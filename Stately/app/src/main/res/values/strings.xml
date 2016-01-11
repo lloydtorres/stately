@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Stately</string>
 
+    <string name="nation_tab_overview">Overview</string>
+    <string name="nation_tab_people">People</string>
+    <string name="nation_tab_gov">Government</string>
+    <string name="nation_tab_economy">Economy</string>
+    <string name="nation_tab_happen">Happenings</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

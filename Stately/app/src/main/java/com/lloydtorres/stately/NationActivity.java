@@ -1,20 +1,41 @@
 package com.lloydtorres.stately;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class NationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NationAsyncResponse {
+
+    private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
+
+    // variables used for nation views
+    private TextView nationName;
+    private TextView nationPrename;
+    private ImageView nationBanner;
+    private RoundedImageView nationFlag;
+
+    // variables used for tabs
+    private PagerSlidingTabStrip tabs;
+    private ViewPager tabsPager;
+    private LayoutAdapter tabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +43,15 @@ public class NationActivity extends AppCompatActivity
         setContentView(R.layout.activity_nation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setElevation(0);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // Initialize the ViewPager and set an adapter
+        tabsPager = (ViewPager) findViewById(R.id.nation_pager);
+        tabsAdapter = new LayoutAdapter(getSupportFragmentManager());
+        tabsPager.setAdapter(tabsAdapter);
+        // Bind the tabs to the ViewPager
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.nation_tabs);
+        tabs.setViewPager(tabsPager);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +61,19 @@ public class NationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getAllNationViews("greater_tern");
+    }
+
+    private void getAllNationViews(String name)
+    {
+        NationAsyncTask nAsyncTask = new NationAsyncTask(this, name);
+        nAsyncTask.execute();
+
+        nationName = (TextView)findViewById(R.id.nation_name);
+        nationPrename = (TextView)findViewById(R.id.nation_prename);
+        nationBanner = (ImageView)findViewById(R.id.nation_banner);
+        nationFlag = (RoundedImageView)findViewById(R.id.nation_flag);
     }
 
     @Override
@@ -55,7 +89,7 @@ public class NationActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.nation, menu);
+        getMenuInflater().inflate(R.menu.menu_nation, menu);
         return true;
     }
 
@@ -97,5 +131,47 @@ public class NationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void nationAsyncResult(Nation n) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        nationName.setText(n.name);
+        nationPrename.setText(n.prename);
+        imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner);
+        imageLoader.displayImage(n.flagURL,nationFlag);
+    }
+
+    // For formatting the tab slider
+    public class LayoutAdapter extends FragmentPagerAdapter {
+
+        private final String[] TITLES = {   getString(R.string.nation_tab_overview),
+                                            getString(R.string.nation_tab_people),
+                                            getString(R.string.nation_tab_gov),
+                                            getString(R.string.nation_tab_economy),
+                                            getString(R.string.nation_tab_happen)
+                                        };
+
+        public LayoutAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
+        }
+
+        @Override
+        public int getCount() {
+            return TITLES.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new Fragment();
+        }
     }
 }
