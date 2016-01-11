@@ -15,7 +15,7 @@ public class NationAsyncTask extends AsyncTask<Void, Void, Nation> {
     private final String appTag = "com.lloydtorres.stately";
 
     private NationAsyncResponse callback;
-    private String url = "http://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=name+type+flag+banner";
+    private String url = Nation.QUERY;
 
     public NationAsyncTask(NationAsyncResponse c, String nationName)
     {

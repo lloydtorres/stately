@@ -25,6 +25,14 @@ public class NationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NationAsyncResponse {
 
     private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
+    private final int OVERVIEW_TAB = 0;
+    private final int PEOPLE_TAB = 1;
+    private final int GOV_TAB = 2;
+    private final int ECONOMY_TAB = 3;
+    private final int HAPPEN_TAB = 4;
+
+    private Nation mNation;
+    private OverviewFragment overviewFragment;
 
     // variables used for nation views
     private TextView nationName;
@@ -45,14 +53,6 @@ public class NationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
 
-        // Initialize the ViewPager and set an adapter
-        tabsPager = (ViewPager) findViewById(R.id.nation_pager);
-        tabsAdapter = new LayoutAdapter(getSupportFragmentManager());
-        tabsPager.setAdapter(tabsAdapter);
-        // Bind the tabs to the ViewPager
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.nation_tabs);
-        tabs.setViewPager(tabsPager);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -63,6 +63,17 @@ public class NationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getAllNationViews("greater_tern");
+    }
+
+    private void initializeTabs()
+    {
+        // Initialize the ViewPager and set an adapter
+        tabsPager = (ViewPager) findViewById(R.id.nation_pager);
+        tabsAdapter = new LayoutAdapter(getSupportFragmentManager());
+        tabsPager.setAdapter(tabsAdapter);
+        // Bind the tabs to the ViewPager
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.nation_tabs);
+        tabs.setViewPager(tabsPager);
     }
 
     private void getAllNationViews(String name)
@@ -135,6 +146,8 @@ public class NationActivity extends AppCompatActivity
 
     @Override
     public void nationAsyncResult(Nation n) {
+        mNation = n;
+
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
@@ -142,7 +155,12 @@ public class NationActivity extends AppCompatActivity
         nationName.setText(n.name);
         nationPrename.setText(n.prename);
         imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner);
-        imageLoader.displayImage(n.flagURL,nationFlag);
+        imageLoader.displayImage(n.flagURL, nationFlag);
+
+        overviewFragment = new OverviewFragment();
+        overviewFragment.setNation(n);
+
+        initializeTabs();
     }
 
     // For formatting the tab slider
@@ -171,7 +189,13 @@ public class NationActivity extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
-            return new Fragment();
+            switch(position)
+            {
+                case OVERVIEW_TAB:
+                    return overviewFragment;
+                default:
+                    return new Fragment();
+            }
         }
     }
 }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_overview_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            card_view:cardBackgroundColor="@android:color/white"
+            card_view:contentPadding="20dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/icon_gov"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_gov"/>
+
+                    <TextView
+                        android:id="@+id/nation_gov_type"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:singleLine="true"
+                        android:layout_toRightOf="@id/icon_gov"
+                        android:layout_centerVertical="true"
+                        tools:text="New York Times Democracy" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/icon_region"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_region"/>
+
+                    <TextView
+                        android:id="@+id/nation_region"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:singleLine="true"
+                        android:layout_toRightOf="@id/icon_region"
+                        android:layout_centerVertical="true"
+                        tools:text="Arbcom" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:id="@+id/icon_motto"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_motto"/>
+
+                    <TextView
+                        android:id="@+id/nation_motto"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:singleLine="true"
+                        android:textStyle="italic"
+                        android:layout_toRightOf="@id/icon_motto"
+                        android:layout_centerVertical="true"
+                        tools:text="Ad astra per aspera" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/act_disabled"
+            android:layout_width="match_parent"
+            android:layout_height="1000dp"
+            android:layout_margin="8dp"
+            card_view:cardBackgroundColor="@android:color/white"
+            card_view:contentPadding="20dp" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
