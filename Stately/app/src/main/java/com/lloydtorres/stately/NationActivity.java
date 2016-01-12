@@ -78,13 +78,14 @@ public class NationActivity extends AppCompatActivity
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
-                if (scrollRange + verticalOffset == 0) {
+                if (scrollRange + verticalOffset <= 0) {
                     if (mNation != null)
                     {
                         collapsingToolbarLayout.setTitle(mNation.name);
                     }
                     isShow = true;
-                } else if(isShow) {
+                }
+                else if(isShow) {
                     collapsingToolbarLayout.setTitle("");
                     isShow = false;
                 }
