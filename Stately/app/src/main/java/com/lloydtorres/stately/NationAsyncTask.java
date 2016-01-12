@@ -7,6 +7,7 @@ import org.simpleframework.xml.core.Persister;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -28,10 +29,12 @@ public class NationAsyncTask extends AsyncTask<Void, Void, Nation> {
         Nation response = null;
 
         try{
-            InputStream input = new URL(url).openStream();
+            URL javaURL = new URL(url);
+            URLConnection conn = javaURL.openConnection();
+            conn.setRequestProperty("User-Agent", appTag);
+            conn.connect();
             Persister serializer = new Persister();
-            response = serializer.read(Nation.class, input);
-            input.close();
+            response = serializer.read(Nation.class, conn.getInputStream());
         }
         catch (Exception e)
         {

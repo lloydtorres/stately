@@ -7,6 +7,29 @@
     <string name="nation_tab_economy">Economy</string>
     <string name="nation_tab_happen">Happenings</string>
 
+    <string name="overview_label_civrights">Civil Rights</string>
+    <string name="overview_label_economy">Economy</string>
+    <string name="overview_label_polifree">Political Freedom</string>
+
+    <string name="card_overview_gov_title">Government</string>
+    <string name="card_overview_gov_leader">Leader</string>
+    <string name="card_overview_gov_capital">Capital</string>
+    <string name="card_overview_gov_priority">Priority</string>
+    <string name="card_overview_gov_tax">Income Tax</string>
+
+    <string name="card_overview_econ_title">Economy</string>
+    <string name="card_overview_econ_currency">Currency</string>
+    <string name="card_overview_econ_gdp">Gross Domestic Product (GDP)</string>
+    <string name="card_overview_econ_industry">Major Industry</string>
+    <string name="card_overview_econ_income">Average Income</string>
+
+    <string name="card_overview_other_title">Other Information</string>
+    <string name="card_overview_other_demonym">Demonym</string>
+    <string name="card_overview_other_demonym_txt1">%1$s (noun, plural %2$s), %3$s (adjective)</string>
+    <string name="card_overview_other_demonym_txt2">%1$s (noun/adjective, plural %2$s)</string>
+    <string name="card_overview_other_religion">Religion</string>
+    <string name="card_overview_other_animal">National Animal</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
