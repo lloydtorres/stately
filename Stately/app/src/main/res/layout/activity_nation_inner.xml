@@ -61,7 +61,7 @@
                     android:textSize="20sp"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/colorPrimaryText"
-                    android:singleLine="false"
+                    android:gravity="center"
                     tools:text="Mignon"/>
 
                 <TextView
@@ -69,13 +69,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:paddingBottom="15dp"
                     android:layout_gravity="center_horizontal"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/colorSecondaryText"
-                    android:singleLine="false"
+                    android:gravity="center"
                     tools:text="Imperial Republic"/>
+
+                <TextView
+                    android:id="@+id/nation_wa_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorPrimary"
+                    android:singleLine="false"
+                    android:text="@string/nation_wa_member"
+                    tools:visibility="visible"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"/>
 
             </LinearLayout>
 

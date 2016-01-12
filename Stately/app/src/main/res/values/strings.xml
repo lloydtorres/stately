@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Stately</string>
 
+    <string name="nation_wa_member">WA Member</string>
+
     <string name="nation_tab_overview">Overview</string>
     <string name="nation_tab_people">People</string>
     <string name="nation_tab_gov">Government</string>

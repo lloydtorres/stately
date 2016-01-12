@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class NationActivity extends AppCompatActivity
     private TextView nationPrename;
     private ImageView nationBanner;
     private RoundedImageView nationFlag;
+    private TextView waState;
 
     // variables used for tabs
     private PagerSlidingTabStrip tabs;
@@ -112,13 +114,14 @@ public class NationActivity extends AppCompatActivity
 
     private void getAllNationViews(String name)
     {
-        NationAsyncTask nAsyncTask = new NationAsyncTask(this, name);
-        nAsyncTask.execute();
-
         nationName = (TextView)findViewById(R.id.nation_name);
         nationPrename = (TextView)findViewById(R.id.nation_prename);
         nationBanner = (ImageView)findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView)findViewById(R.id.nation_flag);
+        waState = (TextView)findViewById(R.id.nation_wa_status);
+
+        NationAsyncTask nAsyncTask = new NationAsyncTask(this, name);
+        nAsyncTask.execute();
     }
 
     @Override
@@ -190,6 +193,11 @@ public class NationActivity extends AppCompatActivity
         nationPrename.setText(n.prename);
         imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner);
         imageLoader.displayImage(n.flagURL, nationFlag);
+
+        if (n.waState.equals(getString(R.string.nation_wa_member)))
+        {
+            waState.setVisibility(View.VISIBLE);
+        }
 
         overviewFragment = new OverviewFragment();
         overviewFragment.setNation(n);

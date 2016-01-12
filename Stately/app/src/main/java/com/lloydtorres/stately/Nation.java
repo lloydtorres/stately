@@ -15,11 +15,12 @@ import java.io.Serializable;
 public class Nation {
 
     public static final String QUERY = "http://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
-                                        + "banner+flag+name+type"
+                                        + "banner+flag+name+type+wa"
                                         + "+category+region+population+motto+freedom+freedomscores"
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
-                                        + "+demonym+demonym2+demonym2plural+customreligion+animal";
+                                        + "+demonym+demonym2+demonym2plural+customreligion+animal"
+                                        + "+endorsements";
 
     @Element(name="BANNER")
     public String bannerKey;
@@ -29,6 +30,8 @@ public class Nation {
     public String name;
     @Element(name="TYPE")
     public String prename;
+    @Element(name="UNSTATUS")
+    public String waState;
 
     @Element(name="CATEGORY")
     public String govType;
@@ -72,6 +75,9 @@ public class Nation {
     public String religion;
     @Element(name="ANIMAL")
     public String animal;
+
+    @Element(name="ENDORSEMENTS", required=false)
+    public String endorsements;
 
     public Nation()
     {
