@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.atteo.evo.inflector.English;
 import org.w3c.dom.Text;
 
 import java.text.NumberFormat;
@@ -125,7 +126,7 @@ public class OverviewFragment extends Fragment {
             popHolder /= 1000000D;
         }
 
-        population.setText(String.format(getString(R.string.val_generic), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
+        population.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
         motto.setText(mNation.motto);
@@ -217,13 +218,13 @@ public class OverviewFragment extends Fragment {
             gdpHolder /= 1000000000000L;
         }
 
-        gdp.setText(String.format(getString(R.string.val_suffix_currency), NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, mNation.currency));
+        gdp.setText(String.format(getString(R.string.val_suffix_currency), NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, English.plural(mNation.currency)));
 
         industry = (TextView) view.findViewById(R.id.nation_industry);
         industry.setText(mNation.industry);
 
         income = (TextView) view.findViewById(R.id.nation_income);
-        income.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(mNation.income).toString(), mNation.currency));
+        income.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(mNation.income).toString(), English.plural(mNation.currency)));
     }
 
     private void initOtherCard(View view)

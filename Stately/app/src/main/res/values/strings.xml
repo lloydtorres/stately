@@ -27,8 +27,8 @@
 
     <string name="card_overview_other_title">Other Information</string>
     <string name="card_overview_other_demonym">Demonym</string>
-    <string name="card_overview_other_demonym_txt1">%1$s (noun, plural %2$s), %3$s (adjective)</string>
-    <string name="card_overview_other_demonym_txt2">%1$s (noun/adjective, plural %2$s)</string>
+    <string name="card_overview_other_demonym_txt1"><i>%1$s</i> (noun, plural <i>%2$s</i>), <i>%3$s</i> (adjective)</string>
+    <string name="card_overview_other_demonym_txt2"><i>%1$s</i> (noun/adjective, plural <i>%2$s</i>)</string>
     <string name="card_overview_other_religion">Religion</string>
     <string name="card_overview_other_animal">National Animal</string>
 
@@ -53,10 +53,9 @@
     <string name="million">million</string>
     <string name="billion">billion</string>
     <string name="trillion">trillion</string>
-    <string name="val_generic">%1$s %2$s</string>
-    <string name="val_currency">%1$s %2$ss</string>
+    <string name="val_currency">%1$s %2$s</string>
     <string name="percent">%1$.1f%%</string>
-    <string name="val_suffix_currency">%1$s %2$s %3$ss</string>
+    <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
