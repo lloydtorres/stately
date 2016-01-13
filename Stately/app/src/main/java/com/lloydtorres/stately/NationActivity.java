@@ -13,12 +13,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,9 +33,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-public class NationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, NationAsyncResponse {
+import org.simpleframework.xml.core.Persister;
 
+public class NationActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final String APP_TAG = "com.lloydtorres.stately";
     private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
     private final int OVERVIEW_TAB = 0;
     private final int PEOPLE_TAB = 1;
@@ -126,8 +136,32 @@ public class NationActivity extends AppCompatActivity
         nationFlag = (RoundedImageView)findViewById(R.id.nation_flag);
         waState = (TextView)findViewById(R.id.nation_wa_status);
 
-        NationAsyncTask nAsyncTask = new NationAsyncTask(this, name);
-        nAsyncTask.execute();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = String.format(Nation.QUERY, name);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    Nation nationResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            nationResponse = serializer.read(Nation.class, response);
+                        }
+                        catch (Exception e) {
+                            Log.e(APP_TAG, e.toString());
+                        }
+
+                        initNationData(nationResponse);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(APP_TAG, error.toString());
+                    }
+                });
+
+        queue.add(stringRequest);
     }
 
     @Override
@@ -187,8 +221,7 @@ public class NationActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void nationAsyncResult(Nation n) {
+    public void initNationData(Nation n) {
         mNation = n;
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
