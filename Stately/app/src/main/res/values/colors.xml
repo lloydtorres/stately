@@ -36,4 +36,9 @@
     <color name="colorChart10">#E91E63</color>
     <color name="colorChart11">#AED581</color>
     <color name="colorChart12">#607D8B</color>
+
+    <color name="colorSector0">#2196F3</color>
+    <color name="colorSector1">#FFC107</color>
+    <color name="colorSector2">#F44336</color>
+    <color name="colorSector3">#455A64</color>
 </resources>

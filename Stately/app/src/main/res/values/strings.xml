@@ -63,6 +63,11 @@
     <string name="rich_val_currency">Richest 10%%: %1$s %2$s</string>
     <string name="card_economy_sectors">Sectors</string>
 
+    <string name="government">Government</string>
+    <string name="state_owned">State-Owned Industry</string>
+    <string name="private_sector">Private Industry</string>
+    <string name="black_market">Black Market (Estimated)</string>
+
     <string name="thousand">thousand</string>
     <string name="million">million</string>
     <string name="billion">billion</string>
