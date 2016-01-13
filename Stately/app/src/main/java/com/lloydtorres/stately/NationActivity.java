@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
@@ -105,7 +104,7 @@ public class NationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initializeTabs()
+    private void initTabs()
     {
         // Initialize the ViewPager and set an adapter
         tabsPager = (ViewPager) findViewById(R.id.nation_pager);
@@ -208,7 +207,7 @@ public class NationActivity extends AppCompatActivity
         overviewFragment = new OverviewFragment();
         overviewFragment.setNation(n);
 
-        initializeTabs();
+        initTabs();
     }
 
     // For formatting the tab slider
