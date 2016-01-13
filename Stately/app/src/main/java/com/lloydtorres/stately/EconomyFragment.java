@@ -42,6 +42,8 @@ public class EconomyFragment extends Fragment implements OnChartValueSelectedLis
     private TextView gdpPerCapitaRich;
     private PieChart sectorChart;
 
+    private List<String> chartLabels;
+
     public void setNation(Nation n)
     {
         mNation = n;
@@ -127,7 +129,7 @@ public class EconomyFragment extends Fragment implements OnChartValueSelectedLis
         sectorChart = (PieChart) view.findViewById(R.id.nation_sectors);
 
         // setup data
-        List<String> chartLabels = new ArrayList<String>();
+        chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
         Sectors sectors = mNation.sectors;
 
@@ -158,7 +160,8 @@ public class EconomyFragment extends Fragment implements OnChartValueSelectedLis
         sectorChart.setHoleColorTransparent(true);
         sectorChart.setHoleRadius(60f);
         sectorChart.setTransparentCircleRadius(65f);
-        sectorChart.setCenterTextSize(30);
+        sectorChart.setCenterTextSize(20);
+        sectorChart.setRotationEnabled(false);
 
         sectorChart.setOnChartValueSelectedListener(this);
         sectorChart.setData(dataFull);
@@ -168,7 +171,7 @@ public class EconomyFragment extends Fragment implements OnChartValueSelectedLis
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         if (sectorChart != null)
         {
-            sectorChart.setCenterText(String.format(getString(R.string.percent), e.getVal()));
+            sectorChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
         }
     }
 

@@ -45,6 +45,8 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
     private TextView summaryDesc;
     private PieChart mortalityChart;
 
+    private List<String> chartLabels;
+
     public void setNation(Nation n)
     {
         mNation = n;
@@ -117,7 +119,7 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
         mortalityChart = (PieChart) view.findViewById(R.id.nation_mortality_chart);
 
         // setup data
-        List<String> chartLabels = new ArrayList<String>();
+        chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
         List<MortalityCause> causes = mNation.mortalityRoot.causes;
 
@@ -145,7 +147,8 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
         mortalityChart.setHoleColorTransparent(true);
         mortalityChart.setHoleRadius(60f);
         mortalityChart.setTransparentCircleRadius(65f);
-        mortalityChart.setCenterTextSize(30);
+        mortalityChart.setCenterTextSize(20);
+        mortalityChart.setRotationEnabled(false);
 
         mortalityChart.setOnChartValueSelectedListener(this);
         mortalityChart.setData(dataFull);
@@ -155,7 +158,7 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         if (mortalityChart != null)
         {
-            mortalityChart.setCenterText(String.format(getString(R.string.percent), e.getVal()));
+            mortalityChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
         }
     }
 

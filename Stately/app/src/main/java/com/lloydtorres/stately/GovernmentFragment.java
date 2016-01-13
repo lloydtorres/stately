@@ -48,6 +48,8 @@ public class GovernmentFragment extends Fragment implements OnChartValueSelected
     private TextView budgetTotal;
     private PieChart budgetChart;
 
+    private List<String> chartLabels;
+
     public void setNation(Nation n)
     {
         mNation = n;
@@ -126,7 +128,7 @@ public class GovernmentFragment extends Fragment implements OnChartValueSelected
         budgetChart = (PieChart) view.findViewById(R.id.nation_govspending);
 
         // setup data
-        List<String> chartLabels = new ArrayList<String>();
+        chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
         GovBudget budget = mNation.govBudget;
 
@@ -173,7 +175,8 @@ public class GovernmentFragment extends Fragment implements OnChartValueSelected
         budgetChart.setHoleColorTransparent(true);
         budgetChart.setHoleRadius(60f);
         budgetChart.setTransparentCircleRadius(65f);
-        budgetChart.setCenterTextSize(30);
+        budgetChart.setCenterTextSize(20);
+        budgetChart.setRotationEnabled(false);
 
         budgetChart.setOnChartValueSelectedListener(this);
         budgetChart.setData(dataFull);
@@ -183,7 +186,7 @@ public class GovernmentFragment extends Fragment implements OnChartValueSelected
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         if (budgetChart != null)
         {
-            budgetChart.setCenterText(String.format(getString(R.string.percent), e.getVal()));
+            budgetChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
         }
     }
 
