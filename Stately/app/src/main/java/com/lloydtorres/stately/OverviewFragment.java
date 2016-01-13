@@ -92,6 +92,11 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
+        if (savedInstanceState != null && mNation == null)
+        {
+            mNation = savedInstanceState.getParcelable("mNation");
+        }
+
         if (mNation != null)
         {
             initMainCard(view);
@@ -102,6 +107,15 @@ public class OverviewFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mNation != null)
+        {
+            outState.putParcelable("mNation", mNation);
+        }
     }
 
     private void initMainCard(View view)
