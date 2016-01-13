@@ -28,19 +28,19 @@ import java.util.Locale;
  */
 public class GovernmentFragment extends Fragment implements OnChartValueSelectedListener {
     private final int[] chartColours = {    R.color.colorChart0,
-            R.color.colorChart1,
-            R.color.colorChart2,
-            R.color.colorChart3,
-            R.color.colorChart4,
-            R.color.colorChart5,
-            R.color.colorChart6,
-            R.color.colorChart7,
-            R.color.colorChart8,
-            R.color.colorChart9,
-            R.color.colorChart10,
-            R.color.colorChart11,
-            R.color.colorChart12
-    };
+                                            R.color.colorChart1,
+                                            R.color.colorChart2,
+                                            R.color.colorChart3,
+                                            R.color.colorChart4,
+                                            R.color.colorChart5,
+                                            R.color.colorChart6,
+                                            R.color.colorChart7,
+                                            R.color.colorChart8,
+                                            R.color.colorChart9,
+                                            R.color.colorChart10,
+                                            R.color.colorChart11,
+                                            R.color.colorChart12
+                                        };
 
     private Nation mNation;
 
