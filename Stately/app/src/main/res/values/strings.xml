@@ -34,12 +34,13 @@
 
     <string name="card_main_title_summary">Summary</string>
 
+    <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
+    <string name="card_people_mortality_title">Mortality</string>
+
     <string name="card_government_expenditures_title">Expenditures</string>
     <string name="card_government_expenditures_budget">Total</string>
     <string name="card_government_expenditures_budget_flavour">%1$s %2$ss (%3$s of GDP)</string>
     <string name="card_government_expenditures_chart">Details</string>
-
-    <string name="card_people_mortality_title">Mortality</string>
 
     <string name="card_economy_analysis_title">Analysis</string>
     <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
