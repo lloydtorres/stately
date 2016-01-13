@@ -7,15 +7,19 @@
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
 
-    <color name="colorFreedom0">#C62828</color>
-    <color name="colorFreedom1">#C62828</color>
+    <color name="colorFreedom0">#b71c1c</color>
+    <color name="colorFreedom1">#BF360C</color>
     <color name="colorFreedom2">#D84315</color>
     <color name="colorFreedom3">#EF6C00</color>
-    <color name="colorFreedom4">#FF8F00</color>
-    <color name="colorFreedom5">#F9A825</color>
-    <color name="colorFreedom6">#9E9D24</color>
-    <color name="colorFreedom7">#7CB342</color>
-    <color name="colorFreedom8">#558B2F</color>
-    <color name="colorFreedom9">#43A047</color>
-    <color name="colorFreedom10">#2E7D32</color>
+    <color name="colorFreedom4">#F57C00</color>
+    <color name="colorFreedom5">#FF8F00</color>
+    <color name="colorFreedom6">#FFA000</color>
+    <color name="colorFreedom7">#AFB42B</color>
+    <color name="colorFreedom8">#C0CA33</color>
+    <color name="colorFreedom9">#9E9D24</color>
+    <color name="colorFreedom10">#689F38</color>
+    <color name="colorFreedom11">#43A047</color>
+    <color name="colorFreedom12">#388E3C</color>
+    <color name="colorFreedom13">#2E7D32</color>
+    <color name="colorFreedom14">#1B5E20</color>
 </resources>

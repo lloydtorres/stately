@@ -30,7 +30,11 @@ public class OverviewFragment extends Fragment {
                                             R.color.colorFreedom7,
                                             R.color.colorFreedom8,
                                             R.color.colorFreedom9,
-                                            R.color.colorFreedom10
+                                            R.color.colorFreedom10,
+                                            R.color.colorFreedom11,
+                                            R.color.colorFreedom12,
+                                            R.color.colorFreedom13,
+                                            R.color.colorFreedom14
                                          };
     private Nation mNation;
 
@@ -135,7 +139,7 @@ public class OverviewFragment extends Fragment {
 
         civilRightsDesc.setText(mNation.freedomDesc.civilRightsDesc);
         civilRightsPts.setText(String.valueOf(mNation.freedomPts.civilRightsPts));
-        int civColInd = mNation.freedomPts.civilRightsPts / 10;
+        int civColInd = mNation.freedomPts.civilRightsPts / 7;
         civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[civColInd]));
 
         economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
@@ -144,7 +148,7 @@ public class OverviewFragment extends Fragment {
 
         economyDesc.setText(mNation.freedomDesc.economyDesc);
         economyPts.setText(String.valueOf(mNation.freedomPts.economyPts));
-        int econColInd = mNation.freedomPts.economyPts / 10;
+        int econColInd = mNation.freedomPts.economyPts / 7;
         economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[econColInd]));
 
         politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
@@ -153,7 +157,7 @@ public class OverviewFragment extends Fragment {
 
         politicalDesc.setText(mNation.freedomDesc.politicalDesc);
         politicalPts.setText(String.valueOf(mNation.freedomPts.politicalPts));
-        int polColInd = mNation.freedomPts.politicalPts / 10;
+        int polColInd = mNation.freedomPts.politicalPts / 7;
         politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[polColInd]));
     }
 
