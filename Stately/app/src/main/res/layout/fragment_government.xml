@@ -100,7 +100,7 @@
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/nation_govspending"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="500dp" />
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

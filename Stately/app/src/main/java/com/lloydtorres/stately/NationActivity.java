@@ -39,6 +39,7 @@ public class NationActivity extends AppCompatActivity
     private Nation mNation;
     private OverviewFragment overviewFragment;
     private PeopleFragment peopleFragment;
+    private GovernmentFragment governmentFragment;
 
     // variables used for nation views
     private TextView nationName;
@@ -211,6 +212,9 @@ public class NationActivity extends AppCompatActivity
         peopleFragment = new PeopleFragment();
         peopleFragment.setNation(n);
 
+        governmentFragment = new GovernmentFragment();
+        governmentFragment.setNation(n);
+
         initTabs();
     }
 
@@ -246,6 +250,8 @@ public class NationActivity extends AppCompatActivity
                     return overviewFragment;
                 case PEOPLE_TAB:
                     return peopleFragment;
+                case GOV_TAB:
+                    return governmentFragment;
                 default:
                     return new Fragment();
             }

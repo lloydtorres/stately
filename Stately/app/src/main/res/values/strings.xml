@@ -39,8 +39,21 @@
 
     <string name="card_government_expenditures_title">Expenditures</string>
     <string name="card_government_expenditures_budget">Total</string>
-    <string name="card_government_expenditures_budget_flavour">%1$s %2$ss (%3$s of GDP)</string>
+    <string name="card_government_expenditures_budget_flavour">%1$s %2$s %3$s (%4$.1f%% of GDP)</string>
     <string name="card_government_expenditures_chart">Details</string>
+
+    <string name="administration">Administration</string>
+    <string name="defense">Defense</string>
+    <string name="education">Education</string>
+    <string name="environment">Environment</string>
+    <string name="healthcare">Healthcare</string>
+    <string name="industry">Industry</string>
+    <string name="international_aid">International Aid</string>
+    <string name="law_and_order">Law and Order</string>
+    <string name="public_transport">Public Transport</string>
+    <string name="social_policy">Social Policy</string>
+    <string name="spirituality">Spirituality</string>
+    <string name="welfare">Welfare</string>
 
     <string name="card_economy_analysis_title">Analysis</string>
     <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
