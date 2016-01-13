@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class NationActivity extends AppCompatActivity
 
         initToolbar();
 
-        getAllNationViews("greater_tern");
+        getAllNationViews("buizelist_eterna");
     }
 
     private void initToolbar()
@@ -231,7 +232,7 @@ public class NationActivity extends AppCompatActivity
         DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
 
         nationName.setText(n.name);
-        nationPrename.setText(n.prename);
+        nationPrename.setText(Html.fromHtml(n.prename).toString());
         imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner, imageOptions);
         imageLoader.displayImage(n.flagURL, nationFlag, imageOptions);
 

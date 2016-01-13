@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +143,7 @@ public class OverviewFragment extends Fragment {
         population.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
-        motto.setText(mNation.motto);
+        motto.setText(Html.fromHtml(mNation.motto).toString());
     }
 
     private void initFreedomCards(View view)
@@ -180,7 +181,7 @@ public class OverviewFragment extends Fragment {
         if (mNation.leader != null)
         {
             leader = (TextView) view.findViewById(R.id.nation_leader);
-            leader.setText(mNation.leader);
+            leader.setText(Html.fromHtml(mNation.leader).toString());
         }
         else
         {
@@ -191,7 +192,7 @@ public class OverviewFragment extends Fragment {
         if (mNation.capital != null)
         {
             capital = (TextView) view.findViewById(R.id.nation_capital);
-            capital.setText(mNation.capital);
+            capital.setText(Html.fromHtml(mNation.capital).toString());
         }
         else
         {
@@ -245,11 +246,11 @@ public class OverviewFragment extends Fragment {
         demonym = (TextView) view.findViewById(R.id.nation_demonym);
         if (mNation.demAdjective.equals(mNation.demNoun))
         {
-            demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural));
+            demonym.setText(Html.fromHtml(String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural)).toString());
         }
         else
         {
-            demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective));
+            demonym.setText(Html.fromHtml(String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective)).toString());
         }
 
         if (mNation.religion != null)
