@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:gravity="bottom"
-                android:background="#FFF"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <ImageView
@@ -111,8 +111,7 @@
             android:id="@+id/nation_tabs"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="#FFF"
-            android:paddingLeft  = "3dp"
+            android:background="@android:color/white"
             android:textColor = "@color/colorSecondaryText"
             app:pstsTextColorSelected = "@color/colorPrimary"
             app:pstsIndicatorColor = "@color/colorPrimary"
