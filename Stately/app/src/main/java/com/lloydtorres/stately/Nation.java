@@ -1,12 +1,7 @@
 package com.lloydtorres.stately;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-
-import java.io.Serializable;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -16,11 +11,16 @@ public class Nation {
 
     public static final String QUERY = "http://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
                                         + "banner+flag+name+type+wa"
-                                        + "+category+region+population+motto+freedom+freedomscores"
+                                        + "+category+region+population+founded+lastactivity+motto"
+                                        + "+freedom+freedomscores"
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
                                         + "+demonym+demonym2+demonym2plural+customreligion+animal"
-                                        + "+endorsements";
+                                        + "+endorsements"
+                                        + "+notable+sensibilities+crime+deaths"
+                                        + "+govtdesc+govt"
+                                        + "+industrydesc+poorest+richest+sectors"
+                                        + "+happenings";
 
     @Element(name="BANNER")
     public String bannerKey;
@@ -39,6 +39,10 @@ public class Nation {
     public String region;
     @Element(name="POPULATION")
     public int popBase;
+    @Element(name="FOUNDED")
+    public String foundedAgo;
+    @Element(name="LASTACTIVITY")
+    public String lastActivityAgo;
     @Element(name="MOTTO")
     public String motto;
 
@@ -78,6 +82,32 @@ public class Nation {
 
     @Element(name="ENDORSEMENTS", required=false)
     public String endorsements;
+
+    @Element(name="NOTABLE")
+    public String notable;
+    @Element(name="SENSIBILITIES")
+    public String sensible;
+    @Element(name="CRIME")
+    public String crime;
+    @Element(name="DEATHS")
+    public Mortality mortalityRoot;
+
+    @Element(name="GOVTDESC")
+    public String govtDesc;
+    @Element(name="GOVT")
+    public GovBudget govBudget;
+
+    @Element(name="INDUSTRYDESC")
+    public String industryDesc;
+    @Element(name="POOREST")
+    public long poorest;
+    @Element(name="RICHEST")
+    public long richest;
+    @Element(name="SECTORS")
+    public Sectors sectors;
+
+    @Element(name="HAPPENINGS")
+    public Happenings happeningsRoot;
 
     public Nation()
     {
