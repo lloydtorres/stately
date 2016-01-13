@@ -36,7 +36,7 @@
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/side_nav_bar" />
+                    android:src="@drawable/gray" />
 
                 <com.github.siyamed.shapeimageview.RoundedImageView
                     xmlns:app="http://schemas.android.com/apk/res-auto"

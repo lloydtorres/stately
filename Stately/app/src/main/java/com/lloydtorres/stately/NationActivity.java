@@ -21,8 +21,10 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class NationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NationAsyncResponse {
@@ -190,10 +192,12 @@ public class NationActivity extends AppCompatActivity
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
 
+        DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
+
         nationName.setText(n.name);
         nationPrename.setText(n.prename);
-        imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner);
-        imageLoader.displayImage(n.flagURL, nationFlag);
+        imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner, imageOptions);
+        imageLoader.displayImage(n.flagURL, nationFlag, imageOptions);
 
         if (n.waState.equals(getString(R.string.nation_wa_member)))
         {
