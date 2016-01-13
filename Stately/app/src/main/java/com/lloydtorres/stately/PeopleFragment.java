@@ -125,7 +125,14 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
 
         for (int i=0; i < causes.size(); i++)
         {
-            chartLabels.add(causes.get(i).type);
+            if (getString(R.string.animal_attack_original).equals(causes.get(i).type))
+            {
+                chartLabels.add(String.format(getString(R.string.animal_attack_madlibs), mNation.animal));
+            }
+            else
+            {
+                chartLabels.add(causes.get(i).type);
+            }
             Entry n = new Entry((float) causes.get(i).value, i);
             chartEntries.add(n);
         }

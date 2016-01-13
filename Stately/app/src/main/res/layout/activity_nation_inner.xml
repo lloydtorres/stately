@@ -50,7 +50,7 @@
                     android:src="@drawable/gray"
                     app:siRadius="2dp"
                     app:siBorderWidth="2dp"
-                    app:siBorderColor="#FFF" />
+                    app:siBorderColor="#AAA" />
 
                 <TextView
                     android:id="@+id/nation_name"
