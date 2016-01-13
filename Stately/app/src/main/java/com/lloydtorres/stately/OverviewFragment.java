@@ -112,20 +112,20 @@ public class OverviewFragment extends Fragment {
         region.setText(mNation.region);
 
         population = (TextView) view.findViewById(R.id.nation_population);
-        String suffix = "million";
+        String suffix = getString(R.string.million);
         double popHolder = mNation.popBase;
         if (mNation.popBase >= 1000D && mNation.popBase < 10000D)
         {
-            suffix = "billion";
+            suffix = getString(R.string.billion);
             popHolder /= 1000D;
         }
         else if (mNation.popBase >= 10000D)
         {
-            suffix = "trillion";
+            suffix = getString(R.string.trillion);
             popHolder /= 1000000D;
         }
 
-        population.setText(String.format("%s %s", NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
+        population.setText(String.format(getString(R.string.val_generic), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
         motto.setText(mNation.motto);
@@ -189,7 +189,7 @@ public class OverviewFragment extends Fragment {
         priority.setText(mNation.govtPriority);
 
         tax = (TextView) view.findViewById(R.id.nation_tax);
-        tax.setText(String.format("%.1f%%", mNation.tax));
+        tax.setText(String.format(getString(R.string.percent), mNation.tax));
     }
 
     private void initEconomyCard(View view)
@@ -199,31 +199,31 @@ public class OverviewFragment extends Fragment {
 
         gdp = (TextView) view.findViewById(R.id.nation_gdp);
 
-        String suffix = "thousand";
+        String suffix = getString(R.string.thousand);
         long gdpHolder = mNation.gdp;
         if (gdpHolder >= 1000000L && gdpHolder < 1000000000L)
         {
-            suffix = "million";
+            suffix = getString(R.string.million);
             gdpHolder /= 1000000L;
         }
         else if (gdpHolder >= 1000000000L && gdpHolder < 1000000000000L)
         {
-            suffix = "billion";
+            suffix = getString(R.string.billion);
             gdpHolder /= 1000000000L;
         }
         else if (gdpHolder >= 1000000000000L)
         {
-            suffix = "trillion";
+            suffix = getString(R.string.trillion);
             gdpHolder /= 1000000000000L;
         }
 
-        gdp.setText(String.format("%s %s %ss", NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, mNation.currency));
+        gdp.setText(String.format(getString(R.string.val_suffix_currency), NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, mNation.currency));
 
         industry = (TextView) view.findViewById(R.id.nation_industry);
         industry.setText(mNation.industry);
 
         income = (TextView) view.findViewById(R.id.nation_income);
-        income.setText(String.format("%s %ss", NumberFormat.getInstance(Locale.US).format(mNation.income).toString(), mNation.currency));
+        income.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(mNation.income).toString(), mNation.currency));
     }
 
     private void initOtherCard(View view)

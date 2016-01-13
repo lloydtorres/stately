@@ -32,6 +32,32 @@
     <string name="card_overview_other_religion">Religion</string>
     <string name="card_overview_other_animal">National Animal</string>
 
+    <string name="card_main_title_summary">Summary</string>
+
+    <string name="card_government_expenditures_title">Expenditures</string>
+    <string name="card_government_expenditures_budget">Total</string>
+    <string name="card_government_expenditures_budget_flavour">%1$s %2$ss (%3$s of GDP)</string>
+    <string name="card_government_expenditures_chart">Details</string>
+
+    <string name="card_people_mortality_title">Mortality</string>
+
+    <string name="card_economy_analysis_title">Analysis</string>
+    <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
+    <string name="card_economy_analysis_per_capita">GDP Per Capita</string>
+    <string name="avg_val_currency">Average: %1$s %2$s</string>
+    <string name="poor_val_currency">Poorest 10%%: %1$s %2$s</string>
+    <string name="rich_val_currency">Richest 10%%: %1$s %2$s</string>
+    <string name="card_economy_sectors">Sectors</string>
+
+    <string name="thousand">thousand</string>
+    <string name="million">million</string>
+    <string name="billion">billion</string>
+    <string name="trillion">trillion</string>
+    <string name="val_generic">%1$s %2$s</string>
+    <string name="val_currency">%1$s %2$ss</string>
+    <string name="percent">%1$.1f%%</string>
+    <string name="val_suffix_currency">%1$s %2$s %3$ss</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
