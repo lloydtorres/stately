@@ -20,7 +20,6 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-10.
  */
 public class OverviewFragment extends Fragment {
-    private static final String OVERVIEW_KEY = "OVERVIEW_KEY";
     private final int[] freedomColours = {  R.color.colorFreedom0,
                                             R.color.colorFreedom1,
                                             R.color.colorFreedom2,

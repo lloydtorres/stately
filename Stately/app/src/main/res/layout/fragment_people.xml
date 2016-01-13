@@ -31,7 +31,7 @@
                     android:textColor="@color/colorPrimary"
                     android:text="@string/card_main_title_summary" />
                 <TextView
-                    android:id="@+id/nation_overviewdesc"
+                    android:id="@+id/nation_summarydesc"
                     android:layout_marginTop="8dp"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif"
@@ -43,7 +43,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/card_government_expenditures"
+            android:id="@+id/card_people_mortality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/card_government_expenditures_title"
+                    android:id="@+id/card_people_mortality_title"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
                     android:textColor="@color/colorPrimary"
                     android:text="@string/card_people_mortality_title" />
                 <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/nation_govspending"
+                    android:id="@+id/nation_mortality_chart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
