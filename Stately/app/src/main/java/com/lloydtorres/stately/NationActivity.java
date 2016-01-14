@@ -236,12 +236,7 @@ public class NationActivity extends AppCompatActivity
     // For formatting the tab slider
     public class LayoutAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = {   getString(R.string.nation_tab_overview),
-                                            getString(R.string.nation_tab_people),
-                                            getString(R.string.nation_tab_gov),
-                                            getString(R.string.nation_tab_economy),
-                                            getString(R.string.nation_tab_happen)
-                                        };
+        private final String[] TITLES = getResources().getStringArray(R.array.nation_tabs);
 
         public LayoutAdapter(FragmentManager fm) {
             super(fm);

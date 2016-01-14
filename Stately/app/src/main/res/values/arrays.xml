@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="nation_tabs">
+        <item>Overview</item>
+        <item>People</item>
+        <item>Government</item>
+        <item>Economy</item>
+        <item>Happenings</item>
+    </string-array>
+</resources>

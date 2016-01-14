@@ -12,12 +12,6 @@
 
     <string name="nation_wa_member">WA Member</string>
 
-    <string name="nation_tab_overview">Overview</string>
-    <string name="nation_tab_people">People</string>
-    <string name="nation_tab_gov">Government</string>
-    <string name="nation_tab_economy">Economy</string>
-    <string name="nation_tab_happen">Happenings</string>
-
     <string name="overview_label_civrights">Civil Rights</string>
     <string name="overview_label_economy">Economy</string>
     <string name="overview_label_polifree">Political Freedom</string>
@@ -90,7 +84,4 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_test">TestActivity</string>
 </resources>
