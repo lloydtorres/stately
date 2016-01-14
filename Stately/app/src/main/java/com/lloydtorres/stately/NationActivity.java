@@ -72,7 +72,7 @@ public class NationActivity extends AppCompatActivity
 
         initToolbar();
 
-        getAllNationViews("buizelist_eterna");
+        getAllNationViews("greater_tern");
     }
 
     private void initToolbar()
