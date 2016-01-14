@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@color/colorPrimary"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:src="@drawable/stately"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+
+    <EditText
+        android:id="@+id/field_username"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:theme="@style/TextLabel"
+        android:background="@android:color/white"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:hint="@string/username_hint"
+        android:nextFocusForward="@+id/field_password"/>
+    <EditText
+        android:id="@+id/field_password"
+        android:layout_marginTop="3dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:theme="@style/TextLabel"
+        android:background="@android:color/white"
+        android:inputType="textWebPassword"
+        android:hint="@string/password"
+        android:nextFocusForward="@+id/login_button"/>
+    <Button
+        android:id="@+id/login_button"
+        android:layout_marginTop="20dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:background="@android:color/transparent"
+        android:textColor="@android:color/white"
+        android:text="@string/log_in"
+        android:layout_gravity="center_horizontal"
+        android:textSize="17sp"
+        android:onClick="verifyLogin"/>
+
+</LinearLayout>

@@ -70,9 +70,19 @@ public class NationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nation);
 
-        initToolbar();
+        if (getIntent() != null)
+        {
+            mNation = (Nation) getIntent().getParcelableExtra("mNationData");
+        }
+        if (mNation == null && savedInstanceState != null)
+        {
+            mNation = savedInstanceState.getParcelable("mNationData");
+        }
 
-        getAllNationViews("greater_tern");
+
+        initToolbar();
+        getAllNationViews();
+        initNationData();
     }
 
     private void initToolbar()
@@ -95,13 +105,11 @@ public class NationActivity extends AppCompatActivity
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset <= 0) {
-                    if (mNation != null)
-                    {
+                    if (mNation != null) {
                         collapsingToolbarLayout.setTitle(mNation.name);
                     }
                     isShow = true;
-                }
-                else if(isShow) {
+                } else if (isShow) {
                     collapsingToolbarLayout.setTitle("");
                     isShow = false;
                 }
@@ -129,74 +137,65 @@ public class NationActivity extends AppCompatActivity
         tabs.setViewPager(tabsPager);
     }
 
-    private void getAllNationViews(String name)
+    private void getAllNationViews()
     {
         nationName = (TextView)findViewById(R.id.nation_name);
         nationPrename = (TextView)findViewById(R.id.nation_prename);
         nationBanner = (ImageView)findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView)findViewById(R.id.nation_flag);
         waState = (TextView)findViewById(R.id.nation_wa_status);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String targetURL = String.format(Nation.QUERY, name);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
-                new Response.Listener<String>() {
-                    Nation nationResponse = null;
-                    @Override
-                    public void onResponse(String response) {
-                        Persister serializer = new Persister();
-                        try {
-                            nationResponse = serializer.read(Nation.class, response);
-                        }
-                        catch (Exception e) {
-                            Log.e(APP_TAG, e.toString());
-                        }
-
-                        initNationData(nationResponse);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(APP_TAG, error.toString());
-                    }
-                });
-
-        queue.add(stringRequest);
     }
 
-    public void initNationData(Nation n) {
-        mNation = n;
-
+    public void initNationData() {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
 
         DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
 
-        nationName.setText(n.name);
-        nationPrename.setText(Html.fromHtml(n.prename).toString());
-        imageLoader.displayImage(String.format(BANNER_TEMPLATE, n.bannerKey), nationBanner, imageOptions);
-        imageLoader.displayImage(n.flagURL, nationFlag, imageOptions);
+        nationName.setText(mNation.name);
+        nationPrename.setText(Html.fromHtml(mNation.prename).toString());
+        imageLoader.displayImage(String.format(BANNER_TEMPLATE, mNation.bannerKey), nationBanner, imageOptions);
+        imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
 
-        if (n.waState.equals(getString(R.string.nation_wa_member)))
+        if (mNation.waState.equals(getString(R.string.nation_wa_member)))
         {
             waState.setVisibility(View.VISIBLE);
         }
 
         overviewFragment = new OverviewFragment();
-        overviewFragment.setNation(n);
+        overviewFragment.setNation(mNation);
 
         peopleFragment = new PeopleFragment();
-        peopleFragment.setNation(n);
+        peopleFragment.setNation(mNation);
 
         governmentFragment = new GovernmentFragment();
-        governmentFragment.setNation(n);
+        governmentFragment.setNation(mNation);
 
         economyFragment = new EconomyFragment();
-        economyFragment.setNation(n);
+        economyFragment.setNation(mNation);
 
         initTabs();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        if (mNation != null)
+        {
+            savedInstanceState.putParcelable("mNationData", mNation);
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null && mNation == null)
+        {
+            mNation = savedInstanceState.getParcelable("mNationData");
+        }
     }
 
     @Override
