@@ -2,10 +2,11 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_nation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.lloydtorres.stately.NationActivity">
+    tools:context=".StatelyActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/nation_appbar"
@@ -91,14 +92,14 @@
                     android:text="@string/nation_wa_member"
                     tools:visibility="visible"/>
 
-                <Space
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="15dp"/>
 
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar_nation"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -127,6 +128,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="#EEE"
         android:layout_weight="1"
-        tools:context=".NationActivity"/>
+        tools:context=".StatelyActivity"/>
 
 </android.support.design.widget.CoordinatorLayout>

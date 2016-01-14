@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e(APP_TAG, e.toString());
                             makeSnackbar(fView, getString(R.string.login_error_parsing));
                         }
-                        Intent nationActivityLaunch = new Intent(LoginActivity.this, NationActivity.class);
+                        Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                         nationActivityLaunch.putExtra("mNationData", nationResponse);
                         startActivity(nationActivityLaunch);
                         finish();

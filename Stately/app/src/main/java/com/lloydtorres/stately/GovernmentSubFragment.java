@@ -26,7 +26,7 @@ import java.util.Locale;
 /**
  * Created by Lloyd on 2016-01-12.
  */
-public class GovernmentFragment extends Fragment implements OnChartValueSelectedListener {
+public class GovernmentSubFragment extends Fragment implements OnChartValueSelectedListener {
     private final int[] chartColours = {    R.color.colorChart0,
                                             R.color.colorChart1,
                                             R.color.colorChart2,
@@ -62,7 +62,7 @@ public class GovernmentFragment extends Fragment implements OnChartValueSelected
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_government, container, false);
+        View view = inflater.inflate(R.layout.fragment_sub_government, container, false);
 
         if (savedInstanceState != null && mNation == null)
         {

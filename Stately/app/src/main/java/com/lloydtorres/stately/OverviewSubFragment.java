@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.atteo.evo.inflector.English;
-import org.w3c.dom.Text;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -20,7 +19,7 @@ import java.util.Locale;
 /**
  * Created by Lloyd on 2016-01-10.
  */
-public class OverviewFragment extends Fragment {
+public class OverviewSubFragment extends Fragment {
     private final int[] freedomColours = {  R.color.colorFreedom0,
                                             R.color.colorFreedom1,
                                             R.color.colorFreedom2,
@@ -90,7 +89,7 @@ public class OverviewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_overview, container, false);
+        View view = inflater.inflate(R.layout.fragment_sub_overview, container, false);
 
         if (savedInstanceState != null && mNation == null)
         {

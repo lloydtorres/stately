@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  * Created by Lloyd on 2016-01-12.
  */
-public class PeopleFragment extends Fragment implements OnChartValueSelectedListener {
+public class PeopleSubFragment extends Fragment implements OnChartValueSelectedListener {
     private final int[] chartColours = {    R.color.colorChart0,
                                             R.color.colorChart1,
                                             R.color.colorChart2,
@@ -69,7 +69,7 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_people, container, false);
+        View view = inflater.inflate(R.layout.fragment_sub_people, container, false);
 
         if (savedInstanceState != null && mNation == null)
         {
