@@ -36,6 +36,16 @@
     <color name="colorChart10">#EC407A</color>
     <color name="colorChart11">#AED581</color>
     <color name="colorChart12">#607D8B</color>
+    <color name="colorChart13">#03A9F4</color>
+    <color name="colorChart14">#6D4C41</color>
+    <color name="colorChart15">#7E57C2</color>
+    <color name="colorChart16">#FFEB3B</color>
+    <color name="colorChart17">#AD1457</color>
+    <color name="colorChart18">#e57373</color>
+    <color name="colorChart19">#4DB6AC</color>
+    <color name="colorChart20">#37474F</color>
+    <color name="colorChart21">#512DA8</color>
+    <color name="colorChart22">#1B5E20</color>
 
     <color name="colorSector0">#2196F3</color>
     <color name="colorSector1">#FFC107</color>

@@ -37,7 +37,17 @@ public class PeopleFragment extends Fragment implements OnChartValueSelectedList
                                             R.color.colorChart9,
                                             R.color.colorChart10,
                                             R.color.colorChart11,
-                                            R.color.colorChart12
+                                            R.color.colorChart12,
+                                            R.color.colorChart13,
+                                            R.color.colorChart14,
+                                            R.color.colorChart15,
+                                            R.color.colorChart16,
+                                            R.color.colorChart17,
+                                            R.color.colorChart18,
+                                            R.color.colorChart19,
+                                            R.color.colorChart20,
+                                            R.color.colorChart21,
+                                            R.color.colorChart22
                                         };
 
     private Nation mNation;
