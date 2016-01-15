@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private Button login;
+    private boolean isLoggingIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +52,20 @@ public class LoginActivity extends AppCompatActivity {
 
     public void verifyLogin(View view)
     {
-        String name = username.getText().toString();
-        boolean verify = CHAR_MATCHER.matchesAllOf(name);
-        if (verify && name.length() > 0)
+        if (!getLoginState())
         {
-            name = name.toLowerCase().replace(" ","_");
-            queryNS(view, name);
-        }
-        else
-        {
-            makeSnackbar(view, getString(R.string.login_error_404));
+            setLoginState(true);
+            String name = username.getText().toString();
+            boolean verify = CHAR_MATCHER.matchesAllOf(name);
+            if (verify && name.length() > 0)
+            {
+                name = name.toLowerCase().replace(" ","_");
+                queryNS(view, name);
+            }
+            else
+            {
+                makeSnackbar(view, getString(R.string.login_error_404));
+            }
         }
     }
 
@@ -97,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                         catch (Exception e) {
                             Log.e(APP_TAG, e.toString());
                             makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            setLoginState(false);
                         }
                         Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                         nationActivityLaunch.putExtra("mNationData", nationResponse);
@@ -107,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(APP_TAG, error.toString());
+                setLoginState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
@@ -122,6 +129,24 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         queue.add(stringRequest);
+    }
+
+    private boolean getLoginState()
+    {
+        return isLoggingIn;
+    }
+
+    private void setLoginState(boolean stat)
+    {
+        if (stat)
+        {
+            login.setText(getString(R.string.log_in_load));
+        }
+        else
+        {
+            login.setText(getString(R.string.log_in));
+        }
+        isLoggingIn = stat;
     }
 
     public void makeSnackbar(View view, String str)

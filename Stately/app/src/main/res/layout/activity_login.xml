@@ -47,7 +47,7 @@
     <Button
         android:id="@+id/login_button"
         android:layout_marginTop="20dp"
-        android:layout_width="80dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
         android:background="@android:color/transparent"
