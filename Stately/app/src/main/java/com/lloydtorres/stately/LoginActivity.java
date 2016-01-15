@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.common.base.CharMatcher;
+import com.lloydtorres.stately.dto.Nation;
 
 import org.simpleframework.xml.core.Persister;
 

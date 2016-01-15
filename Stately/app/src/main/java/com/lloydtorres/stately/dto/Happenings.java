@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;

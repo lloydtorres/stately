@@ -1,6 +1,5 @@
 package com.lloydtorres.stately;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +8,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.nation.NationFragment;
 
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

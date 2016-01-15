@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.nation;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.StatelyActivity;
+import com.lloydtorres.stately.dto.Nation;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;

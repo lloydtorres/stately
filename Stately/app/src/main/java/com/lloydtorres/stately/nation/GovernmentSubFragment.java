@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.nation;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.GovBudget;
+import com.lloydtorres.stately.dto.Nation;
 
 import org.atteo.evo.inflector.English;
 
