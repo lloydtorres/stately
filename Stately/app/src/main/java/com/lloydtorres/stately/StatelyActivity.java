@@ -88,7 +88,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_nation) {
             getSupportActionBar().hide();
             NationFragment nationFragment = new NationFragment();
             nationFragment.setNation(mNation);
@@ -98,21 +98,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             fragmentManager.beginTransaction()
                     .replace(R.id.coordinator_generic, nationFragment)
                     .commit();
-        }
-        else if (id == R.id.nav_gallery) {
-
-        }
-        else if (id == R.id.nav_slideshow) {
-
-        }
-        else if (id == R.id.nav_manage) {
-
-        }
-        else if (id == R.id.nav_share) {
-
-        }
-        else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
