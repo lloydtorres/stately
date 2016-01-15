@@ -25,10 +25,17 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.Arrays;
+
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private final String APP_TAG = "com.lloydtorres.stately";
     private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
+
+    private final int[] noSelect = {    R.id.nav_explore,
+                                        R.id.nav_settings,
+                                        R.id.nav_logout
+                                    };
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -38,7 +45,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private RoundedImageView nationFlag;
     private TextView nationNameView;
 
-    private int currentPosition;
+    private int currentPosition = R.id.nav_nation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +141,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (id != currentPosition)
+        if (id != currentPosition && !isNoSelect(id))
         {
             currentPosition = id;
             if (id == R.id.nav_nation) {
@@ -159,5 +166,17 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         fragmentManager.beginTransaction()
                 .replace(R.id.coordinator_generic, nationFragment)
                 .commit();
+    }
+
+    private boolean isNoSelect(int key)
+    {
+        for (int i=0; i<noSelect.length; i++)
+        {
+            if (noSelect[i] == key)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
