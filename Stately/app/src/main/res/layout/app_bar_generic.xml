@@ -5,7 +5,6 @@
     android:id="@+id/coordinator_generic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.lloydtorres.stately.StatelyActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -24,6 +23,7 @@
 
     <FrameLayout
         android:id="@+id/content_frame"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

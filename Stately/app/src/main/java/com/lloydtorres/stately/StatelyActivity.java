@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.nation.OverviewSubFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -63,6 +64,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_generic);
         setToolbar(toolbar);
+        getSupportActionBar().hide();
         initNavigationView();
     }
 
@@ -85,7 +87,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
         initNavBanner();
-        startNationFragment();
+        NationFragment nf = getNationFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.coordinator_generic, nf)
+                .commit();
     }
 
     private void initNavBanner()
@@ -139,14 +144,24 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 
         if (id != currentPosition && !isNoSelect(id))
         {
             currentPosition = id;
+            android.support.v4.app.Fragment fChoose;
+
             if (id == R.id.nav_nation) {
-                startNationFragment();
+                fChoose = getNationFragment();
             }
+            else
+            {
+                fChoose = new GenericFragment();
+            }
+
+            fm.beginTransaction()
+                    .replace(R.id.coordinator_generic, fChoose)
+                    .commit();
 
             drawer.closeDrawer(GravityCompat.START);
             return true;
@@ -156,16 +171,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             return false;
         }
     }
-    private void startNationFragment()
+    private NationFragment getNationFragment()
     {
-        getSupportActionBar().hide();
         NationFragment nationFragment = new NationFragment();
         nationFragment.setNation(mNation);
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.coordinator_generic, nationFragment)
-                .commit();
+        return nationFragment;
     }
 
     private boolean isNoSelect(int key)
