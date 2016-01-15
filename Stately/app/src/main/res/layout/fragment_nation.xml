@@ -50,7 +50,7 @@
                     android:adjustViewBounds="true"
                     android:src="@drawable/gray"
                     app:siRadius="2dp"
-                    app:siBorderWidth="2dp"
+                    app:siBorderWidth="1dp"
                     app:siBorderColor="#AAA" />
 
                 <TextView

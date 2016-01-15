@@ -79,6 +79,20 @@ public class LoginActivity extends AppCompatActivity {
                         Persister serializer = new Persister();
                         try {
                             nationResponse = serializer.read(Nation.class, response);
+
+                            // Map out government priorities
+                            switch (nationResponse.govtPriority)
+                            {
+                                case "Defence":
+                                    nationResponse.govtPriority = getString(R.string.defense);
+                                    break;
+                                case "Commerce":
+                                    nationResponse.govtPriority = getString(R.string.industry);
+                                    break;
+                                case "Social Equality":
+                                    nationResponse.govtPriority = getString(R.string.social_policy);
+                                    break;
+                            }
                         }
                         catch (Exception e) {
                             Log.e(APP_TAG, e.toString());

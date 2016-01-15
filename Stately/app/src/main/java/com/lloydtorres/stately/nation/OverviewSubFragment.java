@@ -131,15 +131,10 @@ public class OverviewSubFragment extends Fragment {
         population = (TextView) view.findViewById(R.id.nation_population);
         String suffix = getString(R.string.million);
         double popHolder = mNation.popBase;
-        if (mNation.popBase >= 1000D && mNation.popBase < 10000D)
+        if (mNation.popBase >= 1000D)
         {
             suffix = getString(R.string.billion);
             popHolder /= 1000D;
-        }
-        else if (mNation.popBase >= 10000D)
-        {
-            suffix = getString(R.string.trillion);
-            popHolder /= 1000000D;
         }
 
         population.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));

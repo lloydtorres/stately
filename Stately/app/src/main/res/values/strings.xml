@@ -5,9 +5,9 @@
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
 
-    <string name="login_error_404">Error: Invalid nation name or password.</string>
-    <string name="login_error_parsing">Error: Received unexpected data from NationStates.</string>
-    <string name="login_error_no_internet">Error: Could not connect to NationStates.</string>
+    <string name="login_error_404">Invalid nation name or password.</string>
+    <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
+    <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
     <string name="login_error_generic">An error occurred. Please try again.</string>
 
     <string name="nation_wa_member">WA Member</string>
