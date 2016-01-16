@@ -11,6 +11,9 @@
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
     <string name="login_error_generic">An error occurred. Please try again.</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
     <string name="menu_region">Region</string>
@@ -98,6 +101,17 @@
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="wa_general_assembly">General Assembly</string>
+    <string name="wa_security_council">Security Council</string>
+    <string name="wa_voting_time">Voting ends in %1$s</string>
+    <string name="wa_for">For</string>
+    <string name="wa_against">Against</string>
+    <string name="wa_members">members</string>
+    <string name="wa_delegates">delegates</string>
+    <string name="wa_proposed">Proposed by $1%s</string>
+    <string name="wa_sc_nominee">$1%s of</string>
+    <string name="wa_ga_nominee">$1%s Resolution on</string>
+    <string name="wa_resolution">Resolution Text</string>
+    <string name="wa_vote_breakdown">Vote Breakdown</string>
+    <string name="wa_vote_history">Vote History</string>
 </resources>
