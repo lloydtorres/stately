@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.helpers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.StatelyActivity;
 
 /**
  * Created by Lloyd on 2016-01-14.
@@ -41,11 +44,6 @@ public class GenericFragment extends Fragment {
         }
 
         return view;
-    }
-
-    public Toolbar getToolbar()
-    {
-        return toolbar;
     }
 
     @Override

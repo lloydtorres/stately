@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -103,9 +103,9 @@ public class NationFragment extends Fragment {
     {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
 
-        if (mActivity instanceof StatelyActivity)
+        if (mActivity instanceof PrimeActivity)
         {
-            ((StatelyActivity) mActivity).setToolbar(toolbar);
+            ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
 
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container);

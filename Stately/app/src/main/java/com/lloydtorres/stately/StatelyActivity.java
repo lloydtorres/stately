@@ -6,9 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,13 +14,16 @@ import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.GenericFragment;
+import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.nation.ExploreNationActivity;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class StatelyActivity extends PrimeActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private final String APP_TAG = "com.lloydtorres.stately";
     private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
@@ -49,7 +50,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         if (getIntent() != null)
         {
-            mNation = (Nation) getIntent().getParcelableExtra("mNationData");
+            mNation = getIntent().getParcelableExtra("mNationData");
         }
         if (mNation == null && savedInstanceState != null)
         {
@@ -160,6 +161,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
+        else if (id == R.id.nav_explore)
+        {
+            explore();
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
         else if (id == R.id.nav_logout)
         {
             logout();
@@ -189,6 +196,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         }
         return false;
+    }
+
+    private void explore()
+    {
+        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
+        nationActivityLaunch.putExtra("mNationData", mNation);
+        startActivity(nationActivityLaunch);
     }
 
     private void logout()
