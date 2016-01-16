@@ -1,7 +1,6 @@
 package com.lloydtorres.stately;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,20 +12,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.nation.NationFragment;
-import com.lloydtorres.stately.nation.OverviewSubFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
-import java.util.Arrays;
 
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -166,11 +160,17 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
+        else if (id == R.id.nav_logout)
+        {
+            logout();
+            return true;
+        }
         else
         {
             return false;
         }
     }
+
     private NationFragment getNationFragment()
     {
         NationFragment nationFragment = new NationFragment();
@@ -189,5 +189,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         }
         return false;
+    }
+
+    private void logout()
+    {
+        Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
+        startActivity(nationActivityLaunch);
+        finish();
     }
 }
