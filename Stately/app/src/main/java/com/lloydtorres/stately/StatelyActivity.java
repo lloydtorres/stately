@@ -1,18 +1,37 @@
 package com.lloydtorres.stately;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.google.common.base.CharMatcher;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
@@ -23,11 +42,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import org.simpleframework.xml.core.Persister;
+
 public class StatelyActivity extends PrimeActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private final String APP_TAG = "com.lloydtorres.stately";
+    private static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
+                                                            .or(CharMatcher.WHITESPACE)
+                                                            .or(CharMatcher.anyOf("-"))
+                                                            .precomputed();
     private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
-
     private final int[] noSelect = {    R.id.nav_explore,
                                         R.id.nav_settings,
                                         R.id.nav_logout
@@ -35,13 +59,14 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private int currentPosition = R.id.nav_nation;
 
     private Nation mNation;
     private ImageView nationBanner;
     private RoundedImageView nationFlag;
     private TextView nationNameView;
 
-    private int currentPosition = R.id.nav_nation;
+    private EditText exploreSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,9 +225,32 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
 
     private void explore()
     {
-        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
-        nationActivityLaunch.putExtra("mNationData", mNation);
-        startActivity(nationActivityLaunch);
+        LayoutInflater inflater = (LayoutInflater) getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
+
+        exploreSearch = (EditText) dialogView.findViewById(R.id.explore_searchbar);
+        final RadioGroup exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
+
+        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (exploreToggleState.getCheckedRadioButtonId())
+                {
+                    case R.id.explore_radio_nation:
+                        verifyNationInput(findViewById(R.id.drawer_layout));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.menu_explore)
+                .setView(dialogView)
+                .setPositiveButton(R.string.explore_positive, dialogListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
     }
 
     private void logout()
@@ -210,5 +258,84 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
         Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
         startActivity(nationActivityLaunch);
         finish();
+    }
+
+    public void verifyNationInput(View view)
+    {
+        String name = exploreSearch.getText().toString();
+        boolean verify = CHAR_MATCHER.matchesAllOf(name);
+        if (verify && name.length() > 0)
+        {
+            name = name.toLowerCase().replace(" ","_");
+            queryNation(view, name);
+        }
+        else
+        {
+            makeSnackbar(view, getString(R.string.login_error_404));
+        }
+    }
+
+    private void queryNation(View view, String nationName)
+    {
+        final View fView = view;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = String.format(Nation.QUERY, nationName);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    Nation nationResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            nationResponse = serializer.read(Nation.class, response);
+
+                            // Map out government priorities
+                            switch (nationResponse.govtPriority)
+                            {
+                                case "Defence":
+                                    nationResponse.govtPriority = getString(R.string.defense);
+                                    break;
+                                case "Commerce":
+                                    nationResponse.govtPriority = getString(R.string.industry);
+                                    break;
+                                case "Social Equality":
+                                    nationResponse.govtPriority = getString(R.string.social_policy);
+                                    break;
+                            }
+                        }
+                        catch (Exception e) {
+                            Log.e(APP_TAG, e.toString());
+                            makeSnackbar(fView, getString(R.string.login_error_parsing));
+                        }
+                        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
+                        nationActivityLaunch.putExtra("mNationData", nationResponse);
+                        startActivity(nationActivityLaunch);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(APP_TAG, error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                }
+                else if (error instanceof ServerError)
+                {
+                    makeSnackbar(fView, getString(R.string.explore_error_404_nation));
+                }
+                else
+                {
+                    makeSnackbar(fView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
+    public void makeSnackbar(View view, String str)
+    {
+        Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 }

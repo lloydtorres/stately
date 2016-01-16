@@ -19,6 +19,13 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Logout</string>
 
+    <string name="explore_search_text">Go to...</string>
+    <string name="explore_nation">Nation</string>
+    <string name="explore_region">Region</string>
+    <string name="explore_positive">Let\'s Go</string>
+    <string name="explore_negative">Cancel</string>
+    <string name="explore_error_404_nation">Nation not found.</string>
+
     <string name="nation_wa_member">WA Member</string>
 
     <string name="overview_label_civrights">Civil Rights</string>
