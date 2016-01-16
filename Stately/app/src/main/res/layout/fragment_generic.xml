@@ -2,8 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_app_bar"
-    android:fitsSystemWindows="true"
+    android:id="@+id/coordinator_generic"
+    android:fitsSystemWindows="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lloydtorres.stately.StatelyActivity">
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_app_bar"
+            android:id="@+id/toolbar_generic"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -23,7 +23,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/content_app_bar"
+        android:id="@+id/content_frame"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

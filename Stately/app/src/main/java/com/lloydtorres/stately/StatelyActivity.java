@@ -62,7 +62,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             mNation = savedInstanceState.getParcelable("mNationData");
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_generic);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
         initNavigationView();
@@ -89,7 +89,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         initNavBanner();
         NationFragment nf = getNationFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.coordinator_generic, nf)
+                .replace(R.id.coordinator_app_bar, nf)
                 .commit();
     }
 
@@ -160,7 +160,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
 
             fm.beginTransaction()
-                    .replace(R.id.coordinator_generic, fChoose)
+                    .replace(R.id.coordinator_app_bar, fChoose)
                     .commit();
 
             drawer.closeDrawer(GravityCompat.START);
