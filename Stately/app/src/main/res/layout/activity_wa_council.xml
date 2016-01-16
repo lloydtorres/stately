@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_wa_branch"></include>
+    <include layout="@layout/content_wa_council"></include>
 
 </android.support.design.widget.CoordinatorLayout>
