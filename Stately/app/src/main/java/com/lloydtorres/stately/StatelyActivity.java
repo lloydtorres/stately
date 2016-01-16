@@ -271,7 +271,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
         }
         else
         {
-            makeSnackbar(view, getString(R.string.login_error_404));
+            makeSnackbar(view, getString(R.string.explore_error_404_nation));
         }
     }
 
