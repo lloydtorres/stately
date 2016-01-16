@@ -226,7 +226,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
     private void explore()
     {
         LayoutInflater inflater = (LayoutInflater) getSystemService (Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.view_explore_dialog, null);
 
         exploreSearch = (EditText) dialogView.findViewById(R.id.explore_searchbar);
         final RadioGroup exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
