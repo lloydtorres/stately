@@ -12,7 +12,7 @@ import org.simpleframework.xml.Root;
 @Root(name="NATION", strict=false)
 public class Nation implements Parcelable {
 
-    public static final String QUERY = "http://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
+    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
                                         + "banner+flag+name+type+wa"
                                         + "+category+region+population+founded+lastactivity+motto"
                                         + "+freedom+freedomscores"

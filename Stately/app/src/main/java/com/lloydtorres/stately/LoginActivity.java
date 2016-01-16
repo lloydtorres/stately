@@ -85,6 +85,9 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             nationResponse = serializer.read(Nation.class, response);
 
+                            // Switch flag URL to https
+                            nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
+
                             // Map out government priorities
                             switch (nationResponse.govtPriority)
                             {

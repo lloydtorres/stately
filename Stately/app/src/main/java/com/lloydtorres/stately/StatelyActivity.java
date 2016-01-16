@@ -51,7 +51,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
                                                             .or(CharMatcher.WHITESPACE)
                                                             .or(CharMatcher.anyOf("-"))
                                                             .precomputed();
-    private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
+    private final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
     private final int[] noSelect = {    R.id.nav_explore,
                                         R.id.nav_settings,
                                         R.id.nav_logout
@@ -290,6 +290,9 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
                         Persister serializer = new Persister();
                         try {
                             nationResponse = serializer.read(Nation.class, response);
+
+                            // Switch flag URL to https
+                            nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
 
                             // Map out government priorities
                             switch (nationResponse.govtPriority)

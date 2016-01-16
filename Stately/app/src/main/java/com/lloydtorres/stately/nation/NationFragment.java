@@ -32,7 +32,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  */
 public class NationFragment extends Fragment {
     private final String APP_TAG = "com.lloydtorres.stately";
-    private final String BANNER_TEMPLATE = "http://www.nationstates.net/images/banners/%s.jpg";
+    private final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
 
     private final int OVERVIEW_TAB = 0;
     private final int PEOPLE_TAB = 1;
