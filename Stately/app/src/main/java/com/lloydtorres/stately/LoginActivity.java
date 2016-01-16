@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else
             {
+                setLoginState(false);
                 makeSnackbar(view, getString(R.string.login_error_404));
             }
         }
