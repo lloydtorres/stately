@@ -144,6 +144,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
 
         sectorChart.setOnChartValueSelectedListener(this);
         sectorChart.setData(dataFull);
+        sectorChart.invalidate();
     }
 
     @Override

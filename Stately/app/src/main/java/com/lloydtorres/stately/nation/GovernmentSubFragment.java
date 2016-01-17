@@ -148,6 +148,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
 
         budgetChart.setOnChartValueSelectedListener(this);
         budgetChart.setData(dataFull);
+        budgetChart.invalidate();
     }
 
     @Override

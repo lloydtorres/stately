@@ -133,6 +133,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
         mortalityChart.setOnChartValueSelectedListener(this);
         mortalityChart.setData(dataFull);
+        mortalityChart.invalidate();
     }
 
     @Override
