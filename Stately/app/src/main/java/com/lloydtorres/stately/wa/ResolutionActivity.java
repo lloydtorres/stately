@@ -3,6 +3,7 @@ package com.lloydtorres.stately.wa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,8 +30,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
@@ -45,7 +44,7 @@ import java.util.List;
 /**
  * Created by Lloyd on 2016-01-17.
  */
-public class ResolutionActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class ResolutionActivity extends AppCompatActivity {
     private AssemblyActive mAssembly;
     private Resolution mResolution;
     private int councilId;
@@ -63,7 +62,8 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
 
     private PieChart votingBreakdown;
     private LineChart votingHistory;
-    private List<String> chartLabels;
+    private TextView voteHistoryFor;
+    private TextView voteHistoryAgainst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +104,8 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
 
         votingBreakdown = (PieChart) findViewById(R.id.wa_voting_breakdown);
         votingHistory = (LineChart) findViewById(R.id.wa_voting_history);
+        voteHistoryFor = (TextView) findViewById(R.id.wa_vote_history_for);
+        voteHistoryAgainst = (TextView) findViewById(R.id.wa_vote_history_against);
 
         if (mResolution == null)
         {
@@ -192,6 +194,8 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(mResolution.created)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
+        voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
+        voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         content.setText(SparkleHelper.getHtmlFormatting(mResolution.content));
         setVotingBreakdown(mResolution.votesFor, mResolution.votesAgainst);
@@ -206,7 +210,7 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
         float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
 
-        chartLabels = new ArrayList<String>();
+        List<String> chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
 
         int i = 0;
@@ -235,7 +239,7 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         votingBreakdown.setCenterTextSize(20);
         votingBreakdown.setRotationEnabled(false);
 
-        votingBreakdown.setOnChartValueSelectedListener(this);
+        votingBreakdown.setOnChartValueSelectedListener(new VotingBreakdownChartListener(this, votingBreakdown, chartLabels));
         votingBreakdown.setData(dataFull);
         votingBreakdown.invalidate();
     }
@@ -255,7 +259,10 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         setFor.setAxisDependency(YAxis.AxisDependency.LEFT);
         setFor.setColors(SparkleHelper.waColourFor, this);
         setFor.setDrawValues(false);
-        setFor.setDrawHighlightIndicators(false);
+        setFor.setDrawVerticalHighlightIndicator(true);
+        setFor.setDrawHorizontalHighlightIndicator(false);
+        setFor.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        setFor.setHighlightLineWidth(2.5f);
         setFor.setDrawCircles(false);
         setFor.setLineWidth(2.5f);
 
@@ -263,7 +270,10 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
         setAgainst.setColors(SparkleHelper.waColourAgainst, this);
         setAgainst.setDrawValues(false);
-        setAgainst.setDrawHighlightIndicators(false);
+        setAgainst.setDrawVerticalHighlightIndicator(true);
+        setAgainst.setDrawHorizontalHighlightIndicator(false);
+        setAgainst.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        setAgainst.setHighlightLineWidth(2.5f);
         setAgainst.setDrawCircles(false);
         setAgainst.setLineWidth(2.5f);
 
@@ -302,27 +312,13 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
 
         votingHistory.setDoubleTapToZoomEnabled(false);
         votingHistory.setDescription("");
+        votingHistory.setDragEnabled(true);
         votingHistory.setScaleYEnabled(false);
         votingHistory.setDrawGridBackground(false);
+        votingHistory.setOnChartValueSelectedListener(new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst));
 
         votingHistory.setData(data);
         votingHistory.invalidate();
-    }
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        if (votingBreakdown != null)
-        {
-            votingBreakdown.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
-        }
-    }
-
-    @Override
-    public void onNothingSelected() {
-        if (votingBreakdown != null)
-        {
-            votingBreakdown.setCenterText("");
-        }
     }
 
     @Override

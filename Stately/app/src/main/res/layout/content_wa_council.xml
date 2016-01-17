@@ -186,13 +186,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:contentPadding="20dp" >
+            card_view:cardBackgroundColor="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
                 <TextView
                     android:textSize="15sp"
                     android:fontFamily="sans-serif"
@@ -205,7 +209,69 @@
                     android:background="@android:color/white"
                     android:layout_width="match_parent"
                     android:layout_marginTop="10dp"
-                    android:layout_height="300dp" />
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="3dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="@color/colorChart0">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:text="@string/wa_for"/>
+                        <TextView
+                            android:id="@+id/wa_vote_history_for"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp"
+                            tools:text="54,321"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:background="@color/colorChart1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:text="@string/wa_against"/>
+                        <TextView
+                            android:id="@+id/wa_vote_history_against"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp"
+                            tools:text="12,345"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
