@@ -15,11 +15,6 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
-import org.atteo.evo.inflector.English;
-
-import java.text.NumberFormat;
-import java.util.Locale;
-
 /**
  * Created by Lloyd on 2016-01-10.
  */

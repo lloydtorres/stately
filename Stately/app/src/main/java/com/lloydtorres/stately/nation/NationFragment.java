@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
-import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

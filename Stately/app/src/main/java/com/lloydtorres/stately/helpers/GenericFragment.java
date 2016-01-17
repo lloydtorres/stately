@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.StatelyActivity;
 
 /**
  * Created by Lloyd on 2016-01-14.
