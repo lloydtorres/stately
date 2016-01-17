@@ -299,10 +299,7 @@ public class ResolutionActivity extends AppCompatActivity {
 
         // formatting
         Legend cLegend = votingHistory.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
+        cLegend.setEnabled(false);
 
         XAxis xAxis = votingHistory.getXAxis();
         xAxis.setLabelsToSkip(23);
