@@ -10,16 +10,16 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-12.
  */
 @Root(name="EVENT", strict=false)
-public class HappeningEvents implements Parcelable {
+public class HappeningEvent implements Parcelable {
 
     @Element(name="TIMESTAMP")
     public long timestamp;
     @Element(name="TEXT")
     public String content;
 
-    public HappeningEvents() { super(); }
+    public HappeningEvent() { super(); }
 
-    protected HappeningEvents(Parcel in) {
+    protected HappeningEvent(Parcel in) {
         timestamp = in.readLong();
         content = in.readString();
     }
@@ -36,15 +36,15 @@ public class HappeningEvents implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<HappeningEvents> CREATOR = new Parcelable.Creator<HappeningEvents>() {
+    public static final Parcelable.Creator<HappeningEvent> CREATOR = new Parcelable.Creator<HappeningEvent>() {
         @Override
-        public HappeningEvents createFromParcel(Parcel in) {
-            return new HappeningEvents(in);
+        public HappeningEvent createFromParcel(Parcel in) {
+            return new HappeningEvent(in);
         }
 
         @Override
-        public HappeningEvents[] newArray(int size) {
-            return new HappeningEvents[size];
+        public HappeningEvent[] newArray(int size) {
+            return new HappeningEvent[size];
         }
     };
 }

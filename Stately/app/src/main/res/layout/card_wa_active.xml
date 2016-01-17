@@ -70,6 +70,7 @@
                     android:textSize="14sp"
                     android:text="@string/wa_for"/>
                 <TextView
+                    android:id="@+id/card_wa_for"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -95,6 +96,7 @@
                     android:textSize="14sp"
                     android:text="@string/wa_against"/>
                 <TextView
+                    android:id="@+id/card_wa_against"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
