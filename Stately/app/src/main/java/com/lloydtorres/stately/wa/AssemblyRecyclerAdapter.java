@@ -16,6 +16,7 @@ import com.lloydtorres.stately.dto.HappeningEvent;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,7 +45,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         AssemblyStats s = new AssemblyStats(sc.numNations, sc.numDelegates);
         cards.add(s);
 
-        cards.addAll(sc.happeningsRoot.events);
+        List<HappeningEvent> happen = sc.happeningsRoot.events;
+        Collections.sort(happen);
+
+        cards.addAll(happen);
     }
 
     @Override

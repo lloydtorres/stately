@@ -10,7 +10,7 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-12.
  */
 @Root(name="EVENT", strict=false)
-public class HappeningEvent implements Parcelable {
+public class HappeningEvent implements Parcelable, Comparable<HappeningEvent> {
 
     @Element(name="TIMESTAMP")
     public long timestamp;
@@ -47,4 +47,20 @@ public class HappeningEvent implements Parcelable {
             return new HappeningEvent[size];
         }
     };
+
+    @Override
+    public int compareTo(HappeningEvent another) {
+        if (this.timestamp > another.timestamp)
+        {
+            return -1;
+        }
+        else if (this.timestamp < another.timestamp)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }
