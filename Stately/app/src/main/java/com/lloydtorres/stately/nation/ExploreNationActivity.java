@@ -3,6 +3,7 @@ package com.lloydtorres.stately.nation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -13,7 +14,7 @@ import com.lloydtorres.stately.dto.Nation;
 /**
  * Created by Lloyd on 2016-01-15.
  */
-public class ExploreNationActivity extends PrimeActivity {
+public class ExploreNationActivity extends AppCompatActivity implements PrimeActivity {
     private Nation mNation;
     private NationFragment nFragment;
 
