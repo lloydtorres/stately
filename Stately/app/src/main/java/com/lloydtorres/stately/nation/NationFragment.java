@@ -99,6 +99,7 @@ public class NationFragment extends Fragment {
     private void initToolbar(View view)
     {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
+        toolbar.setTitle("");
 
         if (mActivity instanceof PrimeActivity)
         {
