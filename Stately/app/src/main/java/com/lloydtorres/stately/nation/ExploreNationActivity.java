@@ -14,8 +14,6 @@ import com.lloydtorres.stately.dto.Nation;
  * Created by Lloyd on 2016-01-15.
  */
 public class ExploreNationActivity extends PrimeActivity {
-    private final String APP_TAG = "com.lloydtorres.stately";
-
     private Nation mNation;
     private NationFragment nFragment;
 

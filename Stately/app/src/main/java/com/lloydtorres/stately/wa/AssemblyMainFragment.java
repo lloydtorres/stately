@@ -26,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -33,8 +34,6 @@ import org.simpleframework.xml.core.Persister;
  * Created by Lloyd on 2016-01-16.
  */
 public class AssemblyMainFragment extends Fragment {
-    private final String APP_TAG = "com.lloydtorres.stately";
-
     private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
@@ -113,30 +112,25 @@ public class AssemblyMainFragment extends Fragment {
                             }
                         }
                         catch (Exception e) {
-                            Log.e(APP_TAG, e.toString());
-                            makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(APP_TAG, error.toString());
+                SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
         });
 
         queue.add(stringRequest);
-    }
-
-    private void makeSnackbar(View view, String str)
-    {
-        Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 
     private void setGeneralAssembly(Assembly g)
