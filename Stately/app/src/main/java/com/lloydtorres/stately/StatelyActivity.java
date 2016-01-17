@@ -37,6 +37,7 @@ import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.nation.ExploreNationActivity;
 import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.wa.AssemblyMainFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -85,14 +86,13 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
+        getSupportActionBar().setTitle("");
         initNavigationView();
     }
 
-    public void setToolbar(Toolbar t)
-    {
+    public void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("");
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -132,8 +132,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         if (mNation != null)
         {
@@ -171,12 +170,17 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
             currentPosition = id;
             android.support.v4.app.Fragment fChoose;
 
-            if (id == R.id.nav_nation) {
-                fChoose = getNationFragment();
-            }
-            else
+            switch (id)
             {
-                fChoose = new GenericFragment();
+                case R.id.nav_nation:
+                    fChoose = getNationFragment();
+                    break;
+                case R.id.nav_wa:
+                    fChoose = new AssemblyMainFragment();
+                    break;
+                default:
+                    fChoose = new GenericFragment();
+                    break;
             }
 
             fm.beginTransaction()
@@ -186,15 +190,20 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-        else if (id == R.id.nav_explore)
+        else if (isNoSelect(id))
         {
-            explore();
+            switch (id)
+            {
+                case R.id.nav_explore:
+                    explore();
+                    break;
+                case R.id.nav_logout:
+                    logout();
+                    break;
+                default:
+                    break;
+            }
             drawer.closeDrawer(GravityCompat.START);
-            return true;
-        }
-        else if (id == R.id.nav_logout)
-        {
-            logout();
             return true;
         }
         else

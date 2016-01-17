@@ -3,6 +3,7 @@ package com.lloydtorres.stately.wa;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,8 +34,6 @@ import org.simpleframework.xml.core.Persister;
  */
 public class AssemblyMainFragment extends Fragment {
     private final String APP_TAG = "com.lloydtorres.stately";
-    private final int GENERAL_ASSEMBLY = 1;
-    private final int SECURITY_COUNCIL = 2;
 
     private Activity mActivity;
     private View mView;
@@ -62,8 +61,9 @@ public class AssemblyMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_generic, container, false);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
+        toolbar.setTitle(getActivity().getString(R.string.menu_wa));
 
         if (mActivity instanceof PrimeActivity)
         {
@@ -81,7 +81,7 @@ public class AssemblyMainFragment extends Fragment {
 
     private void queryWorldAssembly(View view)
     {
-        queryWorldAssemblyHeavy(mView, GENERAL_ASSEMBLY);
+        queryWorldAssemblyHeavy(mView, Assembly.GENERAL_ASSEMBLY);
     }
 
     private void queryWorldAssemblyHeavy(View view, int chamberId)
@@ -100,21 +100,21 @@ public class AssemblyMainFragment extends Fragment {
                         Persister serializer = new Persister();
                         try {
                             waResponse = serializer.read(Assembly.class, response);
+
+                            if (chamberMode == Assembly.GENERAL_ASSEMBLY)
+                            {
+                                setGeneralAssembly(waResponse);
+                                queryWorldAssemblyHeavy(mView, Assembly.SECURITY_COUNCIL);
+                            }
+                            else if (chamberMode == Assembly.SECURITY_COUNCIL)
+                            {
+                                setSecurityCouncil(waResponse);
+                                refreshRecycler();
+                            }
                         }
                         catch (Exception e) {
                             Log.e(APP_TAG, e.toString());
                             makeSnackbar(fView, getString(R.string.login_error_parsing));
-                        }
-
-                        if (chamberMode == GENERAL_ASSEMBLY)
-                        {
-                            setGeneralAssembly(waResponse);
-                            queryWorldAssemblyHeavy(mView, SECURITY_COUNCIL);
-                        }
-                        else if (chamberMode == SECURITY_COUNCIL)
-                        {
-                            setSecurityCouncil(secCouncil);
-                            refreshRecycler();
                         }
                     }
                 }, new Response.ErrorListener() {

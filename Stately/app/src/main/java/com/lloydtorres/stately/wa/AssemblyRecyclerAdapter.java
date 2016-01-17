@@ -43,7 +43,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         AssemblyStats s = new AssemblyStats(sc.numNations, sc.numDelegates);
         cards.add(s);
 
-        cards.add(sc.happeningsRoot.events);
+        cards.addAll(sc.happeningsRoot.events);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (cards.get(position) instanceof Assembly)
         {
             Assembly a = (Assembly) cards.get(position);
-            return a.resolution != null ? ACTIVE_CARD : INACTIVE_CARD;
+            return a.resolution.name != null ? ACTIVE_CARD : INACTIVE_CARD;
         }
         else if (cards.get(position) instanceof AssemblyStats)
         {

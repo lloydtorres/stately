@@ -12,6 +12,8 @@ import org.simpleframework.xml.Root;
 @Root(name="WA", strict=false)
 public class Assembly implements Parcelable {
 
+    public static int GENERAL_ASSEMBLY = 1;
+    public static final int SECURITY_COUNCIL = 2;
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q="
                                         + "resolution+votetrack"
                                         + "+lastresolution"
@@ -29,6 +31,10 @@ public class Assembly implements Parcelable {
     public int numDelegates;
     @Element(name="HAPPENINGS")
     public Happenings happeningsRoot;
+
+    public Assembly() {
+        super();
+    }
 
     protected Assembly(Parcel in) {
         resolution = (Resolution) in.readValue(Resolution.class.getClassLoader());

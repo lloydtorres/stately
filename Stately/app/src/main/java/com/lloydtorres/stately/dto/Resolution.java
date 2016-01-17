@@ -19,27 +19,31 @@ public class Resolution implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q="
                                         + "resolution+votetrack";
 
-    @Element(name="CATEGORY")
+    @Element(name="CATEGORY", required=false)
     public String category;
-    @Element(name="CREATED")
+    @Element(name="CREATED", required=false)
     public long created;
-    @Element(name="DESC")
+    @Element(name="DESC", required=false)
     public String content;
-    @Element(name="NAME")
+    @Element(name="NAME", required=false)
     public String name;
-    @Element(name="OPTION")
+    @Element(name="OPTION", required=false)
     public String target;
-    @Element(name="PROPOSED_BY")
+    @Element(name="PROPOSED_BY", required=false)
     public String proposedBy;
-    @Element(name="TOTAL_VOTES_AGAINST")
+    @Element(name="TOTAL_VOTES_AGAINST", required=false)
     public int votesAgainst;
-    @Element(name="TOTAL_VOTES_FOR")
+    @Element(name="TOTAL_VOTES_FOR", required=false)
     public int votesFor;
 
-    @ElementList(name="VOTE_TRACK_AGAINST")
+    @ElementList(name="VOTE_TRACK_AGAINST", required=false)
     public List<Integer> voteHistoryAgainst;
-    @ElementList(name="VOTE_TRACK_FOR")
+    @ElementList(name="VOTE_TRACK_FOR", required=false)
     public List<Integer> voteHistoryFor;
+
+    public Resolution() {
+        super();
+    }
 
     protected Resolution(Parcel in) {
         category = in.readString();
