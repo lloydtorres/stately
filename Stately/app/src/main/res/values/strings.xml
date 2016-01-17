@@ -107,7 +107,7 @@
     <string name="wa_against">Against</string>
     <string name="wa_members">members</string>
     <string name="wa_delegates">delegates</string>
-    <string name="wa_proposed">Proposed by $1%s</string>
+    <string name="wa_proposed">Proposed by %1$s</string>
     <string name="wa_nominee_template">%1$s \u2014 %2$s</string>
     <string name="wa_resolution">Resolution</string>
     <string name="wa_vote_breakdown">Vote Breakdown</string>

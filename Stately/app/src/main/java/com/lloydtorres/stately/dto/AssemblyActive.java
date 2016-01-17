@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
 /**
  * Created by Lloyd on 2016-01-17.
  */
-@Root(name="WA")
+@Root(name="WA", strict=false)
 public class AssemblyActive implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q=resolution+votetrack";
 

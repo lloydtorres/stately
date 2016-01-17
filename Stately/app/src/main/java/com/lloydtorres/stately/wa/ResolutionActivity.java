@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -162,12 +163,14 @@ public class ResolutionActivity extends AppCompatActivity {
 
         title.setText(mResolution.name);
         target.setText(String.format(getString(R.string.wa_nominee_template), mResolution.category, mResolution.target));
-        proposedBy.setText(String.format(getString(R.string.wa_proposed), proposedBy));
+        proposedBy.setText(String.format(getString(R.string.wa_proposed), mResolution.proposedBy));
         voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(mResolution.created)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
-        content.setText(mResolution.content);
+        content.setText(SparkleHelper.getHtmlFormatting(mResolution.content));
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

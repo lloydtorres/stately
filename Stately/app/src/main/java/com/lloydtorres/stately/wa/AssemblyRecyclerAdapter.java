@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.wa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -120,40 +121,63 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     // Card viewholders
 
-    public class ActiveCard extends RecyclerView.ViewHolder {
+    public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView cardTitle;
         private TextView cardHeader;
         private TextView cardActiveTime;
         private TextView cardFor;
         private TextView cardAgainst;
-        private Context mContext;
+        private Context context;
 
         public ActiveCard(Context c, View v) {
             super(v);
-            mContext = c;
+            context = c;
             cardTitle = (TextView) v.findViewById(R.id.card_wa_council);
             cardHeader = (TextView) v.findViewById(R.id.card_wa_title);
             cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);
             cardFor = (TextView) v.findViewById(R.id.card_wa_for);
             cardAgainst = (TextView) v.findViewById(R.id.card_wa_against);
+
+            v.setOnClickListener(this);
         }
 
         public void init(Assembly a, int pos)
         {
             if (pos == GENERAL_ASSEMBLY_INDEX)
             {
-                cardTitle.setText(context.getResources().getString(R.string.wa_general_assembly));
+                cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));
             }
             else if (pos == SECURITY_COUNCIL_INDEX)
             {
-                cardTitle.setText(context.getResources().getString(R.string.wa_security_council));
+                cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_security_council));
             }
 
             cardHeader.setText(a.resolution.name);
-            cardActiveTime.setText(String.format(mContext.getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(a.resolution.created)));
+            cardActiveTime.setText(String.format(context.getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(a.resolution.created)));
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            SparkleHelper.logError("Adapter position: " + pos);
+
+            if (pos != RecyclerView.NO_POSITION)
+            {
+                Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
+                switch (pos)
+                {
+                    case GENERAL_ASSEMBLY_INDEX:
+                        resolutionActivityLaunch.putExtra("councilId", Assembly.GENERAL_ASSEMBLY);
+                        break;
+                    case SECURITY_COUNCIL_INDEX:
+                        resolutionActivityLaunch.putExtra("councilId", Assembly.SECURITY_COUNCIL);
+                        break;
+                }
+                context.startActivity(resolutionActivityLaunch);
+            }
         }
     }
 

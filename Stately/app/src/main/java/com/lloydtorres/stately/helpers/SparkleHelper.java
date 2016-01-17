@@ -2,6 +2,7 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
@@ -94,6 +95,14 @@ public class SparkleHelper {
     public static String getBannerURL(String id)
     {
         return String.format(BANNER_TEMPLATE, id);
+    }
+
+    public static String getHtmlFormatting(String content)
+    {
+        String holder = content;
+        holder = holder.replace("\n", "<br />");
+
+        return Html.fromHtml(holder).toString();
     }
 
     public static String getReadableDateFromUTC(long sec)
