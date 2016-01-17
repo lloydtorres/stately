@@ -129,6 +129,7 @@ public class AssemblyMainFragment extends Fragment {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
+                            mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
                         }
                     }
@@ -136,6 +137,7 @@ public class AssemblyMainFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
