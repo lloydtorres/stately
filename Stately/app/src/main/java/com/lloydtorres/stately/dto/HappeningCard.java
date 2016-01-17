@@ -1,7 +1,6 @@
 package com.lloydtorres.stately.dto;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
