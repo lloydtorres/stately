@@ -64,7 +64,7 @@
 
     <string name="card_government_expenditures_title">Expenditures</string>
     <string name="card_government_expenditures_budget">Total</string>
-    <string name="card_government_expenditures_budget_flavour">%1$s %2$s %3$s (%4$.1f%% of GDP)</string>
+    <string name="card_government_expenditures_budget_flavour">%1$s (%2$.1f%% of GDP)</string>
     <string name="card_government_expenditures_chart">Details</string>
 
     <string name="administration">Administration</string>
@@ -83,17 +83,16 @@
     <string name="card_economy_analysis_title">Analysis</string>
     <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_economy_analysis_per_capita">GDP Per Capita</string>
-    <string name="avg_val_currency">Average: %1$s %2$s</string>
-    <string name="poor_val_currency">Poorest 10%%: %1$s %2$s</string>
-    <string name="rich_val_currency">Richest 10%%: %1$s %2$s</string>
+    <string name="avg_val_currency">Average: %1$s</string>
+    <string name="poor_val_currency">Poorest 10%%: %1$s</string>
+    <string name="rich_val_currency">Richest 10%%: %1$s</string>
     <string name="card_economy_sectors">Sectors</string>
 
     <string name="government">Government</string>
-    <string name="state_owned">State-Owned Industry</string>
-    <string name="private_sector">Private Industry</string>
-    <string name="black_market">Black Market (Estimated)</string>
+    <string name="state_owned">State-Owned</string>
+    <string name="private_sector">Private</string>
+    <string name="black_market">Black Market</string>
 
-    <string name="thousand">thousand</string>
     <string name="million">million</string>
     <string name="billion">billion</string>
     <string name="trillion">trillion</string>

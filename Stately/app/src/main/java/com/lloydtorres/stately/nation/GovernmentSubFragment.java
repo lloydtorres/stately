@@ -18,6 +18,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.GovBudget;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
 
@@ -30,21 +31,6 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-12.
  */
 public class GovernmentSubFragment extends Fragment implements OnChartValueSelectedListener {
-    private final int[] chartColours = {    R.color.colorChart0,
-                                            R.color.colorChart1,
-                                            R.color.colorChart2,
-                                            R.color.colorChart3,
-                                            R.color.colorChart4,
-                                            R.color.colorChart5,
-                                            R.color.colorChart6,
-                                            R.color.colorChart7,
-                                            R.color.colorChart8,
-                                            R.color.colorChart9,
-                                            R.color.colorChart10,
-                                            R.color.colorChart11,
-                                            R.color.colorChart12
-                                        };
-
     private Nation mNation;
 
     private TextView govDesc;
@@ -105,25 +91,8 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
     {
         budgetTotal = (TextView) view.findViewById(R.id.nation_expenditures_total);
 
-        String suffix = getString(R.string.thousand);
         long budgetHolder = (long) (mNation.gdp * (mNation.sectors.government/100d));
-        if (budgetHolder >= 1000000L && budgetHolder < 1000000000L)
-        {
-            suffix = getString(R.string.million);
-            budgetHolder /= 1000000L;
-        }
-        else if (budgetHolder >= 1000000000L && budgetHolder < 1000000000000L)
-        {
-            suffix = getString(R.string.billion);
-            budgetHolder /= 1000000000L;
-        }
-        else if (budgetHolder >= 1000000000000L)
-        {
-            suffix = getString(R.string.trillion);
-            budgetHolder /= 1000000000000L;
-        }
-
-        budgetTotal.setText(String.format(getString(R.string.card_government_expenditures_budget_flavour), NumberFormat.getInstance(Locale.US).format(budgetHolder).toString(), suffix, English.plural(mNation.currency), mNation.sectors.government));
+        budgetTotal.setText(String.format(getString(R.string.card_government_expenditures_budget_flavour), SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency), mNation.sectors.government));
     }
 
     private void initBudgetChart(View view)
@@ -163,7 +132,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
 
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
-        dataSet.setColors(chartColours, getActivity());
+        dataSet.setColors(SparkleHelper.chartColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
         // formatting

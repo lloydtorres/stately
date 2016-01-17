@@ -18,6 +18,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
 
@@ -30,12 +31,6 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-12.
  */
 public class EconomySubFragment extends Fragment implements OnChartValueSelectedListener {
-    private final int[] chartColours = {    R.color.colorSector0,
-                                            R.color.colorSector1,
-                                            R.color.colorSector2,
-                                            R.color.colorSector3,
-                                        };
-
     private Nation mNation;
 
     private TextView econDesc;
@@ -98,33 +93,16 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
     private void initGDP(View view)
     {
         gdpTotal = (TextView) view.findViewById(R.id.nation_gdp_total);
+        gdpTotal.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
+
         gdpPerCapitaAvg = (TextView) view.findViewById(R.id.nation_gdp_per_capita_avg);
+        gdpPerCapitaAvg.setText(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, English.plural(mNation.currency))));
+
         gdpPerCapitaPoor = (TextView) view.findViewById(R.id.nation_gdp_per_capita_poor);
+        gdpPerCapitaPoor.setText(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
+
         gdpPerCapitaRich = (TextView) view.findViewById(R.id.nation_gdp_per_capita_rich);
-
-        String suffix = getString(R.string.thousand);
-        long gdpHolder = mNation.gdp;
-        if (gdpHolder >= 1000000L && gdpHolder < 1000000000L)
-        {
-            suffix = getString(R.string.million);
-            gdpHolder /= 1000000L;
-        }
-        else if (gdpHolder >= 1000000000L && gdpHolder < 1000000000000L)
-        {
-            suffix = getString(R.string.billion);
-            gdpHolder /= 1000000000L;
-        }
-        else if (gdpHolder >= 1000000000000L)
-        {
-            suffix = getString(R.string.trillion);
-            gdpHolder /= 1000000000000L;
-        }
-
-        gdpTotal.setText(String.format(getString(R.string.val_suffix_currency), NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, English.plural(mNation.currency)));
-
-        gdpPerCapitaAvg.setText(String.format(getString(R.string.avg_val_currency), NumberFormat.getInstance(Locale.US).format(mNation.income), English.plural(mNation.currency)));
-        gdpPerCapitaPoor.setText(String.format(getString(R.string.poor_val_currency), NumberFormat.getInstance(Locale.US).format(mNation.poorest), English.plural(mNation.currency)));
-        gdpPerCapitaRich.setText(String.format(getString(R.string.rich_val_currency), NumberFormat.getInstance(Locale.US).format(mNation.richest), English.plural(mNation.currency)));
+        gdpPerCapitaRich.setText(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
     }
 
     private void initSectorChart(View view)
@@ -148,7 +126,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
 
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
-        dataSet.setColors(chartColours, getActivity());
+        dataSet.setColors(SparkleHelper.sectorColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
         // formatting

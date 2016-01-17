@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.common.base.CharMatcher;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -28,12 +29,6 @@ import org.simpleframework.xml.core.Persister;
  * Created by Lloyd on 2016-01-13.
  */
 public class LoginActivity extends AppCompatActivity {
-    private final String APP_TAG = "com.lloydtorres.stately";
-    private static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
-                                                                .or(CharMatcher.WHITESPACE)
-                                                                .or(CharMatcher.anyOf("-"))
-                                                                .precomputed();
-
     private EditText username;
     private EditText password;
     private Button login;
@@ -56,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             setLoginState(true);
             String name = username.getText().toString();
-            boolean verify = CHAR_MATCHER.matchesAllOf(name);
-            if (verify && name.length() > 0)
+            if (SparkleHelper.isValidNationName(name) && name.length() > 0)
             {
                 name = name.toLowerCase().replace(" ","_");
                 queryNation(view, name);
@@ -65,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             else
             {
                 setLoginState(false);
-                makeSnackbar(view, getString(R.string.login_error_404));
+                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
             }
         }
     }
@@ -104,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                         catch (Exception e) {
-                            Log.e(APP_TAG, e.toString());
-                            makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
                             setLoginState(false);
                         }
                         Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
@@ -116,18 +110,18 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(APP_TAG, error.toString());
+                SparkleHelper.logError(error.toString());
                 setLoginState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    makeSnackbar(fView, getString(R.string.login_error_404));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_404));
                 }
                 else
                 {
-                    makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
         });
@@ -151,10 +145,5 @@ public class LoginActivity extends AppCompatActivity {
             login.setText(getString(R.string.log_in));
         }
         isLoggingIn = stat;
-    }
-
-    private void makeSnackbar(View view, String str)
-    {
-        Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 }

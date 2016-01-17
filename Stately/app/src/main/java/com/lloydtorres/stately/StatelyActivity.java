@@ -35,6 +35,7 @@ import com.google.common.base.CharMatcher;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.ExploreNationActivity;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
@@ -47,12 +48,6 @@ import org.simpleframework.xml.core.Persister;
 
 public class StatelyActivity extends PrimeActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String APP_TAG = "com.lloydtorres.stately";
-    private static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
-                                                            .or(CharMatcher.WHITESPACE)
-                                                            .or(CharMatcher.anyOf("-"))
-                                                            .precomputed();
-    private final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
     private final int[] noSelect = {    R.id.nav_explore,
                                         R.id.nav_settings,
                                         R.id.nav_logout
@@ -127,7 +122,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
         DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
 
         nationNameView.setText(mNation.name);
-        imageLoader.displayImage(String.format(BANNER_TEMPLATE, mNation.bannerKey), nationBanner, imageOptions);
+        imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
         imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
     }
 
@@ -272,15 +267,14 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
     public void verifyNationInput(View view)
     {
         String name = exploreSearch.getText().toString();
-        boolean verify = CHAR_MATCHER.matchesAllOf(name);
-        if (verify && name.length() > 0)
+        if (SparkleHelper.isValidNationName(name) && name.length() > 0)
         {
             name = name.toLowerCase().replace(" ","_");
             queryNation(view, name);
         }
         else
         {
-            makeSnackbar(view, getString(R.string.explore_error_404_nation));
+            SparkleHelper.makeSnackbar(view, getString(R.string.explore_error_404_nation));
         }
     }
 
@@ -318,8 +312,8 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
                             }
                         }
                         catch (Exception e) {
-                            Log.e(APP_TAG, e.toString());
-                            makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.logError(toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
                         }
                         Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
                         nationActivityLaunch.putExtra("mNationData", nationResponse);
@@ -328,26 +322,21 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(APP_TAG, error.toString());
+                SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    makeSnackbar(fView, getString(R.string.explore_error_404_nation));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.explore_error_404_nation));
                 }
                 else
                 {
-                    makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
         });
 
         queue.add(stringRequest);
-    }
-
-    private void makeSnackbar(View view, String str)
-    {
-        Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 }

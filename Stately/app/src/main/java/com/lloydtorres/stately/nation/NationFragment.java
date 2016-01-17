@@ -22,6 +22,7 @@ import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -31,9 +32,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  * Created by Lloyd on 2016-01-13.
  */
 public class NationFragment extends Fragment {
-    private final String APP_TAG = "com.lloydtorres.stately";
-    private final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
-
     private final int OVERVIEW_TAB = 0;
     private final int PEOPLE_TAB = 1;
     private final int GOV_TAB = 2;
@@ -168,7 +166,7 @@ public class NationFragment extends Fragment {
 
         nationName.setText(mNation.name);
         nationPrename.setText(Html.fromHtml(mNation.prename).toString());
-        imageLoader.displayImage(String.format(BANNER_TEMPLATE, mNation.bannerKey), nationBanner, imageOptions);
+        imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
         imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
 
         if (mNation.waState.equals(getString(R.string.nation_wa_member)))

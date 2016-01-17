@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
 
@@ -23,22 +24,6 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-10.
  */
 public class OverviewSubFragment extends Fragment {
-    private final int[] freedomColours = {  R.color.colorFreedom0,
-                                            R.color.colorFreedom1,
-                                            R.color.colorFreedom2,
-                                            R.color.colorFreedom3,
-                                            R.color.colorFreedom4,
-                                            R.color.colorFreedom5,
-                                            R.color.colorFreedom6,
-                                            R.color.colorFreedom7,
-                                            R.color.colorFreedom8,
-                                            R.color.colorFreedom9,
-                                            R.color.colorFreedom10,
-                                            R.color.colorFreedom11,
-                                            R.color.colorFreedom12,
-                                            R.color.colorFreedom13,
-                                            R.color.colorFreedom14
-                                         };
     private Nation mNation;
 
     // main card
@@ -129,15 +114,7 @@ public class OverviewSubFragment extends Fragment {
         region.setText(mNation.region);
 
         population = (TextView) view.findViewById(R.id.nation_population);
-        String suffix = getString(R.string.million);
-        double popHolder = mNation.popBase;
-        if (mNation.popBase >= 1000D)
-        {
-            suffix = getString(R.string.billion);
-            popHolder /= 1000D;
-        }
-
-        population.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix));
+        population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
         motto.setText(Html.fromHtml(mNation.motto).toString());
@@ -152,7 +129,7 @@ public class OverviewSubFragment extends Fragment {
         civilRightsDesc.setText(mNation.freedomDesc.civilRightsDesc);
         civilRightsPts.setText(String.valueOf(mNation.freedomPts.civilRightsPts));
         int civColInd = mNation.freedomPts.civilRightsPts / 7;
-        civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[civColInd]));
+        civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[civColInd]));
 
         economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
         economyDesc = (TextView) view.findViewById(R.id.overview_economy);
@@ -161,7 +138,7 @@ public class OverviewSubFragment extends Fragment {
         economyDesc.setText(mNation.freedomDesc.economyDesc);
         economyPts.setText(String.valueOf(mNation.freedomPts.economyPts));
         int econColInd = mNation.freedomPts.economyPts / 7;
-        economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[econColInd]));
+        economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[econColInd]));
 
         politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
         politicalDesc = (TextView) view.findViewById(R.id.overview_polifree);
@@ -170,7 +147,7 @@ public class OverviewSubFragment extends Fragment {
         politicalDesc.setText(mNation.freedomDesc.politicalDesc);
         politicalPts.setText(String.valueOf(mNation.freedomPts.politicalPts));
         int polColInd = mNation.freedomPts.politicalPts / 7;
-        politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), freedomColours[polColInd]));
+        politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[polColInd]));
     }
 
     private void initGovernmentCard(View view)
@@ -210,32 +187,13 @@ public class OverviewSubFragment extends Fragment {
         currency.setText(mNation.currency);
 
         gdp = (TextView) view.findViewById(R.id.nation_gdp);
-
-        String suffix = getString(R.string.thousand);
-        long gdpHolder = mNation.gdp;
-        if (gdpHolder >= 1000000L && gdpHolder < 1000000000L)
-        {
-            suffix = getString(R.string.million);
-            gdpHolder /= 1000000L;
-        }
-        else if (gdpHolder >= 1000000000L && gdpHolder < 1000000000000L)
-        {
-            suffix = getString(R.string.billion);
-            gdpHolder /= 1000000000L;
-        }
-        else if (gdpHolder >= 1000000000000L)
-        {
-            suffix = getString(R.string.trillion);
-            gdpHolder /= 1000000000000L;
-        }
-
-        gdp.setText(String.format(getString(R.string.val_suffix_currency), NumberFormat.getInstance(Locale.US).format(gdpHolder).toString(), suffix, English.plural(mNation.currency)));
+        gdp.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
 
         industry = (TextView) view.findViewById(R.id.nation_industry);
         industry.setText(mNation.industry);
 
         income = (TextView) view.findViewById(R.id.nation_income);
-        income.setText(String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(mNation.income).toString(), English.plural(mNation.currency)));
+        income.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency));
     }
 
     private void initOtherCard(View view)

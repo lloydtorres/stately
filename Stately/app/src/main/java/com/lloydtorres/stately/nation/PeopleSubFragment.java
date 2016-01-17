@@ -18,6 +18,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -28,31 +29,6 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-12.
  */
 public class PeopleSubFragment extends Fragment implements OnChartValueSelectedListener {
-    private final int[] chartColours = {    R.color.colorChart0,
-                                            R.color.colorChart1,
-                                            R.color.colorChart2,
-                                            R.color.colorChart3,
-                                            R.color.colorChart4,
-                                            R.color.colorChart5,
-                                            R.color.colorChart6,
-                                            R.color.colorChart7,
-                                            R.color.colorChart8,
-                                            R.color.colorChart9,
-                                            R.color.colorChart10,
-                                            R.color.colorChart11,
-                                            R.color.colorChart12,
-                                            R.color.colorChart13,
-                                            R.color.colorChart14,
-                                            R.color.colorChart15,
-                                            R.color.colorChart16,
-                                            R.color.colorChart17,
-                                            R.color.colorChart18,
-                                            R.color.colorChart19,
-                                            R.color.colorChart20,
-                                            R.color.colorChart21,
-                                            R.color.colorChart22
-                                        };
-
     private Nation mNation;
 
     private TextView summaryDesc;
@@ -101,25 +77,12 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
     {
         summaryDesc = (TextView) view.findViewById(R.id.nation_summarydesc);
 
-        String suffix = getString(R.string.million);
-        double popHolder = mNation.popBase;
-        if (mNation.popBase >= 1000D && mNation.popBase < 10000D)
-        {
-            suffix = getString(R.string.billion);
-            popHolder /= 1000D;
-        }
-        else if (mNation.popBase >= 10000D)
-        {
-            suffix = getString(R.string.trillion);
-            popHolder /= 1000000D;
-        }
-
         String summaryContent = String.format(getString(R.string.card_people_summarydesc_flavour),
                 mNation.prename,
                 mNation.name,
                 mNation.notable,
                 mNation.sensible,
-                String.format(getString(R.string.val_currency), NumberFormat.getInstance(Locale.US).format(popHolder).toString(), suffix),
+                SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
                 mNation.demPlural);
 
         summaryContent += "<br /><br />" + mNation.crime;
@@ -152,7 +115,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
-        dataSet.setColors(chartColours, getActivity());
+        dataSet.setColors(SparkleHelper.chartColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
         // formatting
