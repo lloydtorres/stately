@@ -55,7 +55,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         switch (viewType) {
             case ACTIVE_CARD:
                 View activeCard = inflater.inflate(R.layout.card_wa_active, parent, false);
-                viewHolder = new ActiveCard(activeCard);
+                viewHolder = new ActiveCard(context, activeCard);
                 break;
             case INACTIVE_CARD:
                 View inactiveCard = inflater.inflate(R.layout.card_generic, parent, false);
@@ -127,9 +127,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         private TextView cardActiveTime;
         private TextView cardFor;
         private TextView cardAgainst;
+        private Context mContext;
 
-        public ActiveCard(View v) {
+        public ActiveCard(Context c, View v) {
             super(v);
+            mContext = c;
             cardTitle = (TextView) v.findViewById(R.id.card_wa_council);
             cardHeader = (TextView) v.findViewById(R.id.card_wa_title);
             cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);
@@ -149,7 +151,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
 
             cardHeader.setText(a.resolution.name);
-            cardActiveTime.setText("Whatever");
+            cardActiveTime.setText(String.format(mContext.getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(a.resolution.created)));
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
         }

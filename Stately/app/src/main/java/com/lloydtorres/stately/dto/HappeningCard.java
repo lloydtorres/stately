@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -23,7 +24,7 @@ public class HappeningCard extends RecyclerView.ViewHolder {
 
     public void init(HappeningEvent ev)
     {
-        cardTime.setText("Whatever");
+        cardTime.setText(SparkleHelper.getReadableDateFromUTC(ev.timestamp));
         cardContent.setText(Html.fromHtml(ev.content).toString());
     }
 }

@@ -9,8 +9,10 @@ import com.google.common.base.CharMatcher;
 import com.lloydtorres.stately.R;
 
 import org.atteo.evo.inflector.English;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -78,6 +80,8 @@ public class SparkleHelper {
             .or(CharMatcher.anyOf("-"))
             .precomputed();
 
+    public static final PrettyTime prettyTime = new PrettyTime();
+
     // Validation
 
     public static boolean isValidNationName(String name)
@@ -90,6 +94,12 @@ public class SparkleHelper {
     public static String getBannerURL(String id)
     {
         return String.format(BANNER_TEMPLATE, id);
+    }
+
+    public static String getReadableDateFromUTC(long sec)
+    {
+        Date d = new Date(sec * 1000L);
+        return prettyTime.format(d);
     }
 
     public static String getPrettifiedNumber(int i)
