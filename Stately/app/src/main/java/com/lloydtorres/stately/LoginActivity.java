@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         isLoggingIn = stat;
     }
 
-    public void makeSnackbar(View view, String str)
+    private void makeSnackbar(View view, String str)
     {
         Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }

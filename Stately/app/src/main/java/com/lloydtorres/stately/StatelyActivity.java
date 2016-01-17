@@ -337,7 +337,7 @@ public class StatelyActivity extends PrimeActivity implements NavigationView.OnN
         queue.add(stringRequest);
     }
 
-    public void makeSnackbar(View view, String str)
+    private void makeSnackbar(View view, String str)
     {
         Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
