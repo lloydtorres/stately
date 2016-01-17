@@ -20,7 +20,7 @@ public class SparkleHelper {
     public static final String APP_TAG = "com.lloydtorres.stately";
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
 
-    public static final int[] chartColours = {    R.color.colorChart0,
+    public static final int[] chartColours = {  R.color.colorChart0,
             R.color.colorChart1,
             R.color.colorChart2,
             R.color.colorChart3,
@@ -62,10 +62,15 @@ public class SparkleHelper {
             R.color.colorFreedom14
     };
 
-    public static final int[] sectorColours = {    R.color.colorSector0,
+    public static final int[] sectorColours = { R.color.colorSector0,
             R.color.colorSector1,
             R.color.colorSector2,
             R.color.colorSector3,
+    };
+
+    public static final int[] refreshColours = {    R.color.colorPrimary,
+            R.color.colorPrimaryDark,
+            R.color.colorAccent
     };
 
     public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT

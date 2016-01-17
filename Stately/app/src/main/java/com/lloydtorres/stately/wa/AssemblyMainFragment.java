@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +38,7 @@ public class AssemblyMainFragment extends Fragment {
     private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -69,10 +71,27 @@ public class AssemblyMainFragment extends Fragment {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                                                        @Override
+                                                        public void onRefresh() {
+                                                            queryWorldAssembly(mView);
+                                                        }
+                                                 });
+
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // hack to get swiperefreshlayout to show
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
 
         queryWorldAssembly(mView);
         return mView;
@@ -147,5 +166,6 @@ public class AssemblyMainFragment extends Fragment {
     {
         mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }
