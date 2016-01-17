@@ -76,6 +76,10 @@ public class SparkleHelper {
             R.color.colorAccent
     };
 
+    public static final int[] waColours = { R.color.colorChart0,
+            R.color.colorChart1
+    };
+
     public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
             .or(CharMatcher.WHITESPACE)
             .or(CharMatcher.anyOf("-"))

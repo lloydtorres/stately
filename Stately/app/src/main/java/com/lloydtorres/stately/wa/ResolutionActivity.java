@@ -21,6 +21,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
@@ -29,10 +35,13 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lloyd on 2016-01-17.
  */
-public class ResolutionActivity extends AppCompatActivity {
+public class ResolutionActivity extends AppCompatActivity implements OnChartValueSelectedListener {
     private AssemblyActive mAssembly;
     private Resolution mResolution;
     private int councilId;
@@ -50,6 +59,7 @@ public class ResolutionActivity extends AppCompatActivity {
 
     private PieChart votingBreakdown;
     private LineChart votingHistory;
+    private List<String> chartLabels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,8 +188,64 @@ public class ResolutionActivity extends AppCompatActivity {
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         content.setText(SparkleHelper.getHtmlFormatting(mResolution.content));
+        initializePieChart(mResolution.votesFor, mResolution.votesAgainst);
 
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void initializePieChart(int voteFor, int voteAgainst)
+    {
+        float voteTotal = voteFor + voteAgainst;
+        float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
+        float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
+
+        chartLabels = new ArrayList<String>();
+        List<Entry> chartEntries = new ArrayList<Entry>();
+
+        int i = 0;
+        chartLabels.add(getString(R.string.wa_for));
+        chartEntries.add(new Entry((float) votePercentFor, i++));
+        chartLabels.add(getString(R.string.wa_against));
+        chartEntries.add(new Entry((float) votePercentAgainst, i++));
+
+        PieDataSet dataSet = new PieDataSet(chartEntries, "");
+        dataSet.setDrawValues(false);
+        dataSet.setColors(SparkleHelper.waColours, this);
+        PieData dataFull = new PieData(chartLabels, dataSet);
+
+        // formatting
+        Legend cLegend = votingBreakdown.getLegend();
+        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        cLegend.setForm(Legend.LegendForm.CIRCLE);
+        cLegend.setTextSize(15);
+        cLegend.setWordWrapEnabled(true);
+
+        votingBreakdown.setDrawSliceText(false);
+        votingBreakdown.setDescription("");
+        votingBreakdown.setHoleColorTransparent(true);
+        votingBreakdown.setHoleRadius(60f);
+        votingBreakdown.setTransparentCircleRadius(65f);
+        votingBreakdown.setCenterTextSize(20);
+        votingBreakdown.setRotationEnabled(false);
+
+        votingBreakdown.setOnChartValueSelectedListener(this);
+        votingBreakdown.setData(dataFull);
+    }
+
+    @Override
+    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        if (votingBreakdown != null)
+        {
+            votingBreakdown.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
+        }
+    }
+
+    @Override
+    public void onNothingSelected() {
+        if (votingBreakdown != null)
+        {
+            votingBreakdown.setCenterText("");
+        }
     }
 
     @Override
