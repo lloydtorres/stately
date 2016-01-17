@@ -13,6 +13,7 @@ import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyStats;
 import com.lloydtorres.stately.dto.HappeningCard;
 import com.lloydtorres.stately.dto.HappeningEvent;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +150,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             cardHeader.setText(a.resolution.name);
             cardActiveTime.setText("Whatever");
-            cardFor.setText(String.valueOf(a.resolution.votesFor));
-            cardAgainst.setText(String.valueOf(a.resolution.votesAgainst));
+            cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
+            cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
         }
     }
 
@@ -193,8 +194,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public void init(AssemblyStats s)
         {
-            cardMembers.setText(String.valueOf(s.members));
-            cardDelegates.setText(String.valueOf(s.delegates));
+            cardMembers.setText(SparkleHelper.getPrettifiedNumber(s.members));
+            cardDelegates.setText(SparkleHelper.getPrettifiedNumber(s.delegates));
         }
     }
 }

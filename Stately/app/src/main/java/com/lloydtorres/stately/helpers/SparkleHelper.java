@@ -87,6 +87,11 @@ public class SparkleHelper {
         return String.format(BANNER_TEMPLATE, id);
     }
 
+    public static String getPrettifiedNumber(int i)
+    {
+        return NumberFormat.getInstance(Locale.US).format(i);
+    }
+
     public static String getPrettifiedNumber(double d)
     {
         return NumberFormat.getInstance(Locale.US).format(d);
