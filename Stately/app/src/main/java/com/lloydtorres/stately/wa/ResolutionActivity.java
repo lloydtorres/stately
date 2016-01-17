@@ -30,6 +30,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
@@ -309,6 +310,9 @@ public class ResolutionActivity extends AppCompatActivity {
 
         YAxis yAxisRight = votingHistory.getAxisRight();
         yAxisRight.setEnabled(false);
+
+        YAxis yAxisLeft = votingHistory.getAxisLeft();
+        yAxisLeft.setValueFormatter(new LargeValueFormatter());
 
         votingHistory.setDoubleTapToZoomEnabled(false);
         votingHistory.setDescription("");
