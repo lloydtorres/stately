@@ -3,6 +3,7 @@ package com.lloydtorres.stately.wa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +23,11 @@ import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -188,12 +193,13 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         content.setText(SparkleHelper.getHtmlFormatting(mResolution.content));
-        initializePieChart(mResolution.votesFor, mResolution.votesAgainst);
+        setVotingBreakdown(mResolution.votesFor, mResolution.votesAgainst);
+        setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
 
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    private void initializePieChart(int voteFor, int voteAgainst)
+    private void setVotingBreakdown(int voteFor, int voteAgainst)
     {
         float voteTotal = voteFor + voteAgainst;
         float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
@@ -230,6 +236,76 @@ public class ResolutionActivity extends AppCompatActivity implements OnChartValu
 
         votingBreakdown.setOnChartValueSelectedListener(this);
         votingBreakdown.setData(dataFull);
+        votingBreakdown.invalidate();
+    }
+
+    private void setVotingHistory(List<Integer> votesFor, List<Integer> votesAgainst)
+    {
+        List<Entry> entryFor = new ArrayList<Entry>();
+        List<Entry> entryAgainst = new ArrayList<Entry>();
+
+        for (int i=0; i < votesFor.size(); i++)
+        {
+            entryFor.add(new Entry(votesFor.get(i), i));
+            entryAgainst.add(new Entry(votesAgainst.get(i), i));
+        }
+
+        LineDataSet setFor = new LineDataSet(entryFor, getString(R.string.wa_for));
+        setFor.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setFor.setColors(SparkleHelper.waColourFor, this);
+        setFor.setDrawValues(false);
+        setFor.setDrawHighlightIndicators(false);
+        setFor.setDrawCircles(false);
+        setFor.setLineWidth(2.5f);
+
+        LineDataSet setAgainst = new LineDataSet(entryAgainst, getString(R.string.wa_against));
+        setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
+        setAgainst.setColors(SparkleHelper.waColourAgainst, this);
+        setAgainst.setDrawValues(false);
+        setAgainst.setDrawHighlightIndicators(false);
+        setAgainst.setDrawCircles(false);
+        setAgainst.setLineWidth(2.5f);
+
+        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(setFor);
+        dataSets.add(setAgainst);
+
+        List<String> xLabels = new ArrayList<String>();
+        for (int i=0; i < votesFor.size(); i++)
+        {
+            // Only add labels for each day
+            if (i%24 == 0)
+            {
+                xLabels.add(String.format(getString(R.string.wa_x_axis_d), (i/24)+1));
+            }
+            else
+            {
+                xLabels.add(String.format(getString(R.string.wa_x_axis_h), i));
+            }
+        }
+        LineData data = new LineData(xLabels, dataSets);
+
+        // formatting
+        Legend cLegend = votingHistory.getLegend();
+        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        cLegend.setForm(Legend.LegendForm.CIRCLE);
+        cLegend.setTextSize(15);
+        cLegend.setWordWrapEnabled(true);
+
+        XAxis xAxis = votingHistory.getXAxis();
+        xAxis.setLabelsToSkip(23);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis yAxisRight = votingHistory.getAxisRight();
+        yAxisRight.setEnabled(false);
+
+        votingHistory.setDoubleTapToZoomEnabled(false);
+        votingHistory.setDescription("");
+        votingHistory.setScaleYEnabled(false);
+        votingHistory.setDrawGridBackground(false);
+
+        votingHistory.setData(data);
+        votingHistory.invalidate();
     }
 
     @Override

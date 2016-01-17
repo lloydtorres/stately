@@ -80,6 +80,10 @@ public class SparkleHelper {
             R.color.colorChart1
     };
 
+    public static final int[] waColourFor = { R.color.colorChart0 };
+
+    public static final int[] waColourAgainst = { R.color.colorChart1 };
+
     public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
             .or(CharMatcher.WHITESPACE)
             .or(CharMatcher.anyOf("-"))
