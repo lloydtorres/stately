@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             if (verify && name.length() > 0)
             {
                 name = name.toLowerCase().replace(" ","_");
-                queryNS(view, name);
+                queryNation(view, name);
             }
             else
             {
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void queryNS(View view, String nationName)
+    private void queryNation(View view, String nationName)
     {
         final View fView = view;
 
