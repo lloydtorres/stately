@@ -168,4 +168,11 @@ public class AssemblyMainFragment extends Fragment {
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        mActivity = null;
+    }
 }
