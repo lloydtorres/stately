@@ -85,7 +85,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
         summaryContent += "<br /><br />" + mNation.crime;
 
-        summaryDesc.setText(Html.fromHtml(summaryContent).toString());
+        summaryDesc.setText(SparkleHelper.getHtmlFormatting(summaryContent));
     }
 
     private void initMortalityChart(View view)

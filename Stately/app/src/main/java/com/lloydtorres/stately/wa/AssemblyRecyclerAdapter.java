@@ -203,7 +203,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 cardTitle.setText(context.getResources().getString(R.string.wa_security_council));
             }
 
-            cardContent.setText(Html.fromHtml(a.lastResolution).toString());
+            cardContent.setText(SparkleHelper.getHtmlFormatting(a.lastResolution));
         }
     }
 

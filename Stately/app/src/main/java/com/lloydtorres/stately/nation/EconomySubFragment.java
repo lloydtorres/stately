@@ -85,7 +85,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         String descContent = mNation.industryDesc;
         descContent = descContent.replace(". ", ".<br /><br />");
 
-        econDesc.setText(Html.fromHtml(descContent).toString());
+        econDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
     }
 
     private void initGDP(View view)

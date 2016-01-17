@@ -112,7 +112,7 @@ public class OverviewSubFragment extends Fragment {
         population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
-        motto.setText(Html.fromHtml(mNation.motto).toString());
+        motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto));
     }
 
     private void initFreedomCards(View view)
@@ -150,7 +150,7 @@ public class OverviewSubFragment extends Fragment {
         if (mNation.leader != null)
         {
             leader = (TextView) view.findViewById(R.id.nation_leader);
-            leader.setText(Html.fromHtml(mNation.leader).toString());
+            leader.setText(SparkleHelper.getHtmlFormatting(mNation.leader));
         }
         else
         {
@@ -161,7 +161,7 @@ public class OverviewSubFragment extends Fragment {
         if (mNation.capital != null)
         {
             capital = (TextView) view.findViewById(R.id.nation_capital);
-            capital.setText(Html.fromHtml(mNation.capital).toString());
+            capital.setText(SparkleHelper.getHtmlFormatting(mNation.capital));
         }
         else
         {
@@ -196,11 +196,11 @@ public class OverviewSubFragment extends Fragment {
         demonym = (TextView) view.findViewById(R.id.nation_demonym);
         if (mNation.demAdjective.equals(mNation.demNoun))
         {
-            demonym.setText(Html.fromHtml(String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural)).toString());
+            demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural));
         }
         else
         {
-            demonym.setText(Html.fromHtml(String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective)).toString());
+            demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective));
         }
 
         if (mNation.religion != null)

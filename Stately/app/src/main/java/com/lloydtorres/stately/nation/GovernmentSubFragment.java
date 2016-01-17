@@ -80,7 +80,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         String descContent = mNation.govtDesc;
         descContent = descContent.replace(". ", ".<br /><br />");
 
-        govDesc.setText(Html.fromHtml(descContent).toString());
+        govDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
     }
 
     private void initBudgetTotal(View view)
