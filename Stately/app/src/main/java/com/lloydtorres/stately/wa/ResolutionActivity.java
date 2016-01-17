@@ -6,7 +6,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -60,10 +59,12 @@ public class ResolutionActivity extends AppCompatActivity {
         if (getIntent() != null)
         {
             councilId = getIntent().getIntExtra("councilId", 1);
+            mResolution = getIntent().getParcelableExtra("resolution");
         }
         if (savedInstanceState != null)
         {
             councilId = savedInstanceState.getInt("councilId");
+            mResolution = savedInstanceState.getParcelable("resolution");
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_wa_council);
@@ -75,14 +76,6 @@ public class ResolutionActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 queryResolution(councilId);
-            }
-        });
-
-        // hack to get swiperefreshlayout to show
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
@@ -98,7 +91,23 @@ public class ResolutionActivity extends AppCompatActivity {
         votingBreakdown = (PieChart) findViewById(R.id.wa_voting_breakdown);
         votingHistory = (LineChart) findViewById(R.id.wa_voting_history);
 
-        queryResolution(councilId);
+        if (mResolution == null)
+        {
+            // hack to get swiperefreshlayout to show
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            });
+            queryResolution(councilId);
+        }
+        else
+        {
+            AssemblyActive tmp = new AssemblyActive();
+            tmp.resolution = mResolution;
+            setResolution(tmp);
+        }
     }
 
     public void setToolbar(Toolbar t) {
@@ -132,7 +141,7 @@ public class ResolutionActivity extends AppCompatActivity {
                         Persister serializer = new Persister();
                         try {
                             waResponse = serializer.read(AssemblyActive.class, response);
-                            setContent(waResponse);
+                            setResolution(waResponse);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -156,7 +165,7 @@ public class ResolutionActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void setContent(AssemblyActive res)
+    private void setResolution(AssemblyActive res)
     {
         mAssembly = res;
         mResolution = mAssembly.resolution;
@@ -191,6 +200,10 @@ public class ResolutionActivity extends AppCompatActivity {
     {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("councilId", councilId);
+        if (mResolution != null)
+        {
+            savedInstanceState.putParcelable("resolution", mResolution);
+        }
     }
 
     @Override
@@ -200,6 +213,10 @@ public class ResolutionActivity extends AppCompatActivity {
         if (savedInstanceState != null)
         {
             councilId = savedInstanceState.getInt("councilId");
+            if (mResolution == null)
+            {
+                mResolution = savedInstanceState.getParcelable("resolution");
+            }
         }
     }
 }
