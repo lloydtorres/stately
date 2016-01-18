@@ -25,6 +25,7 @@ public class OverviewSubFragment extends Fragment {
     private TextView region;
     private TextView population;
     private TextView motto;
+    private TextView time;
 
     // freedom cards
     private CardView civilRightsCard;
@@ -112,6 +113,9 @@ public class OverviewSubFragment extends Fragment {
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
         motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto));
+
+        time = (TextView) view.findViewById(R.id.nation_time);
+        time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo));
     }
 
     private void initFreedomCards(View view)

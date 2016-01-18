@@ -110,6 +110,28 @@
                         android:layout_centerVertical="true"
                         tools:text="Ad astra per aspera" />
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+                    <ImageView
+                        android:id="@+id/icon_time"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_time"/>
+                    <TextView
+                        android:id="@+id/nation_time"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:layout_toRightOf="@id/icon_time"
+                        android:layout_centerVertical="true"
+                        tools:text="@string/nation_time_founded" />
+                </RelativeLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
