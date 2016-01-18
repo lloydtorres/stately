@@ -31,7 +31,8 @@
             android:id="@+id/refreshview_recycler"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#EEE" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
