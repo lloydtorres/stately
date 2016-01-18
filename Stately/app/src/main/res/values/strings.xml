@@ -22,12 +22,12 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Logout</string>
 
-    <string name="explore_search_text">Go to...</string>
+    <string name="explore_search_text">Go to&#8230;</string>
     <string name="explore_nation">Nation</string>
     <string name="explore_region">Region</string>
     <string name="explore_positive">Let\'s Go</string>
     <string name="explore_negative">Cancel</string>
-    <string name="explore_default">Exploring...</string>
+    <string name="explore_default">Exploring&#8230;</string>
     <string name="explore_error_404_nation">Nation not found.</string>
 
     <string name="logout_confirm">Logout?</string>
@@ -50,6 +50,17 @@
     <string name="card_overview_econ_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_overview_econ_industry">Major Industry</string>
     <string name="card_overview_econ_income">Average Income</string>
+
+    <string name="card_overview_wa_title">World Assembly</string>
+    <string name="card_overview_wa_overview">%1$s is a member of the World Assembly.</string>
+    <string name="card_overview_wa_vote_title">Resolution Votes</string>
+    <string name="card_overview_wa_novote">No vote on the resolution in the %1$s.</string>
+    <string name="card_overview_wa_vote">Voted %1$s the resolution in the %2$s.</string>
+    <string name="card_overview_wa_endorsements">Endorsements</string>
+
+    <string name="wa_vote_state_undecided">UNDECIDED</string>
+    <string name="wa_vote_state_for">FOR</string>
+    <string name="wa_vote_state_against">AGAINST</string>
 
     <string name="card_overview_other_title">Other Information</string>
     <string name="card_overview_other_demonym">Demonym</string>

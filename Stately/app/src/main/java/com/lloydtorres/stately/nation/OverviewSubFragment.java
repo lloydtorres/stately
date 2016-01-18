@@ -54,6 +54,13 @@ public class OverviewSubFragment extends Fragment {
     private TextView industry;
     private TextView income;
 
+    // wa cards
+    private CardView waCard;
+    private TextView isWaMember;
+    private LinearLayout votesHolder;
+    private TextView gaVote;
+    private TextView scVote;
+
     // other cards
     private TextView demonym;
     private LinearLayout religionLayout;
@@ -85,6 +92,7 @@ public class OverviewSubFragment extends Fragment {
             initFreedomCards(view);
             initGovernmentCard(view);
             initEconomyCard(view);
+            initAssemblyCard(view);
             initOtherCard(view);
         }
 
@@ -192,6 +200,64 @@ public class OverviewSubFragment extends Fragment {
 
         income = (TextView) view.findViewById(R.id.nation_income);
         income.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency));
+    }
+
+    private void initAssemblyCard(View view)
+    {
+        waCard = (CardView) view.findViewById(R.id.card_overview_wa);
+
+        if (mNation.waState.equals(getString(R.string.nation_wa_member)))
+        {
+            waCard.setVisibility(View.VISIBLE);
+
+            isWaMember = (TextView) view.findViewById(R.id.card_overview_wa_overview);
+            isWaMember.setText(String.format(getString(R.string.card_overview_wa_overview), mNation.name));
+
+            votesHolder = (LinearLayout) view.findViewById(R.id.card_overview_wa_votes);
+
+            if (mNation.gaVote != null || mNation.scVote != null)
+            {
+                votesHolder.setVisibility(View.VISIBLE);
+
+                gaVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_ga);
+                scVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_sc);
+
+                setAssemblyVoteState(gaVote, mNation.gaVote, getString(R.string.wa_general_assembly));
+                setAssemblyVoteState(scVote, mNation.scVote, getString(R.string.wa_security_council));
+            }
+            else
+            {
+                votesHolder.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+            waCard.setVisibility(View.GONE);
+        }
+    }
+
+    private void setAssemblyVoteState(TextView target, String vote, String assembly)
+    {
+        if (getString(R.string.wa_vote_state_for).equals(vote))
+        {
+            target.setVisibility(View.VISIBLE);
+            target.setText(String.format(getString(R.string.card_overview_wa_vote), getString(R.string.wa_vote_state_for).toLowerCase(), assembly));
+            target.setTextColor(ContextCompat.getColor(getContext(), R.color.colorChart0));
+        }
+        else if (getString(R.string.wa_vote_state_against).equals(vote))
+        {
+            target.setVisibility(View.VISIBLE);
+            target.setText(String.format(getString(R.string.card_overview_wa_vote), getString(R.string.wa_vote_state_against).toLowerCase(), assembly));
+            target.setTextColor(ContextCompat.getColor(getContext(), R.color.colorChart1));
+        }
+        else if (getString(R.string.wa_vote_state_undecided).equals(vote))
+        {
+            target.setVisibility(View.VISIBLE);
+            target.setText(String.format(getString(R.string.card_overview_wa_novote), assembly));
+        }
+        else {
+            target.setVisibility(View.GONE);
+        }
     }
 
     private void initOtherCard(View view)

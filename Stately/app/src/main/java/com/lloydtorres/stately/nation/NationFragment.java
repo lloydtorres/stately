@@ -50,7 +50,6 @@ public class NationFragment extends Fragment {
     private TextView nationPrename;
     private ImageView nationBanner;
     private RoundedImageView nationFlag;
-    private TextView waState;
 
     // variables used for tabs
     private PagerSlidingTabStrip tabs;
@@ -155,7 +154,6 @@ public class NationFragment extends Fragment {
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView) view.findViewById(R.id.nation_flag);
-        waState = (TextView) view.findViewById(R.id.nation_wa_status);
     }
 
     public void initNationData(View view) {
@@ -169,11 +167,6 @@ public class NationFragment extends Fragment {
         nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename));
         imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
         imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
-
-        if (mNation.waState.equals(getString(R.string.nation_wa_member)))
-        {
-            waState.setVisibility(View.VISIBLE);
-        }
 
         overviewSubFragment = new OverviewSubFragment();
         overviewSubFragment.setNation(mNation);

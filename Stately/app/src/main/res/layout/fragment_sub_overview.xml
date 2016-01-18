@@ -514,6 +514,71 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/card_overview_wa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_margin="8dp"
+            card_view:cardBackgroundColor="@android:color/white"
+            card_view:contentPadding="20dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/card_overview_wa_title"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/card_overview_wa_title" />
+                <TextView
+                    android:id="@+id/card_overview_wa_overview"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryText"
+                    tools:text="@string/card_overview_wa_overview" />
+                <LinearLayout
+                    android:id="@+id/card_overview_wa_votes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:text="@string/card_overview_wa_vote_title" />
+                    <TextView
+                        android:id="@+id/card_overview_wa_vote_ga"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryText"
+                        tools:text="@string/card_overview_wa_vote" />
+                    <TextView
+                        android:id="@+id/card_overview_wa_vote_sc"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryText"
+                        tools:text="@string/card_overview_wa_vote" />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/card_overview_other"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
