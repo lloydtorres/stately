@@ -253,8 +253,21 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     private void logout()
     {
-        Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
-        startActivity(nationActivityLaunch);
-        finish();
+        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
+                startActivity(nationActivityLaunch);
+                finish();
+            }
+        };
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(R.string.menu_logout)
+                .setMessage(getString(R.string.logout_confirm))
+                .setPositiveButton(R.string.menu_logout, dialogListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+
     }
 }

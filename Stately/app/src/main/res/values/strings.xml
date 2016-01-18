@@ -30,6 +30,8 @@
     <string name="explore_default">Exploring...</string>
     <string name="explore_error_404_nation">Nation not found.</string>
 
+    <string name="logout_confirm">Are you sure you want to logout?</string>
+
     <string name="nation_wa_member">WA Member</string>
 
     <string name="overview_label_civrights">Civil Rights</string>
