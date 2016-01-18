@@ -43,6 +43,7 @@ public class NationFragment extends Fragment {
     private PeopleSubFragment peopleSubFragment;
     private GovernmentSubFragment governmentSubFragment;
     private EconomySubFragment economySubFragment;
+    private HappeningSubFragment happeningSubFragment;
 
     // variables used for nation views
     private TextView nationName;
@@ -186,6 +187,9 @@ public class NationFragment extends Fragment {
         economySubFragment = new EconomySubFragment();
         economySubFragment.setNation(mNation);
 
+        happeningSubFragment = new HappeningSubFragment();
+        happeningSubFragment.setNation(mNation);
+
         initTabs(view);
     }
 
@@ -237,6 +241,8 @@ public class NationFragment extends Fragment {
                     return governmentSubFragment;
                 case ECONOMY_TAB:
                     return economySubFragment;
+                case HAPPEN_TAB:
+                    return happeningSubFragment;
                 default:
                     return new Fragment();
             }
