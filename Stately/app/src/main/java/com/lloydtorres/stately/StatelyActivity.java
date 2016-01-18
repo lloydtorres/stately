@@ -19,16 +19,6 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
@@ -41,8 +31,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-
-import org.simpleframework.xml.core.Persister;
 
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PrimeActivity {
 
@@ -239,7 +227,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 switch (exploreToggleState.getCheckedRadioButtonId())
                 {
                     case R.id.explore_radio_nation:
-                        verifyNationInput(findViewById(R.id.drawer_layout));
+                        startExploreActivity();
                         break;
                     default:
                         break;
@@ -255,86 +243,18 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 .show();
     }
 
+    private void startExploreActivity()
+    {
+        String name = exploreSearch.getText().toString();
+        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
+        nationActivityLaunch.putExtra("nationId", name);
+        startActivity(nationActivityLaunch);
+    }
+
     private void logout()
     {
         Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
         startActivity(nationActivityLaunch);
         finish();
-    }
-
-    public void verifyNationInput(View view)
-    {
-        String name = exploreSearch.getText().toString();
-        if (SparkleHelper.isValidNationName(name) && name.length() > 0)
-        {
-            name = name.toLowerCase().replace(" ","_");
-            queryNation(view, name);
-        }
-        else
-        {
-            SparkleHelper.makeSnackbar(view, getString(R.string.explore_error_404_nation));
-        }
-    }
-
-    private void queryNation(View view, String nationName)
-    {
-        final View fView = view;
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String targetURL = String.format(Nation.QUERY, nationName);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
-                new Response.Listener<String>() {
-                    Nation nationResponse = null;
-                    @Override
-                    public void onResponse(String response) {
-                        Persister serializer = new Persister();
-                        try {
-                            nationResponse = serializer.read(Nation.class, response);
-
-                            // Switch flag URL to https
-                            nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
-
-                            // Map out government priorities
-                            switch (nationResponse.govtPriority)
-                            {
-                                case "Defence":
-                                    nationResponse.govtPriority = getString(R.string.defense);
-                                    break;
-                                case "Commerce":
-                                    nationResponse.govtPriority = getString(R.string.industry);
-                                    break;
-                                case "Social Equality":
-                                    nationResponse.govtPriority = getString(R.string.social_policy);
-                                    break;
-                            }
-                        }
-                        catch (Exception e) {
-                            SparkleHelper.logError(toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
-                        }
-                        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
-                        nationActivityLaunch.putExtra("mNationData", nationResponse);
-                        startActivity(nationActivityLaunch);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
-                }
-                else if (error instanceof ServerError)
-                {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.explore_error_404_nation));
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
-                }
-            }
-        });
-
-        queue.add(stringRequest);
     }
 }

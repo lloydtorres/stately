@@ -27,6 +27,7 @@
     <string name="explore_region">Region</string>
     <string name="explore_positive">Let\'s Go</string>
     <string name="explore_negative">Cancel</string>
+    <string name="explore_default">Exploring...</string>
     <string name="explore_error_404_nation">Nation not found.</string>
 
     <string name="nation_wa_member">WA Member</string>
