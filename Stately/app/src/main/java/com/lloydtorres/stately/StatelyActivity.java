@@ -263,8 +263,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         };
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(R.string.menu_logout)
-                .setMessage(getString(R.string.logout_confirm))
+        dialogBuilder.setTitle(R.string.logout_confirm)
                 .setPositiveButton(R.string.menu_logout, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
                 .show();
