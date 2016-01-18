@@ -93,16 +93,17 @@ public class LoginActivity extends AppCompatActivity {
                                     nationResponse.govtPriority = getString(R.string.social_policy);
                                     break;
                             }
+
+                            Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
+                            nationActivityLaunch.putExtra("mNationData", nationResponse);
+                            startActivity(nationActivityLaunch);
+                            finish();
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
                             setLoginState(false);
                         }
-                        Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
-                        nationActivityLaunch.putExtra("mNationData", nationResponse);
-                        startActivity(nationActivityLaunch);
-                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
