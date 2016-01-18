@@ -49,6 +49,8 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
         setToolbar(toolbar);
+        getSupportActionBar().hide();
+
         statusMessage = (TextView) findViewById(R.id.explore_status);
 
         verifyNationInput(nationId);
@@ -141,7 +143,6 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
     private void initFragment(Nation mNation)
     {
-        getSupportActionBar().hide();
         nFragment = new NationFragment();
         nFragment.setNation(mNation);
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
