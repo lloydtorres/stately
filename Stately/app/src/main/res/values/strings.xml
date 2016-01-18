@@ -33,7 +33,8 @@
     <string name="logout_confirm">Logout?</string>
 
     <string name="nation_wa_member">WA Member</string>
-    <string name="nation_time_founded">Founded %1$s\nLast seen %2$s</string>
+    <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
+    <string name="nation_time_immemorial">since time immemorial</string>
 
     <string name="overview_label_civrights">Civil Rights</string>
     <string name="overview_label_economy">Economy</string>

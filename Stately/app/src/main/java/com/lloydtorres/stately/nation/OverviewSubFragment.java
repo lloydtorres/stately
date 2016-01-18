@@ -123,7 +123,14 @@ public class OverviewSubFragment extends Fragment {
         motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto));
 
         time = (TextView) view.findViewById(R.id.nation_time);
-        time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo));
+        if (mNation.foundedAgo.equals("0"))
+        {
+            time.setText(String.format(getString(R.string.nation_time_founded), getString(R.string.nation_time_immemorial), mNation.lastActivityAgo));
+        }
+        else
+        {
+            time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo));
+        }
     }
 
     private void initFreedomCards(View view)
