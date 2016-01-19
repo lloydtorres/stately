@@ -2,9 +2,12 @@ package com.lloydtorres.stately.nation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -54,6 +57,13 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         statusMessage = (TextView) findViewById(R.id.explore_status);
 
         verifyNationInput(nationId);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_explore, menu);
+        return true;
     }
 
     public void setToolbar(Toolbar t) {
@@ -156,10 +166,12 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                Intent intent = NavUtils.getParentActivityIntent(this);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                NavUtils.navigateUpTo(this, intent);
+                finish();
                 return true;
+            case R.id.nav_explore:
+                FragmentManager fm = getSupportFragmentManager();
+                ExploreNationDialog editNameDialog = new ExploreNationDialog();
+                editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);
         }
         return super.onOptionsItemSelected(item);
     }
