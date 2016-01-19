@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.nation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -191,7 +194,7 @@ public class OverviewSubFragment extends Fragment {
                 gaVoteHolder.setVisibility(View.VISIBLE);
 
                 gaVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_ga);
-                setAssemblyVoteState(gaVoteHolder, gaVote, mNation.gaVote, getString(R.string.wa_general_assembly));
+                setAssemblyVoteState(gaVoteHolder, gaVote, mNation.gaVote, Assembly.GENERAL_ASSEMBLY);
             }
 
             if (mNation.scVote != null)
@@ -200,34 +203,57 @@ public class OverviewSubFragment extends Fragment {
                 scVoteHolder.setVisibility(View.VISIBLE);
 
                 scVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_sc);
-                setAssemblyVoteState(scVoteHolder, scVote, mNation.scVote, getString(R.string.wa_security_council));
+                setAssemblyVoteState(scVoteHolder, scVote, mNation.scVote, Assembly.SECURITY_COUNCIL);
             }
         }
     }
 
-    private void setAssemblyVoteState(LinearLayout holder, TextView content, String vote, String assembly)
+    private void setAssemblyVoteState(LinearLayout holder, TextView content, String vote, int councilId)
     {
+        Intent resolutionActivityLaunch = new Intent(getContext(), ResolutionActivity.class);
+        resolutionActivityLaunch.putExtra("councilId", councilId);
+        final Intent fResolution = resolutionActivityLaunch;
+        int stateColour;
+        String assemblyName;
+
+        holder.setVisibility(View.VISIBLE);
+
+        switch (councilId)
+        {
+            case Assembly.GENERAL_ASSEMBLY:
+                assemblyName = getString(R.string.wa_general_assembly);
+                break;
+            case Assembly.SECURITY_COUNCIL:
+                assemblyName = getString(R.string.wa_security_council);
+                break;
+            default:
+                assemblyName = "";
+                break;
+        }
+
         if (getString(R.string.wa_vote_state_for).equals(vote))
         {
-            holder.setVisibility(View.VISIBLE);
-            holder.setBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.waColours[0]));
-            content.setText(String.format(getString(R.string.card_overview_wa_vote), getString(R.string.wa_vote_state_for).toLowerCase(), assembly));
+            stateColour = SparkleHelper.waColours[0];
+            content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
         }
         else if (getString(R.string.wa_vote_state_against).equals(vote))
         {
-            holder.setVisibility(View.VISIBLE);
-            holder.setBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.waColours[1]));
-            content.setText(String.format(getString(R.string.card_overview_wa_vote), getString(R.string.wa_vote_state_against).toLowerCase(), assembly));
+            stateColour = SparkleHelper.waColours[1];
+            content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
         }
-        else if (getString(R.string.wa_vote_state_undecided).equals(vote))
+        else
         {
-            holder.setVisibility(View.VISIBLE);
-            holder.setBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.waColours[2]));
-            content.setText(String.format(getString(R.string.card_overview_wa_novote), assembly));
+            stateColour = SparkleHelper.waColours[2];
+            content.setText(String.format(getString(R.string.card_overview_wa_novote), assemblyName));
         }
-        else {
-            content.setVisibility(View.GONE);
-        }
+
+        holder.setBackgroundColor(ContextCompat.getColor(getContext(), stateColour));
+        holder.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            startActivity(fResolution);
+                                        }
+                                    });
     }
 
     private void initGovernmentCard(View view)
