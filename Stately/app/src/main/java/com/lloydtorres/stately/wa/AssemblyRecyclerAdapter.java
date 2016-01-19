@@ -165,7 +165,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            SparkleHelper.logError("Adapter position: " + pos);
 
             if (pos != RecyclerView.NO_POSITION)
             {

@@ -3,6 +3,7 @@ package com.lloydtorres.stately.nation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -189,7 +189,7 @@ public class OverviewSubFragment extends Fragment {
                 endorsementsHolder.setVisibility(View.VISIBLE);
 
                 String[] endorsements = mNation.endorsements.split(",");
-                List<String> properEndorsements = new ArrayList<String>();
+                ArrayList<String> properEndorsements = new ArrayList<String>();
 
                 for (String e : endorsements)
                 {
@@ -198,6 +198,18 @@ public class OverviewSubFragment extends Fragment {
 
                 endorsementsCount = (TextView) view.findViewById(R.id.nation_wa_num_endorsements);
                 endorsementsCount.setText(SparkleHelper.getPrettifiedNumber(properEndorsements.size()));
+
+                final ArrayList<String> fEndorsements = properEndorsements;
+
+                endorsementsHolder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        EndorsementDialog endorsementDialog = new EndorsementDialog();
+                        endorsementDialog.setEndorsements(fEndorsements);
+                        endorsementDialog.show(fm, EndorsementDialog.DIALOG_TAG);
+                    }
+                });
             }
 
             if (mNation.gaVote != null)
