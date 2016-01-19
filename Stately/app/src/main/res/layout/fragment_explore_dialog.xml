@@ -11,7 +11,8 @@
         android:singleLine="true"
         android:hint="@string/explore_search_text"
         android:inputType="textCapWords|textFilter|textNoSuggestions"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:textSize="15sp"/>
 
     <RadioGroup
         android:id="@+id/explore_radio_group"
@@ -24,13 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/explore_nation"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
         <RadioButton android:id="@+id/explore_radio_region"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="@string/explore_region"
-            android:textSize="17sp"/>
+            android:textSize="15sp"/>
     </RadioGroup>
 
 </LinearLayout>

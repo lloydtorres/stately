@@ -9,7 +9,6 @@ import android.view.View;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import com.lloydtorres.stately.R;
 
 import org.atteo.evo.inflector.English;

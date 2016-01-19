@@ -1,22 +1,21 @@
 package com.lloydtorres.stately;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.RoundedImageView;
@@ -24,7 +23,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.lloydtorres.stately.nation.ExploreNationActivity;
+import com.lloydtorres.stately.nation.ExploreNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -144,12 +143,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 
         if (id != currentPosition && !isNoSelect(id))
         {
             currentPosition = id;
-            android.support.v4.app.Fragment fChoose;
+            Fragment fChoose;
 
             switch (id)
             {
@@ -215,40 +214,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     private void explore()
     {
-        LayoutInflater inflater = (LayoutInflater) getSystemService (Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogView = inflater.inflate(R.layout.view_explore_dialog, null);
-
-        exploreSearch = (EditText) dialogView.findViewById(R.id.explore_searchbar);
-        final RadioGroup exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
-
-        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (exploreToggleState.getCheckedRadioButtonId())
-                {
-                    case R.id.explore_radio_nation:
-                        startExploreActivity();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(R.string.menu_explore)
-                .setView(dialogView)
-                .setPositiveButton(R.string.explore_positive, dialogListener)
-                .setNegativeButton(R.string.explore_negative, null)
-                .show();
-    }
-
-    private void startExploreActivity()
-    {
-        String name = exploreSearch.getText().toString();
-        Intent nationActivityLaunch = new Intent(StatelyActivity.this, ExploreNationActivity.class);
-        nationActivityLaunch.putExtra("nationId", name);
-        startActivity(nationActivityLaunch);
+        FragmentManager fm = getSupportFragmentManager();
+        ExploreNationDialog editNameDialog = new ExploreNationDialog();
+        editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);
     }
 
     private void logout()
