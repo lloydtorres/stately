@@ -176,12 +176,17 @@ public class OverviewSubFragment extends Fragment {
     {
         waCard = (CardView) view.findViewById(R.id.card_overview_wa);
 
-        if (mNation.waState.equals(getString(R.string.nation_wa_member)))
+        if (mNation.waState.equals(getString(R.string.nation_wa_member)) || mNation.waState.equals(getString(R.string.nation_wa_delegate)))
         {
             waCard.setVisibility(View.VISIBLE);
 
             isWaMember = (TextView) view.findViewById(R.id.card_overview_wa_overview);
             isWaMember.setText(String.format(getString(R.string.card_overview_wa_overview), mNation.name));
+
+            if (mNation.waState.equals(getString(R.string.nation_wa_delegate)))
+            {
+                isWaMember.append(String.format(getString(R.string.card_overview_wa_delegate), mNation.name, mNation.region));
+            }
 
             if (mNation.endorsements != null && mNation.endorsements.length() > 0)
             {
