@@ -37,7 +37,7 @@ public class HappeningSubFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sub_happenings, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         if (savedInstanceState != null && mNation == null)
         {
