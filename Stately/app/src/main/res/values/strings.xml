@@ -54,10 +54,9 @@
 
     <string name="card_overview_wa_title">World Assembly</string>
     <string name="card_overview_wa_overview">%1$s is a member of the World Assembly.</string>
-    <string name="card_overview_wa_vote_title">Resolution Votes</string>
+    <string name="card_overview_wa_endorsements">Endorsements</string>
     <string name="card_overview_wa_novote">No vote on the resolution in the %1$s.</string>
     <string name="card_overview_wa_vote">Voted %1$s the resolution in the %2$s.</string>
-    <string name="card_overview_wa_endorsements">Endorsements</string>
 
     <string name="wa_vote_state_undecided">UNDECIDED</string>
     <string name="wa_vote_state_for">FOR</string>

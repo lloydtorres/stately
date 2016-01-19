@@ -77,7 +77,8 @@ public class SparkleHelper {
     };
 
     public static final int[] waColours = { R.color.colorChart0,
-            R.color.colorChart1
+            R.color.colorChart1,
+            R.color.colorChart12
     };
 
     public static final int[] waColourFor = { R.color.colorChart0 };
