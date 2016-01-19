@@ -17,6 +17,9 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lloyd on 2016-01-10.
  */
@@ -185,7 +188,16 @@ public class OverviewSubFragment extends Fragment {
                 endorsementsHolder = (LinearLayout) view.findViewById(R.id.nation_wa_endorsements);
                 endorsementsHolder.setVisibility(View.VISIBLE);
 
+                String[] endorsements = mNation.endorsements.split(",");
+                List<String> properEndorsements = new ArrayList<String>();
+
+                for (String e : endorsements)
+                {
+                    properEndorsements.add(SparkleHelper.getNameFromId(e));
+                }
+
                 endorsementsCount = (TextView) view.findViewById(R.id.nation_wa_num_endorsements);
+                endorsementsCount.setText(SparkleHelper.getPrettifiedNumber(properEndorsements.size()));
             }
 
             if (mNation.gaVote != null)

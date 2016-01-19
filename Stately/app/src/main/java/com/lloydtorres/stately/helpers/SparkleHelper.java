@@ -6,14 +6,19 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.lloydtorres.stately.R;
 
 import org.atteo.evo.inflector.English;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -100,6 +105,28 @@ public class SparkleHelper {
     }
 
     // Formatting
+
+    public static String getNameFromId(String id)
+    {
+        String[] words = id.split("_");
+        List<String> properWords = new ArrayList<String>();
+
+        for (String w : words)
+        {
+            String[] subWords = w.split("-");
+            List<String> properSubWords = new ArrayList<String>();
+
+            for (String sw: subWords)
+            {
+                properSubWords.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, sw));
+            }
+
+            String subFin = Joiner.on("-").join(properSubWords);
+            properWords.add(subFin);
+        }
+
+        return Joiner.on(" ").skipNulls().join(properWords);
+    }
 
     public static String getBannerURL(String id)
     {
