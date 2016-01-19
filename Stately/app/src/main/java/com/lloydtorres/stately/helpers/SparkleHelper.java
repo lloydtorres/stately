@@ -3,6 +3,7 @@ package com.lloydtorres.stately.helpers;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 
@@ -132,12 +133,22 @@ public class SparkleHelper {
         return String.format(BANNER_TEMPLATE, id);
     }
 
-    public static String getHtmlFormatting(String content)
+    public static Spanned getHtmlFormatting(String content)
     {
         String holder = content;
-        holder = holder.replace("\n", "<br />");
 
-        return Html.fromHtml(holder).toString();
+        // BBcode "processing"
+        holder = holder.replace("\n", "<br />")
+                .replace("[i]", "<i>")
+                .replace("[/i]", "</i>")
+                .replace("[b]", "<b>")
+                .replace("[/b]", "</b>")
+                .replace("[u]", "<u>")
+                .replace("[/u]","</u>")
+                .replace("[pre]", "<pre>")
+                .replace("[/pre]", "</pre>");
+
+        return Html.fromHtml(holder);
     }
 
     public static String getReadableDateFromUTC(long sec)

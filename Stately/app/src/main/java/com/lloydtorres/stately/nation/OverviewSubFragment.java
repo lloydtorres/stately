@@ -129,7 +129,7 @@ public class OverviewSubFragment extends Fragment {
         population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
 
         motto = (TextView) view.findViewById(R.id.nation_motto);
-        motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto));
+        motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto).toString());
 
         time = (TextView) view.findViewById(R.id.nation_time);
         if (mNation.foundedAgo.equals("0"))
@@ -273,7 +273,7 @@ public class OverviewSubFragment extends Fragment {
         if (mNation.leader != null)
         {
             leader = (TextView) view.findViewById(R.id.nation_leader);
-            leader.setText(SparkleHelper.getHtmlFormatting(mNation.leader));
+            leader.setText(SparkleHelper.getHtmlFormatting(mNation.leader).toString());
         }
         else
         {
@@ -284,7 +284,7 @@ public class OverviewSubFragment extends Fragment {
         if (mNation.capital != null)
         {
             capital = (TextView) view.findViewById(R.id.nation_capital);
-            capital.setText(SparkleHelper.getHtmlFormatting(mNation.capital));
+            capital.setText(SparkleHelper.getHtmlFormatting(mNation.capital).toString());
         }
         else
         {

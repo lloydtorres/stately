@@ -164,7 +164,7 @@ public class NationFragment extends Fragment {
         DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
 
         nationName.setText(mNation.name);
-        nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename));
+        nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename).toString());
         imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
         imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
 
