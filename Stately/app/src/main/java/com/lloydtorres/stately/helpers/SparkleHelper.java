@@ -3,13 +3,12 @@ package com.lloydtorres.stately.helpers;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,11 +25,8 @@ import org.ocpsoft.prettytime.PrettyTime;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +35,8 @@ import java.util.regex.Pattern;
  */
 public class SparkleHelper {
     public static final String APP_TAG = "com.lloydtorres.stately";
+    public static final String NATION_TARGET = "com.lloydtorres.stately.nation://";
+    public static final String REGION_TARGET = "com.lloydtorres.stately.region://";
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
 
     public static final int CLICKY_NATION_MODE = 1;
@@ -225,56 +223,42 @@ public class SparkleHelper {
 
     // Link and HTML Processing
 
-    public static ClickableSpan getClickable(Context c, String n, int mode)
-    {
-        final String name = getNameFromId(n);
-        final int fMode = mode;
-        final Context fContext = c;
-
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                switch(fMode)
-                {
-                    case CLICKY_NATION_MODE:
-                        startExploring(fContext, name);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false);
-                ds.setColor(ContextCompat.getColor(fContext, R.color.colorPrimary));
-            }
-        };
-
-        return clickableSpan;
-    }
-
     public static void activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
     {
-        ClickableSpan clicky = getClickable(c, nTarget, mode);
-        List<Integer> indices = new ArrayList<Integer>();
-        String tempHolder = template;
-        int nTargetSize = nTarget.length();
+        final String urlFormat = "<a href=\"%s\">%s</a>";
+        String targetActivity;
 
-        while (tempHolder.contains(oTarget))
+        switch (mode)
         {
-            indices.add(tempHolder.indexOf(oTarget));
-            tempHolder = tempHolder.replace(oTarget, nTarget);
+            case CLICKY_NATION_MODE:
+                targetActivity = NATION_TARGET;
+                break;
+            default:
+                targetActivity = REGION_TARGET;
+                break;
+        }
+        targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
+        targetActivity = String.format(urlFormat, targetActivity, nTarget);
+
+        template = template.replace(oTarget, targetActivity);
+
+        t.setText(Html.fromHtml(template));
+        styleLinkifiedTextView(c, t);
+    }
+
+    public static void styleLinkifiedTextView(Context c, TextView t)
+    {
+        Spannable s = new SpannableString(t.getText());
+        URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
+        for (URLSpan span: spans) {
+            int start = s.getSpanStart(span);
+            int end = s.getSpanEnd(span);
+            s.removeSpan(span);
+            span = new URLSpanNoUnderline(c, span.getURL());
+            s.setSpan(span, start, end, 0);
         }
 
-        SpannableString totalSpan = new SpannableString(tempHolder);
-        for (Integer i : indices)
-        {
-            totalSpan.setSpan(clicky, i, i + nTargetSize, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        t.setText(totalSpan);
+        t.setText(s);
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

@@ -42,6 +42,10 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         if (getIntent() != null)
         {
             nationId = getIntent().getStringExtra("nationId");
+            if (nationId == null)
+            {
+                nationId = getIntent().getData().getHost();
+            }
         }
         else
         {
