@@ -26,8 +26,13 @@ import org.ocpsoft.prettytime.PrettyTime;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -277,18 +282,38 @@ public class SparkleHelper {
     {
         String holder = content;
 
-        // BBcode "processing"
-        holder = holder.replace("\n", "<br />")
-                .replace("[i]", "<i>")
-                .replace("[/i]", "</i>")
-                .replace("[b]", "<b>")
-                .replace("[/b]", "</b>")
-                .replace("[u]", "<u>")
-                .replace("[/u]","</u>")
-                .replace("[pre]", "<pre>")
-                .replace("[/pre]", "</pre>");
+        // Basic BBcode processing
+        holder = holder.replace("\n", "<br />");
+        holder = regexReplace(holder, "\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
+        holder = regexReplace(holder, "\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
+        holder = regexReplace(holder, "\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
+        holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<pre>%s</pre>");
+        holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
+        holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
 
         return Html.fromHtml(holder);
+    }
+
+    public static String regexReplace(String target, String regexBefore, String afterFormat)
+    {
+        Matcher m = Pattern.compile(regexBefore).matcher(target);
+        if (m.find())
+        {
+            target = m.replaceAll(String.format(afterFormat, m.group(1)));
+        }
+
+        return target;
+    }
+
+    public static String regexRemove(String target, String regex)
+    {
+        Matcher m = Pattern.compile(regex).matcher(target);
+        if (m.find())
+        {
+            target = m.replaceAll(m.group(1));
+        }
+
+        return target;
     }
 
     // Logging
