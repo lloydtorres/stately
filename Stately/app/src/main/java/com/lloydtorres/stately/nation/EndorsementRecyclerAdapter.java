@@ -1,7 +1,6 @@
 package com.lloydtorres.stately.nation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.List;
 
@@ -64,9 +64,7 @@ public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (pos != RecyclerView.NO_POSITION)
             {
-                Intent nationActivityLaunch = new Intent(context, ExploreNationActivity.class);
-                nationActivityLaunch.putExtra("nationId", nations.get(pos));
-                context.startActivity(nationActivityLaunch);
+                SparkleHelper.startExploring(context, nations.get(pos));
             }
         }
     }

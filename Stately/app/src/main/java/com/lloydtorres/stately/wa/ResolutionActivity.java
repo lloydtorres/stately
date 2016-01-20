@@ -190,8 +190,14 @@ public class ResolutionActivity extends AppCompatActivity {
         mResolution = mAssembly.resolution;
 
         title.setText(mResolution.name);
-        target.setText(String.format(getString(R.string.wa_nominee_template), mResolution.category, mResolution.target));
-        proposedBy.setText(String.format(getString(R.string.wa_proposed), mResolution.proposedBy));
+
+        setTargetView(target, mResolution.category, mResolution.target);
+
+        String proposer = SparkleHelper.getNameFromId(mResolution.proposedBy);
+        String oldProposeTemplate = String.format(getString(R.string.wa_proposed), mResolution.proposedBy);
+        String proposeTemplate = String.format(getString(R.string.wa_proposed), proposer);
+        SparkleHelper.nationLinkBuilder(this, proposedBy, oldProposeTemplate, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
+
         voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(mResolution.created)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
@@ -203,6 +209,25 @@ public class ResolutionActivity extends AppCompatActivity {
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
 
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void setTargetView(TextView t, String category, String target)
+    {
+        String template = getString(R.string.wa_nominee_template);
+        String[] pair = target.split(":");
+
+        switch(pair[0])
+        {
+            case "N":
+                String nationTarget = SparkleHelper.getNameFromId(pair[1]);
+                String oldTemplate = String.format(template, category, pair[1]);
+                String targetTemplate = String.format(template, category, nationTarget);
+                SparkleHelper.nationLinkBuilder(this, t, oldTemplate, targetTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
+                break;
+            default:
+                t.setText(String.format(template, category, target));
+                break;
+        }
     }
 
     private void setVotingBreakdown(int voteFor, int voteAgainst)

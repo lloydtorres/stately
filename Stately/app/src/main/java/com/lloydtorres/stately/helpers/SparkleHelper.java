@@ -1,16 +1,24 @@
 package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.nation.ExploreNationActivity;
 
 import org.atteo.evo.inflector.English;
 import org.ocpsoft.prettytime.PrettyTime;
@@ -27,6 +35,9 @@ import java.util.Locale;
 public class SparkleHelper {
     public static final String APP_TAG = "com.lloydtorres.stately";
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
+
+    public static final int CLICKY_NATION_MODE = 1;
+    public static final int CLICKY_REGION_MODE = 2;
 
     public static final int[] chartColours = {  R.color.colorChart0,
             R.color.colorChart1,
@@ -133,24 +144,6 @@ public class SparkleHelper {
         return String.format(BANNER_TEMPLATE, id);
     }
 
-    public static Spanned getHtmlFormatting(String content)
-    {
-        String holder = content;
-
-        // BBcode "processing"
-        holder = holder.replace("\n", "<br />")
-                .replace("[i]", "<i>")
-                .replace("[/i]", "</i>")
-                .replace("[b]", "<b>")
-                .replace("[/b]", "</b>")
-                .replace("[u]", "<u>")
-                .replace("[/u]","</u>")
-                .replace("[pre]", "<pre>")
-                .replace("[/pre]", "</pre>");
-
-        return Html.fromHtml(holder);
-    }
-
     public static String getReadableDateFromUTC(long sec)
     {
         Date d = new Date(sec * 1000L);
@@ -214,6 +207,75 @@ public class SparkleHelper {
             return String.format(c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, English.plural(currency));
         }
 
+    }
+
+    // Utility
+
+    public static void startExploring(Context c, String n)
+    {
+        Intent nationActivityLaunch = new Intent(c, ExploreNationActivity.class);
+        nationActivityLaunch.putExtra("nationId", n);
+        c.startActivity(nationActivityLaunch);
+    }
+
+    // Link and HTML Processing
+
+    public static ClickableSpan getClickable(Context c, String n, int mode)
+    {
+        final String name = getNameFromId(n);
+        final int fMode = mode;
+        final Context fContext = c;
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                switch(fMode)
+                {
+                    case CLICKY_NATION_MODE:
+                        startExploring(fContext, name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(ContextCompat.getColor(fContext, R.color.colorPrimary));
+            }
+        };
+
+        return clickableSpan;
+    }
+
+    public static void nationLinkBuilder(Context c, TextView t, String original, String revised, String oTarget, String rTarget, int mode)
+    {
+        ClickableSpan clicky = getClickable(c, rTarget, mode);
+        int startIndex = original.indexOf(oTarget);
+        SpannableString totalSpan = new SpannableString(revised);
+        totalSpan.setSpan(clicky, startIndex, startIndex + rTarget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        t.setText(totalSpan);
+        t.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public static Spanned getHtmlFormatting(String content)
+    {
+        String holder = content;
+
+        // BBcode "processing"
+        holder = holder.replace("\n", "<br />")
+                .replace("[i]", "<i>")
+                .replace("[/i]", "</i>")
+                .replace("[b]", "<b>")
+                .replace("[/b]", "</b>")
+                .replace("[u]", "<u>")
+                .replace("[/u]","</u>")
+                .replace("[pre]", "<pre>")
+                .replace("[/pre]", "</pre>");
+
+        return Html.fromHtml(holder);
     }
 
     // Logging

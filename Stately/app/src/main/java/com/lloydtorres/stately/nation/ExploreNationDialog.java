@@ -3,7 +3,6 @@ package com.lloydtorres.stately.nation;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-19.
@@ -64,8 +64,6 @@ public class ExploreNationDialog extends DialogFragment {
     private void startExploreActivity()
     {
         String name = exploreSearch.getText().toString();
-        Intent nationActivityLaunch = new Intent(getContext(), ExploreNationActivity.class);
-        nationActivityLaunch.putExtra("nationId", name);
-        startActivity(nationActivityLaunch);
+        SparkleHelper.startExploring(getContext(), name);
     }
 }
