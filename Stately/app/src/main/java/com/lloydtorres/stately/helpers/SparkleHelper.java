@@ -250,12 +250,25 @@ public class SparkleHelper {
         return clickableSpan;
     }
 
-    public static void nationLinkBuilder(Context c, TextView t, String original, String revised, String oTarget, String rTarget, int mode)
+    public static void activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
     {
-        ClickableSpan clicky = getClickable(c, rTarget, mode);
-        int startIndex = original.indexOf(oTarget);
-        SpannableString totalSpan = new SpannableString(revised);
-        totalSpan.setSpan(clicky, startIndex, startIndex + rTarget.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ClickableSpan clicky = getClickable(c, nTarget, mode);
+        List<Integer> indices = new ArrayList<Integer>();
+        String tempHolder = template;
+        int nTargetSize = nTarget.length();
+
+        while (tempHolder.contains(oTarget))
+        {
+            indices.add(tempHolder.indexOf(oTarget));
+            tempHolder = tempHolder.replace(oTarget, nTarget);
+        }
+
+        SpannableString totalSpan = new SpannableString(tempHolder);
+        for (Integer i : indices)
+        {
+            totalSpan.setSpan(clicky, i, i + nTargetSize, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
         t.setText(totalSpan);
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }

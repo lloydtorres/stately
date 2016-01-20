@@ -194,9 +194,8 @@ public class ResolutionActivity extends AppCompatActivity {
         setTargetView(target, mResolution.category, mResolution.target);
 
         String proposer = SparkleHelper.getNameFromId(mResolution.proposedBy);
-        String oldProposeTemplate = String.format(getString(R.string.wa_proposed), mResolution.proposedBy);
-        String proposeTemplate = String.format(getString(R.string.wa_proposed), proposer);
-        SparkleHelper.nationLinkBuilder(this, proposedBy, oldProposeTemplate, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
+        String proposeTemplate = String.format(getString(R.string.wa_proposed), mResolution.proposedBy);
+        SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
 
         voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.getReadableDateFromUTC(mResolution.created)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
@@ -221,8 +220,7 @@ public class ResolutionActivity extends AppCompatActivity {
             case "N":
                 String nationTarget = SparkleHelper.getNameFromId(pair[1]);
                 String oldTemplate = String.format(template, category, pair[1]);
-                String targetTemplate = String.format(template, category, nationTarget);
-                SparkleHelper.nationLinkBuilder(this, t, oldTemplate, targetTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
+                SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
                 break;
             default:
                 t.setText(String.format(template, category, target));
