@@ -244,7 +244,7 @@ public class SparkleHelper {
         targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
         targetActivity = String.format(urlFormat, targetActivity, nTarget);
 
-        tempHolder = tempHolder.replaceAll(oTarget, targetActivity);
+        tempHolder = tempHolder.replace(oTarget, targetActivity);
 
         t.setText(Html.fromHtml(tempHolder));
         styleLinkifiedTextView(c, t);
@@ -268,26 +268,40 @@ public class SparkleHelper {
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
+    {
+        String holder = content;
+        Map<String, String> names = new HashMap<String, String>();
+
+        Matcher m = Pattern.compile(regex).matcher(holder);
+        while (m.find())
+        {
+            String properName = getNameFromId(m.group(1));
+            names.put(m.group(), properName);
+        }
+
+        Set<Map.Entry<String, String>> set = names.entrySet();
+
+        for (Map.Entry<String, String> n : set) {
+            holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), mode);
+        }
+
+        return holder;
+    }
+
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
         String holder = content;
-        Map<String, String> nationIds = new HashMap<String, String>();
 
-        Matcher m = Pattern.compile("@@(.*?)@@").matcher(holder);
-        if (m.find())
-        {
-            String properName = getNameFromId(m.group(1));
-            nationIds.put(m.group(), properName);
-        }
-
-        Set<Map.Entry<String, String>> set = nationIds.entrySet();
-
-        for (Map.Entry<String, String> n : set) {
-            holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), CLICKY_NATION_MODE);
-        }
+        holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
     }
 
     public static Spanned getHtmlFormatting(String content)
+    {
+        return Html.fromHtml(content);
+    }
+
+    public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
         String holder = content;
 
@@ -300,7 +314,8 @@ public class SparkleHelper {
         holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
 
-        return Html.fromHtml(holder);
+        holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
     }
 
     public static String regexReplace(String target, String regexBefore, String afterFormat)

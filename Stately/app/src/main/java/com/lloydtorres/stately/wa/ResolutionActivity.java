@@ -201,7 +201,7 @@ public class ResolutionActivity extends AppCompatActivity {
         voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
-        content.setText(SparkleHelper.getHtmlFormatting(mResolution.content));
+        SparkleHelper.setBbCodeFormatting(this, content, mResolution.content);
         setVotingBreakdown(mResolution.votesFor, mResolution.votesAgainst);
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
 
