@@ -23,7 +23,6 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -291,13 +290,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             }
                             mNation = nationResponse;
                             initNavBanner();
-
-                            if (currentPosition == R.id.nav_nation)
-                            {
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.coordinator_app_bar, getNationFragment())
-                                        .commit();
-                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
