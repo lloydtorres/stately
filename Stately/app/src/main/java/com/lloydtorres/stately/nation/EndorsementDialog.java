@@ -61,7 +61,7 @@ public class EndorsementDialog extends DialogFragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         Collections.sort(endorsements);
-        mRecyclerAdapter = new EndorsementRecyclerAdapter(getContext(), endorsements);
+        mRecyclerAdapter = new EndorsementRecyclerAdapter(getContext(), this, endorsements);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

@@ -17,11 +17,13 @@ import java.util.List;
  */
 public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
+    private EndorsementDialog selfDialog;
     private List<String> nations;
 
-    public EndorsementRecyclerAdapter(Context c, List<String> n)
+    public EndorsementRecyclerAdapter(Context c, EndorsementDialog d, List<String> n)
     {
         context = c;
+        selfDialog = d;
         nations = n;
     }
 
@@ -65,6 +67,7 @@ public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             if (pos != RecyclerView.NO_POSITION)
             {
                 SparkleHelper.startExploring(context, nations.get(pos));
+                selfDialog.dismiss();
             }
         }
     }
