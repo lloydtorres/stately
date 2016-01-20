@@ -10,6 +10,7 @@
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
     <string name="login_error_generic">An error occurred. Please try again.</string>
+    <string name="error_generic">An internal error occurred.</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

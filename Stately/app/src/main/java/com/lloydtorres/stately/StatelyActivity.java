@@ -18,6 +18,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
@@ -30,6 +40,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
+import org.simpleframework.xml.core.Persister;
 
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PrimeActivity {
 
@@ -128,6 +140,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         {
             mNation = savedInstanceState.getParcelable("mNationData");
         }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        updateNation();
     }
 
     @Override
@@ -236,5 +255,69 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 .setNegativeButton(R.string.explore_negative, null)
                 .show();
 
+    }
+
+    private void updateNation()
+    {
+        final View fView = findViewById(R.id.drawer_layout);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = String.format(Nation.QUERY, mNation.name.toLowerCase().replace(" ", "_"));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    Nation nationResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            nationResponse = serializer.read(Nation.class, response);
+
+                            // Switch flag URL to https
+                            nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
+
+                            // Map out government priorities
+                            switch (nationResponse.govtPriority)
+                            {
+                                case "Defence":
+                                    nationResponse.govtPriority = getString(R.string.defense);
+                                    break;
+                                case "Commerce":
+                                    nationResponse.govtPriority = getString(R.string.industry);
+                                    break;
+                                case "Social Equality":
+                                    nationResponse.govtPriority = getString(R.string.social_policy);
+                                    break;
+                            }
+                            mNation = nationResponse;
+                            initNavBanner();
+
+                            if (currentPosition == R.id.nav_nation)
+                            {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.coordinator_app_bar, getNationFragment())
+                                        .commit();
+                            }
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.error_generic));
+                }
+            }
+        });
+
+        queue.add(stringRequest);
     }
 }
