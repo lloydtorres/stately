@@ -71,7 +71,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             default:
                 View happeningCard = inflater.inflate(R.layout.card_happening, parent, false);
-                viewHolder = new HappeningCard(happeningCard);
+                viewHolder = new HappeningCard(context, happeningCard);
                 break;
         }
         return viewHolder;

@@ -45,6 +45,7 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
             if (nationId == null)
             {
                 nationId = getIntent().getData().getHost();
+                nationId = SparkleHelper.getNameFromId(nationId);
             }
         }
         else

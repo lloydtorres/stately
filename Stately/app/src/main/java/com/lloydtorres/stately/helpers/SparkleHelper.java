@@ -25,8 +25,11 @@ import org.ocpsoft.prettytime.PrettyTime;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -223,9 +226,10 @@ public class SparkleHelper {
 
     // Link and HTML Processing
 
-    public static void activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
+    public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
     {
         final String urlFormat = "<a href=\"%s\">%s</a>";
+        String tempHolder = template;
         String targetActivity;
 
         switch (mode)
@@ -240,10 +244,12 @@ public class SparkleHelper {
         targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
         targetActivity = String.format(urlFormat, targetActivity, nTarget);
 
-        template = template.replace(oTarget, targetActivity);
+        tempHolder = tempHolder.replaceAll(oTarget, targetActivity);
 
-        t.setText(Html.fromHtml(template));
+        t.setText(Html.fromHtml(tempHolder));
         styleLinkifiedTextView(c, t);
+
+        return tempHolder;
     }
 
     public static void styleLinkifiedTextView(Context c, TextView t)
@@ -260,6 +266,25 @@ public class SparkleHelper {
 
         t.setText(s);
         t.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public static void setHappeningsFormatting(Context c, TextView t, String content)
+    {
+        String holder = content;
+        Map<String, String> nationIds = new HashMap<String, String>();
+
+        Matcher m = Pattern.compile("@@(.*?)@@").matcher(holder);
+        if (m.find())
+        {
+            String properName = getNameFromId(m.group(1));
+            nationIds.put(m.group(), properName);
+        }
+
+        Set<Map.Entry<String, String>> set = nationIds.entrySet();
+
+        for (Map.Entry<String, String> n : set) {
+            holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), CLICKY_NATION_MODE);
+        }
     }
 
     public static Spanned getHtmlFormatting(String content)

@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.nation;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,12 @@ import java.util.List;
  * Created by Lloyd on 2016-01-17.
  */
 public class HappeningRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private Context context;
     private List<HappeningEvent> events;
 
-    public HappeningRecyclerAdapter(List<HappeningEvent> ev)
+    public HappeningRecyclerAdapter(Context c, List<HappeningEvent> ev)
     {
+        context = c;
         events = ev;
     }
 
@@ -26,7 +29,7 @@ public class HappeningRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View happeningCard = inflater.inflate(R.layout.card_happening, parent, false);
-        RecyclerView.ViewHolder viewHolder = new HappeningCard(happeningCard);
+        RecyclerView.ViewHolder viewHolder = new HappeningCard(context, happeningCard);
         return viewHolder;
     }
 

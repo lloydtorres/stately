@@ -62,7 +62,7 @@ public class HappeningSubFragment extends Fragment {
         List<HappeningEvent> events = mNation.happeningsRoot.events;
         Collections.sort(events);
 
-        mRecyclerAdapter = new HappeningRecyclerAdapter(events);
+        mRecyclerAdapter = new HappeningRecyclerAdapter(getContext(), events);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
