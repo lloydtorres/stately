@@ -119,7 +119,7 @@
 
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
-    <string name="wa_voting_time">Voting started %1$s</string>
+    <string name="wa_voting_time">Resolution submitted %1$s</string>
     <string name="wa_for">For</string>
     <string name="wa_against">Against</string>
     <string name="wa_members">members</string>
