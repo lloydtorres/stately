@@ -268,7 +268,7 @@ public class SparkleHelper {
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
+    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content)
     {
         String holder = content;
         Map<String, String> names = new HashMap<String, String>();
@@ -280,7 +280,13 @@ public class SparkleHelper {
             names.put(m.group(), properName);
         }
 
-        Set<Map.Entry<String, String>> set = names.entrySet();
+        return names.entrySet();
+    }
+
+    public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
+    {
+        String holder = content;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder);
 
         for (Map.Entry<String, String> n : set) {
             holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), mode);
@@ -316,28 +322,34 @@ public class SparkleHelper {
 
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
+
+        t.setText(Html.fromHtml(holder));
+        styleLinkifiedTextView(c, t);
     }
 
     public static String regexReplace(String target, String regexBefore, String afterFormat)
     {
-        Matcher m = Pattern.compile(regexBefore).matcher(target);
-        if (m.find())
-        {
-            target = m.replaceAll(String.format(afterFormat, m.group(1)));
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder);
+
+        for (Map.Entry<String, String> n : set) {
+            String properFormat = String.format(afterFormat, n.getValue());
+            holder = holder.replace(n.getKey(), properFormat);
         }
 
-        return target;
+        return holder;
     }
 
     public static String regexRemove(String target, String regex)
     {
-        Matcher m = Pattern.compile(regex).matcher(target);
-        if (m.find())
-        {
-            target = m.replaceAll(m.group(1));
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder);
+
+        for (Map.Entry<String, String> n : set) {
+            holder = holder.replace(n.getKey(), "");
         }
 
-        return target;
+        return holder;
     }
 
     // Logging
