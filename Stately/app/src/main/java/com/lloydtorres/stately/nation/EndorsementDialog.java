@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.nation;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,11 @@ public class EndorsementDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            setStyle(DialogFragment.STYLE_NORMAL, R.style.AlertDialogCustom);
+        }
     }
 
     @Override
