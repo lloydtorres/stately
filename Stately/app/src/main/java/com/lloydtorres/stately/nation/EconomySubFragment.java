@@ -12,11 +12,10 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.helpers.PieChartListener;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
@@ -29,7 +28,7 @@ import java.util.List;
  * A sub-fragment within the Nation fragment showing economic data.
  * Takes in nation object.
  */
-public class EconomySubFragment extends Fragment implements OnChartValueSelectedListener {
+public class EconomySubFragment extends Fragment {
     private Nation mNation;
 
     private TextView econDesc;
@@ -158,25 +157,8 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         sectorChart.setCenterTextSize(20);
         sectorChart.setRotationEnabled(false);
 
-        sectorChart.setOnChartValueSelectedListener(this);
+        sectorChart.setOnChartValueSelectedListener(new PieChartListener(getContext(), sectorChart, chartLabels));
         sectorChart.setData(dataFull);
         sectorChart.invalidate();
-    }
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        // Show item label and percent value on click
-        if (sectorChart != null)
-        {
-            sectorChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
-        }
-    }
-
-    @Override
-    public void onNothingSelected() {
-        if (sectorChart != null)
-        {
-            sectorChart.setCenterText("");
-        }
     }
 }

@@ -33,6 +33,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
 import com.lloydtorres.stately.dto.Resolution;
+import com.lloydtorres.stately.helpers.PieChartListener;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
@@ -289,7 +290,7 @@ public class ResolutionActivity extends AppCompatActivity {
         votingBreakdown.setCenterTextSize(20);
         votingBreakdown.setRotationEnabled(false);
 
-        votingBreakdown.setOnChartValueSelectedListener(new VotingBreakdownChartListener(this, votingBreakdown, chartLabels));
+        votingBreakdown.setOnChartValueSelectedListener(new PieChartListener(this, votingBreakdown, chartLabels));
         votingBreakdown.setData(dataFull);
         votingBreakdown.invalidate();
     }

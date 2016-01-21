@@ -12,11 +12,10 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.PieChartListener;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.List;
  * A sub-fragment of the Nation fragment showing data on people.
  * Takes in a Nation object.
  */
-public class PeopleSubFragment extends Fragment implements OnChartValueSelectedListener {
+public class PeopleSubFragment extends Fragment {
     private Nation mNation;
 
     private TextView summaryDesc;
@@ -146,25 +145,8 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
         mortalityChart.setCenterTextSize(20);
         mortalityChart.setRotationEnabled(false);
 
-        mortalityChart.setOnChartValueSelectedListener(this);
+        mortalityChart.setOnChartValueSelectedListener(new PieChartListener(getContext(), mortalityChart, chartLabels));
         mortalityChart.setData(dataFull);
         mortalityChart.invalidate();
-    }
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        // Show item label and percentage on click
-        if (mortalityChart != null)
-        {
-            mortalityChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
-        }
-    }
-
-    @Override
-    public void onNothingSelected() {
-        if (mortalityChart != null)
-        {
-            mortalityChart.setCenterText("");
-        }
     }
 }
