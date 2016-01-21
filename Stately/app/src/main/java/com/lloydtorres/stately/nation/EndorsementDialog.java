@@ -39,7 +39,7 @@ public class EndorsementDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
+        View view = inflater.inflate(R.layout.fragment_paddedrecycler, container, false);
         getDialog().setTitle(getString(R.string.card_overview_wa_endorsements));
 
         // Restore saved state
@@ -59,9 +59,8 @@ public class EndorsementDialog extends DialogFragment {
 
     private void initRecycler(View view)
     {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setPadding(0, 20, 0, 0);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         Collections.sort(endorsements);
