@@ -491,7 +491,7 @@ public class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
-        String holder = Jsoup.clean(content, Whitelist.none());
+        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
@@ -508,7 +508,7 @@ public class SparkleHelper {
      */
     public static Spanned getHtmlFormatting(String content)
     {
-        String holder = Jsoup.clean(content, Whitelist.none());
+        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         return Html.fromHtml(holder);
     }
 
