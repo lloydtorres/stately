@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

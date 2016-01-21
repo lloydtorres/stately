@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately.helpers;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
