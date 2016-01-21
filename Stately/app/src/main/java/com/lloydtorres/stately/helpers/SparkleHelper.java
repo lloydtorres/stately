@@ -20,6 +20,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.nation.ExploreNationActivity;
 
 import org.atteo.evo.inflector.English;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.text.NumberFormat;
@@ -489,7 +491,7 @@ public class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
-        String holder = content;
+        String holder = Jsoup.clean(content, Whitelist.none());
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
@@ -506,7 +508,8 @@ public class SparkleHelper {
      */
     public static Spanned getHtmlFormatting(String content)
     {
-        return Html.fromHtml(content);
+        String holder = Jsoup.clean(content, Whitelist.none());
+        return Html.fromHtml(holder);
     }
 
     /**
@@ -518,10 +521,11 @@ public class SparkleHelper {
     public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
         String holder = content;
+        holder = holder.replace("\n", "<br />");
+        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Basic BBcode processing
-        holder = holder.replace("\n", "<br />");
-        holder = regexReplace(holder, "\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
+        holder = regexReplace(holder, "\\[b\\](.*?)\\[\\/b\\]", "<strong>%s</strong>");
         holder = regexReplace(holder, "\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
         holder = regexReplace(holder, "\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
         holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<pre>%s</pre>");
