@@ -24,6 +24,8 @@ import org.simpleframework.xml.core.Persister;
 
 /**
  * Created by Lloyd on 2016-01-13.
+ * The launcher activity for Stately!
+ * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
     private EditText username;
@@ -42,13 +44,18 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login_button);
     }
 
+    /**
+     * Callback for login button.
+     * Verifies if the input is valid. If yes, start getting nation data.
+     * @param view
+     */
     public void verifyLogin(View view)
     {
         if (!getLoginState())
         {
             setLoginState(true);
             String name = username.getText().toString();
-            if (SparkleHelper.isValidNationName(name) && name.length() > 0)
+            if (SparkleHelper.isValidName(name) && name.length() > 0)
             {
                 name = name.toLowerCase().replace(" ","_");
                 queryNation(view, name);
@@ -61,6 +68,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Downloads nation data for specified nation.
+     * If successful, start the main StatelyActivity.
+     * @param view
+     * @param nationName
+     */
     private void queryNation(View view, String nationName)
     {
         final View fView = view;
@@ -127,11 +140,19 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    /**
+     * Get the login state (i.e. if the login process is currently being done).
+     * @return The login state (true or not).
+     */
     private boolean getLoginState()
     {
         return isLoggingIn;
     }
 
+    /**
+     * Set the login state.
+     * @param stat The current login state. True if logging in, false otherwise.
+     */
     private void setLoginState(boolean stat)
     {
         if (stat)

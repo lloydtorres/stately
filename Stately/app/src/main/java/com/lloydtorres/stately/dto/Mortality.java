@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A list of MortalityCause DTOs as returned by the NationStates API. Formatted this way due to
+ * the structure of the XML returned by the API, and its easier to deserialize like this.
  */
 @Root(name="DEATHS", strict=false)
 public class Mortality implements Parcelable {

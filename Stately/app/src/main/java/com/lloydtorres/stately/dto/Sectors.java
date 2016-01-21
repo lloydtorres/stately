@@ -8,6 +8,8 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A DTO that stores information on a nation's economic sectors, as returned by the
+ * NationStates API.
  */
 @Root(name="SECTORS", strict=false)
 public class Sectors implements Parcelable {

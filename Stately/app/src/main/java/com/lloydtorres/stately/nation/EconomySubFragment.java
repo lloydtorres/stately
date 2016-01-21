@@ -26,6 +26,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A sub-fragment within the Nation fragment showing economic data.
+ * Takes in nation object.
  */
 public class EconomySubFragment extends Fragment implements OnChartValueSelectedListener {
     private Nation mNation;
@@ -37,6 +39,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
     private TextView gdpPerCapitaRich;
     private PieChart sectorChart;
 
+    // Labels used for the pie chart
     private List<String> chartLabels;
 
     public void setNation(Nation n)
@@ -53,6 +56,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sub_economy, container, false);
 
+        // Restore state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNation");
@@ -77,6 +81,10 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         }
     }
 
+    /**
+     * Set up first card with economic description from NationStates.
+     * @param view
+     */
     private void initEconDesc(View view)
     {
         econDesc = (TextView) view.findViewById(R.id.nation_industrydesc);
@@ -87,6 +95,10 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         econDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
     }
 
+    /**
+     * Initialize the card text content on GDP data from NationStates
+     * @param view
+     */
     private void initGDP(View view)
     {
         gdpTotal = (TextView) view.findViewById(R.id.nation_gdp_total);
@@ -102,6 +114,10 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         gdpPerCapitaRich.setText(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
     }
 
+    /**
+     * Initialize the pie chart showing the economic sector breakdown
+     * @param view
+     */
     private void initSectorChart(View view)
     {
         sectorChart = (PieChart) view.findViewById(R.id.nation_sectors);
@@ -121,6 +137,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
         chartLabels.add(getString(R.string.black_market));
         chartEntries.add(new Entry((float) sectors.blackMarket, i++));
 
+        // Disable data labels, set colours and data
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(SparkleHelper.sectorColours, getActivity());
@@ -148,6 +165,7 @@ public class EconomySubFragment extends Fragment implements OnChartValueSelected
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        // Show item label and percent value on click
         if (sectorChart != null)
         {
             sectorChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));

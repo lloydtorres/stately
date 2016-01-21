@@ -15,10 +15,12 @@ import java.util.Collections;
 
 /**
  * Created by Lloyd on 2016-01-19.
+ * A dialog showing a list of endorsements a nation has.
  */
 public class EndorsementDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_endorsement_dialog";
 
+    // RecyclerView variables
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
@@ -40,11 +42,13 @@ public class EndorsementDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
         getDialog().setTitle(getString(R.string.card_overview_wa_endorsements));
 
+        // Restore saved state
         if (savedInstanceState != null && endorsements == null)
         {
             endorsements = savedInstanceState.getStringArrayList("endorsements");
         }
 
+        // If there are endorsements, set up the recycler
         if (endorsements != null)
         {
             initRecycler(view);
@@ -67,6 +71,7 @@ public class EndorsementDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        // Save state
         super.onSaveInstanceState(outState);
         if (endorsements != null)
         {

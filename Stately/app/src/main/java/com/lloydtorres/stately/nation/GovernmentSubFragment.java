@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A sub-fragment within the Nation fragment that displays government data.
+ * Takes in a Nation object.
  */
 public class GovernmentSubFragment extends Fragment implements OnChartValueSelectedListener {
     private Nation mNation;
@@ -32,6 +34,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
     private TextView budgetTotal;
     private PieChart budgetChart;
 
+    // Labels used for the pie chart
     private List<String> chartLabels;
 
     public void setNation(Nation n)
@@ -48,6 +51,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sub_government, container, false);
 
+        // Restore save state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNation");
@@ -72,6 +76,10 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         }
     }
 
+    /**
+     * Initializes the first card containing government description from NationStates.
+     * @param view
+     */
     private void initGovDesc(View view)
     {
         govDesc = (TextView) view.findViewById(R.id.nation_govtdesc);
@@ -82,6 +90,10 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         govDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
     }
 
+    /**
+     * Initializes the text content for the budget card.
+     * @param view
+     */
     private void initBudgetTotal(View view)
     {
         budgetTotal = (TextView) view.findViewById(R.id.nation_expenditures_total);
@@ -90,6 +102,10 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         budgetTotal.setText(String.format(getString(R.string.card_government_expenditures_budget_flavour), SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency), mNation.sectors.government));
     }
 
+    /**
+     * Initializes the pie chart used to display government budget breakdown.
+     * @param view
+     */
     private void initBudgetChart(View view)
     {
         budgetChart = (PieChart) view.findViewById(R.id.nation_govspending);
@@ -99,6 +115,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         List<Entry> chartEntries = new ArrayList<Entry>();
         GovBudget budget = mNation.govBudget;
 
+        // Have to add it one by one, how horrifying
         int i = 0;
         chartLabels.add(getString(R.string.administration));
         chartEntries.add(new Entry((float) budget.admin, i++));
@@ -125,6 +142,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
         chartLabels.add(getString(R.string.welfare));
         chartEntries.add(new Entry((float) budget.welfare, i++));
 
+        // Disable chart labels, set colours, set data
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(SparkleHelper.chartColours, getActivity());
@@ -152,6 +170,7 @@ public class GovernmentSubFragment extends Fragment implements OnChartValueSelec
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        // Show item name and percentage in center of chart on click
         if (budgetChart != null)
         {
             budgetChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));

@@ -8,6 +8,8 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A DTO used to track a nation's government spending for each area in percent, as returned
+ * by the NationStates API.
  */
 @Root(name="GOVT", strict=false)
 public class GovBudget implements Parcelable {

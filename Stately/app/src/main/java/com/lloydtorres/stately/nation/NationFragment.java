@@ -29,8 +29,11 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * Created by Lloyd on 2016-01-13.
+ * The main nation fragment called either by StatelyActivity or ExploreNationActivity.
+ * Displays information about a target nation, takes in a nation object.
  */
 public class NationFragment extends Fragment {
+    // Constants used to determine view pager index.
     private final int OVERVIEW_TAB = 0;
     private final int PEOPLE_TAB = 1;
     private final int GOV_TAB = 2;
@@ -39,6 +42,7 @@ public class NationFragment extends Fragment {
 
     private Nation mNation;
 
+    // sub fragments
     private OverviewSubFragment overviewSubFragment;
     private PeopleSubFragment peopleSubFragment;
     private GovernmentSubFragment governmentSubFragment;
@@ -66,6 +70,7 @@ public class NationFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        // Get activity for manipulation
         super.onAttach(context);
         mActivity = (Activity) context;
     }
@@ -81,6 +86,7 @@ public class NationFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_nation, container, false);
 
+        // Restore state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNationData");
@@ -90,12 +96,15 @@ public class NationFragment extends Fragment {
         {
             initToolbar(view);
             getAllNationViews(view);
-            initNationData(view);
         }
 
         return view;
     }
 
+    /**
+     * Initialize the toolbar and pass it back to the containing activity.
+     * @param view
+     */
     private void initToolbar(View view)
     {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
@@ -106,6 +115,7 @@ public class NationFragment extends Fragment {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
 
+        // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container);
         collapsingToolbarLayout.setTitle("");
 
@@ -124,7 +134,8 @@ public class NationFragment extends Fragment {
                         collapsingToolbarLayout.setTitle(mNation.name);
                     }
                     isShow = true;
-                } else if (isShow) {
+                }
+                else if (isShow) {
                     collapsingToolbarLayout.setTitle("");
                     isShow = false;
                 }
@@ -137,6 +148,10 @@ public class NationFragment extends Fragment {
         return toolbar;
     }
 
+    /**
+     * Initialize the tabs layout and view pager
+     * @param view
+     */
     private void initTabs(View view)
     {
         // Initialize the ViewPager and set an adapter
@@ -148,19 +163,31 @@ public class NationFragment extends Fragment {
         tabs.setViewPager(tabsPager);
     }
 
+    /**
+     * Get the views for the nation elements within the collapsing toolbar
+     * @param view
+     */
     private void getAllNationViews(View view)
     {
         nationName = (TextView) view.findViewById(R.id.nation_name);
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView) view.findViewById(R.id.nation_flag);
+
+        initNationData(view);
     }
 
+    /**
+     * Load the entire fragment's contents
+     * @param view
+     */
     public void initNationData(View view) {
+        // Set up image loader to get images from NationStates
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext()).build();
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
 
+        // Fade image in on finish load
         DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
 
         nationName.setText(mNation.name);
@@ -189,6 +216,7 @@ public class NationFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
+        // Save state
         super.onSaveInstanceState(savedInstanceState);
         if (mNation != null)
         {
@@ -199,6 +227,7 @@ public class NationFragment extends Fragment {
     @Override
     public void onDestroy()
     {
+        // Decouple activity on destroy
         super.onDestroy();
         mActivity = null;
     }

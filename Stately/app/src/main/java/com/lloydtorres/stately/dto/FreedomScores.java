@@ -8,6 +8,7 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-11.
+ * A DTO used to store the freedom scores of a nation returned by the NationStates API.
  */
 @Root(name="FREEDOMSCORES", strict=false)
 public class FreedomScores implements Parcelable {

@@ -8,6 +8,8 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-17.
+ * This is similar to the Assembly DTO, but only contains information on the resolution
+ * as well as voting history to minimize the amount of data to be downloaded.
  */
 @Root(name="WA", strict=false)
 public class AssemblyActive implements Parcelable {

@@ -16,6 +16,8 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-19.
+ * A dialog that takes in a nation or region name, lets the user select the type, then launches
+ * the appropriate explore activity.
  */
 public class ExploreNationDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_explore_dialog";
@@ -32,8 +34,6 @@ public class ExploreNationDialog extends DialogFragment {
 
         exploreSearch = (EditText) dialogView.findViewById(R.id.explore_searchbar);
         exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
-
-        exploreSearch.requestFocus();
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
@@ -55,6 +55,8 @@ public class ExploreNationDialog extends DialogFragment {
                 .setPositiveButton(R.string.explore_positive, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null);
 
+        // Get focus on edit text and open keyboard
+        exploreSearch.requestFocus();
         Dialog d = dialogBuilder.create();
         d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 

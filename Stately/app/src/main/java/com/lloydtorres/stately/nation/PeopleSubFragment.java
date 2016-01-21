@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A sub-fragment of the Nation fragment showing data on people.
+ * Takes in a Nation object.
  */
 public class PeopleSubFragment extends Fragment implements OnChartValueSelectedListener {
     private Nation mNation;
@@ -31,6 +33,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
     private TextView summaryDesc;
     private PieChart mortalityChart;
 
+    // Labels on the mortality chart
     private List<String> chartLabels;
 
     public void setNation(Nation n)
@@ -47,6 +50,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sub_people, container, false);
 
+        // Restore state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNation");
@@ -63,6 +67,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        // Save state
         super.onSaveInstanceState(outState);
         if (mNation != null)
         {
@@ -70,6 +75,10 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
         }
     }
 
+    /**
+     * Initialize the first card showing a mockup of the people descriptors in NationStates.
+     * @param view
+     */
     private void initSummaryDesc(View view)
     {
         summaryDesc = (TextView) view.findViewById(R.id.nation_summarydesc);
@@ -87,6 +96,10 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
         summaryDesc.setText(SparkleHelper.getHtmlFormatting(summaryContent));
     }
 
+    /**
+     * Initialize the mortality pie chart.
+     * @param view
+     */
     private void initMortalityChart(View view)
     {
         mortalityChart = (PieChart) view.findViewById(R.id.nation_mortality_chart);
@@ -98,6 +111,8 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
         for (int i=0; i < causes.size(); i++)
         {
+            // NationStates API stores this as Animal Attack instead of
+            // using the actual national animal, so replace that
             if (getString(R.string.animal_attack_original).equals(causes.get(i).type))
             {
                 chartLabels.add(String.format(getString(R.string.animal_attack_madlibs), mNation.animal));
@@ -110,6 +125,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
             chartEntries.add(n);
         }
 
+        // Disable labels, set values and colours
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(SparkleHelper.chartColours, getActivity());
@@ -137,6 +153,7 @@ public class PeopleSubFragment extends Fragment implements OnChartValueSelectedL
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        // Show item label and percentage on click
         if (mortalityChart != null)
         {
             mortalityChart.setCenterText(String.format(getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));

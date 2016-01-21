@@ -8,6 +8,7 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-11.
+ * A DTO used to store the freedom descriptors of a nation returned by the NationStates API.
  */
 @Root(name="FREEDOM", strict=false)
 public class Freedom implements Parcelable {

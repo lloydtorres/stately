@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-16.
+ * A DTO that stores information on an active WA resolution, as returned by the NationStates API.
  */
 @Root(name="WA", strict=false)
 public class Resolution implements Parcelable {

@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-17.
+ * An adapter used to show happenings in its RecyclerView.
  */
 public class HappeningRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;

@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Lloyd on 2016-01-10.
+ * A sub-fragment of the Nation fragment showing overview stats about a nation.
+ * Takes in a Nation object.
  */
 public class OverviewSubFragment extends Fragment {
     private Nation mNation;
@@ -90,6 +92,7 @@ public class OverviewSubFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sub_overview, container, false);
 
+        // Restore state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNation");
@@ -110,6 +113,7 @@ public class OverviewSubFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        // Save state
         super.onSaveInstanceState(outState);
         if (mNation != null)
         {
@@ -117,6 +121,10 @@ public class OverviewSubFragment extends Fragment {
         }
     }
 
+    /**
+     * Initialize first card with general data (e.g. government type, region)
+     * @param view
+     */
     private void initMainCard(View view)
     {
         govType = (TextView) view.findViewById(R.id.nation_gov_type);
@@ -131,6 +139,7 @@ public class OverviewSubFragment extends Fragment {
         motto = (TextView) view.findViewById(R.id.nation_motto);
         motto.setText(SparkleHelper.getHtmlFormatting(mNation.motto).toString());
 
+        // Testlandia returns a value of 0 for this, so replace with some pretty text instead
         time = (TextView) view.findViewById(R.id.nation_time);
         if (mNation.foundedAgo.equals("0"))
         {
@@ -142,6 +151,10 @@ public class OverviewSubFragment extends Fragment {
         }
     }
 
+    /**
+     * Initialize the freedom indicators, use point value divided by 7 as a colour index.
+     * @param view
+     */
     private void initFreedomCards(View view)
     {
         civilRightsCard = (CardView) view.findViewById(R.id.card_overview_civrights);
@@ -172,10 +185,15 @@ public class OverviewSubFragment extends Fragment {
         politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[polColInd]));
     }
 
+    /**
+     * Initialize the World Assembly card if needed.
+     * @param view
+     */
     private void initAssemblyCard(View view)
     {
         waCard = (CardView) view.findViewById(R.id.card_overview_wa);
 
+        // Only show if member of the WA (or delegate)
         if (mNation.waState.equals(getString(R.string.nation_wa_member)) || mNation.waState.equals(getString(R.string.nation_wa_delegate)))
         {
             waCard.setVisibility(View.VISIBLE);
@@ -183,16 +201,19 @@ public class OverviewSubFragment extends Fragment {
             isWaMember = (TextView) view.findViewById(R.id.card_overview_wa_overview);
             isWaMember.setText(String.format(getString(R.string.card_overview_wa_overview), mNation.name));
 
+            // Add additional text if delegate
             if (mNation.waState.equals(getString(R.string.nation_wa_delegate)))
             {
                 isWaMember.append(String.format(getString(R.string.card_overview_wa_delegate), mNation.name, mNation.region));
             }
 
+            // Show endorsements section if endorsements exist
             if (mNation.endorsements != null && mNation.endorsements.length() > 0)
             {
                 endorsementsHolder = (LinearLayout) view.findViewById(R.id.nation_wa_endorsements);
                 endorsementsHolder.setVisibility(View.VISIBLE);
 
+                // Build endorsements list
                 String[] endorsements = mNation.endorsements.split(",");
                 ArrayList<String> properEndorsements = new ArrayList<String>();
 
@@ -217,6 +238,7 @@ public class OverviewSubFragment extends Fragment {
                 });
             }
 
+            // Show vote state in General Assembly if exists
             if (mNation.gaVote != null)
             {
                 gaVoteHolder = (LinearLayout) view.findViewById(R.id.nation_wa_ga_vote);
@@ -226,6 +248,7 @@ public class OverviewSubFragment extends Fragment {
                 setAssemblyVoteState(gaVoteHolder, gaVote, mNation.gaVote, Assembly.GENERAL_ASSEMBLY);
             }
 
+            // Show vote state in Security council if exists
             if (mNation.scVote != null)
             {
                 scVoteHolder = (LinearLayout) view.findViewById(R.id.nation_wa_sc_vote);
@@ -237,11 +260,21 @@ public class OverviewSubFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets up colours, etc. for the WA voting indicators, which are identical in all but name.
+     * @param holder
+     * @param content
+     * @param vote
+     * @param councilId
+     */
     private void setAssemblyVoteState(LinearLayout holder, TextView content, String vote, int councilId)
     {
+        // Intent to open the ResolutionActivity
         Intent resolutionActivityLaunch = new Intent(getContext(), ResolutionActivity.class);
         resolutionActivityLaunch.putExtra("councilId", councilId);
         final Intent fResolution = resolutionActivityLaunch;
+
+        // Colour of the indicator as well as the assembly name
         int stateColour;
         String assemblyName;
 
@@ -260,16 +293,19 @@ public class OverviewSubFragment extends Fragment {
                 break;
         }
 
+        // If voting FOR the resolution
         if (getString(R.string.wa_vote_state_for).equals(vote))
         {
             stateColour = SparkleHelper.waColours[0];
             content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
         }
+        // If voting AGAINST the resolution
         else if (getString(R.string.wa_vote_state_against).equals(vote))
         {
             stateColour = SparkleHelper.waColours[1];
             content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
         }
+        // If no vote yet
         else
         {
             stateColour = SparkleHelper.waColours[2];
@@ -285,6 +321,10 @@ public class OverviewSubFragment extends Fragment {
                                     });
     }
 
+    /**
+     * Initialize the government card. Lots of if statements here since these fields are optional.
+     * @param view
+     */
     private void initGovernmentCard(View view)
     {
         if (mNation.leader != null)
@@ -316,6 +356,10 @@ public class OverviewSubFragment extends Fragment {
         tax.setText(String.format(getString(R.string.percent), mNation.tax));
     }
 
+    /**
+     * Initialize the economy card.
+     * @param view
+     */
     private void initEconomyCard(View view)
     {
         currency = (TextView) view.findViewById(R.id.nation_currency);
@@ -331,9 +375,14 @@ public class OverviewSubFragment extends Fragment {
         income.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency));
     }
 
+    /**
+     * Initialize the 'other' card (demonym and religion data)
+     * @param view
+     */
     private void initOtherCard(View view)
     {
         demonym = (TextView) view.findViewById(R.id.nation_demonym);
+        // Determine if the adjective is different from the noun (different flavour text)
         if (mNation.demAdjective.equals(mNation.demNoun))
         {
             demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural));
@@ -343,6 +392,7 @@ public class OverviewSubFragment extends Fragment {
             demonym.setText(String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective));
         }
 
+        // This is an optional field
         if (mNation.religion != null)
         {
             religion = (TextView) view.findViewById(R.id.nation_religion);

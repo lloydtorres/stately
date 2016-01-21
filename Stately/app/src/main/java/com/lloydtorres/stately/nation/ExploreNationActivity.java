@@ -28,6 +28,9 @@ import org.simpleframework.xml.core.Persister;
 
 /**
  * Created by Lloyd on 2016-01-15.
+ * This activity can be invoked to load and open a nation page, either as an Intent
+ * or through this Uri: com.lloydtorres.stately.nation://
+ * Requires a nation name to be passed in; does error checking as well.
  */
 public class ExploreNationActivity extends AppCompatActivity implements PrimeActivity {
     private String nationId;
@@ -41,9 +44,14 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
         if (getIntent() != null)
         {
+            // If name passed in as intent
             nationId = getIntent().getStringExtra("nationId");
             if (nationId == null)
             {
+                // If ID passed in through Uri
+                // Funny thing here is that in the link source, they have
+                // to convert it from a proper name to an ID
+                // But we need it as a name so we convert it back
                 nationId = getIntent().getData().getHost();
                 nationId = SparkleHelper.getNameFromId(nationId);
             }
@@ -73,6 +81,7 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("");
+        // We need a back arrow in the toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -84,7 +93,7 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
     private void verifyNationInput(String name)
     {
-        if (SparkleHelper.isValidNationName(name) && name.length() > 0)
+        if (SparkleHelper.isValidName(name) && name.length() > 0)
         {
             name = name.toLowerCase().replace(" ","_");
             queryNation(name);
@@ -156,6 +165,7 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
     private void initFragment(Nation mNation)
     {
+        // Initializes and inflates the nation fragment
         nFragment = new NationFragment();
         nFragment.setNation(mNation);
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -167,11 +177,12 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
+                // Respond to the action bar's Up/Home button
                 finish();
                 return true;
             case R.id.nav_explore:
+                // Open an explore dialog to keep going
                 FragmentManager fm = getSupportFragmentManager();
                 ExploreNationDialog editNameDialog = new ExploreNationDialog();
                 editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);

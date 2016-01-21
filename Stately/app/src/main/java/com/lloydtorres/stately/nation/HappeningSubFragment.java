@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-17.
+ * A sub-fragment of the Nation fragment showing a list of recent happenings for that nation.
+ * Takes in a Nation object.
  */
 public class HappeningSubFragment extends Fragment {
     private Nation mNation;
@@ -39,6 +41,7 @@ public class HappeningSubFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
+        // Restore save state
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable("mNation");
@@ -54,6 +57,7 @@ public class HappeningSubFragment extends Fragment {
 
     private void initHappeningsRecycler(View view)
     {
+        // Setup recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -68,6 +72,7 @@ public class HappeningSubFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        // Save state
         super.onSaveInstanceState(outState);
         if (mNation != null)
         {

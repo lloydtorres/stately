@@ -21,13 +21,16 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-16.
+ * RecyclerView used to show different types of cards in the World Assembly fragment.
  */
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // constants for the different types of cards
     private final int ACTIVE_CARD = 0;
     private final int INACTIVE_CARD = 1;
     private final int STATS_CARD = 2;
     private final int HAPPENING_CARD = 3;
 
+    // positions of the council cards
     private final int GENERAL_ASSEMBLY_INDEX = 0;
     private final int SECURITY_COUNCIL_INDEX = 1;
 
@@ -38,6 +41,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     {
         context = c;
 
+        // Setup objects based on RecyclerView content
         cards = new ArrayList<Object>();
         cards.add(ga);
         cards.add(sc);
@@ -124,6 +128,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     // Card viewholders
 
+    // Card for active resolutions
     public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView cardTitle;
@@ -185,6 +190,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
 
         private TextView cardTitle;
@@ -211,6 +217,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    // Card for stats on members and delegates
     public class StatsCard extends RecyclerView.ViewHolder {
 
         private TextView cardMembers;

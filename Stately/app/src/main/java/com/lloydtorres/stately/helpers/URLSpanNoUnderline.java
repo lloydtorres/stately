@@ -9,6 +9,8 @@ import com.lloydtorres.stately.R;
 
 /**
  * Created by Lloyd on 2016-01-20.
+ * A helper object used to format TextViews with links.
+ * In this case, it removes the underline and colours the link with the primary colour.
  */
 public class URLSpanNoUnderline extends URLSpan {
     private Context context;

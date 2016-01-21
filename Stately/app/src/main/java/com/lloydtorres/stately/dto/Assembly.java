@@ -8,6 +8,7 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-16.
+ * This is a DTO to hold the results of a query to the World Assembly API.
  */
 @Root(name="WA", strict=false)
 public class Assembly implements Parcelable {

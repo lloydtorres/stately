@@ -8,6 +8,7 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A DTO used to hold a single happening event as returned by the NationStates API.
  */
 @Root(name="EVENT", strict=false)
 public class HappeningEvent implements Parcelable, Comparable<HappeningEvent> {

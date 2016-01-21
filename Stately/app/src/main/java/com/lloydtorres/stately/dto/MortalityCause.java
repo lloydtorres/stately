@@ -9,6 +9,8 @@ import org.simpleframework.xml.Text;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A DTO that stores information on one cause of mortality in a nation in percent, as returned
+ * by the NationStates API.
  */
 @Root(name="CAUSE", strict=false)
 public class MortalityCause implements Parcelable {

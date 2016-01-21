@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,8 +41,12 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.simpleframework.xml.core.Persister;
 
+/**
+ * The core Stately activity. This is where the magic happens.
+ */
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PrimeActivity {
 
+    // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
                                         R.id.nav_settings,
                                         R.id.nav_logout
@@ -58,13 +61,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private RoundedImageView nationFlag;
     private TextView nationNameView;
 
-    private EditText exploreSearch;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stately);
 
+        // Get nation object from intent or restore state
         if (getIntent() != null)
         {
             mNation = getIntent().getParcelableExtra("mNationData");
@@ -81,6 +83,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         initNavigationView();
     }
 
+    /**
+     * Method used by associated fragments to set their own toolbars.
+     * @param t
+     */
     public void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
@@ -92,6 +98,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         toggle.syncState();
     }
 
+    /**
+     * Initialize the navigation drawer.
+     * Set the nation fragment as the current view.
+     */
     private void initNavigationView()
     {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -104,6 +114,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 .commit();
     }
 
+    /**
+     * Initialize the banner in the navigation drawer with data from Nation.
+     */
     private void initNavBanner()
     {
         View view = navigationView.getHeaderView(0);
@@ -124,6 +137,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save state
         super.onSaveInstanceState(savedInstanceState);
         if (mNation != null)
         {
@@ -134,6 +148,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
+        // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null && mNation == null)
         {
@@ -144,16 +159,23 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onResume()
     {
+        // Redownload nation data on resume
         super.onResume();
         updateNation();
     }
 
     @Override
     public void onBackPressed() {
+        // Handle back presses
+        // Close drawer if open, call super function otherwise
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else
+        {
             super.onBackPressed();
         }
     }
@@ -163,6 +185,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
 
+        // Main selections
         if (id != currentPosition && !isNoSelect(id))
         {
             currentPosition = id;
@@ -171,16 +194,20 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             switch (id)
             {
                 case R.id.nav_nation:
+                    // Choose Nation
                     fChoose = getNationFragment();
                     break;
                 case R.id.nav_wa:
+                    // Chose World Assembly
                     fChoose = new AssemblyMainFragment();
                     break;
                 default:
+                    // Backup
                     fChoose = new GenericFragment();
                     break;
             }
 
+            // Switch fragments
             fm.beginTransaction()
                     .replace(R.id.coordinator_app_bar, fChoose)
                     .commit();
@@ -188,14 +215,17 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
+        // Other selections
         else if (isNoSelect(id))
         {
             switch (id)
             {
                 case R.id.nav_explore:
+                    // Open explore dialog
                     explore();
                     break;
                 case R.id.nav_logout:
+                    // Start logout process
                     logout();
                     break;
                 default:
@@ -218,6 +248,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         return nationFragment;
     }
 
+    /**
+     * Determine if a nav key is part of the unselectable IDs
+     */
     private boolean isNoSelect(int key)
     {
         for (int i=0; i<noSelect.length; i++)
@@ -230,6 +263,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         return false;
     }
 
+    /**
+     * Start exploration dialog
+     */
     private void explore()
     {
         FragmentManager fm = getSupportFragmentManager();
@@ -237,6 +273,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);
     }
 
+    /**
+     * Start logout process
+     */
     private void logout()
     {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
@@ -256,6 +295,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     }
 
+    /**
+     * Query NationStates for nation data
+     */
     private void updateNation()
     {
         final View fView = findViewById(R.id.drawer_layout);

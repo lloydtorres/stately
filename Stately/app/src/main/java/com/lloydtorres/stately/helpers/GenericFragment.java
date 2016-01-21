@@ -13,6 +13,8 @@ import com.lloydtorres.stately.R;
 
 /**
  * Created by Lloyd on 2016-01-14.
+ * A generic empty fragment with toolbar that can be used as a placeholder.
+ * Originally intended for use within a PrimeActivity, but feel free to use it elsewhere.
  */
 public class GenericFragment extends Fragment {
 

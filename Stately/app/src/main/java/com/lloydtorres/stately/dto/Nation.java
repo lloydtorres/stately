@@ -8,6 +8,7 @@ import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-01-10.
+ * The main DTO used to store information about a nation, as returned by the NationStates API.
  */
 @Root(name="NATION", strict=false)
 public class Nation implements Parcelable {

@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-19.
+ * An adapter used for the endorsement dialog's recycler.
  */
 public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
@@ -66,6 +67,7 @@ public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (pos != RecyclerView.NO_POSITION)
             {
+                // Start exploring nation and close dialog on click.
                 SparkleHelper.startExploring(context, nations.get(pos));
                 selfDialog.dismiss();
             }

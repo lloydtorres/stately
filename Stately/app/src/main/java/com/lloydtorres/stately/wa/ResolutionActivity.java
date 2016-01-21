@@ -42,6 +42,10 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-17.
+ * This activity shows an active resolution from either WA chamber.
+ * Takes in the chamber (council) ID to get the right chamber, as well as a
+ * Resolution object (optional). If Resolution is null, it can get it on its own.
+ * Also has refreshing!
  */
 public class ResolutionActivity extends AppCompatActivity {
     private AssemblyActive mAssembly;
@@ -69,6 +73,7 @@ public class ResolutionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wa_council);
 
+        // Either get data from intent or restore state
         if (getIntent() != null)
         {
             councilId = getIntent().getIntExtra("councilId", 1);
@@ -83,6 +88,7 @@ public class ResolutionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_wa_council);
         setToolbar(toolbar);
 
+        // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.wa_resolution_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -106,6 +112,7 @@ public class ResolutionActivity extends AppCompatActivity {
         voteHistoryFor = (TextView) findViewById(R.id.wa_vote_history_for);
         voteHistoryAgainst = (TextView) findViewById(R.id.wa_vote_history_against);
 
+        // if no resolution passed in, go get it from server.
         if (mResolution == null)
         {
             // hack to get swiperefreshlayout to show
@@ -117,6 +124,7 @@ public class ResolutionActivity extends AppCompatActivity {
             });
             queryResolution(councilId);
         }
+        // Otherwise just show it normally
         else
         {
             AssemblyActive tmp = new AssemblyActive();
@@ -137,6 +145,7 @@ public class ResolutionActivity extends AppCompatActivity {
             case Assembly.SECURITY_COUNCIL:
                 getSupportActionBar().setTitle(getString(R.string.wa_security_council));
         }
+        // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -182,6 +191,10 @@ public class ResolutionActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    /**
+     * Fill in the resolution activity with the given data.
+     * @param res
+     */
     private void setResolution(AssemblyActive res)
     {
         mAssembly = res;
@@ -208,6 +221,12 @@ public class ResolutionActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * This formats the topmost TextView with information on the category and resolution target.
+     * @param t
+     * @param category
+     * @param target
+     */
     private void setTargetView(TextView t, String category, String target)
     {
         String template = getString(R.string.wa_nominee_template);
@@ -216,6 +235,7 @@ public class ResolutionActivity extends AppCompatActivity {
         switch(pair[0])
         {
             case "N":
+                // If target is a nation, linkify it.
                 String nationTarget = SparkleHelper.getNameFromId(pair[1]);
                 String oldTemplate = String.format(template, category, pair[1]);
                 SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
@@ -226,8 +246,14 @@ public class ResolutionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialize the voting breakdown pie chart.
+     * @param voteFor
+     * @param voteAgainst
+     */
     private void setVotingBreakdown(int voteFor, int voteAgainst)
     {
+        // Calculate percentages (floating point math FTW!)
         float voteTotal = voteFor + voteAgainst;
         float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
         float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
@@ -235,12 +261,14 @@ public class ResolutionActivity extends AppCompatActivity {
         List<String> chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
 
+        // Set data
         int i = 0;
         chartLabels.add(getString(R.string.wa_for));
         chartEntries.add(new Entry((float) votePercentFor, i++));
         chartLabels.add(getString(R.string.wa_against));
         chartEntries.add(new Entry((float) votePercentAgainst, i++));
 
+        // Set colour and disable chart labels
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
         dataSet.setColors(SparkleHelper.waColours, this);
@@ -266,17 +294,26 @@ public class ResolutionActivity extends AppCompatActivity {
         votingBreakdown.invalidate();
     }
 
+    /**
+     * Initialize the line graph to show voting history
+     * @param votesFor
+     * @param votesAgainst
+     */
     private void setVotingHistory(List<Integer> votesFor, List<Integer> votesAgainst)
     {
+        final float lineWidth = 2.5f;
+
         List<Entry> entryFor = new ArrayList<Entry>();
         List<Entry> entryAgainst = new ArrayList<Entry>();
 
+        // Build data
         for (int i=0; i < votesFor.size(); i++)
         {
             entryFor.add(new Entry(votesFor.get(i), i));
             entryAgainst.add(new Entry(votesAgainst.get(i), i));
         }
 
+        // lots of formatting for the FOR and AGAINST lines
         LineDataSet setFor = new LineDataSet(entryFor, getString(R.string.wa_for));
         setFor.setAxisDependency(YAxis.AxisDependency.LEFT);
         setFor.setColors(SparkleHelper.waColourFor, this);
@@ -284,9 +321,9 @@ public class ResolutionActivity extends AppCompatActivity {
         setFor.setDrawVerticalHighlightIndicator(true);
         setFor.setDrawHorizontalHighlightIndicator(false);
         setFor.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        setFor.setHighlightLineWidth(2.5f);
+        setFor.setHighlightLineWidth(lineWidth);
         setFor.setDrawCircles(false);
-        setFor.setLineWidth(2.5f);
+        setFor.setLineWidth(lineWidth);
 
         LineDataSet setAgainst = new LineDataSet(entryAgainst, getString(R.string.wa_against));
         setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -295,10 +332,11 @@ public class ResolutionActivity extends AppCompatActivity {
         setAgainst.setDrawVerticalHighlightIndicator(true);
         setAgainst.setDrawHorizontalHighlightIndicator(false);
         setAgainst.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        setAgainst.setHighlightLineWidth(2.5f);
+        setAgainst.setHighlightLineWidth(lineWidth);
         setAgainst.setDrawCircles(false);
-        setAgainst.setLineWidth(2.5f);
+        setAgainst.setLineWidth(lineWidth);
 
+        // Match data with x-axis labels
         List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(setFor);
         dataSets.add(setAgainst);
@@ -357,6 +395,7 @@ public class ResolutionActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
+        // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("councilId", councilId);
         if (mResolution != null)
@@ -368,6 +407,7 @@ public class ResolutionActivity extends AppCompatActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
+        // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
         {

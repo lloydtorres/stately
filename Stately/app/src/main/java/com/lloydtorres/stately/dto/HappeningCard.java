@@ -10,6 +10,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-16.
+ * A ViewHolder used to show a happenings card in a RecyclerView.
  */
 public class HappeningCard extends RecyclerView.ViewHolder {
 

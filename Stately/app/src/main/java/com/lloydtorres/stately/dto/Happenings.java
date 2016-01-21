@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
+ * A list of HappeningEvent DTOs as returned by the NationStates API. This is needed due to
+ * the way the XML response is structured, and its easier to deserialize this way.
  */
 @Root(name="HAPPENINGS", strict=false)
 public class Happenings implements Parcelable {

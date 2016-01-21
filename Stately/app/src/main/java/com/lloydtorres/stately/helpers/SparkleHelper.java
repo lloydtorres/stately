@@ -33,18 +33,60 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+
+                                         __         _____   _
+                                        /  \__..--""  ;-.",'/
+                                       ( /  \_         `.' / `.
+                                       | |    )  `;.  ,'  / \  \
+                                       ( '.  /___/_j_    / ) |  )
+                                       '\     /   __\``::'/__'  |
+                                        |\_  (   / .-| |-.|  `-,|
+                                       .| (   \ ( (WW| \W)j     '
+                 ..-----,             .|'  ',  \_\_`_|  ``-.
+              .-` ..::.  `,___        |,   ._:7        \__/
+            ,'  .:::'':::.|.`.`-.    |:'.   \    ______.-'
+          .'  .::'      '::\`.`. `-._| \ \   `"7  /
+         /   ./:'  ,.--''>-'\ `.`-.(`'  `.`.._/  (
+        -   :/:'  |     /    \  `.(   `.  `._/    \
+        |  :::'  .'    | * \|/`. (     |`-_./      |
+       .'  |||  .'     |   /|\ *`.___.-'           |
+       |   |||  |      | *                         |
+       |   ':|| '.    / \    *   /             \__/
+       | .  |||  |.--'   |      /-,_______\       \
+       |/|  |||  |     _/      /     |    |\       \
+       ` )  '::. '.   /       /     |     | `--,    \
+         \   |||  |   |      |      |     |   /      )
+          `. |||  | _/|      |      |      | (       |
+            `::||  |  |      |      |      |  \      |
+               `-._|  |       \     |       \  `.___/
+                       \_______)     \_______)
+
+
+ */
 /**
  * Created by Lloyd on 2016-01-16.
+ *
+ * SparkleHelper is a collection of common functions and constants used across Stately's
+ * many different classes. These include things such as formatters and linkers.
  */
+
 public class SparkleHelper {
+    // Tag used to mark system log print calls
     public static final String APP_TAG = "com.lloydtorres.stately";
+    // Uri to invoke the ExploreNationActivity
     public static final String NATION_TARGET = "com.lloydtorres.stately.nation://";
+    // Uri to invoke the ExploreRegionActivity
     public static final String REGION_TARGET = "com.lloydtorres.stately.region://";
+    // String template used to get nation banners from NationStates
+    // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
 
+    // Constants used by activityLinkBuilder() to determine if target is nation or region
     public static final int CLICKY_NATION_MODE = 1;
     public static final int CLICKY_REGION_MODE = 2;
 
+    // An array of chart colours
     public static final int[] chartColours = {  R.color.colorChart0,
             R.color.colorChart1,
             R.color.colorChart2,
@@ -70,6 +112,7 @@ public class SparkleHelper {
             R.color.colorChart22
     };
 
+    // An array of colours used for the freedom scale
     public static final int[] freedomColours = {  R.color.colorFreedom0,
             R.color.colorFreedom1,
             R.color.colorFreedom2,
@@ -87,75 +130,121 @@ public class SparkleHelper {
             R.color.colorFreedom14
     };
 
+    // An array of colours used for each sector
     public static final int[] sectorColours = { R.color.colorSector0,
             R.color.colorSector1,
             R.color.colorSector2,
             R.color.colorSector3,
     };
 
+    // An array of colours used to decorate the SwipeRefresher
     public static final int[] refreshColours = {    R.color.colorPrimary,
             R.color.colorPrimaryDark,
             R.color.colorAccent
     };
 
+    // An array of colours used for WA votes
     public static final int[] waColours = { R.color.colorChart0,
             R.color.colorChart1,
             R.color.colorChart12
     };
 
+    // Convenience variable to colour WA for and against votes
     public static final int[] waColourFor = { R.color.colorChart0 };
-
     public static final int[] waColourAgainst = { R.color.colorChart1 };
 
+    // Used for string verification for nation and region IDs
     public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
             .or(CharMatcher.WHITESPACE)
             .or(CharMatcher.anyOf("-"))
             .precomputed();
 
+    // Initialized to provide human-readable date strings for Date objects
     public static final PrettyTime prettyTime = new PrettyTime();
 
-    // Validation
+    /**
+     * VALIDATION
+     * These are functions used to validate inputs.
+     */
 
-    public static boolean isValidNationName(String name)
+    /**
+     * Checks if the passed in name is a valid NationStates name (i.e. A-Z, a-z, 0-9, -, (space)).
+     * @param name The name to be checked.
+     * @return Bool if valid or not.
+     */
+    public static boolean isValidName(String name)
     {
         return CHAR_MATCHER.matchesAllOf(name);
     }
 
-    // Formatting
+    /**
+     * FORMATTING
+     * These are functions used to change an input's format to something nicer.
+     */
 
+    /**
+     * This turns a NationStates ID like greater_tern to a nicely formatted string.
+     * In the example's case, greater_tern -> Greater Tern
+     * @param id The ID to format.
+     * @return String of the nicely-formatted name.
+     */
     public static String getNameFromId(String id)
     {
+        // IDs have no whitespace and are only separated by underscores.
         String[] words = id.split("_");
+        // A list of properly-formatted words.
         List<String> properWords = new ArrayList<String>();
 
         for (String w : words)
         {
+            // IDs can also be separated by dashes, but we want to preserve this.
             String[] subWords = w.split("-");
+            // A list of properly-formatted words connected by a dash.
             List<String> properSubWords = new ArrayList<String>();
 
             for (String sw: subWords)
             {
+                // Transform word from lower case to proper case.
+                // This is very hacky, I know.
                 properSubWords.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, sw));
             }
 
+            // Join the word back with dashes and add it to main list.
+            // If the original target word had no dashes, this would only have an element of one.
             String subFin = Joiner.on("-").join(properSubWords);
             properWords.add(subFin);
         }
 
+        // Join all the proper words back together with spaces.
         return Joiner.on(" ").skipNulls().join(properWords);
     }
 
+    /**
+     * Return the URL of a nation banner.
+     * @param id The banner ID.
+     * @return The URL to the banner.
+     */
     public static String getBannerURL(String id)
     {
         return String.format(BANNER_TEMPLATE, id);
     }
 
+    /**
+     * Return a human-readable date string from a UTC timestamp.
+     * @param sec Unix timestamp.
+     * @return A human-readable date string (e.g. moments ago, 1 week ago).
+     */
     public static String getReadableDateFromUTC(long sec)
     {
         Date d = new Date(sec * 1000L);
         return prettyTime.format(d);
     }
 
+    /**
+     * Returns a number formatted like so: ###,###.## (i.e. US formatting).
+     * @param i number to format (can be int, double or long)
+     * @return The properly-formatted number as a string.
+     */
     public static String getPrettifiedNumber(int i)
     {
         return NumberFormat.getInstance(Locale.US).format(i);
@@ -171,8 +260,17 @@ public class SparkleHelper {
         return NumberFormat.getInstance(Locale.US).format(l);
     }
 
+    /**
+     * Takes in the population number from the NationStates API and format it to the NS format.
+     * The API returns the population numbers in millions (i.e. 1 million = 1).
+     * The NS format is ### million or ##.### billion.
+     * @param c Context to get resources.
+     * @param pop The population number.
+     * @return A nicely-formatted population number with suffix.
+     */
     public static String getPopulationFormatted(Context c, double pop)
     {
+        // The lowest population suffix is a million.
         String suffix = c.getString(R.string.million);
         double popHolder = pop;
 
@@ -185,14 +283,27 @@ public class SparkleHelper {
         return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(popHolder), suffix);
     }
 
+    /**
+     * Takes in a money value and currency name from the NationStates API and formats it to the
+     * NS format.
+     * The NationStates API returns money value as a long, but in-game money is represented like
+     * so: #,### [suffix].
+     * @param c Context to get string.
+     * @param money The amount of money as a long.
+     * @param currency The currency unit.
+     * @return A nicely-formatted string in NS format.
+     */
     public static String getMoneyFormatted(Context c, long money, String currency)
     {
         if (money < 1000000L)
         {
+            // If the money is less than 1 million, we don't need a suffix.
             return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(money), English.plural(currency));
         }
         else
         {
+            // NS drops the least significant digits depending on the suffix needed.
+            // e.g. A value like 10,000,000 is simply 10 million.
             String suffix = "";
             if (money >= 1000000L && money < 1000000000L)
             {
@@ -215,8 +326,16 @@ public class SparkleHelper {
 
     }
 
-    // Utility
+    /**
+     * UTILITY
+     * These are convenient tools to call from any class.
+     */
 
+    /**
+     * Starts the ExploreNationActivity for the given nation ID.
+     * @param c App context
+     * @param n The nation ID
+     */
     public static void startExploring(Context c, String n)
     {
         Intent nationActivityLaunch = new Intent(c, ExploreNationActivity.class);
@@ -224,8 +343,24 @@ public class SparkleHelper {
         c.startActivity(nationActivityLaunch);
     }
 
-    // Link and HTML Processing
+    /**
+     * LINK AND HTML PROCESSING
+     * These are functions used to transform raw NationStates BBCode and formatting into clickable
+     * links and formatted text. Separate from the other formatting functions due to their unique
+     * nature.
+     */
 
+    /**
+     * Builds a link invoking an explore activity to the specified ID, and puts it into the
+     * appropriate TextView.
+     * @param c App context
+     * @param t Target TextView
+     * @param template The original text with the old formatting.
+     * @param oTarget The old format that needs to be replaced.
+     * @param nTarget The new format (usually a name) to replace the old.
+     * @param mode If target is a nation or a region.
+     * @return Returns the new text content for further manipulation.
+     */
     public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
     {
         final String urlFormat = "<a href=\"%s\">%s</a>";
@@ -241,19 +376,28 @@ public class SparkleHelper {
                 targetActivity = REGION_TARGET;
                 break;
         }
+
+        // Name needs to be formatted back to its NationStates ID first for the URL.
         targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
         targetActivity = String.format(urlFormat, targetActivity, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);
 
         t.setText(Html.fromHtml(tempHolder));
+        // Stylify the TextView.
         styleLinkifiedTextView(c, t);
 
         return tempHolder;
     }
 
+    /**
+     * Stylify text view to primary colour and no underline
+     * @param c App context
+     * @param t TextView
+     */
     public static void styleLinkifiedTextView(Context c, TextView t)
     {
+        // Get individual spans and replace them with clickable ones.
         Spannable s = new SpannableString(t.getText());
         URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
         for (URLSpan span: spans) {
@@ -265,17 +409,27 @@ public class SparkleHelper {
         }
 
         t.setText(s);
+        // Need to set this to allow for clickable TextView links.
         t.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    /**
+     * Given a regex and some content, get all pairs of (old, new) where old is a string matching
+     * the regex in the content, and new is the proper name to replace the old string.
+     * @param regex Regex statement
+     * @param content Target content
+     * @return
+     */
     public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content)
     {
         String holder = content;
+        // (old, new) replacement pairs
         Map<String, String> names = new HashMap<String, String>();
 
         Matcher m = Pattern.compile(regex).matcher(holder);
         while (m.find())
         {
+            // Nameify the ID found and put the (old, new) pair into the map
             String properName = getNameFromId(m.group(1));
             names.put(m.group(), properName);
         }
@@ -283,6 +437,15 @@ public class SparkleHelper {
         return names.entrySet();
     }
 
+    /**
+     * A helper function used to 1) find all strings to be replaced and 2) linkifies them.
+     * @param c App context
+     * @param t TextView
+     * @param content Target content
+     * @param regex Regex statement
+     * @param mode If nation or region
+     * @return
+     */
     public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
     {
         String holder = content;
@@ -295,18 +458,36 @@ public class SparkleHelper {
         return holder;
     }
 
+    /**
+     * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
+     * @param c App context
+     * @param t TextView
+     * @param content Target content
+     */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
         String holder = content;
 
+        // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
     }
 
+    /**
+     * Basic HTML formatter that returns a styled version of the string.
+     * @param content Target content
+     * @return Styled spanned object
+     */
     public static Spanned getHtmlFormatting(String content)
     {
         return Html.fromHtml(content);
     }
 
+    /**
+     * Transform NationStates' BBCode-formatted content into HTML
+     * @param c App context
+     * @param t TextView
+     * @param content Target content
+     */
     public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
         String holder = content;
@@ -320,13 +501,23 @@ public class SparkleHelper {
         holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
 
+        // Linkify nations
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
 
+        // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
         styleLinkifiedTextView(c, t);
     }
 
+    /**
+     * Replaces all matches of a given regex with the supplied string template. Only accepts
+     * one parameter.
+     * @param target Target content
+     * @param regexBefore Regex to use
+     * @param afterFormat String template
+     * @return Returns content with all matched substrings replaced
+     */
     public static String regexReplace(String target, String regexBefore, String afterFormat)
     {
         String holder = target;
@@ -340,6 +531,12 @@ public class SparkleHelper {
         return holder;
     }
 
+    /**
+     * Removes all substrings which match the regex
+     * @param target Target content
+     * @param regex Regex
+     * @return
+     */
     public static String regexRemove(String target, String regex)
     {
         String holder = target;
@@ -352,13 +549,25 @@ public class SparkleHelper {
         return holder;
     }
 
-    // Logging
+    /**
+     * LOGGING
+     * These are function calls used to log events and other things.
+     */
 
+    /**
+     * Shows a long snackbar in the given view.
+     * @param view View
+     * @param str Snackbar message
+     */
     public static void makeSnackbar(View view, String str)
     {
         Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     * Logs a system error. Mostly used so that APP_TAG doesn't have to repeat.
+     * @param message Message
+     */
     public static void logError(String message)
     {
         Log.e(APP_TAG, message);

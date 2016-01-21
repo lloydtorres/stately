@@ -30,6 +30,8 @@ import org.simpleframework.xml.core.Persister;
 
 /**
  * Created by Lloyd on 2016-01-16.
+ * A fragment part of the StatelyActivity used to show the World Assembly.
+ * Gets WA data on its own, can also refresh!
  */
 public class AssemblyMainFragment extends Fragment {
     private Activity mActivity;
@@ -46,6 +48,7 @@ public class AssemblyMainFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        // Get activity for manipulation
         super.onAttach(context);
         mActivity = (Activity) context;
     }
@@ -68,6 +71,7 @@ public class AssemblyMainFragment extends Fragment {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
 
+        // Set up refresher to reload data on refresh
         mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -77,12 +81,13 @@ public class AssemblyMainFragment extends Fragment {
                                                         }
                                                  });
 
+        // Setup recyclerview
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // hack to get swiperefreshlayout to show
+        // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -94,11 +99,26 @@ public class AssemblyMainFragment extends Fragment {
         return mView;
     }
 
+    // Wrapper function for the heavy-lifting query function
+    // Starts PART 1 of the query process
     private void queryWorldAssembly(View view)
     {
-        queryWorldAssemblyHeavy(mView, Assembly.GENERAL_ASSEMBLY);
+        queryWorldAssemblyHeavy(view, Assembly.GENERAL_ASSEMBLY);
     }
 
+    /**
+     * The heavy-lifting query function to get various WA data.
+     * In order to avoid async issues (e.g. race conditions), the data calls will be done
+     * in an synchronous-like manner.
+     *
+     * The process is as follows:
+     *
+     * 1. Query General Assembly
+     * 2. Query Security Council
+     * 3. Refresh the WA fragment
+     * @param view
+     * @param chamberId
+     */
     private void queryWorldAssemblyHeavy(View view, int chamberId)
     {
         final View fView = view;
@@ -118,11 +138,15 @@ public class AssemblyMainFragment extends Fragment {
 
                             if (chamberMode == Assembly.GENERAL_ASSEMBLY)
                             {
+                                // Once a response is obtained for the General Assembly,
+                                // start querying for the Security Council
                                 setGeneralAssembly(waResponse);
                                 queryWorldAssemblyHeavy(mView, Assembly.SECURITY_COUNCIL);
                             }
                             else if (chamberMode == Assembly.SECURITY_COUNCIL)
                             {
+                                // Once a response is obtained for the Security Council,
+                                // setup the actual view
                                 setSecurityCouncil(waResponse);
                                 refreshRecycler();
                             }
@@ -171,6 +195,7 @@ public class AssemblyMainFragment extends Fragment {
     @Override
     public void onDestroy()
     {
+        // Detach activity on destroy
         super.onDestroy();
         mActivity = null;
     }
