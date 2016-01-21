@@ -24,7 +24,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -81,6 +83,9 @@ public class SparkleHelper {
     // String template used to get nation banners from NationStates
     // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
+
+    // The number of hours a resolution is on the WA chamber floor
+    public static final int WA_RESOLUTION_DURATION = 96;
 
     // Constants used by activityLinkBuilder() to determine if target is nation or region
     public static final int CLICKY_NATION_MODE = 1;
@@ -341,6 +346,24 @@ public class SparkleHelper {
         Intent nationActivityLaunch = new Intent(c, ExploreNationActivity.class);
         nationActivityLaunch.putExtra("nationId", n);
         c.startActivity(nationActivityLaunch);
+    }
+
+    public static String calculateResolutionEnd(int hoursElapsed)
+    {
+        Calendar cal = new GregorianCalendar();
+
+        // Round up to nearest hour
+        if (cal.get(Calendar.MINUTE) >= 1)
+        {
+            cal.add(Calendar.HOUR, 1);
+        }
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        cal.add(Calendar.HOUR, WA_RESOLUTION_DURATION - hoursElapsed);
+
+        Date d = cal.getTime();
+        return prettyTime.format(d);
     }
 
     /**
