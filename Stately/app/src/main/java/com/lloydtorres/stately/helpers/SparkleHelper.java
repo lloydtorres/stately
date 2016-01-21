@@ -470,6 +470,10 @@ public class SparkleHelper {
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
+
+        // In case there are no nations or regions to linkify, set and style TextView here too
+        t.setText(Html.fromHtml(holder));
+        styleLinkifiedTextView(c, t);
     }
 
     /**
