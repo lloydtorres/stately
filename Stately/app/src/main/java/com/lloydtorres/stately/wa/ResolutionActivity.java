@@ -37,6 +37,7 @@ import com.lloydtorres.stately.helpers.PieChartListener;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class ResolutionActivity extends AppCompatActivity {
     private TextView votesFor;
     private TextView votesAgainst;
 
-    private TextView content;
+    private HtmlTextView content;
 
     private PieChart votingBreakdown;
     private LineChart votingHistory;
@@ -106,7 +107,7 @@ public class ResolutionActivity extends AppCompatActivity {
         votesFor = (TextView) findViewById(R.id.wa_resolution_for);
         votesAgainst = (TextView) findViewById(R.id.wa_resolution_against);
 
-        content = (TextView) findViewById(R.id.wa_resolution_content);
+        content = (HtmlTextView) findViewById(R.id.wa_resolution_content);
 
         votingBreakdown = (PieChart) findViewById(R.id.wa_voting_breakdown);
         votingHistory = (LineChart) findViewById(R.id.wa_voting_history);

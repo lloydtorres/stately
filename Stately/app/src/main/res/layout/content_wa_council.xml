@@ -145,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:text="@string/wa_resolution" />
-                <TextView
+                <org.sufficientlysecure.htmltextview.HtmlTextView
                     android:id="@+id/wa_resolution_content"
                     android:layout_marginTop="8dp"
                     android:textSize="15sp"

@@ -23,6 +23,7 @@ import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -470,6 +471,22 @@ public class SparkleHelper {
         return replacePairs.entrySet();
     }
 
+    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(String regex, String afterFormat, String content)
+    {
+        String holder = content;
+        // (old, new) replacement pairs
+        Map<String, String> replacePairs = new HashMap<String, String>();
+
+        Matcher m = Pattern.compile(regex).matcher(holder);
+        while (m.find())
+        {
+            String properFormat = String.format(afterFormat, m.group(1), m.group(2));
+            replacePairs.put(m.group(), properFormat);
+        }
+
+        return replacePairs.entrySet();
+    }
+
     /**
      * A helper function used to 1) find all strings to be replaced and 2) linkifies them.
      * @param c App context
@@ -540,12 +557,18 @@ public class SparkleHelper {
         holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
 
+        holder = regexListFormat(holder);
+
         // Linkify nations
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
+        if (t instanceof HtmlTextView)
+        {
+            ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+        }
         styleLinkifiedTextView(c, t);
     }
 
@@ -566,6 +589,39 @@ public class SparkleHelper {
             String properFormat = String.format(afterFormat, n.getValue());
             holder = holder.replace(n.getKey(), properFormat);
         }
+
+        return holder;
+    }
+
+    public static String regexDoubleReplace(String target, String regexBefore, String afterFormat)
+    {
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
+
+        for (Map.Entry<String, String> n : set) {
+            holder = holder.replace(n.getKey(), n.getValue());
+        }
+
+        return holder;
+    }
+
+    public static String regexListFormat(String content)
+    {
+        logError("Begin list format.");
+        String holder = content;
+
+        // Switch unordered lists
+        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<br /><ul>%s</ul><br />");
+
+        // Switch ordered lists
+        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<br /><ol=\"%s\">%s</ol><br />");
+
+        // Switch bullets
+        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?\n)", "<li>%s</li>");
+        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?)<\\/ul>", "<li>%s</li></ul>");
+
+        // Handle nested lists
+        holder = regexReplace(holder, "(?s)<\\/li>.*?<ul>(.*?)<\\/ul>", "<ul>%s</ul></li>");
 
         return holder;
     }
