@@ -556,7 +556,12 @@ public class SparkleHelper {
         holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
         holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
+        holder = regexDoubleReplace(holder, "\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
+        holder = regexDoubleReplace(holder, "\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</a>");
+        holder = regexReplace(holder, "\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+        holder = regexReplace(holder, "\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
+        // Format lists
         holder = regexListFormat(holder);
 
         // Linkify nations
