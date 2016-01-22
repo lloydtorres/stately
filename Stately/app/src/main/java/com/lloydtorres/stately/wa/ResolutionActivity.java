@@ -233,17 +233,24 @@ public class ResolutionActivity extends AppCompatActivity {
         String template = getString(R.string.wa_nominee_template);
         String[] pair = target.split(":");
 
-        switch(pair[0])
+        if ("0".equals(target))
         {
-            case "N":
-                // If target is a nation, linkify it.
-                String nationTarget = SparkleHelper.getNameFromId(pair[1]);
-                String oldTemplate = String.format(template, category, pair[1]);
-                SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
-                break;
-            default:
-                t.setText(String.format(template, category, target));
-                break;
+            t.setText(category);
+        }
+        else
+        {
+            switch(pair[0])
+            {
+                case "N":
+                    // If target is a nation, linkify it.
+                    String nationTarget = SparkleHelper.getNameFromId(pair[1]);
+                    String oldTemplate = String.format(template, category, pair[1]);
+                    SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
+                    break;
+                default:
+                    t.setText(String.format(template, category, target));
+                    break;
+            }
         }
     }
 
