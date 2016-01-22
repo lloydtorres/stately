@@ -33,6 +33,7 @@ import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.ExploreNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -197,6 +198,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     // Choose Nation
                     fChoose = getNationFragment();
                     break;
+                case R.id.nav_region:
+                    fChoose = getRegionFragment();
+                    break;
                 case R.id.nav_wa:
                     // Chose World Assembly
                     fChoose = new AssemblyMainFragment();
@@ -240,12 +244,28 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         }
     }
 
+    /**
+     * Get a new nation fragment
+     * @return A new nation fragment
+     */
     private NationFragment getNationFragment()
     {
         NationFragment nationFragment = new NationFragment();
         nationFragment.setNation(mNation);
 
         return nationFragment;
+    }
+
+    /**
+     * Get a new region fragment
+     * @return A new region fragment
+     */
+    private RegionFragment getRegionFragment()
+    {
+        RegionFragment regionFragment = new RegionFragment();
+        regionFragment.setRegionName(mNation.region);
+
+        return regionFragment;
     }
 
     /**

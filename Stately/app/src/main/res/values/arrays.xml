@@ -7,4 +7,10 @@
         <item>Economy</item>
         <item>Happenings</item>
     </string-array>
+    <string-array name="region_tabs">
+        <item>Overview</item>
+        <item>Community</item>
+        <item>Governance</item>
+        <item>Happenings</item>
+    </string-array>
 </resources>
