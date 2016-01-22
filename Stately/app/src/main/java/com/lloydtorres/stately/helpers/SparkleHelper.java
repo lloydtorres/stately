@@ -591,7 +591,7 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
 
         for (Map.Entry<String, String> n : set) {
-            String properFormat = String.format(afterFormat, n.getValue());
+            String properFormat = Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic());
             holder = holder.replace(n.getKey(), properFormat);
         }
 
@@ -604,6 +604,7 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
 
         for (Map.Entry<String, String> n : set) {
+            String replacer = Jsoup.clean(n.getValue(), Whitelist.basic());
             holder = holder.replace(n.getKey(), n.getValue());
         }
 
