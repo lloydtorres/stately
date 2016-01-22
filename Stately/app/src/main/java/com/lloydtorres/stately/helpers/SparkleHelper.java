@@ -80,9 +80,13 @@ public class SparkleHelper {
     // Tag used to mark system log print calls
     public static final String APP_TAG = "com.lloydtorres.stately";
     // Uri to invoke the ExploreNationActivity
-    public static final String NATION_TARGET = "com.lloydtorres.stately.nation://";
+    public static final String NATION_PROTOCOL = "com.lloydtorres.stately.nation";
+    public static final String NATION_TARGET = NATION_PROTOCOL + "://";
     // Uri to invoke the ExploreRegionActivity
-    public static final String REGION_TARGET = "com.lloydtorres.stately.region://";
+    public static final String REGION_PROTOCOL = "com.lloydtorres.stately.region";
+    public static final String REGION_TARGET = REGION_PROTOCOL + "://";
+    // Whitelisted protocols
+    public static final String[] PROTOCOLS = {"http", "https", NATION_PROTOCOL, REGION_PROTOCOL};
     // String template used to get nation banners from NationStates
     // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
@@ -409,7 +413,14 @@ public class SparkleHelper {
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);
 
-        t.setText(Html.fromHtml(tempHolder));
+        if (t instanceof HtmlTextView)
+        {
+            ((HtmlTextView)t).setHtmlFromString(tempHolder, new HtmlTextView.RemoteImageGetter());
+        }
+        else
+        {
+            t.setText(Html.fromHtml(tempHolder));
+        }
         // Stylify the TextView.
         styleLinkifiedTextView(c, t);
 
@@ -436,7 +447,10 @@ public class SparkleHelper {
 
         t.setText(s);
         // Need to set this to allow for clickable TextView links.
-        t.setMovementMethod(LinkMovementMethod.getInstance());
+        if (!(t instanceof HtmlTextView))
+        {
+            t.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
 
     /**
@@ -569,10 +583,13 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        t.setText(Html.fromHtml(holder));
         if (t instanceof HtmlTextView)
         {
             ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+        }
+        else
+        {
+            t.setText(Html.fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
     }
@@ -591,7 +608,7 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
 
         for (Map.Entry<String, String> n : set) {
-            String properFormat = Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic());
+            String properFormat = Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), properFormat);
         }
 
@@ -604,8 +621,8 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
 
         for (Map.Entry<String, String> n : set) {
-            String replacer = Jsoup.clean(n.getValue(), Whitelist.basic());
-            holder = holder.replace(n.getKey(), n.getValue());
+            String replacer = Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
+            holder = holder.replace(n.getKey(), replacer);
         }
 
         return holder;
@@ -613,7 +630,6 @@ public class SparkleHelper {
 
     public static String regexListFormat(String content)
     {
-        logError("Begin list format.");
         String holder = content;
 
         // Switch unordered lists
