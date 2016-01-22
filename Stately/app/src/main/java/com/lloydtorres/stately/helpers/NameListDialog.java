@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately.helpers;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -16,9 +16,9 @@ import java.util.Collections;
 
 /**
  * Created by Lloyd on 2016-01-19.
- * A dialog showing a list of endorsements a nation has.
+ * A dialog showing a list of names a nation has.
  */
-public class EndorsementDialog extends DialogFragment {
+public class NameListDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_endorsement_dialog";
 
     // RecyclerView variables
@@ -26,11 +26,23 @@ public class EndorsementDialog extends DialogFragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
-    private ArrayList<String> endorsements;
+    private ArrayList<String> names;
+    private String title;
+    private int target;
 
-    public void setEndorsements(ArrayList<String> ends)
+    public void setTitle(String s)
     {
-        endorsements = ends;
+        title = s;
+    }
+
+    public void setNames(ArrayList<String> ends)
+    {
+        names = ends;
+    }
+
+    public void setTarget(int i)
+    {
+        target = i;
     }
 
     @Override
@@ -46,19 +58,18 @@ public class EndorsementDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_paddedrecycler, container, false);
-        getDialog().setTitle(getString(R.string.card_overview_wa_endorsements));
+        getDialog().setTitle(title);
+        getDialog().setCanceledOnTouchOutside(true);
 
         // Restore saved state
-        if (savedInstanceState != null && endorsements == null)
+        if (savedInstanceState != null)
         {
-            endorsements = savedInstanceState.getStringArrayList("endorsements");
+            title = savedInstanceState.getString("title");
+            names = savedInstanceState.getStringArrayList("names");
+            target = savedInstanceState.getInt("target");
         }
 
-        // If there are endorsements, set up the recycler
-        if (endorsements != null)
-        {
-            initRecycler(view);
-        }
+        initRecycler(view);
 
         return view;
     }
@@ -69,8 +80,8 @@ public class EndorsementDialog extends DialogFragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        Collections.sort(endorsements);
-        mRecyclerAdapter = new EndorsementRecyclerAdapter(getContext(), this, endorsements);
+        Collections.sort(names);
+        mRecyclerAdapter = new NameListRecyclerAdapter(getContext(), this, names, target);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
@@ -78,9 +89,8 @@ public class EndorsementDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         // Save state
         super.onSaveInstanceState(outState);
-        if (endorsements != null)
-        {
-            outState.putStringArrayList("endorsements", endorsements);
-        }
+        outState.putString("title", title);
+        outState.putStringArrayList("names", names);
+        outState.putInt("target", target);
     }
 }

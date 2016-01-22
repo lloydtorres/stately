@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.List;
 
@@ -16,16 +15,18 @@ import java.util.List;
  * Created by Lloyd on 2016-01-19.
  * An adapter used for the endorsement dialog's recycler.
  */
-public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private EndorsementDialog selfDialog;
-    private List<String> nations;
+    private NameListDialog selfDialog;
+    private List<String> names;
+    private int target;
 
-    public EndorsementRecyclerAdapter(Context c, EndorsementDialog d, List<String> n)
+    public NameListRecyclerAdapter(Context c, NameListDialog d, List<String> n, int t)
     {
         context = c;
         selfDialog = d;
-        nations = n;
+        names = n;
+        target = t;
     }
 
     @Override
@@ -39,12 +40,12 @@ public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         EndorsementEntry happeningCard = (EndorsementEntry) holder;
-        happeningCard.init(nations.get(position));
+        happeningCard.init(names.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return nations.size();
+        return names.size();
     }
 
     public class EndorsementEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -67,9 +68,14 @@ public class EndorsementRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (pos != RecyclerView.NO_POSITION)
             {
-                // Start exploring nation and close dialog on click.
-                SparkleHelper.startExploring(context, nations.get(pos));
-                selfDialog.dismiss();
+                switch (target)
+                {
+                    case SparkleHelper.CLICKY_NATION_MODE:
+                        // Start exploring nation and close dialog on click.
+                        SparkleHelper.startExploring(context, names.get(pos));
+                        selfDialog.dismiss();
+                        break;
+                }
             }
         }
     }

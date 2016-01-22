@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
@@ -231,9 +232,11 @@ public class OverviewSubFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         FragmentManager fm = getActivity().getSupportFragmentManager();
-                        EndorsementDialog endorsementDialog = new EndorsementDialog();
-                        endorsementDialog.setEndorsements(fEndorsements);
-                        endorsementDialog.show(fm, EndorsementDialog.DIALOG_TAG);
+                        NameListDialog nameListDialog = new NameListDialog();
+                        nameListDialog.setTitle(getString(R.string.card_overview_wa_endorsements));
+                        nameListDialog.setNames(fEndorsements);
+                        nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+                        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                     }
                 });
             }
