@@ -553,7 +553,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, "\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
         holder = regexReplace(holder, "\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
         holder = regexReplace(holder, "\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
-        holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<pre>%s</pre>");
+        holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
         holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
 
