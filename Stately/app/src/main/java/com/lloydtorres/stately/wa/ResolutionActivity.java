@@ -209,7 +209,7 @@ public class ResolutionActivity extends AppCompatActivity {
         String proposeTemplate = String.format(getString(R.string.wa_proposed), mResolution.proposedBy);
         SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
 
-        voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(mResolution.voteHistoryFor.size())));
+        voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(mResolution.voteHistoryFor.size()+1)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
         voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
