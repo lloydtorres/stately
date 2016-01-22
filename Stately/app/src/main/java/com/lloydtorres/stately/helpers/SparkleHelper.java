@@ -445,21 +445,29 @@ public class SparkleHelper {
      * @param content Target content
      * @return
      */
-    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content)
+    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content, boolean isName)
     {
         String holder = content;
         // (old, new) replacement pairs
-        Map<String, String> names = new HashMap<String, String>();
+        Map<String, String> replacePairs = new HashMap<String, String>();
 
         Matcher m = Pattern.compile(regex).matcher(holder);
         while (m.find())
         {
-            // Nameify the ID found and put the (old, new) pair into the map
-            String properName = getNameFromId(m.group(1));
-            names.put(m.group(), properName);
+            String properFormat;
+            if (isName)
+            {
+                // Nameify the ID found and put the (old, new) pair into the map
+                properFormat = getNameFromId(m.group(1));
+            }
+            else
+            {
+                properFormat = m.group(1);
+            }
+            replacePairs.put(m.group(), properFormat);
         }
 
-        return names.entrySet();
+        return replacePairs.entrySet();
     }
 
     /**
@@ -474,7 +482,7 @@ public class SparkleHelper {
     public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
     {
         String holder = content;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder);
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, true);
 
         for (Map.Entry<String, String> n : set) {
             holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), mode);
@@ -552,7 +560,7 @@ public class SparkleHelper {
     public static String regexReplace(String target, String regexBefore, String afterFormat)
     {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder);
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
 
         for (Map.Entry<String, String> n : set) {
             String properFormat = String.format(afterFormat, n.getValue());
@@ -571,7 +579,7 @@ public class SparkleHelper {
     public static String regexRemove(String target, String regex)
     {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder);
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
 
         for (Map.Entry<String, String> n : set) {
             holder = holder.replace(n.getKey(), "");
