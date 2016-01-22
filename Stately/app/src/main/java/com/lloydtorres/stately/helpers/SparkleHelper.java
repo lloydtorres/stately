@@ -545,7 +545,7 @@ public class SparkleHelper {
      */
     public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
-        String holder = content;
+        String holder = content.trim();
         holder = holder.replace("\n", "<br />");
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
