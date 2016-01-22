@@ -300,13 +300,13 @@ public class OverviewSubFragment extends Fragment {
         if (getString(R.string.wa_vote_state_for).equals(vote))
         {
             stateColour = SparkleHelper.waColours[0];
-            content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
+            content.setText(String.format(getString(R.string.card_overview_wa_vote), assemblyName, vote));
         }
         // If voting AGAINST the resolution
         else if (getString(R.string.wa_vote_state_against).equals(vote))
         {
             stateColour = SparkleHelper.waColours[1];
-            content.setText(String.format(getString(R.string.card_overview_wa_vote), vote, assemblyName));
+            content.setText(String.format(getString(R.string.card_overview_wa_vote), assemblyName, vote));
         }
         // If no vote yet
         else
