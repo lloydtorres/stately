@@ -11,11 +11,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.astuetz.PagerSlidingTabStrip;
+import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
+import org.simpleframework.xml.core.Persister;
+import org.w3c.dom.Text;
 
 /**
  * Created by Lloyd on 2016-01-21.
@@ -30,8 +50,13 @@ public class RegionFragment extends Fragment {
     private final int GOV_TAB = 2;
     private final int HAPPEN_TAB = 3;
 
-    private String regionName;
-    private Region region;
+    private String mRegionName;
+    private Region mRegion;
+
+    // variables used for mRegion views
+    private TextView regionName;
+    private TextView regionPop;
+    private RoundedImageView regionFlag;
 
     // variables used for tabs
     private PagerSlidingTabStrip tabs;
@@ -43,7 +68,7 @@ public class RegionFragment extends Fragment {
 
     public void setRegionName(String n)
     {
-        regionName = n;
+        mRegionName = n;
     }
 
     @Override
@@ -67,13 +92,19 @@ public class RegionFragment extends Fragment {
         // Restore state
         if (savedInstanceState != null)
         {
-            regionName = savedInstanceState.getString("mRegionName");
-            region = savedInstanceState.getParcelable("mRegionData");
+            mRegionName = savedInstanceState.getString("mRegionName");
+            mRegion = savedInstanceState.getParcelable("mRegionData");
         }
 
-        if (regionName != null)
+        initToolbar(view);
+
+        if (mRegion != null)
         {
-            initToolbar(view);
+            getAllRegionViews(view);
+        }
+        else
+        {
+            updateRegion(view);
         }
 
         return view;
@@ -114,13 +145,60 @@ public class RegionFragment extends Fragment {
         tabs.setViewPager(tabsPager);
     }
 
+    /**
+     * Get the views for the region elements at the top of the fragment
+     * @param view
+     */
+    private void getAllRegionViews(View view)
+    {
+        regionName = (TextView) view.findViewById(R.id.region_name);
+        regionPop = (TextView) view.findViewById(R.id.region_pop);
+        regionFlag = (RoundedImageView) view.findViewById(R.id.region_flag);
+
+        initRegionData(view);
+    }
+
+    /**
+     * Load the entire fragment's contents
+     * @param view
+     */
+    private void initRegionData(View view)
+    {
+        if (mRegion.flagURL != null)
+        {
+            regionFlag.setVisibility(View.VISIBLE);
+
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext()).build();
+            ImageLoader.getInstance().init(config);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+
+            // Fade image in on finish load
+            DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
+
+            imageLoader.displayImage(mRegion.flagURL, regionFlag, imageOptions);
+        }
+
+        regionName.setText(mRegion.name);
+        regionPop.setText(String.format(getString(R.string.region_pop), SparkleHelper.getPrettifiedNumber(mRegion.numNations)));
+
+        initTabs(view);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString("mRegionName", regionName);
-        savedInstanceState.putParcelable("mRegionData", region);
+        savedInstanceState.putString("mRegionName", mRegionName);
+        savedInstanceState.putParcelable("mRegionData", mRegion);
+    }
+
+    @Override
+    public void onResume()
+    {
+        // Redownload region data on resume
+        super.onResume();
+        updateRegion(getView());
     }
 
     @Override
@@ -129,6 +207,57 @@ public class RegionFragment extends Fragment {
         // Decouple activity on destroy
         super.onDestroy();
         mActivity = null;
+    }
+
+    private void updateRegion(View view)
+    {
+        final View fView = view;
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String targetURL = String.format(Region.QUERY, mRegionName.toLowerCase().replace(" ", "_"));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    Region regionResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            regionResponse = serializer.read(Region.class, response);
+
+                            // Switch flag URL to https
+                            if (regionResponse.flagURL != null)
+                            {
+                                regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
+                            }
+
+                            mRegion = regionResponse;
+                            getAllRegionViews(fView);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                }
+                else if (error instanceof ServerError)
+                {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.region_404));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.error_generic));
+                }
+            }
+        });
+
+        queue.add(stringRequest);
     }
 
     // For formatting the tab slider

@@ -118,6 +118,7 @@
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
+    <string name="region_404">Region not found.</string>
     <string name="region_pop">%s Nations</string>
 
     <string name="wa_general_assembly">General Assembly</string>

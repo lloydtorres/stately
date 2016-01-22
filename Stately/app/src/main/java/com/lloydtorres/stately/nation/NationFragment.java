@@ -92,9 +92,9 @@ public class NationFragment extends Fragment {
             mNation = savedInstanceState.getParcelable("mNationData");
         }
 
+        initToolbar(view);
         if (mNation != null)
         {
-            initToolbar(view);
             getAllNationViews(view);
         }
 
