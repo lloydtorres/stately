@@ -25,7 +25,7 @@ public class HappeningCard extends RecyclerView.ViewHolder {
         cardContent = (TextView) v.findViewById(R.id.card_happening_content);
     }
 
-    public void init(HappeningEvent ev)
+    public void init(Event ev)
     {
         cardTime.setText(SparkleHelper.getReadableDateFromUTC(ev.timestamp));
         SparkleHelper.setHappeningsFormatting(context, cardContent, ev.content);

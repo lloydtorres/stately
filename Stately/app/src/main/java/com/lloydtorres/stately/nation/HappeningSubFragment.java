@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.HappeningEvent;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -63,10 +64,10 @@ public class HappeningSubFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<HappeningEvent> events = mNation.happeningsRoot.events;
+        List<Event> events = mNation.happeningsRoot.events;
         Collections.sort(events);
 
-        mRecyclerAdapter = new HappeningRecyclerAdapter(getContext(), events);
+        mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

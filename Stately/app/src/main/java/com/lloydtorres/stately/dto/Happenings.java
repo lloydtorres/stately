@@ -18,14 +18,14 @@ import java.util.List;
 public class Happenings implements Parcelable {
 
     @ElementList(inline=true)
-    public List<HappeningEvent> events;
+    public List<Event> events;
 
     public Happenings() { super(); }
 
     protected Happenings(Parcel in) {
         if (in.readByte() == 0x01) {
-            events = new ArrayList<HappeningEvent>();
-            in.readList(events, HappeningEvent.class.getClassLoader());
+            events = new ArrayList<Event>();
+            in.readList(events, Event.class.getClassLoader());
         } else {
             events = null;
         }

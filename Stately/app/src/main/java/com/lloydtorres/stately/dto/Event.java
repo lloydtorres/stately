@@ -11,16 +11,16 @@ import org.simpleframework.xml.Root;
  * A DTO used to hold a single happening event as returned by the NationStates API.
  */
 @Root(name="EVENT", strict=false)
-public class HappeningEvent implements Parcelable, Comparable<HappeningEvent> {
+public class Event implements Parcelable, Comparable<Event> {
 
     @Element(name="TIMESTAMP")
     public long timestamp;
     @Element(name="TEXT")
     public String content;
 
-    public HappeningEvent() { super(); }
+    public Event() { super(); }
 
-    protected HappeningEvent(Parcel in) {
+    protected Event(Parcel in) {
         timestamp = in.readLong();
         content = in.readString();
     }
@@ -37,20 +37,20 @@ public class HappeningEvent implements Parcelable, Comparable<HappeningEvent> {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<HappeningEvent> CREATOR = new Parcelable.Creator<HappeningEvent>() {
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
         @Override
-        public HappeningEvent createFromParcel(Parcel in) {
-            return new HappeningEvent(in);
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
         }
 
         @Override
-        public HappeningEvent[] newArray(int size) {
-            return new HappeningEvent[size];
+        public Event[] newArray(int size) {
+            return new Event[size];
         }
     };
 
     @Override
-    public int compareTo(HappeningEvent another) {
+    public int compareTo(Event another) {
         if (this.timestamp > another.timestamp)
         {
             return -1;

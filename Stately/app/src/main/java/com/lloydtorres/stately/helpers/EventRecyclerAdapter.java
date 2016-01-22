@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningCard;
-import com.lloydtorres.stately.dto.HappeningEvent;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ import java.util.List;
  * Created by Lloyd on 2016-01-17.
  * An adapter used to show happenings in its RecyclerView.
  */
-public class HappeningRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<HappeningEvent> events;
+    private List<Event> events;
 
-    public HappeningRecyclerAdapter(Context c, List<HappeningEvent> ev)
+    public EventRecyclerAdapter(Context c, List<Event> ev)
     {
         context = c;
         events = ev;

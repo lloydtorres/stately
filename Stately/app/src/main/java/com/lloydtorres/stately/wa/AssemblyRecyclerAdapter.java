@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyStats;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningCard;
-import com.lloydtorres.stately.dto.HappeningEvent;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         AssemblyStats s = new AssemblyStats(sc.numNations, sc.numDelegates);
         cards.add(s);
 
-        List<HappeningEvent> happen = sc.happeningsRoot.events;
+        List<Event> happen = sc.happeningsRoot.events;
         Collections.sort(happen);
 
         cards.addAll(happen);
@@ -98,7 +98,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             default:
                 HappeningCard happeningCard = (HappeningCard) holder;
-                happeningCard.init((HappeningEvent) cards.get(position));
+                happeningCard.init((Event) cards.get(position));
                 break;
         }
     }
