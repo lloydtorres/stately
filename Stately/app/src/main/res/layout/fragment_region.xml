@@ -20,70 +20,79 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_collapseMode="pin" />
+            app:layout_collapseMode="pin"/>
 
-        <LinearLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_container_region"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="false"
-            android:gravity="bottom"
-            android:background="@android:color/white"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:contentScrim="@color/colorPrimary">
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="7dp"/>
-
-            <com.github.siyamed.shapeimageview.RoundedImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:visibility="gone"
-                android:id="@+id/region_flag"
-                android:layout_height="100dp"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@drawable/gray"
-                app:siRadius="2dp"
-                app:siBorderWidth="1dp"
-                app:siBorderColor="#AAA" />
-
-            <TextView
-                android:id="@+id/region_name"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:textSize="20sp"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryText"
+                android:minHeight="120dp"
                 android:gravity="center"
-                tools:text="Arbcom"/>
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <TextView
-                android:id="@+id/region_pop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:layout_gravity="center_horizontal"
-                android:textSize="15sp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorSecondaryText"
-                android:gravity="center"
-                tools:text="@string/region_pop"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp"/>
+                <com.github.siyamed.shapeimageview.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:visibility="gone"
+                    android:id="@+id/region_flag"
+                    android:layout_height="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/gray"
+                    app:siRadius="2dp"
+                    app:siBorderWidth="1dp"
+                    app:siBorderColor="#AAA"
+                    tools:visibility="visible"/>
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/region_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/colorPrimaryText"
+                    android:gravity="center"
+                    tools:text="Arbcom"/>
+
+                <TextView
+                    android:id="@+id/region_pop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorSecondaryText"
+                    android:gravity="center"
+                    tools:text="@string/region_pop"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
 
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/region_tabs"
             android:layout_width="match_parent"
             android:layout_height="40dip"
-            android:fitsSystemWindows="false"
             android:background="@android:color/white"
             android:textColor = "@color/colorSecondaryText"
             app:pstsTextColorSelected = "@color/colorPrimary"

@@ -3,6 +3,8 @@ package com.lloydtorres.stately.region;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -34,6 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
 import org.w3c.dom.Text;
 
@@ -89,14 +92,14 @@ public class RegionFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
 
+        initToolbar(view);
+
         // Restore state
         if (savedInstanceState != null)
         {
             mRegionName = savedInstanceState.getString("mRegionName");
             mRegion = savedInstanceState.getParcelable("mRegionData");
         }
-
-        initToolbar(view);
 
         if (mRegion != null)
         {
@@ -123,6 +126,29 @@ public class RegionFragment extends Fragment {
         {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
+
+        // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
+        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.region_appbar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset <= 0) {
+                    if (mRegion != null) {
+                        toolbar.setTitle(mRegion.name);
+                    }
+                    isShow = true;
+                } else if (isShow) {
+                    toolbar.setTitle("");
+                    isShow = false;
+                }
+            }
+        });
     }
 
     public Toolbar getToolbar()
@@ -179,7 +205,7 @@ public class RegionFragment extends Fragment {
         }
 
         regionName.setText(mRegion.name);
-        regionPop.setText(String.format(getString(R.string.region_pop), SparkleHelper.getPrettifiedNumber(mRegion.numNations)));
+        regionPop.setText(String.format(getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), English.plural(getString(R.string.region_pop), mRegion.numNations)));
 
         initTabs(view);
     }
