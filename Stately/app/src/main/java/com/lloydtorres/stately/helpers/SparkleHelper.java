@@ -522,6 +522,7 @@ public class SparkleHelper {
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "%%(.*?)%%", CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
@@ -553,16 +554,16 @@ public class SparkleHelper {
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "");
-        holder = regexReplace(holder, "\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
-        holder = regexReplace(holder, "\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
-        holder = regexReplace(holder, "\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
-        holder = regexReplace(holder, "\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
-        holder = regexRemove(holder, "\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
-        holder = regexRemove(holder, "\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
-        holder = regexDoubleReplace(holder, "\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
-        holder = regexDoubleReplace(holder, "\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</a>");
-        holder = regexReplace(holder, "\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
-        holder = regexReplace(holder, "\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+        holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
+        holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
+        holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
+        holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
+        holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
+        holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
+        holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
+        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color='%s'>%s</font>");
+        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+        holder = regexReplace(holder, "(?s)\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
         // Format lists
         holder = regexListFormat(holder);
@@ -570,6 +571,8 @@ public class SparkleHelper {
         // Linkify nations
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\[region\\](.*?)\\[\\/region\\]", CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\[region=(.*?)\\]", CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         if (t instanceof HtmlTextView)
