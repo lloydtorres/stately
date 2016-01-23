@@ -12,7 +12,9 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class RegionHappeningSubFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<Event> events = mRegion.happenings;
+        List<Event> events = new ArrayList<Event>(mRegion.happenings);
         events.addAll(mRegion.history);
         Collections.sort(events);
 
