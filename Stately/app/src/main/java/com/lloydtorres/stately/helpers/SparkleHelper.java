@@ -576,8 +576,8 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
         holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
+        holder = regexRemove(holder, "(?s)\\[colou?r=.*?\\](.*?)\\[\\/colou?r\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
-        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color='%s'>%s</font>");
         holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
         holder = regexReplace(holder, "(?s)\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
@@ -668,7 +668,7 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
 
         for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), "");
+            holder = holder.replace(n.getKey(), n.getValue());
         }
 
         return holder;
