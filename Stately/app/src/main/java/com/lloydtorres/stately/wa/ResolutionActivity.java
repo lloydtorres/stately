@@ -234,7 +234,7 @@ public class ResolutionActivity extends AppCompatActivity {
         String template = getString(R.string.wa_nominee_template);
         String[] pair = target.split(":");
 
-        if ("0".equals(target))
+        if (pair.length <= 1)
         {
             t.setText(category);
         }
