@@ -131,6 +131,9 @@ public class RegionFragment extends Fragment {
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container_region);
+        collapsingToolbarLayout.setTitle("");
+
         AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.region_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -143,11 +146,11 @@ public class RegionFragment extends Fragment {
                 }
                 if (scrollRange + verticalOffset <= 0) {
                     if (mRegion != null) {
-                        toolbar.setTitle(mRegion.name);
+                        collapsingToolbarLayout.setTitle(mRegion.name);
                     }
                     isShow = true;
                 } else if (isShow) {
-                    toolbar.setTitle("");
+                    collapsingToolbarLayout.setTitle("");
                     isShow = false;
                 }
             }
