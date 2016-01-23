@@ -57,6 +57,7 @@ public class RegionFragment extends Fragment {
     private Region mRegion;
 
     // sub fragments
+    private RegionOverviewSubFragment regionOverviewSubFragment;
     private RegionHappeningSubFragment regionHappeningSubFragment;
 
     // variables used for mRegion views
@@ -213,6 +214,9 @@ public class RegionFragment extends Fragment {
         regionName.setText(mRegion.name);
         regionPop.setText(String.format(getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), English.plural(getString(R.string.region_pop), mRegion.numNations)));
 
+        regionOverviewSubFragment = new RegionOverviewSubFragment();
+        regionOverviewSubFragment.setRegion(mRegion);
+
         regionHappeningSubFragment = new RegionHappeningSubFragment();
         regionHappeningSubFragment.setRegion(mRegion);
 
@@ -318,6 +322,8 @@ public class RegionFragment extends Fragment {
         public Fragment getItem(int position) {
             switch(position)
             {
+                case OVERVIEW_TAB:
+                    return regionOverviewSubFragment;
                 case HAPPEN_TAB:
                     return regionHappeningSubFragment;
                 default:

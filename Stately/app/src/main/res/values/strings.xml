@@ -121,6 +121,17 @@
     <string name="region_404">Region not found.</string>
     <string name="region_pop">Nation</string>
 
+    <string name="card_region_quick_facts_title">Quick Facts</string>
+    <string name="card_region_wa_delegate">WA Delegate</string>
+    <string name="card_region_founder">Founder</string>
+    <string name="card_region_power">Regional Power</string>
+    <string name="card_region_factbook_title">Factbook</string>
+    <string name="card_region_tags_title">Tags</string>
+
+    <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
+    <string name="region_filler_vote">vote</string>
+    <string name="region_filler_none">None</string>
+
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>
