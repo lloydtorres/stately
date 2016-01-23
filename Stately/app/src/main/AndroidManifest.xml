@@ -42,7 +42,6 @@
             android:name=".wa.ResolutionActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"
-            android:launchMode="singleTop"
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
     </application>
