@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
@@ -19,13 +18,13 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  * A dialog that takes in a nation or region name, lets the user select the type, then launches
  * the appropriate explore activity.
  */
-public class ExploreNationDialog extends DialogFragment {
+public class ExploreDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_explore_dialog";
 
     private EditText exploreSearch;
     private RadioGroup exploreToggleState;
 
-    public ExploreNationDialog() { }
+    public ExploreDialog() { }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)  {
@@ -38,14 +37,7 @@ public class ExploreNationDialog extends DialogFragment {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (exploreToggleState.getCheckedRadioButtonId())
-                {
-                    case R.id.explore_radio_nation:
-                        startExploreActivity();
-                        break;
-                    default:
-                        break;
-                }
+                startExploreActivity();
             }
         };
 
@@ -65,7 +57,19 @@ public class ExploreNationDialog extends DialogFragment {
 
     private void startExploreActivity()
     {
+        int mode;
+
+        switch (exploreToggleState.getCheckedRadioButtonId())
+        {
+            case R.id.explore_radio_nation:
+                mode = SparkleHelper.CLICKY_NATION_MODE;
+                break;
+            default:
+                mode = SparkleHelper.CLICKY_REGION_MODE;
+                break;
+        }
+
         String name = exploreSearch.getText().toString();
-        SparkleHelper.startExploring(getContext(), name);
+        SparkleHelper.startExploring(getContext(), name, mode);
     }
 }

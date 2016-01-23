@@ -72,7 +72,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 {
                     case SparkleHelper.CLICKY_NATION_MODE:
                         // Start exploring nation and close dialog on click.
-                        SparkleHelper.startExploring(context, names.get(pos));
+                        SparkleHelper.startExploring(context, names.get(pos), SparkleHelper.CLICKY_NATION_MODE);
                         selfDialog.dismiss();
                         break;
                 }

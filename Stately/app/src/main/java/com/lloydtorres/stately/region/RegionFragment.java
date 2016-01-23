@@ -38,13 +38,12 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
-import org.w3c.dom.Text;
 
 /**
  * Created by Lloyd on 2016-01-21.
  * The region fragment called either by StatelyActivity or ExploreRegionActivity.
- * Displays information about a target region, takes in a region name.
- * Does the search and refresh by itself.
+ * Displays information about a target region, takes in a region name or object.
+ * Can do the search and refresh by itself.
  */
 public class RegionFragment extends Fragment {
     // Constants used to determine view pager index.
@@ -77,6 +76,10 @@ public class RegionFragment extends Fragment {
     {
         mRegionName = n;
     }
+    public void setRegion(Region r)
+    {
+        mRegion = r;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -107,6 +110,7 @@ public class RegionFragment extends Fragment {
 
         if (mRegion != null)
         {
+            mRegionName = mRegion.name;
             getAllRegionViews(view);
         }
         else

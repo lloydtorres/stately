@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.lloydtorres.stately.ExploreActivity;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.nation.ExploreNationActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -79,14 +79,11 @@ import java.util.regex.Pattern;
 public class SparkleHelper {
     // Tag used to mark system log print calls
     public static final String APP_TAG = "com.lloydtorres.stately";
-    // Uri to invoke the ExploreNationActivity
-    public static final String NATION_PROTOCOL = "com.lloydtorres.stately.nation";
-    public static final String NATION_TARGET = NATION_PROTOCOL + "://";
-    // Uri to invoke the ExploreRegionActivity
-    public static final String REGION_PROTOCOL = "com.lloydtorres.stately.region";
-    public static final String REGION_TARGET = REGION_PROTOCOL + "://";
+    // Uri to invoke the ExploreActivity
+    public static final String EXPLORE_PROTOCOL = "com.lloydtorres.stately.explore";
+    public static final String EXPLORE_TARGET = EXPLORE_PROTOCOL + "://";
     // Whitelisted protocols
-    public static final String[] PROTOCOLS = {"http", "https", NATION_PROTOCOL, REGION_PROTOCOL};
+    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
     // String template used to get nation banners from NationStates
     // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
@@ -348,11 +345,12 @@ public class SparkleHelper {
      * @param c App context
      * @param n The nation ID
      */
-    public static void startExploring(Context c, String n)
+    public static void startExploring(Context c, String n, int mode)
     {
-        Intent nationActivityLaunch = new Intent(c, ExploreNationActivity.class);
-        nationActivityLaunch.putExtra("nationId", n);
-        c.startActivity(nationActivityLaunch);
+        Intent exploreActivityLaunch = new Intent(c, ExploreActivity.class);
+        exploreActivityLaunch.putExtra("id", n);
+        exploreActivityLaunch.putExtra("mode", mode);
+        c.startActivity(exploreActivityLaunch);
     }
 
     public static String calculateResolutionEnd(int hoursElapsed)
@@ -393,23 +391,13 @@ public class SparkleHelper {
      */
     public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
     {
-        final String urlFormat = "<a href=\"%s\">%s</a>";
+        final String urlFormat = "<a href=\"%s/%d\">%s</a>";
         String tempHolder = template;
-        String targetActivity;
-
-        switch (mode)
-        {
-            case CLICKY_NATION_MODE:
-                targetActivity = NATION_TARGET;
-                break;
-            default:
-                targetActivity = REGION_TARGET;
-                break;
-        }
+        String targetActivity = EXPLORE_TARGET;
 
         // Name needs to be formatted back to its NationStates ID first for the URL.
         targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
-        targetActivity = String.format(urlFormat, targetActivity, nTarget);
+        targetActivity = String.format(urlFormat, targetActivity, mode, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);
 

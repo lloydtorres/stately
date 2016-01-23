@@ -28,14 +28,14 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".nation.ExploreNationActivity"
+            android:name=".ExploreActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="com.lloydtorres.stately.nation" />
+                <data android:scheme="com.lloydtorres.stately.explore" />
             </intent-filter>
         </activity>
         <activity

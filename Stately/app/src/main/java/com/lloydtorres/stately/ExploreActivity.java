@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.nation;
+package com.lloydtorres.stately;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -19,23 +19,28 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.region.RegionFragment;
 
 import org.simpleframework.xml.core.Persister;
 
 /**
  * Created by Lloyd on 2016-01-15.
- * This activity can be invoked to load and open a nation page, either as an Intent
- * or through this Uri: com.lloydtorres.stately.nation://
- * Requires a nation name to be passed in; does error checking as well.
+ * This activity can be invoked to load and open a nation/region page, either as an Intent
+ * or through this Uri: com.lloydtorres.stately.explore://<name>/<mode>
+ * Requires a name to be passed in; does error checking as well.
  */
-public class ExploreNationActivity extends AppCompatActivity implements PrimeActivity {
-    private String nationId;
-    private NationFragment nFragment;
+public class ExploreActivity extends AppCompatActivity implements PrimeActivity {
+    private String id;
+    private int mode;
     private TextView statusMessage;
+
+    private NationFragment nFragment;
+    private RegionFragment rFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +50,17 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         if (getIntent() != null)
         {
             // If name passed in as intent
-            nationId = getIntent().getStringExtra("nationId");
-            if (nationId == null)
+            id = getIntent().getStringExtra("id");
+            mode = getIntent().getIntExtra("mode", SparkleHelper.CLICKY_NATION_MODE);
+            if (id == null)
             {
                 // If ID passed in through Uri
                 // Funny thing here is that in the link source, they have
                 // to convert it from a proper name to an ID
                 // But we need it as a name so we convert it back
-                nationId = getIntent().getData().getHost();
-                nationId = SparkleHelper.getNameFromId(nationId);
+                id = getIntent().getData().getHost();
+                id = SparkleHelper.getNameFromId(id);
+                mode = Integer.valueOf(getIntent().getData().getLastPathSegment());
             }
         }
         else
@@ -67,7 +74,7 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
 
         statusMessage = (TextView) findViewById(R.id.explore_status);
 
-        verifyNationInput(nationId);
+        verifyInput(id);
     }
 
     @Override
@@ -91,16 +98,32 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         statusMessage.setText(s);
     }
 
-    private void verifyNationInput(String name)
+    private void verifyInput(String name)
     {
         if (SparkleHelper.isValidName(name) && name.length() > 0)
         {
             name = name.toLowerCase().replace(" ","_");
-            queryNation(name);
+            switch (mode)
+            {
+                case SparkleHelper.CLICKY_NATION_MODE:
+                    queryNation(name);
+                    break;
+                default:
+                    queryRegion(name);
+                    break;
+            }
         }
         else
         {
-            setExploreStatus(getString(R.string.explore_error_404_nation));
+            switch (mode)
+            {
+                case SparkleHelper.CLICKY_NATION_MODE:
+                    setExploreStatus(getString(R.string.explore_error_404_nation));
+                    break;
+                default:
+                    setExploreStatus(getString(R.string.region_404));
+                    break;
+            }
         }
     }
 
@@ -163,6 +186,54 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         queue.add(stringRequest);
     }
 
+    private void queryRegion(String name)
+    {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = String.format(Region.QUERY, name);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    Region regionResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            regionResponse = serializer.read(Region.class, response);
+
+                            // Switch flag URL to https
+                            if (regionResponse.flagURL != null)
+                            {
+                                regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
+                            }
+
+                            initFragment(regionResponse);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            setExploreStatus(getString(R.string.login_error_parsing));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    setExploreStatus(getString(R.string.login_error_no_internet));
+                }
+                else if (error instanceof ServerError)
+                {
+                    setExploreStatus(getString(R.string.region_404));
+                }
+                else
+                {
+                    setExploreStatus(getString(R.string.error_generic));
+                }
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
     private void initFragment(Nation mNation)
     {
         // Initializes and inflates the nation fragment
@@ -171,6 +242,17 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, nFragment)
+                .commit();
+    }
+
+    private void initFragment(Region mRegion)
+    {
+        // Initializes and inflates the region fragment
+        rFragment = new RegionFragment();
+        rFragment.setRegion(mRegion);
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.explore_coordinator, rFragment)
                 .commit();
     }
 
@@ -184,8 +266,8 @@ public class ExploreNationActivity extends AppCompatActivity implements PrimeAct
             case R.id.nav_explore:
                 // Open an explore dialog to keep going
                 FragmentManager fm = getSupportFragmentManager();
-                ExploreNationDialog editNameDialog = new ExploreNationDialog();
-                editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);
+                ExploreDialog editNameDialog = new ExploreDialog();
+                editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
         }
         return super.onOptionsItemSelected(item);
     }

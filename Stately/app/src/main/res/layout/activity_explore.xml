@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lloydtorres.stately.nation.ExploreNationActivity">
+    tools:context=".ExploreActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

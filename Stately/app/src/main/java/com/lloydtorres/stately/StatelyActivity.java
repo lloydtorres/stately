@@ -31,7 +31,6 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.lloydtorres.stately.nation.ExploreNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
@@ -289,8 +288,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void explore()
     {
         FragmentManager fm = getSupportFragmentManager();
-        ExploreNationDialog editNameDialog = new ExploreNationDialog();
-        editNameDialog.show(fm, ExploreNationDialog.DIALOG_TAG);
+        ExploreDialog editNameDialog = new ExploreDialog();
+        editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
     }
 
     /**
