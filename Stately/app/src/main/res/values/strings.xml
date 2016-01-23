@@ -131,6 +131,8 @@
     <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
     <string name="region_filler_vote">vote</string>
     <string name="region_filler_none">None</string>
+    <string name="region_eo">Embassy opened with %1$s.</string>
+    <string name="region_ec">Embassy closed with %1$s.</string>
 
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>

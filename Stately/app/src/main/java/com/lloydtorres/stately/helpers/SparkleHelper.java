@@ -524,6 +524,22 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "%%(.*?)%%", CLICKY_REGION_MODE);
 
+        if (holder.contains("EO:"))
+        {
+            String[] newTargets = holder.split(":");
+            String newTarget = newTargets[1].substring(0, newTargets[1].length() - 2);
+            String template = String.format(c.getString(R.string.region_eo), holder);
+            holder = activityLinkBuilder(c, t, template, "EO:"+newTarget, getNameFromId(newTarget), CLICKY_REGION_MODE);
+        }
+
+        if (holder.contains("EC:"))
+        {
+            String[] newTargets = holder.split(":");
+            String newTarget = newTargets[1].substring(0, newTargets[1].length() - 2);
+            String template = String.format(c.getString(R.string.region_ec), holder);
+            holder = activityLinkBuilder(c, t, template, "EC:"+newTarget, getNameFromId(newTarget), CLICKY_REGION_MODE);
+        }
+
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
         styleLinkifiedTextView(c, t);
