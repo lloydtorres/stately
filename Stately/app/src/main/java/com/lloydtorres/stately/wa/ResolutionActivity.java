@@ -248,6 +248,12 @@ public class ResolutionActivity extends AppCompatActivity {
                     String oldTemplate = String.format(template, category, pair[1]);
                     SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
                     break;
+                case "R":
+                    // If target is a nation, linkify it.
+                    String regionTarget = SparkleHelper.getNameFromId(pair[1]);
+                    String oldRegionTemplate = String.format(template, category, pair[1]);
+                    SparkleHelper.activityLinkBuilder(this, t, oldRegionTemplate, pair[1], regionTarget, SparkleHelper.CLICKY_REGION_MODE);
+                    break;
                 default:
                     t.setText(String.format(template, category, target));
                     break;

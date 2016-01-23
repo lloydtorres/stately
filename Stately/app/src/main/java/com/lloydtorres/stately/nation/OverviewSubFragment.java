@@ -132,7 +132,7 @@ public class OverviewSubFragment extends Fragment {
         govType.setText(mNation.govType);
 
         region = (TextView) view.findViewById(R.id.nation_region);
-        region.setText(mNation.region);
+        SparkleHelper.activityLinkBuilder(getContext(), region, mNation.region, mNation.region, mNation.region, SparkleHelper.CLICKY_REGION_MODE);
 
         population = (TextView) view.findViewById(R.id.nation_population);
         population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
