@@ -2,6 +2,8 @@ package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Embassy;
 import com.lloydtorres.stately.dto.Officer;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,6 +50,7 @@ public class RegionGovernanceSubFragment extends Fragment {
         if (mRegion != null)
         {
             initOfficersCard(inflater, view);
+            initEmbassyCard(view);
         }
 
         return view;
@@ -92,6 +98,45 @@ public class RegionGovernanceSubFragment extends Fragment {
         label.setText(position);
         SparkleHelper.activityLinkBuilder(getContext(), content, nation, nation, SparkleHelper.getNameFromId(nation), SparkleHelper.CLICKY_NATION_MODE);
         officersLayout.addView(delegateView);
+    }
+
+    private void initEmbassyCard(View v)
+    {
+        ArrayList<String> embassyList = new ArrayList<String>();
+        if (mRegion.embassies != null && mRegion.embassies.size() > 0)
+        {
+            for (Embassy e : mRegion.embassies)
+            {
+                if (e.type == null)
+                {
+                    embassyList.add(e.name);
+                }
+            }
+        }
+
+        CardView embassyCard = (CardView) v.findViewById(R.id.card_region_embassies);
+
+        if (embassyList.size() > 0)
+        {
+            TextView embassyNum = (TextView) v.findViewById(R.id.card_region_embassies_num);
+            embassyNum.setText(String.valueOf(embassyList.size()));
+            final ArrayList<String> embassies = embassyList;
+            embassyCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    NameListDialog nameListDialog = new NameListDialog();
+                    nameListDialog.setTitle(getString(R.string.card_region_embassies));
+                    nameListDialog.setNames(embassies);
+                    nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+                    nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+                }
+            });
+        }
+        else
+        {
+            embassyCard.setVisibility(View.GONE);
+        }
     }
 
     @Override
