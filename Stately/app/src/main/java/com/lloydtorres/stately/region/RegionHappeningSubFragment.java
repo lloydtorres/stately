@@ -12,7 +12,6 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

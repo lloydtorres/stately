@@ -8,14 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.PieChartListener;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
