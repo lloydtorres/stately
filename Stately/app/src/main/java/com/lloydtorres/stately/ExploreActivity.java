@@ -62,7 +62,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 id = getIntent().getData().getHost();
                 id = SparkleHelper.getNameFromId(id);
                 mode = Integer.valueOf(getIntent().getData().getLastPathSegment());
-                noRefresh = true;
             }
         }
         else
@@ -252,7 +251,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         // Initializes and inflates the region fragment
         rFragment = new RegionFragment();
         rFragment.setRegion(mRegion);
-        rFragment.setRefreshState(noRefresh);
+        rFragment.setNoRefreshState(true);
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, rFragment)
