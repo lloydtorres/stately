@@ -13,6 +13,8 @@ import org.simpleframework.xml.Root;
 @Root(strict=false)
 public class WaVote implements Parcelable {
 
+    @Element(required=false)
+    public int chamber;
     @Element(name="FOR", required=false)
     public int voteFor;
     @Element(name="AGAINST",required=false)
@@ -21,6 +23,7 @@ public class WaVote implements Parcelable {
     public WaVote() { super(); }
 
     protected WaVote(Parcel in) {
+        chamber = in.readInt();
         voteFor = in.readInt();
         voteAgainst = in.readInt();
     }
@@ -32,6 +35,7 @@ public class WaVote implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(chamber);
         dest.writeInt(voteFor);
         dest.writeInt(voteAgainst);
     }
