@@ -147,22 +147,7 @@ public class GovernmentSubFragment extends Fragment {
         dataSet.setColors(SparkleHelper.chartColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
-        // formatting
-        Legend cLegend = budgetChart.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
-
-        budgetChart.setDrawSliceText(false);
-        budgetChart.setDescription("");
-        budgetChart.setHoleColorTransparent(true);
-        budgetChart.setHoleRadius(60f);
-        budgetChart.setTransparentCircleRadius(65f);
-        budgetChart.setCenterTextSize(20);
-        budgetChart.setRotationEnabled(false);
-
-        budgetChart.setOnChartValueSelectedListener(new PieChartListener(getContext(), budgetChart, chartLabels));
+        budgetChart = SparkleHelper.getFormattedPieChart(getContext(), budgetChart, chartLabels);
         budgetChart.setData(dataFull);
         budgetChart.invalidate();
     }

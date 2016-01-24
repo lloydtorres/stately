@@ -142,22 +142,7 @@ public class EconomySubFragment extends Fragment {
         dataSet.setColors(SparkleHelper.sectorColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
-        // formatting
-        Legend cLegend = sectorChart.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
-
-        sectorChart.setDrawSliceText(false);
-        sectorChart.setDescription("");
-        sectorChart.setHoleColorTransparent(true);
-        sectorChart.setHoleRadius(60f);
-        sectorChart.setTransparentCircleRadius(65f);
-        sectorChart.setCenterTextSize(20);
-        sectorChart.setRotationEnabled(false);
-
-        sectorChart.setOnChartValueSelectedListener(new PieChartListener(getContext(), sectorChart, chartLabels));
+        sectorChart = SparkleHelper.getFormattedPieChart(getContext(), sectorChart, chartLabels);
         sectorChart.setData(dataFull);
         sectorChart.invalidate();
     }

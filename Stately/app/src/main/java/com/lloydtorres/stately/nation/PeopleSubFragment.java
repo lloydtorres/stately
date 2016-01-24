@@ -130,22 +130,7 @@ public class PeopleSubFragment extends Fragment {
         dataSet.setColors(SparkleHelper.chartColours, getActivity());
         PieData dataFull = new PieData(chartLabels, dataSet);
 
-        // formatting
-        Legend cLegend = mortalityChart.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
-
-        mortalityChart.setDrawSliceText(false);
-        mortalityChart.setDescription("");
-        mortalityChart.setHoleColorTransparent(true);
-        mortalityChart.setHoleRadius(60f);
-        mortalityChart.setTransparentCircleRadius(65f);
-        mortalityChart.setCenterTextSize(20);
-        mortalityChart.setRotationEnabled(false);
-
-        mortalityChart.setOnChartValueSelectedListener(new PieChartListener(getContext(), mortalityChart, chartLabels));
+        mortalityChart = SparkleHelper.getFormattedPieChart(getContext(), mortalityChart, chartLabels);
         mortalityChart.setData(dataFull);
         mortalityChart.invalidate();
     }

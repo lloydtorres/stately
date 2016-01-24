@@ -290,21 +290,7 @@ public class ResolutionActivity extends AppCompatActivity {
         PieData dataFull = new PieData(chartLabels, dataSet);
 
         // formatting
-        Legend cLegend = votingBreakdown.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
-
-        votingBreakdown.setDrawSliceText(false);
-        votingBreakdown.setDescription("");
-        votingBreakdown.setHoleColorTransparent(true);
-        votingBreakdown.setHoleRadius(60f);
-        votingBreakdown.setTransparentCircleRadius(65f);
-        votingBreakdown.setCenterTextSize(20);
-        votingBreakdown.setRotationEnabled(false);
-
-        votingBreakdown.setOnChartValueSelectedListener(new PieChartListener(this, votingBreakdown, chartLabels));
+        votingBreakdown = SparkleHelper.getFormattedPieChart(this, votingBreakdown, chartLabels);
         votingBreakdown.setData(dataFull);
         votingBreakdown.invalidate();
     }

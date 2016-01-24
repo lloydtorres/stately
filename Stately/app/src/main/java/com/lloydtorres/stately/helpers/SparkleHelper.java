@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -333,6 +335,26 @@ public class SparkleHelper {
             return String.format(c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, English.plural(currency));
         }
 
+    }
+
+    public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels)
+    {
+        Legend cLegend = p.getLegend();
+        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        cLegend.setForm(Legend.LegendForm.CIRCLE);
+        cLegend.setTextSize(15);
+        cLegend.setWordWrapEnabled(true);
+
+        p.setDrawSliceText(false);
+        p.setDescription("");
+        p.setHoleColorTransparent(true);
+        p.setHoleRadius(60f);
+        p.setTransparentCircleRadius(65f);
+        p.setCenterTextSize(20);
+        p.setRotationEnabled(false);
+
+        p.setOnChartValueSelectedListener(new PieChartListener(c, p, chartLabels));
+        return p;
     }
 
     /**
