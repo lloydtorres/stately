@@ -82,7 +82,7 @@ public class RegionFragment extends Fragment {
     {
         mRegion = r;
     }
-    public void setRefreshState(boolean b)
+    public void setNoRefreshState(boolean b)
     {
         noRefresh = b;
     }
