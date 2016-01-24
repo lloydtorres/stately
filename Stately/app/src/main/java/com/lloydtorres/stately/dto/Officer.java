@@ -11,7 +11,7 @@ import org.simpleframework.xml.Root;
  * An officer in a region.
  */
 @Root(name="OFFICER", strict=false)
-public class Officer implements Parcelable {
+public class Officer implements Parcelable, Comparable<Officer> {
 
     @Element(name="NATION", required=false)
     public String name;
@@ -52,4 +52,9 @@ public class Officer implements Parcelable {
             return new Officer[size];
         }
     };
+
+    @Override
+    public int compareTo(Officer another) {
+        return this.order - another.order;
+    }
 }
