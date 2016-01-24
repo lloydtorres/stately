@@ -250,17 +250,6 @@ public class RegionFragment extends Fragment {
     }
 
     @Override
-    public void onResume()
-    {
-        // Redownload region data on resume
-        super.onResume();
-        if (!noRefresh)
-        {
-            updateRegion(getView());
-        }
-    }
-
-    @Override
     public void onDestroy()
     {
         // Decouple activity on destroy
