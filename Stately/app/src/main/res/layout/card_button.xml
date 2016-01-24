@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_button_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardBackgroundColor="@color/colorPrimary"
+    card_view:contentPaddingLeft="20dp"
+    card_view:contentPaddingRight="20dp"
+    card_view:contentPaddingTop="10dp"
+    card_view:contentPaddingBottom="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/card_button_text"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:fontFamily="sans-serif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/card_region_rmb" />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/card_button_num"
+            android:adjustViewBounds="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            tools:text="88" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

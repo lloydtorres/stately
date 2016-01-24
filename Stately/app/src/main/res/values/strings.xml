@@ -131,6 +131,12 @@
     <string name="card_region_factbook_title">Factbook</string>
     <string name="card_region_tags_title">Tags</string>
 
+    <string name="card_region_rmb">Regional Message Board</string>
+    <string name="card_region_poll">Poll</string>
+    <string name="card_region_wa_vote">%1$s Resolution</string>
+    <string name="region_wa_filler">Among %1$s nations, voting is currently %2$d FOR to %3$d AGAINST.</string>
+    <string name="card_region_wa_link">Open the %1$s resolution.</string>
+
     <string name="card_region_officers">Officers</string>
     <string name="region_filler_no_officers">%1$s doesn\'t have any officers.</string>
     <string name="card_region_embassies">Embassies</string>
