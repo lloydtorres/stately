@@ -282,7 +282,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             linkContent.setText(String.format(context.getString(R.string.card_region_wa_link), chamberName));
 
             filler.setText(String.format(context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
-            SparkleHelper.setWaVotingBreakdown(context, chart, w.voteFor, w.voteAgainst);
+            if (!SparkleHelper.setWaVotingBreakdown(context, chart, w.voteFor, w.voteAgainst))
+            {
+                chart.setVisibility(View.GONE);
+                nullVote.setVisibility(View.VISIBLE);
+            }
         }
     }
 

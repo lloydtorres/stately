@@ -410,33 +410,41 @@ public class SparkleHelper {
      * @param voteFor Number of votes for
      * @param voteAgainst Number of votes against
      */
-    public static void setWaVotingBreakdown(Context c, PieChart p, float voteFor, float voteAgainst)
+    public static boolean setWaVotingBreakdown(Context c, PieChart p, float voteFor, float voteAgainst)
     {
         // Calculate percentages (floating point math FTW!)
         float voteTotal = voteFor + voteAgainst;
-        float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
-        float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
 
-        List<String> chartLabels = new ArrayList<String>();
-        List<Entry> chartEntries = new ArrayList<Entry>();
+        if (voteTotal > 0)
+        {
+            float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
+            float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
 
-        // Set data
-        int i = 0;
-        chartLabels.add(c.getString(R.string.wa_for));
-        chartEntries.add(new Entry((float) votePercentFor, i++));
-        chartLabels.add(c.getString(R.string.wa_against));
-        chartEntries.add(new Entry((float) votePercentAgainst, i++));
+            List<String> chartLabels = new ArrayList<String>();
+            List<Entry> chartEntries = new ArrayList<Entry>();
 
-        // Set colour and disable chart labels
-        PieDataSet dataSet = new PieDataSet(chartEntries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(SparkleHelper.waColours, c);
-        PieData dataFull = new PieData(chartLabels, dataSet);
+            // Set data
+            int i = 0;
+            chartLabels.add(c.getString(R.string.wa_for));
+            chartEntries.add(new Entry((float) votePercentFor, i++));
+            chartLabels.add(c.getString(R.string.wa_against));
+            chartEntries.add(new Entry((float) votePercentAgainst, i++));
 
-        // formatting
-        p = SparkleHelper.getFormattedPieChart(c, p, chartLabels);
-        p.setData(dataFull);
-        p.invalidate();
+            // Set colour and disable chart labels
+            PieDataSet dataSet = new PieDataSet(chartEntries, "");
+            dataSet.setDrawValues(false);
+            dataSet.setColors(SparkleHelper.waColours, c);
+            PieData dataFull = new PieData(chartLabels, dataSet);
+
+            // formatting
+            p = SparkleHelper.getFormattedPieChart(c, p, chartLabels);
+            p.setData(dataFull);
+            p.invalidate();
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

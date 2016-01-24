@@ -175,6 +175,16 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimary"
                     android:text="@string/wa_vote_breakdown" />
+                <TextView
+                    android:id="@+id/resolution_null_vote"
+                    android:visibility="gone"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:textSize="15sp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/votes_null"/>
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/wa_voting_breakdown"
                     android:layout_width="match_parent"

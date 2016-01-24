@@ -66,6 +66,7 @@ public class ResolutionActivity extends AppCompatActivity {
     private HtmlTextView content;
 
     private PieChart votingBreakdown;
+    private TextView nullVote;
     private LineChart votingHistory;
     private TextView voteHistoryFor;
     private TextView voteHistoryAgainst;
@@ -110,6 +111,7 @@ public class ResolutionActivity extends AppCompatActivity {
         content = (HtmlTextView) findViewById(R.id.wa_resolution_content);
 
         votingBreakdown = (PieChart) findViewById(R.id.wa_voting_breakdown);
+        nullVote = (TextView) findViewById(R.id.resolution_null_vote);
         votingHistory = (LineChart) findViewById(R.id.wa_voting_history);
         voteHistoryFor = (TextView) findViewById(R.id.wa_vote_history_for);
         voteHistoryAgainst = (TextView) findViewById(R.id.wa_vote_history_against);
@@ -217,7 +219,11 @@ public class ResolutionActivity extends AppCompatActivity {
         voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         SparkleHelper.setBbCodeFormatting(this, content, mResolution.content);
-        SparkleHelper.setWaVotingBreakdown(this, votingBreakdown, mResolution.votesFor, mResolution.votesAgainst);
+        if (!SparkleHelper.setWaVotingBreakdown(this, votingBreakdown, mResolution.votesFor, mResolution.votesAgainst))
+        {
+            votingBreakdown.setVisibility(View.GONE);
+            nullVote.setVisibility(View.VISIBLE);
+        }
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
 
         mSwipeRefreshLayout.setRefreshing(false);
