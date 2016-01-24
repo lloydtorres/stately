@@ -89,6 +89,8 @@ public class SparkleHelper {
     public static final String EXPLORE_TARGET = EXPLORE_PROTOCOL + "://";
     // Whitelisted protocols
     public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
+    // Current NationStates API version
+    public static final String API_VERSION = "7";
     // String template used to get nation banners from NationStates
     // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";

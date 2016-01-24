@@ -3,6 +3,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -24,7 +26,8 @@ public class Region implements Parcelable {
                                         + "+factbook+tags"
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
-                                        + "+happenings+history";
+                                        + "+happenings+history"
+                                        + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="NAME")
     public String name;

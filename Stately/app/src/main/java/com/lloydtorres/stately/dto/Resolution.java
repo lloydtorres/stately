@@ -3,6 +3,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -18,7 +20,8 @@ import java.util.List;
 public class Resolution implements Parcelable {
 
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q="
-                                        + "resolution+votetrack";
+                                        + "resolution+votetrack"
+                                        + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="CATEGORY", required=false)
     public String category;

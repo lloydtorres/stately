@@ -3,6 +3,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -24,7 +26,8 @@ public class Nation implements Parcelable {
                                         + "+notable+sensibilities+crime+deaths"
                                         + "+govtdesc+govt"
                                         + "+industrydesc+poorest+richest+sectors"
-                                        + "+happenings";
+                                        + "+happenings"
+                                        + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="BANNER")
     public String bannerKey;
