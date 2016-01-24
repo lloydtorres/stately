@@ -54,6 +54,7 @@ public class RegionFragment extends Fragment {
 
     private String mRegionName;
     private Region mRegion;
+    private boolean noRefresh;
 
     // sub fragments
     private RegionOverviewSubFragment regionOverviewSubFragment;
@@ -80,6 +81,10 @@ public class RegionFragment extends Fragment {
     public void setRegion(Region r)
     {
         mRegion = r;
+    }
+    public void setRefreshState(boolean b)
+    {
+        noRefresh = b;
     }
 
     @Override
@@ -245,7 +250,10 @@ public class RegionFragment extends Fragment {
     {
         // Redownload region data on resume
         super.onResume();
-        updateRegion(getView());
+        if (!noRefresh)
+        {
+            updateRegion(getView());
+        }
     }
 
     @Override

@@ -38,6 +38,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     private String id;
     private int mode;
     private TextView statusMessage;
+    private boolean noRefresh;
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
@@ -61,6 +62,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 id = getIntent().getData().getHost();
                 id = SparkleHelper.getNameFromId(id);
                 mode = Integer.valueOf(getIntent().getData().getLastPathSegment());
+                noRefresh = true;
             }
         }
         else
@@ -250,6 +252,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         // Initializes and inflates the region fragment
         rFragment = new RegionFragment();
         rFragment.setRegion(mRegion);
+        rFragment.setRefreshState(noRefresh);
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, rFragment)

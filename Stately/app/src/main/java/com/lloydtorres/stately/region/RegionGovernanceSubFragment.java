@@ -76,9 +76,9 @@ public class RegionGovernanceSubFragment extends Fragment {
         List<Officer> officers = mRegion.officers;
         Collections.sort(officers);
 
-        for (Officer o : officers)
+        for (int i=0; i<officers.size(); i++)
         {
-            inflateOfficerEntry(inflater, officersLayout, o.office, o.name);
+            inflateOfficerEntry(inflater, officersLayout, officers.get(i).office, officers.get(i).name);
             tracker++;
         }
 
@@ -114,6 +114,7 @@ public class RegionGovernanceSubFragment extends Fragment {
             }
         }
 
+        Collections.sort(embassyList);
         CardView embassyCard = (CardView) v.findViewById(R.id.card_region_embassies);
 
         if (embassyList.size() > 0)
