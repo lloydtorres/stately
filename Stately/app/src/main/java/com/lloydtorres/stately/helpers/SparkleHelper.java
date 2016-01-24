@@ -450,6 +450,7 @@ public class SparkleHelper {
      */
     public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content, boolean isName)
     {
+        regex = "(?s)(?i)" + regex;
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
@@ -475,6 +476,7 @@ public class SparkleHelper {
 
     public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(String regex, String afterFormat, String content)
     {
+        regex = "(?s)(?i)" + regex;
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
@@ -587,6 +589,7 @@ public class SparkleHelper {
         // Linkify nations
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\[nation=(.*?)\\]", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[region\\](.*?)\\[\\/region\\]", CLICKY_REGION_MODE);
         holder = linkifyHelper(c, t, holder, "\\[region=(.*?)\\]", CLICKY_REGION_MODE);
 
