@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -337,6 +340,13 @@ public class SparkleHelper {
 
     }
 
+    /**
+     * Formats a pie chart in a standardized way
+     * @param c Context
+     * @param p Pie chart
+     * @param chartLabels x-labels
+     * @return the PieChart, whose data must be set and invalidated
+     */
     public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels)
     {
         Legend cLegend = p.getLegend();
@@ -391,6 +401,42 @@ public class SparkleHelper {
 
         Date d = cal.getTime();
         return prettyTime.format(d);
+    }
+
+    /**
+     * Formats a pie chart displaying current voting breakdown for a WA resolution.
+     * @param c Context
+     * @param p Pie chart
+     * @param voteFor Number of votes for
+     * @param voteAgainst Number of votes against
+     */
+    public static void setWaVotingBreakdown(Context c, PieChart p, float voteFor, float voteAgainst)
+    {
+        // Calculate percentages (floating point math FTW!)
+        float voteTotal = voteFor + voteAgainst;
+        float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
+        float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
+
+        List<String> chartLabels = new ArrayList<String>();
+        List<Entry> chartEntries = new ArrayList<Entry>();
+
+        // Set data
+        int i = 0;
+        chartLabels.add(c.getString(R.string.wa_for));
+        chartEntries.add(new Entry((float) votePercentFor, i++));
+        chartLabels.add(c.getString(R.string.wa_against));
+        chartEntries.add(new Entry((float) votePercentAgainst, i++));
+
+        // Set colour and disable chart labels
+        PieDataSet dataSet = new PieDataSet(chartEntries, "");
+        dataSet.setDrawValues(false);
+        dataSet.setColors(SparkleHelper.waColours, c);
+        PieData dataFull = new PieData(chartLabels, dataSet);
+
+        // formatting
+        p = SparkleHelper.getFormattedPieChart(c, p, chartLabels);
+        p.setData(dataFull);
+        p.invalidate();
     }
 
     /**

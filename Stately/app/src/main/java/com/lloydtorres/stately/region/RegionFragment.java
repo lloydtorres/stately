@@ -58,6 +58,7 @@ public class RegionFragment extends Fragment {
 
     // sub fragments
     private RegionOverviewSubFragment regionOverviewSubFragment;
+    private RegionCommunitySubFragment regionCommunitySubFragment;
     private RegionGovernanceSubFragment regionGovernanceSubFragment;
     private RegionHappeningSubFragment regionHappeningSubFragment;
 
@@ -227,6 +228,9 @@ public class RegionFragment extends Fragment {
         regionOverviewSubFragment = new RegionOverviewSubFragment();
         regionOverviewSubFragment.setRegion(mRegion);
 
+        regionCommunitySubFragment = new RegionCommunitySubFragment();
+        regionCommunitySubFragment.setRegion(mRegion);
+
         regionGovernanceSubFragment = new RegionGovernanceSubFragment();
         regionGovernanceSubFragment.setRegion(mRegion);
 
@@ -340,6 +344,8 @@ public class RegionFragment extends Fragment {
             {
                 case OVERVIEW_TAB:
                     return regionOverviewSubFragment;
+                case COMMUNITY_TAB:
+                    return regionCommunitySubFragment;
                 case GOV_TAB:
                     return regionGovernanceSubFragment;
                 case HAPPEN_TAB:

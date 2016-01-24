@@ -217,7 +217,7 @@ public class ResolutionActivity extends AppCompatActivity {
         voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         SparkleHelper.setBbCodeFormatting(this, content, mResolution.content);
-        setVotingBreakdown(mResolution.votesFor, mResolution.votesAgainst);
+        SparkleHelper.setWaVotingBreakdown(this, votingBreakdown, mResolution.votesFor, mResolution.votesAgainst);
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
 
         mSwipeRefreshLayout.setRefreshing(false);
@@ -259,40 +259,6 @@ public class ResolutionActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    /**
-     * Initialize the voting breakdown pie chart.
-     * @param voteFor
-     * @param voteAgainst
-     */
-    private void setVotingBreakdown(int voteFor, int voteAgainst)
-    {
-        // Calculate percentages (floating point math FTW!)
-        float voteTotal = voteFor + voteAgainst;
-        float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
-        float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
-
-        List<String> chartLabels = new ArrayList<String>();
-        List<Entry> chartEntries = new ArrayList<Entry>();
-
-        // Set data
-        int i = 0;
-        chartLabels.add(getString(R.string.wa_for));
-        chartEntries.add(new Entry((float) votePercentFor, i++));
-        chartLabels.add(getString(R.string.wa_against));
-        chartEntries.add(new Entry((float) votePercentAgainst, i++));
-
-        // Set colour and disable chart labels
-        PieDataSet dataSet = new PieDataSet(chartEntries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(SparkleHelper.waColours, this);
-        PieData dataFull = new PieData(chartLabels, dataSet);
-
-        // formatting
-        votingBreakdown = SparkleHelper.getFormattedPieChart(this, votingBreakdown, chartLabels);
-        votingBreakdown.setData(dataFull);
-        votingBreakdown.invalidate();
     }
 
     /**

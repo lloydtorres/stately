@@ -12,7 +12,7 @@ import org.simpleframework.xml.Root;
  * An option in the regional poll, along with current vote count.
  */
 @Root(name="OPTION", strict=false)
-public class PollOption implements Parcelable {
+public class PollOption implements Parcelable, Comparable<PollOption> {
 
     @Attribute(required=false)
     public int id;
@@ -54,4 +54,9 @@ public class PollOption implements Parcelable {
             return new PollOption[size];
         }
     };
+
+    @Override
+    public int compareTo(PollOption another) {
+        return this.id - another.id;
+    }
 }

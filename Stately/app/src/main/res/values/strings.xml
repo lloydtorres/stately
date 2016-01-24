@@ -133,9 +133,12 @@
 
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
+    <string name="region_option_index">Option %d</string>
     <string name="card_region_wa_vote">%1$s Resolution</string>
-    <string name="region_wa_filler">Among %1$s nations, voting is currently %2$d FOR to %3$d AGAINST.</string>
+    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d FOR to %2$d AGAINST.</string>
     <string name="card_region_wa_link">Open the %1$s resolution.</string>
+    <string name="poll_votes_template">%1$s (%2$d %3$s)</string>
+    <string name="votes_null">No votes have been recorded yet!</string>
 
     <string name="card_region_officers">Officers</string>
     <string name="region_filler_no_officers">%1$s doesn\'t have any officers.</string>
