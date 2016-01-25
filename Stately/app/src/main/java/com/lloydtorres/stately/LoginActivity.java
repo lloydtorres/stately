@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             String name = username.getText().toString();
             if (SparkleHelper.isValidName(name) && name.length() > 0)
             {
-                name = name.toLowerCase().replace(" ","_");
+                name = SparkleHelper.getIdFromName(name);
                 queryNation(view, name);
             }
             else

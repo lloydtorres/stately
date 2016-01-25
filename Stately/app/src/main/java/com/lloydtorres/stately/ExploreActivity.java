@@ -103,7 +103,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     {
         if (SparkleHelper.isValidName(name) && name.length() > 0)
         {
-            name = name.toLowerCase().replace(" ","_");
+            name = SparkleHelper.getIdFromName(name);
             switch (mode)
             {
                 case SparkleHelper.CLICKY_NATION_MODE:

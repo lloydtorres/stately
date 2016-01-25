@@ -199,6 +199,16 @@ public class SparkleHelper {
      */
 
     /**
+     * Turns a proper name into a NationStates ID.
+     * @param n the name
+     * @return the NS ID
+     */
+    public static String getIdFromName(String n)
+    {
+        return n.toLowerCase().replace(" ","_");
+    }
+
+    /**
      * This turns a NationStates ID like greater_tern to a nicely formatted string.
      * In the example's case, greater_tern -> Greater Tern
      * @param id The ID to format.
