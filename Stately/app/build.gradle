@@ -32,6 +32,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
 
     compile 'com.google.guava:guava:19.0'
+    compile 'com.github.orangegangsters:swipy:1.2.2@aar'
     compile "org.ocpsoft.prettytime:prettytime:3.2.7.Final"
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
