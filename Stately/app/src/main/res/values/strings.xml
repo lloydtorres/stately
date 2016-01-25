@@ -146,6 +146,8 @@
     <string name="region_eo">Embassy opened with %1$s.</string>
     <string name="region_ec">Embassy closed with %1$s.</string>
 
+    <string name="region_rmb">RMB: %1$s</string>
+
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>

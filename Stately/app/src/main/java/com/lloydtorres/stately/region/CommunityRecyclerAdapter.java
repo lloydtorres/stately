@@ -48,7 +48,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         context = c;
         // This adds a button to the RMB
-        cards.add("");
+        cards.add(mRegion.name);
 
         if (mRegion.poll != null)
         {
@@ -95,6 +95,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         switch (holder.getItemViewType()) {
             case BUTTON_CARD:
                 MessageBoardCard rmbCard = (MessageBoardCard) holder;
+                rmbCard.init((String) cards.get(position));
                 break;
             case POLL_CARD:
                 PollCard pollCard = (PollCard) holder;
@@ -136,6 +137,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private Context context;
         private CardView buttonCard;
+        private String regionName;
 
         public MessageBoardCard(Context c, View v) {
             super(v);
@@ -144,9 +146,16 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             v.setOnClickListener(this);
         }
 
+        public void init(String n)
+        {
+            regionName = n;
+        }
+
         @Override
         public void onClick(View v) {
-            //@TODO
+            Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
+            messageBoardActivity.putExtra("regionName", regionName);
+            context.startActivity(messageBoardActivity);
         }
     }
 
