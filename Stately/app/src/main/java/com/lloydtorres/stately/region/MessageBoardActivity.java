@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +22,6 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.RegionMessages;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -40,7 +39,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private String regionName;
     private Set<Integer> uniqueEnforcer;
 
-    private SwipyRefreshLayout mSwipyRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -49,7 +48,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_refreshviewdouble);
+        setContentView(R.layout.fragment_refreshview);
 
         if (getIntent() != null)
         {
@@ -65,34 +64,31 @@ public class MessageBoardActivity extends AppCompatActivity {
             rebuildUniqueEnforcer();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshviewdouble_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setToolbar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshviewdouble_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setup refresher to requery for resolution on swipe
-        mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.refreshviewdouble_refresher);
-        mSwipyRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
-        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction.equals(SwipyRefreshLayoutDirection.BOTTOM)) {
-                    queryMessages(0, false);
-                }
+            public void onRefresh() {
+                queryMessages(0, false);
             }
         });
 
         if (messages.posts.size() <= 0)
         {
             // hack to get swipyrefreshlayout to show
-            mSwipyRefreshLayout.post(new Runnable() {
+            mSwipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
-                    mSwipyRefreshLayout.setRefreshing(true);
+                    mSwipeRefreshLayout.setRefreshing(true);
                 }
             });
             queryMessages(0, true);
@@ -120,7 +116,7 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryMessages(final int offset, final boolean initialRun)
     {
-        final View fView = findViewById(R.id.refreshviewdouble_main);
+        final View fView = findViewById(R.id.refreshview_main);
 
         // stop if this is the 11th time the query has been called
         if (offset >= 110)
@@ -145,7 +141,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            mSwipyRefreshLayout.setRefreshing(false);
+                            mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
 
                         }
@@ -154,7 +150,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
-                mSwipyRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
@@ -211,7 +207,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         Collections.sort(messages.posts);
         mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-        mSwipyRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     /**
