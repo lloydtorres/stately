@@ -18,11 +18,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.RegionMessages;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.simpleframework.xml.core.Persister;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -31,7 +38,7 @@ import org.simpleframework.xml.core.Persister;
 public class MessageBoardActivity extends AppCompatActivity {
     private RegionMessages messages;
     private String regionName;
-    private int offsetCount;
+    private Set<Integer> uniqueEnforcer;
 
     private SwipyRefreshLayout mSwipyRefreshLayout;
 
@@ -46,13 +53,16 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         if (getIntent() != null)
         {
+            messages = new RegionMessages();
+            messages.posts = new ArrayList<Post>();
             regionName = getIntent().getStringExtra("regionName");
+            uniqueEnforcer = new HashSet<Integer>();
         }
         if (savedInstanceState != null)
         {
             messages = savedInstanceState.getParcelable("messages");
             regionName = savedInstanceState.getString("regionName");
-            offsetCount = savedInstanceState.getInt("offsetCount");
+            rebuildUniqueEnforcer();
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.refreshviewdouble_toolbar);
@@ -67,6 +77,31 @@ public class MessageBoardActivity extends AppCompatActivity {
         // Setup refresher to requery for resolution on swipe
         mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.refreshviewdouble_refresher);
         mSwipyRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction.equals(SwipyRefreshLayoutDirection.BOTTOM)) {
+                    queryMessages(0, false);
+                }
+            }
+        });
+
+        if (messages.posts.size() <= 0)
+        {
+            // hack to get swipyrefreshlayout to show
+            mSwipyRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipyRefreshLayout.setRefreshing(true);
+                }
+            });
+            queryMessages(0, true);
+        }
+        // Otherwise just show it normally
+        else
+        {
+            refreshRecycler();
+        }
     }
 
     public void setToolbar(Toolbar t) {
@@ -79,9 +114,21 @@ public class MessageBoardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void queryMessages(int offset)
+    /**
+     * Get RMB messages from NationStates
+     * @param offset the number of messages to skip
+     */
+    private void queryMessages(final int offset, final boolean initialRun)
     {
-        final View fView = findViewById(R.id.wa_council_main);
+        final View fView = findViewById(R.id.refreshviewdouble_main);
+
+        // stop if this is the 11th time the query has been called
+        if (offset >= 110)
+        {
+            SparkleHelper.makeSnackbar(fView, getString(R.string.rmb_backload_error));
+            refreshRecycler();
+            return;
+        }
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset);
@@ -94,10 +141,11 @@ public class MessageBoardActivity extends AppCompatActivity {
                         Persister serializer = new Persister();
                         try {
                             messageResponse = serializer.read(RegionMessages.class, response);
-                            // @TODO
+                            processMessageResponse(messageResponse, offset, initialRun);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
+                            mSwipyRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
 
                         }
@@ -106,6 +154,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                mSwipyRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
                 }
@@ -117,6 +166,65 @@ public class MessageBoardActivity extends AppCompatActivity {
         });
 
         queue.add(stringRequest);
+    }
+
+    /**
+     * Process the response after querying for RMB messages.
+     * Depending on the response, we may have to check again if there's more messages to get.
+     * @param m The response
+     * @param offset The current offset
+     * @param initialRun if this is the first time the process is being run
+     */
+    private void processMessageResponse(RegionMessages m, int offset, boolean initialRun)
+    {
+        int uniqueMessages = 0;
+
+        // Only add unique posts to our list
+        for (Post p : m.posts)
+        {
+            if (!uniqueEnforcer.contains(p.id))
+            {
+                messages.posts.add(p);
+                uniqueEnforcer.add(p.id);
+                uniqueMessages++;
+            }
+        }
+
+        // If this is the initial run, don't keep going
+        if (!initialRun && uniqueMessages >= 10)
+        {
+            // In this case, all the messages were unique, so there may be more messages to load
+            queryMessages(offset+10, false);
+        }
+        else
+        {
+            // We've reached the point where we already have the messages, so put everything back together
+            refreshRecycler();
+        }
+    }
+
+    /**
+     * Refreshes the contents of the recycler
+     */
+    private void refreshRecycler()
+    {
+        Collections.sort(messages.posts);
+        mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mSwipyRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * This function rebuilds the set used to track unique messages after a restart.
+     * Because set isn't parcelable :(
+     */
+    private void rebuildUniqueEnforcer()
+    {
+        uniqueEnforcer = new HashSet<Integer>();
+        for (Post p : messages.posts)
+        {
+            uniqueEnforcer.add(p.id);
+        }
     }
 
     @Override
@@ -135,7 +243,6 @@ public class MessageBoardActivity extends AppCompatActivity {
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt("offsetCount", offsetCount);
         if (messages != null)
         {
             savedInstanceState.putParcelable("messages", messages);
@@ -153,10 +260,10 @@ public class MessageBoardActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
         {
-            offsetCount = savedInstanceState.getInt("offsetCount");
             if (messages == null)
             {
                 messages = savedInstanceState.getParcelable("messages");
+                rebuildUniqueEnforcer();
             }
             if (regionName == null)
             {

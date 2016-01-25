@@ -22,7 +22,7 @@ public class RegionMessages implements Parcelable {
                                             + "&v=" + SparkleHelper.API_VERSION;
 
     @ElementList(name="MESSAGES", required=false)
-    List<Post> posts;
+    public List<Post> posts;
 
     public RegionMessages() { super(); }
 

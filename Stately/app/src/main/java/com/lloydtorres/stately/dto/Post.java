@@ -63,7 +63,7 @@ public class Post implements Parcelable, Comparable<Post> {
     public int compareTo(Post another) {
         if (this.timestamp > another.timestamp)
         {
-            return -1;
+            return 1;
         }
         else if (this.timestamp == another.timestamp)
         {
@@ -71,7 +71,7 @@ public class Post implements Parcelable, Comparable<Post> {
         }
         else
         {
-            return 1;
+            return -1;
         }
     }
 }
