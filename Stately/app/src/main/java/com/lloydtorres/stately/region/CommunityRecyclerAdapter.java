@@ -55,13 +55,13 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             cards.add(mRegion.poll);
         }
 
-        if (mRegion.gaVote != null)
+        if (mRegion.gaVote != null && (mRegion.gaVote.voteFor + mRegion.gaVote.voteAgainst) > 0)
         {
             mRegion.gaVote.chamber = Assembly.GENERAL_ASSEMBLY;
             cards.add(mRegion.gaVote);
         }
 
-        if (mRegion.scVote != null)
+        if (mRegion.scVote != null && (mRegion.scVote.voteFor + mRegion.scVote.voteAgainst) > 0)
         {
             mRegion.scVote.chamber = Assembly.SECURITY_COUNCIL;
             cards.add(mRegion.scVote);
