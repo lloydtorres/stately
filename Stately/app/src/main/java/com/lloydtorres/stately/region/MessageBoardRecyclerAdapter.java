@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.region;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import java.util.List;
  * An adapter for the recyclerview in MessageBoardActivity.
  */
 public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int EMPTY_INDICATOR = -1;
+
     private Context context;
     private List<Post> messages;
 
@@ -25,6 +28,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     {
         context = c;
         messages = p;
+
+        if (messages.size() <= 0)
+        {
+            Post np = new Post();
+            np.id = EMPTY_INDICATOR;
+            messages.add(np);
+        }
     }
 
     @Override
@@ -63,9 +73,19 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(Post p)
         {
-            SparkleHelper.activityLinkBuilder(context, cardAuthor, p.name, p.name, SparkleHelper.getNameFromId(p.name), SparkleHelper.CLICKY_NATION_MODE);
-            cardTime.setText(SparkleHelper.getReadableDateFromUTC(p.timestamp));
-            SparkleHelper.setBbCodeFormatting(context, cardContent, p.message);
+            if (p.id != EMPTY_INDICATOR)
+            {
+                SparkleHelper.activityLinkBuilder(context, cardAuthor, p.name, p.name, SparkleHelper.getNameFromId(p.name), SparkleHelper.CLICKY_NATION_MODE);
+                cardTime.setText(SparkleHelper.getReadableDateFromUTC(p.timestamp));
+                SparkleHelper.setBbCodeFormatting(context, cardContent, p.message);
+            }
+            else
+            {
+                cardTime.setVisibility(View.GONE);
+                cardAuthor.setVisibility(View.GONE);
+                cardContent.setText(context.getString(R.string.rmb_no_content));
+                cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+            }
         }
     }
 
