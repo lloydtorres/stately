@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
@@ -26,6 +27,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpCookie;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,10 @@ import java.util.Map;
  * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
+    // Cookie shenanigans
     private static final String LOGIN_TARGET = "https://www.nationstates.net/";
+    private static final URI LOGIN_URI = URI.create(LOGIN_TARGET);
+    private static final String LOGIN_DOMAIN = "nationstates.net";
     private CookieManager cookies;
 
     private EditText username;
@@ -57,8 +62,76 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set cookie handler
         cookies = new CookieManager();
+        cookies.getCookieStore().removeAll();
         cookies.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookies);
+
+        // If user login exists, try logging in first
+        UserLogin u = SparkleHelper.getActiveUser(this);
+        if (u != null)
+        {
+            verifyAutologin(u.name, u.autologin);
+        }
+    }
+
+    /**
+     * Verify that the stored autologin cookie is correct.
+     * Proceeds to load nation data if correct, resets otherwise.
+     * @param name Name of the nation
+     */
+    private void verifyAutologin(final String name, final String autologin)
+    {
+        setLoginState(true);
+
+        HttpCookie cookie = new HttpCookie("autologin", autologin);
+        cookie.setPath("/");
+        cookie.setDomain(LOGIN_DOMAIN);
+        cookies.getCookieStore().add(LOGIN_URI, cookie);
+
+        final View view = findViewById(R.id.activity_login_main);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = LOGIN_TARGET;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (handleCookieResponse())
+                        {
+                            queryNation(view, name);
+                        }
+                        else
+                        {
+                            // Reset if not successful
+                            setLoginState(false);
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_autologin));
+                            SparkleHelper.removeActiveUser(getApplicationContext());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                setLoginState(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Cookie", String.format("autologin=%s", autologin));
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
     }
 
     /**
@@ -155,16 +228,23 @@ public class LoginActivity extends AppCompatActivity {
      */
     private boolean handleCookieResponse()
     {
+        boolean autologinFlag = false;
+        boolean pinFlag = false;
+
         List<HttpCookie> cookieResponse = cookies.getCookieStore().getCookies();
         for (HttpCookie c : cookieResponse)
         {
             if (c.getName().equals("autologin"))
             {
                 autologin = c.getValue();
-                return true;
+                autologinFlag =  true;
+            }
+            if (c.getName().equals("pin"))
+            {
+                pinFlag =  true;
             }
         }
-        return false;
+        return autologinFlag && pinFlag;
     }
 
     /**
