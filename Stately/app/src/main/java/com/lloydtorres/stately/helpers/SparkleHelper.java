@@ -397,6 +397,11 @@ public class SparkleHelper {
         c.startActivity(exploreActivityLaunch);
     }
 
+    /**
+     * Calculates the remaining time for a WA resolution in human-readable form.
+     * @param hoursElapsed Number of hours passed since voting started
+     * @return Time remaining in human-readable form
+     */
     public static String calculateResolutionEnd(int hoursElapsed)
     {
         Calendar cal = new GregorianCalendar();
