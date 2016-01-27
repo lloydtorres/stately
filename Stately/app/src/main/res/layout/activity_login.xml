@@ -55,6 +55,6 @@
         android:text="@string/log_in"
         android:layout_gravity="center_horizontal"
         android:textSize="17sp"
-        android:onClick="verifyLogin"/>
+        android:onClick="verifyUsername"/>
 
 </LinearLayout>

@@ -22,12 +22,23 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Lloyd on 2016-01-13.
  * The launcher activity for Stately!
  * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
+    private static final String LOGIN_TARGET = "https://www.nationstates.net/";
+    private CookieManager cookies;
+
     private EditText username;
     private EditText password;
     private Button login;
@@ -42,14 +53,19 @@ public class LoginActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.field_username);
         password = (EditText) findViewById(R.id.field_password);
         login = (Button) findViewById(R.id.login_button);
+
+        // Set cookie handler
+        cookies = new CookieManager();
+        cookies.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookies);
     }
 
     /**
      * Callback for login button.
-     * Verifies if the input is valid. If yes, start getting nation data.
+     * Verifies if the input is valid. If yes, verify password next.
      * @param view
      */
-    public void verifyLogin(View view)
+    public void verifyUsername(View view)
     {
         if (!getLoginState())
         {
@@ -57,8 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             String name = username.getText().toString();
             if (SparkleHelper.isValidName(name) && name.length() > 0)
             {
-                name = SparkleHelper.getIdFromName(name);
-                queryNation(view, name);
+                verifyPassword(view, name);
             }
             else
             {
@@ -66,6 +81,89 @@ public class LoginActivity extends AppCompatActivity {
                 SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
             }
         }
+    }
+
+    /**
+     * This verifies the password entered by the user. If so, download the actual nation data.
+     * @param view View
+     * @param name Nation name
+     */
+    private void verifyPassword(final View view, final String name)
+    {
+        final String pass = password.getText().toString();
+        cookies.getCookieStore().removeAll();
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = LOGIN_TARGET;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (handleCookieResponse(name))
+                        {
+                            queryNation(view, name);
+                        }
+                        else
+                        {
+                            setLoginState(false);
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                setLoginState(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("logging_in", "1");
+                params.put("nation", name);
+                params.put("password", pass);
+                params.put("submit", "Login");
+                params.put("autologin", "yes");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+    /**
+     * This verifies if the login was successful, by checking if the autologin cookie was created.
+     * Also performs operations to note the username and password.
+     * @param name Nation name
+     * @return If login was successful or not
+     */
+    private boolean handleCookieResponse(String name)
+    {
+        List<HttpCookie> cookieResponse = cookies.getCookieStore().getCookies();
+        for (HttpCookie c : cookieResponse)
+        {
+            if (c.getName().equals("autologin"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -77,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     private void queryNation(final View view, String nationName)
     {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String targetURL = String.format(Nation.QUERY, nationName);
+        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(nationName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
