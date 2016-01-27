@@ -367,7 +367,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.error_generic));
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
         });

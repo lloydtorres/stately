@@ -298,7 +298,7 @@ public class RegionFragment extends Fragment {
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });

@@ -227,7 +227,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 }
                 else
                 {
-                    setExploreStatus(getString(R.string.error_generic));
+                    setExploreStatus(getString(R.string.login_error_generic));
                 }
             }
         });
