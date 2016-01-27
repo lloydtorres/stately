@@ -2,6 +2,8 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spannable;
@@ -23,6 +25,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.ExploreActivity;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.UserLogin;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -91,6 +94,11 @@ public class SparkleHelper {
     public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "7";
+
+    // Keys to user name and autologin
+    public static final String VAR_NAME = "var_name";
+    public static final String VAR_AUTOLOGIN = "var_autologin";
+
     // String template used to get nation banners from NationStates
     // @param: banner_id
     public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
@@ -205,7 +213,7 @@ public class SparkleHelper {
      */
     public static String getIdFromName(String n)
     {
-        return n.toLowerCase().replace(" ","_");
+        return n.toLowerCase().replace(" ", "_");
     }
 
     /**
@@ -383,6 +391,55 @@ public class SparkleHelper {
      * UTILITY
      * These are convenient tools to call from any class.
      */
+
+    /**
+     * Sets the currently logged-in user in shared prefs;
+     * @param c App context
+     * @param name User name
+     * @param autologin User autologin cookie
+     */
+    public static void setActiveUser(Context c, String name, String autologin)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(VAR_NAME, name);
+        editor.putString(VAR_AUTOLOGIN, autologin);
+        editor.commit();
+    }
+
+    /**
+     * Retrieve information about the currently logged in user
+     * @param c App context
+     * @return A UserLogin object with their name and autologin
+     */
+    public static UserLogin getActiveUser(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        String name = storage.getString(VAR_NAME, null);
+        String autologin = storage.getString(VAR_AUTOLOGIN, null);
+        if (name != null && autologin != null)
+        {
+            UserLogin u = new UserLogin();
+            u.name = name;
+            u.autologin = autologin;
+            return u;
+        }
+
+        return null;
+    }
+
+    /**
+     * Removes data about the logged in user from shared prefs.
+     * @param c App context
+     */
+    public static void removeActiveUser(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.remove("var_name");
+        editor.remove("var_autologin");
+        editor.commit();
+    }
 
     /**
      * Starts the ExploreNationActivity for the given nation ID.

@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button login;
     private boolean isLoggingIn;
+    private String autologin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (handleCookieResponse(name))
+                        if (handleCookieResponse())
                         {
                             queryNation(view, name);
                         }
@@ -150,16 +151,16 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This verifies if the login was successful, by checking if the autologin cookie was created.
      * Also performs operations to note the username and password.
-     * @param name Nation name
      * @return If login was successful or not
      */
-    private boolean handleCookieResponse(String name)
+    private boolean handleCookieResponse()
     {
         List<HttpCookie> cookieResponse = cookies.getCookieStore().getCookies();
         for (HttpCookie c : cookieResponse)
         {
             if (c.getName().equals("autologin"))
             {
+                autologin = c.getValue();
                 return true;
             }
         }
@@ -172,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param view
      * @param nationName
      */
-    private void queryNation(final View view, String nationName)
+    private void queryNation(final View view, final String nationName)
     {
         RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(nationName));
@@ -202,6 +203,8 @@ public class LoginActivity extends AppCompatActivity {
                                     nationResponse.govtPriority = getString(R.string.social_policy);
                                     break;
                             }
+
+                            SparkleHelper.setActiveUser(getApplicationContext(), nationName, autologin);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                             nationActivityLaunch.putExtra("mNationData", nationResponse);
@@ -253,10 +256,14 @@ public class LoginActivity extends AppCompatActivity {
     {
         if (stat)
         {
+            username.setVisibility(View.GONE);
+            password.setVisibility(View.GONE);
             login.setText(getString(R.string.log_in_load));
         }
         else
         {
+            username.setVisibility(View.VISIBLE);
+            password.setVisibility(View.VISIBLE);
             login.setText(getString(R.string.log_in));
         }
         isLoggingIn = stat;
