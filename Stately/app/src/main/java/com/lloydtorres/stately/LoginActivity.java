@@ -74,10 +74,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param view
      * @param nationName
      */
-    private void queryNation(View view, String nationName)
+    private void queryNation(final View view, String nationName)
     {
-        final View fView = view;
-
         RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Nation.QUERY, nationName);
 
@@ -114,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                             setLoginState(false);
                         }
                     }
@@ -124,15 +122,15 @@ public class LoginActivity extends AppCompatActivity {
                 SparkleHelper.logError(error.toString());
                 setLoginState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_404));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });

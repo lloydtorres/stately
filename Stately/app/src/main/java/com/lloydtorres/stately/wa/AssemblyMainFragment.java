@@ -119,11 +119,8 @@ public class AssemblyMainFragment extends Fragment {
      * @param view
      * @param chamberId
      */
-    private void queryWorldAssemblyHeavy(View view, int chamberId)
+    private void queryWorldAssemblyHeavy(final View view, final int chamberId)
     {
-        final View fView = view;
-        final int chamberMode = chamberId;
-
         RequestQueue queue = Volley.newRequestQueue(this.getActivity());
         String targetURL = String.format(Assembly.QUERY, chamberId);
 
@@ -136,14 +133,14 @@ public class AssemblyMainFragment extends Fragment {
                         try {
                             waResponse = serializer.read(Assembly.class, response);
 
-                            if (chamberMode == Assembly.GENERAL_ASSEMBLY)
+                            if (chamberId == Assembly.GENERAL_ASSEMBLY)
                             {
                                 // Once a response is obtained for the General Assembly,
                                 // start querying for the Security Council
                                 setGeneralAssembly(waResponse);
                                 queryWorldAssemblyHeavy(mView, Assembly.SECURITY_COUNCIL);
                             }
-                            else if (chamberMode == Assembly.SECURITY_COUNCIL)
+                            else if (chamberId == Assembly.SECURITY_COUNCIL)
                             {
                                 // Once a response is obtained for the Security Council,
                                 // setup the actual view
@@ -154,7 +151,7 @@ public class AssemblyMainFragment extends Fragment {
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             mSwipeRefreshLayout.setRefreshing(false);
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -163,11 +160,11 @@ public class AssemblyMainFragment extends Fragment {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });

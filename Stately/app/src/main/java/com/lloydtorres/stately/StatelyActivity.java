@@ -322,7 +322,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         final View fView = findViewById(R.id.drawer_layout);
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String targetURL = String.format(Nation.QUERY, mNation.name.toLowerCase().replace(" ", "_"));
+        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(mNation.name));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

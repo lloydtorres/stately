@@ -257,12 +257,10 @@ public class RegionFragment extends Fragment {
         mActivity = null;
     }
 
-    private void updateRegion(View view)
+    private void updateRegion(final View view)
     {
-        final View fView = view;
-
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String targetURL = String.format(Region.QUERY, mRegionName.toLowerCase().replace(" ", "_"));
+        String targetURL = String.format(Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -280,11 +278,11 @@ public class RegionFragment extends Fragment {
                             }
 
                             mRegion = regionResponse;
-                            getAllRegionViews(fView);
+                            getAllRegionViews(view);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -292,15 +290,15 @@ public class RegionFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.region_404));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.region_404));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.error_generic));
                 }
             }
         });
