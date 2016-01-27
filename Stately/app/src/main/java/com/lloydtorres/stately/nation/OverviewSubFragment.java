@@ -144,11 +144,11 @@ public class OverviewSubFragment extends Fragment {
         time = (TextView) view.findViewById(R.id.nation_time);
         if (mNation.foundedAgo.equals("0"))
         {
-            time.setText(String.format(getString(R.string.nation_time_founded), getString(R.string.nation_time_immemorial), mNation.lastActivityAgo));
+            time.setText(String.format(getString(R.string.nation_time_founded), getString(R.string.nation_time_immemorial), mNation.lastActivityAgo.toLowerCase()));
         }
         else
         {
-            time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo));
+            time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo.toLowerCase()));
         }
     }
 
