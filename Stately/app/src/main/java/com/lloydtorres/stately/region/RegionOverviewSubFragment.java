@@ -71,7 +71,7 @@ public class RegionOverviewSubFragment extends Fragment {
             }
             else
             {
-                delegate.setText(getString(R.string.region_filler_none));
+                founder.setText(getString(R.string.region_filler_none));
             }
 
             power = (TextView) view.findViewById(R.id.region_power);
