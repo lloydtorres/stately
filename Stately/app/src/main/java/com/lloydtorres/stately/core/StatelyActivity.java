@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.core;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -27,7 +27,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;

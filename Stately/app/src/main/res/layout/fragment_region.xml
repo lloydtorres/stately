@@ -6,7 +6,7 @@
     android:fitsSystemWindows="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StatelyActivity">
+    tools:context=".core.StatelyActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/region_appbar"
@@ -112,6 +112,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="#EEE"
         android:layout_weight="1"
-        tools:context=".StatelyActivity"/>
+        tools:context=".core.StatelyActivity"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.lloydtorres.stately;
+package com.lloydtorres.stately.explore;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**

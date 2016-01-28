@@ -23,9 +23,9 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
-import com.lloydtorres.stately.ExploreActivity;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.explore.ExploreActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
