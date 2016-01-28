@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Stately</string>
 
+    <!-- Login -->
     <string name="username_hint">Nation Name</string>
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
@@ -12,6 +13,7 @@
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
     <string name="login_error_generic">An error occurred. Please try again.</string>
 
+    <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -23,6 +25,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Log Out</string>
 
+    <!-- Explorer -->
     <string name="explore_search_text">Go to&#8230;</string>
     <string name="explore_nation">Nation</string>
     <string name="explore_region">Region</string>
@@ -31,29 +34,35 @@
     <string name="explore_default">Exploring&#8230;</string>
     <string name="explore_error_404_nation">Nation not found.</string>
 
+    <!-- Logout confirm -->
     <string name="logout_confirm">Log out?</string>
 
+    <!-- Nation main card -->
     <string name="nation_wa_member">WA Member</string>
     <string name="nation_wa_delegate">WA Delegate</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
     <string name="nation_time_immemorial">since time immemorial</string>
 
+    <!-- Nation freedom card -->
     <string name="overview_label_civrights">Civil Rights</string>
     <string name="overview_label_economy">Economy</string>
     <string name="overview_label_polifree">Political Freedom</string>
 
+    <!-- Nation government card -->
     <string name="card_overview_gov_title">Government</string>
     <string name="card_overview_gov_leader">Leader</string>
     <string name="card_overview_gov_capital">Capital</string>
     <string name="card_overview_gov_priority">Priority</string>
     <string name="card_overview_gov_tax">Income Tax</string>
 
+    <!-- Nation economy card -->
     <string name="card_overview_econ_title">Economy</string>
     <string name="card_overview_econ_currency">Currency</string>
     <string name="card_overview_econ_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_overview_econ_industry">Major Industry</string>
     <string name="card_overview_econ_income">Average Income</string>
 
+    <!-- Nation WA card -->
     <string name="card_overview_wa_title">World Assembly</string>
     <string name="card_overview_wa_overview">%1$s is a member of the World Assembly.</string>
     <string name="card_overview_wa_delegate">\n\n%1$s also represents %2$s in the World Assembly as its delegate.</string>
@@ -65,6 +74,7 @@
     <string name="wa_vote_state_for">FOR</string>
     <string name="wa_vote_state_against">AGAINST</string>
 
+    <!-- Nation other card -->
     <string name="card_overview_other_title">Other Information</string>
     <string name="card_overview_other_demonym">Demonym</string>
     <string name="card_overview_other_demonym_txt1">%1$s (noun, plural %2$s), %3$s (adjective)</string>
@@ -72,14 +82,17 @@
     <string name="card_overview_other_religion">Religion</string>
     <string name="card_overview_other_animal">National Animal</string>
 
+    <!-- Nation subfragment cards -->
     <string name="card_main_title_summary">Summary</string>
     <string name="chart_inner_text">%1$s\n%2$.1f%%</string>
 
+    <!-- Nation people subfragment -->
     <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
     <string name="card_people_mortality_title">Mortality</string>
     <string name="animal_attack_original">Animal Attack</string>
     <string name="animal_attack_madlibs">%1$s Attack</string>
 
+    <!-- Nation government subfragment -->
     <string name="card_government_expenditures_title">Expenditures</string>
     <string name="card_government_expenditures_budget">Total</string>
     <string name="card_government_expenditures_budget_flavour">%1$s (%2$.1f%% of GDP)</string>
@@ -98,6 +111,7 @@
     <string name="spirituality">Spirituality</string>
     <string name="welfare">Welfare</string>
 
+    <!-- Nation economy subfragment -->
     <string name="card_economy_analysis_title">Analysis</string>
     <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_economy_analysis_per_capita">GDP Per Capita</string>
@@ -111,6 +125,7 @@
     <string name="private_sector">Private</string>
     <string name="black_market">Black Market</string>
 
+    <!-- Large number suffixes -->
     <string name="million">million</string>
     <string name="billion">billion</string>
     <string name="trillion">trillion</string>
@@ -118,9 +133,11 @@
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
+    <!-- Region -->
     <string name="region_404">Region not found.</string>
     <string name="region_pop">Nation</string>
 
+    <!-- Region overview subfragment -->
     <string name="card_region_quick_facts_title">Quick Facts</string>
     <string name="card_region_wa_delegate">WA Delegate</string>
     <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
@@ -131,6 +148,7 @@
     <string name="card_region_factbook_title">Factbook</string>
     <string name="card_region_tags_title">Tags</string>
 
+    <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
     <string name="region_option_index">Option %d</string>
@@ -140,16 +158,19 @@
     <string name="poll_votes_template">%1$s (%2$d %3$s)</string>
     <string name="votes_null">No votes have been recorded yet!</string>
 
+    <!-- Region message board -->
+    <string name="region_rmb">RMB: %1$s</string>
+    <string name="rmb_no_content">Nothing to see here!</string>
+    <string name="rmb_backload_error">Too many messages to load, some were skipped.</string>
+
+    <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>
     <string name="region_filler_no_officers">%1$s doesn\'t have any officers.</string>
     <string name="card_region_embassies">Embassies</string>
     <string name="region_eo">Embassy opened with %1$s.</string>
     <string name="region_ec">Embassy closed with %1$s.</string>
 
-    <string name="region_rmb">RMB: %1$s</string>
-    <string name="rmb_no_content">Nothing to see here!</string>
-    <string name="rmb_backload_error">Too many messages to load, some were skipped.</string>
-
+    <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>
