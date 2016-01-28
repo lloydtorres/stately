@@ -42,7 +42,7 @@
                         android:textStyle="italic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#777"
+                        android:textColor="@color/colorSecondaryText"
                         tools:text="@string/wa_nominee_template" />
                     <TextView
                         android:id="@+id/wa_proposed_by"
@@ -51,7 +51,7 @@
                         android:textStyle="italic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#777"
+                        android:textColor="@color/colorSecondaryText"
                         tools:text="@string/wa_proposed" />
                     <TextView
                         android:id="@+id/wa_activetime"
@@ -59,7 +59,7 @@
                         android:textStyle="italic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#777"
+                        android:textColor="@color/colorSecondaryText"
                         tools:text="@string/wa_voting_time" />
                 </LinearLayout>
 

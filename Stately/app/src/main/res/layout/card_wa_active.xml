@@ -43,7 +43,7 @@
                 android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#777"
+                android:textColor="@color/colorSecondaryText"
                 tools:text="@string/wa_voting_time" />
         </LinearLayout>
 

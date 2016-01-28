@@ -29,7 +29,7 @@
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#777"
+            android:textColor="@color/colorSecondaryText"
             tools:text="@string/issue_number" />
         <TextView
             android:id="@+id/card_issue_option_content"
