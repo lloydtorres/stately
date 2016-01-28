@@ -50,6 +50,12 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/menu_settings"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.WithStatusBar">
+        </activity>
     </application>
 
 </manifest>

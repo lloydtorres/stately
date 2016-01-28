@@ -33,6 +33,7 @@ import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
+import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -227,6 +228,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     // Open explore dialog
                     explore();
                     break;
+                case R.id.nav_settings:
+                    startSettings();
+                    break;
                 case R.id.nav_logout:
                     // Start logout process
                     logout();
@@ -290,6 +294,15 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         FragmentManager fm = getSupportFragmentManager();
         ExploreDialog editNameDialog = new ExploreDialog();
         editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
+    }
+
+    /**
+     * Start settings activity.
+     */
+    private void startSettings()
+    {
+        Intent settingsActivityLaunch = new Intent(StatelyActivity.this, SettingsActivity.class);
+        startActivity(settingsActivityLaunch);
     }
 
     /**
