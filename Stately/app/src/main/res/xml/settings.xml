@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <CheckBoxPreference
         android:key="setting_autologin"
         android:title="@string/setting_autologin"
         android:defaultValue="true"
         android:icon="@null" />
-    <SwitchPreference
+    <CheckBoxPreference
         android:key="setting_crashreport"
         android:title="@string/setting_crashreport"
         android:defaultValue="true"
