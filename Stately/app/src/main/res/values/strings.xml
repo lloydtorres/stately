@@ -185,4 +185,10 @@
     <string name="wa_vote_history">Vote History</string>
     <string name="wa_x_axis_h">%1$d h</string>
     <string name="wa_x_axis_d">Day %1$d</string>
+
+    <!-- Settings -->
+    <string name="setting_autologin">Log in automatically</string>
+    <string name="setting_crashreport">Send app crash reports</string>
+    <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
+    <string name="got_it">Got It</string>
 </resources>
