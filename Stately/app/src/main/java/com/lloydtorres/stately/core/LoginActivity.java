@@ -1,7 +1,9 @@
 package com.lloydtorres.stately.core;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final URI LOGIN_URI = URI.create(LOGIN_TARGET);
     private static final String LOGIN_DOMAIN = "nationstates.net";
     private CookieManager cookies;
+    private SharedPreferences storage;
 
     private EditText username;
     private EditText password;
@@ -57,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
 
+        storage = PreferenceManager.getDefaultSharedPreferences(this);
+
         username = (EditText) findViewById(R.id.field_username);
         password = (EditText) findViewById(R.id.field_password);
         login = (Button) findViewById(R.id.login_button);
@@ -67,11 +72,18 @@ public class LoginActivity extends AppCompatActivity {
         cookies.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookies);
 
-        // If user login exists, try logging in first
-        UserLogin u = SparkleHelper.getActiveUser(this);
-        if (u != null)
+        // If settings allows it and user login exists, try logging in first
+        if (storage.getBoolean("setting_autologin", true))
         {
-            verifyAutologin(u.name, u.autologin);
+            UserLogin u = SparkleHelper.getActiveUser(this);
+            if (u != null)
+            {
+                verifyAutologin(u.name, u.autologin);
+            }
+        }
+        else
+        {
+            SparkleHelper.removeActiveUser(this);
         }
     }
 
