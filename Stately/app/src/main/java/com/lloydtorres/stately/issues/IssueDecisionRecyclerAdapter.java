@@ -147,6 +147,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         {
             option = op;
             content.setText(SparkleHelper.getHtmlFormatting(option.content).toString());
+            selectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((IssueDecisionActivity) context).sendAdoptPosition(option.index);
+                }
+            });
 
             if (mode == DISMISS_CARD)
             {

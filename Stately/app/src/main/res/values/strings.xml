@@ -180,8 +180,10 @@
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
     <string name="issue_option_selected">Adopting this position</string>
+    <string name="issue_selected_message">Adopted the position in Option %1$d.</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
     <string name="issue_issue_dismissed">Dismissing this issue</string>
+    <string name="issue_dismissed_message">Dismissed this issue.</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

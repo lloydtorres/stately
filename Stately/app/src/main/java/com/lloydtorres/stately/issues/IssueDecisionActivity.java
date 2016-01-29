@@ -40,6 +40,7 @@ import java.util.Map;
 public class IssueDecisionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
+    private static final String DISMISS_TEXT = "The government is preparing to dismiss this issue.";
 
     private Issue issue;
 
@@ -198,11 +199,74 @@ public class IssueDecisionActivity extends AppCompatActivity {
         IssueOption dismissOption = new IssueOption();
         dismissOption.index = -1;
         dismissOption.content = "";
+        if (issueInfoRaw.text().contains(DISMISS_TEXT))
+        {
+            dismissOption.selected = true;
+        }
         issue.options.add(dismissOption);
 
         mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Send the position selected by the user back to the server.
+     * @param index The index of the option selected.
+     */
+    public void sendAdoptPosition(final int index)
+    {
+        final View view = findViewById(R.id.issue_decision_main);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String targetURL = String.format(IssueOption.QUERY, issue.id);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        switch (index)
+                        {
+                            case -1:
+                                SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismissed_message));
+                                break;
+                            default:
+                                SparkleHelper.makeSnackbar(view, String.format(getString(R.string.issue_selected_message), index+1));
+                                break;
+                        }
+                        startQueryIssueInfo();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put(String.format("choice-%d", index), "1");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
     }
 
     @Override
