@@ -39,6 +39,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".issues.IssueDecisionActivity"
+            android:label="@string/menu_issues"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.WithStatusBar">
+        </activity>
+        <activity
             android:name=".region.MessageBoardActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"

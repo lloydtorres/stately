@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,12 +48,13 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return issues.size();
     }
 
-    public class IssueCard extends RecyclerView.ViewHolder {
+    public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context context;
         private TextView title;
         private TextView state;
         private ImageView stateIcon;
+        private Issue issue;
 
         public IssueCard(Context c, View v) {
             super(v);
@@ -60,12 +62,16 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             title = (TextView) v.findViewById(R.id.card_issue_main_title);
             state = (TextView) v.findViewById(R.id.card_issue_main_status);
             stateIcon = (ImageView) v.findViewById(R.id.card_issue_main_status_icon);
+
+            v.setOnClickListener(this);
         }
 
         public void init(Issue i)
         {
-            title.setText(i.title);
-            switch(i.status)
+            issue = i;
+
+            title.setText(issue.title);
+            switch(issue.status)
             {
                 case Issue.STATUS_PENDING:
                     state.setText(context.getString(R.string.issue_pending));
@@ -80,6 +86,16 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     state.setTextColor(ContextCompat.getColor(context, R.color.issueUnaddressed));
                     stateIcon.setImageResource(R.drawable.ic_unaddressed);
                     break;
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (issue != null)
+            {
+                Intent decisionActivityLaunch = new Intent(context, IssueDecisionActivity.class);
+                decisionActivityLaunch.putExtra(IssueDecisionActivity.ISSUE_DATA, issue);
+                context.startActivity(decisionActivityLaunch);
             }
         }
     }
