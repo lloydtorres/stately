@@ -197,9 +197,11 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
         IssueOption dismissOption = new IssueOption();
         dismissOption.index = -1;
+        dismissOption.content = "";
         issue.options.add(dismissOption);
 
-        //@TODO Add adapters
+        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

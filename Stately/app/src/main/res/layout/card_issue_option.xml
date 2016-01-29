@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/card_issue_option_content_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -43,6 +44,7 @@
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_marginRight="3dp"
+                android:layout_marginLeft="-9dp"
                 android:src="@drawable/ic_check_green"/>
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -53,4 +53,5 @@
     <color name="colorSector3">#455A64</color>
 
     <color name="issueUnaddressed">#F44336</color>
+    <color name="white">#FFFFFF</color>
 </resources>
