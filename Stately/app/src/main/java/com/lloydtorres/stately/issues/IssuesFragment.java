@@ -130,6 +130,14 @@ public class IssuesFragment extends Fragment {
         return mView;
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // Refresh on resume
+        startQueryIssues();
+    }
+
     /**
      * Call to start querying and activate SwipeFreshLayout
      */
