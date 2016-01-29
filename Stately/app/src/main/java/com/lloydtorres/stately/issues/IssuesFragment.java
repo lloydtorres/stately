@@ -126,7 +126,7 @@ public class IssuesFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, BASE_URI);
-                        processIssues(d);
+                        processIssues(view, d);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -150,11 +150,20 @@ public class IssuesFragment extends Fragment {
      * Process the HTML contents of the issues into actual Issue objects
      * @param d
      */
-    private void processIssues(Document d)
+    private void processIssues(View v, Document d)
     {
         issues = new ArrayList<Issue>();
 
         Element issuesContainer = d.select("ul.dilemmalist").first();
+
+        if (issuesContainer == null)
+        {
+            // safety check
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
+            return;
+        }
+
         Elements issuesRaw = issuesContainer.children();
 
         for (Element i : issuesRaw)
