@@ -94,6 +94,8 @@ public class SparkleHelper {
     public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "7";
+    // NationStates API
+    public static final String BASE_URI = "https://www.nationstates.net/";
 
     // Keys to user name and autologin
     public static final String VAR_NAME = "var_name";

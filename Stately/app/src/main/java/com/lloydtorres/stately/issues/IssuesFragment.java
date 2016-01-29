@@ -45,7 +45,6 @@ import java.util.Map;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends Fragment {
-    public static final String BASE_URI = "https://www.nationstates.net/";
     private static final String UNADDRESSED = "unaddressed";
     private static final String PENDING = "legislation pending";
     private static final String DISMISSED = "dismissed";
@@ -159,7 +158,7 @@ public class IssuesFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Document d = Jsoup.parse(response, BASE_URI);
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         processIssues(view, d);
                     }
                 }, new Response.ErrorListener() {
