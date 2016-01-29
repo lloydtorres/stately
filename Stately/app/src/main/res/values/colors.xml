@@ -51,4 +51,6 @@
     <color name="colorSector1">#FFC107</color>
     <color name="colorSector2">#F44336</color>
     <color name="colorSector3">#455A64</color>
+
+    <color name="issueUnaddressed">#F44336</color>
 </resources>
