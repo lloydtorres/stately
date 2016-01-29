@@ -33,6 +33,7 @@ import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
@@ -202,6 +203,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 case R.id.nav_nation:
                     // Choose Nation
                     fChoose = getNationFragment();
+                    break;
+                case R.id.nav_issues:
+                    // Choose Issues
+                    fChoose = new IssuesFragment();
                     break;
                 case R.id.nav_region:
                     fChoose = getRegionFragment();
