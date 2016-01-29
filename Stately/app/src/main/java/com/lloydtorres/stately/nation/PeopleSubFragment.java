@@ -25,6 +25,8 @@ import java.util.List;
  * Takes in a Nation object.
  */
 public class PeopleSubFragment extends Fragment {
+    public static final String NATION_DATA_KEY = "mNation";
+
     private Nation mNation;
 
     private TextView summaryDesc;
@@ -50,7 +52,7 @@ public class PeopleSubFragment extends Fragment {
         // Restore state
         if (savedInstanceState != null && mNation == null)
         {
-            mNation = savedInstanceState.getParcelable("mNation");
+            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
         }
 
         if (mNation != null)
@@ -68,7 +70,7 @@ public class PeopleSubFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (mNation != null)
         {
-            outState.putParcelable("mNation", mNation);
+            outState.putParcelable(NATION_DATA_KEY, mNation);
         }
     }
 

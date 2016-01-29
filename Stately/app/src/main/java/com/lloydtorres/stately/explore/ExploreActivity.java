@@ -36,6 +36,10 @@ import org.simpleframework.xml.core.Persister;
  * Requires a name to be passed in; does error checking as well.
  */
 public class ExploreActivity extends AppCompatActivity implements PrimeActivity {
+    // Keys for intent data
+    public static final String EXPLORE_ID = "id";
+    public static final String EXPLORE_MODE = "mode";
+
     private String id;
     private int mode;
     private TextView statusMessage;
@@ -52,8 +56,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         if (getIntent() != null)
         {
             // If name passed in as intent
-            id = getIntent().getStringExtra("id");
-            mode = getIntent().getIntExtra("mode", SparkleHelper.CLICKY_NATION_MODE);
+            id = getIntent().getStringExtra(EXPLORE_ID);
+            mode = getIntent().getIntExtra(EXPLORE_MODE, SparkleHelper.CLICKY_NATION_MODE);
             if (id == null)
             {
                 // If ID passed in through Uri

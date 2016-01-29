@@ -154,7 +154,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         @Override
         public void onClick(View v) {
             Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
-            messageBoardActivity.putExtra("regionName", regionName);
+            messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, regionName);
             context.startActivity(messageBoardActivity);
         }
     }
@@ -267,7 +267,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         {
             // Setup resolution link
             Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
-            resolutionActivityLaunch.putExtra("councilId", w.chamber);
+            resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
             final Intent fResolution = resolutionActivityLaunch;
             resolutionLink.setOnClickListener(new View.OnClickListener() {
                 @Override

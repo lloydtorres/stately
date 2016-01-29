@@ -436,8 +436,8 @@ public class SparkleHelper {
     {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
-        editor.remove("var_name");
-        editor.remove("var_autologin");
+        editor.remove(VAR_NAME);
+        editor.remove(VAR_AUTOLOGIN);
         editor.commit();
     }
 
@@ -449,8 +449,8 @@ public class SparkleHelper {
     public static void startExploring(Context c, String n, int mode)
     {
         Intent exploreActivityLaunch = new Intent(c, ExploreActivity.class);
-        exploreActivityLaunch.putExtra("id", n);
-        exploreActivityLaunch.putExtra("mode", mode);
+        exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_ID, n);
+        exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_MODE, mode);
         c.startActivity(exploreActivityLaunch);
     }
 
@@ -507,11 +507,11 @@ public class SparkleHelper {
             // Set colour and disable chart labels
             PieDataSet dataSet = new PieDataSet(chartEntries, "");
             dataSet.setDrawValues(false);
-            dataSet.setColors(SparkleHelper.waColours, c);
+            dataSet.setColors(waColours, c);
             PieData dataFull = new PieData(chartLabels, dataSet);
 
             // formatting
-            p = SparkleHelper.getFormattedPieChart(c, p, chartLabels);
+            p = getFormattedPieChart(c, p, chartLabels);
             p.setData(dataFull);
             p.invalidate();
 

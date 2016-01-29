@@ -49,6 +49,9 @@ import org.simpleframework.xml.core.Persister;
  */
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PrimeActivity {
 
+    // Keys used for intents
+    public static final String NATION_DATA = "mNationData";
+
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
                                         R.id.nav_settings,
@@ -72,11 +75,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         // Get nation object from intent or restore state
         if (getIntent() != null)
         {
-            mNation = getIntent().getParcelableExtra("mNationData");
+            mNation = getIntent().getParcelableExtra(NATION_DATA);
         }
         if (mNation == null && savedInstanceState != null)
         {
-            mNation = savedInstanceState.getParcelable("mNationData");
+            mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
@@ -144,7 +147,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onSaveInstanceState(savedInstanceState);
         if (mNation != null)
         {
-            savedInstanceState.putParcelable("mNationData", mNation);
+            savedInstanceState.putParcelable(NATION_DATA, mNation);
         }
     }
 
@@ -155,7 +158,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null && mNation == null)
         {
-            mNation = savedInstanceState.getParcelable("mNationData");
+            mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
     }
 

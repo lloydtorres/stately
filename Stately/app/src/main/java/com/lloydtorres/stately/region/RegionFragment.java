@@ -46,6 +46,9 @@ import org.simpleframework.xml.core.Persister;
  * Can do the search and refresh by itself.
  */
 public class RegionFragment extends Fragment {
+    public static final String REGION_NAME_KEY = "mRegionName";
+    public static final String REGION_DATA_KEY = "mRegionData";
+
     // Constants used to determine view pager index.
     private final int OVERVIEW_TAB = 0;
     private final int COMMUNITY_TAB = 1;
@@ -111,8 +114,8 @@ public class RegionFragment extends Fragment {
         // Restore state
         if (savedInstanceState != null)
         {
-            mRegionName = savedInstanceState.getString("mRegionName");
-            mRegion = savedInstanceState.getParcelable("mRegionData");
+            mRegionName = savedInstanceState.getString(REGION_NAME_KEY);
+            mRegion = savedInstanceState.getParcelable(REGION_DATA_KEY);
         }
 
         if (mRegion != null)
@@ -245,8 +248,8 @@ public class RegionFragment extends Fragment {
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString("mRegionName", mRegionName);
-        savedInstanceState.putParcelable("mRegionData", mRegion);
+        savedInstanceState.putString(REGION_NAME_KEY, mRegionName);
+        savedInstanceState.putParcelable(REGION_DATA_KEY, mRegion);
     }
 
     @Override

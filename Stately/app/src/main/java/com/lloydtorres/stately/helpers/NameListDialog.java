@@ -20,6 +20,9 @@ import java.util.Collections;
  */
 public class NameListDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_endorsement_dialog";
+    public static final String TITLE_KEY = "title";
+    public static final String NAMES_KEY = "names";
+    public static final String TARGET_KEY = "target";
 
     // RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -64,9 +67,9 @@ public class NameListDialog extends DialogFragment {
         // Restore saved state
         if (savedInstanceState != null)
         {
-            title = savedInstanceState.getString("title");
-            names = savedInstanceState.getStringArrayList("names");
-            target = savedInstanceState.getInt("target");
+            title = savedInstanceState.getString(TITLE_KEY);
+            names = savedInstanceState.getStringArrayList(NAMES_KEY);
+            target = savedInstanceState.getInt(TARGET_KEY);
         }
 
         initRecycler(view);
@@ -89,8 +92,8 @@ public class NameListDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         // Save state
         super.onSaveInstanceState(outState);
-        outState.putString("title", title);
-        outState.putStringArrayList("names", names);
-        outState.putInt("target", target);
+        outState.putString(TITLE_KEY, title);
+        outState.putStringArrayList(NAMES_KEY, names);
+        outState.putInt(TARGET_KEY, target);
     }
 }

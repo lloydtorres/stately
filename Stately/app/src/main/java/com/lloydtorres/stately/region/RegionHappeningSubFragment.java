@@ -23,6 +23,8 @@ import java.util.List;
  * events, as returned by the NationStates API. Takes in a Region object.
  */
 public class RegionHappeningSubFragment extends Fragment {
+    public static final String REGION_KEY = "mRegion";
+
     private Region mRegion;
 
     private RecyclerView mRecyclerView;
@@ -46,7 +48,7 @@ public class RegionHappeningSubFragment extends Fragment {
         // Restore save state
         if (savedInstanceState != null && mRegion == null)
         {
-            mRegion = savedInstanceState.getParcelable("mRegion");
+            mRegion = savedInstanceState.getParcelable(REGION_KEY);
         }
 
         if (mRegion != null)
@@ -79,7 +81,7 @@ public class RegionHappeningSubFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (mRegion != null)
         {
-            outState.putParcelable("mRegion", mRegion);
+            outState.putParcelable(REGION_KEY, mRegion);
         }
     }
 }

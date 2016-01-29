@@ -17,6 +17,8 @@ import com.lloydtorres.stately.dto.Region;
  * Accepts a Region object.
  */
 public class RegionCommunitySubFragment extends Fragment {
+    public static final String REGION_KEY = "mRegion";
+
     private Region mRegion;
 
     private RecyclerView mRecyclerView;
@@ -40,7 +42,7 @@ public class RegionCommunitySubFragment extends Fragment {
         // Restore save state
         if (savedInstanceState != null && mRegion == null)
         {
-            mRegion = savedInstanceState.getParcelable("mRegion");
+            mRegion = savedInstanceState.getParcelable(REGION_KEY);
         }
 
         if (mRegion != null)
@@ -68,7 +70,7 @@ public class RegionCommunitySubFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (mRegion != null)
         {
-            outState.putParcelable("mRegion", mRegion);
+            outState.putParcelable(REGION_KEY, mRegion);
         }
     }
 }

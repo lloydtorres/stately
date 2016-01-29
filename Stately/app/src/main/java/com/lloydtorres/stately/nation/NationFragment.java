@@ -33,6 +33,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  * Displays information about a target nation, takes in a nation object.
  */
 public class NationFragment extends Fragment {
+    public static final String NATION_DATA_KEY = "mNationData";
+
     // Constants used to determine view pager index.
     private final int OVERVIEW_TAB = 0;
     private final int PEOPLE_TAB = 1;
@@ -89,7 +91,7 @@ public class NationFragment extends Fragment {
         // Restore state
         if (savedInstanceState != null && mNation == null)
         {
-            mNation = savedInstanceState.getParcelable("mNationData");
+            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
         }
 
         initToolbar(view);
@@ -220,7 +222,7 @@ public class NationFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
         if (mNation != null)
         {
-            savedInstanceState.putParcelable("mNationData", mNation);
+            savedInstanceState.putParcelable(NATION_DATA_KEY, mNation);
         }
     }
 

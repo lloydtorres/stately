@@ -25,6 +25,8 @@ import java.util.List;
  * Created by Lloyd on 2016-01-24.
  */
 public class RegionGovernanceSubFragment extends Fragment {
+    public static final String REGION_KEY = "mRegion";
+
     private Region mRegion;
 
     public void setRegion(Region r)
@@ -44,7 +46,7 @@ public class RegionGovernanceSubFragment extends Fragment {
         // Restore save state
         if (savedInstanceState != null && mRegion == null)
         {
-            mRegion = savedInstanceState.getParcelable("mRegion");
+            mRegion = savedInstanceState.getParcelable(REGION_KEY);
         }
 
         if (mRegion != null)
@@ -146,7 +148,7 @@ public class RegionGovernanceSubFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (mRegion != null)
         {
-            outState.putParcelable("mRegion", mRegion);
+            outState.putParcelable(REGION_KEY, mRegion);
         }
     }
 }

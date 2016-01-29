@@ -35,6 +35,10 @@ import java.util.Set;
  * An activity that displays the contents of the regional message board.
  */
 public class MessageBoardActivity extends AppCompatActivity {
+    // Keys for Intent data
+    public static final String BOARD_REGION_NAME = "regionName";
+    public static final String BOARD_MESSAGES = "messages";
+
     private RegionMessages messages;
     private String regionName;
     private Set<Integer> uniqueEnforcer;
@@ -54,13 +58,13 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messages = new RegionMessages();
             messages.posts = new ArrayList<Post>();
-            regionName = getIntent().getStringExtra("regionName");
+            regionName = getIntent().getStringExtra(BOARD_REGION_NAME);
             uniqueEnforcer = new HashSet<Integer>();
         }
         if (savedInstanceState != null)
         {
-            messages = savedInstanceState.getParcelable("messages");
-            regionName = savedInstanceState.getString("regionName");
+            messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
+            regionName = savedInstanceState.getString(BOARD_REGION_NAME);
             rebuildUniqueEnforcer();
         }
 
@@ -241,11 +245,11 @@ public class MessageBoardActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         if (messages != null)
         {
-            savedInstanceState.putParcelable("messages", messages);
+            savedInstanceState.putParcelable(BOARD_MESSAGES, messages);
         }
         if (regionName != null)
         {
-            savedInstanceState.putString("regionName", regionName);
+            savedInstanceState.putString(BOARD_REGION_NAME, regionName);
         }
     }
 
@@ -258,12 +262,12 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             if (messages == null)
             {
-                messages = savedInstanceState.getParcelable("messages");
+                messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
                 rebuildUniqueEnforcer();
             }
             if (regionName == null)
             {
-                regionName = savedInstanceState.getString("regionName");
+                regionName = savedInstanceState.getString(BOARD_REGION_NAME);
             }
         }
     }

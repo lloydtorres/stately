@@ -300,7 +300,7 @@ public class LoginActivity extends AppCompatActivity {
                             SparkleHelper.setActiveUser(getApplicationContext(), nationName, autologin);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
-                            nationActivityLaunch.putExtra("mNationData", nationResponse);
+                            nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
                             startActivity(nationActivityLaunch);
                             finish();
                         }

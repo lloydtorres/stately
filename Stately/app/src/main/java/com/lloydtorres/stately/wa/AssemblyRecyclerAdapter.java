@@ -177,12 +177,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 switch (pos)
                 {
                     case GENERAL_ASSEMBLY_INDEX:
-                        resolutionActivityLaunch.putExtra("councilId", Assembly.GENERAL_ASSEMBLY);
-                        resolutionActivityLaunch.putExtra("resolution", ((Assembly)cards.get(GENERAL_ASSEMBLY_INDEX)).resolution);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.GENERAL_ASSEMBLY);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(GENERAL_ASSEMBLY_INDEX)).resolution);
                         break;
                     case SECURITY_COUNCIL_INDEX:
-                        resolutionActivityLaunch.putExtra("councilId", Assembly.SECURITY_COUNCIL);
-                        resolutionActivityLaunch.putExtra("resolution", ((Assembly)cards.get(SECURITY_COUNCIL_INDEX)).resolution);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.SECURITY_COUNCIL);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(SECURITY_COUNCIL_INDEX)).resolution);
                         break;
                 }
                 context.startActivity(resolutionActivityLaunch);

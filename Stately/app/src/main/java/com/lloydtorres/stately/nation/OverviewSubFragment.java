@@ -27,6 +27,8 @@ import java.util.ArrayList;
  * Takes in a Nation object.
  */
 public class OverviewSubFragment extends Fragment {
+    public static final String NATION_DATA_KEY = "mNation";
+
     private Nation mNation;
 
     // main card
@@ -96,7 +98,7 @@ public class OverviewSubFragment extends Fragment {
         // Restore state
         if (savedInstanceState != null && mNation == null)
         {
-            mNation = savedInstanceState.getParcelable("mNation");
+            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
         }
 
         if (mNation != null)
@@ -118,7 +120,7 @@ public class OverviewSubFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (mNation != null)
         {
-            outState.putParcelable("mNation", mNation);
+            outState.putParcelable(NATION_DATA_KEY, mNation);
         }
     }
 
@@ -274,7 +276,7 @@ public class OverviewSubFragment extends Fragment {
     {
         // Intent to open the ResolutionActivity
         Intent resolutionActivityLaunch = new Intent(getContext(), ResolutionActivity.class);
-        resolutionActivityLaunch.putExtra("councilId", councilId);
+        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
         final Intent fResolution = resolutionActivityLaunch;
 
         // Colour of the indicator as well as the assembly name

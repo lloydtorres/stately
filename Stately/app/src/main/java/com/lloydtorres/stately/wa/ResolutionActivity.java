@@ -47,6 +47,10 @@ import java.util.List;
  * Also has refreshing!
  */
 public class ResolutionActivity extends AppCompatActivity {
+    // Keys for Intent data
+    public static final String TARGET_COUNCIL_ID = "councilId";
+    public static final String TARGET_RESOLUTION = "resolution";
+
     private AssemblyActive mAssembly;
     private Resolution mResolution;
     private int councilId;
@@ -76,13 +80,13 @@ public class ResolutionActivity extends AppCompatActivity {
         // Either get data from intent or restore state
         if (getIntent() != null)
         {
-            councilId = getIntent().getIntExtra("councilId", 1);
-            mResolution = getIntent().getParcelableExtra("resolution");
+            councilId = getIntent().getIntExtra(TARGET_COUNCIL_ID, 1);
+            mResolution = getIntent().getParcelableExtra(TARGET_RESOLUTION);
         }
         if (savedInstanceState != null)
         {
-            councilId = savedInstanceState.getInt("councilId");
-            mResolution = savedInstanceState.getParcelable("resolution");
+            councilId = savedInstanceState.getInt(TARGET_COUNCIL_ID);
+            mResolution = savedInstanceState.getParcelable(TARGET_RESOLUTION);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_wa_council);
@@ -367,10 +371,10 @@ public class ResolutionActivity extends AppCompatActivity {
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt("councilId", councilId);
+        savedInstanceState.putInt(TARGET_COUNCIL_ID, councilId);
         if (mResolution != null)
         {
-            savedInstanceState.putParcelable("resolution", mResolution);
+            savedInstanceState.putParcelable(TARGET_RESOLUTION, mResolution);
         }
     }
 
@@ -381,10 +385,10 @@ public class ResolutionActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
         {
-            councilId = savedInstanceState.getInt("councilId");
+            councilId = savedInstanceState.getInt(TARGET_COUNCIL_ID);
             if (mResolution == null)
             {
-                mResolution = savedInstanceState.getParcelable("resolution");
+                mResolution = savedInstanceState.getParcelable(TARGET_RESOLUTION);
             }
         }
     }
