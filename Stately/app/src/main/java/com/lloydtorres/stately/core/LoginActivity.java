@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String LOGIN_TARGET = "https://www.nationstates.net/";
     private static final URI LOGIN_URI = URI.create(LOGIN_TARGET);
     private static final String LOGIN_DOMAIN = "nationstates.net";
+    private static final long LOGIN_EXPIRY = 12960000; // about 5 months in seconds
     private CookieManager cookies;
     private SharedPreferences storage;
 
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         HttpCookie cookie = new HttpCookie("autologin", autologin);
         cookie.setPath("/");
         cookie.setDomain(LOGIN_DOMAIN);
+        cookie.setMaxAge(LOGIN_EXPIRY);
         cookies.getCookieStore().add(LOGIN_URI, cookie);
 
         final View view = findViewById(R.id.activity_login_main);
