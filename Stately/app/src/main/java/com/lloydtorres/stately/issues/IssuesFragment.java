@@ -1,7 +1,9 @@
 package com.lloydtorres.stately.issues;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -33,7 +36,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-28.
@@ -50,6 +55,9 @@ public class IssuesFragment extends Fragment {
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FloatingActionButton mFloatingActionButton;
+
+    private static AlertDialog.Builder dialogBuilder;
+    private static DialogInterface.OnClickListener dialogClickListener;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -92,7 +100,25 @@ public class IssuesFragment extends Fragment {
             }
         });
 
+        // dialog and listener for positive responses
+        dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dismissAllIssues(mView);
+            }
+        };
+
+        // On press fab, show dialog
         mFloatingActionButton = (FloatingActionButton) mView.findViewById(R.id.issues_fab);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogBuilder.setMessage(getString(R.string.issue_dismiss_all))
+                        .setPositiveButton(getString(R.string.issue_dismiss_all_positive), dialogClickListener)
+                        .setNegativeButton(getString(R.string.explore_negative), null).show();
+            }
+        });
 
         // Setup recyclerview
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.issues_recycler);
@@ -100,6 +126,16 @@ public class IssuesFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        startQueryIssues();
+
+        return mView;
+    }
+
+    /**
+     * Call to start querying and activate SwipeFreshLayout
+     */
+    private void startQueryIssues()
+    {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -108,8 +144,6 @@ public class IssuesFragment extends Fragment {
             }
         });
         queryIssues(mView);
-
-        return mView;
     }
 
     /**
@@ -141,7 +175,15 @@ public class IssuesFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
 
         queue.add(stringRequest);
     }
@@ -201,6 +243,52 @@ public class IssuesFragment extends Fragment {
         mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void dismissAllIssues(final View view)
+    {
+        RequestQueue queue = Volley.newRequestQueue(this.getActivity());
+        String targetURL = Issue.QUERY;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismiss_all_response));
+                        startQueryIssues();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("dismiss_all", "1");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getContext());
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        queue.add(stringRequest);
     }
 
     @Override

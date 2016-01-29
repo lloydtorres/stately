@@ -175,6 +175,8 @@
     <string name="issue_dismissed">Dismissed</string>
     <string name="issue_pending">Legislation Pending</string>
     <string name="issue_dismiss_all">Dismiss all issues?</string>
+    <string name="issue_dismiss_all_positive">Dismiss</string>
+    <string name="issue_dismiss_all_response">All issues dismissed.</string>
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
     <string name="issue_option_selected">Adopting this position</string>
