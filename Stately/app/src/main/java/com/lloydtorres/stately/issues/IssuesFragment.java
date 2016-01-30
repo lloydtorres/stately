@@ -53,6 +53,7 @@ public class IssuesFragment extends Fragment {
 
     private Activity mActivity;
     private View mView;
+    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -83,6 +84,7 @@ public class IssuesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         mView = inflater.inflate(R.layout.fragment_issues, container, false);
+        mainView = mView.findViewById(R.id.refreshview_main);
         SparkleHelper.initAd(mView, R.id.ad_issues_fragment);
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
@@ -99,7 +101,7 @@ public class IssuesFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryIssues(mView);
+                queryIssues(mainView);
             }
         });
 
@@ -108,7 +110,7 @@ public class IssuesFragment extends Fragment {
         dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dismissAllIssues(mView);
+                dismissAllIssues(mainView);
             }
         };
 
@@ -143,7 +145,7 @@ public class IssuesFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
         });
-        queryIssues(mView);
+        queryIssues(mainView);
     }
 
     /**

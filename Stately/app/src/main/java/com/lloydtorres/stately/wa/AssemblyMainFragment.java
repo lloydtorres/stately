@@ -36,6 +36,7 @@ import org.simpleframework.xml.core.Persister;
 public class AssemblyMainFragment extends Fragment {
     private Activity mActivity;
     private View mView;
+    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -63,6 +64,7 @@ public class AssemblyMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         mView = inflater.inflate(R.layout.fragment_wa_main, container, false);
+        mainView = mView.findViewById(R.id.refreshview_main);
         SparkleHelper.initAd(mView, R.id.ad_wa_fragment);
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
@@ -79,7 +81,7 @@ public class AssemblyMainFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                                         @Override
                                                         public void onRefresh() {
-                                                            queryWorldAssembly(mView);
+                                                            queryWorldAssembly(mainView);
                                                         }
                                                  });
 
@@ -97,7 +99,7 @@ public class AssemblyMainFragment extends Fragment {
             }
         });
 
-        queryWorldAssembly(mView);
+        queryWorldAssembly(mainView);
         return mView;
     }
 
@@ -140,7 +142,7 @@ public class AssemblyMainFragment extends Fragment {
                                 // Once a response is obtained for the General Assembly,
                                 // start querying for the Security Council
                                 setGeneralAssembly(waResponse);
-                                queryWorldAssemblyHeavy(mView, Assembly.SECURITY_COUNCIL);
+                                queryWorldAssemblyHeavy(view, Assembly.SECURITY_COUNCIL);
                             }
                             else if (chamberId == Assembly.SECURITY_COUNCIL)
                             {
