@@ -207,4 +207,8 @@
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
+
+    <!-- Ads -->
+    <!-- Test ID: ca-app-pub-3940256099942544/6300978111 -->
+    <string name="ad_nation_fragment">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

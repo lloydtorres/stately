@@ -20,6 +20,8 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -521,6 +523,19 @@ public class SparkleHelper {
         }
 
         return false;
+    }
+
+    /**
+     * Initializes an ad.
+     * @param view Target view
+     * @param viewId ID of the AdView
+     */
+    public static void initAd(View view, int viewId)
+    {
+        AdView mAdView = (AdView) view.findViewById(viewId);
+        mAdView.setAdListener(new GenericAdListener(mAdView));
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     /**

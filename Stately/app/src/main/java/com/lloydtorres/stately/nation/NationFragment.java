@@ -88,6 +88,8 @@ public class NationFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_nation, container, false);
 
+        SparkleHelper.initAd(view, R.id.ad_nation_fragment);
+
         // Restore state
         if (savedInstanceState != null && mNation == null)
         {
