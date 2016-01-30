@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
+        android:name="com.lloydtorres.stately.core.StatelyApp"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -62,6 +63,9 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="651c62b07195273645b7c74e9b21a68bf3d124cd" />
     </application>
 
 </manifest>
