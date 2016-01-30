@@ -534,7 +534,9 @@ public class SparkleHelper {
     {
         AdView mAdView = (AdView) view.findViewById(viewId);
         mAdView.setAdListener(new GenericAdListener(mAdView));
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                                    .build();
         mAdView.loadAd(adRequest);
     }
 

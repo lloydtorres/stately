@@ -108,6 +108,7 @@ public class RegionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
+        SparkleHelper.initAd(view, R.id.ad_region_fragment);
 
         initToolbar(view);
 

@@ -62,7 +62,9 @@ public class AssemblyMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
+        mView = inflater.inflate(R.layout.fragment_wa_main, container, false);
+        SparkleHelper.initAd(mView, R.id.ad_wa_fragment);
+
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_wa));
 
