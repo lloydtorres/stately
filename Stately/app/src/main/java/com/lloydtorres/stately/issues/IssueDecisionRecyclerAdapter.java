@@ -165,6 +165,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             {
                 selectButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
                 selectContent.setTextColor(ContextCompat.getColor(context, R.color.white));
+                selectButton.setOnClickListener(null);
 
                 switch (mode)
                 {
