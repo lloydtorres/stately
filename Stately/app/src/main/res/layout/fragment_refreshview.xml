@@ -31,7 +31,9 @@
             android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#EEE" />
+            android:background="#EEE"
+            android:paddingBottom="20dp"
+            android:clipToPadding="false" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

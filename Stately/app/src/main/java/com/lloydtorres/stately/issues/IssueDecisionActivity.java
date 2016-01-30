@@ -55,6 +55,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_decision);
 
+        SparkleHelper.initAd(findViewById(R.id.activity_issue_decision_main), R.id.ad_decision_activity);
+
         // Either get data from intent or restore state
         if (getIntent() != null)
         {

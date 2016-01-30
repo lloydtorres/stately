@@ -211,4 +211,10 @@
     <!-- Ads -->
     <!-- Test ID: ca-app-pub-3940256099942544/6300978111 -->
     <string name="ad_nation_fragment">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_issues_fragment">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_decision_activity">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_region_fragment">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_message_board_activity">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_wa_fragment">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_resolution_activity">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
