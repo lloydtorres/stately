@@ -5,13 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,7 +55,6 @@ public class IssuesFragment extends Fragment {
     private View mView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private FloatingActionButton mFloatingActionButton;
 
     private static AlertDialog.Builder dialogBuilder;
     private static DialogInterface.OnClickListener dialogClickListener;
@@ -75,13 +76,14 @@ public class IssuesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_issues, container, false);
-        toolbar = (Toolbar) mView.findViewById(R.id.issues_toolbar);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
+        toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_issues));
 
         if (mActivity instanceof PrimeActivity)
@@ -90,7 +92,7 @@ public class IssuesFragment extends Fragment {
         }
 
         // Set up refresher to reload data on refresh
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.issues_refresher);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -108,19 +110,8 @@ public class IssuesFragment extends Fragment {
             }
         };
 
-        // On press fab, show dialog
-        mFloatingActionButton = (FloatingActionButton) mView.findViewById(R.id.issues_fab);
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogBuilder.setMessage(getString(R.string.issue_dismiss_all))
-                        .setPositiveButton(getString(R.string.issue_dismiss_all_positive), dialogClickListener)
-                        .setNegativeButton(getString(R.string.explore_negative), null).show();
-            }
-        });
-
         // Setup recyclerview
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.issues_recycler);
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -296,6 +287,24 @@ public class IssuesFragment extends Fragment {
         };
 
         queue.add(stringRequest);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_issue, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_dismiss:
+                dialogBuilder.setMessage(getString(R.string.issue_dismiss_all))
+                        .setPositiveButton(getString(R.string.issue_dismiss_all_positive), dialogClickListener)
+                        .setNegativeButton(getString(R.string.explore_negative), null).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
