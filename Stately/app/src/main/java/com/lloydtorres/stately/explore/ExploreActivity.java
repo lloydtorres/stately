@@ -275,6 +275,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 FragmentManager fm = getSupportFragmentManager();
                 ExploreDialog editNameDialog = new ExploreDialog();
                 editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
