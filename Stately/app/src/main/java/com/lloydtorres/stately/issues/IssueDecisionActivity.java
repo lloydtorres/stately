@@ -281,6 +281,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+        // Refresh on resume
+        startQueryIssueInfo();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         // Save state
