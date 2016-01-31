@@ -1,7 +1,7 @@
 Stately
 =======
 
-**Stately** is an unofficial Android app for [NationStates](http://www.nationstates.net/), a nation simulation game by Max Barry.
+**Stately** is an unofficial [NationStates](http://www.nationstates.net/) app for Android.
 
 ### Features
 
