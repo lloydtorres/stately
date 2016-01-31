@@ -15,6 +15,7 @@ Stately
 
 ### Revision History
 
+* **1.0.1** - Fix bug with malformed vectors.
 * **1.0.0** - Initial release.
 
 ### Libraries
