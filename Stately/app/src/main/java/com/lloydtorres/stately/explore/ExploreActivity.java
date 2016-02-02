@@ -12,16 +12,15 @@ import android.widget.TextView;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
@@ -135,7 +134,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
     private void queryNation(String name)
     {
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Nation.QUERY, name);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -189,12 +187,11 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     private void queryRegion(String name)
     {
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Region.QUERY, name);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -237,7 +234,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     private void initFragment(Nation mNation)

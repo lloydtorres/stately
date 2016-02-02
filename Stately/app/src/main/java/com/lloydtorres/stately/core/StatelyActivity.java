@@ -20,16 +20,15 @@ import android.widget.TextView;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.explore.ExploreDialog;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -38,10 +37,6 @@ import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -131,15 +126,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         nationFlag = (RoundedImageView) view.findViewById(R.id.nav_flag);
         nationNameView = (TextView) view.findViewById(R.id.nav_nation_name);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
-        ImageLoader imageLoader = ImageLoader.getInstance();
-
-        DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
-
         nationNameView.setText(mNation.name);
-        imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
-        imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
+
+        DashHelper dash = DashHelper.getInstance(this);
+        dash.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner);
+        dash.displayImage(mNation.flagURL, nationFlag);
     }
 
     @Override
@@ -344,8 +335,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void updateNation()
     {
         final View fView = findViewById(R.id.drawer_layout);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(mNation.name));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -395,6 +384,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 }

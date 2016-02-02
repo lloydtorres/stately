@@ -18,23 +18,18 @@ import android.widget.TextView;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
@@ -216,15 +211,7 @@ public class RegionFragment extends Fragment {
         if (mRegion.flagURL != null)
         {
             regionFlag.setVisibility(View.VISIBLE);
-
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext()).build();
-            ImageLoader.getInstance().init(config);
-            ImageLoader imageLoader = ImageLoader.getInstance();
-
-            // Fade image in on finish load
-            DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
-
-            imageLoader.displayImage(mRegion.flagURL, regionFlag, imageOptions);
+            DashHelper.getInstance(getContext()).displayImage(mRegion.flagURL, regionFlag);
         }
 
         regionName.setText(mRegion.name);
@@ -264,7 +251,6 @@ public class RegionFragment extends Fragment {
 
     private void updateRegion(final View view)
     {
-        RequestQueue queue = Volley.newRequestQueue(getContext());
         String targetURL = String.format(Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -308,7 +294,7 @@ public class RegionFragment extends Fragment {
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(getContext()).addRequest(stringRequest);
     }
 
     // For formatting the tab slider

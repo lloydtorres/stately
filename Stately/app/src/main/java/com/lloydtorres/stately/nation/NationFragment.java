@@ -20,12 +20,9 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * Created by Lloyd on 2016-01-13.
@@ -186,18 +183,12 @@ public class NationFragment extends Fragment {
      * @param view
      */
     public void initNationData(View view) {
-        // Set up image loader to get images from NationStates
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext()).build();
-        ImageLoader.getInstance().init(config);
-        ImageLoader imageLoader = ImageLoader.getInstance();
-
-        // Fade image in on finish load
-        DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
-
         nationName.setText(mNation.name);
         nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename).toString());
-        imageLoader.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, imageOptions);
-        imageLoader.displayImage(mNation.flagURL, nationFlag, imageOptions);
+
+        DashHelper dash = DashHelper.getInstance(getContext());
+        dash.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner);
+        dash.displayImage(mNation.flagURL, nationFlag);
 
         overviewSubFragment = new OverviewSubFragment();
         overviewSubFragment.setNation(mNation);

@@ -15,14 +15,13 @@ import android.view.ViewGroup;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -125,7 +124,6 @@ public class AssemblyMainFragment extends Fragment {
      */
     private void queryWorldAssemblyHeavy(final View view, final int chamberId)
     {
-        RequestQueue queue = Volley.newRequestQueue(this.getActivity());
         String targetURL = String.format(Assembly.QUERY, chamberId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -173,7 +171,7 @@ public class AssemblyMainFragment extends Fragment {
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(getContext()).addRequest(stringRequest);
     }
 
     private void setGeneralAssembly(Assembly g)

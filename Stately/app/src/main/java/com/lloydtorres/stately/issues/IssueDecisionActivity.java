@@ -12,16 +12,15 @@ import android.view.View;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
@@ -119,8 +118,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
     private void queryIssueInfo()
     {
         final View view = findViewById(R.id.issue_decision_main);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -153,7 +150,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
@@ -219,8 +216,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void sendAdoptPosition(final int index)
     {
         final View view = findViewById(R.id.issue_decision_main);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
@@ -268,7 +263,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     @Override

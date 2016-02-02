@@ -12,16 +12,15 @@ import android.widget.EditText;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
@@ -104,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
         cookies.getCookieStore().add(LOGIN_URI, cookie);
 
         final View view = findViewById(R.id.activity_login_main);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = LOGIN_TARGET;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -146,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
@@ -182,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
         final String pass = password.getText().toString();
         cookies.getCookieStore().removeAll();
 
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = LOGIN_TARGET;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
@@ -233,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
@@ -270,7 +266,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void queryNation(final View view, final String nationName)
     {
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(nationName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -331,7 +326,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**

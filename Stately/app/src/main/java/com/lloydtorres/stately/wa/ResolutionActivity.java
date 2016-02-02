@@ -12,12 +12,10 @@ import android.widget.TextView;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -31,6 +29,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
 import com.lloydtorres.stately.dto.Resolution;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
@@ -160,8 +159,6 @@ public class ResolutionActivity extends AppCompatActivity {
     private void queryResolution(int chamberId)
     {
         final View fView = findViewById(R.id.wa_council_main);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
         String targetURL = String.format(AssemblyActive.QUERY, chamberId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -195,7 +192,7 @@ public class ResolutionActivity extends AppCompatActivity {
             }
         });
 
-        queue.add(stringRequest);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
