@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -69,6 +70,8 @@ public class ResolutionActivity extends AppCompatActivity {
     private TextView votesAgainst;
 
     private HtmlTextView content;
+    private LinearLayout voteButton;
+    private TextView voteButtonContent;
 
     private PieChart votingBreakdown;
     private TextView nullVote;
@@ -123,6 +126,8 @@ public class ResolutionActivity extends AppCompatActivity {
         votesAgainst = (TextView) findViewById(R.id.wa_resolution_against);
 
         content = (HtmlTextView) findViewById(R.id.wa_resolution_content);
+        voteButton = (LinearLayout) findViewById(R.id.wa_resolution_vote);
+        voteButtonContent = (TextView) findViewById(R.id.wa_resolution_vote_content);
 
         votingBreakdown = (PieChart) findViewById(R.id.wa_voting_breakdown);
         nullVote = (TextView) findViewById(R.id.resolution_null_vote);
@@ -152,6 +157,7 @@ public class ResolutionActivity extends AppCompatActivity {
         {
             AssemblyActive tmp = new AssemblyActive();
             tmp.resolution = mResolution;
+            setVoteStatus(voteStatus);
             setResolution(tmp);
         }
     }
@@ -268,6 +274,48 @@ public class ResolutionActivity extends AppCompatActivity {
     private void setVoteStatus(WaVoteStatus vs)
     {
         voteStatus = vs;
+
+        String voteStats = "";
+        switch(councilId)
+        {
+            case Assembly.GENERAL_ASSEMBLY:
+                voteStats = voteStatus.gaVote;
+                break;
+            case Assembly.SECURITY_COUNCIL:
+                voteStats = voteStatus.scVote;
+                break;
+        }
+
+        if (SparkleHelper.isWaMember(this, voteStatus.waState))
+        {
+            voteButton.setVisibility(View.VISIBLE);
+
+            // If voting FOR the resolution
+            if (getString(R.string.wa_vote_state_for).equals(voteStats))
+            {
+                findViewById(R.id.view_divider).setVisibility(View.GONE);
+                iconVoteFor.setVisibility(View.VISIBLE);
+                histIconVoteFor.setVisibility(View.VISIBLE);
+                voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart0));
+                voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
+                voteButtonContent.setText(getString(R.string.wa_resolution_vote_for));
+            }
+            // If voting AGAINST the resolution
+            else if (getString(R.string.wa_vote_state_against).equals(voteStats))
+            {
+                findViewById(R.id.view_divider).setVisibility(View.GONE);
+                iconVoteAgainst.setVisibility(View.VISIBLE);
+                histIconVoteAgainst.setVisibility(View.VISIBLE);
+                voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart1));
+                voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
+                voteButtonContent.setText(getString(R.string.wa_resolution_vote_against));
+            }
+        }
+        else
+        {
+            findViewById(R.id.view_divider).setVisibility(View.GONE);
+            voteButton.setOnClickListener(null);
+        }
     }
 
     /**
@@ -300,34 +348,6 @@ public class ResolutionActivity extends AppCompatActivity {
             nullVote.setVisibility(View.VISIBLE);
         }
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
-
-        // set voting state
-        String voteStats = "";
-        switch(councilId)
-        {
-            case Assembly.GENERAL_ASSEMBLY:
-                voteStats = voteStatus.gaVote;
-                break;
-            case Assembly.SECURITY_COUNCIL:
-                voteStats = voteStatus.scVote;
-                break;
-        }
-
-        if (SparkleHelper.isWaMember(this, voteStatus.waState))
-        {
-            // If voting FOR the resolution
-            if (getString(R.string.wa_vote_state_for).equals(voteStats))
-            {
-                iconVoteFor.setVisibility(View.VISIBLE);
-                histIconVoteFor.setVisibility(View.VISIBLE);
-            }
-            // If voting AGAINST the resolution
-            else if (getString(R.string.wa_vote_state_against).equals(voteStats))
-            {
-                iconVoteAgainst.setVisibility(View.VISIBLE);
-                histIconVoteAgainst.setVisibility(View.VISIBLE);
-            }
-        }
 
         mSwipeRefreshLayout.setRefreshing(false);
     }

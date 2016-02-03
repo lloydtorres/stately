@@ -197,6 +197,9 @@
     <string name="wa_proposed">Proposed by %1$s</string>
     <string name="wa_nominee_template">%1$s \u2014 %2$s</string>
     <string name="wa_resolution">Resolution</string>
+    <string name="wa_resolution_vote_default">Vote on this resolution</string>
+    <string name="wa_resolution_vote_for">Voted FOR this resolution.</string>
+    <string name="wa_resolution_vote_against">Voted AGAINST this resolution.</string>
     <string name="wa_vote_breakdown">Vote Breakdown</string>
     <string name="wa_vote_history">Vote History</string>
     <string name="wa_x_axis_h">%1$d h</string>
