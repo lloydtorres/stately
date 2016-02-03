@@ -27,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.GenericFragment;
@@ -204,7 +205,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     break;
                 case R.id.nav_wa:
                     // Chose World Assembly
-                    fChoose = new AssemblyMainFragment();
+                    fChoose = getWaFragment();
                     break;
                 default:
                     // Backup
@@ -270,6 +271,18 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         regionFragment.setRegionName(mNation.region);
 
         return regionFragment;
+    }
+
+    private AssemblyMainFragment getWaFragment()
+    {
+        AssemblyMainFragment waFragment = new AssemblyMainFragment();
+        WaVoteStatus voteStatus = new WaVoteStatus();
+        voteStatus.waState = mNation.waState;
+        voteStatus.gaVote = mNation.gaVote;
+        voteStatus.scVote = mNation.scVote;
+        waFragment.setVoteStatus(voteStatus);
+
+        return waFragment;
     }
 
     /**

@@ -197,7 +197,7 @@ public class OverviewSubFragment extends Fragment {
         waCard = (CardView) view.findViewById(R.id.card_overview_wa);
 
         // Only show if member of the WA (or delegate)
-        if (mNation.waState.equals(getString(R.string.nation_wa_member)) || mNation.waState.equals(getString(R.string.nation_wa_delegate)))
+        if (SparkleHelper.isWaMember(getContext(), mNation.waState))
         {
             waCard.setVisibility(View.VISIBLE);
 

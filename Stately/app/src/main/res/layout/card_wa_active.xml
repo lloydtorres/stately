@@ -53,57 +53,79 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center"
                 android:background="@color/colorChart0">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/main_icon_vote_for"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_voted"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:text="@string/wa_for"/>
-                <TextView
-                    android:id="@+id/card_wa_for"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@android:color/white"
-                    android:textSize="30sp"
-                    tools:text="54,321"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:text="@string/wa_for"/>
+                    <TextView
+                        android:id="@+id/card_wa_for"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@android:color/white"
+                        android:textSize="30sp"
+                        tools:text="54,321"/>
+                </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center"
                 android:background="@color/colorChart1">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/main_icon_vote_against"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_voted"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:text="@string/wa_against"/>
-                <TextView
-                    android:id="@+id/card_wa_against"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@android:color/white"
-                    android:textSize="30sp"
-                    tools:text="12,345"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:text="@string/wa_against"/>
+                    <TextView
+                        android:id="@+id/card_wa_against"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@android:color/white"
+                        android:textSize="30sp"
+                        tools:text="12,345"/>
+                </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 

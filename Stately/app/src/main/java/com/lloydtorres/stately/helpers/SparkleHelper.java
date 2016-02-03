@@ -543,6 +543,17 @@ public class SparkleHelper {
     }
 
     /**
+     * Checks if the given string indicates that the given stat is for a WA member.
+     * @param c App context
+     * @param stat WA state indicator
+     * @return bool if stat indicates its a WA member
+     */
+    public static boolean isWaMember(Context c, String stat)
+    {
+        return stat.equals(c.getString(R.string.nation_wa_member)) || stat.equals(c.getString(R.string.nation_wa_delegate));
+    }
+
+    /**
      * LINK AND HTML PROCESSING
      * These are functions used to transform raw NationStates BBCode and formatting into clickable
      * links and formatted text. Separate from the other formatting functions due to their unique

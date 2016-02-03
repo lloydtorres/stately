@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -13,6 +14,7 @@ import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyStats;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningCard;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -36,10 +38,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private List<Object> cards;
     private Context context;
+    private WaVoteStatus voteStatus;
 
-    public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc)
+    public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc, WaVoteStatus vs)
     {
         context = c;
+        voteStatus = vs;
 
         // Setup objects based on RecyclerView content
         cards = new ArrayList<Object>();
@@ -131,12 +135,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card for active resolutions
     public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private Context context;
         private TextView cardTitle;
         private TextView cardHeader;
         private TextView cardActiveTime;
         private TextView cardFor;
         private TextView cardAgainst;
-        private Context context;
+        private ImageView iconVoteFor;
+        private ImageView iconVoteAgainst;
 
         public ActiveCard(Context c, View v) {
             super(v);
@@ -146,25 +152,44 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);
             cardFor = (TextView) v.findViewById(R.id.card_wa_for);
             cardAgainst = (TextView) v.findViewById(R.id.card_wa_against);
+            iconVoteFor = (ImageView) v.findViewById(R.id.main_icon_vote_for);
+            iconVoteAgainst = (ImageView) v.findViewById(R.id.main_icon_vote_against);
 
             v.setOnClickListener(this);
         }
 
         public void init(Assembly a, int pos)
         {
+            String voteStats = "";
             if (pos == GENERAL_ASSEMBLY_INDEX)
             {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));
+                voteStats = voteStatus.gaVote;
             }
             else if (pos == SECURITY_COUNCIL_INDEX)
             {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_security_council));
+                voteStats = voteStatus.scVote;
             }
 
             cardHeader.setText(a.resolution.name);
             cardActiveTime.setText(String.format(context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(a.resolution.voteHistoryFor.size()+1)));
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
+
+            if (SparkleHelper.isWaMember(context, voteStatus.waState))
+            {
+                // If voting FOR the resolution
+                if (context.getString(R.string.wa_vote_state_for).equals(voteStats))
+                {
+                    iconVoteFor.setVisibility(View.VISIBLE);
+                }
+                // If voting AGAINST the resolution
+                else if (context.getString(R.string.wa_vote_state_against).equals(voteStats))
+                {
+                    iconVoteAgainst.setVisibility(View.VISIBLE);
+                }
+            }
         }
 
         @Override

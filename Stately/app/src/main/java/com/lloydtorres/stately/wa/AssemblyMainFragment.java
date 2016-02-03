@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -33,6 +34,8 @@ import org.simpleframework.xml.core.Persister;
  * Gets WA data on its own, can also refresh!
  */
 public class AssemblyMainFragment extends Fragment {
+    public static final String VOTE_STATUS_KEY = "voteStatus";
+
     private Activity mActivity;
     private View mView;
     private View mainView;
@@ -45,6 +48,12 @@ public class AssemblyMainFragment extends Fragment {
 
     private Assembly genAssembly;
     private Assembly secCouncil;
+    private WaVoteStatus voteStatus;
+
+    public void setVoteStatus(WaVoteStatus w)
+    {
+        voteStatus = w;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -65,6 +74,12 @@ public class AssemblyMainFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_wa_main, container, false);
         mainView = mView.findViewById(R.id.refreshview_main);
         SparkleHelper.initAd(mView, R.id.ad_wa_fragment);
+
+        // Restore state
+        if (savedInstanceState != null && voteStatus == null)
+        {
+            voteStatus = savedInstanceState.getParcelable(VOTE_STATUS_KEY);
+        }
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_wa));
@@ -186,9 +201,20 @@ public class AssemblyMainFragment extends Fragment {
 
     private void refreshRecycler()
     {
-        mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil);
+        mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil, voteStatus);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        if (voteStatus != null)
+        {
+            savedInstanceState.putParcelable(VOTE_STATUS_KEY, voteStatus);
+        }
     }
 
     @Override
