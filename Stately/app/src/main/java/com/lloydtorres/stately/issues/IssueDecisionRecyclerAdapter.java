@@ -130,6 +130,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private LinearLayout selectButton;
         private ImageView selectIcon;
         private TextView selectContent;
+        private View divider;
 
         public IssueOptionCard(Context c, View v)
         {
@@ -141,6 +142,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             selectButton = (LinearLayout) v.findViewById(R.id.card_issue_option_select);
             selectIcon = (ImageView) v.findViewById(R.id.card_issue_option_select_icon);
             selectContent = (TextView) v.findViewById(R.id.card_issue_option_select_text);
+            divider = v.findViewById(R.id.view_divider);
         }
 
         public void init(IssueOption op, int mode)
@@ -159,6 +161,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 contentHolder.setVisibility(View.GONE);
                 selectContent.setText(context.getString(R.string.issue_dismiss_issue));
                 selectIcon.setImageResource(R.drawable.ic_dismiss_green);
+                divider.setVisibility(View.GONE);
             }
 
             if (op.selected)

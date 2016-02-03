@@ -28,6 +28,7 @@
                 android:textColor="@color/colorPrimaryText"
                 tools:text="Lorem ipsum" />
         </LinearLayout>
+        <include layout="@layout/view_divider" />
         <LinearLayout
             android:gravity="center_vertical"
             android:id="@+id/card_issue_option_select"

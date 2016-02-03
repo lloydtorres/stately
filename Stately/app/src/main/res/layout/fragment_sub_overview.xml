@@ -329,12 +329,12 @@
                     android:textColor="@color/colorPrimaryText"
                     tools:text="@string/card_overview_wa_overview" />
             </LinearLayout>
+            <include layout="@layout/view_divider" />
             <LinearLayout
                 android:id="@+id/nation_wa_endorsements"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-            <include layout="@layout/view_divider" />
                 android:orientation="vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"

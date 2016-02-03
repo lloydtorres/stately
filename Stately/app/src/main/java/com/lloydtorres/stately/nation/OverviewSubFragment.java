@@ -242,6 +242,11 @@ public class OverviewSubFragment extends Fragment {
                     }
                 });
             }
+            else
+            {
+                // disable divider
+                view.findViewById(R.id.view_divider).setVisibility(View.GONE);
+            }
 
             // Show vote state in General Assembly if exists
             if (mNation.gaVote != null)

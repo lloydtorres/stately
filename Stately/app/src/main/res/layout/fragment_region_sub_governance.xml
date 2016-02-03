@@ -58,7 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            card_view:cardBackgroundColor="@color/colorPrimary"
             card_view:contentPaddingLeft="20dp"
             card_view:contentPaddingRight="20dp"
             card_view:contentPaddingTop="10dp"
@@ -74,7 +73,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/card_region_embassies" />
                 <TextView
                     android:id="@+id/card_region_embassies_num"
@@ -85,7 +84,7 @@
                     android:fontFamily="sans-serif-light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorPrimary"
                     tools:text="88" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
