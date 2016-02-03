@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -29,6 +30,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
 import com.lloydtorres.stately.dto.Resolution;
+import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -49,9 +52,11 @@ public class ResolutionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String TARGET_COUNCIL_ID = "councilId";
     public static final String TARGET_RESOLUTION = "resolution";
+    public static final String TARGET_VOTE_STATUS = "voteStatus";
 
     private AssemblyActive mAssembly;
     private Resolution mResolution;
+    private WaVoteStatus voteStatus;
     private int councilId;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -71,6 +76,11 @@ public class ResolutionActivity extends AppCompatActivity {
     private TextView voteHistoryFor;
     private TextView voteHistoryAgainst;
 
+    private ImageView iconVoteFor;
+    private ImageView iconVoteAgainst;
+    private ImageView histIconVoteFor;
+    private ImageView histIconVoteAgainst;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +93,13 @@ public class ResolutionActivity extends AppCompatActivity {
         {
             councilId = getIntent().getIntExtra(TARGET_COUNCIL_ID, 1);
             mResolution = getIntent().getParcelableExtra(TARGET_RESOLUTION);
+            voteStatus = getIntent().getParcelableExtra(TARGET_VOTE_STATUS);
         }
         if (savedInstanceState != null)
         {
             councilId = savedInstanceState.getInt(TARGET_COUNCIL_ID);
             mResolution = savedInstanceState.getParcelable(TARGET_RESOLUTION);
+            voteStatus = savedInstanceState.getParcelable(TARGET_VOTE_STATUS);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_wa_council);
@@ -117,6 +129,11 @@ public class ResolutionActivity extends AppCompatActivity {
         votingHistory = (LineChart) findViewById(R.id.wa_voting_history);
         voteHistoryFor = (TextView) findViewById(R.id.wa_vote_history_for);
         voteHistoryAgainst = (TextView) findViewById(R.id.wa_vote_history_against);
+
+        iconVoteFor = (ImageView) findViewById(R.id.content_icon_vote_for);
+        iconVoteAgainst = (ImageView) findViewById(R.id.content_icon_vote_against);
+        histIconVoteFor = (ImageView) findViewById(R.id.history_icon_vote_for);
+        histIconVoteAgainst = (ImageView) findViewById(R.id.history_icon_vote_against);
 
         // if no resolution passed in, go get it from server.
         if (mResolution == null)
@@ -156,6 +173,10 @@ public class ResolutionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * Queries the resolution from the specified chamber, then calls to check the nation status.
+     * @param chamberId Current WA chamber being checked
+     */
     private void queryResolution(int chamberId)
     {
         final View fView = findViewById(R.id.wa_council_main);
@@ -169,7 +190,7 @@ public class ResolutionActivity extends AppCompatActivity {
                         Persister serializer = new Persister();
                         try {
                             waResponse = serializer.read(AssemblyActive.class, response);
-                            setResolution(waResponse);
+                            queryVoteStatus(waResponse);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -193,6 +214,60 @@ public class ResolutionActivity extends AppCompatActivity {
         });
 
         DashHelper.getInstance(this).addRequest(stringRequest);
+    }
+
+    /**
+     * Called from queryResolution(). Checks the current nation's WA voting rights.
+     * @param a The resolution data to be passed to setResolution().
+     */
+    private void queryVoteStatus(final AssemblyActive a)
+    {
+        final View fView = findViewById(R.id.wa_council_main);
+        UserLogin u = SparkleHelper.getActiveUser(this);
+        String targetURL = String.format(WaVoteStatus.QUERY, SparkleHelper.getIdFromName(u.name));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    WaVoteStatus vsResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            vsResponse = serializer.read(WaVoteStatus.class, response);
+                            setVoteStatus(vsResponse);
+                            setResolution(a);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        DashHelper.getInstance(this).addRequest(stringRequest);
+    }
+
+    /**
+     * Setter for the voteStatus object.
+     * @param vs
+     */
+    private void setVoteStatus(WaVoteStatus vs)
+    {
+        voteStatus = vs;
     }
 
     /**
@@ -225,6 +300,34 @@ public class ResolutionActivity extends AppCompatActivity {
             nullVote.setVisibility(View.VISIBLE);
         }
         setVotingHistory(mResolution.voteHistoryFor, mResolution.voteHistoryAgainst);
+
+        // set voting state
+        String voteStats = "";
+        switch(councilId)
+        {
+            case Assembly.GENERAL_ASSEMBLY:
+                voteStats = voteStatus.gaVote;
+                break;
+            case Assembly.SECURITY_COUNCIL:
+                voteStats = voteStatus.scVote;
+                break;
+        }
+
+        if (SparkleHelper.isWaMember(this, voteStatus.waState))
+        {
+            // If voting FOR the resolution
+            if (getString(R.string.wa_vote_state_for).equals(voteStats))
+            {
+                iconVoteFor.setVisibility(View.VISIBLE);
+                histIconVoteFor.setVisibility(View.VISIBLE);
+            }
+            // If voting AGAINST the resolution
+            else if (getString(R.string.wa_vote_state_against).equals(voteStats))
+            {
+                iconVoteAgainst.setVisibility(View.VISIBLE);
+                histIconVoteAgainst.setVisibility(View.VISIBLE);
+            }
+        }
 
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -375,6 +478,10 @@ public class ResolutionActivity extends AppCompatActivity {
         {
             savedInstanceState.putParcelable(TARGET_RESOLUTION, mResolution);
         }
+        if (voteStatus != null)
+        {
+            savedInstanceState.putParcelable(TARGET_VOTE_STATUS, voteStatus);
+        }
     }
 
     @Override
@@ -388,6 +495,10 @@ public class ResolutionActivity extends AppCompatActivity {
             if (mResolution == null)
             {
                 mResolution = savedInstanceState.getParcelable(TARGET_RESOLUTION);
+            }
+            if (voteStatus == null)
+            {
+                voteStatus = savedInstanceState.getParcelable(TARGET_VOTE_STATUS);
             }
         }
     }

@@ -210,6 +210,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                         resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(SECURITY_COUNCIL_INDEX)).resolution);
                         break;
                 }
+                resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_VOTE_STATUS, voteStatus);
                 context.startActivity(resolutionActivityLaunch);
             }
         }
