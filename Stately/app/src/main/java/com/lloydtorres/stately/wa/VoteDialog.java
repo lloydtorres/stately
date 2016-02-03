@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-02-02.
@@ -23,8 +24,14 @@ public class VoteDialog extends DialogFragment {
 
     private RadioGroup voteToggleState;
     private int choice;
+    private ResolutionActivity activity;
 
     public VoteDialog() { }
+
+    public void setListener(ResolutionActivity a)
+    {
+        activity = a;
+    }
 
     public void setChoice(int c)
     {
@@ -54,7 +61,7 @@ public class VoteDialog extends DialogFragment {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // @TODO
+                submitVote();
             }
         };
 
@@ -65,5 +72,30 @@ public class VoteDialog extends DialogFragment {
                 .setNegativeButton(R.string.explore_negative, null);
 
         return dialogBuilder.create();
+    }
+
+    /**
+     * Calls ResolutionActivity's own submitVote logic.
+     */
+    private void submitVote()
+    {
+        int mode;
+        switch (voteToggleState.getCheckedRadioButtonId())
+        {
+            case R.id.vote_radio_for:
+                mode = VOTE_FOR;
+                break;
+            case R.id.vote_radio_against:
+                mode = VOTE_AGAINST;
+                break;
+            default:
+                mode = VOTE_UNDECIDED;
+                break;
+        }
+
+        if (mode != choice)
+        {
+            activity.submitVote(mode);
+        }
     }
 }

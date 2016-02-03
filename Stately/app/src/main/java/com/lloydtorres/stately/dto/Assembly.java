@@ -22,6 +22,8 @@ public class Assembly implements Parcelable {
                                         + "+lastresolution"
                                         + "+numnations+numdelegates+happenings"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final String TARGET_GA = "https://www.nationstates.net/page=ga";
+    public static final String TARGET_SC = "https://www.nationstates.net/page=sc";
 
     @Element(name="RESOLUTION", required=false)
     public Resolution resolution;

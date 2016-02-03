@@ -200,6 +200,7 @@
     <string name="wa_resolution_vote_default">Vote on this resolution</string>
     <string name="wa_resolution_vote_for">Voted FOR this resolution.</string>
     <string name="wa_resolution_vote_against">Voted AGAINST this resolution.</string>
+    <string name="wa_resolution_vote_undecided">No vote for this resolution.</string>
     <string name="wa_vote_dialog_title">Resolution Vote</string>
     <string name="wa_vote_dialog_for">Vote FOR</string>
     <string name="wa_vote_dialog_against">Vote AGAINST</string>
@@ -209,6 +210,9 @@
     <string name="wa_vote_history">Vote History</string>
     <string name="wa_x_axis_h">%1$d h</string>
     <string name="wa_x_axis_d">Day %1$d</string>
+    <string name="wa_post_for">Vote For</string>
+    <string name="wa_post_against">Vote Against</string>
+    <string name="wa_post_undecided">Withdraw Vote</string>
 
     <!-- Settings -->
     <string name="setting_autologin">Log in automatically</string>

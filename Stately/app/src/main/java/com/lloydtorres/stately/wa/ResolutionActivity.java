@@ -37,11 +37,16 @@ import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-17.
@@ -144,14 +149,7 @@ public class ResolutionActivity extends AppCompatActivity {
         // if no resolution passed in, go get it from server.
         if (mResolution == null)
         {
-            // hack to get swiperefreshlayout to show
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                }
-            });
-            queryResolution(councilId);
+            startQueryResolution();
         }
         // Otherwise just show it normally
         else
@@ -161,6 +159,18 @@ public class ResolutionActivity extends AppCompatActivity {
             setVoteStatus(voteStatus);
             setResolution(tmp);
         }
+    }
+
+    private void startQueryResolution()
+    {
+        // hack to get swiperefreshlayout to show
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        queryResolution(councilId);
     }
 
     public void setToolbar(Toolbar t) {
@@ -268,10 +278,15 @@ public class ResolutionActivity extends AppCompatActivity {
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
+    /**
+     * Convenience class to show voting dialog.
+     * @param vote Current choice in voting
+     */
     private void showVoteDialog(int vote)
     {
         FragmentManager fm = getSupportFragmentManager();
         VoteDialog voteDialog = new VoteDialog();
+        voteDialog.setListener(this);
         voteDialog.setChoice(vote);
         voteDialog.show(fm, VoteDialog.DIALOG_TAG);
     }
@@ -324,6 +339,14 @@ public class ResolutionActivity extends AppCompatActivity {
             }
             else
             {
+                findViewById(R.id.view_divider).setVisibility(View.VISIBLE);
+                iconVoteFor.setVisibility(View.GONE);
+                histIconVoteFor.setVisibility(View.GONE);
+                iconVoteAgainst.setVisibility(View.GONE);
+                histIconVoteAgainst.setVisibility(View.GONE);
+                voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+                voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                voteButtonContent.setText(getString(R.string.wa_resolution_vote_default));
                 voteChoice = VoteDialog.VOTE_UNDECIDED;
             }
 
@@ -339,6 +362,150 @@ public class ResolutionActivity extends AppCompatActivity {
             findViewById(R.id.view_divider).setVisibility(View.GONE);
             voteButton.setOnClickListener(null);
         }
+    }
+
+    /**
+     * Starts the vote submission process.
+     * @param choice Voting choice.
+     */
+    public void submitVote(int choice)
+    {
+        String url;
+        switch(councilId)
+        {
+            case Assembly.GENERAL_ASSEMBLY:
+                url = Assembly.TARGET_GA;
+                break;
+            default:
+                url = Assembly.TARGET_SC;
+                break;
+        }
+        getLocalId(url, choice);
+    }
+
+    /**
+     * Gets the required localid to post vote.
+     * @param url Target URL to scrape.
+     * @param p Vote
+     */
+    private void getLocalId(final String url, final int p)
+    {
+        final View view = findViewById(R.id.wa_council_main);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element input = d.select("input[name=localid]").first();
+
+                        if (input == null)
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            return;
+                        }
+
+                        String localid = input.attr("value");
+                        postVote(url, localid, p);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        DashHelper.getInstance(this).addRequest(stringRequest);
+    }
+
+    /**
+     * Actually post the user's vote
+     * @param url Target URL.
+     * @param localid Required localid
+     * @param p Vote
+     */
+    private void postVote(final String url, final String localid, final int p)
+    {
+        final View view = findViewById(R.id.wa_council_main);
+        final String votePost;
+        switch (p)
+        {
+            case VoteDialog.VOTE_FOR:
+                votePost = getString(R.string.wa_post_for);
+                break;
+            case VoteDialog.VOTE_AGAINST:
+                votePost = getString(R.string.wa_post_against);
+                break;
+            default:
+                votePost = getString(R.string.wa_post_undecided);
+                break;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        switch(p)
+                        {
+                            case VoteDialog.VOTE_FOR:
+                                SparkleHelper.makeSnackbar(view, getString(R.string.wa_resolution_vote_for));
+                                break;
+                            case VoteDialog.VOTE_AGAINST:
+                                SparkleHelper.makeSnackbar(view, getString(R.string.wa_resolution_vote_against));
+                                break;
+                            default:
+                                SparkleHelper.makeSnackbar(view, getString(R.string.wa_resolution_vote_undecided));
+                                break;
+                        }
+                        startQueryResolution();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("localid", localid);
+                params.put("vote", votePost);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
