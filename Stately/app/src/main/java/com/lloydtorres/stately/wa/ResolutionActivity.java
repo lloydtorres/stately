@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.wa;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -267,6 +268,14 @@ public class ResolutionActivity extends AppCompatActivity {
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
+    private void showVoteDialog(int vote)
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        VoteDialog voteDialog = new VoteDialog();
+        voteDialog.setChoice(vote);
+        voteDialog.show(fm, VoteDialog.DIALOG_TAG);
+    }
+
     /**
      * Setter for the voteStatus object.
      * @param vs
@@ -289,6 +298,7 @@ public class ResolutionActivity extends AppCompatActivity {
         if (SparkleHelper.isWaMember(this, voteStatus.waState))
         {
             voteButton.setVisibility(View.VISIBLE);
+            final int voteChoice;
 
             // If voting FOR the resolution
             if (getString(R.string.wa_vote_state_for).equals(voteStats))
@@ -299,6 +309,7 @@ public class ResolutionActivity extends AppCompatActivity {
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart0));
                 voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_for));
+                voteChoice = VoteDialog.VOTE_FOR;
             }
             // If voting AGAINST the resolution
             else if (getString(R.string.wa_vote_state_against).equals(voteStats))
@@ -309,7 +320,19 @@ public class ResolutionActivity extends AppCompatActivity {
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart1));
                 voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_against));
+                voteChoice = VoteDialog.VOTE_AGAINST;
             }
+            else
+            {
+                voteChoice = VoteDialog.VOTE_UNDECIDED;
+            }
+
+            voteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showVoteDialog(voteChoice);
+                }
+            });
         }
         else
         {
