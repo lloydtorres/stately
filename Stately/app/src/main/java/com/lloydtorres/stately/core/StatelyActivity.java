@@ -327,21 +327,19 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         // with link to login activity
         if (logins.size() <= 1)
         {
-            AlertDialog dialog;
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    SparkleHelper.startAddNation(getApplicationContext());
+                    SparkleHelper.startAddNation(StatelyActivity.this);
                     dialog.dismiss();
                 }
             };
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-            dialog = dialogBuilder
+            dialogBuilder
                     .setTitle(getString(R.string.menu_switch))
                     .setMessage(getString(R.string.switch_single_warn))
                     .setPositiveButton(getString(R.string.log_in), dialogClickListener)
-                    .setNegativeButton(getString(R.string.explore_negative), null).create();
-            dialog.show();
+                    .setNegativeButton(getString(R.string.explore_negative), null).show();
         }
         // If other nations exist, show switch dialog
         else
