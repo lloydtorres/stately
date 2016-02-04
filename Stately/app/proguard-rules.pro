@@ -17,3 +17,7 @@
 #}
 
 -keep class org.ocpsoft.prettytime.i18n.**
+-keep public class * extends com.orm.SugarRecord {
+    public protected *;
+}
+-keep class com.orm.** { *; }

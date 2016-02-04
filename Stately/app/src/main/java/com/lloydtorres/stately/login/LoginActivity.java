@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.core;
+package com.lloydtorres.stately.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +18,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -40,6 +41,10 @@ import java.util.Map;
  * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
+    public static final String USERNAME_KEY = "username";
+    public static final String AUTOLOGIN_KEY = "autologin";
+    public static final String NOAUTOLOGIN_KEY = "disableAutoLogin";
+
     // Cookie shenanigans
     private static final String LOGIN_TARGET = "https://www.nationstates.net/";
     private static final URI LOGIN_URI = URI.create(LOGIN_TARGET);
@@ -71,6 +76,24 @@ public class LoginActivity extends AppCompatActivity {
         cookies.getCookieStore().removeAll();
         cookies.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookies);
+
+        // If activity was launched by an intent, handle that first
+        if (getIntent() != null)
+        {
+            String username = getIntent().getStringExtra(USERNAME_KEY);
+            String autologin = getIntent().getStringExtra(AUTOLOGIN_KEY);
+            boolean noAutoLogin = getIntent().getBooleanExtra(NOAUTOLOGIN_KEY, false);
+
+            if (username != null && autologin != null)
+            {
+                verifyAutologin(username, autologin);
+            }
+            // Prevent autologin
+            if (noAutoLogin)
+            {
+                return;
+            }
+        }
 
         // If settings allows it and user login exists, try logging in first
         if (storage.getBoolean("setting_autologin", true))
@@ -298,8 +321,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                             nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
+                            nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(nationActivityLaunch);
-                            finish();
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());

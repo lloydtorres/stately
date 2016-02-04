@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-02-02.

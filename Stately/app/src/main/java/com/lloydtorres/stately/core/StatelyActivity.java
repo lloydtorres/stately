@@ -27,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -34,12 +35,17 @@ import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.issues.IssuesFragment;
+import com.lloydtorres.stately.login.LoginActivity;
+import com.lloydtorres.stately.login.SwitchNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 
 import org.simpleframework.xml.core.Persister;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The core Stately activity. This is where the magic happens.
@@ -51,6 +57,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
+                                        R.id.nav_switch,
                                         R.id.nav_settings,
                                         R.id.nav_logout
                                     };
@@ -230,6 +237,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     // Open explore dialog
                     explore();
                     break;
+                case R.id.nav_switch:
+                    switchNation();
+                    break;
                 case R.id.nav_settings:
                     startSettings();
                     break;
@@ -308,6 +318,41 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         FragmentManager fm = getSupportFragmentManager();
         ExploreDialog exploreDialog = new ExploreDialog();
         exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
+    }
+
+    private void switchNation()
+    {
+        List<UserLogin> logins = UserLogin.listAll(UserLogin.class);
+        // If no other nations besides current one, show warning dialog
+        // with link to login activity
+        if (logins.size() <= 1)
+        {
+            AlertDialog dialog;
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent loginActivityLaunch = new Intent(getApplicationContext(), LoginActivity.class);
+                    loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
+                    startActivity(loginActivityLaunch);
+                    dialog.dismiss();
+                }
+            };
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialog = dialogBuilder
+                    .setTitle(getString(R.string.menu_switch))
+                    .setMessage(getString(R.string.switch_single_warn))
+                    .setPositiveButton(getString(R.string.log_in), dialogClickListener)
+                    .setNegativeButton(getString(R.string.explore_negative), null).create();
+            dialog.show();
+        }
+        // If other nations exist, show switch dialog
+        else
+        {
+            FragmentManager fm = getSupportFragmentManager();
+            SwitchNationDialog switchDialog = new SwitchNationDialog();
+            switchDialog.setLogins(new ArrayList<UserLogin>(logins));
+            switchDialog.show(fm, SwitchNationDialog.DIALOG_TAG);
+        }
     }
 
     /**

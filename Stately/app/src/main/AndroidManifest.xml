@@ -16,7 +16,7 @@
         <meta-data android:name="QUERY_LOG" android:value="false" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.lloydtorres.stately.dto" />
         <activity
-            android:name=".core.LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme">

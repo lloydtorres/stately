@@ -1,7 +1,6 @@
 package com.lloydtorres.stately.settings;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,7 +18,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     private SharedPreferences storage;
     private static AlertDialog.Builder dialogBuilder;
-    private static DialogInterface.OnClickListener dialogClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +31,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         storage.registerOnSharedPreferenceChangeListener(this);
 
         dialogBuilder = new AlertDialog.Builder(this);
-        dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        };
     }
 
     private void setToolbar(Toolbar toolbar)
@@ -68,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("setting_crashreport")) {
-            dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), dialogClickListener).show();
+            dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
         }
     }
 }

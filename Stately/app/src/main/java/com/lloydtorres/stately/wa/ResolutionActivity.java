@@ -241,7 +241,7 @@ public class ResolutionActivity extends AppCompatActivity {
     {
         final View fView = findViewById(R.id.wa_council_main);
         UserLogin u = SparkleHelper.getActiveUser(this);
-        String targetURL = String.format(WaVoteStatus.QUERY, SparkleHelper.getIdFromName(u.name));
+        String targetURL = String.format(WaVoteStatus.QUERY, u.nationId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

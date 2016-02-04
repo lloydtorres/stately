@@ -397,13 +397,18 @@ public class SparkleHelper {
      */
 
     /**
-     * Sets the currently logged-in user in shared prefs;
+     * Sets the currently logged-in user in shared prefs and saves them into the database.
      * @param c App context
      * @param name User name
      * @param autologin User autologin cookie
      */
     public static void setActiveUser(Context c, String name, String autologin)
     {
+        // Save user into database
+        UserLogin u = new UserLogin(getIdFromName(name), name, autologin);
+        u.save();
+
+        // Save user into shared preferences
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(VAR_NAME, name);
@@ -423,9 +428,7 @@ public class SparkleHelper {
         String autologin = storage.getString(VAR_AUTOLOGIN, null);
         if (name != null && autologin != null)
         {
-            UserLogin u = new UserLogin();
-            u.name = name;
-            u.autologin = autologin;
+            UserLogin u = new UserLogin(getIdFromName(name), name, autologin);
             return u;
         }
 

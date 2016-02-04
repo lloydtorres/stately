@@ -22,6 +22,7 @@
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>
     <string name="menu_explore">Explore</string>
+    <string name="menu_switch">Switch Nations</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Log Out</string>
 
@@ -33,6 +34,9 @@
     <string name="explore_negative">Cancel</string>
     <string name="explore_default">Exploring&#8230;</string>
     <string name="explore_error_404_nation">Nation not found.</string>
+
+    <!-- Switch nation -->
+    <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
 
     <!-- Logout confirm -->
     <string name="logout_confirm">Log out?</string>

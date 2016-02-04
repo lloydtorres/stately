@@ -29,6 +29,10 @@
             android:icon="@drawable/ic_menu_explore"
             android:title="@string/menu_explore" />
         <item
+            android:id="@+id/nav_switch"
+            android:icon="@drawable/ic_menu_switch"
+            android:title="@string/menu_switch" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_settings" />
