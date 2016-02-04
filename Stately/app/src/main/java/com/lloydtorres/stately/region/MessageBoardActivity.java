@@ -76,6 +76,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
+        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setup refresher to requery for resolution on swipe
