@@ -306,8 +306,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void explore()
     {
         FragmentManager fm = getSupportFragmentManager();
-        ExploreDialog editNameDialog = new ExploreDialog();
-        editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
+        ExploreDialog exploreDialog = new ExploreDialog();
+        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
     }
 
     /**
