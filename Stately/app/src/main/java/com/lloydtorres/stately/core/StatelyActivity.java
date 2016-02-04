@@ -438,6 +438,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         });
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+        }
     }
 }

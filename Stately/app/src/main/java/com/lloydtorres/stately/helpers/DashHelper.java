@@ -50,11 +50,16 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  * Used for getting instances of the Volley request queue, imageloaders, etc.
  */
 public class DashHelper {
+    private static final int HALF_MINUTE_MS = 30000;
+    private static final int RATE_LIMIT = 25;
+
     private static DashHelper mDashie;
     private static Context mContext;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mImageOptions;
+    private long lastCall;
+    private int numCalls;
 
     /**
      * Private constructor.
@@ -65,6 +70,8 @@ public class DashHelper {
         mContext = c;
         mRequestQueue = getRequestQueue();
         mImageLoader = getImageLoader();
+        lastCall = System.currentTimeMillis();
+        numCalls = 0;
     }
 
     public static synchronized DashHelper getInstance(Context c)
@@ -93,9 +100,35 @@ public class DashHelper {
      * Adds a request to the Volley queue.
      * @param req The Volley request.
      */
-    public <T> void addRequest(Request<T> req)
+    public synchronized <T> boolean addRequest(Request<T> req)
     {
-        getRequestQueue().add(req);
+        if (isNotLockout())
+        {
+            getRequestQueue().add(req);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isNotLockout()
+    {
+        // Reset the call counter if more than 30 seconds have passed
+        long curTime = System.currentTimeMillis();
+        if ((curTime - lastCall) >= HALF_MINUTE_MS)
+        {
+            numCalls = 0;
+        }
+
+        if (numCalls < RATE_LIMIT)
+        {
+            lastCall = curTime;
+            numCalls++;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**

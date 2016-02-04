@@ -194,7 +194,11 @@ public class AssemblyMainFragment extends Fragment {
             }
         });
 
-        DashHelper.getInstance(getContext()).addRequest(stringRequest);
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     private void setGeneralAssembly(Assembly g)

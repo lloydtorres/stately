@@ -150,7 +150,11 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -263,7 +267,11 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     @Override

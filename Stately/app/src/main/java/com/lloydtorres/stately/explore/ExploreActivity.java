@@ -187,7 +187,10 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             }
         });
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            setExploreStatus(getString(R.string.rate_limit_error));
+        }
     }
 
     private void queryRegion(String name)
@@ -234,7 +237,10 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             }
         });
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            setExploreStatus(getString(R.string.rate_limit_error));
+        }
     }
 
     private void initFragment(Nation mNation)

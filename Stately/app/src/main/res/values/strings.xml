@@ -13,6 +13,8 @@
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
     <string name="login_error_generic">An error occurred. Please try again.</string>
 
+    <string name="rate_limit_error">Too fast! Try again in a bit.</string>
+
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

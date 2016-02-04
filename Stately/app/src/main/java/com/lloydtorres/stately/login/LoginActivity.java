@@ -166,7 +166,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -252,7 +255,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -349,7 +355,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     /**

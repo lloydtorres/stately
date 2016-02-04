@@ -303,7 +303,10 @@ public class RegionFragment extends Fragment {
             }
         });
 
-        DashHelper.getInstance(getContext()).addRequest(stringRequest);
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     // For formatting the tab slider

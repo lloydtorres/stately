@@ -193,7 +193,11 @@ public class IssuesFragment extends Fragment {
             }
         };
 
-        DashHelper.getInstance(getContext()).addRequest(stringRequest);
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -295,7 +299,11 @@ public class IssuesFragment extends Fragment {
             }
         };
 
-        DashHelper.getInstance(getContext()).addRequest(stringRequest);
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
     }
 
     @Override
