@@ -47,7 +47,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private RegionMessages messages;
     private String regionName;
     private Set<Integer> uniqueEnforcer;
-    private int pastOffset = 10;
+    private int pastOffset = 0;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
 
@@ -105,20 +105,25 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         if (messages.posts.size() <= 0)
         {
-            // hack to get swipyrefreshlayout to show
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                }
-            });
-            queryMessages(0, SCAN_FORWARD, true);
+            startQueryMessages();
         }
         // Otherwise just show it normally
         else
         {
-            refreshRecycler();
+            refreshRecycler(SCAN_FORWARD, 0);
         }
+    }
+
+    public void startQueryMessages()
+    {
+        // hack to get swipyrefreshlayout to show
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        queryMessages(0, SCAN_FORWARD, true);
     }
 
     public void setToolbar(Toolbar t) {
@@ -142,8 +147,9 @@ public class MessageBoardActivity extends AppCompatActivity {
         // stop if this is the 11th time the query has been called moving forward
         if (direction == SCAN_FORWARD && offset >= 110)
         {
+            pastOffset = 10;
             SparkleHelper.makeSnackbar(fView, getString(R.string.rmb_backload_error));
-            refreshRecycler();
+            refreshRecycler(SCAN_FORWARD, 0);
             return;
         }
 
@@ -163,7 +169,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                                     processMessageResponseBackward(fView, messageResponse);
                                     break;
                                 default:
-                                    processMessageResponseForward(messageResponse, offset, initialRun);
+                                    processMessageResponseForward(fView, messageResponse, offset, initialRun);
                                     break;
                             }
                         }
@@ -192,13 +198,18 @@ public class MessageBoardActivity extends AppCompatActivity {
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
+    /**
+     * Used to scan for previous messages.
+     * @param view Activity view
+     * @param m Message response
+     */
     private void processMessageResponseBackward(View view, RegionMessages m)
     {
         // If there's nothing in the current messages, then there's probably nothing in the past
         if (messages.posts.size() <= 0 || m.posts.size() <= 0)
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_no_content));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
             return;
         }
 
@@ -216,15 +227,15 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
 
         // If all messages were from the past, we're good
-        if (timeCounter >= 10)
+        if (timeCounter >= m.posts.size())
         {
-            pastOffset += 10;
+            pastOffset += m.posts.size();
             messages.posts.addAll(m.posts);
             for (Post p : m.posts)
             {
                 uniqueEnforcer.add(p.id);
             }
-            refreshRecycler();
+            refreshRecycler(SCAN_BACKWARD, m.posts.size());
         }
         // If only some messages were from the past, adjust the offset and try again
         else if (timeCounter < 10 && timeCounter >= 1)
@@ -237,7 +248,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         // If all messages are not from the past, stop and complain
         else
         {
-            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backload_error));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backtrack_error));
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -249,7 +260,7 @@ public class MessageBoardActivity extends AppCompatActivity {
      * @param offset The current offset
      * @param initialRun if this is the first time the process is being run
      */
-    private void processMessageResponseForward(RegionMessages m, int offset, boolean initialRun)
+    private void processMessageResponseForward(View view, RegionMessages m, int offset, boolean initialRun)
     {
         int uniqueMessages = 0;
 
@@ -264,6 +275,8 @@ public class MessageBoardActivity extends AppCompatActivity {
             }
         }
 
+        pastOffset += uniqueMessages;
+
         // If this is the initial run, don't keep going
         if (!initialRun && uniqueMessages >= 10)
         {
@@ -272,20 +285,34 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
         else
         {
-            // We've reached the point where we already have the messages, so put everything back together
-            refreshRecycler();
+            if (uniqueMessages <= 0)
+            {
+                SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            else
+            {
+                // We've reached the point where we already have the messages, so put everything back together
+                refreshRecycler(SCAN_FORWARD, 0);
+            }
         }
     }
 
     /**
      * Refreshes the contents of the recycler
      */
-    private void refreshRecycler()
+    private void refreshRecycler(int direction, int newItems)
     {
         Collections.sort(messages.posts);
         mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+
+        // go back to user position if scanning backward
+        if (direction == SCAN_BACKWARD)
+        {
+            ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 16);
+        }
     }
 
     /**

@@ -166,7 +166,9 @@
     <!-- Region message board -->
     <string name="region_rmb">RMB: %1$s</string>
     <string name="rmb_no_content">Nothing to see here!</string>
+    <string name="rmb_caught_up">All caught up!</string>
     <string name="rmb_backload_error">Too many messages to load, some were skipped.</string>
+    <string name="rmb_backtrack_error">Can\'t catch up with the volume of posts.</string>
 
     <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>
