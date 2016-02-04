@@ -28,6 +28,7 @@ import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.login.LoginActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -459,6 +460,13 @@ public class SparkleHelper {
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_ID, n);
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_MODE, mode);
         c.startActivity(exploreActivityLaunch);
+    }
+
+    public static void startAddNation(Context c)
+    {
+        Intent loginActivityLaunch = new Intent(c, LoginActivity.class);
+        loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
+        c.startActivity(loginActivityLaunch);
     }
 
     /**

@@ -331,9 +331,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent loginActivityLaunch = new Intent(getApplicationContext(), LoginActivity.class);
-                    loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
-                    startActivity(loginActivityLaunch);
+                    SparkleHelper.startAddNation(getApplicationContext());
                     dialog.dismiss();
                 }
             };

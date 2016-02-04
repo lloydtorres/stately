@@ -37,6 +37,7 @@
 
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
+    <string name="add_nation">Add Nation</string>
 
     <!-- Logout confirm -->
     <string name="logout_confirm">Log out?</string>

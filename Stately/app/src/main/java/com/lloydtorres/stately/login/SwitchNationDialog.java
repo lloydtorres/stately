@@ -1,5 +1,8 @@
 package com.lloydtorres.stately.login;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -7,10 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,20 +49,30 @@ public class SwitchNationDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_paddedrecycler, container, false);
-        getDialog().setTitle(getString(R.string.menu_switch));
-        getDialog().setCanceledOnTouchOutside(true);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_paddedrecycler, null);
 
         // Restore saved state
         if (savedInstanceState != null)
         {
             logins = savedInstanceState.getParcelableArrayList(LOGINS_KEY);
         }
-
         initRecycler(view);
 
-        return view;
+        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SparkleHelper.startAddNation(getContext());
+            }
+        };
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle(R.string.menu_switch)
+                .setView(view)
+                .setPositiveButton(R.string.add_nation, dialogListener);
+
+        return dialogBuilder.create();
     }
 
     private void initRecycler(View view)
