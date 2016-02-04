@@ -89,7 +89,7 @@ public class IssuesFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_issues));
 
-        if (mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof PrimeActivity)
         {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
@@ -159,12 +159,20 @@ public class IssuesFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         processIssues(view, d);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {

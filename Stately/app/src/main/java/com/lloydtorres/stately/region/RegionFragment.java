@@ -137,7 +137,7 @@ public class RegionFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
-        if (mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof PrimeActivity)
         {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
@@ -258,6 +258,11 @@ public class RegionFragment extends Fragment {
                     Region regionResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
                         Persister serializer = new Persister();
                         try {
                             regionResponse = serializer.read(Region.class, response);
@@ -279,6 +284,10 @@ public class RegionFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));

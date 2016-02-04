@@ -84,7 +84,7 @@ public class AssemblyMainFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_wa));
 
-        if (mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof PrimeActivity)
         {
             ((PrimeActivity) mActivity).setToolbar(toolbar);
         }
@@ -146,6 +146,10 @@ public class AssemblyMainFragment extends Fragment {
                     Assembly waResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
                         Persister serializer = new Persister();
                         try {
                             waResponse = serializer.read(Assembly.class, response);
@@ -174,6 +178,10 @@ public class AssemblyMainFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
