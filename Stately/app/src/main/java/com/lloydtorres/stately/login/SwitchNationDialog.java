@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -58,8 +59,10 @@ public class SwitchNationDialog extends DialogFragment {
         {
             logins = savedInstanceState.getParcelableArrayList(LOGINS_KEY);
         }
+
         initRecycler(view);
 
+        // Build actual dialog
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -77,6 +80,7 @@ public class SwitchNationDialog extends DialogFragment {
 
     private void initRecycler(View view)
     {
+        // Base recycler stuff
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -84,6 +88,31 @@ public class SwitchNationDialog extends DialogFragment {
         Collections.sort(logins);
         mRecyclerAdapter = new SwitchNationRecyclerAdapter(getContext(), this, logins);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+
+        // Add swipe to delete
+        ItemTouchHelper.SimpleCallback deleteCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                // not needed
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // remove on swipe
+                int pos = viewHolder.getAdapterPosition();
+
+                if (pos != RecyclerView.NO_POSITION)
+                {
+                    logins.get(pos).delete();
+                    logins.remove(pos);
+                    mRecyclerAdapter.notifyItemRemoved(pos);
+                    mRecyclerAdapter.notifyItemRangeChanged(pos, logins.size());
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
