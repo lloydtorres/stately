@@ -38,10 +38,16 @@ public class MessageBoardActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String BOARD_REGION_NAME = "regionName";
     public static final String BOARD_MESSAGES = "messages";
+    public static final String BOARD_PAST_OFFSET = "pastOffset";
+
+    // Direction to scan for messages
+    private static final int SCAN_BACKWARD = 0;
+    private static final int SCAN_FORWARD = 1;
 
     private RegionMessages messages;
     private String regionName;
     private Set<Integer> uniqueEnforcer;
+    private int pastOffset = 10;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
 
@@ -67,6 +73,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
             regionName = savedInstanceState.getString(BOARD_REGION_NAME);
+            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, 10);
             rebuildUniqueEnforcer();
         }
 
@@ -85,7 +92,14 @@ public class MessageBoardActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                queryMessages(0, false);
+                if (direction == SwipyRefreshLayoutDirection.TOP)
+                {
+                    queryMessages(pastOffset, SCAN_BACKWARD, false);
+                }
+                else
+                {
+                    queryMessages(0, SCAN_FORWARD, false);
+                }
             }
         });
 
@@ -98,7 +112,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                     mSwipeRefreshLayout.setRefreshing(true);
                 }
             });
-            queryMessages(0, true);
+            queryMessages(0, SCAN_FORWARD, true);
         }
         // Otherwise just show it normally
         else
@@ -121,12 +135,12 @@ public class MessageBoardActivity extends AppCompatActivity {
      * Get RMB messages from NationStates
      * @param offset the number of messages to skip
      */
-    private void queryMessages(final int offset, final boolean initialRun)
+    private void queryMessages(final int offset, final int direction, final boolean initialRun)
     {
         final View fView = findViewById(R.id.message_board_coordinator);
 
-        // stop if this is the 11th time the query has been called
-        if (offset >= 110)
+        // stop if this is the 11th time the query has been called moving forward
+        if (direction == SCAN_FORWARD && offset >= 110)
         {
             SparkleHelper.makeSnackbar(fView, getString(R.string.rmb_backload_error));
             refreshRecycler();
@@ -143,7 +157,15 @@ public class MessageBoardActivity extends AppCompatActivity {
                         Persister serializer = new Persister();
                         try {
                             messageResponse = serializer.read(RegionMessages.class, response);
-                            processMessageResponse(messageResponse, offset, initialRun);
+                            switch (direction)
+                            {
+                                case SCAN_BACKWARD:
+                                    processMessageResponseBackward(fView, messageResponse);
+                                    break;
+                                default:
+                                    processMessageResponseForward(messageResponse, offset, initialRun);
+                                    break;
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -170,14 +192,64 @@ public class MessageBoardActivity extends AppCompatActivity {
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
+    private void processMessageResponseBackward(View view, RegionMessages m)
+    {
+        // If there's nothing in the current messages, then there's probably nothing in the past
+        if (messages.posts.size() <= 0 || m.posts.size() <= 0)
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_no_content));
+            return;
+        }
+
+        Collections.sort(m.posts);
+
+        // Count the number of obtained posts that were posted earlier than the current earliest
+        long earliestCurrentDate = messages.posts.get(0).timestamp;
+        int timeCounter = 0;
+        for (Post p : m.posts)
+        {
+            if (p.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(p.id))
+            {
+                timeCounter++;
+            }
+        }
+
+        // If all messages were from the past, we're good
+        if (timeCounter >= 10)
+        {
+            pastOffset += 10;
+            messages.posts.addAll(m.posts);
+            for (Post p : m.posts)
+            {
+                uniqueEnforcer.add(p.id);
+            }
+            refreshRecycler();
+        }
+        // If only some messages were from the past, adjust the offset and try again
+        else if (timeCounter < 10 && timeCounter >= 1)
+        {
+            // If only n/10 messages were older than the earliest, then we should move
+            // our offset by 10 - n to get all 10 old messages
+            pastOffset += (10 - timeCounter);
+            queryMessages(pastOffset, SCAN_FORWARD, false);
+        }
+        // If all messages are not from the past, stop and complain
+        else
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backload_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     /**
-     * Process the response after querying for RMB messages.
+     * Process the response after querying for RMB messages (scanning forward).
      * Depending on the response, we may have to check again if there's more messages to get.
      * @param m The response
      * @param offset The current offset
      * @param initialRun if this is the first time the process is being run
      */
-    private void processMessageResponse(RegionMessages m, int offset, boolean initialRun)
+    private void processMessageResponseForward(RegionMessages m, int offset, boolean initialRun)
     {
         int uniqueMessages = 0;
 
@@ -196,7 +268,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!initialRun && uniqueMessages >= 10)
         {
             // In this case, all the messages were unique, so there may be more messages to load
-            queryMessages(offset+10, false);
+            queryMessages(offset+10, SCAN_FORWARD, false);
         }
         else
         {
@@ -245,6 +317,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(BOARD_PAST_OFFSET, pastOffset);
         if (messages != null)
         {
             savedInstanceState.putParcelable(BOARD_MESSAGES, messages);
@@ -262,6 +335,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
         {
+            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, 10);
             if (messages == null)
             {
                 messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
