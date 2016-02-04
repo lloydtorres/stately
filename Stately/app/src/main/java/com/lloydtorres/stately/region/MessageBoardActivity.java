@@ -315,7 +315,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         // go back to user position if scanning backward
         if (direction == SCAN_BACKWARD)
         {
-            ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 16);
+            ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
         }
     }
 
