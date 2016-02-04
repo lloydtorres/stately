@@ -1,7 +1,6 @@
 package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +20,8 @@ import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.RegionMessages;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -42,7 +43,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private String regionName;
     private Set<Integer> uniqueEnforcer;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -69,20 +70,20 @@ public class MessageBoardActivity extends AppCompatActivity {
             rebuildUniqueEnforcer();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setup refresher to requery for resolution on swipe
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 queryMessages(0, false);
             }
         });
@@ -121,7 +122,7 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryMessages(final int offset, final boolean initialRun)
     {
-        final View fView = findViewById(R.id.refreshview_main);
+        final View fView = findViewById(R.id.message_board_coordinator);
 
         // stop if this is the 11th time the query has been called
         if (offset >= 110)

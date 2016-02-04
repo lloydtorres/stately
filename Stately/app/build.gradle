@@ -49,6 +49,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.github.orangegangsters:swipy:1.2.2@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'org.atteo:evo-inflector:1.2'
     compile "org.jsoup:jsoup:1.8.3"

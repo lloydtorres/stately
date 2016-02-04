@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/fragment_refreshview"
+    <include layout="@layout/content_message_board"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_above="@+id/ad_message_board_activity"/>
