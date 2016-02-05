@@ -9,12 +9,14 @@ Stately
 
 * Browse your nation's data: stats, people, government, economy, and happenings.
 * Read and respond to daily issues encountered by your nation.
-* Check your region's factbook and visit its regional message board.
-* Observe current proceedings in the World Assembly, such as resolutions at vote.
+* Login and switch between your different nations.
+* Check your region's factbook and post in the regional message board.
+* Observe and vote on the proceedings of the World Assembly.
 * Explore other nations and regions in NationStates.
 
 ### Revision History
 
+* **1.1.0** - Multi-nation login, RMB posting, WA voting.
 * **1.0.1** - Fix bug with malformed vectors.
 * **1.0.0** - Initial release.
 
@@ -31,6 +33,8 @@ Stately uses the following open-source libraries:
 * [PrettyTime](http://www.ocpsoft.org/prettytime/)
 * [Shape Image View](https://github.com/siyamed/android-shape-imageview)
 * [Simple XML](http://simple.sourceforge.net/)
+* [SugarORM](https://github.com/satyan/sugar)
+* [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)
 * [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
 * [Volley](https://github.com/mcxiaoke/android-volley)
 
