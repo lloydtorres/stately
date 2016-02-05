@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -17,8 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
+import com.lloydtorres.stately.dto.RegionMemStatus;
 import com.lloydtorres.stately.dto.RegionMessages;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -50,6 +55,9 @@ public class MessageBoardActivity extends AppCompatActivity {
     private int pastOffset = 0;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
+    private LinearLayout messageResponder;
+    private EditText messageContainer;
+    private ImageView messagePostButton;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -90,16 +98,89 @@ public class MessageBoardActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction == SwipyRefreshLayoutDirection.TOP)
-                {
+                if (direction == SwipyRefreshLayoutDirection.TOP) {
                     queryMessages(pastOffset, SCAN_BACKWARD, false);
-                }
-                else
-                {
+                } else {
                     queryMessages(0, SCAN_FORWARD, false);
                 }
             }
         });
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        queryRegionMembership();
+    }
+
+    /**
+     * Checks to see if current nation is a member of this RMB's region.
+     */
+    private void queryRegionMembership()
+    {
+        final View fView = findViewById(R.id.message_board_coordinator);
+        String targetURL = String.format(RegionMemStatus.QUERY, SparkleHelper.getActiveUser(this).nationId);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    RegionMemStatus memResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            memResponse = serializer.read(RegionMemStatus.class, response);
+                            processRegionMembership(memResponse);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Enables message respond box if member of region, then calls on function to load messages.
+     * @param rms The current nation's region.
+     */
+    private void processRegionMembership(RegionMemStatus rms)
+    {
+        if (SparkleHelper.getIdFromName(rms.region).equals(SparkleHelper.getIdFromName(regionName)))
+        {
+            messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
+            messageResponder.setVisibility(View.VISIBLE);
+            messageContainer = (EditText) findViewById(R.id.responder_content);
+            messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
+            messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
+            messagePostButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // @TODO
+                }
+            });
+        }
 
         if (messages.posts.size() <= 0)
         {
@@ -175,7 +256,6 @@ public class MessageBoardActivity extends AppCompatActivity {
                             SparkleHelper.logError(e.toString());
                             mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
-
                         }
                     }
                 }, new Response.ErrorListener() {
