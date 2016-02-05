@@ -106,13 +106,31 @@ public class MessageBoardActivity extends AppCompatActivity {
             }
         });
 
+        startSwipeRefresh();
+        queryRegionMembership();
+    }
+
+    public void setToolbar(Toolbar t) {
+        setSupportActionBar(t);
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setTitle(String.format(getString(R.string.region_rmb), regionName));
+
+        // Need to be able to get back to previous activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    /**
+     * Hack to make swipe refresh show up.
+     */
+    private void startSwipeRefresh()
+    {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
             }
         });
-        queryRegionMembership();
     }
 
     /**
@@ -193,26 +211,13 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
     }
 
-    public void startQueryMessages()
+    /**
+     * Load swipe refresher and start loading messages.
+     */
+    private void startQueryMessages()
     {
-        // hack to get swipyrefreshlayout to show
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        startSwipeRefresh();
         queryMessages(0, SCAN_FORWARD, true);
-    }
-
-    public void setToolbar(Toolbar t) {
-        setSupportActionBar(t);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(String.format(getString(R.string.region_rmb), regionName));
-
-        // Need to be able to get back to previous activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     /**
