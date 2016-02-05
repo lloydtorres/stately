@@ -29,7 +29,7 @@
         android:textSize="17sp"
         android:theme="@style/TextLabel"
         android:background="@android:color/white"
-        android:inputType="textCapWords|textFilter|textNoSuggestions"
+        android:inputType="textCapWords|textNoSuggestions"
         android:hint="@string/username_hint"
         android:nextFocusForward="@+id/field_password"/>
     <EditText
