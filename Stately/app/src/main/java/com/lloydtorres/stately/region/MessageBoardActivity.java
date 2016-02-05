@@ -20,19 +20,26 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
+import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionMemStatus;
 import com.lloydtorres.stately.dto.RegionMessages;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -58,6 +65,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private LinearLayout messageResponder;
     private EditText messageContainer;
     private ImageView messagePostButton;
+    private ImageView.OnClickListener postMessageListener;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -91,6 +99,13 @@ public class MessageBoardActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        postMessageListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postMessage();
+            }
+        };
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
@@ -192,12 +207,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             messageContainer = (EditText) findViewById(R.id.responder_content);
             messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
             messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
-            messagePostButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // @TODO
-                }
-            });
+            messagePostButton.setOnClickListener(postMessageListener);
         }
 
         if (messages.posts.size() <= 0)
@@ -368,7 +378,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!initialRun && uniqueMessages >= 10)
         {
             // In this case, all the messages were unique, so there may be more messages to load
-            queryMessages(offset+10, SCAN_FORWARD, false);
+            queryMessages(offset + 10, SCAN_FORWARD, false);
         }
         else
         {
@@ -382,6 +392,125 @@ public class MessageBoardActivity extends AppCompatActivity {
                 // We've reached the point where we already have the messages, so put everything back together
                 refreshRecycler(SCAN_FORWARD, 0);
             }
+        }
+    }
+
+    /**
+     * It's called postMessage(), but this actually gets the chk value first before calling
+     * the function that actually posts the message.
+     */
+    private void postMessage()
+    {
+        // Make sure there's actually a message to post first
+        if (messageContainer.getText().length() <= 0)
+        {
+            return;
+        }
+
+        startSwipeRefresh();
+        messagePostButton.setOnClickListener(null);
+        final View view = findViewById(R.id.message_board_coordinator);
+        String targetURL = String.format(Region.GET_QUERY, SparkleHelper.getIdFromName(regionName));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element input = d.select("input[name=chk]").first();
+
+                        if (input == null)
+                        {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            return;
+                        }
+
+                        String chk = input.attr("value");
+                        postActualMessage(chk);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    private void postActualMessage(final String chk)
+    {
+        final View view = findViewById(R.id.message_board_coordinator);
+        String targetURL = String.format(RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        messageContainer.setText("");
+                        messagePostButton.setOnClickListener(postMessageListener);
+                        startQueryMessages();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                messagePostButton.setOnClickListener(postMessageListener);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("chk", chk);
+                params.put("message", messageContainer.getText().toString());
+                params.put("lodge_message", "1");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            messagePostButton.setOnClickListener(postMessageListener);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
 

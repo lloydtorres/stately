@@ -408,6 +408,7 @@ public class ResolutionActivity extends AppCompatActivity {
 
                         if (input == null)
                         {
+                            mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                             return;
                         }

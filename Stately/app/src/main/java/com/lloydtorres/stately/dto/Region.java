@@ -28,6 +28,7 @@ public class Region implements Parcelable {
                                         + "+officers+embassies"
                                         + "+happenings+history"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final String GET_QUERY = "https://www.nationstates.net/region=%s";
 
     @Element(name="NAME")
     public String name;
