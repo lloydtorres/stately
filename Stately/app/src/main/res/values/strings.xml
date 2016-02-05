@@ -171,6 +171,7 @@
     <string name="rmb_caught_up">All caught up!</string>
     <string name="rmb_backload_error">Too many messages to load, some were skipped.</string>
     <string name="rmb_backtrack_error">Can\'t catch up with the volume of posts.</string>
+    <string name="rmb_message_hint">Post a message…</string>
 
     <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>

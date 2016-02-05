@@ -58,9 +58,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_message_board);
-
-        // SparkleHelper.initAd(findViewById(R.id.message_board_main), R.id.ad_message_board_activity);
+        setContentView(R.layout.activity_message_board);
 
         if (getIntent() != null)
         {

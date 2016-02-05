@@ -1,24 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/message_board_main"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/message_board_main"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<include layout="@layout/content_message_board"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_above="@+id/message_board_responder"/>
 
-    <include layout="@layout/content_message_board"
-        android:layout_height="match_parent"
+<LinearLayout
+    android:id="@+id/message_board_responder"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="center|bottom"
+    android:background="@android:color/white">
+    <include layout="@layout/view_divider" />
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_above="@+id/ad_message_board_activity"/>
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_message_board_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center|bottom"
-        android:background="#222"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/ad_message_board_activity"/>
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/responder_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textSize="17sp"
+            android:background="@android:color/white"
+            android:maxLines="3"
+            android:inputType="textMultiLine|textCapSentences"
+            android:hint="@string/rmb_message_hint"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/responder_post_button"/>
+        <ImageView
+            android:id="@+id/responder_post_button"
+            android:layout_marginRight="7dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:adjustViewBounds="true"
+            android:layout_gravity="end"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_post"/>
+    </RelativeLayout>
+</LinearLayout>
 
 </RelativeLayout>
