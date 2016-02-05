@@ -462,6 +462,10 @@ public class SparkleHelper {
         c.startActivity(exploreActivityLaunch);
     }
 
+    /**
+     * Launches a LoginActivity without autologging in.
+     * @param c App context
+     */
     public static void startAddNation(Context c)
     {
         Intent loginActivityLaunch = new Intent(c, LoginActivity.class);
