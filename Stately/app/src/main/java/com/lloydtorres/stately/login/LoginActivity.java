@@ -22,6 +22,7 @@ import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
@@ -68,7 +69,9 @@ public class LoginActivity extends AppCompatActivity {
         storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         username = (EditText) findViewById(R.id.field_username);
+        username.setCustomSelectionActionModeCallback(new NullActionCallback());
         password = (EditText) findViewById(R.id.field_password);
+        password.setCustomSelectionActionModeCallback(new NullActionCallback());
         login = (Button) findViewById(R.id.login_button);
 
         // Set cookie handler
