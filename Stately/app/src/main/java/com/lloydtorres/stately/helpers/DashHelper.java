@@ -51,14 +51,14 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  */
 public class DashHelper {
     private static final int HALF_MINUTE_MS = 30000;
-    private static final int RATE_LIMIT = 25;
+    private static final int RATE_LIMIT = 45;
 
     private static DashHelper mDashie;
     private static Context mContext;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mImageOptions;
-    private long lastCall;
+    private long lastReset;
     private int numCalls;
 
     /**
@@ -70,7 +70,7 @@ public class DashHelper {
         mContext = c;
         mRequestQueue = getRequestQueue();
         mImageLoader = getImageLoader();
-        lastCall = System.currentTimeMillis();
+        lastReset = System.currentTimeMillis();
         numCalls = 0;
     }
 
@@ -114,14 +114,14 @@ public class DashHelper {
     {
         // Reset the call counter if more than 30 seconds have passed
         long curTime = System.currentTimeMillis();
-        if ((curTime - lastCall) >= HALF_MINUTE_MS)
+        if ((curTime - lastReset) >= HALF_MINUTE_MS)
         {
             numCalls = 0;
+            lastReset = curTime;
         }
 
         if (numCalls < RATE_LIMIT)
         {
-            lastCall = curTime;
             numCalls++;
             return true;
         }

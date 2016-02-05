@@ -172,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+            setLoginState(false);
         }
     }
 
