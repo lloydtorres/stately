@@ -16,8 +16,6 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
-import org.atteo.evo.inflector.English;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +102,7 @@ public class EconomySubFragment extends Fragment {
         gdpTotal.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
 
         gdpPerCapitaAvg = (TextView) view.findViewById(R.id.nation_gdp_per_capita_avg);
-        gdpPerCapitaAvg.setText(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, English.plural(mNation.currency))));
+        gdpPerCapitaAvg.setText(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
 
         gdpPerCapitaPoor = (TextView) view.findViewById(R.id.nation_gdp_per_capita_poor);
         gdpPerCapitaPoor.setText(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
