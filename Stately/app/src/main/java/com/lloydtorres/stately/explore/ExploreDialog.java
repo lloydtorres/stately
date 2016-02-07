@@ -1,10 +1,10 @@
 package com.lloydtorres.stately.explore;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,7 +44,7 @@ public class ExploreDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         dialogBuilder.setTitle(R.string.menu_explore)
                 .setView(dialogView)
                 .setPositiveButton(R.string.explore_positive, dialogListener)

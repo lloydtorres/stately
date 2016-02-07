@@ -334,7 +334,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     dialog.dismiss();
                 }
             };
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
             dialogBuilder
                     .setTitle(getString(R.string.menu_switch))
                     .setMessage(getString(R.string.switch_single_warn))
@@ -375,7 +375,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         dialogBuilder.setTitle(R.string.logout_confirm)
                 .setPositiveButton(R.string.menu_logout, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)

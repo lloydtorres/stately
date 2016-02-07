@@ -1,8 +1,10 @@
 package com.lloydtorres.stately.helpers;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,20 +51,24 @@ public class NameListDialog extends DialogFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            setStyle(DialogFragment.STYLE_NORMAL, R.style.AlertDialogCustom);
+            dialog = new AppCompatDialog(getActivity(), R.style.AlertDialogCustom);
         }
+        else
+        {
+            dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
+        }
+        dialog.setTitle(title);
+        dialog.setCanceledOnTouchOutside(true);
+        return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_paddedrecycler, container, false);
-        getDialog().setTitle(title);
-        getDialog().setCanceledOnTouchOutside(true);
+        View view = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
 
         // Restore saved state
         if (savedInstanceState != null)

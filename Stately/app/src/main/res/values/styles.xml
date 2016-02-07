@@ -29,4 +29,8 @@
         <item name="colorControlActivated">@android:color/darker_gray</item>
     </style>
 
+    <style name="MaterialDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>

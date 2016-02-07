@@ -1,9 +1,9 @@
 package com.lloydtorres.stately.settings;
 
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         storage = PreferenceManager.getDefaultSharedPreferences(this);
         storage.registerOnSharedPreferenceChangeListener(this);
 
-        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
     }
 
     private void setToolbar(Toolbar toolbar)

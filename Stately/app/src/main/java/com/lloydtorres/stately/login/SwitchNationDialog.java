@@ -1,11 +1,11 @@
 package com.lloydtorres.stately.login;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -47,12 +47,16 @@ public class SwitchNationDialog extends DialogFragment {
         {
             setStyle(DialogFragment.STYLE_NORMAL, R.style.AlertDialogCustom);
         }
+        else
+        {
+            setStyle(DialogFragment.STYLE_NORMAL, R.style.MaterialDialog);
+        }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_paddedrecycler, null);
+        View view = inflater.inflate(R.layout.fragment_dialog_recycler, null);
 
         // Restore saved state
         if (savedInstanceState != null)
@@ -70,7 +74,7 @@ public class SwitchNationDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         dialogBuilder.setTitle(R.string.menu_switch)
                 .setView(view)
                 .setPositiveButton(R.string.add_nation, dialogListener);
