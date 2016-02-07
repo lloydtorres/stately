@@ -20,9 +20,9 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Lloyd on 2016-01-13.
@@ -186,9 +186,8 @@ public class NationFragment extends Fragment {
         nationName.setText(mNation.name);
         nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename).toString());
 
-        DashHelper dash = DashHelper.getInstance(getContext());
-        dash.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner);
-        dash.displayImage(mNation.flagURL, nationFlag);
+        Picasso.with(getContext()).load(SparkleHelper.getBannerURL(mNation.bannerKey)).into(nationBanner);
+        Picasso.with(getContext()).load(mNation.flagURL).into(nationFlag);
 
         overviewSubFragment = new OverviewSubFragment();
         overviewSubFragment.setNation(mNation);

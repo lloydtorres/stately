@@ -41,6 +41,7 @@ import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
+import com.squareup.picasso.Picasso;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -136,9 +137,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         nationNameView.setText(mNation.name);
 
-        DashHelper dash = DashHelper.getInstance(this);
-        dash.displayImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner);
-        dash.displayImage(mNation.flagURL, nationFlag);
+        Picasso.with(this).load(SparkleHelper.getBannerURL(mNation.bannerKey)).into(nationBanner);
+        Picasso.with(this).load(mNation.flagURL).into(nationFlag);
     }
 
     @Override

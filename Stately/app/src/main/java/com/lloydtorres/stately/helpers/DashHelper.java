@@ -33,15 +33,10 @@ package com.lloydtorres.stately.helpers;
  */
 
 import android.content.Context;
-import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * Created by Lloyd on 2016-02-01.
@@ -56,8 +51,6 @@ public class DashHelper {
     private static DashHelper mDashie;
     private static Context mContext;
     private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
-    private DisplayImageOptions mImageOptions;
     private long lastReset;
     private int numCalls;
 
@@ -69,7 +62,6 @@ public class DashHelper {
     {
         mContext = c;
         mRequestQueue = getRequestQueue();
-        mImageLoader = getImageLoader();
         lastReset = System.currentTimeMillis();
         numCalls = 0;
     }
@@ -129,34 +121,5 @@ public class DashHelper {
         {
             return false;
         }
-    }
-
-    /**
-     * Creates a new ImageLoader if it doesn't already exist, then returns it.
-     * @return The Universal ImageLoader
-     */
-    public ImageLoader getImageLoader()
-    {
-        if (mImageLoader == null)
-        {
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext.getApplicationContext()).build();
-            mImageLoader = ImageLoader.getInstance();
-            mImageLoader.init(config);
-
-            // Fade image in on finish load
-            mImageOptions = new DisplayImageOptions.Builder().displayer(new FadeInBitmapDisplayer(500)).build();
-        }
-
-        return mImageLoader;
-    }
-
-    /**
-     * Loads a specified image URL into the ImageView
-     * @param url The target URL
-     * @param imageView The ImageView to put the image in.
-     */
-    public void displayImage(String url, ImageView imageView)
-    {
-        getImageLoader().displayImage(url, imageView, mImageOptions);
     }
 }

@@ -30,6 +30,7 @@ import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.squareup.picasso.Picasso;
 
 import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
@@ -211,7 +212,7 @@ public class RegionFragment extends Fragment {
         if (mRegion.flagURL != null)
         {
             regionFlag.setVisibility(View.VISIBLE);
-            DashHelper.getInstance(getContext()).displayImage(mRegion.flagURL, regionFlag);
+            Picasso.with(getContext()).load(mRegion.flagURL).into(regionFlag);
         }
 
         regionName.setText(mRegion.name);
