@@ -30,12 +30,12 @@ Stately uses the following open-source libraries:
 * [jsoup](http://jsoup.org/)
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
+* [Picasso](https://github.com/square/picasso)
 * [PrettyTime](http://www.ocpsoft.org/prettytime/)
 * [Shape Image View](https://github.com/siyamed/android-shape-imageview)
 * [Simple XML](http://simple.sourceforge.net/)
-* [SugarORM](https://github.com/satyan/sugar)
+* [Sugar ORM](https://github.com/satyan/sugar)
 * [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)
-* [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
 * [Volley](https://github.com/mcxiaoke/android-volley)
 
 Stately also uses the following proprietary libraries:
