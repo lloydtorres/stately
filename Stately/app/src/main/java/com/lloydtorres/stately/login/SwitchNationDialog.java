@@ -42,15 +42,7 @@ public class SwitchNationDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            setStyle(DialogFragment.STYLE_NORMAL, R.style.AlertDialogCustom);
-        }
-        else
-        {
-            setStyle(DialogFragment.STYLE_NORMAL, R.style.MaterialDialog);
-        }
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MaterialDialog);
     }
 
     @Override
