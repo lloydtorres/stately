@@ -776,7 +776,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
         holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
-        holder = regexRemove(holder, "(?s)\\[colou?r=.*?\\](.*?)\\[\\/colou?r\\]");
+        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
         holder = regexReplace(holder, "(?<=^|\\s)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?<=^|\\s)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
