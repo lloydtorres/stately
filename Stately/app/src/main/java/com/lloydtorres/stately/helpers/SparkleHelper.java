@@ -778,8 +778,8 @@ public class SparkleHelper {
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
-        holder = regexReplace(holder, "(?<=^|\\s)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, "(?<=^|\\s)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
         holder = regexReplace(holder, "(?s)\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
