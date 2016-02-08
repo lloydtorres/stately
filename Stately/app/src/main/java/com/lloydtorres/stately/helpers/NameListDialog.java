@@ -52,7 +52,15 @@ public class NameListDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AppCompatDialog dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
+        AppCompatDialog dialog = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            dialog = new AppCompatDialog(getActivity(), R.style.AlertDialogCustom);
+        }
+        else
+        {
+            dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
+        }
         dialog.setTitle(title);
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
