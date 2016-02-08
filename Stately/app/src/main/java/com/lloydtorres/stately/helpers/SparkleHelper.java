@@ -552,7 +552,7 @@ public class SparkleHelper {
         mAdView.setAdListener(new GenericAdListener(mAdView));
 
         FlurryAdapterExtras flurryAdapterExtras = new FlurryAdapterExtras();
-        flurryAdapterExtras.setLogEnabled(false);
+        flurryAdapterExtras.setLogEnabled(true);
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addNetworkExtras(flurryAdapterExtras)
