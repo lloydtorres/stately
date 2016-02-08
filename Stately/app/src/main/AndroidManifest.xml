@@ -69,6 +69,10 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
+        <activity
+            android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize">
+        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="651c62b07195273645b7c74e9b21a68bf3d124cd" />

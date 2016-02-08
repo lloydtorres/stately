@@ -20,6 +20,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.google.ads.mediation.flurry.FlurryAdapterExtras;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.common.base.CaseFormat;
@@ -549,7 +550,12 @@ public class SparkleHelper {
     {
         AdView mAdView = (AdView) view.findViewById(viewId);
         mAdView.setAdListener(new GenericAdListener(mAdView));
+
+        FlurryAdapterExtras flurryAdapterExtras = new FlurryAdapterExtras();
+        flurryAdapterExtras.setLogEnabled(false);
+
         AdRequest adRequest = new AdRequest.Builder()
+                .addNetworkExtras(flurryAdapterExtras)
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("03633EF76BA22B61C33C65CDCDB8D8B0")
                 .addTestDevice("CB2FCCF13C56C7ADC4F190827D780B91")
