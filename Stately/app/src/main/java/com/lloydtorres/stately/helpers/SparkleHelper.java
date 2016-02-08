@@ -773,6 +773,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
         holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
         holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
+        holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
         holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexRemove(holder, "(?s)\\[colou?r=.*?\\](.*?)\\[\\/colou?r\\]");
