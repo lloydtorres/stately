@@ -777,6 +777,8 @@ public class SparkleHelper {
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexRemove(holder, "(?s)\\[colou?r=.*?\\](.*?)\\[\\/colou?r\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
+        holder = regexReplace(holder, "(?<=^|\\s)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, "(?<=^|\\s)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
         holder = regexReplace(holder, "(?s)\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
@@ -816,7 +818,8 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
 
         for (Map.Entry<String, String> n : set) {
-            String properFormat = Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
+            // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
+            String properFormat = String.format(afterFormat, n.getValue()); //Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), properFormat);
         }
 
@@ -829,7 +832,8 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
 
         for (Map.Entry<String, String> n : set) {
-            String replacer = Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
+            // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
+            String replacer = n.getValue(); //Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), replacer);
         }
 
