@@ -67,6 +67,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private int currentPosition = R.id.nav_nation;
+    private boolean isLoaded = false;
 
     private Nation mNation;
     private ImageView nationBanner;
@@ -168,7 +169,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     {
         // Redownload nation data on resume
         super.onResume();
-        updateNation();
+        if (isLoaded)
+        {
+            updateNation();
+        }
+        else
+        {
+            isLoaded = true;
+        }
     }
 
     @Override

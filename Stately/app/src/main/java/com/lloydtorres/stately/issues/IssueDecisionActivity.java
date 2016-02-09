@@ -84,8 +84,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        startQueryIssueInfo();
     }
 
     public void setToolbar(Toolbar t) {

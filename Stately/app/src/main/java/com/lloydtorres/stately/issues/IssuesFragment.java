@@ -119,8 +119,6 @@ public class IssuesFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        startQueryIssues();
-
         return mView;
     }
 
