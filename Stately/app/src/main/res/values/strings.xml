@@ -144,7 +144,7 @@
     <!-- Activity Feed -->
     <string name="activityfeed_subscriptions">Subscriptions</string>
     <string name="subscriptions_curnation">Current nation</string>
-    <string name="subscriptions_switch">Switch nation list</string>
+    <string name="subscriptions_switch">Switch nation list (max 10)</string>
     <string name="subscriptions_region">Current region</string>
     <string name="subscriptions_wa">World Assembly</string>
     <string name="update">Update</string>
