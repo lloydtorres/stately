@@ -1,11 +1,13 @@
 package com.lloydtorres.stately.dto;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
@@ -27,7 +29,16 @@ public class HappeningCard extends RecyclerView.ViewHolder {
 
     public void init(Event ev)
     {
-        cardTime.setText(SparkleHelper.getReadableDateFromUTC(ev.timestamp));
-        SparkleHelper.setHappeningsFormatting(context, cardContent, ev.content);
+        if (ev.timestamp != EventRecyclerAdapter.EMPTY_INDICATOR)
+        {
+            cardTime.setText(SparkleHelper.getReadableDateFromUTC(ev.timestamp));
+            SparkleHelper.setHappeningsFormatting(context, cardContent, ev.content);
+        }
+        else
+        {
+            cardTime.setVisibility(View.GONE);
+            cardContent.setText(context.getString(R.string.rmb_no_content));
+            cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+        }
     }
 }

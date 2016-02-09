@@ -17,6 +17,8 @@ import java.util.List;
  * An adapter used to show happenings in its RecyclerView.
  */
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int EMPTY_INDICATOR = -1;
+
     private Context context;
     private List<Event> events;
 
@@ -24,6 +26,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     {
         context = c;
         events = ev;
+
+        if (events.size() <= 0)
+        {
+            Event ne = new Event();
+            ne.timestamp = EMPTY_INDICATOR;
+            events.add(ne);
+        }
     }
 
     @Override
