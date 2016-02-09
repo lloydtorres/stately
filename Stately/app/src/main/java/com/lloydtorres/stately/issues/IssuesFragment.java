@@ -142,9 +142,9 @@ public class IssuesFragment extends Fragment {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                queryIssues(mainView);
             }
         });
-        queryIssues(mainView);
     }
 
     /**

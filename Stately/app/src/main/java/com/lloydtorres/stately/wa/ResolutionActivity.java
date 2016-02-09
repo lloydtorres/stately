@@ -168,9 +168,9 @@ public class ResolutionActivity extends AppCompatActivity {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                queryResolution(councilId);
             }
         });
-        queryResolution(councilId);
     }
 
     public void setToolbar(Toolbar t) {

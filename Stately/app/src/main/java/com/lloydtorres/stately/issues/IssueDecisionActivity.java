@@ -107,9 +107,9 @@ public class IssueDecisionActivity extends AppCompatActivity {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                queryIssueInfo();
             }
         });
-        queryIssueInfo();
     }
 
     /**
