@@ -2,7 +2,9 @@ package com.lloydtorres.stately.feed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,9 +18,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Event;
+import com.lloydtorres.stately.dto.HappeningFeed;
+import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+
+import org.simpleframework.xml.core.Persister;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Lloyd on 2016-02-08.
@@ -38,6 +59,8 @@ public class ActivityFeedFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
+    private SharedPreferences storage; // shared preferences
+    private List<Event> events;
     private String nationName;
     private String regionName;
 
@@ -62,6 +85,8 @@ public class ActivityFeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        storage = PreferenceManager.getDefaultSharedPreferences(getContext());
+        events = new ArrayList<Event>();
         setHasOptionsMenu(true);
     }
 
@@ -99,7 +124,7 @@ public class ActivityFeedFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // @TODO
+                queryHappenings(buildHappeningsQuery());
             }
         });
 
@@ -109,24 +134,174 @@ public class ActivityFeedFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // hack to get swiperefreshlayout to show initially while loading
+        startQueryHappenings();
+        return mView;
+    }
+
+    /**
+     * Convenience method to show swipe refresh and start query.
+     */
+    public void startQueryHappenings()
+    {
+        events = new ArrayList<Event>();
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
+                queryHappenings(buildHappeningsQuery());
             }
         });
+    }
 
-        // @TODO
-        return mView;
+    /**
+     * Builds the list to be passed into queryHappenings();
+     * If it's a UserLogin --> Nation
+     * If it's a String --> Region
+     * If it's an Integer --> World Assembly
+     */
+    private List<Object> buildHappeningsQuery()
+    {
+        List<Object> q = new ArrayList<Object>();
+        UserLogin curNation = SparkleHelper.getActiveUser(getContext());
+
+        // Include current nation?
+        if (storage.getBoolean(SubscriptionsDialog.CURRENT_NATION, true))
+        {
+            q.add(curNation);
+        }
+
+        // Include switch nations?
+        if (storage.getBoolean(SubscriptionsDialog.SWITCH_NATIONS, true))
+        {
+            // Query all user logins, sort then remove current nation
+            List<UserLogin> switchNations = UserLogin.listAll(UserLogin.class);
+            Collections.sort(switchNations);
+            for (UserLogin u : switchNations)
+            {
+                if (u.nationId.equals(curNation.nationId))
+                {
+                    switchNations.remove(u);
+                    break;
+                }
+            }
+
+            // Only get first 10
+            if (switchNations.size() >= 10)
+            {
+                switchNations = switchNations.subList(0, 10);
+            }
+            q.addAll(switchNations);
+        }
+
+        // Include current region?
+        if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true))
+        {
+            q.add(regionName);
+        }
+
+        // Include World Assembly?
+        if (storage.getBoolean(SubscriptionsDialog.WORLD_ASSEMBLY, true))
+        {
+            q.add(0);
+        }
+
+        return q;
     }
 
     /**
      * Convenience method for handling happening queries.
      */
-    public void queryHappenings()
+    private void queryHappenings(List<Object> query)
     {
+        if (query.size() <= 0)
+        {
+            Collections.sort(events);
+            mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        else
+        {
+            Object q = query.remove(0);
 
+            String url = "";
+            // If query is for a nation
+            if (q instanceof UserLogin)
+            {
+                url = String.format(HappeningFeed.QUERY_NATION, ((UserLogin) q).nationId);
+            }
+            // If query is for a region
+            else if (q instanceof String)
+            {
+                url = String.format(HappeningFeed.QUERY_REGION, SparkleHelper.getIdFromName((String) q));
+            }
+            // If query is for the World Assembly
+            else if (q instanceof Integer)
+            {
+                url = HappeningFeed.QUERY_WA;
+            }
+            queryHappeningsHeavy(url, query);
+        }
+    }
+
+    /**
+     * Heavy-lifting for querying happenings.
+     * @param target
+     * @param remainingQueries
+     */
+    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
+                new Response.Listener<String>() {
+                    HappeningFeed happeningResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
+                        Persister serializer = new Persister();
+                        try {
+                            happeningResponse = serializer.read(HappeningFeed.class, response);
+                            events.addAll(happeningResponse.happenings);
+                            queryHappenings(remainingQueries);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                SparkleHelper.logError(error.toString());
+                // force queryHappenings to load recyclerview
+                queryHappenings(new ArrayList<Object>());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                }
+                else if (error instanceof ServerError)
+                {
+                    SparkleHelper.makeSnackbar(mainView, getString(R.string.region_404));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            // force queryHappenings to load recyclerview
+            queryHappenings(new ArrayList<Object>());
+            SparkleHelper.makeSnackbar(mainView, getString(R.string.rate_limit_error));
+        }
     }
 
     @Override
@@ -161,14 +336,6 @@ public class ActivityFeedFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        // Refresh on resume
-        // @TODO
     }
 
     @Override
