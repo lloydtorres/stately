@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -145,7 +146,9 @@ public class ActivityFeedFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_subscriptions:
-                // @TODO
+                FragmentManager fm = getChildFragmentManager();
+                SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
+                subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
                 return true;
         }
         return super.onOptionsItemSelected(item);

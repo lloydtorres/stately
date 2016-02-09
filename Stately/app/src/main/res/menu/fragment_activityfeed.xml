@@ -4,6 +4,6 @@
     <item
         android:id="@+id/nav_subscriptions"
         android:icon="@drawable/ic_subscriptions"
-        android:title="@string/activity_subscriptions"
+        android:title="@string/activityfeed_subscriptions"
         app:showAsAction="always" />
 </menu>
