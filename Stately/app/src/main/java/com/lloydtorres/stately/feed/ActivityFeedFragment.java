@@ -124,6 +124,7 @@ public class ActivityFeedFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                events = new ArrayList<Event>();
                 queryHappenings(buildHappeningsQuery());
             }
         });
