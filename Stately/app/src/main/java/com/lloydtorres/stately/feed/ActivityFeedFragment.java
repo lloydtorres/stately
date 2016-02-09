@@ -121,6 +121,14 @@ public class ActivityFeedFragment extends Fragment {
         return mView;
     }
 
+    /**
+     * Convenience method for handling happening queries.
+     */
+    public void queryHappenings()
+    {
+
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
@@ -148,6 +156,7 @@ public class ActivityFeedFragment extends Fragment {
             case R.id.nav_subscriptions:
                 FragmentManager fm = getChildFragmentManager();
                 SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
+                subscriptionsDialog.setCallback(this);
                 subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
                 return true;
         }
