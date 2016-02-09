@@ -21,6 +21,7 @@
 
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
+    <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>
     <string name="menu_explore">Explore</string>
@@ -140,6 +141,9 @@
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
+    <!-- Activity Feed -->
+    <string name="activity_subscriptions">Subscriptions</string>
+
     <!-- Region -->
     <string name="region_404">Region not found.</string>
     <string name="region_pop">Nation</string>
@@ -237,6 +241,7 @@
     <string name="ad_nation_fragment">ca-app-pub-7121810709947327/9881202698</string>
     <string name="ad_issues_fragment">ca-app-pub-7121810709947327/9124323093</string>
     <string name="ad_decision_activity">ca-app-pub-7121810709947327/1601056295</string>
+    <string name="ad_activityfeed_fragment">ca-app-pub-7121810709947327/4080394295</string>
     <string name="ad_region_fragment">ca-app-pub-7121810709947327/3077789495</string>
     <string name="ad_message_board_activity">ca-app-pub-7121810709947327/4554522692</string>
     <string name="ad_wa_fragment">ca-app-pub-7121810709947327/6031255892</string>

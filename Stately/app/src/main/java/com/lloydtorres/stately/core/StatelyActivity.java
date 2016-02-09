@@ -30,6 +30,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
+import com.lloydtorres.stately.feed.ActivityFeedFragment;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PrimeActivity;
@@ -207,6 +208,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     // Choose Issues
                     fChoose = new IssuesFragment();
                     break;
+                case R.id.nav_activityfeed:
+                    fChoose = getActivityFeed();
+                    break;
                 case R.id.nav_region:
                     fChoose = getRegionFragment();
                     break;
@@ -271,6 +275,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         return nationFragment;
     }
 
+    private ActivityFeedFragment getActivityFeed()
+    {
+        ActivityFeedFragment activityFeedFragment = new ActivityFeedFragment();
+        activityFeedFragment.setNationName(mNation.name);
+        activityFeedFragment.setRegionName(mNation.region);
+        return activityFeedFragment;
+    }
+
     /**
      * Get a new region fragment
      * @return A new region fragment
@@ -283,6 +295,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         return regionFragment;
     }
 
+    /**
+     * Get a new WA fragment
+     * @return A new WA fragment
+     */
     private AssemblyMainFragment getWaFragment()
     {
         AssemblyMainFragment waFragment = new AssemblyMainFragment();
@@ -320,6 +336,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
     }
 
+    /**
+     * Start switch nation dialog.
+     */
     private void switchNation()
     {
         List<UserLogin> logins = UserLogin.listAll(UserLogin.class);
