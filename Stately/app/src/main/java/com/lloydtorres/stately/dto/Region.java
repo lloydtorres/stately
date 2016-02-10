@@ -46,7 +46,7 @@ public class Region implements Parcelable {
     @Element(name="POWER")
     public String power;
 
-    @Element(name="FACTBOOK")
+    @Element(name="FACTBOOK", required=false)
     public String factbook;
     @ElementList(name="TAGS")
     public List<String> tags;

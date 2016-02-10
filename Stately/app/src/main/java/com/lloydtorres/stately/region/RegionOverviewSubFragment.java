@@ -2,6 +2,7 @@ package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class RegionOverviewSubFragment extends Fragment {
     private TextView delegate;
     private TextView founder;
     private TextView power;
+    private CardView factbookCard;
     private HtmlTextView factbook;
     private TextView tags;
 
@@ -80,7 +82,15 @@ public class RegionOverviewSubFragment extends Fragment {
             power.setText(mRegion.power);
 
             factbook = (HtmlTextView) view.findViewById(R.id.region_factbook);
-            SparkleHelper.setBbCodeFormatting(getContext(), factbook, mRegion.factbook);
+            if (mRegion.factbook != null)
+            {
+                SparkleHelper.setBbCodeFormatting(getContext(), factbook, mRegion.factbook);
+            }
+            else
+            {
+                factbookCard = (CardView) view.findViewById(R.id.region_factbook_card);
+                factbookCard.setVisibility(View.GONE);
+            }
 
             tags = (TextView) view.findViewById(R.id.region_tags);
             String tagCombine = Joiner.on(", ").skipNulls().join(mRegion.tags);
