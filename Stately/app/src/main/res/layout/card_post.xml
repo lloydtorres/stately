@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/card_post_name"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
