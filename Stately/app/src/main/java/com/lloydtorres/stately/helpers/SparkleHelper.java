@@ -723,7 +723,7 @@ public class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
-        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
+        String holder = getHtmlFormatting(content).toString();
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
@@ -758,6 +758,8 @@ public class SparkleHelper {
     public static Spanned getHtmlFormatting(String content)
     {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
         return Html.fromHtml(holder);
     }
 
@@ -771,6 +773,8 @@ public class SparkleHelper {
     {
         String holder = content.trim();
         holder = holder.replace("\n", "<br />");
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
@@ -853,7 +857,7 @@ public class SparkleHelper {
 
     /**
      * Convenience class used by regexQuoteFormat() to format blockquotes with author attrib.
-     * @param context App context
+     * @param c App context
      * @param t Target TextView
      * @param regex Regex to use
      * @param content Original string
@@ -893,9 +897,9 @@ public class SparkleHelper {
 
         // handle quotes with parameters on them
         // in this case, [quote=name;id]...
-        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(\\w+?);[0-9]+\\](.*?)\\[\\/quote\\]", holder);
+        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]", holder);
         // in this case, just [quote=name]...
-        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(\\w+?)\\](.*?)\\[\\/quote\\]", holder);
+        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]", holder);
 
         return holder;
     }
