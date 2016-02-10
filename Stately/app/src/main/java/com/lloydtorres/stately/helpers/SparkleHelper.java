@@ -866,7 +866,7 @@ public class SparkleHelper {
         Matcher m = Pattern.compile(regex).matcher(holder);
         while (m.find())
         {
-            String properFormat = String.format("<blockquote>@@%s@@:<br /><i>%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            String properFormat = String.format("<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
             replacePairs.put(m.group(), properFormat);
         }
         Set<Map.Entry<String, String>> set = replacePairs.entrySet();
