@@ -791,8 +791,7 @@ public class SparkleHelper {
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
-        holder = regexReplace(holder, "(?s)\\[quote=.*?\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+        holder = regexQuoteFormat(c, t, holder);
 
         // Format lists
         holder = regexListFormat(holder);
@@ -852,6 +851,60 @@ public class SparkleHelper {
         return holder;
     }
 
+    /**
+     * Convenience class used by regexQuoteFormat() to format blockquotes with author attrib.
+     * @param context App context
+     * @param t Target TextView
+     * @param regex Regex to use
+     * @param content Original string
+     * @return Formatted string
+     */
+    public static String regexQuoteFormatHelper(Context c, TextView t, String regex, String content)
+    {
+        String holder = content;
+        Map<String, String> replacePairs = new HashMap<String, String>();
+        Matcher m = Pattern.compile(regex).matcher(holder);
+        while (m.find())
+        {
+            String properFormat = String.format("<blockquote><i><b>@@%s@@:</b><br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            replacePairs.put(m.group(), properFormat);
+        }
+        Set<Map.Entry<String, String>> set = replacePairs.entrySet();
+        for (Map.Entry<String, String> n : set) {
+            String replacer = n.getValue();
+            holder = holder.replace(n.getKey(), replacer);
+        }
+        holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
+        return holder;
+    }
+
+    /**
+     * Used for formatting blockquotes
+     * @param context App context
+     * @param content Original string
+     * @return Formatted string
+     */
+    public static String regexQuoteFormat(Context context, TextView t, String content)
+    {
+        String holder = content;
+
+        // handle basic quotes
+        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+
+        // handle quotes with parameters on them
+        // in this case, [quote=name;id]...
+        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(\\w+?);[0-9]+\\](.*?)\\[\\/quote\\]", holder);
+        // in this case, just [quote=name]...
+        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(\\w+?)\\](.*?)\\[\\/quote\\]", holder);
+
+        return holder;
+    }
+
+    /**
+     * Formats a raw BBCode list into a pretty HTML list
+     * @param content Original content
+     * @return Formatted content
+     */
     public static String regexListFormat(String content)
     {
         String holder = content;
