@@ -12,6 +12,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.List;
 
 /**
@@ -61,14 +63,14 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private Context context;
         private TextView cardAuthor;
         private TextView cardTime;
-        private TextView cardContent;
+        private HtmlTextView cardContent;
 
         public PostCard(Context c, View v) {
             super(v);
             context = c;
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);
-            cardContent = (TextView) v.findViewById(R.id.card_post_content);
+            cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
         }
 
         public void init(Post p)

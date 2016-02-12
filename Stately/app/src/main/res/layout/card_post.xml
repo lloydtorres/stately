@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorSecondaryText"
             tools:text="7 minutes ago" />
-        <TextView
+        <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/card_post_content"
             android:layout_marginTop="8dp"
             android:textSize="15sp"

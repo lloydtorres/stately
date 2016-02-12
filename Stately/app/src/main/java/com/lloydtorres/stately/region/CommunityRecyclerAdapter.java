@@ -24,6 +24,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +165,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private Context context;
         private TextView question;
-        private TextView content;
+        private HtmlTextView content;
         private LinearLayout options;
         private PieChart breakdown;
         private TextView nullVote;
@@ -173,7 +174,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             super(v);
             context = c;
             question = (TextView) v.findViewById(R.id.card_region_poll_question);
-            content = (TextView) v.findViewById(R.id.card_region_poll_content);
+            content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
             options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
             breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
             nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);

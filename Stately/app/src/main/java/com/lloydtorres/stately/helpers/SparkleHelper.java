@@ -931,10 +931,10 @@ public class SparkleHelper {
         String holder = content;
 
         // Switch unordered lists
-        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<br /><ul>%s</ul><br />", true);
+        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<ul>%s</ul>", true);
 
         // Switch ordered lists
-        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<br /><ol=\"%s\">%s</ol><br />", true);
+        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<ol=\"%s\">%s</ol>", true);
 
         // Switch bullets
         holder = regexReplace(holder, "(?s)\\[\\*\\](((?!<ul>|<\\/ul>|<ol|<\\/ol>).)*?)(?=\\[\\*\\])", "<li>%s</li>", false);

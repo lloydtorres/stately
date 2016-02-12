@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
             tools:text="A tree falls in a forest and no one is around to hear it. Does a hipster have a vinyl recording of it?" />
-        <TextView
+        <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/card_region_poll_content"
             android:paddingTop="8dp"
             android:textSize="15sp"
