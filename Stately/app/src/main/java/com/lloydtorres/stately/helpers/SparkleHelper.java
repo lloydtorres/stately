@@ -782,7 +782,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_REGION_MODE, false);
 
         // Basic BBcode processing
-        holder = holder.replace("[hr]", "");
+        holder = holder.replace("[hr]", "<br>");
         holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>", false);
         holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>", false);
         holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>", false);
