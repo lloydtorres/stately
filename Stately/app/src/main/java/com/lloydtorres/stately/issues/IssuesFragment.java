@@ -263,6 +263,11 @@ public class IssuesFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
                         SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismiss_all_response));
                         startQueryIssues();
                     }
@@ -270,6 +275,12 @@ public class IssuesFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
