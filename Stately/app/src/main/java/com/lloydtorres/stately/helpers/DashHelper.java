@@ -33,10 +33,14 @@ package com.lloydtorres.stately.helpers;
  */
 
 import android.content.Context;
+import android.os.Build;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.lloydtorres.stately.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Lloyd on 2016-02-01.
@@ -102,6 +106,10 @@ public class DashHelper {
         return false;
     }
 
+    /**
+     * Determines if adding a request will violate rate limits.
+     * @return True if request can be granted, false otherwise
+     */
     private boolean isNotLockout()
     {
         // Reset the call counter if more than 30 seconds have passed
@@ -120,6 +128,19 @@ public class DashHelper {
         else
         {
             return false;
+        }
+    }
+
+    public void loadImage(String url, ImageView target, boolean adjustBounds)
+    {
+        // Only adjust if set and version is <=4.2
+        if (adjustBounds && Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        {
+            Picasso.with(mContext).load(url).placeholder(R.drawable.gray).transform(new JellyBeanTransform(mContext, target)).into(target);
+        }
+        else
+        {
+            Picasso.with(mContext).load(url).placeholder(R.drawable.gray).into(target);
         }
     }
 }
