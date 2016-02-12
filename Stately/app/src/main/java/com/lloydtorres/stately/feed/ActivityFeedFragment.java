@@ -48,6 +48,7 @@ import java.util.List;
 public class ActivityFeedFragment extends Fragment {
     public static final String NATION_KEY = "nationName";
     public static final String REGION_KEY = "regionName";
+    private static final int SWITCH_LIMIT = 10;
 
     private Activity mActivity;
     private View mView;
@@ -187,9 +188,9 @@ public class ActivityFeedFragment extends Fragment {
             }
 
             // Only get first 10
-            if (switchNations.size() >= 10)
+            if (switchNations.size() >= SWITCH_LIMIT)
             {
-                switchNations = switchNations.subList(0, 10);
+                switchNations = switchNations.subList(0, SWITCH_LIMIT);
             }
             q.addAll(switchNations);
         }
@@ -281,18 +282,21 @@ public class ActivityFeedFragment extends Fragment {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
-                // force queryHappenings to load recyclerview
-                queryHappenings(new ArrayList<Object>());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                    // force queryHappenings to load recyclerview
+                    queryHappenings(new ArrayList<Object>());
                 }
                 else if (error instanceof ServerError)
                 {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.region_404));
+                    // if some data seems missing, continue anyway
+                    queryHappenings(remainingQueries);
                 }
                 else
                 {
                     SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                    // force queryHappenings to load recyclerview
+                    queryHappenings(new ArrayList<Object>());
                 }
             }
         });
