@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int EMPTY_INDICATOR = -1;
+    private static final String DELETED_CONTENT = "Message deleted by author";
 
     private Context context;
     private List<Post> messages;
@@ -80,6 +81,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 SparkleHelper.activityLinkBuilder(context, cardAuthor, p.name, p.name, SparkleHelper.getNameFromId(p.name), SparkleHelper.CLICKY_NATION_MODE);
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(p.timestamp));
                 SparkleHelper.setBbCodeFormatting(context, cardContent, p.message);
+
+                if (p.message != null && p.message.equals(DELETED_CONTENT))
+                {
+                    cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+                }
             }
             else
             {
