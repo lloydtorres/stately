@@ -16,6 +16,7 @@ Stately
 
 ### Revision History
 
+* **1.2.0** - Activity feed, improved BBCode parsing, Material dialogs, Flurry.
 * **1.1.0** - Multi-nation login, RMB posting, WA voting, rate limiter.
 * **1.0.1** - Fix bug with malformed vectors.
 * **1.0.0** - Initial release.
