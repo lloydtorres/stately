@@ -793,8 +793,7 @@ public class SparkleHelper {
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>", false);
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>", false);
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(http:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>", false);
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>)(https:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>", false);
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(htt(?:p|ps):\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>", false);
         holder = regexQuoteFormat(c, t, holder);
 
         // Format lists
