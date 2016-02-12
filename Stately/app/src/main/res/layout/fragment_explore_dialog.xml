@@ -12,7 +12,8 @@
         android:hint="@string/explore_search_text"
         android:inputType="textCapWords|textFilter|textNoSuggestions"
         android:layout_gravity="center_horizontal"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:nextFocusForward="@+id/explore_radio_group"/>
 
     <RadioGroup
         android:id="@+id/explore_radio_group"
