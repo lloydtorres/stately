@@ -194,7 +194,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             Element button = option.getElementsByTag("button").first();
             if (button != null)
             {
-                issueOption.header = option.getElementsByTag("button").first().attr("name");
+                issueOption.header = button.attr("name");
             }
             else
             {
