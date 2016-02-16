@@ -9,9 +9,12 @@ import android.os.Parcelable;
  */
 public class IssueOption implements Parcelable {
     public static final String QUERY = "http://www.nationstates.net/page=show_dilemma/dilemma=%d";
+    public static final String SELECTED_HEADER = "selected";
+    public static final String DISMISS_HEADER = "choice--1";
 
     public int index;
     public String content;
+    public String header;
     public boolean selected;
 
     public IssueOption() { super(); }
@@ -19,6 +22,7 @@ public class IssueOption implements Parcelable {
     protected IssueOption(Parcel in) {
         index = in.readInt();
         content = in.readString();
+        header = in.readString();
         selected = in.readByte() != 0x00;
     }
 
@@ -31,6 +35,7 @@ public class IssueOption implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(index);
         dest.writeString(content);
+        dest.writeString(header);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 

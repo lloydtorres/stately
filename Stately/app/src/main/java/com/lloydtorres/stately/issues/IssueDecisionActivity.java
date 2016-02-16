@@ -191,6 +191,16 @@ public class IssueDecisionActivity extends AppCompatActivity {
             IssueOption issueOption = new IssueOption();
             issueOption.index = i++;
 
+            Element button = option.getElementsByTag("button").first();
+            if (button != null)
+            {
+                issueOption.header = option.getElementsByTag("button").first().attr("name");
+            }
+            else
+            {
+                issueOption.header = IssueOption.SELECTED_HEADER;
+            }
+
             String optionContent = option.getElementsByTag("p").first().text();
             issueOption.content = optionContent;
 
@@ -204,6 +214,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
         IssueOption dismissOption = new IssueOption();
         dismissOption.index = -1;
+        dismissOption.header = IssueOption.DISMISS_HEADER;
         dismissOption.content = "";
         if (issueInfoRaw.text().contains(DISMISS_TEXT))
         {
@@ -231,8 +242,9 @@ public class IssueDecisionActivity extends AppCompatActivity {
     /**
      * Send the position selected by the user back to the server.
      * @param index The index of the option selected.
+     * @param header The header request of the option selected.
      */
-    public void sendAdoptPosition(final int index)
+    public void sendAdoptPosition(final int index, final String header)
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
@@ -269,7 +281,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put(String.format("choice-%d", index), "1");
+                params.put(header, "1");
                 return params;
             }
 
