@@ -34,6 +34,7 @@ public class OverviewSubFragment extends Fragment {
     // main card
     private TextView govType;
     private TextView region;
+    private TextView influence;
     private TextView population;
     private TextView motto;
     private TextView time;
@@ -135,6 +136,9 @@ public class OverviewSubFragment extends Fragment {
 
         region = (TextView) view.findViewById(R.id.nation_region);
         SparkleHelper.activityLinkBuilder(getContext(), region, mNation.region, mNation.region, mNation.region, SparkleHelper.CLICKY_REGION_MODE);
+
+        influence = (TextView) view.findViewById(R.id.nation_influence);
+        influence.setText(mNation.influence);
 
         population = (TextView) view.findViewById(R.id.nation_population);
         population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
