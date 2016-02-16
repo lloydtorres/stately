@@ -16,6 +16,7 @@ Stately
 
 ### Revision History
 
+* **1.2.2** - Fix bug where issue option header may be different from index.
 * **1.2.1** - Fix bugs with detached fragment and missing HtmlTextViews.
 * **1.2.0** - Activity feed, improved BBCode parsing, Material dialogs, Flurry.
 * **1.1.0** - Multi-nation login, RMB posting, WA voting, rate limiter.
