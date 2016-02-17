@@ -101,9 +101,11 @@ public class SparkleHelper {
     // NationStates API
     public static final String BASE_URI = "https://www.nationstates.net/";
 
-    // Keys to user name and autologin
+    // Keys to user name and autologin and other session variables
     public static final String VAR_NAME = "var_name";
     public static final String VAR_AUTOLOGIN = "var_autologin";
+    public static final String VAR_REGION = "var_region";
+    public static final String VAR_WA_MEMBER = "var_wa_member";
 
     // String template used to get nation banners from NationStates
     // @param: banner_id
@@ -394,8 +396,8 @@ public class SparkleHelper {
     }
 
     /**
-     * UTILITY
-     * These are convenient tools to call from any class.
+     * LOGINS & SESSION DATA
+     * These update, return and remove data about the current login and its session data.
      */
 
     /**
@@ -419,6 +421,34 @@ public class SparkleHelper {
     }
 
     /**
+     * Sets data on region and WA membership for the current session.
+     * @param c App context
+     * @param regionName Current region ID
+     * @param waStatus WA membership status
+     */
+    public static void setSessionData(Context c, String regionName, String waStatus)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(VAR_REGION, regionName);
+        editor.putBoolean(VAR_WA_MEMBER, isWaMember(c, waStatus));
+        editor.commit();
+    }
+
+    /**
+     * Used for updating the session region name if it changes.
+     * @param c App context
+     * @param regionName Current region ID
+     */
+    public static void setRegionSessionData(Context c, String regionName)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(VAR_REGION, regionName);
+        editor.commit();
+    }
+
+    /**
      * Retrieve information about the currently logged in user
      * @param c App context
      * @return A UserLogin object with their name and autologin
@@ -438,6 +468,28 @@ public class SparkleHelper {
     }
 
     /**
+     * Returns the current member region in the current session.
+     * @param c App context
+     * @return ID of region
+     */
+    public static String getRegionSessionData(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getString(VAR_REGION, null);
+    }
+
+    /**
+     * Returns current WA membership status in current session.
+     * @param c App context
+     * @return WA membership status
+     */
+    public static boolean getWaSessionData(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(VAR_WA_MEMBER, false);
+    }
+
+    /**
      * Removes data about the logged in user from shared prefs.
      * @param c App context
      */
@@ -449,6 +501,24 @@ public class SparkleHelper {
         editor.remove(VAR_AUTOLOGIN);
         editor.commit();
     }
+
+    /**
+     * Removes session data.
+     * @param c App context
+     */
+    public static void removeSessionData(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.remove(VAR_REGION);
+        editor.remove(VAR_WA_MEMBER);
+        editor.commit();
+    }
+
+    /**
+     * UTILITY
+     * These are convenient tools to call from any class.
+     */
 
     /**
      * Starts the ExploreNationActivity for the given nation ID.
