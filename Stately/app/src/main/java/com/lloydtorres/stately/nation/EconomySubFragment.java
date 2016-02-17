@@ -144,4 +144,14 @@ public class EconomySubFragment extends Fragment {
         sectorChart.setData(dataFull);
         sectorChart.invalidate();
     }
+
+    @Override
+    public void onPause()
+    {
+        if (sectorChart != null)
+        {
+            sectorChart = null;
+        }
+        super.onPause();
+    }
 }

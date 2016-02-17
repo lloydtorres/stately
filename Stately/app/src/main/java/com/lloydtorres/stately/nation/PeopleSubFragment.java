@@ -134,4 +134,14 @@ public class PeopleSubFragment extends Fragment {
         mortalityChart.setData(dataFull);
         mortalityChart.invalidate();
     }
+
+    @Override
+    public void onPause()
+    {
+        if (mortalityChart != null)
+        {
+            mortalityChart = null;
+        }
+        super.onPause();
+    }
 }

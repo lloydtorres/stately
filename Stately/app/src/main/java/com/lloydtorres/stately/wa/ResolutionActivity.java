@@ -729,4 +729,18 @@ public class ResolutionActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onDestroy()
+    {
+        if (votingBreakdown != null)
+        {
+            votingBreakdown = null;
+        }
+        if (votingHistory != null)
+        {
+            votingHistory = null;
+        }
+        super.onDestroy();
+    }
 }

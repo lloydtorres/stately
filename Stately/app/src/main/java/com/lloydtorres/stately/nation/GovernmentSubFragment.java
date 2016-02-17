@@ -151,4 +151,14 @@ public class GovernmentSubFragment extends Fragment {
         budgetChart.setData(dataFull);
         budgetChart.invalidate();
     }
+
+    @Override
+    public void onPause()
+    {
+        if (budgetChart != null)
+        {
+            budgetChart = null;
+        }
+        super.onPause();
+    }
 }
