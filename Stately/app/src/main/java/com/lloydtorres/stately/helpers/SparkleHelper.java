@@ -3,6 +3,7 @@ package com.lloydtorres.stately.helpers;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
@@ -673,17 +674,7 @@ public class SparkleHelper {
         targetActivity = String.format(urlFormat, targetActivity, mode, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);
-
-        if (t instanceof HtmlTextView)
-        {
-            ((HtmlTextView)t).setHtmlFromString(tempHolder, new HtmlTextView.RemoteImageGetter());
-        }
-        else
-        {
-            t.setText(Html.fromHtml(tempHolder));
-        }
-        // Stylify the TextView.
-        styleLinkifiedTextView(c, t);
+        setStyledTextView(c, t, tempHolder);
 
         return tempHolder;
     }
@@ -877,9 +868,28 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, "\\[region=(.*?)\\]", CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
+        setStyledTextView(c, t, holder);
+    }
+
+    /**
+     * Helper used for setting and styling an HTML string into a TextView.
+     * @param c App context
+     * @param t Target TextView
+     * @param holder Content
+     */
+    public static void setStyledTextView(Context c, TextView t, String holder)
+    {
         if (t instanceof HtmlTextView)
         {
-            ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+            try
+            {
+                ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+            }
+            catch(Exception e)
+            {
+                t.setText(c.getString(R.string.bbcode_parse_error));
+                t.setTypeface(t.getTypeface(), Typeface.ITALIC);
+            }
         }
         else
         {
