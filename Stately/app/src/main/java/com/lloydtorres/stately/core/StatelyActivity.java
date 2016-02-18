@@ -396,6 +396,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SparkleHelper.removeActiveUser(getApplicationContext());
+                SparkleHelper.removeSessionData(getApplicationContext());
                 Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
                 startActivity(nationActivityLaunch);
                 finish();
@@ -444,6 +445,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                                     break;
                             }
                             mNation = nationResponse;
+                            SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
                             initNavBanner();
                         }
                         catch (Exception e) {
