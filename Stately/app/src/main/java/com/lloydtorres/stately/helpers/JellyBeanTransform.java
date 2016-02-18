@@ -40,6 +40,7 @@ public class JellyBeanTransform implements Transformation {
         Bitmap scaledBitmap = Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
         if (scaledBitmap != source) {
             source.recycle();
+            source = null;
         }
         return scaledBitmap;
     }
