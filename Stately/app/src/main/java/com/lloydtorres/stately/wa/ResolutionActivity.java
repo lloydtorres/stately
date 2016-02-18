@@ -306,6 +306,7 @@ public class ResolutionActivity extends AppCompatActivity {
     private void setVoteStatus(WaVoteStatus vs)
     {
         voteStatus = vs;
+        SparkleHelper.setWaSessionData(this, voteStatus.waState);
 
         String voteStats = "";
         switch(councilId)

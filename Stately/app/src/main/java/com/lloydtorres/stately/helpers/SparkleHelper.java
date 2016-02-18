@@ -450,6 +450,19 @@ public class SparkleHelper {
     }
 
     /**
+     * Used for updating the session WA membership if it changes.
+     * @param c
+     * @param stat
+     */
+    public static void setWaSessionData(Context c, String stat)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putBoolean(VAR_WA_MEMBER, isWaMember(c, stat));
+        editor.commit();
+    }
+
+    /**
      * Retrieve information about the currently logged in user
      * @param c App context
      * @return A UserLogin object with their name and autologin
