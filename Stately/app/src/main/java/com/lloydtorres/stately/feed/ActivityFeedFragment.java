@@ -125,6 +125,11 @@ public class ActivityFeedFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+
                 events = new ArrayList<Event>();
                 queryHappenings(buildHappeningsQuery());
             }
@@ -149,6 +154,11 @@ public class ActivityFeedFragment extends Fragment {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(true);
                 queryHappenings(buildHappeningsQuery());
             }
