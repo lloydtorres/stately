@@ -7,10 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
+import com.android.volley.RedirectError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
@@ -27,7 +29,13 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-15.
@@ -39,10 +47,16 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     // Keys for intent data
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";
+    public static final String EXPLORE_NAME = "name";
     public static final String IS_ENDORSABLE = "isEndorsable";
     public static final String IS_ENDORSED = "isEndorsed";
 
+    public static final String ENDORSE_URL = "https://www.nationstates.net/cgi-bin/endorse.cgi";
+    private static final String ENDORSE_REQUEST = "endorse";
+    private static final String UNENDORSE_REQUEST = "unendorse";
+
     private String id;
+    private String name;
     private int mode;
     private TextView statusMessage;
     private boolean noRefresh;
@@ -81,6 +95,9 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         // Restore state
         if (savedInstanceState != null)
         {
+            id = savedInstanceState.getString(EXPLORE_ID);
+            mode = savedInstanceState.getInt(EXPLORE_MODE);
+            name = savedInstanceState.getString(EXPLORE_NAME);
             isEndorsable = savedInstanceState.getBoolean(IS_ENDORSABLE, false);
             isEndorsed = savedInstanceState.getBoolean(IS_ENDORSED, false);
         }
@@ -137,11 +154,28 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * Used for setting a message while the explore fragment is loading.
+     * @param s Message
+     */
     private void setExploreStatus(String s)
     {
         statusMessage.setText(s);
     }
 
+    /**
+     * Set the name of the target in the explore activity.
+     * @param n Name
+     */
+    private void setName(String n)
+    {
+        name = n;
+    }
+
+    /**
+     * Checks if the target ID is valid then routes it to the proper query.
+     * @param name Target ID
+     */
     private void verifyInput(String name)
     {
         if (SparkleHelper.isValidName(name) && name.length() > 0)
@@ -171,8 +205,13 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         }
     }
 
+    /**
+     * Queries data about a nation from the NS API.
+     * @param name Target nation ID
+     */
     private void queryNation(String name)
     {
+        name = SparkleHelper.getIdFromName(name);
         String targetURL = String.format(Nation.QUERY, name);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -200,6 +239,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                                     nationResponse.govtPriority = getString(R.string.social_policy);
                                     break;
                             }
+
+                            setName(nationResponse.name);
 
                             // determine endorseable state
                             UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
@@ -260,6 +301,10 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         }
     }
 
+    /**
+     * Queries a target region from the NS API.
+     * @param name Target region ID.
+     */
     private void queryRegion(String name)
     {
         String targetURL = String.format(Region.QUERY, name);
@@ -333,12 +378,146 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 .commit();
     }
 
+    /**
+     * Gets the required local ID for a target page.
+     * @param url Target page URL
+     */
+    private void getLocalId(final String url)
+    {
+        final View view = findViewById(R.id.explore_coordinator);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element input = d.select("input[name=localid]").first();
+
+                        if (input == null)
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            return;
+                        }
+
+                        String localid = input.attr("value");
+                        switch (mode)
+                        {
+                            case SparkleHelper.CLICKY_NATION_MODE:
+                                postEndorsement(localid);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    private void postEndorsement(final String localid)
+    {
+        final View view = findViewById(R.id.explore_coordinator);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ENDORSE_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // blank since the post gets redirected
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // actual success since post gets redirected
+                if (error instanceof RedirectError)
+                {
+                    if (isEndorsed)
+                    {
+                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.wa_withdraw_endorse_response), name));
+                    }
+                    else
+                    {
+                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.wa_endorsed_response), name));
+                    }
+
+                    queryNation(id);
+                }
+                else
+                {
+                    SparkleHelper.logError(error.toString());
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                    }
+                    else
+                    {
+                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                    }
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("nation", id);
+                params.put("localid", localid);
+
+                if (isEndorsed)
+                {
+                    params.put("action", UNENDORSE_REQUEST);
+                }
+                else
+                {
+                    params.put("action", ENDORSE_REQUEST);
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // Respond to the action bar's Up/Home button
                 finish();
+                return true;
+            case R.id.nav_endorse:
+                getLocalId(String.format(Nation.QUERY_HTML, id));
                 return true;
             case R.id.nav_explore:
                 // Open an explore dialog to keep going
@@ -355,6 +534,9 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(EXPLORE_ID, id);
+        savedInstanceState.putInt(EXPLORE_MODE, mode);
+        savedInstanceState.putString(EXPLORE_NAME, name);
         savedInstanceState.putBoolean(IS_ENDORSABLE, isEndorsable);
         savedInstanceState.putBoolean(IS_ENDORSED, isEndorsed);
     }
