@@ -483,7 +483,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("nation", id);
+                params.put("nation", SparkleHelper.getIdFromName(id));
                 params.put("localid", localid);
 
                 if (isEndorsed)
