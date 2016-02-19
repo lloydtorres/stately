@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -38,11 +39,15 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     // Keys for intent data
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";
+    public static final String IS_ENDORSABLE = "isEndorsable";
+    public static final String IS_ENDORSED = "isEndorsed";
 
     private String id;
     private int mode;
     private TextView statusMessage;
     private boolean noRefresh;
+    private boolean isEndorsable;
+    private boolean isEndorsed;
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
@@ -73,6 +78,13 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             return;
         }
 
+        // Restore state
+        if (savedInstanceState != null)
+        {
+            isEndorsable = savedInstanceState.getBoolean(IS_ENDORSABLE, false);
+            isEndorsed = savedInstanceState.getBoolean(IS_ENDORSED, false);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
@@ -85,7 +97,34 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_explore, menu);
+
+        if (mode == SparkleHelper.CLICKY_NATION_MODE)
+        {
+            if (isEndorsable)
+            {
+                if (isEndorsed)
+                {
+                    inflater.inflate(R.menu.activity_explore_nation_endorsed, menu);
+                }
+                else
+                {
+                    inflater.inflate(R.menu.activity_explore_nation_endorsable, menu);
+                }
+            }
+            else
+            {
+                inflater.inflate(R.menu.activity_explore_default, menu);
+            }
+        }
+        else if (mode == SparkleHelper.CLICKY_REGION_MODE)
+        {
+            inflater.inflate(R.menu.activity_explore_default, menu);
+        }
+        else
+        {
+            inflater.inflate(R.menu.activity_explore_default, menu);
+        }
+
         return true;
     }
 
@@ -161,6 +200,34 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                                     nationResponse.govtPriority = getString(R.string.social_policy);
                                     break;
                             }
+
+                            // determine endorseable state
+                            UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                            String userId = u.nationId;
+                            String userRegionId = SparkleHelper.getRegionSessionData(getApplicationContext());
+                            boolean userWaMember = SparkleHelper.getWaSessionData(getApplicationContext());
+
+                            String exploreId = SparkleHelper.getIdFromName(nationResponse.name);
+                            String exploreRegionId = SparkleHelper.getIdFromName(nationResponse.region);
+                            boolean exploreWaMember = SparkleHelper.isWaMember(getApplicationContext(), nationResponse.waState);
+
+                            // must not be same as session nation, must be in same region, must both be WA members
+                            if (!exploreId.equals(userId)
+                                    && exploreRegionId.equals(userRegionId)
+                                    && userWaMember && exploreWaMember)
+                            {
+                                isEndorsable = true;
+
+                                if (nationResponse.endorsements != null && nationResponse.endorsements.contains(userId))
+                                {
+                                    isEndorsed = true;
+                                }
+                                else
+                                {
+                                    isEndorsed = false;
+                                }
+                            }
+                            invalidateOptionsMenu();
 
                             initFragment(nationResponse);
                         }
@@ -281,5 +348,14 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(IS_ENDORSABLE, isEndorsable);
+        savedInstanceState.putBoolean(IS_ENDORSED, isEndorsed);
     }
 }
