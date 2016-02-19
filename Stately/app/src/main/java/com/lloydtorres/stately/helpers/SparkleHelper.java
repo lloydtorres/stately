@@ -852,22 +852,22 @@ public class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/nation=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_NATION_MODE, false);
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_REGION_MODE, false);
+        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/nation=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_NATION_MODE);
+        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_REGION_MODE);
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
-        holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>", false);
-        holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>", false);
-        holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>", false);
-        holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>", false);
-        holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />", false);
-        holder = regexDoubleReplace(holder, "(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />", false);
+        holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
+        holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
+        holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
+        holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
+        holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
+        holder = regexDoubleReplace(holder, "(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
         holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
         holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
-        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>", false);
-        holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>", false);
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(htt(?:p|ps):\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>", false);
+        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
+        holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(htt(?:p|ps):\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
 
         // Format lists
@@ -917,10 +917,9 @@ public class SparkleHelper {
      * @param target Target content
      * @param regexBefore Regex to use
      * @param afterFormat String template
-     * @param stripInnerBreaks If breaks within content to be replace should be removed
      * @return Returns content with all matched substrings replaced
      */
-    public static String regexReplace(String target, String regexBefore, String afterFormat, boolean stripInnerBreaks)
+    public static String regexReplace(String target, String regexBefore, String afterFormat)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
@@ -928,10 +927,6 @@ public class SparkleHelper {
         for (Map.Entry<String, String> n : set) {
             // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
             String replacer = n.getValue();
-            if (stripInnerBreaks)
-            {
-                replacer = replacer.replace("<br>", "").replace("<br />", "");
-            }
             String properFormat = String.format(afterFormat, replacer); //Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), properFormat);
         }
@@ -944,10 +939,9 @@ public class SparkleHelper {
      * @param target Target content
      * @param regexBefore Regex to use
      * @param afterFormat String template
-     * @param stripInnerBreaks If breaks within content to be replace should be removed
      * @return
      */
-    public static String regexDoubleReplace(String target, String regexBefore, String afterFormat, boolean stripInnerBreaks)
+    public static String regexDoubleReplace(String target, String regexBefore, String afterFormat)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
@@ -955,10 +949,6 @@ public class SparkleHelper {
         for (Map.Entry<String, String> n : set) {
             // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
             String replacer = n.getValue(); //Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
-            if (stripInnerBreaks)
-            {
-                replacer = replacer.replace("<br>", "").replace("<br />", "");
-            }
             holder = holder.replace(n.getKey(), replacer);
         }
 
@@ -1003,7 +993,7 @@ public class SparkleHelper {
         String holder = content;
 
         // handle basic quotes
-        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>", false);
+        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
 
         // handle quotes with parameters on them
         // in this case, [quote=name;id]...
@@ -1024,17 +1014,17 @@ public class SparkleHelper {
         String holder = content;
 
         // Switch unordered lists
-        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<ul>%s</ul>", true);
+        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<ul>%s</ul>");
 
         // Switch ordered lists
-        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<ol=\"%s\">%s</ol>", true);
+        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<ol=\"%s\">%s</ol>");
 
         // Switch bullets
-        holder = regexReplace(holder, "(?s)\\[\\*\\](((?!<ul>|<\\/ul>|<ol|<\\/ol>).)*?)(?=\\[\\*\\])", "<li>%s</li>", false);
-        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?)(?=<\\/ul>|<\\/ol>)", "<li>%s</li>", false);
+        holder = regexReplace(holder, "(?s)\\[\\*\\](((?!<ul>|<\\/ul>|<ol|<\\/ol>).)*?)(?=\\[\\*\\])", "<li>%s</li>");
+        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?)(?=<\\/ul>|<\\/ol>)", "<li>%s</li>");
 
         // Handle nested lists
-        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?<\\/li>(?:<\\/ul>|<\\/ol>))", "<li>%s</li>", false);
+        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?<\\/li>(?:<\\/ul>|<\\/ol>))", "<li>%s</li>");
 
         return holder;
     }
