@@ -400,6 +400,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };

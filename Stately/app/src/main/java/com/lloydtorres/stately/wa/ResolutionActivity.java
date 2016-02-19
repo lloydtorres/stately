@@ -515,6 +515,7 @@ public class ResolutionActivity extends AppCompatActivity {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };

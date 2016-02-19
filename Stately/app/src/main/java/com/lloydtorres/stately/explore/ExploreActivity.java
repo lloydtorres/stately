@@ -436,6 +436,11 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         }
     }
 
+    /**
+     * Actually does the post to submit an endorsement. This is a bit weird since the API
+     * call redirects to a different page, so the "success" case is actually in the error.
+     * @param localid Required localId value
+     */
     private void postEndorsement(final String localid)
     {
         final View view = findViewById(R.id.explore_coordinator);
