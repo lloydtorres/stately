@@ -20,7 +20,7 @@ public class RegionMessages implements Parcelable {
 
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q=messages;offset=%d"
                                             + "&v=" + SparkleHelper.API_VERSION;
-    public static final String POST_QUERY = "https://www.nationstates.net/page=lodgermbpost/region=%s";
+    public static final String POST_QUERY = "https://www.nationstates.net/page=lodgermbpost/region=%s/template-overall=none";
 
     @ElementList(name="MESSAGES", required=false)
     public List<Post> posts;
