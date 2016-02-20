@@ -153,7 +153,7 @@ public class RegionFragment extends Fragment {
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
+                if (scrollRange == -1 && mRegion != null) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset <= 0) {
