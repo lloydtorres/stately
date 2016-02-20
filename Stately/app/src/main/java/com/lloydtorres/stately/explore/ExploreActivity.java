@@ -50,6 +50,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     public static final String EXPLORE_NAME = "name";
     public static final String IS_ENDORSABLE = "isEndorsable";
     public static final String IS_ENDORSED = "isEndorsed";
+    public static final String IS_MOVEABLE = "isMoveable";
 
     public static final String ENDORSE_URL = "https://www.nationstates.net/cgi-bin/endorse.cgi";
     private static final String ENDORSE_REQUEST = "endorse";
@@ -62,6 +63,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     private boolean noRefresh;
     private boolean isEndorsable;
     private boolean isEndorsed;
+    private boolean isMoveable;
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
@@ -102,6 +104,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             name = savedInstanceState.getString(EXPLORE_NAME);
             isEndorsable = savedInstanceState.getBoolean(IS_ENDORSABLE, false);
             isEndorsed = savedInstanceState.getBoolean(IS_ENDORSED, false);
+            isMoveable = savedInstanceState.getBoolean(IS_MOVEABLE, false);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
@@ -137,7 +140,14 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         }
         else if (mode == SparkleHelper.CLICKY_REGION_MODE)
         {
-            inflater.inflate(R.menu.activity_explore_default, menu);
+            if (isMoveable)
+            {
+                inflater.inflate(R.menu.activity_explore_region_move, menu);
+            }
+            else
+            {
+                inflater.inflate(R.menu.activity_explore_default, menu);
+            }
         }
         else
         {
@@ -260,15 +270,12 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                                     && userWaMember && exploreWaMember)
                             {
                                 isEndorsable = true;
-
-                                if (nationResponse.endorsements != null && nationResponse.endorsements.contains(userId))
-                                {
-                                    isEndorsed = true;
-                                }
-                                else
-                                {
-                                    isEndorsed = false;
-                                }
+                                isEndorsed = nationResponse.endorsements != null && nationResponse.endorsements.contains(userId);
+                            }
+                            else
+                            {
+                                isEndorsable = false;
+                                isEndorsed = false;
                             }
                             invalidateOptionsMenu();
 
@@ -325,6 +332,11 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                             {
                                 regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
                             }
+
+                            // determine moveable state
+                            String curRegion = SparkleHelper.getRegionSessionData(getApplicationContext());
+                            isMoveable = !curRegion.equals(SparkleHelper.getIdFromName(regionResponse.name));
+                            invalidateOptionsMenu();
 
                             initFragment(regionResponse);
                         }
@@ -544,5 +556,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         savedInstanceState.putString(EXPLORE_NAME, name);
         savedInstanceState.putBoolean(IS_ENDORSABLE, isEndorsable);
         savedInstanceState.putBoolean(IS_ENDORSED, isEndorsed);
+        savedInstanceState.putBoolean(IS_MOVEABLE, isMoveable);
     }
 }

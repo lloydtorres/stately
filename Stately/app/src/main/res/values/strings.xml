@@ -43,6 +43,10 @@
     <string name="explore_endorsed_response">Endorsed %1$s.</string>
     <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
 
+    <string name="explore_region_move">Move to %1$s?</string>
+    <string name="explore_region_password">Password required to move</string>
+    <string name="explore_move_confirm">Move</string>
+
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
     <string name="add_nation">Add Nation</string>
