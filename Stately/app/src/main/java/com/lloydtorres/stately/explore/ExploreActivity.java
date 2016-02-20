@@ -30,6 +30,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
@@ -553,14 +554,16 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
+        EditText passView = (EditText) dialogView.findViewById(R.id.move_password);
+        passView.setCustomSelectionActionModeCallback(new NullActionCallback());
+        final EditText fPassView = passView;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                EditText passView = (EditText) dialogView.findViewById(R.id.move_password);
                 String password = null;
-                if (passView != null && passView.getText().length() >= 0)
+                if (fPassView.getText().length() >= 0)
                 {
-                    password = passView.getText().toString();
+                    password = fPassView.getText().toString();
                 }
                 postRegionMove(localid, password);
                 dialog.dismiss();
