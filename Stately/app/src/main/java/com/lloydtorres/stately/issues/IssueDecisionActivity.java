@@ -1,7 +1,11 @@
 package com.lloydtorres.stately.issues;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -240,11 +244,53 @@ public class IssueDecisionActivity extends AppCompatActivity {
     }
 
     /**
+     * Helper to confirm the position selected by the user.
+     * @param index The index of the option selected.
+     * @param header The header request of the option selected.
+     */
+    public void setAdoptPosition(final int index, final String header)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                postAdoptPosition(index, header);
+                dialog.dismiss();
+            }
+        };
+
+        if (storage.getBoolean("setting_issueconfirm", true))
+        {
+            dialogBuilder
+                    .setNegativeButton(getString(R.string.explore_negative), null);
+
+            switch (index)
+            {
+                case DISMISSED:
+                    dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
+                            .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
+                    break;
+                default:
+                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), index + 1))
+                            .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
+                    break;
+            }
+
+            dialogBuilder.show();
+        }
+        else
+        {
+            postAdoptPosition(index, header);
+        }
+    }
+
+    /**
      * Send the position selected by the user back to the server.
      * @param index The index of the option selected.
      * @param header The header request of the option selected.
      */
-    public void sendAdoptPosition(final int index, final String header)
+    public void postAdoptPosition(final int index, final String header)
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
@@ -253,6 +299,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        /*
                         switch (index)
                         {
                             case DISMISSED:
@@ -262,7 +309,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
                                 SparkleHelper.makeSnackbar(view, String.format(getString(R.string.issue_selected_message), index+1));
                                 break;
                         }
-                        startQueryIssueInfo(index);
+                        startQueryIssueInfo(index);*/
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

@@ -213,6 +213,10 @@
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
     <string name="issue_option_selected">Adopting this position</string>
+    <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
+    <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
+    <string name="issue_option_adopt">Adopt</string>
+    <string name="issue_option_dismiss">Dismiss</string>
     <string name="issue_selected_message">Adopted the position in Option %1$d.</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
     <string name="issue_issue_dismissed">Dismissing this issue</string>
@@ -248,6 +252,7 @@
 
     <!-- Settings -->
     <string name="setting_autologin">Log in automatically</string>
+    <string name="setting_issueconfirm">Confirm issue decisions</string>
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
