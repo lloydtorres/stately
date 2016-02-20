@@ -458,11 +458,11 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 {
                     if (isEndorsed)
                     {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.wa_withdraw_endorse_response), name));
+                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_withdraw_endorse_response), name));
                     }
                     else
                     {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.wa_endorsed_response), name));
+                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_endorsed_response), name));
                     }
 
                     queryNation(id);

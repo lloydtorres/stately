@@ -38,6 +38,11 @@
     <string name="explore_default">Exploring&#8230;</string>
     <string name="explore_error_404_nation">Nation not found.</string>
 
+    <string name="explore_endorse">Endorse</string>
+    <string name="explore_withdraw_endorse">Withdraw Endorsement</string>
+    <string name="explore_endorsed_response">Endorsed %1$s.</string>
+    <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
+
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
     <string name="add_nation">Add Nation</string>
@@ -75,10 +80,6 @@
     <string name="card_overview_wa_overview">%1$s is a member of the World Assembly.</string>
     <string name="card_overview_wa_delegate">\n\n%1$s also represents %2$s in the World Assembly as its delegate.</string>
     <string name="card_overview_wa_endorsements">Endorsements</string>
-    <string name="card_overview_wa_endorse">Endorse</string>
-    <string name="card_overview_wa_withdraw_endorse">Withdraw Endorsement</string>
-    <string name="wa_endorsed_response">Endorsed %1$s.</string>
-    <string name="wa_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
     <string name="card_overview_wa_novote">%1$s: No vote on the resolution.</string>
     <string name="card_overview_wa_vote">%1$s: Voted %2$s the resolution.</string>
 

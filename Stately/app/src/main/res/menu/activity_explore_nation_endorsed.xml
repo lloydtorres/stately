@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_endorse"
         android:icon="@drawable/ic_endorse_yes"
-        android:title="@string/card_overview_wa_withdraw_endorse"
+        android:title="@string/explore_withdraw_endorse"
         app:showAsAction="always" />
     <item
         android:id="@+id/nav_explore"

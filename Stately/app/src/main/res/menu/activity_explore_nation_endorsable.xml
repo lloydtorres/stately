@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_endorse"
         android:icon="@drawable/ic_endorse_no"
-        android:title="@string/card_overview_wa_endorse"
+        android:title="@string/explore_endorse"
         app:showAsAction="always" />
     <item
         android:id="@+id/nav_explore"
