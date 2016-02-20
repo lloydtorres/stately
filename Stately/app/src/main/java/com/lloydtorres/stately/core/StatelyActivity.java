@@ -71,6 +71,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private NavigationView navigationView;
     private int currentPosition = R.id.nav_nation;
     private boolean isLoaded = false;
+    private int navInit = NATION_FRAGMENT;
 
     private Nation mNation;
     private ImageView nationBanner;
@@ -81,8 +82,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stately);
-
-        int navInit = NATION_FRAGMENT;
 
         // Get nation object from intent or restore state
         if (getIntent() != null)
@@ -95,17 +94,20 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        if (mNation == null)
-        {
-            UserLogin u = SparkleHelper.getActiveUser(this);
-            updateNation(u.name);
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setTitle("");
-        initNavigationView(navInit);
+
+        if (mNation == null)
+        {
+            UserLogin u = SparkleHelper.getActiveUser(this);
+            updateNation(u.name, true);
+        }
+        else
+        {
+            initNavigationView(navInit);
+        }
     }
 
     /**
@@ -197,7 +199,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onResume();
         if (isLoaded)
         {
-            updateNation(mNation.name);
+            updateNation(mNation.name, false);
         }
         else
         {
@@ -440,8 +442,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Query NationStates for nation data
      * @param name Target nation name
+     * @param firstLaunch Indicates if activity is being launched for the first time
      */
-    private void updateNation(String name)
+    private void updateNation(String name, final boolean firstLaunch)
     {
         final View fView = findViewById(R.id.drawer_layout);
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(name));
@@ -473,7 +476,15 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             }
                             mNation = nationResponse;
                             SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
-                            initNavBanner();
+
+                            if (firstLaunch)
+                            {
+                                initNavigationView(navInit);
+                            }
+                            else
+                            {
+                                initNavBanner();
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
