@@ -55,6 +55,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     // Keys used for intents
     public static final String NATION_DATA = "mNationData";
+    public static final String NAV_INIT = "navInit";
+
+    public static final int NATION_FRAGMENT = 0;
+    public static final int REGION_FRAGMENT = 3;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
@@ -78,21 +82,30 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stately);
 
+        int navInit = NATION_FRAGMENT;
+
         // Get nation object from intent or restore state
         if (getIntent() != null)
         {
             mNation = getIntent().getParcelableExtra(NATION_DATA);
+            navInit = getIntent().getIntExtra(NAV_INIT, NATION_FRAGMENT);
         }
         if (mNation == null && savedInstanceState != null)
         {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
+        if (mNation == null)
+        {
+            UserLogin u = SparkleHelper.getActiveUser(this);
+            updateNation(u.name);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setTitle("");
-        initNavigationView();
+        initNavigationView(navInit);
     }
 
     /**
@@ -113,17 +126,30 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Initialize the navigation drawer.
      * Set the nation fragment as the current view.
+     * @param start Index of the view to start with
      */
-    private void initNavigationView()
+    private void initNavigationView(int start)
     {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.getMenu().getItem(start).setChecked(true);
         initNavBanner();
-        NationFragment nf = getNationFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.coordinator_app_bar, nf)
-                .commit();
+
+        switch (start)
+        {
+            case REGION_FRAGMENT:
+                RegionFragment rf = getRegionFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.coordinator_app_bar, rf)
+                        .commit();
+                break;
+            default:
+                NationFragment nf = getNationFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.coordinator_app_bar, nf)
+                        .commit();
+                break;
+        }
     }
 
     /**
@@ -171,7 +197,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onResume();
         if (isLoaded)
         {
-            updateNation();
+            updateNation(mNation.name);
         }
         else
         {
@@ -413,11 +439,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     /**
      * Query NationStates for nation data
+     * @param name Target nation name
      */
-    private void updateNation()
+    private void updateNation(String name)
     {
         final View fView = findViewById(R.id.drawer_layout);
-        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(mNation.name));
+        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(name));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
