@@ -46,6 +46,7 @@
     <string name="explore_region_move">Move to %1$s?</string>
     <string name="explore_region_password">Password required to move</string>
     <string name="explore_move_confirm">Move</string>
+    <string name="explore_move_wrong_password">Incorrect password.</string>
 
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>

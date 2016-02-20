@@ -1,13 +1,18 @@
 package com.lloydtorres.stately.explore;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -20,6 +25,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -36,6 +42,8 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-01-15.
@@ -51,10 +59,14 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     public static final String IS_ENDORSABLE = "isEndorsable";
     public static final String IS_ENDORSED = "isEndorsed";
     public static final String IS_MOVEABLE = "isMoveable";
+    public static final String IS_PASSWORD = "isPassword";
 
     public static final String ENDORSE_URL = "https://www.nationstates.net/cgi-bin/endorse.cgi";
     private static final String ENDORSE_REQUEST = "endorse";
     private static final String UNENDORSE_REQUEST = "unendorse";
+    private static final String PASSWORD_TAG = "Password";
+    private static final Pattern REGION_MOVE_SUCCESS = Pattern.compile("Success! .*? is now located in .*?\\.");
+    private static final Pattern REGION_MOVE_WRONG_PASS = Pattern.compile("Moving to .*?: You have not entered the correct password for .*?\\.");
 
     private String id;
     private String name;
@@ -64,6 +76,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     private boolean isEndorsable;
     private boolean isEndorsed;
     private boolean isMoveable;
+    private boolean isPassword;
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
@@ -105,6 +118,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             isEndorsable = savedInstanceState.getBoolean(IS_ENDORSABLE, false);
             isEndorsed = savedInstanceState.getBoolean(IS_ENDORSED, false);
             isMoveable = savedInstanceState.getBoolean(IS_MOVEABLE, false);
+            isPassword = savedInstanceState.getBoolean(IS_PASSWORD, false);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
@@ -327,6 +341,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                         try {
                             regionResponse = serializer.read(Region.class, response);
 
+                            setName(regionResponse.name);
+
                             // Switch flag URL to https
                             if (regionResponse.flagURL != null)
                             {
@@ -336,6 +352,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                             // determine moveable state
                             String curRegion = SparkleHelper.getRegionSessionData(getApplicationContext());
                             isMoveable = !curRegion.equals(SparkleHelper.getIdFromName(regionResponse.name));
+                            isPassword = regionResponse.tags != null && regionResponse.tags.contains(PASSWORD_TAG);
                             invalidateOptionsMenu();
 
                             initFragment(regionResponse);
@@ -418,6 +435,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                                 postEndorsement(localid);
                                 break;
                             default:
+                                handleRegionMove(localid);
                                 break;
                         }
                     }
@@ -526,6 +544,122 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         }
     }
 
+    /**
+     * Handles which dialog to show for confirmation/password when moving regions.
+     * @param localid The required localid
+     */
+    public void handleRegionMove(final String localid)
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText passView = (EditText) dialogView.findViewById(R.id.move_password);
+                String password = null;
+                if (passView != null && passView.getText().length() >= 0)
+                {
+                    password = passView.getText().toString();
+                }
+                postRegionMove(localid, password);
+                dialog.dismiss();
+            }
+        };
+
+        if (isPassword)
+        {
+            dialogBuilder
+                    .setTitle(getString(R.string.explore_region_password))
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.explore_move_confirm), dialogClickListener)
+                    .setNegativeButton(getString(R.string.explore_negative), null);
+        }
+        else
+        {
+            dialogBuilder
+                    .setTitle(String.format(getString(R.string.explore_region_move), name))
+                    .setPositiveButton(getString(R.string.explore_move_confirm), dialogClickListener)
+                    .setNegativeButton(getString(R.string.explore_negative), null);
+        }
+
+        dialogBuilder.show();
+    }
+
+    /**
+     * POSTs to the server to move a nation to a region.
+     * @param localid Required localId
+     * @param password Password (can be null)
+     */
+    private void postRegionMove(final String localid, final String password)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Region.CHANGE_QUERY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(response);
+                        Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(response);
+
+                        if (moveSuccess.find())
+                        {
+                            Intent statelyActivityLaunch = new Intent(ExploreActivity.this, StatelyActivity.class);
+                            statelyActivityLaunch.putExtra(StatelyActivity.NAV_INIT, StatelyActivity.REGION_FRAGMENT);
+                            statelyActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(statelyActivityLaunch);
+                        }
+                        else if (moveWrongPassword.find())
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.explore_move_wrong_password));
+                        }
+                        else
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("move_region", "1");
+                params.put("region_name", SparkleHelper.getIdFromName(id));
+                params.put("localid", localid);
+
+                if (password != null)
+                {
+                    params.put("password", password);
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -534,7 +668,10 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 finish();
                 return true;
             case R.id.nav_endorse:
-                getLocalId(String.format(Nation.QUERY_HTML, id));
+                getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)));
+                return true;
+            case R.id.nav_move:
+                getLocalId(String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(id)));
                 return true;
             case R.id.nav_explore:
                 // Open an explore dialog to keep going
@@ -557,5 +694,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         savedInstanceState.putBoolean(IS_ENDORSABLE, isEndorsable);
         savedInstanceState.putBoolean(IS_ENDORSED, isEndorsed);
         savedInstanceState.putBoolean(IS_MOVEABLE, isMoveable);
+        savedInstanceState.putBoolean(IS_PASSWORD, isPassword);
     }
 }

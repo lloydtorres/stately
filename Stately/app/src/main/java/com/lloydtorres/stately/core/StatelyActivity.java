@@ -144,12 +144,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.coordinator_app_bar, rf)
                         .commit();
+                currentPosition = R.id.nav_region;
                 break;
             default:
                 NationFragment nf = getNationFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.coordinator_app_bar, nf)
                         .commit();
+                currentPosition = R.id.nav_nation;
                 break;
         }
     }
