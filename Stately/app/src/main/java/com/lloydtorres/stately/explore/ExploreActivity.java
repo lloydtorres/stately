@@ -65,11 +65,13 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+        view = findViewById(R.id.explore_coordinator);
 
         if (getIntent() != null)
         {
@@ -384,7 +386,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
      */
     private void getLocalId(final String url)
     {
-        final View view = findViewById(R.id.explore_coordinator);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -443,7 +444,6 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
      */
     private void postEndorsement(final String localid)
     {
-        final View view = findViewById(R.id.explore_coordinator);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ENDORSE_URL,
                 new Response.Listener<String>() {
                     @Override
