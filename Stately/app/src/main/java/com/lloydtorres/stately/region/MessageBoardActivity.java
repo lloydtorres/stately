@@ -133,8 +133,6 @@ public class MessageBoardActivity extends AppCompatActivity {
                 }
             }
         });
-
-        startSwipeRefresh();
         processRegionMembership();
     }
 
@@ -181,6 +179,7 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         if (messages.posts.size() <= 0)
         {
+            startSwipeRefresh();
             startQueryMessages(SCAN_FORWARD);
         }
         // Otherwise just show it normally
