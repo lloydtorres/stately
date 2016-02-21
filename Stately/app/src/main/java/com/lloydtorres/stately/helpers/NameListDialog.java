@@ -61,7 +61,6 @@ public class NameListDialog extends DialogFragment {
         {
             dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
         }
-        dialog.setTitle(title);
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
@@ -78,6 +77,7 @@ public class NameListDialog extends DialogFragment {
             target = savedInstanceState.getInt(TARGET_KEY);
         }
 
+        getDialog().setTitle(title);
         initRecycler(view);
 
         return view;
