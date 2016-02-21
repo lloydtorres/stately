@@ -59,6 +59,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private String regionName;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
+    private boolean postable = false;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
@@ -160,6 +161,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
             messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
             messagePostButton.setOnClickListener(postMessageListener);
+            postable = true;
         }
 
         if (messages.posts.size() <= 0)
@@ -479,7 +481,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         Collections.sort(messages.posts);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
+            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else
@@ -492,6 +494,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (direction == SCAN_BACKWARD)
         {
             ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
         }
     }
 

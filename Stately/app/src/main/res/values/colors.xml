@@ -54,4 +54,6 @@
 
     <color name="issueUnaddressed">#F44336</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="highlightColor">#FFF9C4</color>
 </resources>
