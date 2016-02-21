@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,6 +175,21 @@ public class NationFragment extends Fragment {
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView) view.findViewById(R.id.nation_flag);
+
+        // Adjust nation banner height if needed
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        if (getActivity() != null && isAdded())
+        {
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int screenHeight = displaymetrics.heightPixels;
+            int bannerHeight = nationBanner.getHeight();
+            // If it takes up more than half the screen
+            if (screenHeight/((float)bannerHeight) > 2)
+            {
+                nationBanner.getLayoutParams().height = screenHeight/3;
+                nationBanner.requestLayout();
+            }
+        }
 
         initNationData(view);
     }
