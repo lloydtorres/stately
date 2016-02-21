@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -60,12 +62,15 @@ public class MessageBoardActivity extends AppCompatActivity {
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
     private boolean postable = false;
+    private Post replyTarget = null;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
     private EditText messageContainer;
     private ImageView messagePostButton;
     private ImageView.OnClickListener postMessageListener;
+    private RelativeLayout messageReplyContainer;
+    private TextView messageReplyContent;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -161,6 +166,8 @@ public class MessageBoardActivity extends AppCompatActivity {
             messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
             messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
             messagePostButton.setOnClickListener(postMessageListener);
+            messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+            messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
             postable = true;
         }
 
@@ -350,6 +357,25 @@ public class MessageBoardActivity extends AppCompatActivity {
     }
 
     /**
+     * Used for setting a reply message for the post.
+     * @param p
+     */
+    public void setReplyMessage(Post p)
+    {
+        replyTarget = p;
+        if (replyTarget != null)
+        {
+            messageReplyContainer.setVisibility(View.VISIBLE);
+            messageReplyContent.setText(String.format(getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+        }
+        else
+        {
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
+            messageReplyContainer.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * It's called postMessage(), but this actually gets the chk value first before calling
      * the function that actually posts the message.
      */
@@ -430,6 +456,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
+                        setReplyMessage(null);
                         startQueryMessages();
                     }
                 }, new Response.ErrorListener() {
@@ -451,7 +478,19 @@ public class MessageBoardActivity extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("chk", chk);
-                params.put("message", messageContainer.getText().toString());
+
+                String newMessage = messageContainer.getText().toString();
+                if (replyTarget != null)
+                {
+                    String quoteMessage = replyTarget.message;
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = String.format(getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
+                    newMessage = quoteMessage + newMessage;
+                }
+                params.put("message", newMessage);
+
                 params.put("lodge_message", "1");
                 return params;
             }
@@ -490,11 +529,15 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
         mSwipeRefreshLayout.setRefreshing(false);
 
-        // go back to user position if scanning backward
-        if (direction == SCAN_BACKWARD)
+        switch (direction)
         {
-            ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
-            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
+            case SCAN_FORWARD:
+                mLayoutManager.scrollToPosition(messages.posts.size()-1);
+                break;
+            case SCAN_BACKWARD:
+                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
+                ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
+                break;
         }
     }
 

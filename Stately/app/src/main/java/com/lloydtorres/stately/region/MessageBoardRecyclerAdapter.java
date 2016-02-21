@@ -161,9 +161,16 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            SparkleHelper.logError("onClick on " + pos);
             if (pos != RecyclerView.NO_POSITION && post.message != null && !post.message.equals(DELETED_CONTENT))
             {
+                if (replyIndex == pos)
+                {
+                    ((MessageBoardActivity) context).setReplyMessage(null);
+                }
+                else
+                {
+                    ((MessageBoardActivity) context).setReplyMessage(post);
+                }
                 setReplyIndex(pos);
             }
         }

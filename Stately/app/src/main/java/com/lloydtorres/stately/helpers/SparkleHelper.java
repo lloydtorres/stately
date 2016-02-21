@@ -863,8 +863,8 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
         holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
         holder = regexDoubleReplace(holder, "(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
-        holder = regexRemove(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
-        holder = regexRemove(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
+        holder = regexExtract(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
+        holder = regexExtract(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(htt(?:p|ps):\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
@@ -1030,6 +1030,24 @@ public class SparkleHelper {
     }
 
     /**
+     * Extracts a capture group from a regex
+     * @param target Target content
+     * @param regex Regex
+     * @return
+     */
+    public static String regexExtract(String target, String regex)
+    {
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
+
+        for (Map.Entry<String, String> n : set) {
+            holder = holder.replace(n.getKey(), n.getValue());
+        }
+
+        return holder;
+    }
+
+    /**
      * Removes all substrings which match the regex
      * @param target Target content
      * @param regex Regex
@@ -1041,7 +1059,7 @@ public class SparkleHelper {
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
 
         for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), n.getValue());
+            holder = holder.replace(n.getKey(), "");
         }
 
         return holder;
