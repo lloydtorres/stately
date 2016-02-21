@@ -81,6 +81,8 @@ public class OverviewSubFragment extends Fragment {
     private LinearLayout religionLayout;
     private TextView religion;
     private TextView animal;
+    private TextView censusTitle;
+    private TextView censusContent;
 
     public void setNation(Nation n)
     {
@@ -420,5 +422,15 @@ public class OverviewSubFragment extends Fragment {
 
         animal = (TextView) view.findViewById(R.id.nation_animal);
         animal.setText(mNation.animal);
+
+        censusTitle = (TextView) view.findViewById(R.id.nation_census_title);
+        censusTitle.setText(String.format(getString(R.string.card_overview_other_census_title), "Whatever"));
+        censusContent = (TextView) view.findViewById(R.id.nation_census_content);
+        censusContent.setText(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedNumber(mNation.censusScore.value), "Whatever"));
+        if (mNation.rCensus > 0)
+        {
+            censusContent.append(String.format(getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(mNation.rCensus), mNation.region));
+        }
+        censusContent.append(String.format(getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(mNation.wCensus)));
     }
 }

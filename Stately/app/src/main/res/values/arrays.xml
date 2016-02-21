@@ -13,4 +13,14 @@
         <item>Governance</item>
         <item>Happenings</item>
     </string-array>
+    <string-array name="census">
+        <item>Civil Rights#Martin Luther King, Jr. Units</item>
+        <item>Economy#Krugman-Greenspan Business Outlook Index</item>
+        <item>Political Freedoms#Diebold Election Inking Scale</item>
+        <item>Population#Capita (Millions)</item>
+        <item>Authoritarianism#Stalins</item>
+        <item>Averageness#Average Standardized Normality Scale</item>
+        <item>Business Subsidization#Gilded Widget Scale</item>
+        <item>Compassion#Kitten Softness Rating</item>
+    </string-array>
 </resources>
