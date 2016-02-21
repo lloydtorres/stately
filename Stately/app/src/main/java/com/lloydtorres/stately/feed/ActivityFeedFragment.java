@@ -32,6 +32,7 @@ import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -193,6 +194,9 @@ public class ActivityFeedFragment extends Fragment {
         });
     }
 
+    /**
+     * Queries a nation's dossier.
+     */
     private void queryDossier()
     {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, DOSSIER_QUERY,
@@ -559,15 +563,54 @@ public class ActivityFeedFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager fm = getChildFragmentManager();
         switch (item.getItemId()) {
+            case R.id.nav_dossier_n:
+                showNationDossier(fm);
+                return true;
+            case R.id.nav_dossier_r:
+                showRegionDossier(fm);
+                return true;
             case R.id.nav_subscriptions:
-                FragmentManager fm = getChildFragmentManager();
                 SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
                 subscriptionsDialog.setCallback(this);
                 subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Setup and show contents of the nation dossier
+     * @param fm Fragment Manager
+     */
+    private void showNationDossier(FragmentManager fm)
+    {
+        ArrayList<String> dossierNationNames = new ArrayList<String>();
+        for (UserLogin u : dossierNations)
+        {
+            dossierNationNames.add(u.name);
+        }
+        Collections.sort(dossierNationNames);
+        NameListDialog nameListDialog = new NameListDialog();
+        nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
+        nameListDialog.setNames(dossierNationNames);
+        nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+    }
+
+    /**
+     * Setup and show contents of the region dossier
+     * @param fm Fragment Manager
+     */
+    private void showRegionDossier(FragmentManager fm)
+    {
+        Collections.sort(dossierRegions);
+        NameListDialog nameListDialog = new NameListDialog();
+        nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
+        nameListDialog.setNames((ArrayList<String>) dossierRegions);
+        nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
     }
 
     @Override

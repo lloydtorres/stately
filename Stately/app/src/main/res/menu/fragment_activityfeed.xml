@@ -2,6 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/nav_dossier_n"
+        android:icon="@drawable/ic_menu_nation"
+        android:title="@string/activityfeed_dossier_n"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_dossier_r"
+        android:icon="@drawable/ic_menu_region"
+        android:title="@string/activityfeed_dossier_r"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/nav_subscriptions"
         android:icon="@drawable/ic_subscriptions"
         android:title="@string/activityfeed_subscriptions"
