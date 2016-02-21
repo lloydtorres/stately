@@ -58,7 +58,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public static final String NAV_INIT = "navInit";
 
     public static final int NATION_FRAGMENT = 0;
+    public static final int ISSUES_FRAGMENT = 1;
+    public static final int ACTIVITY_FEED_FRAGMENT = 2;
     public static final int REGION_FRAGMENT = 3;
+    public static final int WA_FRAGMENT = 4;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
@@ -89,9 +92,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             mNation = getIntent().getParcelableExtra(NATION_DATA);
             navInit = getIntent().getIntExtra(NAV_INIT, NATION_FRAGMENT);
         }
-        if (mNation == null && savedInstanceState != null)
+        if (savedInstanceState != null)
         {
-            mNation = savedInstanceState.getParcelable(NATION_DATA);
+            if (mNation == null)
+            {
+                mNation = savedInstanceState.getParcelable(NATION_DATA);
+            }
+            navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
@@ -137,23 +144,34 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         navigationView.getMenu().getItem(start).setChecked(true);
         initNavBanner();
 
+        Fragment f;
         switch (start)
         {
+            case ISSUES_FRAGMENT:
+                f = new IssuesFragment();
+                currentPosition = R.id.nav_issues;
+                break;
+            case ACTIVITY_FEED_FRAGMENT:
+                f = getActivityFeed();
+                currentPosition = R.id.nav_activityfeed;
+                break;
             case REGION_FRAGMENT:
-                RegionFragment rf = getRegionFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.coordinator_app_bar, rf)
-                        .commit();
+                f = getRegionFragment();
                 currentPosition = R.id.nav_region;
                 break;
+            case WA_FRAGMENT:
+                f = getWaFragment();
+                currentPosition = R.id.nav_wa;
+                break;
             default:
-                NationFragment nf = getNationFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.coordinator_app_bar, nf)
-                        .commit();
+                f = getNationFragment();
                 currentPosition = R.id.nav_nation;
                 break;
         }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.coordinator_app_bar, f)
+                .commit();
     }
 
     /**
@@ -177,6 +195,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(NAV_INIT, navInit);
         if (mNation != null)
         {
             savedInstanceState.putParcelable(NATION_DATA, mNation);
@@ -188,6 +207,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
+        navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
         if (savedInstanceState != null && mNation == null)
         {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
@@ -241,20 +261,25 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 case R.id.nav_nation:
                     // Choose Nation
                     fChoose = getNationFragment();
+                    navInit = NATION_FRAGMENT;
                     break;
                 case R.id.nav_issues:
                     // Choose Issues
                     fChoose = new IssuesFragment();
+                    navInit = ISSUES_FRAGMENT;
                     break;
                 case R.id.nav_activityfeed:
                     fChoose = getActivityFeed();
+                    navInit = ACTIVITY_FEED_FRAGMENT;
                     break;
                 case R.id.nav_region:
                     fChoose = getRegionFragment();
+                    navInit = REGION_FRAGMENT;
                     break;
                 case R.id.nav_wa:
                     // Chose World Assembly
                     fChoose = getWaFragment();
+                    navInit = WA_FRAGMENT;
                     break;
                 default:
                     // Backup
