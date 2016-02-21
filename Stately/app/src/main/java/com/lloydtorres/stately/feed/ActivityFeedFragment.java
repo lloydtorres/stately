@@ -237,6 +237,7 @@ public class ActivityFeedFragment extends Fragment {
             Object q = query.remove(0);
 
             String url = "";
+            String appendName = null;
             // If query is for a nation
             if (q instanceof UserLogin)
             {
@@ -246,22 +247,24 @@ public class ActivityFeedFragment extends Fragment {
             else if (q instanceof String)
             {
                 url = String.format(HappeningFeed.QUERY_REGION, SparkleHelper.getIdFromName((String) q));
+                appendName = (String) q;
             }
             // If query is for the World Assembly
             else if (q instanceof Integer)
             {
                 url = HappeningFeed.QUERY_WA;
             }
-            queryHappeningsHeavy(url, query);
+            queryHappeningsHeavy(url, query, appendName);
         }
     }
 
     /**
      * Heavy-lifting for querying happenings.
-     * @param target
-     * @param remainingQueries
+     * @param target Target URL
+     * @param remainingQueries Queries remaining that need to be run
+     * @param appendName If target name needs to be appended to happenings
      */
-    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries)
+    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries, final String appendName)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
                 new Response.Listener<String>() {
@@ -276,7 +279,17 @@ public class ActivityFeedFragment extends Fragment {
                         Persister serializer = new Persister();
                         try {
                             happeningResponse = serializer.read(HappeningFeed.class, response);
-                            events.addAll(happeningResponse.happenings);
+                            List<Event> queriedHappenings = happeningResponse.happenings;
+
+                            if (appendName != null)
+                            {
+                                for (Event e : queriedHappenings)
+                                {
+                                    e.content = String.format(getString(R.string.activityfeed_append), appendName, e.content);
+                                }
+                            }
+
+                            events.addAll(queriedHappenings);
                             queryHappenings(remainingQueries);
                         }
                         catch (Exception e) {

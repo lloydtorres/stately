@@ -160,6 +160,7 @@
     <string name="subscriptions_dossier_r">Dossier regions (first 10)</string>
     <string name="subscriptions_wa">World Assembly</string>
     <string name="update">Update</string>
+    <string name="activityfeed_append">%%%%%1$s%%%%: %2$s</string>
 
     <!-- Region -->
     <string name="region_404">Region not found.</string>
