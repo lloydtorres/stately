@@ -89,6 +89,7 @@ public class NameListDialog extends DialogFragment {
     {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
 
+        /*
         // If the recyclerview is too big for the screen, resize it
         DisplayMetrics displaymetrics = new DisplayMetrics();
         if (getActivity() != null && isAdded())
@@ -97,12 +98,12 @@ public class NameListDialog extends DialogFragment {
             int screenHeight = displaymetrics.heightPixels;
             int recyclerHeight = mRecyclerView.getHeight();
 
-            if (screenHeight/((float)recyclerHeight) > 2)
+            if (((float)recyclerHeight)/screenHeight > 2)
             {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight/2);
                 mRecyclerView.setLayoutParams(lp);
             }
-        }
+        }*/
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

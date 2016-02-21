@@ -176,6 +176,7 @@ public class NationFragment extends Fragment {
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
         nationFlag = (RoundedImageView) view.findViewById(R.id.nation_flag);
 
+        /*
         // Adjust nation banner height if needed
         DisplayMetrics displaymetrics = new DisplayMetrics();
         if (getActivity() != null && isAdded())
@@ -184,12 +185,12 @@ public class NationFragment extends Fragment {
             int screenHeight = displaymetrics.heightPixels;
             int bannerHeight = nationBanner.getHeight();
             // If it takes up more than half the screen
-            if (screenHeight/((float)bannerHeight) > 2)
+            if (((float)bannerHeight)/screenHeight > 2)
             {
                 nationBanner.getLayoutParams().height = screenHeight/3;
                 nationBanner.requestLayout();
             }
-        }
+        }*/
 
         initNationData(view);
     }
