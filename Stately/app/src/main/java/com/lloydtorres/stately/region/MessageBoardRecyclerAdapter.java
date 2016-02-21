@@ -24,8 +24,8 @@ import java.util.List;
  */
 public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int NO_SELECTION = -1;
-    private static final int EMPTY_INDICATOR = -1;
     private static final String DELETED_CONTENT = "Message deleted by author";
+    private static final int EMPTY_INDICATOR = -1;
 
     private Context context;
     private List<Post> messages;
@@ -39,6 +39,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         setMessages(p);
     }
 
+    /**
+     * Set new messages
+     * @param p List of posts
+     */
     public void setMessages(List<Post> p)
     {
         messages = p;
@@ -52,6 +56,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    /**
+     * Set which message to reply to
+     * @param i Index
+     */
     public void setReplyIndex(int i)
     {
         int oldReplyIndex = replyIndex;
@@ -73,12 +81,26 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
+    /**
+     * Add an offset to the reply index
+     * @param a Offset
+     */
     public void addToReplyIndex(int a)
     {
         if (replyIndex != -1)
         {
             setReplyIndex(replyIndex + a);
         }
+    }
+
+    /**
+     * Mark a message as having been deleted
+     * @param i
+     */
+    public void setAsDeleted(int i)
+    {
+        messages.get(i).message = DELETED_CONTENT;
+        notifyItemChanged(i);
     }
 
     @Override
@@ -110,7 +132,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return messages.size();
     }
 
-    public class PostCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PostCard extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private Context context;
         private Post post;
@@ -130,6 +152,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (enableClick)
             {
                 v.setOnClickListener(this);
+                v.setOnLongClickListener(this);
             }
         }
 
@@ -176,6 +199,22 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     setReplyIndex(pos);
                 }
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (context != null)
+            {
+                String selfName = SparkleHelper.getActiveUser(context).nationId;
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && selfName.equals(post.name) && !post.message.equals(DELETED_CONTENT))
+                {
+                    ((MessageBoardActivity) context).confirmDelete(pos, post.id);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

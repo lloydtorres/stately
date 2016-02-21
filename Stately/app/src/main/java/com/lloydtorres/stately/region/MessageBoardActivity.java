@@ -1,6 +1,8 @@
 package com.lloydtorres.stately.region;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +58,10 @@ public class MessageBoardActivity extends AppCompatActivity {
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
     private static final int SCAN_FORWARD = 1;
+    private static final int SCAN_SAME = 2;
+
+    private static final String CONFIRM_DELETE = "self-deleted by";
+    private AlertDialog.Builder dialogBuilder;
 
     private RegionMessages messages;
     private String regionName;
@@ -98,6 +104,8 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
+
+        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mRecyclerView.setHasFixedSize(true);
@@ -173,7 +181,7 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         if (messages.posts.size() <= 0)
         {
-            startQueryMessages();
+            startQueryMessages(SCAN_FORWARD);
         }
         // Otherwise just show it normally
         else
@@ -185,10 +193,10 @@ public class MessageBoardActivity extends AppCompatActivity {
     /**
      * Load swipe refresher and start loading messages.
      */
-    private void startQueryMessages()
+    private void startQueryMessages(int direction)
     {
         startSwipeRefresh();
-        queryMessages(0, SCAN_FORWARD, true);
+        queryMessages(0, direction, true);
     }
 
     /**
@@ -457,7 +465,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                         messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
                         setReplyMessage(null);
-                        startQueryMessages();
+                        startQueryMessages(SCAN_FORWARD);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -495,6 +503,84 @@ public class MessageBoardActivity extends AppCompatActivity {
                 return params;
             }
 
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            messagePostButton.setOnClickListener(postMessageListener);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Public convenience class to confirm if post should be deleted.
+     * @param pos Position of the deleted post
+     * @param id
+     */
+    public void confirmDelete(final int pos, final int id)
+    {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startSwipeRefresh();
+                postMessageDelete(pos, id);
+                dialog.dismiss();
+            }
+        };
+
+        dialogBuilder.setTitle(R.string.rmb_delete_confirm)
+                .setPositiveButton(R.string.rmb_delete, dialogClickListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+    }
+
+    /**
+     * POSTs a delete command to the NS servers.
+     * @param pos Position of the deleted post
+     * @param id Post ID
+     */
+    private void postMessageDelete(final int pos, final int id)
+    {
+        final View view = findViewById(R.id.message_board_coordinator);
+        String targetURL = String.format(RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (!response.contains(CONFIRM_DELETE))
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                        }
+                        else
+                        {
+                            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setAsDeleted(pos);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                messagePostButton.setOnClickListener(postMessageListener);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
