@@ -23,6 +23,31 @@ android:layout_height="match_parent">
     android:background="@android:color/white">
     <include layout="@layout/view_divider" />
     <RelativeLayout
+        android:id="@+id/responder_reply_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+        <ImageView
+            android:id="@+id/responder_reply_icon"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/ic_reply"/>
+        <TextView
+            android:id="@+id/responder_reply_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/responder_reply_icon"
+            android:text="@string/rmb_reply"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -31,7 +56,7 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:background="@android:color/white"
             android:maxLines="3"
             android:inputType="textMultiLine|textCapSentences"
