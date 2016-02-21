@@ -67,15 +67,7 @@ public class SwitchNationDialog extends DialogFragment {
             logins = savedInstanceState.getParcelableArrayList(LOGINS_KEY);
         }
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        int screenHeight = NameListDialog.RECYCLER_DEFAULT_HEIGHT * 3;
-        if (getActivity() != null && isAdded())
-        {
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            screenHeight = displaymetrics.heightPixels;
-        }
-
-        initRecycler(view, screenHeight);
+        initRecycler(view);
 
         // Build actual dialog
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
@@ -93,18 +85,26 @@ public class SwitchNationDialog extends DialogFragment {
         return dialogBuilder.create();
     }
 
-    private void initRecycler(View view, int screenHeight)
+    private void initRecycler(View view)
     {
         // Base recycler stuff
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
-        if (screenHeight/NameListDialog.RECYCLER_DEFAULT_HEIGHT < 3)
+
+        // If the recyclerview is too big for the screen, resize it
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        if (getActivity() != null && isAdded())
         {
-            // If the recyclerview is too big for the screen, resize it
-            SparkleHelper.logError("Resizing recycler");
-            // Resetting since this value is in px rather than dp
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight / 2);
-            mRecyclerView.setLayoutParams(lp);
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int screenHeight = displaymetrics.heightPixels;
+            int recyclerHeight = mRecyclerView.getHeight();
+
+            if (screenHeight/((float)recyclerHeight) > 2)
+            {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight/2);
+                mRecyclerView.setLayoutParams(lp);
+            }
         }
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
