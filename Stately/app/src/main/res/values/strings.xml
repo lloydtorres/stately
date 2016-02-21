@@ -163,6 +163,8 @@
     <string name="activityfeed_append">%%%%%1$s%%%%: %2$s</string>
     <string name="activityfeed_dossier_n">Dossier: Nations</string>
     <string name="activityfeed_dossier_r">Dossier: Regions</string>
+    <string name="dossier_n_none">There are no nations in the Dossier.</string>
+    <string name="dossier_r_none">There are no regions in the Dossier.</string>
 
     <!-- Region -->
     <string name="region_404">Region not found.</string>

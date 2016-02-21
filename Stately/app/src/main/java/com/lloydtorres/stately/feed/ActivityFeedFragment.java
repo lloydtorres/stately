@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -83,6 +84,8 @@ public class ActivityFeedFragment extends Fragment {
     private List<UserLogin> dossierNations = new ArrayList<UserLogin>();
     private List<String> dossierRegions = new ArrayList<String>();
 
+    private AlertDialog.Builder dialogBuilder;
+
     public void setNationName(String n)
     {
         nationName = n;
@@ -106,6 +109,7 @@ public class ActivityFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
         events = new ArrayList<Event>();
+        dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         setHasOptionsMenu(true);
     }
 
@@ -586,17 +590,27 @@ public class ActivityFeedFragment extends Fragment {
      */
     private void showNationDossier(FragmentManager fm)
     {
-        ArrayList<String> dossierNationNames = new ArrayList<String>();
-        for (UserLogin u : dossierNations)
+        if (dossierNations.size() > 0)
         {
-            dossierNationNames.add(u.name);
+            ArrayList<String> dossierNationNames = new ArrayList<String>();
+            for (UserLogin u : dossierNations)
+            {
+                dossierNationNames.add(u.name);
+            }
+            Collections.sort(dossierNationNames);
+            NameListDialog nameListDialog = new NameListDialog();
+            nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
+            nameListDialog.setNames(dossierNationNames);
+            nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+            nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
         }
-        Collections.sort(dossierNationNames);
-        NameListDialog nameListDialog = new NameListDialog();
-        nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
-        nameListDialog.setNames(dossierNationNames);
-        nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
-        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+        else
+        {
+            dialogBuilder.setTitle(R.string.activityfeed_dossier_n)
+                    .setMessage(R.string.dossier_n_none)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
+        }
     }
 
     /**
@@ -605,12 +619,22 @@ public class ActivityFeedFragment extends Fragment {
      */
     private void showRegionDossier(FragmentManager fm)
     {
-        Collections.sort(dossierRegions);
-        NameListDialog nameListDialog = new NameListDialog();
-        nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
-        nameListDialog.setNames((ArrayList<String>) dossierRegions);
-        nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
-        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+        if (dossierRegions.size() > 0)
+        {
+            Collections.sort(dossierRegions);
+            NameListDialog nameListDialog = new NameListDialog();
+            nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
+            nameListDialog.setNames((ArrayList<String>) dossierRegions);
+            nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+            nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+        }
+        else
+        {
+            dialogBuilder.setTitle(R.string.activityfeed_dossier_r)
+                    .setMessage(R.string.dossier_r_none)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
+        }
     }
 
     @Override
