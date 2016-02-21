@@ -7,9 +7,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
 
@@ -25,6 +27,7 @@ public class NameListDialog extends DialogFragment {
     public static final String TITLE_KEY = "title";
     public static final String NAMES_KEY = "names";
     public static final String TARGET_KEY = "target";
+    public static final int RECYCLER_DEFAULT_HEIGHT = 300;
 
     // RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -77,15 +80,31 @@ public class NameListDialog extends DialogFragment {
             target = savedInstanceState.getInt(TARGET_KEY);
         }
 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        int screenHeight = RECYCLER_DEFAULT_HEIGHT * 3;
+        if (getActivity() != null && isAdded())
+        {
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            screenHeight = displaymetrics.heightPixels;
+        }
+
         getDialog().setTitle(title);
-        initRecycler(view);
+        initRecycler(view, screenHeight);
 
         return view;
     }
 
-    private void initRecycler(View view)
+    private void initRecycler(View view, int screenHeight)
     {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+        if (screenHeight/RECYCLER_DEFAULT_HEIGHT < 3)
+        {
+            // If the recyclerview is too big for the screen, resize it
+            SparkleHelper.logError("Resizing recycler");
+            // Resetting since this value is in px rather than dp
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight / 2);
+            mRecyclerView.setLayoutParams(lp);
+        }
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
