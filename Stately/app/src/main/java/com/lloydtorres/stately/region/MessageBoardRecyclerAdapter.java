@@ -30,6 +30,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public MessageBoardRecyclerAdapter(Context c, List<Post> p)
     {
         context = c;
+        setMessages(p);
+    }
+
+    public void setMessages(List<Post> p)
+    {
         messages = p;
 
         if (messages.size() <= 0)
@@ -38,6 +43,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             np.id = EMPTY_INDICATOR;
             messages.add(np);
         }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -51,7 +57,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         PostCard postCard = (PostCard) holder;
-        postCard.init(messages.get(position));
+        Post message = messages.get(position);
+        postCard.init(message);
     }
 
     @Override
@@ -81,11 +88,6 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 SparkleHelper.activityLinkBuilder(context, cardAuthor, p.name, p.name, SparkleHelper.getNameFromId(p.name), SparkleHelper.CLICKY_NATION_MODE);
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(p.timestamp));
                 SparkleHelper.setBbCodeFormatting(context, cardContent, p.message);
-
-                if (p.message != null && p.message.equals(DELETED_CONTENT))
-                {
-                    cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
-                }
             }
             else
             {

@@ -412,6 +412,10 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The actual function that POSTs the message.
+     * @param chk
+     */
     private void postActualMessage(final String chk)
     {
         final View view = findViewById(R.id.message_board_coordinator);
@@ -473,8 +477,15 @@ public class MessageBoardActivity extends AppCompatActivity {
     private void refreshRecycler(int direction, int newItems)
     {
         Collections.sort(messages.posts);
-        mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null)
+        {
+            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else
+        {
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setMessages(messages.posts);
+        }
         mSwipeRefreshLayout.setRefreshing(false);
 
         // go back to user position if scanning backward
