@@ -75,7 +75,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void addToReplyIndex(int a)
     {
-        setReplyIndex(replyIndex + a);
+        if (replyIndex != -1)
+        {
+            setReplyIndex(replyIndex + a);
+        }
     }
 
     @Override
@@ -170,8 +173,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 else
                 {
                     ((MessageBoardActivity) context).setReplyMessage(post);
+                    setReplyIndex(pos);
                 }
-                setReplyIndex(pos);
             }
         }
     }
