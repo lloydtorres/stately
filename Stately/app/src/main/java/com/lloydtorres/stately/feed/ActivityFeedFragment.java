@@ -35,11 +35,19 @@ import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Lloyd on 2016-02-08.
@@ -48,7 +56,14 @@ import java.util.List;
 public class ActivityFeedFragment extends Fragment {
     public static final String NATION_KEY = "nationName";
     public static final String REGION_KEY = "regionName";
+    public static final String DOSSIER_QUERY = "https://www.nationstates.net/page=dossier/template-overall=none";
     private static final int SWITCH_LIMIT = 10;
+
+    private static final String DOSSIER_CONFIRM = "Your Dossier is a collection of intelligence on nations and regions of interest.";
+    private static final String NO_NATIONS = "You have no nations in your Dossier.";
+    private static final String NO_REGIONS = "You have no regions in your Dossier.";
+    private static final String NATION_LINK_PREFIX = "nation=";
+    private static final String REGION_LINK_PREFIX = "region=";
 
     private Activity mActivity;
     private View mView;
@@ -64,6 +79,8 @@ public class ActivityFeedFragment extends Fragment {
     private List<Event> events;
     private String nationName;
     private String regionName;
+    private List<UserLogin> dossierNations = new ArrayList<UserLogin>();
+    private List<String> dossierRegions = new ArrayList<String>();
 
     public void setNationName(String n)
     {
@@ -141,14 +158,15 @@ public class ActivityFeedFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        startQueryHappenings();
+        startQueryHappenings(true);
         return mView;
     }
 
     /**
      * Convenience method to show swipe refresh and start query.
+     * @param firstRun If this is the first time the function is being called
      */
-    public void startQueryHappenings()
+    public void startQueryHappenings(final boolean firstRun)
     {
         events = new ArrayList<Event>();
         mSwipeRefreshLayout.post(new Runnable() {
@@ -160,9 +178,133 @@ public class ActivityFeedFragment extends Fragment {
                 }
 
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryHappenings(buildHappeningsQuery());
+
+                if (firstRun)
+                {
+                    // Query dossier first when running for first time
+                    queryDossier();
+                }
+                else
+                {
+                    // Just query regular happenings otherwise
+                    queryHappenings(buildHappeningsQuery());
+                }
             }
         });
+    }
+
+    private void queryDossier()
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DOSSIER_QUERY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
+                        // Confirm that we're looking at the dossier page
+                        if (response.contains(DOSSIER_CONFIRM))
+                        {
+                            Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                            boolean nationsExist = !response.contains(NO_NATIONS);
+                            boolean regionsExist = !response.contains(NO_REGIONS);
+
+                            // If there's nations in the dossier
+                            if (nationsExist)
+                            {
+                                Element nationContainer = d.select("div.widebox").first();
+
+                                if (nationContainer == null)
+                                {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                                    return;
+                                }
+
+                                // Get nations in dossier
+                                Elements nations = nationContainer.select("a.nlink");
+                                for (Element e : nations)
+                                {
+                                    String id = e.attr("href").replace(NATION_LINK_PREFIX, "");
+                                    UserLogin n = new UserLogin();
+                                    n.nationId = id;
+                                    n.name = SparkleHelper.getNameFromId(id);
+                                    dossierNations.add(n);
+                                }
+                            }
+
+                            // If there's regions in the dossier
+                            if (regionsExist)
+                            {
+                                Element regionContainer = d.select("div.widebox").first();
+                                // If nations are also on the dossier, regions is actually the second box
+                                if (nationsExist)
+                                {
+                                    regionContainer = d.select("div.widebox").get(1);
+                                }
+
+                                if (regionContainer == null)
+                                {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                                    return;
+                                }
+
+                                // Get regions in dossier
+                                Elements regions = regionContainer.select("a.rlink");
+                                for (Element e : regions)
+                                {
+                                    String id = e.attr("href").replace(REGION_LINK_PREFIX, "");
+                                    dossierRegions.add(SparkleHelper.getNameFromId(id));
+                                }
+                            }
+
+                            queryHappenings(buildHappeningsQuery());
+                        }
+                        else
+                        {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("Cookie", String.format("autologin=%s", u.autologin));
+                }
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mainView, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -181,6 +323,9 @@ public class ActivityFeedFragment extends Fragment {
         {
             q.add(curNation);
         }
+
+        // Used for enforcing unique nations
+        Set<String> uniqueEnforcer = new HashSet<String>();
 
         // Include switch nations?
         if (storage.getBoolean(SubscriptionsDialog.SWITCH_NATIONS, true))
@@ -203,12 +348,70 @@ public class ActivityFeedFragment extends Fragment {
                 switchNations = switchNations.subList(0, SWITCH_LIMIT);
             }
             q.addAll(switchNations);
+
+            // Add to unique enforcer
+            for (UserLogin s : switchNations)
+            {
+                uniqueEnforcer.add(s.nationId);
+            }
         }
+
+        // Include dossier nations?
+        if (storage.getBoolean(SubscriptionsDialog.DOSSIER_NATIONS, true))
+        {
+            // Only add entries not already being queried
+            // and limit to 10
+            int dossierNationCounter = 0;
+            for (UserLogin n : dossierNations)
+            {
+                if (!uniqueEnforcer.contains(n.nationId))
+                {
+                    if (++dossierNationCounter > SWITCH_LIMIT)
+                    {
+                        break;
+                    }
+                    q.add(n);
+                }
+            }
+        }
+
+        // Flag to track if self region was added
+        boolean regionAdded = false;
 
         // Include current region?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true))
         {
             q.add(regionName);
+            regionAdded = true;
+        }
+
+        // Include dossier regions?
+        if (storage.getBoolean(SubscriptionsDialog.DOSSIER_REGIONS, true))
+        {
+            List<String> fDossierRegions = new ArrayList<String>();
+            if (regionAdded)
+            {
+                // If region already added, we need to get rid of the self-region entry
+                for (String r : dossierRegions)
+                {
+                    if (!r.equals(regionName))
+                    {
+                        fDossierRegions.add(r);
+                    }
+                }
+            }
+            else
+            {
+                fDossierRegions = dossierRegions;
+            }
+
+            // Only get first 10
+            if (fDossierRegions.size() >= SWITCH_LIMIT)
+            {
+                fDossierRegions = fDossierRegions.subList(0, SWITCH_LIMIT);
+            }
+
+            q.addAll(fDossierRegions);
         }
 
         // Include World Assembly?
@@ -222,6 +425,7 @@ public class ActivityFeedFragment extends Fragment {
 
     /**
      * Convenience method for handling happening queries.
+     * @param query Remaining queries
      */
     private void queryHappenings(List<Object> query)
     {
