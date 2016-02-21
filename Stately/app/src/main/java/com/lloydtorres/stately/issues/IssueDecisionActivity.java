@@ -226,8 +226,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         issue.options.add(dismissOption);
 
-        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        setRecyclerAdapter(issue);
 
         switch (jumpPos)
         {
@@ -242,6 +241,12 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setEnabled(false);
+    }
+
+    private void setRecyclerAdapter(Issue issue)
+    {
+        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     /**
@@ -366,8 +371,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        // Refresh on resume
-        startQueryIssueInfo(NO_JUMP);
+        if (issue.options == null)
+        {
+            startQueryIssueInfo(NO_JUMP);
+        }
+        else
+        {
+            setRecyclerAdapter(issue);
+        }
     }
 
     @Override
