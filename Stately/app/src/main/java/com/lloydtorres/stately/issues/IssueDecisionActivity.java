@@ -241,6 +241,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
 
         mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setEnabled(false);
     }
 
     /**
