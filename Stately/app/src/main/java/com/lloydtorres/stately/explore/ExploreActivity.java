@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.explore;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -586,7 +588,12 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                     .setNegativeButton(getString(R.string.explore_negative), null);
         }
 
-        dialogBuilder.show();
+        Dialog d = dialogBuilder.create();
+        if (isPassword)
+        {
+            d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+        d.show();
     }
 
     /**
