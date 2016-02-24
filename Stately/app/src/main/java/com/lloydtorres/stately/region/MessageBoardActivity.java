@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.region;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,7 +111,6 @@ public class MessageBoardActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
-        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -382,12 +384,26 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messageReplyContainer.setVisibility(View.VISIBLE);
             messageReplyContent.setText(String.format(getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+            messageContainer.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
         }
         else
         {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
             messageReplyContainer.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Helper for scrolling to a certain position.
+     * @param p Post
+     * @param i Post index
+     */
+    public void setReplyMessage(Post p, int i)
+    {
+        setReplyMessage(p);
+        mLayoutManager.scrollToPosition(i);
     }
 
     /**
