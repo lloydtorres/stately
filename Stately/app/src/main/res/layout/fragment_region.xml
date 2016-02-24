@@ -1,138 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_region"
+    android:fitsSystemWindows="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".core.StatelyActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_above="@+id/ad_region_fragment"
-        android:id="@+id/coordinator_region"
-        android:fitsSystemWindows="false"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/region_appbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".core.StatelyActivity">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="false"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/region_appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="false"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_container_region"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="@color/colorPrimary">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="?attr/actionBarSize"
-                    android:minHeight="120dp"
-                    android:gravity="center"
-                    android:background="@android:color/white"
-                    android:orientation="vertical"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_collapseMode="none">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"/>
-
-                    <com.github.siyamed.shapeimageview.RoundedImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:visibility="gone"
-                        android:id="@+id/region_flag"
-                        android:layout_height="100dp"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/gray"
-                        app:siRadius="2dp"
-                        app:siBorderWidth="1dp"
-                        app:siBorderColor="#AAA"
-                        tools:visibility="visible"/>
-
-                    <TextView
-                        android:id="@+id/region_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="20sp"
-                        android:fontFamily="sans-serif"
-                        android:textColor="@color/colorPrimaryText"
-                        android:gravity="center"
-                        tools:text="Arbcom"/>
-
-                    <TextView
-                        android:id="@+id/region_pop"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif-light"
-                        android:textColor="@color/colorSecondaryText"
-                        android:gravity="center"
-                        tools:text="@string/region_pop"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"/>
-
-                </LinearLayout>
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar_region"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:layout_collapseMode="pin" />
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-            <com.astuetz.PagerSlidingTabStrip
-                android:id="@+id/region_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:background="@android:color/white"
-                android:textColor = "@color/colorSecondaryText"
-                app:pstsTextColorSelected = "@color/colorPrimary"
-                app:pstsIndicatorColor = "@color/colorPrimary"
-                app:pstsUnderlineColor = "@color/colorPrimary" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/region_pager"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_container_region"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:background="#EEE"
-            android:layout_weight="1"
-            tools:context=".core.StatelyActivity"/>
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary">
 
-    </android.support.design.widget.CoordinatorLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="?attr/actionBarSize"
+                android:minHeight="120dp"
+                android:gravity="center"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="none">
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_region_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center|bottom"
-        android:background="#222"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/ad_region_fragment"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
 
-</RelativeLayout>
+                <com.github.siyamed.shapeimageview.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:visibility="gone"
+                    android:id="@+id/region_flag"
+                    android:layout_height="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/gray"
+                    app:siRadius="2dp"
+                    app:siBorderWidth="1dp"
+                    app:siBorderColor="#AAA"
+                    tools:visibility="visible"/>
+
+                <TextView
+                    android:id="@+id/region_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/colorPrimaryText"
+                    android:gravity="center"
+                    tools:text="Arbcom"/>
+
+                <TextView
+                    android:id="@+id/region_pop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorSecondaryText"
+                    android:gravity="center"
+                    tools:text="@string/region_pop"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_region"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_collapseMode="pin" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/region_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:background="@android:color/white"
+            android:textColor = "@color/colorSecondaryText"
+            app:pstsTextColorSelected = "@color/colorPrimary"
+            app:pstsIndicatorColor = "@color/colorPrimary"
+            app:pstsUnderlineColor = "@color/colorPrimary" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/region_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="#EEE"
+        android:layout_weight="1"
+        tools:context=".core.StatelyActivity"/>
+
+</android.support.design.widget.CoordinatorLayout>

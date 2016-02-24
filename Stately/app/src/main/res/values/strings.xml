@@ -269,15 +269,4 @@
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
-
-    <!-- Ads -->
-    <!-- Test ID: ca-app-pub-3940256099942544/6300978111 -->
-    <string name="ad_nation_fragment">ca-app-pub-7121810709947327/9881202698</string>
-    <string name="ad_issues_fragment">ca-app-pub-7121810709947327/9124323093</string>
-    <string name="ad_decision_activity">ca-app-pub-7121810709947327/1601056295</string>
-    <string name="ad_activityfeed_fragment">ca-app-pub-7121810709947327/4080394295</string>
-    <string name="ad_region_fragment">ca-app-pub-7121810709947327/3077789495</string>
-    <string name="ad_message_board_activity">ca-app-pub-7121810709947327/4554522692</string>
-    <string name="ad_wa_fragment">ca-app-pub-7121810709947327/6031255892</string>
-    <string name="ad_resolution_activity">ca-app-pub-7121810709947327/1461455495</string>
 </resources>

@@ -95,8 +95,6 @@ public class ResolutionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wa_council);
 
-        SparkleHelper.initAd(findViewById(R.id.activity_wa_council_main), R.id.ad_resolution_activity);
-
         // Either get data from intent or restore state
         if (getIntent() != null)
         {

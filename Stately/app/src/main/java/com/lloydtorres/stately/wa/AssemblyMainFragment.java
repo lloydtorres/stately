@@ -42,7 +42,6 @@ public class AssemblyMainFragment extends Fragment {
 
     private Activity mActivity;
     private View mView;
-    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -75,9 +74,7 @@ public class AssemblyMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_wa_main, container, false);
-        mainView = mView.findViewById(R.id.refreshview_main);
-        SparkleHelper.initAd(mView, R.id.ad_wa_fragment);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         // Restore state
         if (savedInstanceState != null && voteStatus == null)
@@ -99,7 +96,7 @@ public class AssemblyMainFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                                         @Override
                                                         public void onRefresh() {
-                                                            queryWorldAssembly(mainView);
+                                                            queryWorldAssembly(mView);
                                                         }
                                                  });
 
@@ -117,7 +114,7 @@ public class AssemblyMainFragment extends Fragment {
             }
         });
 
-        queryWorldAssembly(mainView);
+        queryWorldAssembly(mView);
         return mView;
     }
 

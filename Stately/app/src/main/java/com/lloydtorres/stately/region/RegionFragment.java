@@ -107,8 +107,6 @@ public class RegionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
-        View mainView = view.findViewById(R.id.coordinator_region);
-        SparkleHelper.initAd(view, R.id.ad_region_fragment);
 
         initToolbar(view);
 
@@ -122,11 +120,11 @@ public class RegionFragment extends Fragment {
         if (mRegion != null)
         {
             mRegionName = mRegion.name;
-            getAllRegionViews(mainView);
+            getAllRegionViews(view);
         }
         else
         {
-            updateRegion(mainView);
+            updateRegion(view);
         }
 
         return view;
