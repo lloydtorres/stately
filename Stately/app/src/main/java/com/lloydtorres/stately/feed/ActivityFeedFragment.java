@@ -302,6 +302,7 @@ public class ActivityFeedFragment extends Fragment {
                 if (getActivity() != null && isAdded())
                 {
                     UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                     params.put("Cookie", String.format("autologin=%s", u.autologin));
                 }
                 return params;
@@ -534,7 +535,18 @@ public class ActivityFeedFragment extends Fragment {
                     queryHappenings(new ArrayList<Object>());
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

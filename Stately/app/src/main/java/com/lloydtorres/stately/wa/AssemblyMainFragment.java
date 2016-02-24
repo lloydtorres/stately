@@ -21,12 +21,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -192,7 +196,17 @@ public class AssemblyMainFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded()) {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

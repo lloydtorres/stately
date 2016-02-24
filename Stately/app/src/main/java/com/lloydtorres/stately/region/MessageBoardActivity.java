@@ -254,7 +254,15 @@ public class MessageBoardActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -434,6 +442,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
@@ -506,6 +515,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -584,6 +594,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }

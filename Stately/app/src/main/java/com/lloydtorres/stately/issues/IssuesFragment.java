@@ -185,8 +185,12 @@ public class IssuesFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getContext());
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    params.put("Cookie", String.format("autologin=%s", u.autologin));
+                }
                 return params;
             }
         };
@@ -304,6 +308,7 @@ public class IssuesFragment extends Fragment {
                 if (getActivity() != null && isAdded())
                 {
                     UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                     params.put("Content-Type", "application/x-www-form-urlencoded");
                     params.put("Cookie", String.format("autologin=%s", u.autologin));
                 }
