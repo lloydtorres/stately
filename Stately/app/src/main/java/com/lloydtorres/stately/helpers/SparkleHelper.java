@@ -827,8 +827,8 @@ public class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/nation=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_NATION_MODE);
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/)?$", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/)?$", CLICKY_REGION_MODE);
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
