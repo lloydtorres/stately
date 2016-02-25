@@ -365,11 +365,9 @@ public class MessageBoardActivity extends AppCompatActivity {
                 SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            else
-            {
-                // We've reached the point where we already have the messages, so put everything back together
-                refreshRecycler(SCAN_FORWARD, 0);
-            }
+            
+            // We've reached the point where we already have the messages, so put everything back together
+            refreshRecycler(SCAN_FORWARD, 0);
         }
     }
 
