@@ -8,11 +8,13 @@ Stately
 ### Features
 
 * Browse your nation's data: stats, people, government, economy, and happenings.
-* Read and respond to daily issues encountered by your nation.
-* Login and switch between your different nations.
-* Check your region's factbook and post in the regional message board.
-* Observe and vote on the proceedings of the World Assembly.
-* Explore other nations and regions in NationStates.
+* Respond to issues encountered by your nation.
+* Login and switch between different nations.
+* Browse through regional factbooks and communities.
+* Read more and post on your own region's RMB.
+* Observe and vote on current World Assembly proceedings.
+* Compile all your happenings together with the Activity Feed.
+* Explore, endorse and move to other nations and regions in NationStates.
 
 ### Revision History
 
