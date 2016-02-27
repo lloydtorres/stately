@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Stately</string>
-    <string name="app_header">Stately/1.2.3 (User %1$s)</string>
-    <string name="app_header_nouser">Stately/1.2.3 (No User)</string>
+    <string name="app_header">Stately/1.3.0 (User %1$s)</string>
+    <string name="app_header_nouser">Stately/1.3.0 (No User)</string>
 
     <!-- Login -->
     <string name="username_hint">Nation Name</string>
