@@ -104,7 +104,7 @@
             android:layout_height="40dip"
             android:background="@android:color/white"
             android:textColor = "@color/colorSecondaryText"
-            app:pstsTextColorSelected = "@color/colorPrimary"
+            app:pstsTabTextColor = "@color/tab_color"
             app:pstsIndicatorColor = "@color/colorPrimary"
             app:pstsUnderlineColor = "@color/colorPrimary" />
 

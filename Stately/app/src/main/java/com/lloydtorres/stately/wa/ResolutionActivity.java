@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
@@ -658,7 +659,7 @@ public class ResolutionActivity extends AppCompatActivity {
         setAgainst.setLineWidth(lineWidth);
 
         // Match data with x-axis labels
-        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setFor);
         dataSets.add(setAgainst);
 
