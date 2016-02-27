@@ -52,7 +52,6 @@ public class IssuesFragment extends Fragment {
 
     private Activity mActivity;
     private View mView;
-    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -82,9 +81,7 @@ public class IssuesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_issues, container, false);
-        mainView = mView.findViewById(R.id.refreshview_main);
-        SparkleHelper.initAd(mView, R.id.ad_issues_fragment);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getActivity().getString(R.string.menu_issues));
@@ -100,7 +97,7 @@ public class IssuesFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryIssues(mainView);
+                queryIssues(mView);
             }
         });
 
@@ -109,7 +106,7 @@ public class IssuesFragment extends Fragment {
         dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dismissAllIssues(mainView);
+                dismissAllIssues(mView);
             }
         };
 
@@ -140,7 +137,7 @@ public class IssuesFragment extends Fragment {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryIssues(mainView);
+                queryIssues(mView);
             }
         });
     }
@@ -185,8 +182,12 @@ public class IssuesFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getContext());
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    params.put("Cookie", String.format("autologin=%s", u.autologin));
+                }
                 return params;
             }
         };
@@ -304,6 +305,7 @@ public class IssuesFragment extends Fragment {
                 if (getActivity() != null && isAdded())
                 {
                     UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                     params.put("Content-Type", "application/x-www-form-urlencoded");
                     params.put("Cookie", String.format("autologin=%s", u.autologin));
                 }

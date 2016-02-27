@@ -7,6 +7,11 @@
         android:defaultValue="true"
         android:icon="@null" />
     <CheckBoxPreference
+        android:key="setting_issueconfirm"
+        android:title="@string/setting_issueconfirm"
+        android:defaultValue="true"
+        android:icon="@null" />
+    <CheckBoxPreference
         android:key="setting_crashreport"
         android:title="@string/setting_crashreport"
         android:defaultValue="true"

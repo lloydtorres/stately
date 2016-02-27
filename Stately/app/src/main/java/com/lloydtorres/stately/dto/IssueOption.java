@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * An object containing text for one of the options in an issue.
  */
 public class IssueOption implements Parcelable {
-    public static final String QUERY = "http://www.nationstates.net/page=show_dilemma/dilemma=%d";
+    public static final String QUERY = "http://www.nationstates.net/page=show_dilemma/dilemma=%d/template-overall=none";
     public static final String SELECTED_HEADER = "selected";
     public static final String DISMISS_HEADER = "choice--1";
 

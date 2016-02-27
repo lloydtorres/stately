@@ -1,15 +1,22 @@
 package com.lloydtorres.stately.region;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -54,17 +61,25 @@ public class MessageBoardActivity extends AppCompatActivity {
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
     private static final int SCAN_FORWARD = 1;
+    private static final int SCAN_SAME = 2;
+
+    private static final String CONFIRM_DELETE = "self-deleted by";
+    private AlertDialog.Builder dialogBuilder;
 
     private RegionMessages messages;
     private String regionName;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
+    private boolean postable = false;
+    private Post replyTarget = null;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
     private EditText messageContainer;
     private ImageView messagePostButton;
     private ImageView.OnClickListener postMessageListener;
+    private RelativeLayout messageReplyContainer;
+    private TextView messageReplyContent;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -93,8 +108,9 @@ public class MessageBoardActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
+        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
-        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -119,8 +135,6 @@ public class MessageBoardActivity extends AppCompatActivity {
                 }
             }
         });
-
-        startSwipeRefresh();
         processRegionMembership();
     }
 
@@ -160,11 +174,15 @@ public class MessageBoardActivity extends AppCompatActivity {
             messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
             messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
             messagePostButton.setOnClickListener(postMessageListener);
+            messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+            messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
+            postable = true;
         }
 
         if (messages.posts.size() <= 0)
         {
-            startQueryMessages();
+            startSwipeRefresh();
+            startQueryMessages(SCAN_FORWARD);
         }
         // Otherwise just show it normally
         else
@@ -176,10 +194,10 @@ public class MessageBoardActivity extends AppCompatActivity {
     /**
      * Load swipe refresher and start loading messages.
      */
-    private void startQueryMessages()
+    private void startQueryMessages(int direction)
     {
         startSwipeRefresh();
-        queryMessages(0, SCAN_FORWARD, true);
+        queryMessages(0, direction, true);
     }
 
     /**
@@ -238,7 +256,15 @@ public class MessageBoardActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -339,12 +365,43 @@ public class MessageBoardActivity extends AppCompatActivity {
                 SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            else
-            {
-                // We've reached the point where we already have the messages, so put everything back together
-                refreshRecycler(SCAN_FORWARD, 0);
-            }
+            
+            // We've reached the point where we already have the messages, so put everything back together
+            refreshRecycler(SCAN_FORWARD, 0);
         }
+    }
+
+    /**
+     * Used for setting a reply message for the post.
+     * @param p
+     */
+    public void setReplyMessage(Post p)
+    {
+        replyTarget = p;
+        if (replyTarget != null)
+        {
+            messageReplyContainer.setVisibility(View.VISIBLE);
+            messageReplyContent.setText(String.format(getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+            messageContainer.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
+        }
+        else
+        {
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
+            messageReplyContainer.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Helper for scrolling to a certain position.
+     * @param p Post
+     * @param i Post index
+     */
+    public void setReplyMessage(Post p, int i)
+    {
+        setReplyMessage(p);
+        mLayoutManager.scrollToPosition(i);
     }
 
     /**
@@ -399,7 +456,9 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };
@@ -411,6 +470,10 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The actual function that POSTs the message.
+     * @param chk
+     */
     private void postActualMessage(final String chk)
     {
         final View view = findViewById(R.id.message_board_coordinator);
@@ -423,7 +486,8 @@ public class MessageBoardActivity extends AppCompatActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
-                        startQueryMessages();
+                        setReplyMessage(null);
+                        startQueryMessages(SCAN_FORWARD);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -444,7 +508,19 @@ public class MessageBoardActivity extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("chk", chk);
-                params.put("message", messageContainer.getText().toString());
+
+                String newMessage = messageContainer.getText().toString();
+                if (replyTarget != null)
+                {
+                    String quoteMessage = replyTarget.message;
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = String.format(getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
+                    newMessage = quoteMessage + newMessage;
+                }
+                params.put("message", newMessage);
+
                 params.put("lodge_message", "1");
                 return params;
             }
@@ -453,6 +529,86 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            messagePostButton.setOnClickListener(postMessageListener);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Public convenience class to confirm if post should be deleted.
+     * @param pos Position of the deleted post
+     * @param id
+     */
+    public void confirmDelete(final int pos, final int id)
+    {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startSwipeRefresh();
+                postMessageDelete(pos, id);
+                dialog.dismiss();
+            }
+        };
+
+        dialogBuilder.setTitle(R.string.rmb_delete_confirm)
+                .setPositiveButton(R.string.rmb_delete, dialogClickListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+    }
+
+    /**
+     * POSTs a delete command to the NS servers.
+     * @param pos Position of the deleted post
+     * @param id Post ID
+     */
+    private void postMessageDelete(final int pos, final int id)
+    {
+        final View view = findViewById(R.id.message_board_coordinator);
+        String targetURL = String.format(RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (!response.contains(CONFIRM_DELETE))
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                        }
+                        else
+                        {
+                            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setAsDeleted(pos);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                messagePostButton.setOnClickListener(postMessageListener);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -472,14 +628,26 @@ public class MessageBoardActivity extends AppCompatActivity {
     private void refreshRecycler(int direction, int newItems)
     {
         Collections.sort(messages.posts);
-        mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null)
+        {
+            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else
+        {
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setMessages(messages.posts);
+        }
         mSwipeRefreshLayout.setRefreshing(false);
 
-        // go back to user position if scanning backward
-        if (direction == SCAN_BACKWARD)
+        switch (direction)
         {
-            ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
+            case SCAN_FORWARD:
+                mLayoutManager.scrollToPosition(messages.posts.size()-1);
+                break;
+            case SCAN_BACKWARD:
+                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
+                ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
+                break;
         }
     }
 

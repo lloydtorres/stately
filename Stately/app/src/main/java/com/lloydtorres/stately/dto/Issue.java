@@ -11,7 +11,7 @@ import java.util.List;
  * An object containing all information about one issue encountered in NationStates.
  */
 public class Issue implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/page=dilemmas";
+    public static final String QUERY = "https://www.nationstates.net/page=dilemmas/template-overall=none";
 
     public static final int STATUS_UNADDRESSED = 0;
     public static final int STATUS_PENDING = 1;

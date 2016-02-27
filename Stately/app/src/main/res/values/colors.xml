@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#43A047</color>
     <color name="colorPrimaryDark">#2E7D32</color>
-    <color name="colorAccent">#8BC34A</color>
+    <color name="colorAccent">#43A047</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
@@ -54,4 +54,6 @@
 
     <color name="issueUnaddressed">#F44336</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="highlightColor">#FFF9C4</color>
 </resources>

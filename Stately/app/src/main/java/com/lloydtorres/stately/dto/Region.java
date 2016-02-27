@@ -29,6 +29,8 @@ public class Region implements Parcelable {
                                         + "+happenings+history"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String GET_QUERY = "https://www.nationstates.net/region=%s";
+    public static final String QUERY_HTML = "https://www.nationstates.net/region=%s/template-overall=none";
+    public static final String CHANGE_QUERY = "https://www.nationstates.net/page=change_region/template-overall=none";
 
     @Element(name="NAME")
     public String name;

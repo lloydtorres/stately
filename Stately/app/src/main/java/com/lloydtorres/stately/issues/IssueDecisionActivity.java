@@ -1,7 +1,11 @@
 package com.lloydtorres.stately.issues;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,8 +59,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_decision);
-
-        SparkleHelper.initAd(findViewById(R.id.activity_issue_decision_main), R.id.ad_decision_activity);
 
         // Either get data from intent or restore state
         if (getIntent() != null)
@@ -147,6 +149,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -222,8 +225,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         issue.options.add(dismissOption);
 
-        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        setRecyclerAdapter(issue);
 
         switch (jumpPos)
         {
@@ -237,6 +239,55 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
 
         mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setEnabled(false);
+    }
+
+    private void setRecyclerAdapter(Issue issue)
+    {
+        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+    }
+
+    /**
+     * Helper to confirm the position selected by the user.
+     * @param index The index of the option selected.
+     * @param header The header request of the option selected.
+     */
+    public void setAdoptPosition(final int index, final String header)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                postAdoptPosition(index, header);
+                dialog.dismiss();
+            }
+        };
+
+        if (storage.getBoolean("setting_issueconfirm", true))
+        {
+            dialogBuilder
+                    .setNegativeButton(getString(R.string.explore_negative), null);
+
+            switch (index)
+            {
+                case DISMISSED:
+                    dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
+                            .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
+                    break;
+                default:
+                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), index + 1))
+                            .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
+                    break;
+            }
+
+            dialogBuilder.show();
+        }
+        else
+        {
+            postAdoptPosition(index, header);
+        }
     }
 
     /**
@@ -244,7 +295,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
      * @param index The index of the option selected.
      * @param header The header request of the option selected.
      */
-    public void sendAdoptPosition(final int index, final String header)
+    public void postAdoptPosition(final int index, final String header)
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
@@ -253,6 +304,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        /*
                         switch (index)
                         {
                             case DISMISSED:
@@ -262,7 +314,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
                                 SparkleHelper.makeSnackbar(view, String.format(getString(R.string.issue_selected_message), index+1));
                                 break;
                         }
-                        startQueryIssueInfo(index);
+                        startQueryIssueInfo(index);*/
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -289,7 +342,9 @@ public class IssueDecisionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };
@@ -316,8 +371,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        // Refresh on resume
-        startQueryIssueInfo(NO_JUMP);
+        if (issue.options == null)
+        {
+            startQueryIssueInfo(NO_JUMP);
+        }
+        else
+        {
+            setRecyclerAdapter(issue);
+        }
     }
 
     @Override

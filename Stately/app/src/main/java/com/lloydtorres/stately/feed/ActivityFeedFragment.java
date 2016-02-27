@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,14 +33,23 @@ import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Lloyd on 2016-02-08.
@@ -48,11 +58,17 @@ import java.util.List;
 public class ActivityFeedFragment extends Fragment {
     public static final String NATION_KEY = "nationName";
     public static final String REGION_KEY = "regionName";
+    public static final String DOSSIER_QUERY = "https://www.nationstates.net/page=dossier/template-overall=none";
     private static final int SWITCH_LIMIT = 10;
+
+    private static final String DOSSIER_CONFIRM = "Your Dossier is a collection of intelligence on nations and regions of interest.";
+    private static final String NO_NATIONS = "You have no nations in your Dossier.";
+    private static final String NO_REGIONS = "You have no regions in your Dossier.";
+    private static final String NATION_LINK_PREFIX = "nation=";
+    private static final String REGION_LINK_PREFIX = "region=";
 
     private Activity mActivity;
     private View mView;
-    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -64,6 +80,10 @@ public class ActivityFeedFragment extends Fragment {
     private List<Event> events;
     private String nationName;
     private String regionName;
+    private List<UserLogin> dossierNations = new ArrayList<UserLogin>();
+    private List<String> dossierRegions = new ArrayList<String>();
+
+    private AlertDialog.Builder dialogBuilder;
 
     public void setNationName(String n)
     {
@@ -88,15 +108,14 @@ public class ActivityFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
         events = new ArrayList<Event>();
+        dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_activityfeed, container, false);
-        mainView = mView.findViewById(R.id.refreshview_main);
-        SparkleHelper.initAd(mView, R.id.ad_activityfeed_fragment);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         // Restore state
         if (savedInstanceState != null)
@@ -141,14 +160,15 @@ public class ActivityFeedFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        startQueryHappenings();
+        startQueryHappenings(true);
         return mView;
     }
 
     /**
      * Convenience method to show swipe refresh and start query.
+     * @param firstRun If this is the first time the function is being called
      */
-    public void startQueryHappenings()
+    public void startQueryHappenings(final boolean firstRun)
     {
         events = new ArrayList<Event>();
         mSwipeRefreshLayout.post(new Runnable() {
@@ -160,9 +180,137 @@ public class ActivityFeedFragment extends Fragment {
                 }
 
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryHappenings(buildHappeningsQuery());
+
+                if (firstRun)
+                {
+                    // Query dossier first when running for first time
+                    queryDossier();
+                }
+                else
+                {
+                    // Just query regular happenings otherwise
+                    queryHappenings(buildHappeningsQuery());
+                }
             }
         });
+    }
+
+    /**
+     * Queries a nation's dossier.
+     */
+    private void queryDossier()
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, DOSSIER_QUERY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
+                        // Confirm that we're looking at the dossier page
+                        if (response.contains(DOSSIER_CONFIRM))
+                        {
+                            Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                            boolean nationsExist = !response.contains(NO_NATIONS);
+                            boolean regionsExist = !response.contains(NO_REGIONS);
+
+                            // If there's nations in the dossier
+                            if (nationsExist)
+                            {
+                                Element nationContainer = d.select("div.widebox").first();
+
+                                if (nationContainer == null)
+                                {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                                    return;
+                                }
+
+                                // Get nations in dossier
+                                Elements nations = nationContainer.select("a.nlink");
+                                for (Element e : nations)
+                                {
+                                    String id = e.attr("href").replace(NATION_LINK_PREFIX, "");
+                                    UserLogin n = new UserLogin();
+                                    n.nationId = id;
+                                    n.name = SparkleHelper.getNameFromId(id);
+                                    dossierNations.add(n);
+                                }
+                            }
+
+                            // If there's regions in the dossier
+                            if (regionsExist)
+                            {
+                                Element regionContainer = d.select("div.widebox").first();
+                                // If nations are also on the dossier, regions is actually the second box
+                                if (nationsExist)
+                                {
+                                    regionContainer = d.select("div.widebox").get(1);
+                                }
+
+                                if (regionContainer == null)
+                                {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                                    return;
+                                }
+
+                                // Get regions in dossier
+                                Elements regions = regionContainer.select("a.rlink");
+                                for (Element e : regions)
+                                {
+                                    String id = e.attr("href").replace(REGION_LINK_PREFIX, "");
+                                    dossierRegions.add(SparkleHelper.getNameFromId(id));
+                                }
+                            }
+
+                            queryHappenings(buildHappeningsQuery());
+                        }
+                        else
+                        {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                            return;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    params.put("Cookie", String.format("autologin=%s", u.autologin));
+                }
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
     }
 
     /**
@@ -181,6 +329,9 @@ public class ActivityFeedFragment extends Fragment {
         {
             q.add(curNation);
         }
+
+        // Used for enforcing unique nations
+        Set<String> uniqueEnforcer = new HashSet<String>();
 
         // Include switch nations?
         if (storage.getBoolean(SubscriptionsDialog.SWITCH_NATIONS, true))
@@ -203,12 +354,70 @@ public class ActivityFeedFragment extends Fragment {
                 switchNations = switchNations.subList(0, SWITCH_LIMIT);
             }
             q.addAll(switchNations);
+
+            // Add to unique enforcer
+            for (UserLogin s : switchNations)
+            {
+                uniqueEnforcer.add(s.nationId);
+            }
         }
+
+        // Include dossier nations?
+        if (storage.getBoolean(SubscriptionsDialog.DOSSIER_NATIONS, true))
+        {
+            // Only add entries not already being queried
+            // and limit to 10
+            int dossierNationCounter = 0;
+            for (UserLogin n : dossierNations)
+            {
+                if (!uniqueEnforcer.contains(n.nationId))
+                {
+                    if (++dossierNationCounter > SWITCH_LIMIT)
+                    {
+                        break;
+                    }
+                    q.add(n);
+                }
+            }
+        }
+
+        // Flag to track if self region was added
+        boolean regionAdded = false;
 
         // Include current region?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true))
         {
             q.add(regionName);
+            regionAdded = true;
+        }
+
+        // Include dossier regions?
+        if (storage.getBoolean(SubscriptionsDialog.DOSSIER_REGIONS, true))
+        {
+            List<String> fDossierRegions = new ArrayList<String>();
+            if (regionAdded)
+            {
+                // If region already added, we need to get rid of the self-region entry
+                for (String r : dossierRegions)
+                {
+                    if (!r.equals(regionName))
+                    {
+                        fDossierRegions.add(r);
+                    }
+                }
+            }
+            else
+            {
+                fDossierRegions = dossierRegions;
+            }
+
+            // Only get first 10
+            if (fDossierRegions.size() >= SWITCH_LIMIT)
+            {
+                fDossierRegions = fDossierRegions.subList(0, SWITCH_LIMIT);
+            }
+
+            q.addAll(fDossierRegions);
         }
 
         // Include World Assembly?
@@ -222,6 +431,7 @@ public class ActivityFeedFragment extends Fragment {
 
     /**
      * Convenience method for handling happening queries.
+     * @param query Remaining queries
      */
     private void queryHappenings(List<Object> query)
     {
@@ -237,6 +447,7 @@ public class ActivityFeedFragment extends Fragment {
             Object q = query.remove(0);
 
             String url = "";
+            String appendName = null;
             // If query is for a nation
             if (q instanceof UserLogin)
             {
@@ -246,22 +457,24 @@ public class ActivityFeedFragment extends Fragment {
             else if (q instanceof String)
             {
                 url = String.format(HappeningFeed.QUERY_REGION, SparkleHelper.getIdFromName((String) q));
+                appendName = (String) q;
             }
             // If query is for the World Assembly
             else if (q instanceof Integer)
             {
                 url = HappeningFeed.QUERY_WA;
             }
-            queryHappeningsHeavy(url, query);
+            queryHappeningsHeavy(url, query, appendName);
         }
     }
 
     /**
      * Heavy-lifting for querying happenings.
-     * @param target
-     * @param remainingQueries
+     * @param target Target URL
+     * @param remainingQueries Queries remaining that need to be run
+     * @param appendName If target name needs to be appended to happenings
      */
-    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries)
+    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries, final String appendName)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
                 new Response.Listener<String>() {
@@ -276,12 +489,22 @@ public class ActivityFeedFragment extends Fragment {
                         Persister serializer = new Persister();
                         try {
                             happeningResponse = serializer.read(HappeningFeed.class, response);
-                            events.addAll(happeningResponse.happenings);
+                            List<Event> queriedHappenings = happeningResponse.happenings;
+
+                            if (appendName != null)
+                            {
+                                for (Event e : queriedHappenings)
+                                {
+                                    e.content = String.format(getString(R.string.activityfeed_append), appendName, e.content);
+                                }
+                            }
+
+                            events.addAll(queriedHappenings);
                             queryHappenings(remainingQueries);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -293,7 +516,7 @@ public class ActivityFeedFragment extends Fragment {
                 }
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                     // force queryHappenings to load recyclerview
                     queryHappenings(new ArrayList<Object>());
                 }
@@ -304,18 +527,29 @@ public class ActivityFeedFragment extends Fragment {
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                     // force queryHappenings to load recyclerview
                     queryHappenings(new ArrayList<Object>());
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {
             // force queryHappenings to load recyclerview
             queryHappenings(new ArrayList<Object>());
-            SparkleHelper.makeSnackbar(mainView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
@@ -342,15 +576,74 @@ public class ActivityFeedFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager fm = getChildFragmentManager();
         switch (item.getItemId()) {
+            case R.id.nav_dossier_n:
+                showNationDossier(fm);
+                return true;
+            case R.id.nav_dossier_r:
+                showRegionDossier(fm);
+                return true;
             case R.id.nav_subscriptions:
-                FragmentManager fm = getChildFragmentManager();
                 SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
                 subscriptionsDialog.setCallback(this);
                 subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Setup and show contents of the nation dossier
+     * @param fm Fragment Manager
+     */
+    private void showNationDossier(FragmentManager fm)
+    {
+        if (dossierNations.size() > 0)
+        {
+            ArrayList<String> dossierNationNames = new ArrayList<String>();
+            for (UserLogin u : dossierNations)
+            {
+                dossierNationNames.add(u.name);
+            }
+            Collections.sort(dossierNationNames);
+            NameListDialog nameListDialog = new NameListDialog();
+            nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
+            nameListDialog.setNames(dossierNationNames);
+            nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+            nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+        }
+        else
+        {
+            dialogBuilder.setTitle(R.string.activityfeed_dossier_n)
+                    .setMessage(R.string.dossier_n_none)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
+        }
+    }
+
+    /**
+     * Setup and show contents of the region dossier
+     * @param fm Fragment Manager
+     */
+    private void showRegionDossier(FragmentManager fm)
+    {
+        if (dossierRegions.size() > 0)
+        {
+            Collections.sort(dossierRegions);
+            NameListDialog nameListDialog = new NameListDialog();
+            nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
+            nameListDialog.setNames((ArrayList<String>) dossierRegions);
+            nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+            nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+        }
+        else
+        {
+            dialogBuilder.setTitle(R.string.activityfeed_dossier_r)
+                    .setMessage(R.string.dossier_r_none)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
+        }
     }
 
     @Override

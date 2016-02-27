@@ -29,6 +29,8 @@ public class Nation implements Parcelable {
                                         + "+happenings"
                                         + "&v=" + SparkleHelper.API_VERSION;
 
+    public static final String QUERY_HTML = "https://www.nationstates.net/nation=%s/template-overall=none";
+
     @Element(name="BANNER")
     public String bannerKey;
     @Element(name="FLAG")

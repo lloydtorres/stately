@@ -2,6 +2,8 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +23,28 @@ import java.util.List;
  * An adapter for the recyclerview in MessageBoardActivity.
  */
 public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int EMPTY_INDICATOR = -1;
+    public static final int NO_SELECTION = -1;
     private static final String DELETED_CONTENT = "Message deleted by author";
+    private static final int EMPTY_INDICATOR = -1;
 
     private Context context;
     private List<Post> messages;
+    private int replyIndex = NO_SELECTION;
+    private boolean enableClick = false;
 
-    public MessageBoardRecyclerAdapter(Context c, List<Post> p)
+    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec)
     {
         context = c;
+        enableClick = ec;
+        setMessages(p);
+    }
+
+    /**
+     * Set new messages
+     * @param p List of posts
+     */
+    public void setMessages(List<Post> p)
+    {
         messages = p;
 
         if (messages.size() <= 0)
@@ -38,6 +53,54 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             np.id = EMPTY_INDICATOR;
             messages.add(np);
         }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Set which message to reply to
+     * @param i Index
+     */
+    public void setReplyIndex(int i)
+    {
+        int oldReplyIndex = replyIndex;
+        replyIndex = i;
+
+        if (oldReplyIndex != -1)
+        {
+            notifyItemChanged(oldReplyIndex);
+        }
+        if (replyIndex != -1)
+        {
+            notifyItemChanged(replyIndex);
+        }
+
+        if (replyIndex == oldReplyIndex)
+        {
+            replyIndex = NO_SELECTION;
+            notifyItemChanged(oldReplyIndex);
+        }
+    }
+
+    /**
+     * Add an offset to the reply index
+     * @param a Offset
+     */
+    public void addToReplyIndex(int a)
+    {
+        if (replyIndex != -1)
+        {
+            setReplyIndex(replyIndex + a);
+        }
+    }
+
+    /**
+     * Mark a message as having been deleted
+     * @param i
+     */
+    public void setAsDeleted(int i)
+    {
+        messages.get(i).message = DELETED_CONTENT;
+        notifyItemChanged(i);
     }
 
     @Override
@@ -51,7 +114,17 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         PostCard postCard = (PostCard) holder;
-        postCard.init(messages.get(position));
+        Post message = messages.get(position);
+        postCard.init(message);
+
+        if (position == replyIndex)
+        {
+            postCard.select();
+        }
+        else
+        {
+            postCard.deselect();
+        }
     }
 
     @Override
@@ -59,9 +132,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return messages.size();
     }
 
-    public class PostCard extends RecyclerView.ViewHolder {
+    public class PostCard extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private Context context;
+        private Post post;
+        private CardView cardContainer;
         private TextView cardAuthor;
         private TextView cardTime;
         private HtmlTextView cardContent;
@@ -69,23 +144,26 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public PostCard(Context c, View v) {
             super(v);
             context = c;
+            cardContainer = (CardView) v.findViewById(R.id.card_post_container);
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);
             cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+
+            if (enableClick)
+            {
+                v.setOnClickListener(this);
+                v.setOnLongClickListener(this);
+            }
         }
 
         public void init(Post p)
         {
-            if (p.id != EMPTY_INDICATOR)
+            post = p;
+            if (post.id != EMPTY_INDICATOR)
             {
-                SparkleHelper.activityLinkBuilder(context, cardAuthor, p.name, p.name, SparkleHelper.getNameFromId(p.name), SparkleHelper.CLICKY_NATION_MODE);
-                cardTime.setText(SparkleHelper.getReadableDateFromUTC(p.timestamp));
-                SparkleHelper.setBbCodeFormatting(context, cardContent, p.message);
-
-                if (p.message != null && p.message.equals(DELETED_CONTENT))
-                {
-                    cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
-                }
+                SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), SparkleHelper.CLICKY_NATION_MODE);
+                cardTime.setText(SparkleHelper.getReadableDateFromUTC(post.timestamp));
+                SparkleHelper.setBbCodeFormatting(context, cardContent, post.message);
             }
             else
             {
@@ -94,6 +172,49 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 cardContent.setText(context.getString(R.string.rmb_no_content));
                 cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
             }
+        }
+
+        public void select()
+        {
+            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+        }
+
+        public void deselect()
+        {
+            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && post.message != null && !post.message.equals(DELETED_CONTENT))
+            {
+                if (replyIndex == pos)
+                {
+                    ((MessageBoardActivity) context).setReplyMessage(null);
+                }
+                else
+                {
+                    ((MessageBoardActivity) context).setReplyMessage(post, pos);
+                    setReplyIndex(pos);
+                }
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (context != null)
+            {
+                String selfName = SparkleHelper.getActiveUser(context).nationId;
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && selfName.equals(post.name) && !post.message.equals(DELETED_CONTENT))
+                {
+                    ((MessageBoardActivity) context).confirmDelete(pos, post.id);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

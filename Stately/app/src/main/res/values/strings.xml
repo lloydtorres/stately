@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Stately</string>
+    <string name="app_header">Stately/1.2.3 (User %1$s)</string>
+    <string name="app_header_nouser">Stately/1.2.3 (No User)</string>
 
     <!-- Login -->
     <string name="username_hint">Nation Name</string>
@@ -37,6 +39,16 @@
     <string name="explore_negative">Cancel</string>
     <string name="explore_default">Exploring&#8230;</string>
     <string name="explore_error_404_nation">Nation not found.</string>
+
+    <string name="explore_endorse">Endorse</string>
+    <string name="explore_withdraw_endorse">Withdraw Endorsement</string>
+    <string name="explore_endorsed_response">Endorsed %1$s.</string>
+    <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
+
+    <string name="explore_region_move">Move to %1$s?</string>
+    <string name="explore_region_password">Password required to move</string>
+    <string name="explore_move_confirm">Move</string>
+    <string name="explore_move_wrong_password">Incorrect password.</string>
 
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
@@ -145,9 +157,16 @@
     <string name="activityfeed_subscriptions">Subscriptions</string>
     <string name="subscriptions_curnation">Current nation</string>
     <string name="subscriptions_switch">Switch nation list (first 10)</string>
+    <string name="subscriptions_dossier_n">Dossier: Nations (first 10)</string>
     <string name="subscriptions_region">Current region</string>
+    <string name="subscriptions_dossier_r">Dossier: Regions (first 10)</string>
     <string name="subscriptions_wa">World Assembly</string>
     <string name="update">Update</string>
+    <string name="activityfeed_append">%%%%%1$s%%%%: %2$s</string>
+    <string name="activityfeed_dossier_n">Dossier: Nations</string>
+    <string name="activityfeed_dossier_r">Dossier: Regions</string>
+    <string name="dossier_n_none">There are no nations in the Dossier.</string>
+    <string name="dossier_r_none">There are no regions in the Dossier.</string>
 
     <!-- Region -->
     <string name="region_404">Region not found.</string>
@@ -167,7 +186,7 @@
     <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
-    <string name="region_option_index">Option %d</string>
+    <string name="region_option_index">Option %1$d</string>
     <string name="card_region_wa_vote">%1$s Resolution</string>
     <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d FOR to %2$d AGAINST.</string>
     <string name="card_region_wa_link">Open the %1$s resolution</string>
@@ -184,6 +203,10 @@
     <string name="rmb_backtrack_error">Can\'t catch up with the volume of posts.</string>
     <string name="bbcode_parse_error">A parsing error was encountered: couldn\'t load content.</string>
     <string name="rmb_message_hint">Post a message…</string>
+    <string name="rmb_reply">Replying to %1$s</string>
+    <string name="rmb_delete_confirm">Delete this post?</string>
+    <string name="rmb_delete">Delete</string>
+    <string name="rmb_reply_format">[quote=%1$s;%2$d]%3$s[/quote]\n</string>
 
     <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>
@@ -203,6 +226,10 @@
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
     <string name="issue_option_selected">Adopting this position</string>
+    <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
+    <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
+    <string name="issue_option_adopt">Adopt</string>
+    <string name="issue_option_dismiss">Dismiss</string>
     <string name="issue_selected_message">Adopted the position in Option %1$d.</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
     <string name="issue_issue_dismissed">Dismissing this issue</string>
@@ -238,18 +265,8 @@
 
     <!-- Settings -->
     <string name="setting_autologin">Log in automatically</string>
+    <string name="setting_issueconfirm">Confirm issue decisions</string>
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
-
-    <!-- Ads -->
-    <!-- Test ID: ca-app-pub-3940256099942544/6300978111 -->
-    <string name="ad_nation_fragment">ca-app-pub-7121810709947327/9881202698</string>
-    <string name="ad_issues_fragment">ca-app-pub-7121810709947327/9124323093</string>
-    <string name="ad_decision_activity">ca-app-pub-7121810709947327/1601056295</string>
-    <string name="ad_activityfeed_fragment">ca-app-pub-7121810709947327/4080394295</string>
-    <string name="ad_region_fragment">ca-app-pub-7121810709947327/3077789495</string>
-    <string name="ad_message_board_activity">ca-app-pub-7121810709947327/4554522692</string>
-    <string name="ad_wa_fragment">ca-app-pub-7121810709947327/6031255892</string>
-    <string name="ad_resolution_activity">ca-app-pub-7121810709947327/1461455495</string>
 </resources>

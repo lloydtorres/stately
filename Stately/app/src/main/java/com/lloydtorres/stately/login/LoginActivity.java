@@ -164,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
+                params.put("User-Agent", getString(R.string.app_header_nouser));
                 params.put("Cookie", String.format("autologin=%s", autologin));
                 return params;
             }
@@ -254,6 +255,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
+                params.put("User-Agent", getString(R.string.app_header_nouser));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
@@ -358,7 +360,15 @@ public class LoginActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

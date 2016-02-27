@@ -21,7 +21,9 @@ public class SubscriptionsDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_subscriptions_dialog";
     public static final String CURRENT_NATION = "subs_curnation";
     public static final String SWITCH_NATIONS = "subs_switch";
+    public static final String DOSSIER_NATIONS = "subs_dossier_n";
     public static final String CURRENT_REGION = "subs_curregion";
+    public static final String DOSSIER_REGIONS = "subs_dossier_r";
     public static final String WORLD_ASSEMBLY = "subs_wa";
 
     private SharedPreferences storage; // shared preferences
@@ -29,7 +31,9 @@ public class SubscriptionsDialog extends DialogFragment {
 
     private CheckBox curNation;
     private CheckBox switchNations;
+    private CheckBox dossierNations;
     private CheckBox curRegion;
+    private CheckBox dossierRegions;
     private CheckBox assembly;
 
     public SubscriptionsDialog() { }
@@ -55,8 +59,12 @@ public class SubscriptionsDialog extends DialogFragment {
         curNation.setChecked(storage.getBoolean(CURRENT_NATION, true));
         switchNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_switch);
         switchNations.setChecked(storage.getBoolean(SWITCH_NATIONS, true));
+        dossierNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_n);
+        dossierNations.setChecked(storage.getBoolean(DOSSIER_NATIONS, true));
         curRegion = (CheckBox) dialogView.findViewById(R.id.subscriptions_region);
         curRegion.setChecked(storage.getBoolean(CURRENT_REGION, true));
+        dossierRegions = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_r);
+        dossierRegions.setChecked(storage.getBoolean(DOSSIER_REGIONS, true));
         assembly = (CheckBox) dialogView.findViewById(R.id.subscriptions_wa);
         assembly.setChecked(storage.getBoolean(WORLD_ASSEMBLY, true));
 
@@ -66,12 +74,14 @@ public class SubscriptionsDialog extends DialogFragment {
                 SharedPreferences.Editor editor = storage.edit();
                 editor.putBoolean(CURRENT_NATION, curNation.isChecked());
                 editor.putBoolean(SWITCH_NATIONS, switchNations.isChecked());
+                editor.putBoolean(DOSSIER_NATIONS, dossierNations.isChecked());
                 editor.putBoolean(CURRENT_REGION, curRegion.isChecked());
+                editor.putBoolean(DOSSIER_REGIONS, dossierRegions.isChecked());
                 editor.putBoolean(WORLD_ASSEMBLY, assembly.isChecked());
                 editor.commit();
                 if (callback != null)
                 {
-                    callback.startQueryHappenings();
+                    callback.startQueryHappenings(false);
                 }
             }
         };

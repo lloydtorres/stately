@@ -61,7 +61,6 @@ public class NameListDialog extends DialogFragment {
         {
             dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
         }
-        dialog.setTitle(title);
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
@@ -78,6 +77,7 @@ public class NameListDialog extends DialogFragment {
             target = savedInstanceState.getInt(TARGET_KEY);
         }
 
+        getDialog().setTitle(title);
         initRecycler(view);
 
         return view;
@@ -86,6 +86,23 @@ public class NameListDialog extends DialogFragment {
     private void initRecycler(View view)
     {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+
+        /*
+        // If the recyclerview is too big for the screen, resize it
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        if (getActivity() != null && isAdded())
+        {
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int screenHeight = displaymetrics.heightPixels;
+            int recyclerHeight = mRecyclerView.getHeight();
+
+            if (((float)recyclerHeight)/screenHeight > 2)
+            {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight/2);
+                mRecyclerView.setLayoutParams(lp);
+            }
+        }*/
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

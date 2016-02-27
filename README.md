@@ -44,6 +44,4 @@ Stately uses the following open-source libraries:
 
 Stately also uses the following proprietary libraries:
 
-* [AdMob](https://developers.google.com/admob/)
 * [Crashlytics](https://try.crashlytics.com/)
-* [Flurry](http://www.flurry.com/)
