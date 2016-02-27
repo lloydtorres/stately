@@ -195,7 +195,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
                 else
                 {
-                    ((MessageBoardActivity) context).setReplyMessage(post);
+                    ((MessageBoardActivity) context).setReplyMessage(post, pos);
                     setReplyIndex(pos);
                 }
             }

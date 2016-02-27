@@ -21,9 +21,6 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.google.ads.mediation.flurry.FlurryAdapterExtras;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
@@ -626,28 +623,6 @@ public class SparkleHelper {
     }
 
     /**
-     * Initializes an ad.
-     * @param view Target view
-     * @param viewId ID of the AdView
-     */
-    public static void initAd(View view, int viewId)
-    {
-        AdView mAdView = (AdView) view.findViewById(viewId);
-        mAdView.setAdListener(new GenericAdListener(mAdView));
-
-        FlurryAdapterExtras flurryAdapterExtras = new FlurryAdapterExtras();
-        flurryAdapterExtras.setLogEnabled(true);
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .addNetworkExtras(flurryAdapterExtras)
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("03633EF76BA22B61C33C65CDCDB8D8B0")
-                .addTestDevice("CB2FCCF13C56C7ADC4F190827D780B91")
-                .build();
-        mAdView.loadAd(adRequest);
-    }
-
-    /**
      * Checks if the given string indicates that the given stat is for a WA member.
      * @param c App context
      * @param stat WA state indicator
@@ -852,8 +827,10 @@ public class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/nation=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_NATION_MODE);
-        holder = regexReplace(holder, "\\bhttps?:\\/\\/(?:www.|)nationstates\\.net\\/region=(\\w*)", EXPLORE_TARGET + "%s" + "/" + CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
+        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_NATION_MODE+"]");
+        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_REGION_MODE+"]");
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
@@ -867,7 +844,8 @@ public class SparkleHelper {
         holder = regexExtract(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
         holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(htt(?:p|ps):\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
 
         // Format lists

@@ -21,12 +21,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -38,7 +42,6 @@ public class AssemblyMainFragment extends Fragment {
 
     private Activity mActivity;
     private View mView;
-    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -71,9 +74,7 @@ public class AssemblyMainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_wa_main, container, false);
-        mainView = mView.findViewById(R.id.refreshview_main);
-        SparkleHelper.initAd(mView, R.id.ad_wa_fragment);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         // Restore state
         if (savedInstanceState != null && voteStatus == null)
@@ -95,7 +96,7 @@ public class AssemblyMainFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                                         @Override
                                                         public void onRefresh() {
-                                                            queryWorldAssembly(mainView);
+                                                            queryWorldAssembly(mView);
                                                         }
                                                  });
 
@@ -113,7 +114,7 @@ public class AssemblyMainFragment extends Fragment {
             }
         });
 
-        queryWorldAssembly(mainView);
+        queryWorldAssembly(mView);
         return mView;
     }
 
@@ -192,7 +193,17 @@ public class AssemblyMainFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded()) {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

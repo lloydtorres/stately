@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.region;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,7 +111,6 @@ public class MessageBoardActivity extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
-        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -133,8 +135,6 @@ public class MessageBoardActivity extends AppCompatActivity {
                 }
             }
         });
-
-        startSwipeRefresh();
         processRegionMembership();
     }
 
@@ -181,6 +181,7 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         if (messages.posts.size() <= 0)
         {
+            startSwipeRefresh();
             startQueryMessages(SCAN_FORWARD);
         }
         // Otherwise just show it normally
@@ -255,7 +256,15 @@ public class MessageBoardActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -356,11 +365,9 @@ public class MessageBoardActivity extends AppCompatActivity {
                 SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            else
-            {
-                // We've reached the point where we already have the messages, so put everything back together
-                refreshRecycler(SCAN_FORWARD, 0);
-            }
+            
+            // We've reached the point where we already have the messages, so put everything back together
+            refreshRecycler(SCAN_FORWARD, 0);
         }
     }
 
@@ -375,12 +382,26 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messageReplyContainer.setVisibility(View.VISIBLE);
             messageReplyContent.setText(String.format(getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+            messageContainer.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
         }
         else
         {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
             messageReplyContainer.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Helper for scrolling to a certain position.
+     * @param p Post
+     * @param i Post index
+     */
+    public void setReplyMessage(Post p, int i)
+    {
+        setReplyMessage(p);
+        mLayoutManager.scrollToPosition(i);
     }
 
     /**
@@ -435,6 +456,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
@@ -507,6 +529,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -585,6 +608,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }

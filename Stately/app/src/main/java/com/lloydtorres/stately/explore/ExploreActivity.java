@@ -1,5 +1,6 @@
 package com.lloydtorres.stately.explore;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -317,7 +319,15 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                     setExploreStatus(getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -379,7 +389,15 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                     setExploreStatus(getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -457,6 +475,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -533,6 +552,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
@@ -586,7 +606,12 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                     .setNegativeButton(getString(R.string.explore_negative), null);
         }
 
-        dialogBuilder.show();
+        Dialog d = dialogBuilder.create();
+        if (isPassword)
+        {
+            d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+        d.show();
     }
 
     /**
@@ -651,6 +676,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;

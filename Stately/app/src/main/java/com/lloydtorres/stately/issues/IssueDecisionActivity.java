@@ -60,8 +60,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_decision);
 
-        SparkleHelper.initAd(findViewById(R.id.activity_issue_decision_main), R.id.ad_decision_activity);
-
         // Either get data from intent or restore state
         if (getIntent() != null)
         {
@@ -151,6 +149,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -226,8 +225,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         issue.options.add(dismissOption);
 
-        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        setRecyclerAdapter(issue);
 
         switch (jumpPos)
         {
@@ -242,6 +240,12 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setEnabled(false);
+    }
+
+    private void setRecyclerAdapter(Issue issue)
+    {
+        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     /**
@@ -338,6 +342,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
@@ -366,8 +371,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        // Refresh on resume
-        startQueryIssueInfo(NO_JUMP);
+        if (issue.options == null)
+        {
+            startQueryIssueInfo(NO_JUMP);
+        }
+        else
+        {
+            setRecyclerAdapter(issue);
+        }
     }
 
     @Override

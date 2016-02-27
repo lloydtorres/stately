@@ -86,6 +86,23 @@ public class SwitchNationDialog extends DialogFragment {
     {
         // Base recycler stuff
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+
+        /*
+        // If the recyclerview is too big for the screen, resize it
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        if (getActivity() != null && isAdded())
+        {
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int screenHeight = displaymetrics.heightPixels;
+            int recyclerHeight = mRecyclerView.getHeight();
+
+            if (((float)recyclerHeight)/screenHeight > 2)
+            {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight/2);
+                mRecyclerView.setLayoutParams(lp);
+            }
+        }*/
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

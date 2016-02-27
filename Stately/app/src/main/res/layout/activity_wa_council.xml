@@ -1,53 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_wa_council_main"
+    android:layout_above="@+id/ad_resolution_activity"
+    android:id="@+id/wa_council_main"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.lloydtorres.stately.wa.ResolutionActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_above="@+id/ad_resolution_activity"
-        android:id="@+id/wa_council_main"
-        android:fitsSystemWindows="true"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.lloydtorres.stately.wa.ResolutionActivity">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_wa_council"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/wa_resolution_refresher"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/content_wa_council"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_resolution_activity"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center|bottom"
-        android:background="#222"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/ad_resolution_activity"/>
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_wa_council"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/wa_resolution_refresher"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/content_wa_council"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -27,12 +27,16 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-21.
@@ -103,8 +107,6 @@ public class RegionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
-        View mainView = view.findViewById(R.id.coordinator_region);
-        SparkleHelper.initAd(view, R.id.ad_region_fragment);
 
         initToolbar(view);
 
@@ -118,11 +120,11 @@ public class RegionFragment extends Fragment {
         if (mRegion != null)
         {
             mRegionName = mRegion.name;
-            getAllRegionViews(mainView);
+            getAllRegionViews(view);
         }
         else
         {
-            updateRegion(mainView);
+            updateRegion(view);
         }
 
         return view;
@@ -301,7 +303,20 @@ public class RegionFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

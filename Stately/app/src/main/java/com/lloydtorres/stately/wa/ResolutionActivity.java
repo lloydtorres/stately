@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
@@ -94,8 +95,6 @@ public class ResolutionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wa_council);
-
-        SparkleHelper.initAd(findViewById(R.id.activity_wa_council_main), R.id.ad_resolution_activity);
 
         // Either get data from intent or restore state
         if (getIntent() != null)
@@ -228,7 +227,15 @@ public class ResolutionActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -277,7 +284,15 @@ public class ResolutionActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -435,6 +450,7 @@ public class ResolutionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
@@ -514,6 +530,7 @@ public class ResolutionActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
@@ -642,7 +659,7 @@ public class ResolutionActivity extends AppCompatActivity {
         setAgainst.setLineWidth(lineWidth);
 
         // Match data with x-axis labels
-        List<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setFor);
         dataSets.add(setAgainst);
 

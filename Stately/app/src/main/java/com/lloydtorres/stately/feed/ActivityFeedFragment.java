@@ -69,7 +69,6 @@ public class ActivityFeedFragment extends Fragment {
 
     private Activity mActivity;
     private View mView;
-    private View mainView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -116,9 +115,7 @@ public class ActivityFeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_activityfeed, container, false);
-        mainView = mView.findViewById(R.id.refreshview_main);
-        SparkleHelper.initAd(mView, R.id.ad_activityfeed_fragment);
+        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         // Restore state
         if (savedInstanceState != null)
@@ -227,7 +224,7 @@ public class ActivityFeedFragment extends Fragment {
                                 if (nationContainer == null)
                                 {
                                     mSwipeRefreshLayout.setRefreshing(false);
-                                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                                     return;
                                 }
 
@@ -256,7 +253,7 @@ public class ActivityFeedFragment extends Fragment {
                                 if (regionContainer == null)
                                 {
                                     mSwipeRefreshLayout.setRefreshing(false);
-                                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                                     return;
                                 }
 
@@ -274,7 +271,7 @@ public class ActivityFeedFragment extends Fragment {
                         else
                         {
                             mSwipeRefreshLayout.setRefreshing(false);
-                            SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                             return;
                         }
                     }
@@ -288,11 +285,11 @@ public class ActivityFeedFragment extends Fragment {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         }){
@@ -302,6 +299,7 @@ public class ActivityFeedFragment extends Fragment {
                 if (getActivity() != null && isAdded())
                 {
                     UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                     params.put("Cookie", String.format("autologin=%s", u.autologin));
                 }
                 return params;
@@ -311,7 +309,7 @@ public class ActivityFeedFragment extends Fragment {
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(mainView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
@@ -506,7 +504,7 @@ public class ActivityFeedFragment extends Fragment {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -518,7 +516,7 @@ public class ActivityFeedFragment extends Fragment {
                 }
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                     // force queryHappenings to load recyclerview
                     queryHappenings(new ArrayList<Object>());
                 }
@@ -529,18 +527,29 @@ public class ActivityFeedFragment extends Fragment {
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(mainView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                     // force queryHappenings to load recyclerview
                     queryHappenings(new ArrayList<Object>());
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                if (getActivity() != null && isAdded())
+                {
+                    UserLogin u = SparkleHelper.getActiveUser(getContext());
+                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                }
+                return params;
+            }
+        };
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {
             // force queryHappenings to load recyclerview
             queryHappenings(new ArrayList<Object>());
-            SparkleHelper.makeSnackbar(mainView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
