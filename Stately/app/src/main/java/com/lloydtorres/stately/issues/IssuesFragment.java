@@ -62,7 +62,7 @@ public class IssuesFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
-    private List<Issue> issues;
+    private List<Object> issues;
 
     @Override
     public void onAttach(Context context) {
@@ -205,7 +205,7 @@ public class IssuesFragment extends Fragment {
      */
     private void processIssues(View v, Document d)
     {
-        issues = new ArrayList<Issue>();
+        issues = new ArrayList<Object>();
 
         Element issuesContainer = d.select("ul.dilemmalist").first();
 
@@ -250,6 +250,9 @@ public class IssuesFragment extends Fragment {
 
             issues.add(issueCore);
         }
+
+        String nextUpdate = d.select("p.dilemmanextupdate").text();
+        issues.add(nextUpdate);
 
         mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues);
         mRecyclerView.setAdapter(mRecyclerAdapter);
