@@ -233,7 +233,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                postAdoptPosition(index, header);
+                startPostAdoptPosition(header);
                 dialog.dismiss();
             }
         };
@@ -259,19 +259,29 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         else
         {
-            postAdoptPosition(index, header);
+            startPostAdoptPosition(header);
         }
+    }
+
+    private void startPostAdoptPosition(final String header)
+    {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                postAdoptPosition(header);
+            }
+        });
     }
 
     /**
      * Send the position selected by the user back to the server.
-     * @param index The index of the option selected.
      * @param header The header request of the option selected.
      */
-    public void postAdoptPosition(final int index, final String header)
+    public void postAdoptPosition(final String header)
     {
         final View view = findViewById(R.id.issue_decision_main);
-        String targetURL = String.format(IssueOption.QUERY, issue.id);
+        String targetURL = String.format(IssueOption.POST_QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
                 new Response.Listener<String>() {

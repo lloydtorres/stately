@@ -215,8 +215,11 @@ public class IssuesFragment extends Fragment {
             issues.add(issueCore);
         }
 
-        String nextUpdate = d.select("p.dilemmanextupdate").text();
-        issues.add(nextUpdate);
+        if (issuesRaw.size() <= 0)
+        {
+            String nextUpdate = getString(R.string.no_issues);
+            issues.add(nextUpdate);
+        }
 
         mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues);
         mRecyclerView.setAdapter(mRecyclerAdapter);
