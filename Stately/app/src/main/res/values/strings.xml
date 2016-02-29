@@ -216,24 +216,13 @@
     <string name="region_ec">Embassy closed with %1$s.</string>
 
     <!-- Issues -->
-    <string name="issue_unaddressed">Unaddressed</string>
-    <string name="issue_dismissed">Dismissed</string>
-    <string name="issue_pending">Legislation Pending</string>
-    <string name="issue_dismiss_all_menu">Dismiss all issues</string>
-    <string name="issue_dismiss_all">Dismiss all issues?</string>
-    <string name="issue_dismiss_all_positive">Dismiss</string>
-    <string name="issue_dismiss_all_response">All issues dismissed.</string>
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
-    <string name="issue_option_selected">Adopting this position</string>
     <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
     <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
     <string name="issue_option_adopt">Adopt</string>
     <string name="issue_option_dismiss">Dismiss</string>
-    <string name="issue_selected_message">Adopted the position in Option %1$d.</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
-    <string name="issue_issue_dismissed">Dismissing this issue</string>
-    <string name="issue_dismissed_message">Dismissed this issue.</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

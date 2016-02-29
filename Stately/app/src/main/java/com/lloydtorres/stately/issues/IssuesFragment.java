@@ -2,18 +2,13 @@ package com.lloydtorres.stately.issues;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,10 +41,6 @@ import java.util.Map;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends Fragment {
-    private static final String UNADDRESSED = "unaddressed";
-    private static final String PENDING = "legislation pending";
-    private static final String DISMISSED = "dismissed";
-
     private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
@@ -220,21 +211,6 @@ public class IssuesFragment extends Fragment {
             issueCore.id = issueId;
             String issueName = issueMain.text();
             issueCore.title = issueName;
-
-            // Get issue status
-            String issueStat = i.text().trim().replaceAll(".* \\[(.*?)\\]", "$1").toLowerCase();
-            switch (issueStat)
-            {
-                case PENDING:
-                    issueCore.status = Issue.STATUS_PENDING;
-                    break;
-                case DISMISSED:
-                    issueCore.status = Issue.STATUS_DISMISSED;
-                    break;
-                default:
-                    issueCore.status = Issue.STATUS_UNADDRESSED;
-                    break;
-            }
 
             issues.add(issueCore);
         }

@@ -43,8 +43,6 @@ import java.util.Map;
 public class IssueDecisionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
-    private static final String DISMISS_TEXT = "The government is preparing to dismiss this issue.";
-    public static final int NO_JUMP = -2;
     public static final int DISMISSED = -1;
 
     private Issue issue;
@@ -79,7 +77,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryIssueInfo(NO_JUMP);
+                queryIssueInfo();
             }
         });
 
@@ -101,25 +99,23 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
     /**
      * Call to start querying and activate SwipeFreshLayout
-     * @param jumpPos position to jump to on load
      */
-    private void startQueryIssueInfo(final int jumpPos)
+    private void startQueryIssueInfo()
     {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryIssueInfo(jumpPos);
+                queryIssueInfo();
             }
         });
     }
 
     /**
      * Query information on the current issue from the actual NationStates site
-     * @param jumpPos position to jump to on load
      */
-    private void queryIssueInfo(final int jumpPos)
+    private void queryIssueInfo()
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
@@ -129,7 +125,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processIssueInfo(view, d, jumpPos);
+                        processIssueInfo(view, d);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -166,9 +162,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
      * Process the received page into the Issue and its IssueOptions
      * @param v Activity view
      * @param d Document received from NationStates
-     * @param jumpPos position to jump to on load
      */
-    private void processIssueInfo(View v, Document d, int jumpPos)
+    private void processIssueInfo(View v, Document d)
     {
         Element issueInfoContainer = d.select("div#dilemma").first();
 
@@ -206,12 +201,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
             String optionContent = option.getElementsByTag("p").first().text();
             issueOption.content = optionContent;
-
-            if (option.hasClass("chosendiloption"))
-            {
-                issueOption.selected = true;
-            }
-
             issue.options.add(issueOption);
         }
 
@@ -219,25 +208,9 @@ public class IssueDecisionActivity extends AppCompatActivity {
         dismissOption.index = -1;
         dismissOption.header = IssueOption.DISMISS_HEADER;
         dismissOption.content = "";
-        if (issueInfoRaw.text().contains(DISMISS_TEXT))
-        {
-            dismissOption.selected = true;
-        }
         issue.options.add(dismissOption);
 
         setRecyclerAdapter(issue);
-
-        switch (jumpPos)
-        {
-            case DISMISSED:
-                mLayoutManager.scrollToPosition(issue.options.size() - 1);
-                break;
-            case NO_JUMP:
-                break;
-            default:
-                mLayoutManager.scrollToPosition(jumpPos + 1);
-        }
-
         mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setEnabled(false);
     }
@@ -304,17 +277,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        /*
-                        switch (index)
-                        {
-                            case DISMISSED:
-                                SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismissed_message));
-                                break;
-                            default:
-                                SparkleHelper.makeSnackbar(view, String.format(getString(R.string.issue_selected_message), index+1));
-                                break;
-                        }
-                        startQueryIssueInfo(index);*/
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -373,7 +335,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         super.onResume();
         if (issue.options == null)
         {
-            startQueryIssueInfo(NO_JUMP);
+            startQueryIssueInfo();
         }
         else
         {

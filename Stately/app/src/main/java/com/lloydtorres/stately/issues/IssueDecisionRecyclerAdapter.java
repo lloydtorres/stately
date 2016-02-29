@@ -1,7 +1,6 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,25 +161,6 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 selectContent.setText(context.getString(R.string.issue_dismiss_issue));
                 selectIcon.setImageResource(R.drawable.ic_dismiss_green);
                 divider.setVisibility(View.GONE);
-            }
-
-            if (op.selected)
-            {
-                selectButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
-                selectContent.setTextColor(ContextCompat.getColor(context, R.color.white));
-                selectButton.setOnClickListener(null);
-
-                switch (mode)
-                {
-                    case OPTION_CARD:
-                        selectContent.setText(context.getText(R.string.issue_option_selected));
-                        selectIcon.setImageResource(R.drawable.ic_check_white);
-                        break;
-                    case DISMISS_CARD:
-                        selectContent.setText(context.getText(R.string.issue_issue_dismissed));
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_white);
-                        break;
-                }
             }
         }
     }

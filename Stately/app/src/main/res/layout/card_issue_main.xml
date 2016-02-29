@@ -24,28 +24,15 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
             tools:text="Not A Drop To Drink" />
-        <LinearLayout
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+        <TextView
+            android:id="@+id/card_issue_main_number"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/card_issue_main_status_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="-5dp"
-                tools:src="@drawable/ic_dismiss_grey"/>
-            <TextView
-                android:id="@+id/card_issue_main_status"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-light"
-                android:textStyle="italic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
-                tools:text="@string/issue_dismissed" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryText"
+            tools:text="@string/issue_number" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

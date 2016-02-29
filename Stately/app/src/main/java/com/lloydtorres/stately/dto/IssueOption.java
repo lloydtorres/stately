@@ -15,7 +15,6 @@ public class IssueOption implements Parcelable {
     public int index;
     public String content;
     public String header;
-    public boolean selected;
 
     public IssueOption() { super(); }
 
@@ -23,7 +22,6 @@ public class IssueOption implements Parcelable {
         index = in.readInt();
         content = in.readString();
         header = in.readString();
-        selected = in.readByte() != 0x00;
     }
 
     @Override
@@ -36,7 +34,6 @@ public class IssueOption implements Parcelable {
         dest.writeInt(index);
         dest.writeString(content);
         dest.writeString(header);
-        dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
