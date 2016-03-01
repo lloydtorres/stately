@@ -288,20 +288,25 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        if (response.contains(LEGISLATION_PASSED))
+                        if (!IssueOption.DISMISS_HEADER.equals(option.header))
                         {
-                            Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
-                            issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
-                            issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
-                            startActivity(issueResultsActivity);
-                            finish();
+                            if (response.contains(LEGISLATION_PASSED))
+                            {
+                                Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
+                                issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
+                                issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
+                                startActivity(issueResultsActivity);
+                                finish();
+                            }
+                            else
+                            {
+                                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            }
                         }
                         else
                         {
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            finish();
                         }
-
                     }
                 }, new Response.ErrorListener() {
             @Override
