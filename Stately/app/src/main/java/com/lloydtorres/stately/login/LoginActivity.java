@@ -364,8 +364,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("User-Agent", getString(R.string.app_header_nouser));
                 return params;
             }
         };

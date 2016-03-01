@@ -8,14 +8,14 @@ import android.os.Parcelable;
  * An object containing text for one of the options in an issue.
  */
 public class IssueOption implements Parcelable {
-    public static final String QUERY = "http://www.nationstates.net/page=show_dilemma/dilemma=%d/template-overall=none";
+    public static final String QUERY = "https://www.nationstates.net/page=show_dilemma/dilemma=%d/template-overall=none";
+    public static final String POST_QUERY = "https://www.nationstates.net/page=enact_dilemma/dilemma=%d/template-overall=none";
     public static final String SELECTED_HEADER = "selected";
     public static final String DISMISS_HEADER = "choice--1";
 
     public int index;
     public String content;
     public String header;
-    public boolean selected;
 
     public IssueOption() { super(); }
 
@@ -23,7 +23,6 @@ public class IssueOption implements Parcelable {
         index = in.readInt();
         content = in.readString();
         header = in.readString();
-        selected = in.readByte() != 0x00;
     }
 
     @Override
@@ -36,7 +35,6 @@ public class IssueOption implements Parcelable {
         dest.writeInt(index);
         dest.writeString(content);
         dest.writeString(header);
-        dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

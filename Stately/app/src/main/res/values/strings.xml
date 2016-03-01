@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Stately</string>
-    <string name="app_header">Stately/1.3.0 (User %1$s)</string>
-    <string name="app_header_nouser">Stately/1.3.0 (No User)</string>
+    <string name="app_header">Stately/1.3.1 (User %1$s)</string>
+    <string name="app_header_nouser">Stately/1.3.1 (No User)</string>
 
     <!-- Login -->
     <string name="username_hint">Nation Name</string>
@@ -220,24 +220,18 @@
     <string name="region_ec">Embassy closed with %1$s.</string>
 
     <!-- Issues -->
-    <string name="issue_unaddressed">Unaddressed</string>
-    <string name="issue_dismissed">Dismissed</string>
-    <string name="issue_pending">Legislation Pending</string>
-    <string name="issue_dismiss_all_menu">Dismiss all issues</string>
-    <string name="issue_dismiss_all">Dismiss all issues?</string>
-    <string name="issue_dismiss_all_positive">Dismiss</string>
-    <string name="issue_dismiss_all_response">All issues dismissed.</string>
+    <string name="no_issues">No issues available at the moment.</string>
     <string name="issue_number">Issue #%1$d</string>
     <string name="issue_select_option">Adopt this position</string>
-    <string name="issue_option_selected">Adopting this position</string>
     <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
     <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
     <string name="issue_option_adopt">Adopt</string>
     <string name="issue_option_dismiss">Dismiss</string>
-    <string name="issue_selected_message">Adopted the position in Option %1$d.</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
-    <string name="issue_issue_dismissed">Dismissing this issue</string>
-    <string name="issue_dismissed_message">Dismissed this issue.</string>
+    <string name="issue_legislation_passed">Legislation Passed</string>
+    <string name="issue_breaking">Breaking News</string>
+    <string name="issue_position">Adopted Position</string>
+    <string name="issue_postcard">Postcards: %1$s</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

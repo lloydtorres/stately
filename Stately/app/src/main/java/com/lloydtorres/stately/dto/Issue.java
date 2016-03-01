@@ -13,13 +13,8 @@ import java.util.List;
 public class Issue implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/page=dilemmas/template-overall=none";
 
-    public static final int STATUS_UNADDRESSED = 0;
-    public static final int STATUS_PENDING = 1;
-    public static final int STATUS_DISMISSED = 2;
-
     public int id;
     public String title;
-    public int status;
     public String content;
     public List<IssueOption> options;
 
@@ -28,7 +23,6 @@ public class Issue implements Parcelable {
     protected Issue(Parcel in) {
         id = in.readInt();
         title = in.readString();
-        status = in.readInt();
         content = in.readString();
         if (in.readByte() == 0x01) {
             options = new ArrayList<IssueOption>();
@@ -47,7 +41,6 @@ public class Issue implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(title);
-        dest.writeInt(status);
         dest.writeString(content);
         if (options == null) {
             dest.writeByte((byte) (0x00));

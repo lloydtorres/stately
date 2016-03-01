@@ -2,18 +2,13 @@ package com.lloydtorres.stately.issues;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,23 +41,16 @@ import java.util.Map;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends Fragment {
-    private static final String UNADDRESSED = "unaddressed";
-    private static final String PENDING = "legislation pending";
-    private static final String DISMISSED = "dismissed";
-
     private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private static AlertDialog.Builder dialogBuilder;
-    private static DialogInterface.OnClickListener dialogClickListener;
-
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
-    private List<Issue> issues;
+    private List<Object> issues;
 
     @Override
     public void onAttach(Context context) {
@@ -100,15 +88,6 @@ public class IssuesFragment extends Fragment {
                 queryIssues(mView);
             }
         });
-
-        // dialog and listener for positive responses
-        dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
-        dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismissAllIssues(mView);
-            }
-        };
 
         // Setup recyclerview
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
@@ -205,7 +184,7 @@ public class IssuesFragment extends Fragment {
      */
     private void processIssues(View v, Document d)
     {
-        issues = new ArrayList<Issue>();
+        issues = new ArrayList<Object>();
 
         Element issuesContainer = d.select("ul.dilemmalist").first();
 
@@ -233,109 +212,18 @@ public class IssuesFragment extends Fragment {
             String issueName = issueMain.text();
             issueCore.title = issueName;
 
-            // Get issue status
-            String issueStat = i.text().trim().replaceAll(".* \\[(.*?)\\]", "$1").toLowerCase();
-            switch (issueStat)
-            {
-                case PENDING:
-                    issueCore.status = Issue.STATUS_PENDING;
-                    break;
-                case DISMISSED:
-                    issueCore.status = Issue.STATUS_DISMISSED;
-                    break;
-                default:
-                    issueCore.status = Issue.STATUS_UNADDRESSED;
-                    break;
-            }
-
             issues.add(issueCore);
+        }
+
+        if (issuesRaw.size() <= 0)
+        {
+            String nextUpdate = getString(R.string.no_issues);
+            issues.add(nextUpdate);
         }
 
         mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private void dismissAllIssues(final View view)
-    {
-        String targetURL = Issue.QUERY;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
-                            return;
-                        }
-
-                        SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismiss_all_response));
-                        startQueryIssues();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-
-                if (getActivity() == null || !isAdded())
-                {
-                    return;
-                }
-
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                }
-            }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("dismiss_all", "1");
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded())
-                {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    params.put("Content-Type", "application/x-www-form-urlencoded");
-                    params.put("Cookie", String.format("autologin=%s", u.autologin));
-                }
-                return params;
-            }
-        };
-
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_issue, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_dismiss:
-                dialogBuilder.setMessage(getString(R.string.issue_dismiss_all))
-                        .setPositiveButton(getString(R.string.issue_dismiss_all_positive), dialogClickListener)
-                        .setNegativeButton(getString(R.string.explore_negative), null).show();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

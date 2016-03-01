@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -43,9 +44,8 @@ import java.util.Map;
 public class IssueDecisionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
-    private static final String DISMISS_TEXT = "The government is preparing to dismiss this issue.";
-    public static final int NO_JUMP = -2;
     public static final int DISMISSED = -1;
+    private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
 
     private Issue issue;
 
@@ -79,7 +79,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryIssueInfo(NO_JUMP);
+                queryIssueInfo();
             }
         });
 
@@ -101,25 +101,23 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
     /**
      * Call to start querying and activate SwipeFreshLayout
-     * @param jumpPos position to jump to on load
      */
-    private void startQueryIssueInfo(final int jumpPos)
+    private void startQueryIssueInfo()
     {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryIssueInfo(jumpPos);
+                queryIssueInfo();
             }
         });
     }
 
     /**
      * Query information on the current issue from the actual NationStates site
-     * @param jumpPos position to jump to on load
      */
-    private void queryIssueInfo(final int jumpPos)
+    private void queryIssueInfo()
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
@@ -129,7 +127,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processIssueInfo(view, d, jumpPos);
+                        processIssueInfo(view, d);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -166,9 +164,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
      * Process the received page into the Issue and its IssueOptions
      * @param v Activity view
      * @param d Document received from NationStates
-     * @param jumpPos position to jump to on load
      */
-    private void processIssueInfo(View v, Document d, int jumpPos)
+    private void processIssueInfo(View v, Document d)
     {
         Element issueInfoContainer = d.select("div#dilemma").first();
 
@@ -206,12 +203,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
             String optionContent = option.getElementsByTag("p").first().text();
             issueOption.content = optionContent;
-
-            if (option.hasClass("chosendiloption"))
-            {
-                issueOption.selected = true;
-            }
-
             issue.options.add(issueOption);
         }
 
@@ -219,25 +210,9 @@ public class IssueDecisionActivity extends AppCompatActivity {
         dismissOption.index = -1;
         dismissOption.header = IssueOption.DISMISS_HEADER;
         dismissOption.content = "";
-        if (issueInfoRaw.text().contains(DISMISS_TEXT))
-        {
-            dismissOption.selected = true;
-        }
         issue.options.add(dismissOption);
 
         setRecyclerAdapter(issue);
-
-        switch (jumpPos)
-        {
-            case DISMISSED:
-                mLayoutManager.scrollToPosition(issue.options.size() - 1);
-                break;
-            case NO_JUMP:
-                break;
-            default:
-                mLayoutManager.scrollToPosition(jumpPos + 1);
-        }
-
         mSwipeRefreshLayout.setRefreshing(false);
         mSwipeRefreshLayout.setEnabled(false);
     }
@@ -250,17 +225,16 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
     /**
      * Helper to confirm the position selected by the user.
-     * @param index The index of the option selected.
-     * @param header The header request of the option selected.
+     * @param option The option selected.
      */
-    public void setAdoptPosition(final int index, final String header)
+    public void setAdoptPosition(final IssueOption option)
     {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                postAdoptPosition(index, header);
+                startPostAdoptPosition(option);
                 dialog.dismiss();
             }
         };
@@ -270,14 +244,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
 
-            switch (index)
+            switch (option.index)
             {
                 case DISMISSED:
                     dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), index + 1))
+                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), option.index + 1))
                             .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
                     break;
             }
@@ -286,36 +260,53 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         else
         {
-            postAdoptPosition(index, header);
+            startPostAdoptPosition(option);
         }
+    }
+
+    private void startPostAdoptPosition(final IssueOption option)
+    {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                postAdoptPosition(option);
+            }
+        });
     }
 
     /**
      * Send the position selected by the user back to the server.
-     * @param index The index of the option selected.
-     * @param header The header request of the option selected.
+     * @param option The option selected.
      */
-    public void postAdoptPosition(final int index, final String header)
+    public void postAdoptPosition(final IssueOption option)
     {
         final View view = findViewById(R.id.issue_decision_main);
-        String targetURL = String.format(IssueOption.QUERY, issue.id);
+        String targetURL = String.format(IssueOption.POST_QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        /*
-                        switch (index)
+                        if (!IssueOption.DISMISS_HEADER.equals(option.header))
                         {
-                            case DISMISSED:
-                                SparkleHelper.makeSnackbar(view, getString(R.string.issue_dismissed_message));
-                                break;
-                            default:
-                                SparkleHelper.makeSnackbar(view, String.format(getString(R.string.issue_selected_message), index+1));
-                                break;
+                            if (response.contains(LEGISLATION_PASSED))
+                            {
+                                Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
+                                issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
+                                issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
+                                startActivity(issueResultsActivity);
+                                finish();
+                            }
+                            else
+                            {
+                                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            }
                         }
-                        startQueryIssueInfo(index);*/
-                        finish();
+                        else
+                        {
+                            finish();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -334,7 +325,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put(header, "1");
+                params.put(option.header, "1");
                 return params;
             }
 
@@ -373,7 +364,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         super.onResume();
         if (issue.options == null)
         {
-            startQueryIssueInfo(NO_JUMP);
+            startQueryIssueInfo();
         }
         else
         {

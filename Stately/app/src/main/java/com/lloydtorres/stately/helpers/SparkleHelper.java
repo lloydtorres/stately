@@ -98,6 +98,7 @@ public class SparkleHelper {
     public static final String API_VERSION = "7";
     // NationStates API
     public static final String BASE_URI = "https://www.nationstates.net/";
+    public static final String BASE_URI_NOSLASH = "https://www.nationstates.net";
 
     // Keys to user name and autologin and other session variables
     public static final String VAR_NAME = "var_name";
