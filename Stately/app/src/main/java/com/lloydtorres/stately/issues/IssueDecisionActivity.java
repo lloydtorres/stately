@@ -1,6 +1,7 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -44,6 +45,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
     public static final int DISMISSED = -1;
+    private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
 
     private Issue issue;
 
@@ -223,17 +225,16 @@ public class IssueDecisionActivity extends AppCompatActivity {
 
     /**
      * Helper to confirm the position selected by the user.
-     * @param index The index of the option selected.
-     * @param header The header request of the option selected.
+     * @param option The option selected.
      */
-    public void setAdoptPosition(final int index, final String header)
+    public void setAdoptPosition(final IssueOption option)
     {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startPostAdoptPosition(header);
+                startPostAdoptPosition(option);
                 dialog.dismiss();
             }
         };
@@ -243,14 +244,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
 
-            switch (index)
+            switch (option.index)
             {
                 case DISMISSED:
                     dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), index + 1))
+                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), option.index + 1))
                             .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
                     break;
             }
@@ -259,26 +260,26 @@ public class IssueDecisionActivity extends AppCompatActivity {
         }
         else
         {
-            startPostAdoptPosition(header);
+            startPostAdoptPosition(option);
         }
     }
 
-    private void startPostAdoptPosition(final String header)
+    private void startPostAdoptPosition(final IssueOption option)
     {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                postAdoptPosition(header);
+                postAdoptPosition(option);
             }
         });
     }
 
     /**
      * Send the position selected by the user back to the server.
-     * @param header The header request of the option selected.
+     * @param option The option selected.
      */
-    public void postAdoptPosition(final String header)
+    public void postAdoptPosition(final IssueOption option)
     {
         final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.POST_QUERY, issue.id);
@@ -287,7 +288,20 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        finish();
+
+                        if (response.contains(LEGISLATION_PASSED))
+                        {
+                            Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
+                            issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
+                            issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
+                            startActivity(issueResultsActivity);
+                            finish();
+                        }
+                        else
+                        {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                        }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -306,7 +320,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put(header, "1");
+                params.put(option.header, "1");
                 return params;
             }
 

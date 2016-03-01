@@ -224,6 +224,9 @@
     <string name="issue_option_adopt">Adopt</string>
     <string name="issue_option_dismiss">Dismiss</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
+    <string name="issue_legislation_passed">Legislation Passed</string>
+    <string name="issue_breaking">Breaking News</string>
+    <string name="issue_position">Adopted Position</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

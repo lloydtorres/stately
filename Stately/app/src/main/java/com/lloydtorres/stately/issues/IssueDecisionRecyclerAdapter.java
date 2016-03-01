@@ -151,7 +151,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             selectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((IssueDecisionActivity) context).setAdoptPosition(option.index, option.header);
+                    ((IssueDecisionActivity) context).setAdoptPosition(option);
                 }
             });
 
