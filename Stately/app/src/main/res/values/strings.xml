@@ -227,6 +227,7 @@
     <string name="issue_legislation_passed">Legislation Passed</string>
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_position">Adopted Position</string>
+    <string name="issue_postcard">Postcards: %1$s</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

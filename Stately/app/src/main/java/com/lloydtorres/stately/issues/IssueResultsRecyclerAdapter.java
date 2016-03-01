@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.IssueOption;
+import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -24,6 +25,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private final int NEWS_CARD = 0;
     private final int POSITION_CARD = 1;
     private final int HEADLINE_CARD = 2;
+    private final int POSTCARD_CARD = 3;
 
     private Context context;
     private List<Object> content;
@@ -48,6 +50,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             case POSITION_CARD:
                 viewHolder = new PositionCard(context, genericCard);
                 break;
+            case POSTCARD_CARD:
+                View postcardCard = inflater.inflate(R.layout.card_postcard, parent, false);
+                viewHolder = new PostcardCard(context, postcardCard);
+                break;
             default:
                 View headlineCard = inflater.inflate(R.layout.card_headline, parent, false);
                 viewHolder = new HeadlineCard(context, headlineCard);
@@ -66,6 +72,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             case POSITION_CARD:
                 PositionCard positionCard = (PositionCard) holder;
                 positionCard.init((IssueOption) content.get(position));
+                break;
+            case POSTCARD_CARD:
+                PostcardCard postcardCard = (PostcardCard) holder;
+                postcardCard.init((IssuePostcard) content.get(position));
                 break;
             default:
                 HeadlineCard headlineCard = (HeadlineCard) holder;
@@ -92,6 +102,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         else if (content.get(position) instanceof IssueResultHeadline)
         {
             return HEADLINE_CARD;
+        }
+        else if (content.get(position) instanceof IssuePostcard)
+        {
+            return POSTCARD_CARD;
         }
         return -1;
     }
@@ -155,6 +169,25 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             title.setText(headline.headline);
             DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
+        }
+    }
+
+    public class PostcardCard extends RecyclerView.ViewHolder {
+        private Context context;
+        private TextView title;
+        private ImageView img;
+
+        public PostcardCard(Context c, View v) {
+            super(v);
+            context = c;
+            title = (TextView) v.findViewById(R.id.card_postcard_title);
+            img = (ImageView) v.findViewById(R.id.card_postcard_img);
+        }
+
+        public void init(IssuePostcard card)
+        {
+            title.setText(String.format(context.getString(R.string.issue_postcard), card.title.trim()));
+            DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }
 }

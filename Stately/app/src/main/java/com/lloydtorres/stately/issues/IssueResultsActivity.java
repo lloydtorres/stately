@@ -5,11 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.IssueOption;
+import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -30,12 +30,14 @@ public class IssueResultsActivity extends AppCompatActivity {
     public static final String OPTION_DATA = "optionData";
     public static final String NEWS_DATA = "newsData";
     public static final String HEADLINES_DATA = "headlinesData";
+    public static final String POSTCARD_DATA = "postcardData";
 
     private static final String RECLASSIFICATION = "Reclassification";
 
     private String news;
     private IssueOption option;
     private ArrayList<IssueResultHeadline> headlines;
+    private ArrayList<IssuePostcard> postcards;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -58,6 +60,7 @@ public class IssueResultsActivity extends AppCompatActivity {
             news = savedInstanceState.getString(NEWS_DATA);
             option = savedInstanceState.getParcelable(OPTION_DATA);
             headlines = savedInstanceState.getParcelableArrayList(HEADLINES_DATA);
+            postcards = savedInstanceState.getParcelableArrayList(POSTCARD_DATA);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.results_toolbar);
@@ -125,6 +128,25 @@ public class IssueResultsActivity extends AppCompatActivity {
             headlines.add(headline);
         }
 
+        // Get postcards if available
+        postcards = new ArrayList<IssuePostcard>();
+        Element postcardContainer = d.select("div.bannerpostcards").first();
+        if (postcardContainer != null)
+        {
+            Elements postcardHolders = postcardContainer.select("a.bannerpostcard");
+            for (Element p : postcardHolders)
+            {
+                IssuePostcard postcard = new IssuePostcard();
+
+                Element img = p.select("img").first();
+                Element text = p.select("div.bannerpostcardtitle").first();
+
+                postcard.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
+                postcard.title = text.text();
+                postcards.add(postcard);
+            }
+        }
+
         setRecyclerAdapter();
     }
 
@@ -137,6 +159,10 @@ public class IssueResultsActivity extends AppCompatActivity {
         resultsContent.add(news);
         resultsContent.add(option);
         resultsContent.addAll(headlines);
+        if (postcards != null)
+        {
+            resultsContent.addAll(postcards);
+        }
 
         mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent);
         mRecyclerView.setAdapter(mRecyclerAdapter);
@@ -170,6 +196,10 @@ public class IssueResultsActivity extends AppCompatActivity {
         {
             savedInstanceState.putParcelableArrayList(HEADLINES_DATA, headlines);
         }
+        if (postcards != null)
+        {
+            savedInstanceState.putParcelableArrayList(POSTCARD_DATA, postcards);
+        }
     }
 
     @Override
@@ -190,6 +220,10 @@ public class IssueResultsActivity extends AppCompatActivity {
             if (headlines != null)
             {
                 headlines = savedInstanceState.getParcelableArrayList(HEADLINES_DATA);
+            }
+            if (postcards != null)
+            {
+                postcards = savedInstanceState.getParcelableArrayList(POSTCARD_DATA);
             }
         }
     }
