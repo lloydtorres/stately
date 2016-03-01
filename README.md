@@ -18,6 +18,7 @@ Stately
 
 ### Revision History
 
+* **1.3.1** - Support for instant issues, bug fix for issue preventing login.
 * **1.3.0** - Endorsements, move regions, RMB quote/delete, User-Agent, removed ads.
 * **1.2.3** - Bug fixes and improvements.
 * **1.2.2** - Fix bug where issue option header may be different from index.
