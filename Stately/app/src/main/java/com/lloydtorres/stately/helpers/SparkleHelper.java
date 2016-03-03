@@ -325,6 +325,47 @@ public class SparkleHelper {
     }
 
     /**
+     * Similar to getPrettifiedNumber, but adds a suffix as needed.
+     * But this is the same code as getMoneyFormatted!, you say.
+     * Well this uses doubles and the other one uses longs.
+     * Something something unnecessary casting.
+     * @param c app context
+     * @param d number to format
+     * @return Properly-formatted number as a string
+     */
+    public static String getPrettifiedSuffixedNumber(Context c, double d)
+    {
+        if (d < 1000000L)
+        {
+            // If the money is less than 1 million, we don't need a suffix.
+            return getPrettifiedNumber(d);
+        }
+        else
+        {
+            // NS drops the least significant digits depending on the suffix needed.
+            // e.g. A value like 10,000,000 is simply 10 million.
+            String suffix = "";
+            if (d >= 1000000D && d < 1000000000D)
+            {
+                suffix = c.getString(R.string.million);
+                d /= 1000000D;
+            }
+            else if (d >= 1000000000D && d < 1000000000000D)
+            {
+                suffix = c.getString(R.string.billion);
+                d /= 1000000000D;
+            }
+            else if (d >= 1000000000000D)
+            {
+                suffix = c.getString(R.string.trillion);
+                d /= 1000000000000D;
+            }
+
+            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
+        }
+    }
+
+    /**
      * Takes in a money value and currency name from the NationStates API and formats it to the
      * NS format.
      * The NationStates API returns money value as a long, but in-game money is represented like
