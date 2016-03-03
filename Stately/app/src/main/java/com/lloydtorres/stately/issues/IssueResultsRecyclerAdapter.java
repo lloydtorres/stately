@@ -1,6 +1,8 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
@@ -22,10 +25,13 @@ import java.util.List;
  * An adapter for showing the results of an issue resolution.
  */
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private String[] WORLD_CENSUS_ITEMS;
+
     private final int NEWS_CARD = 0;
     private final int POSITION_CARD = 1;
     private final int HEADLINE_CARD = 2;
     private final int POSTCARD_CARD = 3;
+    private final int CENSUSDELTA_CARD = 4;
 
     private Context context;
     private List<Object> content;
@@ -34,6 +40,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     {
         context = c;
         content = con;
+        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
     }
 
     @Override
@@ -53,6 +60,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             case POSTCARD_CARD:
                 View postcardCard = inflater.inflate(R.layout.card_postcard, parent, false);
                 viewHolder = new PostcardCard(context, postcardCard);
+                break;
+            case CENSUSDELTA_CARD:
+                View censusDeltaCard = inflater.inflate(R.layout.card_census_delta, parent, false);
+                viewHolder = new CensusDeltaCard(context, censusDeltaCard);
                 break;
             default:
                 View headlineCard = inflater.inflate(R.layout.card_headline, parent, false);
@@ -76,6 +87,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             case POSTCARD_CARD:
                 PostcardCard postcardCard = (PostcardCard) holder;
                 postcardCard.init((IssuePostcard) content.get(position));
+                break;
+            case CENSUSDELTA_CARD:
+                CensusDeltaCard censusDeltaCard = (CensusDeltaCard) holder;
+                censusDeltaCard.init((CensusDelta) content.get(position));
                 break;
             default:
                 HeadlineCard headlineCard = (HeadlineCard) holder;
@@ -106,6 +121,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         else if (content.get(position) instanceof IssuePostcard)
         {
             return POSTCARD_CARD;
+        }
+        else if (content.get(position) instanceof CensusDelta)
+        {
+            return CENSUSDELTA_CARD;
         }
         return -1;
     }
@@ -188,6 +207,41 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         {
             title.setText(String.format(context.getString(R.string.issue_postcard), card.title.trim()));
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
+        }
+    }
+
+    public class CensusDeltaCard extends RecyclerView.ViewHolder {
+        private Context context;
+        private CardView cardHolder;
+        private TextView title;
+        private TextView unit;
+        private TextView value;
+
+        public CensusDeltaCard(Context c, View v)
+        {
+            super(v);
+            context = c;
+            cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
+            title = (TextView) v.findViewById(R.id.card_delta_name);
+            unit = (TextView) v.findViewById(R.id.card_delta_unit);
+            value = (TextView) v.findViewById(R.id.card_delta_value);
+        }
+
+        public void init(CensusDelta delta)
+        {
+            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
+
+            int censusId = delta.censusId;
+            // if census ID is out of bounds, set it as unknown
+            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
+            {
+                censusId = WORLD_CENSUS_ITEMS.length - 1;
+            }
+            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            title.setText(censusType[0]);
+            unit.setText(censusType[1]);
+            String valueHolder = delta.isPositive ? "+"+delta.delta : "-"+delta.delta;
+            value.setText(valueHolder);
         }
     }
 }
