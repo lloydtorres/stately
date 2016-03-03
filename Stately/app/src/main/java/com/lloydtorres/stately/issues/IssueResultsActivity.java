@@ -99,17 +99,15 @@ public class IssueResultsActivity extends AppCompatActivity {
     {
         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
 
-        if (d == null)
-        {
-            finish();
-        }
-
         // Get talking point and reclassification
         Element resultsContainer = d.select("div.dilemma").first();
-        news = resultsContainer.select("p").first().text();
-        if (resultsContainer.text().contains(RECLASSIFICATION))
+        if (resultsContainer != null)
         {
-            news = news + "\n\n" + resultsContainer.select("p").get(1).text();
+            news = resultsContainer.select("p").first().text();
+            if (resultsContainer.text().contains(RECLASSIFICATION))
+            {
+                news = news + "\n\n" + resultsContainer.select("p").get(1).text();
+            }
         }
 
         // Get headlines
@@ -156,7 +154,10 @@ public class IssueResultsActivity extends AppCompatActivity {
     private void setRecyclerAdapter()
     {
         List<Object> resultsContent = new ArrayList<Object>();
-        resultsContent.add(news);
+        if (news != null)
+        {
+            resultsContent.add(news);
+        }
         resultsContent.add(option);
         resultsContent.addAll(headlines);
         if (postcards != null)
