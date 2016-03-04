@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.Nation;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private Context context;
     private List<Object> issues;
+    private Nation mNation;
 
-    public IssuesRecyclerAdapter(Context c, List<Object> i)
+    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n)
     {
         context = c;
         issues = i;
+        mNation = n;
     }
 
     @Override
@@ -113,6 +116,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             {
                 Intent decisionActivityLaunch = new Intent(context, IssueDecisionActivity.class);
                 decisionActivityLaunch.putExtra(IssueDecisionActivity.ISSUE_DATA, issue);
+                decisionActivityLaunch.putExtra(IssueDecisionActivity.NATION_DATA, mNation);
                 context.startActivity(decisionActivityLaunch);
             }
         }

@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -44,10 +45,12 @@ import java.util.Map;
 public class IssueDecisionActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
+    public static final String NATION_DATA = "nationData";
     public static final int DISMISSED = -1;
     private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
 
     private Issue issue;
+    private Nation mNation;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -64,10 +67,12 @@ public class IssueDecisionActivity extends AppCompatActivity {
         if (getIntent() != null)
         {
             issue = getIntent().getParcelableExtra(ISSUE_DATA);
+            mNation = getIntent().getParcelableExtra(NATION_DATA);
         }
         if (savedInstanceState != null)
         {
             issue = savedInstanceState.getParcelable(ISSUE_DATA);
+            mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.issue_decision_toolbar);
@@ -295,6 +300,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                                 Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
                                 issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
                                 issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
+                                issueResultsActivity.putExtra(IssueResultsActivity.NATION_DATA, mNation);
                                 startActivity(issueResultsActivity);
                                 finish();
                             }
@@ -381,6 +387,10 @@ public class IssueDecisionActivity extends AppCompatActivity {
         {
             savedInstanceState.putParcelable(ISSUE_DATA, issue);
         }
+        if (mNation != null)
+        {
+            savedInstanceState.putParcelable(NATION_DATA, mNation);
+        }
     }
 
     @Override
@@ -393,6 +403,10 @@ public class IssueDecisionActivity extends AppCompatActivity {
             if (issue == null)
             {
                 issue = savedInstanceState.getParcelable(ISSUE_DATA);
+            }
+            if (mNation == null)
+            {
+                mNation = savedInstanceState.getParcelable(NATION_DATA);
             }
         }
     }

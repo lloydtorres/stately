@@ -25,6 +25,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
@@ -839,6 +840,51 @@ public class SparkleHelper {
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
         styleLinkifiedTextView(c, t);
+    }
+
+    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target)
+    {
+        if (nationData != null && target != null)
+        {
+            target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@REGION@@", nationData.region);
+            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
+            target = target.replace("@@POPULATION@@", getPrettifiedNumber(nationData.popBase));
+            target = target.replace("@@TYPE@@", nationData.prename);
+            target = target.replace("@@ANIMAL@@", nationData.animal);
+            target = target.replace("@@CURRENCY@@", nationData.currency);
+            target = target.replace("@@PL(CURRENCY)@@", English.plural(nationData.currency));
+            target = target.replace("@@SLOGAN@@", nationData.motto);
+            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
+            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
+            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
+
+            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
+            if (nationData.capital != null)
+            {
+                valCapital = nationData.capital;
+            }
+            target = target.replace("@@CAPITAL@@", valCapital);
+            target = target.replace("@@$nation->query_capital()@@", valCapital);
+
+            String valLeader = c.getString(R.string.issue_leader_none);
+            if (nationData.leader != null)
+            {
+                valLeader = nationData.leader;
+            }
+            target = target.replace("@@LEADER@@", valLeader);
+            target = target.replace("@@$nation->query_leader()@@", valLeader);
+
+            String valReligion = c.getString(R.string.issue_religion_none);
+            if (nationData.religion != null)
+            {
+                valReligion = nationData.religion;
+            }
+            target = target.replace("@@FAITH@@", valReligion);
+            target = target.replace("@@$nation->query_faith()@@", valReligion);
+        }
+
+        t.setText(getHtmlFormatting(target).toString());
     }
 
     /**

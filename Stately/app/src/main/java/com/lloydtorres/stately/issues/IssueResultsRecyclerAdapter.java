@@ -15,6 +15,7 @@ import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -35,11 +36,13 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private Context context;
     private List<Object> content;
+    private Nation mNation;
 
-    public IssueResultsRecyclerAdapter(Context c, List<Object> con)
+    public IssueResultsRecyclerAdapter(Context c, List<Object> con, Nation n)
     {
         context = c;
         content = con;
+        mNation = n;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
     }
 
@@ -144,7 +147,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(String n)
         {
             title.setText(context.getString(R.string.issue_breaking));
-            content.setText(n);
+            SparkleHelper.setIssueResultsFormatting(context, content, mNation, n);
         }
     }
 
@@ -182,11 +185,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(IssueResultHeadline headline)
         {
             headline.headline = headline.headline.trim();
-            if (context != null)
-            {
-                headline.headline = headline.headline.replace("@@NAME@@", SparkleHelper.getActiveUser(context).name);
-            }
-            title.setText(headline.headline);
+            SparkleHelper.setIssueResultsFormatting(context, title, mNation, headline.headline);
             DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
         }
     }
@@ -205,7 +204,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(IssuePostcard card)
         {
-            title.setText(String.format(context.getString(R.string.issue_postcard), card.title.trim()));
+            String titleContent = String.format(context.getString(R.string.issue_postcard), card.title.trim());
+            SparkleHelper.setIssueResultsFormatting(context, title, mNation, titleContent);
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }

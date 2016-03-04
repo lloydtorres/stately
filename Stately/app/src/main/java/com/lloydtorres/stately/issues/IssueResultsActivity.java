@@ -12,6 +12,7 @@ import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
@@ -33,6 +34,7 @@ public class IssueResultsActivity extends AppCompatActivity {
     public static final String HEADLINES_DATA = "headlinesData";
     public static final String POSTCARD_DATA = "postcardData";
     public static final String CENSUSDELTA_DATA = "censusDeltaData";
+    public static final String NATION_DATA = "nationData";
 
     private static final String RECLASSIFICATION = "Reclassification";
 
@@ -41,6 +43,7 @@ public class IssueResultsActivity extends AppCompatActivity {
     private ArrayList<IssueResultHeadline> headlines;
     private ArrayList<IssuePostcard> postcards;
     private ArrayList<CensusDelta> censusDeltas;
+    private Nation mNation;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -57,6 +60,7 @@ public class IssueResultsActivity extends AppCompatActivity {
         {
             response = getIntent().getStringExtra(RESPONSE_DATA);
             option = getIntent().getParcelableExtra(OPTION_DATA);
+            mNation = getIntent().getParcelableExtra(NATION_DATA);
         }
         if (savedInstanceState != null)
         {
@@ -65,6 +69,7 @@ public class IssueResultsActivity extends AppCompatActivity {
             headlines = savedInstanceState.getParcelableArrayList(HEADLINES_DATA);
             postcards = savedInstanceState.getParcelableArrayList(POSTCARD_DATA);
             censusDeltas = savedInstanceState.getParcelableArrayList(CENSUSDELTA_DATA);
+            mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.results_toolbar);
@@ -110,7 +115,7 @@ public class IssueResultsActivity extends AppCompatActivity {
             news = resultsContainer.select("p").first().text();
             if (resultsContainer.text().contains(RECLASSIFICATION))
             {
-                news = news + "\n\n" + resultsContainer.select("p").get(1).text();
+                news = news + "<br><br>" + resultsContainer.select("p").get(1).text();
             }
         }
 
@@ -193,7 +198,7 @@ public class IssueResultsActivity extends AppCompatActivity {
             resultsContent.addAll(censusDeltas);
         }
 
-        mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent);
+        mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent, mNation);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
@@ -233,6 +238,10 @@ public class IssueResultsActivity extends AppCompatActivity {
         {
             savedInstanceState.putParcelableArrayList(CENSUSDELTA_DATA, censusDeltas);
         }
+        if (mNation != null)
+        {
+            savedInstanceState.putParcelable(NATION_DATA, mNation);
+        }
     }
 
     @Override
@@ -261,6 +270,10 @@ public class IssueResultsActivity extends AppCompatActivity {
             if (censusDeltas != null)
             {
                 censusDeltas = savedInstanceState.getParcelableArrayList(CENSUSDELTA_DATA);
+            }
+            if (mNation != null)
+            {
+                mNation = savedInstanceState.getParcelable(NATION_DATA);
             }
         }
     }

@@ -232,6 +232,9 @@
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_position">Adopted Position</string>
     <string name="issue_postcard">Postcards: %1$s</string>
+    <string name="issue_capital_none">%1$s City</string>
+    <string name="issue_leader_none">Leader</string>
+    <string name="issue_religion_none">a major religion</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

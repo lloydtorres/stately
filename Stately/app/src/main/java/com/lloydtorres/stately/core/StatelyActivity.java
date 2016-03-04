@@ -148,7 +148,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         switch (start)
         {
             case ISSUES_FRAGMENT:
-                f = new IssuesFragment();
+                f = getIssuesFragment();
                 currentPosition = R.id.nav_issues;
                 break;
             case ACTIVITY_FEED_FRAGMENT:
@@ -265,7 +265,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     break;
                 case R.id.nav_issues:
                     // Choose Issues
-                    fChoose = new IssuesFragment();
+                    fChoose = getIssuesFragment();
                     navInit = ISSUES_FRAGMENT;
                     break;
                 case R.id.nav_activityfeed:
@@ -338,6 +338,17 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         return nationFragment;
     }
 
+    private IssuesFragment getIssuesFragment()
+    {
+        IssuesFragment issuesFragment = new IssuesFragment();
+        issuesFragment.setNationData(mNation);
+        return issuesFragment;
+    }
+
+    /**
+     * Get a new activity feed fragment
+     * @return New activity feed fragment
+     */
     private ActivityFeedFragment getActivityFeed()
     {
         ActivityFeedFragment activityFeedFragment = new ActivityFeedFragment();
