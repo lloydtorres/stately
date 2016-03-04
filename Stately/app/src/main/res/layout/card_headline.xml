@@ -29,7 +29,7 @@
         <ImageView
             android:id="@+id/card_issue_headline_img"
             android:layout_height="match_parent"
-            android:layout_width="100dp"
+            android:layout_width="70dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
