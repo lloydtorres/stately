@@ -94,6 +94,7 @@
         <item>Crime##Crimes Per Hour</item>
         <item>Foreign Aid##Clooney Contribution Index</item>
         <item>Black Market##Standard Monetary Units</item>
+        <item>Residency##Days</item>
         <item>Unknown##Mystery Units</item>
     </string-array>
 </resources>
