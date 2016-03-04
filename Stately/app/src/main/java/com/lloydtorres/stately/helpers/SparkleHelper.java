@@ -25,6 +25,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
@@ -322,6 +323,47 @@ public class SparkleHelper {
         }
 
         return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(popHolder), suffix);
+    }
+
+    /**
+     * Similar to getPrettifiedNumber, but adds a suffix as needed.
+     * But this is the same code as getMoneyFormatted!, you say.
+     * Well this uses doubles and the other one uses longs.
+     * Something something unnecessary casting.
+     * @param c app context
+     * @param d number to format
+     * @return Properly-formatted number as a string
+     */
+    public static String getPrettifiedSuffixedNumber(Context c, double d)
+    {
+        if (d < 1000000L)
+        {
+            // If the money is less than 1 million, we don't need a suffix.
+            return getPrettifiedNumber(d);
+        }
+        else
+        {
+            // NS drops the least significant digits depending on the suffix needed.
+            // e.g. A value like 10,000,000 is simply 10 million.
+            String suffix = "";
+            if (d >= 1000000D && d < 1000000000D)
+            {
+                suffix = c.getString(R.string.million);
+                d /= 1000000D;
+            }
+            else if (d >= 1000000000D && d < 1000000000000D)
+            {
+                suffix = c.getString(R.string.billion);
+                d /= 1000000000D;
+            }
+            else if (d >= 1000000000000D)
+            {
+                suffix = c.getString(R.string.trillion);
+                d /= 1000000000000D;
+            }
+
+            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
+        }
     }
 
     /**
@@ -798,6 +840,51 @@ public class SparkleHelper {
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(Html.fromHtml(holder));
         styleLinkifiedTextView(c, t);
+    }
+
+    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target)
+    {
+        if (nationData != null && target != null)
+        {
+            target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@REGION@@", nationData.region);
+            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
+            target = target.replace("@@POPULATION@@", getPrettifiedNumber(nationData.popBase));
+            target = target.replace("@@TYPE@@", nationData.prename);
+            target = target.replace("@@ANIMAL@@", nationData.animal);
+            target = target.replace("@@CURRENCY@@", nationData.currency);
+            target = target.replace("@@PL(CURRENCY)@@", English.plural(nationData.currency));
+            target = target.replace("@@SLOGAN@@", nationData.motto);
+            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
+            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
+            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
+
+            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
+            if (nationData.capital != null)
+            {
+                valCapital = nationData.capital;
+            }
+            target = target.replace("@@CAPITAL@@", valCapital);
+            target = target.replace("@@$nation->query_capital()@@", valCapital);
+
+            String valLeader = c.getString(R.string.issue_leader_none);
+            if (nationData.leader != null)
+            {
+                valLeader = nationData.leader;
+            }
+            target = target.replace("@@LEADER@@", valLeader);
+            target = target.replace("@@$nation->query_leader()@@", valLeader);
+
+            String valReligion = c.getString(R.string.issue_religion_none);
+            if (nationData.religion != null)
+            {
+                valReligion = nationData.religion;
+            }
+            target = target.replace("@@FAITH@@", valReligion);
+            target = target.replace("@@$nation->query_faith()@@", valReligion);
+        }
+
+        t.setText(getHtmlFormatting(target).toString());
     }
 
     /**

@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
@@ -51,6 +52,12 @@ public class IssuesFragment extends Fragment {
     private RecyclerView.Adapter mRecyclerAdapter;
 
     private List<Object> issues;
+    private Nation mNation;
+
+    public void setNationData(Nation n)
+    {
+        mNation = n;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -221,7 +228,7 @@ public class IssuesFragment extends Fragment {
             issues.add(nextUpdate);
         }
 
-        mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues);
+        mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }

@@ -22,6 +22,7 @@ public class Nation implements Parcelable {
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
                                         + "+demonym+demonym2+demonym2plural+customreligion+animal"
+                                        + "+censusscore+rcensus+wcensus"
                                         + "+gavote+scvote+endorsements"
                                         + "+notable+sensibilities+crime+deaths"
                                         + "+govtdesc+govt"
@@ -91,6 +92,13 @@ public class Nation implements Parcelable {
     @Element(name="ANIMAL")
     public String animal;
 
+    @Element(name="CENSUSSCORE")
+    public CensusScore censusScore;
+    @Element(name="RCENSUS")
+    public int rCensus;
+    @Element(name="WCENSUS")
+    public int wCensus;
+
     @Element(name="GAVOTE", required=false)
     public String gaVote;
     @Element(name="SCVOTE", required=false)
@@ -157,6 +165,9 @@ public class Nation implements Parcelable {
         demPlural = in.readString();
         religion = in.readString();
         animal = in.readString();
+        censusScore = (CensusScore) in.readValue(CensusScore.class.getClassLoader());
+        rCensus = in.readInt();
+        wCensus = in.readInt();
         gaVote = in.readString();
         scVote = in.readString();
         endorsements = in.readString();
@@ -207,6 +218,9 @@ public class Nation implements Parcelable {
         dest.writeString(demPlural);
         dest.writeString(religion);
         dest.writeString(animal);
+        dest.writeValue(censusScore);
+        dest.writeInt(rCensus);
+        dest.writeInt(wCensus);
         dest.writeString(gaVote);
         dest.writeString(scVote);
         dest.writeString(endorsements);

@@ -28,6 +28,7 @@ import java.util.ArrayList;
  */
 public class OverviewSubFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNation";
+    private String[] WORLD_CENSUS_ITEMS;
 
     private Nation mNation;
 
@@ -81,6 +82,8 @@ public class OverviewSubFragment extends Fragment {
     private LinearLayout religionLayout;
     private TextView religion;
     private TextView animal;
+    private TextView censusTitle;
+    private TextView censusContent;
 
     public void setNation(Nation n)
     {
@@ -90,6 +93,7 @@ public class OverviewSubFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
     }
 
     @Override
@@ -420,5 +424,23 @@ public class OverviewSubFragment extends Fragment {
 
         animal = (TextView) view.findViewById(R.id.nation_animal);
         animal.setText(mNation.animal);
+
+        censusTitle = (TextView) view.findViewById(R.id.nation_census_title);
+        int censusId = mNation.censusScore.id;
+        // if census ID is out of bounds, set it as unknown
+        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
+        {
+            censusId = WORLD_CENSUS_ITEMS.length - 1;
+        }
+        String[] worldCensusItem = WORLD_CENSUS_ITEMS[censusId].split("##");
+
+        censusTitle.setText(String.format(getString(R.string.card_overview_other_census_title), worldCensusItem[0]));
+        censusContent = (TextView) view.findViewById(R.id.nation_census_content);
+        censusContent.setText(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), mNation.censusScore.value), worldCensusItem[1]));
+        if (mNation.rCensus > 0)
+        {
+            censusContent.append(String.format(getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(mNation.rCensus), mNation.region));
+        }
+        censusContent.append(String.format(getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(mNation.wCensus)));
     }
 }

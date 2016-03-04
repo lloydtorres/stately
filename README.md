@@ -18,6 +18,7 @@ Stately
 
 ### Revision History
 
+* **1.3.3** - Improved issue results screen.
 * **1.3.2** - Bug fix for possible missing HTML element in issue results.
 * **1.3.1** - Support for instant issues, bug fix for issue preventing login.
 * **1.3.0** - Endorsements, move regions, RMB quote/delete, User-Agent, removed ads.
