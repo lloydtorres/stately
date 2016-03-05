@@ -9,7 +9,7 @@ import android.os.Parcelable;
  */
 public class IssueOption implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/page=show_dilemma/dilemma=%d/template-overall=none";
-    public static final String POST_QUERY = "https://www.nationstates.net/page=enact_dilemma/dilemma=%d";
+    public static final String POST_QUERY = "https://www.nationstates.net/page=enact_dilemma/dilemma=%d/template-overall=none";
     public static final String SELECTED_HEADER = "selected";
     public static final String DISMISS_HEADER = "choice--1";
 
