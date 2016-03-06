@@ -166,7 +166,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(IssueOption op)
         {
             title.setText(context.getString(R.string.issue_position));
-            content.setText(op.content);
+            content.setText(SparkleHelper.getHtmlFormatting(op.content).toString());
         }
     }
 
