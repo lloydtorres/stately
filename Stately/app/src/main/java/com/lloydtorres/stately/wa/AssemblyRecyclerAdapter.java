@@ -13,7 +13,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyStats;
 import com.lloydtorres.stately.dto.Event;
-import com.lloydtorres.stately.dto.HappeningCard;
+import com.lloydtorres.stately.helpers.HappeningCard;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 

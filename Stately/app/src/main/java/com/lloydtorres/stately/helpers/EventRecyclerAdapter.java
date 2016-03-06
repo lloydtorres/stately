@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
-import com.lloydtorres.stately.dto.HappeningCard;
 
 import java.util.List;
 

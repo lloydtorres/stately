@@ -1,4 +1,4 @@
-package com.lloydtorres.stately.dto;
+package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
