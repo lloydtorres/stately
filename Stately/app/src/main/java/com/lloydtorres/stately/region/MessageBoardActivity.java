@@ -210,7 +210,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         // stop if this is the 11th time the query has been called moving forward
         if (direction == SCAN_FORWARD && offset >= 110)
         {
-            pastOffset = 10;
+            pastOffset = offset;
             SparkleHelper.makeSnackbar(fView, getString(R.string.rmb_backload_error));
             refreshRecycler(SCAN_FORWARD, 0);
             return;
