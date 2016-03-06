@@ -36,12 +36,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-01-28.
  * A fragment to display current issues.
  */
 public class IssuesFragment extends Fragment {
+    private static final String NEXT_ISSUE_REGEX = "\\$\\('#nextdilemmacountdown'\\)\\.countdown\\(\\{timestamp:new Date\\(([0-9]*?)\\)\\}\\);";
+
     private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
@@ -222,9 +226,24 @@ public class IssuesFragment extends Fragment {
             issues.add(issueCore);
         }
 
+        Element nextIssueUpdate = d.select("p.dilemmanextupdate").first();
+        if (nextIssueUpdate != null)
+        {
+            String nextUpdate = nextIssueUpdate.text();
+            issues.add(nextUpdate);
+        }
+
         if (issuesRaw.size() <= 0)
         {
             String nextUpdate = getString(R.string.no_issues);
+
+            Matcher m = Pattern.compile(NEXT_ISSUE_REGEX).matcher(d.html());
+            if (m.find())
+            {
+                long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
+                nextUpdate = String.format(getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(nextUpdateTime));
+            }
+
             issues.add(nextUpdate);
         }
 
