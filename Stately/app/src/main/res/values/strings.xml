@@ -237,6 +237,12 @@
     <string name="issue_leader_none">Leader</string>
     <string name="issue_religion_none">a major religion</string>
 
+    <!-- Telegrams -->
+    <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
+    <string name="telegrams_alert_region">Regional Telegram</string>
+    <string name="telegrams_alert_mod">Moderator Telegram</string>
+    <string name="telegrams_to">to %1$s</string>
+
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
