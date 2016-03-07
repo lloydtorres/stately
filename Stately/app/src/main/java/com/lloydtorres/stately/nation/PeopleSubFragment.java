@@ -126,7 +126,7 @@ public class PeopleSubFragment extends Fragment {
         String waCategory = mNation.govType.toLowerCase().replace(" ", "_").replace("-", "_");
         if (waCategoryDescriptors.containsKey(waCategory))
         {
-            summaryContent += "<br /><br />" + getString(waCategoryDescriptors.get(waCategory));
+            summaryContent += "<br /><br />" + String.format(getString(waCategoryDescriptors.get(waCategory)), mNation.demPlural);
         }
 
         summaryContent += "<br /><br />" + mNation.crime;
