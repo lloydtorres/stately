@@ -238,6 +238,8 @@
     <string name="issue_religion_none">a major religion</string>
 
     <!-- Telegrams -->
+    <string name="telegrams_folders">Folders</string>
+    <string name="telegrams_compose">Compose Telegram</string>
     <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
     <string name="telegrams_alert_region">Regional Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
