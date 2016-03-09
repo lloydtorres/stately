@@ -90,7 +90,6 @@ public class IssuesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -99,7 +98,7 @@ public class IssuesFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
-        toolbar.setTitle(getActivity().getString(R.string.menu_issues));
+        toolbar.setTitle(getString(R.string.menu_issues));
 
         if (mActivity != null && mActivity instanceof PrimeActivity)
         {
