@@ -147,7 +147,7 @@ public class ActivityFeedFragment extends Fragment {
         }
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
-        toolbar.setTitle(getActivity().getString(R.string.menu_activityfeed));
+        toolbar.setTitle(getString(R.string.menu_activityfeed));
 
         if (mActivity != null && mActivity instanceof PrimeActivity)
         {

@@ -99,7 +99,7 @@ public class AssemblyMainFragment extends Fragment {
         }
 
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
-        toolbar.setTitle(getActivity().getString(R.string.menu_wa));
+        toolbar.setTitle(getString(R.string.menu_wa));
 
         if (mActivity != null && mActivity instanceof PrimeActivity)
         {
