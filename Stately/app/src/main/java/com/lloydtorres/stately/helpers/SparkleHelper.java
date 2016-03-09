@@ -442,7 +442,6 @@ public class SparkleHelper {
 
         p.setDrawSliceText(false);
         p.setDescription("");
-        p.setHoleColorTransparent(true);
         p.setHoleRadius(60f);
         p.setTransparentCircleRadius(65f);
         p.setCenterTextSize(20);
