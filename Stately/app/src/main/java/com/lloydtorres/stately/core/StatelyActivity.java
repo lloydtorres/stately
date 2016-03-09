@@ -57,6 +57,7 @@ import com.lloydtorres.stately.login.SwitchNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 
 import org.simpleframework.xml.core.Persister;
@@ -75,9 +76,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     public static final int NATION_FRAGMENT = 0;
     public static final int ISSUES_FRAGMENT = 1;
-    public static final int ACTIVITY_FEED_FRAGMENT = 2;
-    public static final int REGION_FRAGMENT = 3;
-    public static final int WA_FRAGMENT = 4;
+    public static final int TELEGRAMS_FRAGMENT = 2;
+    public static final int ACTIVITY_FEED_FRAGMENT = 3;
+    public static final int REGION_FRAGMENT = 4;
+    public static final int WA_FRAGMENT = 5;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
@@ -167,6 +169,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 f = getIssuesFragment();
                 currentPosition = R.id.nav_issues;
                 break;
+            case TELEGRAMS_FRAGMENT:
+                f = getTelegramsFragment();
+                currentPosition = R.id.nav_telegrams;
             case ACTIVITY_FEED_FRAGMENT:
                 f = getActivityFeed();
                 currentPosition = R.id.nav_activityfeed;
@@ -284,6 +289,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     fChoose = getIssuesFragment();
                     navInit = ISSUES_FRAGMENT;
                     break;
+                case R.id.nav_telegrams:
+                    fChoose = getTelegramsFragment();
+                    break;
                 case R.id.nav_activityfeed:
                     fChoose = getActivityFeed();
                     navInit = ACTIVITY_FEED_FRAGMENT;
@@ -359,6 +367,16 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         IssuesFragment issuesFragment = new IssuesFragment();
         issuesFragment.setNationData(mNation);
         return issuesFragment;
+    }
+
+    /**
+     * Get a new telegrams fragment
+     * @return Telegrams fragment
+     */
+    private TelegramsFragment getTelegramsFragment()
+    {
+        TelegramsFragment telegramsFragment = new TelegramsFragment();
+        return telegramsFragment;
     }
 
     /**

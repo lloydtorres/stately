@@ -23,6 +23,7 @@
 
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
+    <string name="menu_telegrams">Telegrams</string>
     <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>

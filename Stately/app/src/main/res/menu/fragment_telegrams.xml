@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/nav_dossier_n"
+        android:id="@+id/nav_folders"
         android:icon="@drawable/ic_folder"
         android:title="@string/telegrams_folders"
         app:showAsAction="always" />
     <item
-        android:id="@+id/nav_subscriptions"
+        android:id="@+id/nav_compose"
         android:icon="@drawable/ic_compose"
         android:title="@string/telegrams_compose"
         app:showAsAction="always" />
