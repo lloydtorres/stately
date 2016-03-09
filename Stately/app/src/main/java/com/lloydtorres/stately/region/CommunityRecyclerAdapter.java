@@ -252,7 +252,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
             label.setText(String.format(context.getString(R.string.region_option_index), index));
-            content.setText(String.format(context.getString(R.string.poll_votes_template), option, votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            content.setText(String.format(context.getString(R.string.poll_votes_template), SparkleHelper.getHtmlFormatting(option), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
             optionLayout.addView(optionView);
         }
     }
