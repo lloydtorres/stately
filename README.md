@@ -18,6 +18,7 @@ Stately
 
 ### Revision History
 
+* **1.3.4** - Bug fixes and improvements.
 * **1.3.3** - Improved issue results screen.
 * **1.3.2** - Bug fix for possible missing HTML element in issue results.
 * **1.3.1** - Support for instant issues, bug fix for issue preventing login.

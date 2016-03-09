@@ -204,7 +204,17 @@ public class IssueDecisionActivity extends AppCompatActivity {
         issue.content = issueText;
 
         issue.options = new ArrayList<IssueOption>();
-        Elements optionsHolder = issueInfoRaw.select("ol.diloptions").first().getElementsByTag("li");
+
+        Element optionHolderMain = issueInfoRaw.select("ol.diloptions").first();
+        if (optionHolderMain == null)
+        {
+            // safety check
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
+            return;
+        }
+
+        Elements optionsHolder = optionHolderMain.select("li");
 
         int i = 0;
         for (Element option : optionsHolder)
@@ -212,7 +222,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             IssueOption issueOption = new IssueOption();
             issueOption.index = i++;
 
-            Element button = option.getElementsByTag("button").first();
+            Element button = option.select("button").first();
             if (button != null)
             {
                 issueOption.header = button.attr("name");
@@ -222,8 +232,16 @@ public class IssueDecisionActivity extends AppCompatActivity {
                 issueOption.header = IssueOption.SELECTED_HEADER;
             }
 
-            String optionContent = option.getElementsByTag("p").first().text();
-            issueOption.content = optionContent;
+            Element optionContentHolder = option.select("p").first();
+            if (optionContentHolder == null)
+            {
+                // safety check
+                mSwipeRefreshLayout.setRefreshing(false);
+                SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
+                return;
+            }
+
+            issueOption.content = optionContentHolder.text();
             issue.options.add(issueOption);
         }
 

@@ -114,7 +114,7 @@ public class RegionGovernanceSubFragment extends Fragment {
         View delegateView = inflater.inflate(R.layout.view_cardentry, null);
         TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
         TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
-        label.setText(position);
+        label.setText(SparkleHelper.getHtmlFormatting(position));
         SparkleHelper.activityLinkBuilder(getContext(), content, nation, nation, SparkleHelper.getNameFromId(nation), SparkleHelper.CLICKY_NATION_MODE);
         officersLayout.addView(delegateView);
     }
