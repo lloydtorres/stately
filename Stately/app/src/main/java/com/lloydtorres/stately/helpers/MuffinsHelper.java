@@ -102,6 +102,10 @@ public class MuffinsHelper {
             String rtId = rt.attr("id");
             tel.id = Integer.valueOf(rtId.replace("tgid-", ""));
 
+            // Get time of telegram
+            Element timeRaw = rt.select("time").first();
+            tel.timestamp = Long.valueOf(timeRaw.attr("data-epoch"));
+
             // Get type of telegram
             tel.type = Telegram.TELEGRAM_GENERIC;
             Element typeRaw = rt.select("div.tgtopline").first();

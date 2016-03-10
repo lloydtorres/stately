@@ -113,6 +113,7 @@ public class TelegramsFragment extends Fragment {
         activeFolder = new TelegramFolder();
         activeFolder.name = "Inbox";
         activeFolder.value = "inbox";
+        uniqueEnforcer = new HashSet<Integer>();
 
         // Restore state
         if (savedInstanceState != null)
@@ -266,7 +267,39 @@ public class TelegramsFragment extends Fragment {
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId, true);
         // @TODO: Do something with the scanned telegrams
+        processTelegramsForward(scannedTelegrams);
 
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Processes the scanned telegrams if scanning forward (i.e. new telegrams).
+     * @param scannedTelegrams Telegrams scanned from NS
+     */
+    private void processTelegramsForward(ArrayList<Telegram> scannedTelegrams)
+    {
+        int uniqueMessages = 0;
+
+        for (Telegram t : scannedTelegrams)
+        {
+            if (!uniqueEnforcer.contains(t.id))
+            {
+                telegrams.add(t);
+                uniqueEnforcer.add(t.id);
+                uniqueMessages++;
+            }
+        }
+
+        if (uniqueMessages <= 0)
+        {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
+        }
+
+        // We've reached the point where we already have the messages, so put everything back together
+        // @TODO: Modularize
+        //refreshRecycler(SCAN_FORWARD);
+        mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

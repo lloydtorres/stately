@@ -26,7 +26,7 @@ import java.util.List;
  * Created by Lloyd on 2016-03-08.
  * This contains data about a telegram.
  */
-public class Telegram implements Parcelable {
+public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final String GET_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none/folder=%s?start=%d";
 
     public static final int TELEGRAM_GENERIC = 0;
@@ -36,6 +36,7 @@ public class Telegram implements Parcelable {
 
     public int id;
     public int type;
+    public long timestamp;
     public String sender;
     public boolean isNation;
     public List<String> recepients;
@@ -47,6 +48,7 @@ public class Telegram implements Parcelable {
     protected Telegram(Parcel in) {
         id = in.readInt();
         type = in.readInt();
+        timestamp = in.readLong();
         sender = in.readString();
         isNation = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
@@ -68,6 +70,7 @@ public class Telegram implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeInt(type);
+        dest.writeLong(timestamp);
         dest.writeString(sender);
         dest.writeByte((byte) (isNation ? 0x01 : 0x00));
         if (recepients == null) {
@@ -92,4 +95,20 @@ public class Telegram implements Parcelable {
             return new Telegram[size];
         }
     };
+
+    @Override
+    public int compareTo(Telegram another) {
+        if (this.timestamp > another.timestamp)
+        {
+            return 1;
+        }
+        else if (this.timestamp == another.timestamp)
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 }

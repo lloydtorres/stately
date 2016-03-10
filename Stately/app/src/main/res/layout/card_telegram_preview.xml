@@ -26,7 +26,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_toLeftOf="@+id/card_telegram_preview_time"
                 android:layout_toStartOf="@+id/card_telegram_preview_time"
                 tools:text="Kaugummi" />
