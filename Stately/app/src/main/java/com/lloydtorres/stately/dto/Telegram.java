@@ -27,6 +27,8 @@ import java.util.List;
  * This contains data about a telegram.
  */
 public class Telegram implements Parcelable {
+    public static final String GET_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none/folder=%s?start=%d";
+
     public static final int TELEGRAM_GENERIC = 0;
     public static final int TELEGRAM_RECRUITMENT = 1;
     public static final int TELEGRAM_REGION = 2;
@@ -35,8 +37,9 @@ public class Telegram implements Parcelable {
     public int id;
     public int type;
     public String sender;
-    public List<String> nationRecepients;
-    public List<String> otherRecepients;
+    public boolean isNation;
+    public List<String> recepients;
+    public String preview;
     public String content;
 
     public Telegram() { super(); }
@@ -45,18 +48,14 @@ public class Telegram implements Parcelable {
         id = in.readInt();
         type = in.readInt();
         sender = in.readString();
+        isNation = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            nationRecepients = new ArrayList<String>();
-            in.readList(nationRecepients, String.class.getClassLoader());
+            recepients = new ArrayList<String>();
+            in.readList(recepients, String.class.getClassLoader());
         } else {
-            nationRecepients = null;
+            recepients = null;
         }
-        if (in.readByte() == 0x01) {
-            otherRecepients = new ArrayList<String>();
-            in.readList(otherRecepients, String.class.getClassLoader());
-        } else {
-            otherRecepients = null;
-        }
+        preview = in.readString();
         content = in.readString();
     }
 
@@ -70,18 +69,14 @@ public class Telegram implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(type);
         dest.writeString(sender);
-        if (nationRecepients == null) {
+        dest.writeByte((byte) (isNation ? 0x01 : 0x00));
+        if (recepients == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(nationRecepients);
+            dest.writeList(recepients);
         }
-        if (otherRecepients == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(otherRecepients);
-        }
+        dest.writeString(preview);
         dest.writeString(content);
     }
 

@@ -87,22 +87,6 @@
             android:orientation="horizontal"
             android:gravity="right">
             <ImageView
-                android:id="@+id/card_telegram_archive"
-                android:layout_marginRight="12dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_archive"/>
-            <ImageView
-                android:id="@+id/card_telegram_trash"
-                android:layout_marginRight="12dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_trash"/>
-            <ImageView
                 android:id="@+id/card_telegram_reply"
                 android:layout_marginRight="12dp"
                 android:layout_width="24dp"
