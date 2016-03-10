@@ -786,7 +786,7 @@ public class SparkleHelper {
 
     public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(String regex, String afterFormat, String content)
     {
-        regex = "(?s)(?i)" + regex;
+        regex = "(?i)" + regex;
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
