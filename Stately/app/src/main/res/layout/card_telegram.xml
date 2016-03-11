@@ -71,7 +71,7 @@
                 android:layout_toRightOf="@+id/card_telegram_alert_icon"
                 android:layout_toEndOf="@+id/card_telegram_alert_icon" />
         </RelativeLayout>
-        <TextView
+        <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/card_telegram_content"
             android:textSize="15sp"
             android:fontFamily="sans-serif"

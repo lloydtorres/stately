@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +42,12 @@ import java.util.List;
  * An adapter used for displaying telegrams. Can be used for previews and full telegrams.
  */
 public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int EMPTY_INDICATOR = -1;
+
     // constants for the different types of cards
     private final int PREVIEW_CARD = 0;
     private final int FULL_CARD = 1;
+    private final int EMPTY_CARD = 2;
 
     private Context context;
     private List<Telegram> telegrams;
@@ -49,7 +55,23 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public TelegramsAdapter(Context c, List<Telegram> t)
     {
         context = c;
+        setTelgrams(t);
+    }
+
+    /**
+     * Sets the contents of this telegram adapter.
+     * @param t List of telegrams
+     */
+    public void setTelgrams(List<Telegram> t)
+    {
         telegrams = t;
+        if (telegrams.size() <= 0)
+        {
+            Telegram empty = new Telegram();
+            empty.id = EMPTY_INDICATOR;
+            telegrams.add(empty);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -62,9 +84,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 View fullCard = inflater.inflate(R.layout.card_telegram, parent, false);
                 viewHolder = new TelegramCard(context, fullCard);
                 break;
-            default:
+            case PREVIEW_CARD:
                 View previewCard = inflater.inflate(R.layout.card_telegram_preview, parent, false);
                 viewHolder = new TelegramPreviewCard(context, previewCard);
+                break;
+            default:
+                View emptyCard = inflater.inflate(R.layout.card_post, parent, false);
+                viewHolder = new NoTelegramsCard(context, emptyCard);
                 break;
         }
 
@@ -78,7 +104,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 TelegramCard telegramCard = (TelegramCard) holder;
                 telegramCard.init(telegrams.get(position));
                 break;
-            default:
+            case PREVIEW_CARD:
                 TelegramPreviewCard telegramPreviewCard = (TelegramPreviewCard) holder;
                 telegramPreviewCard.init(telegrams.get(position));
                 break;
@@ -96,9 +122,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             return FULL_CARD;
         }
-        else
+        if (telegrams.get(position).preview != null)
         {
             return PREVIEW_CARD;
+        }
+        else
+        {
+            return EMPTY_CARD;
         }
     }
 
@@ -158,7 +188,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private RelativeLayout alertHolder;
         private ImageView alertIcon;
         private TextView alertText;
-        private TextView preview;
+        private HtmlTextView preview;
 
         public TelegramPreviewCard(Context c, View v) {
             super(v);
@@ -168,7 +198,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_preview_alert_holder);
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_preview_alert_icon);
             alertText = (TextView) v.findViewById(R.id.card_telegram_preview_alert_message);
-            preview = (TextView) v.findViewById(R.id.card_telegram_preview_content);
+            preview = (HtmlTextView) v.findViewById(R.id.card_telegram_preview_content);
         }
 
         public void init(Telegram t)
@@ -183,6 +213,20 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(t.timestamp));
             setAlertState(t.type, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(t.preview).toString());
+        }
+    }
+
+    public class NoTelegramsCard extends RecyclerView.ViewHolder {
+        public NoTelegramsCard(Context c, View v)
+        {
+            super(v);
+            TextView cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
+            TextView cardTime = (TextView) v.findViewById(R.id.card_post_time);
+            HtmlTextView cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+            cardTime.setVisibility(View.GONE);
+            cardAuthor.setVisibility(View.GONE);
+            cardContent.setText(c.getString(R.string.rmb_no_content));
+            cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
         }
     }
 }

@@ -100,7 +100,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public int compareTo(Telegram another) {
         if (this.timestamp > another.timestamp)
         {
-            return 1;
+            return -1;
         }
         else if (this.timestamp == another.timestamp)
         {
@@ -108,7 +108,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         }
         else
         {
-            return -1;
+            return 1;
         }
     }
 }

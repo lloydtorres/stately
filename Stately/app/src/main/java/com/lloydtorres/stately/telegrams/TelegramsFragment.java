@@ -55,6 +55,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -298,8 +299,24 @@ public class TelegramsFragment extends Fragment {
         }
 
         // We've reached the point where we already have the messages, so put everything back together
-        // @TODO: Modularize
-        //refreshRecycler(SCAN_FORWARD);
+        refreshRecycler();
+    }
+
+    /**
+     * Refreshes the contents of the recycler adapter.
+     */
+    private void refreshRecycler()
+    {
+        Collections.sort(telegrams);
+        if (mRecyclerAdapter == null)
+        {
+            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else
+        {
+
+        }
         mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
