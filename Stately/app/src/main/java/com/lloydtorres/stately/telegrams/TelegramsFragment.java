@@ -46,6 +46,7 @@ import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.MuffinsHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.region.MessageBoardRecyclerAdapter;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -299,14 +300,15 @@ public class TelegramsFragment extends Fragment {
         }
 
         // We've reached the point where we already have the messages, so put everything back together
-        refreshRecycler();
+        refreshRecycler(SCAN_FORWARD);
     }
 
     /**
      * Refreshes the contents of the recycler adapter.
      */
-    private void refreshRecycler()
+    private void refreshRecycler(int direction)
     {
+        int oldSize = 1;
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
@@ -315,11 +317,20 @@ public class TelegramsFragment extends Fragment {
         }
         else
         {
-
+            ((TelegramsAdapter) mRecyclerAdapter).setTelgrams(telegrams);
+            oldSize = mRecyclerAdapter.getItemCount();
         }
-        mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+
+        switch (direction)
+        {
+            case SCAN_FORWARD:
+                mLayoutManager.scrollToPosition(0);
+                break;
+            case SCAN_BACKWARD:
+                mLayoutManager.scrollToPosition(oldSize-1);
+                break;
+        }
     }
 
     /**
