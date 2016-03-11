@@ -67,9 +67,9 @@ import java.util.regex.Pattern;
  * Note that the "generics" in this function expect content from a NS telegrams page.
  */
 public class MuffinsHelper {
-    public static final String SEND_ARROW = "&rarr;";
-    public static final String SEND_ARROW_SENDER_REGEX = "<div class=\"tg_headers\">(.*?)&rarr;";
-    public static final String SEND_ARROW_RECEPIENT_REGEX = "&rarr;(.*?)<\\/div>";
+    public static final String SEND_ARROW = "→";
+    public static final String SEND_ARROW_SENDER_REGEX = "(?s)^(.*?)" + SEND_ARROW;
+    public static final String SEND_ARROW_RECEPIENT_REGEX = "(?s)" + SEND_ARROW + "(.*?)$";
     public static final Pattern SENDER_REGEX = Pattern.compile(SEND_ARROW_SENDER_REGEX);
     public static final Pattern RECEPIENT_REGEX = Pattern.compile(SEND_ARROW_RECEPIENT_REGEX);
 

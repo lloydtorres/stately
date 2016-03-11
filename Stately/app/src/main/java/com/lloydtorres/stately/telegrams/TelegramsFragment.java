@@ -156,6 +156,8 @@ public class TelegramsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        startQueryTelegrams(SCAN_FORWARD);
+
         return mView;
     }
 
