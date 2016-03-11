@@ -245,6 +245,7 @@
     <string name="telegrams_alert_region">Regional Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
     <string name="telegrams_to">to %1$s</string>
+    <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

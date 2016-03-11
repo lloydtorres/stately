@@ -270,8 +270,15 @@ public class TelegramsFragment extends Fragment {
 
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId, true);
-        // @TODO: Do something with the scanned telegrams
-        processTelegramsForward(scannedTelegrams);
+        switch (direction)
+        {
+            case SCAN_FORWARD:
+                processTelegramsForward(scannedTelegrams);
+                break;
+            default:
+                processTelegramsBackward(scannedTelegrams);
+                break;
+        }
 
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -294,6 +301,8 @@ public class TelegramsFragment extends Fragment {
             }
         }
 
+        pastOffset += uniqueMessages;
+
         if (uniqueMessages <= 0)
         {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
@@ -304,11 +313,53 @@ public class TelegramsFragment extends Fragment {
     }
 
     /**
+     * Processes the scanned telegrams if scanning backwards (i.e. past telegrams).
+     * @param scannedTelegrams Telegrams scanned from NS
+     */
+    private void processTelegramsBackward(ArrayList<Telegram> scannedTelegrams)
+    {
+        // If there's nothing in the current telegrams, then there's probably nothing in the past
+        if (telegrams.size() <= 0 || scannedTelegrams.size() <= 0)
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
+            return;
+        }
+
+        Collections.sort(scannedTelegrams);
+
+        // Count the number of obtained telegrams that are earlier than the current earliest
+        long earliestCurrentDate = telegrams.get(telegrams.size()-1).timestamp;
+        int timeCounter = 0;
+        for (Telegram t : scannedTelegrams)
+        {
+            if (t.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(t.id))
+            {
+                telegrams.add(t);
+                uniqueEnforcer.add(t.id);
+                timeCounter++;
+                pastOffset++;
+            }
+        }
+
+        // if no telegrams are from the past, complain
+        if (timeCounter < 1)
+        {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_backtrack_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+        else
+        {
+            refreshRecycler(SCAN_BACKWARD);
+        }
+    }
+
+    /**
      * Refreshes the contents of the recycler adapter.
      */
     private void refreshRecycler(int direction)
     {
-        int oldSize = 1;
+        int oldSize = 0;
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
@@ -317,8 +368,8 @@ public class TelegramsFragment extends Fragment {
         }
         else
         {
-            ((TelegramsAdapter) mRecyclerAdapter).setTelgrams(telegrams);
             oldSize = mRecyclerAdapter.getItemCount();
+            ((TelegramsAdapter) mRecyclerAdapter).setTelgrams(telegrams);
         }
         mSwipeRefreshLayout.setRefreshing(false);
 
@@ -328,7 +379,7 @@ public class TelegramsFragment extends Fragment {
                 mLayoutManager.scrollToPosition(0);
                 break;
             case SCAN_BACKWARD:
-                mLayoutManager.scrollToPosition(oldSize-1);
+                mLayoutManager.scrollToPosition(oldSize+1);
                 break;
         }
     }
