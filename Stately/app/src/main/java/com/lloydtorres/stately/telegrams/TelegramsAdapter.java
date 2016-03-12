@@ -238,7 +238,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
-            SparkleHelper.setBbCodeFormatting(context, content, telegram.content, false);
+            SparkleHelper.setTelegramHtmlFormatting(context, content, telegram.content);
 
             String curNation = SparkleHelper.getActiveUser(context).nationId;
             List<String> senderNationCheck = MuffinsHelper.getNationList(telegram.sender);

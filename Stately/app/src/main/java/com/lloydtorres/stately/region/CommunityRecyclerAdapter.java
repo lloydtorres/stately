@@ -202,7 +202,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             if (p.text != null && p.text.length() > 0)
             {
-                SparkleHelper.setBbCodeFormatting(context, content, p.text, true);
+                SparkleHelper.setBbCodeFormatting(context, content, p.text);
             }
             else
             {

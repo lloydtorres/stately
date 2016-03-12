@@ -921,33 +921,21 @@ public class SparkleHelper {
      * @param c App context
      * @param t TextView
      * @param content Target content
-     * @param strictWhitelist determines if the strict whitelist should be applied
      */
-    public static void setBbCodeFormatting(Context c, TextView t, String content, boolean strictWhitelist)
+    public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
         String holder = content.trim();
         holder = holder.replace("\n", "<br />");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-
-        if (strictWhitelist)
-        {
-            holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
-        }
-        else
-        {
-            holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
-            holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
-            holder = holder.replace("<a href=\"//" + DOMAIN_URI + "/", "<a href=" + BASE_URI);
-            holder = holder.replace("<a href=\"/", "<a href=" + BASE_URI);
-        }
+        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
         holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_NATION_MODE+"]");
-        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_REGION_MODE+"]");
+        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
@@ -976,6 +964,37 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, "\\[region=(.*?)\\]", CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
+        setStyledTextView(c, t, holder);
+    }
+
+    /**
+     * Formats raw HTML from a telegram into something the app can understand.
+     * @param c App context
+     * @param t TextView
+     * @param content Target content
+     */
+    public static void setTelegramHtmlFormatting(Context c, TextView t, String content)
+    {
+        String holder = content.trim();
+        holder = holder.replace("\n", "<br />");
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
+        holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
+        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+        holder = holder.replace("<a href=\"//" + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
+        holder = holder.replace("<a href=\"/", "<a href=\"" + BASE_URI);
+
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
+        holder = regexDoubleReplace(holder, "<a href=\"(?:"+BASE_URI+"|)nation=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "\">%s</a>");
+
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
+        holder = regexDoubleReplace(holder, "<a href=\"(?:"+BASE_URI+"|)region=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
+
+        //holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        //holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+
+        Log.v(APP_TAG, holder);
         setStyledTextView(c, t, holder);
     }
 
