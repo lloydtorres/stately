@@ -982,19 +982,16 @@ public class SparkleHelper {
         holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("<a href=\"//" + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
+        holder = holder.replace("<a href=\"//www." + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + BASE_URI);
 
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
         holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)nation=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "\">%s</a>");
 
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
+        holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)region=(\\w.*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
         holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)region=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
 
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-
-        Log.v(APP_TAG, holder);
 
         setStyledTextView(c, t, holder);
     }
