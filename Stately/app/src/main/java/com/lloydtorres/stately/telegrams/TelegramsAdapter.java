@@ -134,6 +134,25 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    public int getIndexOfId(int id)
+    {
+        for (int i=0; i<telegrams.size(); i++)
+        {
+            if (telegrams.get(i).id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Changes the telegram alert to a certain style depending on its type.
+     * @param type Telegram type
+     * @param holder
+     * @param icon
+     * @param text
+     */
     public void setAlertState(int type, RelativeLayout holder, ImageView icon, TextView text)
     {
         if (type != Telegram.TELEGRAM_GENERIC)

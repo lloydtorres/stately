@@ -199,6 +199,11 @@ public class TelegramReadActivity extends AppCompatActivity {
             telegrams = scannedTelegrams;
             mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
             mRecyclerView.setAdapter(mRecyclerAdapter);
+            int scrollIndex = ((TelegramsAdapter) mRecyclerAdapter).getIndexOfId(id);
+            if (scrollIndex != -1)
+            {
+                mLayoutManager.scrollToPosition(scrollIndex);
+            }
         }
         else
         {
