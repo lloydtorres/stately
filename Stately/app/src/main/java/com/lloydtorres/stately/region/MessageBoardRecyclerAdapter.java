@@ -180,7 +180,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             {
                 SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), SparkleHelper.CLICKY_NATION_MODE);
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(post.timestamp));
-                SparkleHelper.setBbCodeFormatting(context, cardContent, post.message);
+                SparkleHelper.setBbCodeFormatting(context, cardContent, post.message, true);
             }
             else
             {

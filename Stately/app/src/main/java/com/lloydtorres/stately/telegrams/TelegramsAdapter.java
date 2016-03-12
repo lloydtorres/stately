@@ -201,7 +201,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView alertIcon;
         private TextView alertText;
 
-        private TextView content;
+        private HtmlTextView content;
         private LinearLayout replyHolder;
         private ImageView reply;
         private ImageView replyAll;
@@ -215,7 +215,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_alert_holder);
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
             alertText = (TextView) v.findViewById(R.id.card_telegram_alert_message);
-            content = (TextView) v.findViewById(R.id.card_telegram_content);
+            content = (HtmlTextView) v.findViewById(R.id.card_telegram_content);
             replyHolder = (LinearLayout) v.findViewById(R.id.card_telegram_actions_holder);
             reply = (ImageView) v.findViewById(R.id.card_telegram_reply);
             replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
@@ -238,7 +238,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
-            SparkleHelper.setBbCodeFormatting(context, content, telegram.content);
+            SparkleHelper.setBbCodeFormatting(context, content, telegram.content, false);
 
             String curNation = SparkleHelper.getActiveUser(context).nationId;
             List<String> senderNationCheck = MuffinsHelper.getNationList(telegram.sender);

@@ -114,8 +114,9 @@ public class SparkleHelper {
     // Current NationStates API version
     public static final String API_VERSION = "7";
     // NationStates API
-    public static final String BASE_URI = "https://www.nationstates.net/";
-    public static final String BASE_URI_NOSLASH = "https://www.nationstates.net";
+    public static final String DOMAIN_URI = "nationstates.net";
+    public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
+    public static final String BASE_URI_NOSLASH = "https://www." + DOMAIN_URI;
 
     // Keys to user name and autologin and other session variables
     public static final String VAR_NAME = "var_name";
@@ -920,18 +921,31 @@ public class SparkleHelper {
      * @param c App context
      * @param t TextView
      * @param content Target content
+     * @param strictWhitelist determines if the strict whitelist should be applied
      */
-    public static void setBbCodeFormatting(Context c, TextView t, String content)
+    public static void setBbCodeFormatting(Context c, TextView t, String content, boolean strictWhitelist)
     {
         String holder = content.trim();
         holder = holder.replace("\n", "<br />");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
+
+        if (strictWhitelist)
+        {
+            holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
+        }
+        else
+        {
+            holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
+            holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+            holder = holder.replace("<a href=\"//" + DOMAIN_URI + "/", "<a href=" + BASE_URI);
+            holder = holder.replace("<a href=\"/", "<a href=" + BASE_URI);
+        }
 
         // Replace raw NS nation and region links with Stately versions
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
         holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_NATION_MODE+"]");
         holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_REGION_MODE+"]");
 
