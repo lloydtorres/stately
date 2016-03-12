@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.helpers.MuffinsHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -189,15 +190,66 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class TelegramCard extends RecyclerView.ViewHolder {
 
-        // @TODO
+        private Context context;
+        private Telegram telegram;
+
+        private TextView sender;
+        private TextView recepients;
+        private TextView timestamp;
+
+        private RelativeLayout alertHolder;
+        private ImageView alertIcon;
+        private TextView alertText;
+
+        private TextView content;
+        private LinearLayout replyHolder;
+        private ImageView reply;
+        private ImageView replyAll;
 
         public TelegramCard(Context c, View v) {
             super(v);
+            context = c;
+            sender = (TextView) v.findViewById(R.id.card_telegram_from);
+            recepients = (TextView) v.findViewById(R.id.card_telegram_to);
+            timestamp = (TextView) v.findViewById(R.id.card_telegram_time);
+            alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_alert_holder);
+            alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
+            alertText = (TextView) v.findViewById(R.id.card_telegram_alert_message);
+            content = (TextView) v.findViewById(R.id.card_telegram_content);
+            replyHolder = (LinearLayout) v.findViewById(R.id.card_telegram_actions_holder);
+            reply = (ImageView) v.findViewById(R.id.card_telegram_reply);
+            replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
         }
 
         public void init(Telegram t)
         {
+            telegram = t;
+            SparkleHelper.setHappeningsFormatting(context, sender, telegram.sender);
 
+            if (telegram.recepients != null && telegram.recepients.size() > 0)
+            {
+                String recepientsContent = String.format(context.getString(R.string.telegrams_to), Joiner.on(", ").skipNulls().join(telegram.recepients));
+                SparkleHelper.setHappeningsFormatting(context, recepients, recepientsContent);
+            }
+            else
+            {
+                recepients.setVisibility(View.GONE);
+            }
+
+            timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
+            setAlertState(telegram.type, alertHolder, alertIcon, alertText);
+            SparkleHelper.setBbCodeFormatting(context, content, telegram.content);
+
+            String curNation = SparkleHelper.getActiveUser(context).nationId;
+            List<String> senderNationCheck = MuffinsHelper.getNationList(telegram.sender);
+            if (senderNationCheck.size() > 0 && senderNationCheck.get(0).equals(curNation))
+            {
+                replyHolder.setVisibility(View.GONE);
+            }
+            else if (senderNationCheck.size() <= 0)
+            {
+                replyHolder.setVisibility(View.GONE);
+            }
         }
     }
 

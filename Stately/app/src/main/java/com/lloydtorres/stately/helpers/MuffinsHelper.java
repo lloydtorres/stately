@@ -58,6 +58,7 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +73,9 @@ public class MuffinsHelper {
     public static final String SEND_ARROW_RECEPIENT_REGEX = "(?s)" + SEND_ARROW + "(.*?)$";
     public static final Pattern SENDER_REGEX = Pattern.compile(SEND_ARROW_SENDER_REGEX);
     public static final Pattern RECEPIENT_REGEX = Pattern.compile(SEND_ARROW_RECEPIENT_REGEX);
+
+    public static final String NATION_FORMAT_REGEX = "@@(.*?)@@";
+    public static final Pattern NATION_REGEX = Pattern.compile(NATION_FORMAT_REGEX);
 
     public static final String NATION_LINK_PREFIX = "nation=";
     public static final String REGION_LINK_PREFIX = "region=";
@@ -225,6 +229,19 @@ public class MuffinsHelper {
     {
         rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"tgrecruitmovebutton\">.*?<\\/div>");
         rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<p class=\"replyline\">(.*?)<\\/p>");
+        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"inreplyto\">(.*?)<\\/div>");
+        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"rmbspacer\">(.*?)<\\/div>");
         targetTelegram.content = Jsoup.clean(rawHtml, Whitelist.basic().addTags("br"));
+    }
+
+    public static List<String> getNationList(String raw)
+    {
+        List<String> nationList = new ArrayList<String>();
+        Matcher nationMatcher = NATION_REGEX.matcher(raw);
+        while (nationMatcher.find())
+        {
+            nationList.add(SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_FORMAT_REGEX)));
+        }
+        return nationList;
     }
 }

@@ -76,7 +76,7 @@
             android:textSize="15sp"
             android:fontFamily="sans-serif"
             android:layout_marginTop="12dp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="The General Assembly resolution Ban on Booby-Trapped Aid was discarded by the WA for rule violations after garnering 11,721 votes in favor and 3,124 votes against." />
