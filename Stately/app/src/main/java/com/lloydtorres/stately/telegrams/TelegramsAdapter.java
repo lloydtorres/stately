@@ -228,7 +228,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (telegram.recepients != null && telegram.recepients.size() > 0)
             {
-                String recepientsContent = String.format(context.getString(R.string.telegrams_to), Joiner.on(", ").skipNulls().join(telegram.recepients));
+                String recepientsContent = String.format(context.getString(R.string.telegrams_recepients), Joiner.on(", ").skipNulls().join(telegram.recepients));
                 SparkleHelper.setHappeningsFormatting(context, recepients, recepientsContent);
             }
             else
