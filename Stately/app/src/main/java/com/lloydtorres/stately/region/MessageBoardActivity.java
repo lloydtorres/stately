@@ -377,7 +377,10 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             if (uniqueMessages <= 0)
             {
-                SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
+                if (!initialRun)
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
+                }
                 mSwipeRefreshLayout.setRefreshing(false);
             }
             
