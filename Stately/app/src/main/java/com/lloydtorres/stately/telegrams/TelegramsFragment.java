@@ -46,7 +46,6 @@ import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.MuffinsHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.lloydtorres.stately.region.MessageBoardRecyclerAdapter;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 

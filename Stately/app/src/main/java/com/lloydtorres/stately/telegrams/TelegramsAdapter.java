@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -181,9 +182,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class TelegramPreviewCard extends RecyclerView.ViewHolder {
+    public class TelegramPreviewCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context context;
+        private Telegram telegram;
         private TextView header;
         private TextView timestamp;
         private RelativeLayout alertHolder;
@@ -200,20 +202,33 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_preview_alert_icon);
             alertText = (TextView) v.findViewById(R.id.card_telegram_preview_alert_message);
             preview = (HtmlTextView) v.findViewById(R.id.card_telegram_preview_content);
+            v.setOnClickListener(this);
         }
 
         public void init(Telegram t)
         {
+            telegram = t;
             List<String> headerContents = new ArrayList<String>();
-            headerContents.add(t.sender);
+            headerContents.add(telegram.sender);
             if (t.recepients != null)
             {
                 headerContents.addAll(t.recepients);
             }
             SparkleHelper.setHappeningsFormatting(context, header, Joiner.on(", ").skipNulls().join(headerContents));
-            timestamp.setText(SparkleHelper.getReadableDateFromUTC(t.timestamp));
-            setAlertState(t.type, alertHolder, alertIcon, alertText);
-            preview.setText(SparkleHelper.getHtmlFormatting(t.preview).toString());
+            timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
+            setAlertState(telegram.type, alertHolder, alertIcon, alertText);
+            preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (telegram != null)
+            {
+                Intent readActivityIntent = new Intent(context, TelegramReadActivity.class);
+                readActivityIntent.putExtra(TelegramReadActivity.ID_DATA, telegram.id);
+                readActivityIntent.putExtra(TelegramReadActivity.TITLE_DATA, header.getText().toString());
+                context.startActivity(readActivityIntent);
+            }
         }
     }
 
