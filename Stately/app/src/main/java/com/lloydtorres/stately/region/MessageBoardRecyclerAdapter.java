@@ -24,6 +24,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -187,6 +188,12 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 cardAuthor.setVisibility(View.GONE);
                 cardContent.setText(context.getString(R.string.rmb_no_content));
                 cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0, 0, 0);
+                cardContent.setLayoutParams(params);
             }
         }
 
