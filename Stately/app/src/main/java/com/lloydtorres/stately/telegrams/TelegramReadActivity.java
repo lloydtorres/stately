@@ -108,7 +108,7 @@ public class TelegramReadActivity extends AppCompatActivity {
     private void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setTitle(String.format(getString(R.string.telegram_title), title));
 
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
