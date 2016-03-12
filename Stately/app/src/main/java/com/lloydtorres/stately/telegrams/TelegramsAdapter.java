@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -227,6 +228,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardAuthor.setVisibility(View.GONE);
             cardContent.setText(c.getString(R.string.rmb_no_content));
             cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, 0);
+            cardContent.setLayoutParams(params);
         }
     }
 }

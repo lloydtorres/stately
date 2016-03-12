@@ -75,7 +75,6 @@ public class TelegramsFragment extends Fragment {
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
     private static final int SCAN_FORWARD = 1;
-    private static final int SCAN_SAME = 2;
 
     private Activity mActivity;
     private View mView;
@@ -88,7 +87,7 @@ public class TelegramsFragment extends Fragment {
 
     private ArrayList<Telegram> telegrams;
     private ArrayList<TelegramFolder> folders;
-    private TelegramFolder activeFolder;
+    private int selectedFolder;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
 
@@ -112,9 +111,11 @@ public class TelegramsFragment extends Fragment {
         mView = inflater.inflate(R.layout.content_message_board, container, false);
         telegrams = new ArrayList<Telegram>();
         folders = new ArrayList<TelegramFolder>();
-        activeFolder = new TelegramFolder();
+        TelegramFolder activeFolder = new TelegramFolder();
         activeFolder.name = "Inbox";
         activeFolder.value = "inbox";
+        folders.add(activeFolder);
+        selectedFolder = 0;
         uniqueEnforcer = new HashSet<Integer>();
 
         // Restore state
@@ -123,7 +124,7 @@ public class TelegramsFragment extends Fragment {
             pastOffset = savedInstanceState.getInt(KEY_PAST_OFFSET, 0);
             telegrams = savedInstanceState.getParcelableArrayList(KEY_TELEGRAMS);
             folders = savedInstanceState.getParcelableArrayList(KEY_FOLDERS);
-            activeFolder = savedInstanceState.getParcelable(KEY_ACTIVE);
+            selectedFolder = savedInstanceState.getInt(KEY_ACTIVE, 0);
             rebuildUniqueEnforcer();
         }
 
@@ -143,11 +144,11 @@ public class TelegramsFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if (direction.equals(SwipyRefreshLayoutDirection.TOP))
                 {
-                    queryTelegrams(0, SCAN_FORWARD);
+                    queryTelegrams(0, SCAN_FORWARD, false);
                 }
                 else
                 {
-                    queryTelegrams(pastOffset, SCAN_BACKWARD);
+                    queryTelegrams(pastOffset, SCAN_BACKWARD, false);
                 }
             }
         });
@@ -173,7 +174,7 @@ public class TelegramsFragment extends Fragment {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryTelegrams(0, direction);
+                queryTelegrams(0, direction, true);
             }
         });
     }
@@ -181,8 +182,20 @@ public class TelegramsFragment extends Fragment {
     /**
      * Scrape and parse telegrams from NS site.
      */
-    private void queryTelegrams(final int offset, final int direction)
+    private void queryTelegrams(final int offset, final int direction, final boolean firstRun)
     {
+        TelegramFolder activeFolder = null;
+
+        if (selectedFolder < folders.size())
+        {
+            activeFolder = folders.get(selectedFolder);
+        }
+        else
+        {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+            return;
+        }
+
         String targetURL = String.format(Telegram.GET_TELEGRAM, activeFolder.value, offset);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -194,7 +207,7 @@ public class TelegramsFragment extends Fragment {
                             return;
                         }
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processRawTelegrams(d, direction);
+                        processRawTelegrams(d, direction, firstRun);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -238,8 +251,9 @@ public class TelegramsFragment extends Fragment {
      * Actually parse through the response sent by NS and build telegram objects.
      * @param d Document containing parsed response.
      * @param direction Direction the user is loading telegrams
+     * @param firstRun if first time running this process
      */
-    private void processRawTelegrams(Document d, int direction)
+    private void processRawTelegrams(Document d, int direction, boolean firstRun)
     {
         Element telegramsContainer = d.select("div#tglist").first();
         Element foldersContainer = d.select("select#tgfolder").first();
@@ -273,7 +287,7 @@ public class TelegramsFragment extends Fragment {
         switch (direction)
         {
             case SCAN_FORWARD:
-                processTelegramsForward(scannedTelegrams);
+                processTelegramsForward(scannedTelegrams, firstRun);
                 break;
             default:
                 processTelegramsBackward(scannedTelegrams);
@@ -286,8 +300,9 @@ public class TelegramsFragment extends Fragment {
     /**
      * Processes the scanned telegrams if scanning forward (i.e. new telegrams).
      * @param scannedTelegrams Telegrams scanned from NS
+     * @param firstRun if running this process for first time
      */
-    private void processTelegramsForward(ArrayList<Telegram> scannedTelegrams)
+    private void processTelegramsForward(ArrayList<Telegram> scannedTelegrams, boolean firstRun)
     {
         int uniqueMessages = 0;
 
@@ -303,7 +318,7 @@ public class TelegramsFragment extends Fragment {
 
         pastOffset += uniqueMessages;
 
-        if (uniqueMessages <= 0)
+        if (uniqueMessages <= 0 && !firstRun)
         {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
         }
@@ -385,6 +400,30 @@ public class TelegramsFragment extends Fragment {
     }
 
     /**
+     * Displays a dialog showing a list of folders.
+     * @param fm
+     */
+    private void showFoldersDialog(FragmentManager fm)
+    {
+        FoldersDialog foldersDialog = new FoldersDialog();
+        foldersDialog.setFolders(folders);
+        foldersDialog.setSelected(selectedFolder);
+        foldersDialog.show(fm, FoldersDialog.DIALOG_TAG);
+    }
+
+    public void setSelectedFolder(int selected)
+    {
+        if (selected < folders.size())
+        {
+            selectedFolder = selected;
+            telegrams = new ArrayList<Telegram>();
+            uniqueEnforcer = new HashSet<Integer>();
+            pastOffset = 0;
+            startQueryTelegrams(SCAN_FORWARD);
+        }
+    }
+
+    /**
      * This function rebuilds the set used to track unique messages after a restart.
      * Because set isn't parcelable :(
      */
@@ -403,6 +442,7 @@ public class TelegramsFragment extends Fragment {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_PAST_OFFSET, pastOffset);
+        savedInstanceState.putInt(KEY_ACTIVE, selectedFolder);
         if (telegrams != null)
         {
             savedInstanceState.putParcelableArrayList(KEY_TELEGRAMS, telegrams);
@@ -410,10 +450,6 @@ public class TelegramsFragment extends Fragment {
         if (folders != null)
         {
             savedInstanceState.putParcelableArrayList(KEY_FOLDERS, folders);
-        }
-        if (activeFolder != null)
-        {
-            savedInstanceState.putParcelable(KEY_ACTIVE, activeFolder);
         }
     }
 
@@ -428,6 +464,7 @@ public class TelegramsFragment extends Fragment {
         FragmentManager fm = getChildFragmentManager();
         switch (item.getItemId()) {
             case R.id.nav_folders:
+                showFoldersDialog(fm);
                 return true;
             case R.id.nav_compose:
                 return true;
