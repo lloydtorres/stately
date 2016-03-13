@@ -19,84 +19,87 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:contentPadding="16dp" >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/telegram_compose_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="12dp"
-                    android:layout_alignLeft="@+id/telegram_compose_from"
-                    android:layout_alignRight="@+id/telegram_compose_from"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:text="@string/telegrams_to"/>
-                <EditText
-                    android:id="@+id/telegram_compose_recipients"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/telegram_compose_to"
-                    android:layout_alignTop="@+id/telegram_compose_to"
-                    android:inputType="textCapWords|textNoSuggestions"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimaryText"
-                    android:background="@android:color/transparent"
-                    android:textColorHint="@color/colorSecondaryText"
-                    android:hint="@string/telegrams_to_hint"/>
-                <TextView
-                    android:id="@+id/telegram_compose_from"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="12dp"
-                    android:paddingRight="12dp"
-                    android:layout_below="@+id/telegram_compose_recipients"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorSecondaryText"
-                    android:text="@string/telegrams_from"/>
-                <TextView
-                    android:id="@+id/telegram_compose_sender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="12dp"
-                    android:layout_toRightOf="@+id/telegram_compose_from"
-                    android:layout_alignTop="@+id/telegram_compose_from"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimaryText"
-                    tools:text="Greater Tern"/>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/telegram_compose_refresher"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="12dp"
-        android:background="#EEE"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <android.support.v7.widget.CardView
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:contentPadding="16dp">
-            <EditText
-                android:id="@+id/telegram_compose_content"
+            android:orientation="vertical"
+            android:background="#EEE">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:contentPadding="16dp" >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/telegram_compose_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="12dp"
+                        android:layout_alignLeft="@+id/telegram_compose_from"
+                        android:layout_alignRight="@+id/telegram_compose_from"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorSecondaryText"
+                        android:text="@string/telegrams_to"/>
+                    <EditText
+                        android:id="@+id/telegram_compose_recipients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/telegram_compose_to"
+                        android:layout_alignTop="@+id/telegram_compose_to"
+                        android:inputType="textCapWords|textNoSuggestions"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorPrimaryText"
+                        android:background="@android:color/transparent"
+                        android:textColorHint="@color/colorSecondaryText"
+                        android:hint="@string/telegrams_to_hint"/>
+                    <TextView
+                        android:id="@+id/telegram_compose_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingRight="12dp"
+                        android:layout_below="@+id/telegram_compose_recipients"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorSecondaryText"
+                        android:text="@string/telegrams_from"/>
+                    <TextView
+                        android:id="@+id/telegram_compose_sender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:layout_toRightOf="@+id/telegram_compose_from"
+                        android:layout_alignTop="@+id/telegram_compose_from"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorPrimaryText"
+                        tools:text="Greater Tern"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="top"
-                android:textSize="15sp"
-                android:inputType="textMultiLine|textCapSentences"
-                android:background="@android:color/transparent"
-                android:hint="@string/telegrams_compose_hint"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:contentPadding="16dp">
+                <EditText
+                    android:id="@+id/telegram_compose_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:textSize="15sp"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/telegrams_compose_hint"/>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>
