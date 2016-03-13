@@ -45,6 +45,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
+import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -601,6 +602,20 @@ public class SparkleHelper {
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_ID, n);
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_MODE, mode);
         c.startActivity(exploreActivityLaunch);
+    }
+
+    /**
+     * Starts the TelegramComposeActivity and prefills it with data (if provided).
+     * @param c App context
+     * @param recipients A string of recipients, can be null or empty
+     * @param replyId Reply ID, can be filled or TelegramComposeActivity.NO_REPLY_ID
+     */
+    public static void startTelegramCompose(Context c, String recipients, int replyId)
+    {
+        Intent telegramComposeActivityLaunch = new Intent(c, TelegramComposeActivity.class);
+        telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.RECIPIENTS_DATA, recipients);
+        telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.REPLY_ID_DATA, replyId);
+        c.startActivity(telegramComposeActivityLaunch);
     }
 
     /**

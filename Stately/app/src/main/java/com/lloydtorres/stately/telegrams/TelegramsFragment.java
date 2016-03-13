@@ -466,6 +466,7 @@ public class TelegramsFragment extends Fragment {
                 showFoldersDialog(fm);
                 return true;
             case R.id.nav_compose:
+                SparkleHelper.startTelegramCompose(getContext(), null, TelegramComposeActivity.NO_REPLY_ID);
                 return true;
         }
         return super.onOptionsItemSelected(item);

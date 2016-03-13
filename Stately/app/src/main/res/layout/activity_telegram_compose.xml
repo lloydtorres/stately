@@ -44,9 +44,11 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/telegram_compose_to"
                     android:layout_alignTop="@+id/telegram_compose_to"
+                    android:inputType="textCapWords|textNoSuggestions"
                     android:textSize="15sp"
                     android:textColor="@color/colorPrimaryText"
                     android:background="@android:color/transparent"
+                    android:textColorHint="@color/colorSecondaryText"
                     android:hint="@string/telegrams_to_hint"/>
                 <TextView
                     android:id="@+id/telegram_compose_from"

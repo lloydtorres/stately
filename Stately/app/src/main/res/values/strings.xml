@@ -253,6 +253,7 @@
     <string name="telegrams_to_hint">Nations (comma separated)</string>
     <string name="telegrams_from">From</string>
     <string name="telegrams_compose_hint">Compose telegram…</string>
+    <string name="telegrams_send">Send Telegram</string>
     <string name="telegrams_success">Telegram sent.</string>
     <string name="telegrams_fail">Couldn\t send telegram. Try again in a bit.</string>
 
