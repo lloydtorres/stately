@@ -1008,6 +1008,8 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
 
+        holder = regexReplace(holder, "(?s)<p>(.*?)<\\/p>", "<br>%s");
+
         setStyledTextView(c, t, holder);
     }
 
