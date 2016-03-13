@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
@@ -65,6 +66,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         setToolbar(toolbar);
 
         recipientsField = (EditText) findViewById(R.id.telegram_compose_recipients);
+        recipientsField.setCustomSelectionActionModeCallback(new NullActionCallback());
         if (recipients != null && recipients.length() > 0)
         {
             recipientsField.setText(recipients);
@@ -74,6 +76,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         senderField.setText(SparkleHelper.getActiveUser(this).name);
 
         content = (EditText) findViewById(R.id.telegram_compose_content);
+        content.setCustomSelectionActionModeCallback(new NullActionCallback());
         content.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
