@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:textColor="@color/colorSecondaryText"
-            android:text="@string/telegrams_recepients"/>
+            android:text="@string/telegrams_recipients"/>
         <TextView
             android:id="@+id/card_telegram_time"
             android:textSize="14sp"

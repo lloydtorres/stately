@@ -58,7 +58,6 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,9 +69,9 @@ import java.util.regex.Pattern;
 public class MuffinsHelper {
     public static final String SEND_ARROW = "→";
     public static final String SEND_ARROW_SENDER_REGEX = "(?s)^(.*?)" + SEND_ARROW;
-    public static final String SEND_ARROW_RECEPIENT_REGEX = "(?s)" + SEND_ARROW + "(.*?)$";
+    public static final String SEND_ARROW_RECIPIENT_REGEX = "(?s)" + SEND_ARROW + "(.*?)$";
     public static final Pattern SENDER_REGEX = Pattern.compile(SEND_ARROW_SENDER_REGEX);
-    public static final Pattern RECEPIENT_REGEX = Pattern.compile(SEND_ARROW_RECEPIENT_REGEX);
+    public static final Pattern RECIPIENT_REGEX = Pattern.compile(SEND_ARROW_RECIPIENT_REGEX);
 
     public static final String NATION_FORMAT_REGEX = "@@(.*?)@@";
     public static final Pattern NATION_REGEX = Pattern.compile(NATION_FORMAT_REGEX);
@@ -141,11 +140,11 @@ public class MuffinsHelper {
                     processSenderHeader(senderHeaderRaw, tel, selfName);
                 }
 
-                Matcher recepientsMatcher = RECEPIENT_REGEX.matcher(headerRawHtml);
-                if (recepientsMatcher.find())
+                Matcher recipientsMatcher = RECIPIENT_REGEX.matcher(headerRawHtml);
+                if (recipientsMatcher.find())
                 {
-                    Document recepientsHeaderRaw = Jsoup.parse(recepientsMatcher.group(1), SparkleHelper.BASE_URI);
-                    processRecepientsHeader(recepientsHeaderRaw, tel);
+                    Document recipientsHeaderRaw = Jsoup.parse(recipientsMatcher.group(1), SparkleHelper.BASE_URI);
+                    processRecipientsHeader(recipientsHeaderRaw, tel);
                 }
             }
             else
@@ -199,24 +198,24 @@ public class MuffinsHelper {
     }
 
     /**
-     * Goes through the recepients part of the raw telegram header and builds a list of recepients.
+     * Goes through the recipients part of the raw telegram header and builds a list of recipients.
      * @param targetDoc See above
      * @param targetTelegram See above
      */
-    public static void processRecepientsHeader(Document targetDoc, Telegram targetTelegram)
+    public static void processRecipientsHeader(Document targetDoc, Telegram targetTelegram)
     {
-        targetTelegram.recepients = new ArrayList<String>();
+        targetTelegram.recipients = new ArrayList<String>();
 
         Elements nationsRaw = targetDoc.select("a.nlink");
         for (Element n : nationsRaw)
         {
-            targetTelegram.recepients.add("@@" + SparkleHelper.getIdFromName(n.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@");
+            targetTelegram.recipients.add("@@" + SparkleHelper.getIdFromName(n.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@");
         }
 
         Elements regionsRaw = targetDoc.select("a.rlink");
         for (Element r : regionsRaw)
         {
-            targetTelegram.recepients.add("%%" + SparkleHelper.getIdFromName(r.attr("href").replace(REGION_LINK_PREFIX, "")) + "%%");
+            targetTelegram.recipients.add("%%" + SparkleHelper.getIdFromName(r.attr("href").replace(REGION_LINK_PREFIX, "")) + "%%");
         }
     }
 

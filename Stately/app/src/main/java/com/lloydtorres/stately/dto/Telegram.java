@@ -28,6 +28,7 @@ import java.util.List;
  */
 public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final String GET_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none/folder=%s?start=%d";
+    public static final String SEND_TELEGRAM = "https://www.nationstates.net/page=telegrams";
     public static final String GET_CONVERSATION = "https://www.nationstates.net/page=tg/template-overall=none/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
@@ -40,7 +41,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public long timestamp;
     public String sender;
     public boolean isNation;
-    public List<String> recepients;
+    public List<String> recipients;
     public String preview;
     public String content;
 
@@ -53,10 +54,10 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         sender = in.readString();
         isNation = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            recepients = new ArrayList<String>();
-            in.readList(recepients, String.class.getClassLoader());
+            recipients = new ArrayList<String>();
+            in.readList(recipients, String.class.getClassLoader());
         } else {
-            recepients = null;
+            recipients = null;
         }
         preview = in.readString();
         content = in.readString();
@@ -74,11 +75,11 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         dest.writeLong(timestamp);
         dest.writeString(sender);
         dest.writeByte((byte) (isNation ? 0x01 : 0x00));
-        if (recepients == null) {
+        if (recipients == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(recepients);
+            dest.writeList(recipients);
         }
         dest.writeString(preview);
         dest.writeString(content);

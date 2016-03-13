@@ -194,7 +194,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private Telegram telegram;
 
         private TextView sender;
-        private TextView recepients;
+        private TextView recipients;
         private TextView timestamp;
 
         private RelativeLayout alertHolder;
@@ -210,7 +210,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(v);
             context = c;
             sender = (TextView) v.findViewById(R.id.card_telegram_from);
-            recepients = (TextView) v.findViewById(R.id.card_telegram_to);
+            recipients = (TextView) v.findViewById(R.id.card_telegram_to);
             timestamp = (TextView) v.findViewById(R.id.card_telegram_time);
             alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_alert_holder);
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
@@ -226,14 +226,14 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegram = t;
             SparkleHelper.setHappeningsFormatting(context, sender, telegram.sender);
 
-            if (telegram.recepients != null && telegram.recepients.size() > 0)
+            if (telegram.recipients != null && telegram.recipients.size() > 0)
             {
-                String recepientsContent = String.format(context.getString(R.string.telegrams_recepients), Joiner.on(", ").skipNulls().join(telegram.recepients));
-                SparkleHelper.setHappeningsFormatting(context, recepients, recepientsContent);
+                String recipientsContent = String.format(context.getString(R.string.telegrams_recipients), Joiner.on(", ").skipNulls().join(telegram.recipients));
+                SparkleHelper.setHappeningsFormatting(context, recipients, recipientsContent);
             }
             else
             {
-                recepients.setVisibility(View.GONE);
+                recipients.setVisibility(View.GONE);
             }
 
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
@@ -270,11 +270,11 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     List<String> recipientsRaw = new ArrayList<String>();
                     recipientsRaw.add(MuffinsHelper.getNationIdFromFormat(telegram.sender));
                     // Go through recipients if they exist
-                    if (telegram.recepients != null)
+                    if (telegram.recipients != null)
                     {
-                        for (int i=0; i<telegram.recepients.size(); i++)
+                        for (int i=0; i<telegram.recipients.size(); i++)
                         {
-                            String idChk = MuffinsHelper.getNationIdFromFormat(telegram.recepients.get(i));
+                            String idChk = MuffinsHelper.getNationIdFromFormat(telegram.recipients.get(i));
                             if (idChk != null && !idChk.equals(curNation))
                             {
                                 recipientsRaw.add(idChk);
@@ -322,9 +322,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegram = t;
             List<String> headerContents = new ArrayList<String>();
             headerContents.add(telegram.sender);
-            if (t.recepients != null)
+            if (t.recipients != null)
             {
-                headerContents.addAll(t.recepients);
+                headerContents.addAll(t.recipients);
             }
             SparkleHelper.setHappeningsFormatting(context, header, Joiner.on(", ").skipNulls().join(headerContents));
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));

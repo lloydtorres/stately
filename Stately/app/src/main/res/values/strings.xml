@@ -245,7 +245,7 @@
     <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
     <string name="telegrams_alert_region">Regional Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
-    <string name="telegrams_recepients">to %1$s</string>
+    <string name="telegrams_recipients">to %1$s</string>
     <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
     <string name="telegrams_empty_convo">No telegrams found.</string>
     <string name="telegrams_reply">Reply to Telegram</string>
