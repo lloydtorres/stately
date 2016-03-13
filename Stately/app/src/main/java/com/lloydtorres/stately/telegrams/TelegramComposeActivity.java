@@ -103,6 +103,10 @@ public class TelegramComposeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                // Respond to the action bar's Up/Home button
+                finish();
+                return true;
             case R.id.nav_send_telegram:
                 // @TODO Send telegram
                 return true;

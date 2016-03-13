@@ -53,6 +53,7 @@ import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
+import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -75,6 +76,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";
     public static final String EXPLORE_NAME = "name";
+    public static final String IS_ME = "isMe";
     public static final String IS_ENDORSABLE = "isEndorsable";
     public static final String IS_ENDORSED = "isEndorsed";
     public static final String IS_MOVEABLE = "isMoveable";
@@ -92,6 +94,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     private int mode;
     private TextView statusMessage;
     private boolean noRefresh;
+    private boolean isMe;
     private boolean isEndorsable;
     private boolean isEndorsed;
     private boolean isMoveable;
@@ -134,6 +137,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             id = savedInstanceState.getString(EXPLORE_ID);
             mode = savedInstanceState.getInt(EXPLORE_MODE);
             name = savedInstanceState.getString(EXPLORE_NAME);
+            isMe = savedInstanceState.getBoolean(IS_ME, false);
             isEndorsable = savedInstanceState.getBoolean(IS_ENDORSABLE, false);
             isEndorsed = savedInstanceState.getBoolean(IS_ENDORSED, false);
             isMoveable = savedInstanceState.getBoolean(IS_MOVEABLE, false);
@@ -168,7 +172,14 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             }
             else
             {
-                inflater.inflate(R.menu.activity_explore_default, menu);
+                if (!isMe)
+                {
+                    inflater.inflate(R.menu.activity_explore_nation_not_wa, menu);
+                }
+                else
+                {
+                    inflater.inflate(R.menu.activity_explore_default, menu);
+                }
             }
         }
         else if (mode == SparkleHelper.CLICKY_REGION_MODE)
@@ -298,9 +309,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                             boolean exploreWaMember = SparkleHelper.isWaMember(getApplicationContext(), nationResponse.waState);
 
                             // must not be same as session nation, must be in same region, must both be WA members
-                            if (!exploreId.equals(userId)
-                                    && exploreRegionId.equals(userRegionId)
-                                    && userWaMember && exploreWaMember)
+                            isMe = exploreId.equals(userId);
+                            if (!isMe && exploreRegionId.equals(userRegionId) && userWaMember && exploreWaMember)
                             {
                                 isEndorsable = true;
                                 isEndorsed = nationResponse.endorsements != null && nationResponse.endorsements.contains(userId);
@@ -712,6 +722,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 // Respond to the action bar's Up/Home button
                 finish();
                 return true;
+            case R.id.nav_send_telegram:
+                SparkleHelper.startTelegramCompose(this, name, TelegramComposeActivity.NO_REPLY_ID);
             case R.id.nav_endorse:
                 getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)));
                 return true;
@@ -736,6 +748,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         savedInstanceState.putString(EXPLORE_ID, id);
         savedInstanceState.putInt(EXPLORE_MODE, mode);
         savedInstanceState.putString(EXPLORE_NAME, name);
+        savedInstanceState.putBoolean(IS_ME, isMe);
         savedInstanceState.putBoolean(IS_ENDORSABLE, isEndorsable);
         savedInstanceState.putBoolean(IS_ENDORSED, isEndorsed);
         savedInstanceState.putBoolean(IS_MOVEABLE, isMoveable);
