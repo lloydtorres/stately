@@ -476,7 +476,6 @@ public class MessageBoardActivity extends AppCompatActivity {
                 UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
                 params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };
@@ -549,6 +548,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                 UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
                 params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
         };
