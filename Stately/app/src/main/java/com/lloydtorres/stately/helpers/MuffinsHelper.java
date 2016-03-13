@@ -235,14 +235,13 @@ public class MuffinsHelper {
         targetTelegram.content = Jsoup.clean(rawHtml, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
     }
 
-    public static List<String> getNationList(String raw)
+    public static String getNationIdFromFormat(String raw)
     {
-        List<String> nationList = new ArrayList<String>();
         Matcher nationMatcher = NATION_REGEX.matcher(raw);
-        while (nationMatcher.find())
+        if (nationMatcher.find())
         {
-            nationList.add(SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_FORMAT_REGEX)));
+            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_FORMAT_REGEX));
         }
-        return nationList;
+        return null;
     }
 }

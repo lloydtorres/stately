@@ -240,16 +240,57 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
             SparkleHelper.setTelegramHtmlFormatting(context, content, telegram.content);
 
-            String curNation = SparkleHelper.getActiveUser(context).nationId;
-            List<String> senderNationCheck = MuffinsHelper.getNationList(telegram.sender);
-            if (senderNationCheck.size() > 0 && senderNationCheck.get(0).equals(curNation))
+            final String curNation = SparkleHelper.getActiveUser(context).nationId;
+            String senderNationCheck = MuffinsHelper.getNationIdFromFormat(telegram.sender);
+            if (senderNationCheck != null && senderNationCheck.equals(curNation))
             {
                 replyHolder.setVisibility(View.GONE);
             }
-            else if (senderNationCheck.size() <= 0)
+            else if (senderNationCheck == null)
             {
                 replyHolder.setVisibility(View.GONE);
             }
+            else
+            {
+                replyHolder.setVisibility(View.VISIBLE);
+            }
+
+            reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String recipient = MuffinsHelper.getNationIdFromFormat(telegram.sender);
+                    SparkleHelper.startTelegramCompose(context, SparkleHelper.getNameFromId(recipient), telegram.id);
+                }
+            });
+
+            replyAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Add sender first
+                    List<String> recipientsRaw = new ArrayList<String>();
+                    recipientsRaw.add(MuffinsHelper.getNationIdFromFormat(telegram.sender));
+                    // Go through recipients if they exist
+                    if (telegram.recepients != null)
+                    {
+                        for (int i=0; i<telegram.recepients.size(); i++)
+                        {
+                            String idChk = MuffinsHelper.getNationIdFromFormat(telegram.recepients.get(i));
+                            if (idChk != null && !idChk.equals(curNation))
+                            {
+                                recipientsRaw.add(idChk);
+                            }
+                        }
+                    }
+
+                    List<String> recipients = new ArrayList<String>();
+                    for (String r : recipientsRaw)
+                    {
+                        recipients.add(SparkleHelper.getNameFromId(r));
+                    }
+                    String fRecipients = Joiner.on(", ").skipNulls().join(recipients);
+                    SparkleHelper.startTelegramCompose(context, fRecipients, telegram.id);
+                }
+            });
         }
     }
 

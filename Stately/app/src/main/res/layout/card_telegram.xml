@@ -84,21 +84,21 @@
             android:id="@+id/card_telegram_actions_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:orientation="horizontal"
             android:gravity="right">
             <ImageView
                 android:id="@+id/card_telegram_reply"
-                android:layout_marginRight="12dp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:padding="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_reply"/>
             <ImageView
                 android:id="@+id/card_telegram_reply_all"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:padding="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_reply_all"/>
