@@ -52,6 +52,7 @@ import android.content.Context;
 import android.os.Build;
 import android.widget.ImageView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -67,6 +68,9 @@ import com.squareup.picasso.Picasso;
 public class DashHelper {
     private static final int HALF_MINUTE_MS = 30000;
     private static final int RATE_LIMIT = 45;
+    private static final DefaultRetryPolicy RETRY_POLICY = new DefaultRetryPolicy(HALF_MINUTE_MS,
+                                                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
     private static DashHelper mDashie;
     private static Context mContext;
@@ -116,6 +120,7 @@ public class DashHelper {
     {
         if (isNotLockout())
         {
+            req.setRetryPolicy(RETRY_POLICY);
             getRequestQueue().add(req);
             return true;
         }
