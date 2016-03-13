@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final String GET_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none/folder=%s?start=%d";
-    public static final String SEND_TELEGRAM = "https://www.nationstates.net/page=telegrams";
+    public static final String SEND_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none";
     public static final String GET_CONVERSATION = "https://www.nationstates.net/page=tg/template-overall=none/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
