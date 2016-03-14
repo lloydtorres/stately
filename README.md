@@ -18,6 +18,7 @@ Stately
 
 ### Revision History
 
+* **1.4.0** - Telegram support, increased network timeout.
 * **1.3.4** - Bug fixes and improvements.
 * **1.3.3** - Improved issue results screen.
 * **1.3.2** - Bug fix for possible missing HTML element in issue results.
