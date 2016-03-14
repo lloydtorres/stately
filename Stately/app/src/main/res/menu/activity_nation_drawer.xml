@@ -12,6 +12,10 @@
             android:icon="@drawable/ic_menu_issues"
             android:title="@string/menu_issues" />
         <item
+            android:id="@+id/nav_telegrams"
+            android:icon="@drawable/ic_menu_telegrams"
+            android:title="@string/menu_telegrams" />
+        <item
             android:id="@+id/nav_activityfeed"
             android:icon="@drawable/ic_activityfeed"
             android:title="@string/menu_activityfeed" />

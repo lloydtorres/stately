@@ -23,6 +23,7 @@
 
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
+    <string name="menu_telegrams">Telegrams</string>
     <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>
@@ -236,6 +237,27 @@
     <string name="issue_capital_none">%1$s City</string>
     <string name="issue_leader_none">Leader</string>
     <string name="issue_religion_none">a major religion</string>
+
+    <!-- Telegrams -->
+    <string name="telegram_title">Telegram: %1$s</string>
+    <string name="telegrams_folders">Folders</string>
+    <string name="telegrams_compose">Compose Telegram</string>
+    <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
+    <string name="telegrams_alert_region">Regional Telegram</string>
+    <string name="telegrams_alert_mod">Moderator Telegram</string>
+    <string name="telegrams_recipients">to %1$s</string>
+    <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
+    <string name="telegrams_empty_convo">No telegrams found.</string>
+    <string name="telegrams_reply">Reply to Telegram</string>
+    <string name="telegrams_to">To</string>
+    <string name="telegrams_to_hint">Nations (comma separated)</string>
+    <string name="telegrams_from">From</string>
+    <string name="telegrams_compose_hint">Compose telegram…</string>
+    <string name="telegrams_send">Send Telegram</string>
+    <string name="telegrams_empty_recipients">No recipients found for this telegram.</string>
+    <string name="telegrams_empty_content">Telegram seems empty.</string>
+    <string name="telegrams_invalid_recipient">Something seems wrong with the recipients.</string>
+    <string name="telegrams_fail">Couldn\'t send telegram. Try again in a bit.</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>

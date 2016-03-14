@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:contentPadding="20dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/card_telegram_preview_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/card_telegram_preview_from"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingRight="10dp"
+                android:textColor="@color/colorPrimaryText"
+                android:layout_toLeftOf="@+id/card_telegram_preview_time"
+                android:layout_toStartOf="@+id/card_telegram_preview_time"
+                tools:text="Kaugummi" />
+            <TextView
+                android:id="@+id/card_telegram_preview_time"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textColor="@color/colorSecondaryText"
+                tools:text="3 days ago"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/card_telegram_preview_alert_holder"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            tools:visibility="visible">
+            <ImageView
+                android:id="@+id/card_telegram_preview_alert_icon"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/ic_alert_recruitment"/>
+            <TextView
+                android:id="@+id/card_telegram_preview_alert_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorChart1"
+                android:fontFamily="sans-serif-light"
+                tools:text="@string/telegrams_alert_recruitment"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:layout_toRightOf="@+id/card_telegram_preview_alert_icon"
+                android:layout_toEndOf="@+id/card_telegram_preview_alert_icon" />
+        </RelativeLayout>
+        <org.sufficientlysecure.htmltextview.HtmlTextView
+            android:id="@+id/card_telegram_preview_content"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryText"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="The General Assembly resolution Ban on Booby-Trapped Aid was discarded by the WA for rule violations after garnering 11,721 votes in favor and 3,124 votes against." />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

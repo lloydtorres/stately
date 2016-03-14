@@ -58,6 +58,18 @@
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
         <activity
+            android:name=".telegrams.TelegramReadActivity"
+            android:label="@string/menu_telegrams"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.WithStatusBar">
+        </activity>
+        <activity
+            android:name=".telegrams.TelegramComposeActivity"
+            android:label="@string/menu_telegrams"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.WithStatusBar">
+        </activity>
+        <activity
             android:name=".region.MessageBoardActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorPortrait"
