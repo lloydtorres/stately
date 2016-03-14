@@ -100,6 +100,12 @@ public class TelegramComposeActivity extends AppCompatActivity {
         if (recipients != null && recipients.length() > 0)
         {
             recipientsField.setText(recipients);
+            if (replyId != NO_REPLY_ID)
+            {
+                // If this is a reply telegram, don't let user edit this field
+                recipientsField.setEnabled(false);
+                recipientsField.setFocusable(false);
+            }
         }
 
         senderField = (TextView) findViewById(R.id.telegram_compose_sender);
