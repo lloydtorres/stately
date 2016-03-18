@@ -16,8 +16,5 @@
 #   public *;
 #}
 
--keep class org.ocpsoft.prettytime.i18n.**
--keep public class * extends com.orm.SugarRecord {
-    public protected *;
-}
--keep class com.orm.** { *; }
+-keep class com.lloydtorres.stately.dto.** { *; }
+-dontwarn com.squareup.okhttp.**
