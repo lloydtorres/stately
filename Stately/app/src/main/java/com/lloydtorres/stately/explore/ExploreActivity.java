@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
-import com.android.volley.RedirectError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
@@ -530,7 +529,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             @Override
             public void onErrorResponse(VolleyError error) {
                 // actual success since post gets redirected
-                if (error instanceof RedirectError)
+                if (error instanceof ServerError)
                 {
                     if (isEndorsed)
                     {

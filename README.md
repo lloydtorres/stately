@@ -48,7 +48,7 @@ Stately uses the following open-source libraries:
 * [Simple XML](http://simple.sourceforge.net/)
 * [Sugar ORM](https://github.com/satyan/sugar)
 * [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)
-* [Volley](https://github.com/mcxiaoke/android-volley)
+* [Volley](http://developer.android.com/training/volley/index.html)
 
 Stately also uses the following proprietary libraries:
 
