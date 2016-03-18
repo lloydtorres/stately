@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -68,7 +67,7 @@ public class NationFragment extends Fragment {
     private TextView nationName;
     private TextView nationPrename;
     private ImageView nationBanner;
-    private RoundedImageView nationFlag;
+    private ImageView nationFlag;
 
     // variables used for tabs
     private PagerSlidingTabStrip tabs;
@@ -187,7 +186,7 @@ public class NationFragment extends Fragment {
         nationName = (TextView) view.findViewById(R.id.nation_name);
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
-        nationFlag = (RoundedImageView) view.findViewById(R.id.nation_flag);
+        nationFlag = (ImageView) view.findViewById(R.id.nation_flag);
 
         /*
         // Adjust nation banner height if needed

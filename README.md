@@ -43,8 +43,6 @@ Stately uses the following open-source libraries:
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
 * [Picasso](https://github.com/square/picasso)
-* [PrettyTime](http://www.ocpsoft.org/prettytime/)
-* [Shape Image View](https://github.com/siyamed/android-shape-imageview)
 * [Simple XML](http://simple.sourceforge.net/)
 * [Sugar ORM](https://github.com/satyan/sugar)
 * [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)

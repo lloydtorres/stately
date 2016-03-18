@@ -40,7 +40,6 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -96,7 +95,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
     private Nation mNation;
     private ImageView nationBanner;
-    private RoundedImageView nationFlag;
+    private ImageView nationFlag;
     private TextView nationNameView;
 
     @Override
@@ -202,7 +201,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     {
         View view = navigationView.getHeaderView(0);
         nationBanner = (ImageView) view.findViewById(R.id.nav_banner_back);
-        nationFlag = (RoundedImageView) view.findViewById(R.id.nav_flag);
+        nationFlag = (ImageView) view.findViewById(R.id.nav_flag);
         nationNameView = (TextView) view.findViewById(R.id.nav_nation_name);
 
         nationNameView.setText(mNation.name);

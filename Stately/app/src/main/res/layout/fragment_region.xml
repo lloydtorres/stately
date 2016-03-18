@@ -38,8 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"/>
 
-                <com.github.siyamed.shapeimageview.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <ImageView
                     android:visibility="gone"
                     android:id="@+id/region_flag"
                     android:layout_height="100dp"
@@ -48,10 +47,7 @@
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     android:src="@drawable/gray"
-                    app:siRadius="2dp"
-                    app:siBorderWidth="1dp"
-                    app:siBorderColor="#AAA"
-                    tools:visibility="visible"/>
+                    android:background="@drawable/border_light_grey"/>
 
                 <TextView
                     android:id="@+id/region_name"

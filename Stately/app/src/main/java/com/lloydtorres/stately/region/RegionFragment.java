@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -40,7 +41,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.astuetz.PagerSlidingTabStrip;
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -83,7 +83,7 @@ public class RegionFragment extends Fragment {
     // variables used for mRegion views
     private TextView regionName;
     private TextView regionPop;
-    private RoundedImageView regionFlag;
+    private ImageView regionFlag;
 
     // variables used for tabs
     private PagerSlidingTabStrip tabs;
@@ -215,7 +215,7 @@ public class RegionFragment extends Fragment {
     {
         regionName = (TextView) view.findViewById(R.id.region_name);
         regionPop = (TextView) view.findViewById(R.id.region_pop);
-        regionFlag = (RoundedImageView) view.findViewById(R.id.region_flag);
+        regionFlag = (ImageView) view.findViewById(R.id.region_flag);
 
         initRegionData(view);
     }

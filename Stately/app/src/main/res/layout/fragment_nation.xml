@@ -40,8 +40,7 @@
                     android:adjustViewBounds="true"
                     android:src="@drawable/gray" />
 
-                <com.github.siyamed.shapeimageview.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <ImageView
                     android:id="@+id/nation_flag"
                     android:layout_height="100dp"
                     android:layout_width="wrap_content"
@@ -50,9 +49,7 @@
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     android:src="@drawable/gray"
-                    app:siRadius="2dp"
-                    app:siBorderWidth="1dp"
-                    app:siBorderColor="#AAA" />
+                    android:background="@drawable/border_light_grey" />
 
                 <TextView
                     android:id="@+id/nation_name"
