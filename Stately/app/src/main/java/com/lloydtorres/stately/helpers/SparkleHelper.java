@@ -50,10 +50,11 @@ import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -210,7 +211,7 @@ public class SparkleHelper {
             .precomputed();
 
     // Initialized to provide human-readable date strings for Date objects
-    public static final PrettyTime prettyTime = new PrettyTime();
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
 
     /**
      * VALIDATION
@@ -291,13 +292,53 @@ public class SparkleHelper {
 
     /**
      * Return a human-readable date string from a UTC timestamp.
+     * @param c App context
      * @param sec Unix timestamp.
      * @return A human-readable date string (e.g. moments ago, 1 week ago).
      */
-    public static String getReadableDateFromUTC(long sec)
+    public static String getReadableDateFromUTC(Context c, long sec)
     {
-        Date d = new Date(sec * 1000L);
-        return prettyTime.format(d);
+        long curTime = System.currentTimeMillis();
+        long inputTime = sec * 1000L;
+        long timeDiff = inputTime - curTime;
+        long timeDiffAbs = Math.abs(timeDiff);
+
+        // If the time diff is zero or positive, it's in the future; past otherwise
+        String pastIndicator = (timeDiff >= 0) ? c.getString(R.string.time_from_now) : c.getString(R.string.time_ago);
+        String template = c.getString(R.string.time_generic_template);
+
+        if (timeDiffAbs < 60000L)
+        {
+            // less than a minute
+            template = String.format(c.getString(R.string.time_moments_template), c.getString(R.string.time_moments), pastIndicator);
+        }
+        else if (timeDiffAbs < 3600000L)
+        {
+            // less than an hour
+            BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
+            int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            template = String.format(template, minutes, English.plural(c.getString(R.string.time_minute), minutes), pastIndicator);
+        }
+        else if (timeDiffAbs < 86400000L)
+        {
+            // less than a day
+            BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
+            int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            template = String.format(template, hours, English.plural(c.getString(R.string.time_hour), hours), pastIndicator);
+        }
+        else if (timeDiffAbs < 604800000L)
+        {
+            // less than a week
+            BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
+            int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            template = String.format(template, days, English.plural(c.getString(R.string.time_day), days), pastIndicator);
+        }
+        else
+        {
+            template = sdf.format(new Date(inputTime));
+        }
+
+        return template;
     }
 
     /**
@@ -631,10 +672,11 @@ public class SparkleHelper {
 
     /**
      * Calculates the remaining time for a WA resolution in human-readable form.
+     * @param c App context
      * @param hoursElapsed Number of hours passed since voting started
      * @return Time remaining in human-readable form
      */
-    public static String calculateResolutionEnd(int hoursElapsed)
+    public static String calculateResolutionEnd(Context c, int hoursElapsed)
     {
         Calendar cal = new GregorianCalendar();
 
@@ -649,7 +691,7 @@ public class SparkleHelper {
         cal.add(Calendar.HOUR, WA_RESOLUTION_DURATION - hoursElapsed);
 
         Date d = cal.getTime();
-        return prettyTime.format(d);
+        return getReadableDateFromUTC(c, d.getTime() / 1000L);
     }
 
     /**

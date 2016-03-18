@@ -47,7 +47,7 @@ public class HappeningCard extends RecyclerView.ViewHolder {
     {
         if (ev.timestamp != EventRecyclerAdapter.EMPTY_INDICATOR)
         {
-            cardTime.setText(SparkleHelper.getReadableDateFromUTC(ev.timestamp));
+            cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, ev.timestamp));
             SparkleHelper.setHappeningsFormatting(context, cardContent, ev.content);
         }
         else

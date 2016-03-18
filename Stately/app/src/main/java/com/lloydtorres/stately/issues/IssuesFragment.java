@@ -256,7 +256,7 @@ public class IssuesFragment extends Fragment {
             if (m.find())
             {
                 long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
-                nextUpdate = String.format(getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(nextUpdateTime));
+                nextUpdate = String.format(getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
             }
 
             issues.add(nextUpdate);

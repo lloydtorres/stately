@@ -179,7 +179,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (post.id != EMPTY_INDICATOR)
             {
                 SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), SparkleHelper.CLICKY_NATION_MODE);
-                cardTime.setText(SparkleHelper.getReadableDateFromUTC(post.timestamp));
+                cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
                 SparkleHelper.setBbCodeFormatting(context, cardContent, post.message);
             }
             else

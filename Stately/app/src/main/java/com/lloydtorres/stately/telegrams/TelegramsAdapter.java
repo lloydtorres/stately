@@ -236,7 +236,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 recipients.setVisibility(View.GONE);
             }
 
-            timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
+            timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
             SparkleHelper.setTelegramHtmlFormatting(context, content, telegram.content);
 
@@ -327,7 +327,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 headerContents.addAll(t.recipients);
             }
             SparkleHelper.setHappeningsFormatting(context, header, Joiner.on(", ").skipNulls().join(headerContents));
-            timestamp.setText(SparkleHelper.getReadableDateFromUTC(telegram.timestamp));
+            timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());
         }
