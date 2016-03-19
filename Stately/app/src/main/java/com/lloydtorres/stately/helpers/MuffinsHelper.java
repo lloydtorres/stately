@@ -219,6 +219,11 @@ public class MuffinsHelper {
         }
     }
 
+    public static final Pattern NS_TG_RECRUIT_BUTTON = Pattern.compile("(?i)(?s)<div class=\"tgrecruitmovebutton\">(.*?)<\\/div>");
+    public static final Pattern NS_TG_REPLY_LINE = Pattern.compile("(?i)(?s)<p class=\"replyline\">(.*?)<\\/p>");
+    public static final Pattern NS_TG_REPLY_TO = Pattern.compile("(?i)(?s)<div class=\"inreplyto\">(.*?)<\\/div>");
+    public static final Pattern NS_TG_SPACER = Pattern.compile("(?i)(?s)<div class=\"rmbspacer\">(.*?)<\\/div>");
+
     /**
      * Takes in the raw HTML for a given telegram and processes its data.
      * @param rawHtml See above
@@ -227,10 +232,10 @@ public class MuffinsHelper {
     public static void processTelegramContent(String rawHtml, Telegram targetTelegram)
     {
         rawHtml = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + rawHtml;
-        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"tgrecruitmovebutton\">(.*?)<\\/div>");
-        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<p class=\"replyline\">(.*?)<\\/p>");
-        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"inreplyto\">(.*?)<\\/div>");
-        rawHtml = SparkleHelper.regexRemove(rawHtml, "(?s)<div class=\"rmbspacer\">(.*?)<\\/div>");
+        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_RECRUIT_BUTTON);
+        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_REPLY_LINE);
+        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_REPLY_TO);
+        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_SPACER);
         targetTelegram.content = Jsoup.clean(rawHtml, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
     }
 
@@ -239,7 +244,7 @@ public class MuffinsHelper {
         Matcher nationMatcher = NATION_REGEX.matcher(raw);
         if (nationMatcher.find())
         {
-            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_FORMAT_REGEX));
+            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_REGEX));
         }
         return null;
     }

@@ -530,9 +530,9 @@ public class MessageBoardActivity extends AppCompatActivity {
                 if (replyTarget != null)
                 {
                     String quoteMessage = replyTarget.message;
-                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote\\](.*?)\\[\\/quote\\]");
-                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]");
-                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
+                    quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_2);
                     quoteMessage = String.format(getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
                     newMessage = quoteMessage + newMessage;
                 }

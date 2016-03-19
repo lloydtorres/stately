@@ -818,14 +818,13 @@ public class SparkleHelper {
      * @param content Target content
      * @return
      */
-    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(String regex, String content, boolean isName)
+    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName)
     {
-        regex = "(?i)" + regex;
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
 
-        Matcher m = Pattern.compile(regex).matcher(holder);
+        Matcher m = regex.matcher(holder);
         while (m.find())
         {
             String properFormat;
@@ -844,14 +843,13 @@ public class SparkleHelper {
         return replacePairs.entrySet();
     }
 
-    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(String regex, String afterFormat, String content)
+    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content)
     {
-        regex = "(?i)" + regex;
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
 
-        Matcher m = Pattern.compile(regex).matcher(holder);
+        Matcher m = regex.matcher(holder);
         while (m.find())
         {
             String properFormat = String.format(afterFormat, m.group(1), m.group(2));
@@ -870,7 +868,7 @@ public class SparkleHelper {
      * @param mode If nation or region
      * @return
      */
-    public static String linkifyHelper(Context c, TextView t, String content, String regex, int mode)
+    public static String linkifyHelper(Context c, TextView t, String content, Pattern regex, int mode)
     {
         String holder = content;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, true);
@@ -881,6 +879,9 @@ public class SparkleHelper {
 
         return holder;
     }
+
+    public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
+    public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
 
     /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
@@ -893,8 +894,8 @@ public class SparkleHelper {
         String holder = getHtmlFormatting(content).toString();
 
         // Linkify nations (@@NATION@@)
-        holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, "%%(.*?)%%", CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_REGION, CLICKY_REGION_MODE);
 
         if (holder.contains("EO:"))
         {
@@ -976,6 +977,34 @@ public class SparkleHelper {
     }
 
     /**
+     * Regex patterns
+     */
+
+    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*");
+    public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](.*?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.*?\\](.*?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(.*?)\\]");
+    public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](.*?)\\[\\/region\\]");
+    public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(.*?)\\]");
+    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]");
+
+    public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
+    public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
+    public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
+    public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
+    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
+    public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
+    public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
+    public static final Pattern RAW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)");
+    public static final Pattern RAW_LINK_2 = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)");
+
+    /**
      * Transform NationStates' BBCode-formatted content into HTML
      * @param c App context
      * @param t TextView
@@ -990,11 +1019,11 @@ public class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
-        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "]");
-        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
+        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, CLICKY_REGION_MODE);
+        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "]");
+        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
@@ -1005,36 +1034,39 @@ public class SparkleHelper {
         holder = holder.replace("&lt;", "<");
         holder = holder.replace("&gt;", ">");
         holder = holder.replace("[*]", "<li>");
-        holder = regexExtract(holder, "(?s)\\[list=.*?\\](.*?)\\[\\/list\\]");
-        holder = regexExtract(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]");
         holder = Jsoup.clean(holder, Whitelist.relaxed());
 
         // Q: Why don't you use the BBCode parser instead of doing this manually? :(
         // A: Because it misses some tags for some reason, so it's limited to lists for now.
-        holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
-        holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
-        holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
-        holder = regexReplace(holder, "(?s)\\[pre\\](.*?)\\[\\/pre\\]", "<code>%s</code>");
-        holder = regexReplace(holder, "(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
-        holder = regexDoubleReplace(holder, "(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]", "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
-        holder = regexExtract(holder, "(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
-        holder = regexExtract(holder, "(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
-        holder = regexDoubleReplace(holder, "(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]", "<font color=\"%s\">%s</font>");
-        holder = regexDoubleReplace(holder, "(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]", "<a href=\"%s\">%s</a>");
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, BBCODE_B, "<b>%s</b>");
+        holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
+        holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
+        holder = regexReplace(holder, BBCODE_PRE, "<code>%s</code>");
+        holder = regexReplace(holder, BBCODE_SPOILER, "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
+        holder = regexDoubleReplace(holder, BBCODE_SPOILER_2, "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
+        holder = regexExtract(holder, BBCODE_PROPOSAL);
+        holder = regexExtract(holder, BBCODE_RESOLUTION);
+        holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
+        holder = regexDoubleReplace(holder, BBCODE_URL, "<a href=\"%s\">%s</a>");
+        holder = regexReplace(holder, RAW_LINK, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, RAW_LINK_2, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
 
         // Linkify nations and regions
-        holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\[nation=.*?\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\[nation=(.*?)\\]", CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\[region\\](.*?)\\[\\/region\\]", CLICKY_REGION_MODE);
-        holder = linkifyHelper(c, t, holder, "\\[region=(.*?)\\]", CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder);
     }
+
+    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI + "|)nation=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI + "|)region=(\\w.*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:\" + BASE_URI + \"|)region=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
      * Formats raw HTML from a telegram into something the app can understand.
@@ -1054,15 +1086,15 @@ public class SparkleHelper {
         holder = holder.replace("<a href=\"//www." + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + BASE_URI);
 
-        holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)nation=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "\">%s</a>");
+        holder = regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "\">%s</a>");
 
-        holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)region=(\\w.*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
-        holder = regexDoubleReplace(holder, "<a href=\"(?:" + BASE_URI + "|)region=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>", "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
+        holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
+        holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
 
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, RAW_LINK, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexReplace(holder, RAW_LINK_2, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
 
-        holder = regexReplace(holder, "(?s)<p>(.*?)<\\/p>", "<br>%s");
+        holder = regexReplace(holder, PARAGRAPH, "<br>%s");
 
         setStyledTextView(c, t, holder);
     }
@@ -1102,7 +1134,7 @@ public class SparkleHelper {
      * @param afterFormat String template
      * @return Returns content with all matched substrings replaced
      */
-    public static String regexReplace(String target, String regexBefore, String afterFormat)
+    public static String regexReplace(String target, Pattern regexBefore, String afterFormat)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
@@ -1124,7 +1156,7 @@ public class SparkleHelper {
      * @param afterFormat String template
      * @return
      */
-    public static String regexDoubleReplace(String target, String regexBefore, String afterFormat)
+    public static String regexDoubleReplace(String target, Pattern regexBefore, String afterFormat)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
@@ -1146,11 +1178,11 @@ public class SparkleHelper {
      * @param content Original string
      * @return Formatted string
      */
-    public static String regexQuoteFormatHelper(Context c, TextView t, String regex, String content)
+    public static String regexQuoteFormatHelper(Context c, TextView t, Pattern regex, String content)
     {
         String holder = content;
         Map<String, String> replacePairs = new HashMap<String, String>();
-        Matcher m = Pattern.compile(regex).matcher(holder);
+        Matcher m = regex.matcher(holder);
         while (m.find())
         {
             String properFormat = String.format("<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
@@ -1161,9 +1193,13 @@ public class SparkleHelper {
             String replacer = n.getValue();
             holder = holder.replace(n.getKey(), replacer);
         }
-        holder = linkifyHelper(c, t, holder, "@@(.*?)@@", CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
         return holder;
     }
+
+    public static final Pattern BBCODE_QUOTE = Pattern.compile("(?i)(?s)\\[quote\\](.*?)\\[\\/quote\\]");
+    public static final Pattern BBCODE_QUOTE_1 = Pattern.compile("(?i)(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]");
+    public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
 
     /**
      * Used for formatting blockquotes
@@ -1176,13 +1212,13 @@ public class SparkleHelper {
         String holder = content;
 
         // handle basic quotes
-        holder = regexReplace(holder, "(?s)\\[quote\\](.*?)\\[\\/quote\\]", "<blockquote><i>%s</i></blockquote>");
+        holder = regexReplace(holder, BBCODE_QUOTE, "<blockquote><i>%s</i></blockquote>");
 
         // handle quotes with parameters on them
         // in this case, [quote=name;id]...
-        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]", holder);
+        holder = regexQuoteFormatHelper(context, t, BBCODE_QUOTE_1, holder);
         // in this case, just [quote=name]...
-        holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]", holder);
+        holder = regexQuoteFormatHelper(context, t, BBCODE_QUOTE_2, holder);
 
         return holder;
     }
@@ -1193,7 +1229,7 @@ public class SparkleHelper {
      * @param regex Regex
      * @return
      */
-    public static String regexExtract(String target, String regex)
+    public static String regexExtract(String target, Pattern regex)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
@@ -1211,7 +1247,7 @@ public class SparkleHelper {
      * @param regex Regex
      * @return
      */
-    public static String regexRemove(String target, String regex)
+    public static String regexRemove(String target, Pattern regex)
     {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
