@@ -50,6 +50,8 @@ import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.kefirsf.bb.BBProcessorFactory;
+import org.kefirsf.bb.TextProcessor;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
@@ -982,7 +984,7 @@ public class SparkleHelper {
     public static void setBbCodeFormatting(Context c, TextView t, String content)
     {
         String holder = content.trim();
-        holder = holder.replace("\n", "<br />");
+        holder = holder.replace("\n", "<br>");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
@@ -991,11 +993,24 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$", CLICKY_NATION_MODE);
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$", CLICKY_REGION_MODE);
         holder = linkifyHelper(c, t, holder, "\\b(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*", CLICKY_REGION_MODE);
-        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url="+EXPLORE_TARGET+"%s/"+CLICKY_NATION_MODE+"]");
+        holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]", "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "]");
         holder = regexReplace(holder, "\\[url=(?:https?:\\/\\/|)(?:www.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]", "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
 
         // Basic BBcode processing
         holder = holder.replace("[hr]", "<br>");
+
+        // Process lists first (they're problematic!)
+        TextProcessor processor = BBProcessorFactory.getInstance().create(c.getResources().openRawResource(R.raw.bbcode));
+        holder = processor.process(holder);
+        holder = holder.replace("&lt;", "<");
+        holder = holder.replace("&gt;", ">");
+        holder = holder.replace("[*]", "<li>");
+        holder = regexExtract(holder, "(?s)\\[list=.*?\\](.*?)\\[\\/list\\]");
+        holder = regexExtract(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]");
+        holder = Jsoup.clean(holder, Whitelist.relaxed());
+
+        // Q: Why don't you use the BBCode parser instead of doing this manually? :(
+        // A: Because it misses some tags for some reason, so it's limited to lists for now.
         holder = regexReplace(holder, "(?s)\\[b\\](.*?)\\[\\/b\\]", "<b>%s</b>");
         holder = regexReplace(holder, "(?s)\\[i\\](.*?)\\[\\/i\\]", "<i>%s</i>");
         holder = regexReplace(holder, "(?s)\\[u\\](.*?)\\[\\/u\\]", "<u>%s</u>");
@@ -1009,9 +1024,6 @@ public class SparkleHelper {
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexReplace(holder, "(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
-
-        // Format lists
-        holder = regexListFormat(holder);
 
         // Linkify nations and regions
         holder = linkifyHelper(c, t, holder, "\\[nation\\](.*?)\\[\\/nation\\]", CLICKY_NATION_MODE);
@@ -1069,8 +1081,8 @@ public class SparkleHelper {
             {
                 ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
+                logError(e.toString());
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
@@ -1171,31 +1183,6 @@ public class SparkleHelper {
         holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]", holder);
         // in this case, just [quote=name]...
         holder = regexQuoteFormatHelper(context, t, "(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]", holder);
-
-        return holder;
-    }
-
-    /**
-     * Formats a raw BBCode list into a pretty HTML list
-     * @param content Original content
-     * @return Formatted content
-     */
-    public static String regexListFormat(String content)
-    {
-        String holder = content;
-
-        // Switch unordered lists
-        holder = regexReplace(holder, "(?s)\\[list\\](.*?)\\[\\/list\\]", "<ul>%s</ul>");
-
-        // Switch ordered lists
-        holder = regexDoubleReplace(holder, "(?s)\\[list=(.*?)\\](.*?)\\[\\/list\\]", "<ol=\"%s\">%s</ol>");
-
-        // Switch bullets
-        holder = regexReplace(holder, "(?s)\\[\\*\\](((?!<ul>|<\\/ul>|<ol|<\\/ol>).)*?)(?=\\[\\*\\])", "<li>%s</li>");
-        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?)(?=<\\/ul>|<\\/ol>)", "<li>%s</li>");
-
-        // Handle nested lists
-        holder = regexReplace(holder, "(?s)\\[\\*\\](.*?<\\/li>(?:<\\/ul>|<\\/ol>))", "<li>%s</li>");
 
         return holder;
     }
