@@ -16,8 +16,10 @@
 
 package com.lloydtorres.stately.nation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,23 +142,42 @@ public class EconomySubFragment extends Fragment {
         List<Entry> chartEntries = new ArrayList<Entry>();
         Sectors sectors = mNation.sectors;
 
+        List<Integer> sectorColours = new ArrayList<Integer>();
+        Context context = getContext();
+
         int i = 0;
-        chartLabels.add(getString(R.string.government));
-        chartEntries.add(new Entry((float) sectors.government, i++));
-        chartLabels.add(getString(R.string.state_owned));
-        chartEntries.add(new Entry((float) sectors.stateOwned, i++));
-        chartLabels.add(getString(R.string.private_sector));
-        chartEntries.add(new Entry((float) sectors.privateSector, i++));
-        chartLabels.add(getString(R.string.black_market));
-        chartEntries.add(new Entry((float) sectors.blackMarket, i++));
+        if (sectors.government > 0D)
+        {
+            chartLabels.add(getString(R.string.government));
+            chartEntries.add(new Entry((float) sectors.government, i++));
+            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector0));
+        }
+        if (sectors.stateOwned > 0D)
+        {
+            chartLabels.add(getString(R.string.state_owned));
+            chartEntries.add(new Entry((float) sectors.stateOwned, i++));
+            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector1));
+        }
+        if (sectors.privateSector > 0D)
+        {
+            chartLabels.add(getString(R.string.private_sector));
+            chartEntries.add(new Entry((float) sectors.privateSector, i++));
+            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector2));
+        }
+        if (sectors.blackMarket > 0D)
+        {
+            chartLabels.add(getString(R.string.black_market));
+            chartEntries.add(new Entry((float) sectors.blackMarket, i++));
+            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector3));
+        }
 
         // Disable data labels, set colours and data
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
-        dataSet.setColors(SparkleHelper.sectorColours, getActivity());
+        dataSet.setColors(sectorColours);
         PieData dataFull = new PieData(chartLabels, dataSet);
 
-        sectorChart = SparkleHelper.getFormattedPieChart(getContext(), sectorChart, chartLabels);
+        sectorChart = SparkleHelper.getFormattedPieChart(context, sectorChart, chartLabels);
         sectorChart.setData(dataFull);
         sectorChart.invalidate();
     }

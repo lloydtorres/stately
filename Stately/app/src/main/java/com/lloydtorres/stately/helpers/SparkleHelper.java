@@ -183,13 +183,6 @@ public class SparkleHelper {
             R.color.colorFreedom14
     };
 
-    // An array of colours used for each sector
-    public static final int[] sectorColours = { R.color.colorSector0,
-            R.color.colorSector1,
-            R.color.colorSector2,
-            R.color.colorSector3,
-    };
-
     // An array of colours used to decorate the SwipeRefresher
     public static final int[] refreshColours = {    R.color.colorPrimary,
             R.color.colorPrimaryDark,

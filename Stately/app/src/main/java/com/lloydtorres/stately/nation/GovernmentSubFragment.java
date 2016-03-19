@@ -16,8 +16,10 @@
 
 package com.lloydtorres.stately.nation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,40 +132,91 @@ public class GovernmentSubFragment extends Fragment {
         List<Entry> chartEntries = new ArrayList<Entry>();
         GovBudget budget = mNation.govBudget;
 
+        List<Integer> budgetColours = new ArrayList<Integer>();
+        Context context = getContext();
+
         // Have to add it one by one, how horrifying
         int i = 0;
-        chartLabels.add(getString(R.string.administration));
-        chartEntries.add(new Entry((float) budget.admin, i++));
-        chartLabels.add(getString(R.string.defense));
-        chartEntries.add(new Entry((float) budget.defense, i++));
-        chartLabels.add(getString(R.string.education));
-        chartEntries.add(new Entry((float) budget.education, i++));
-        chartLabels.add(getString(R.string.environment));
-        chartEntries.add(new Entry((float) budget.environment, i++));
-        chartLabels.add(getString(R.string.healthcare));
-        chartEntries.add(new Entry((float) budget.healthcare, i++));
-        chartLabels.add(getString(R.string.industry));
-        chartEntries.add(new Entry((float) budget.industry, i++));
-        chartLabels.add(getString(R.string.international_aid));
-        chartEntries.add(new Entry((float) budget.internationalAid, i++));
-        chartLabels.add(getString(R.string.law_and_order));
-        chartEntries.add(new Entry((float) budget.lawAndOrder, i++));
-        chartLabels.add(getString(R.string.public_transport));
-        chartEntries.add(new Entry((float) budget.publicTransport, i++));
-        chartLabels.add(getString(R.string.social_policy));
-        chartEntries.add(new Entry((float) budget.socialPolicy, i++));
-        chartLabels.add(getString(R.string.spirituality));
-        chartEntries.add(new Entry((float) budget.spirituality, i++));
-        chartLabels.add(getString(R.string.welfare));
-        chartEntries.add(new Entry((float) budget.welfare, i++));
+        if (budget.admin > 0D)
+        {
+            chartLabels.add(getString(R.string.administration));
+            chartEntries.add(new Entry((float) budget.admin, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart0));
+        }
+        if (budget.defense > 0D)
+        {
+            chartLabels.add(getString(R.string.defense));
+            chartEntries.add(new Entry((float) budget.defense, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart1));
+        }
+        if (budget.education > 0D)
+        {
+            chartLabels.add(getString(R.string.education));
+            chartEntries.add(new Entry((float) budget.education, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart2));
+        }
+        if (budget.environment > 0D)
+        {
+            chartLabels.add(getString(R.string.environment));
+            chartEntries.add(new Entry((float) budget.environment, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart3));
+        }
+        if (budget.healthcare > 0D)
+        {
+            chartLabels.add(getString(R.string.healthcare));
+            chartEntries.add(new Entry((float) budget.healthcare, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart4));
+        }
+        if (budget.industry > 0D)
+        {
+            chartLabels.add(getString(R.string.industry));
+            chartEntries.add(new Entry((float) budget.industry, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart5));
+        }
+        if (budget.internationalAid > 0D)
+        {
+            chartLabels.add(getString(R.string.international_aid));
+            chartEntries.add(new Entry((float) budget.internationalAid, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart6));
+        }
+        if (budget.lawAndOrder > 0D)
+        {
+            chartLabels.add(getString(R.string.law_and_order));
+            chartEntries.add(new Entry((float) budget.lawAndOrder, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart7));
+        }
+        if (budget.publicTransport > 0D)
+        {
+            chartLabels.add(getString(R.string.public_transport));
+            chartEntries.add(new Entry((float) budget.publicTransport, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart8));
+        }
+        if (budget.socialPolicy > 0D)
+        {
+            chartLabels.add(getString(R.string.social_policy));
+            chartEntries.add(new Entry((float) budget.socialPolicy, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart9));
+        }
+        if (budget.spirituality > 0D)
+        {
+            chartLabels.add(getString(R.string.spirituality));
+            chartEntries.add(new Entry((float) budget.spirituality, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart10));
+        }
+        if (budget.welfare > 0D)
+        {
+            chartLabels.add(getString(R.string.welfare));
+            chartEntries.add(new Entry((float) budget.welfare, i++));
+            budgetColours.add(ContextCompat.getColor(context, R.color.colorChart11));
+        }
 
         // Disable chart labels, set colours, set data
         PieDataSet dataSet = new PieDataSet(chartEntries, "");
         dataSet.setDrawValues(false);
-        dataSet.setColors(SparkleHelper.chartColours, getActivity());
+        dataSet.setColors(budgetColours);
         PieData dataFull = new PieData(chartLabels, dataSet);
 
-        budgetChart = SparkleHelper.getFormattedPieChart(getContext(), budgetChart, chartLabels);
+        budgetChart = SparkleHelper.getFormattedPieChart(context, budgetChart, chartLabels);
         budgetChart.setData(dataFull);
         budgetChart.invalidate();
     }
