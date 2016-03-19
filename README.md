@@ -10,6 +10,7 @@ Stately
 * Browse your nation's data: stats, people, government, economy, and happenings.
 * Respond to issues encountered by your nation.
 * Login and switch between different nations.
+* Read, compose and reply to telegrams.
 * Browse through regional factbooks and communities.
 * Read more and post on your own region's RMB.
 * Observe and vote on current World Assembly proceedings.
