@@ -994,8 +994,6 @@ public class SparkleHelper {
     public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
-    public static final Pattern RAW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\?\\[\\<]+)");
-    public static final Pattern RAW_LINK_2 = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)");
 
     /**
      * Transform NationStates' BBCode-formatted content into HTML
@@ -1041,8 +1039,8 @@ public class SparkleHelper {
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, BBCODE_URL, "<a href=\"%s\">%s</a>");
-        holder = regexReplace(holder, RAW_LINK, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, RAW_LINK_2, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
 
         // Linkify nations and regions
@@ -1084,10 +1082,10 @@ public class SparkleHelper {
         holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
         holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
 
-        holder = regexReplace(holder, RAW_LINK, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = regexReplace(holder, RAW_LINK_2, "<a href=\"%s\">" + c.getString(R.string.clicky_link) + "</a>");
-
         holder = regexReplace(holder, PARAGRAPH, "<br>%s");
+
+        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
 
         setStyledTextView(c, t, holder);
     }
