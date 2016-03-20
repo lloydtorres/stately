@@ -175,7 +175,7 @@ public class PeopleSubFragment extends Fragment {
             {
                 chartLabels.add(causes.get(i).type);
             }
-            Entry n = new Entry((float) causes.get(i).value, i);
+            Entry n = new Entry(causes.get(i).value, i);
             chartEntries.add(n);
         }
 

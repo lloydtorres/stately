@@ -31,21 +31,21 @@ import org.simpleframework.xml.Root;
 public class Sectors implements Parcelable {
 
     @Element(name="BLACKMARKET")
-    public double blackMarket;
+    public float blackMarket;
     @Element(name="GOVERNMENT")
-    public double government;
+    public float government;
     @Element(name="INDUSTRY")
-    public double privateSector;
+    public float privateSector;
     @Element(name="PUBLIC")
-    public double stateOwned;
+    public float stateOwned;
 
     public Sectors() { super(); }
 
     protected Sectors(Parcel in) {
-        blackMarket = in.readDouble();
-        government = in.readDouble();
-        privateSector = in.readDouble();
-        stateOwned = in.readDouble();
+        blackMarket = in.readFloat();
+        government = in.readFloat();
+        privateSector = in.readFloat();
+        stateOwned = in.readFloat();
     }
 
     @Override
@@ -55,10 +55,10 @@ public class Sectors implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(blackMarket);
-        dest.writeDouble(government);
-        dest.writeDouble(privateSector);
-        dest.writeDouble(stateOwned);
+        dest.writeFloat(blackMarket);
+        dest.writeFloat(government);
+        dest.writeFloat(privateSector);
+        dest.writeFloat(stateOwned);
     }
 
     @SuppressWarnings("unused")

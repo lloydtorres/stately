@@ -137,76 +137,76 @@ public class GovernmentSubFragment extends Fragment {
 
         // Have to add it one by one, how horrifying
         int i = 0;
-        if (budget.admin > 0D)
+        if (budget.admin > 0f)
         {
             chartLabels.add(getString(R.string.administration));
-            chartEntries.add(new Entry((float) budget.admin, i++));
+            chartEntries.add(new Entry(budget.admin, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart0));
         }
-        if (budget.defense > 0D)
+        if (budget.defense > 0f)
         {
             chartLabels.add(getString(R.string.defense));
-            chartEntries.add(new Entry((float) budget.defense, i++));
+            chartEntries.add(new Entry(budget.defense, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart1));
         }
-        if (budget.education > 0D)
+        if (budget.education > 0f)
         {
             chartLabels.add(getString(R.string.education));
-            chartEntries.add(new Entry((float) budget.education, i++));
+            chartEntries.add(new Entry(budget.education, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart2));
         }
-        if (budget.environment > 0D)
+        if (budget.environment > 0f)
         {
             chartLabels.add(getString(R.string.environment));
-            chartEntries.add(new Entry((float) budget.environment, i++));
+            chartEntries.add(new Entry(budget.environment, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart3));
         }
-        if (budget.healthcare > 0D)
+        if (budget.healthcare > 0f)
         {
             chartLabels.add(getString(R.string.healthcare));
-            chartEntries.add(new Entry((float) budget.healthcare, i++));
+            chartEntries.add(new Entry(budget.healthcare, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart4));
         }
-        if (budget.industry > 0D)
+        if (budget.industry > 0f)
         {
             chartLabels.add(getString(R.string.industry));
-            chartEntries.add(new Entry((float) budget.industry, i++));
+            chartEntries.add(new Entry(budget.industry, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart5));
         }
-        if (budget.internationalAid > 0D)
+        if (budget.internationalAid > 0f)
         {
             chartLabels.add(getString(R.string.international_aid));
-            chartEntries.add(new Entry((float) budget.internationalAid, i++));
+            chartEntries.add(new Entry(budget.internationalAid, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart6));
         }
-        if (budget.lawAndOrder > 0D)
+        if (budget.lawAndOrder > 0f)
         {
             chartLabels.add(getString(R.string.law_and_order));
-            chartEntries.add(new Entry((float) budget.lawAndOrder, i++));
+            chartEntries.add(new Entry(budget.lawAndOrder, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart7));
         }
-        if (budget.publicTransport > 0D)
+        if (budget.publicTransport > 0f)
         {
             chartLabels.add(getString(R.string.public_transport));
-            chartEntries.add(new Entry((float) budget.publicTransport, i++));
+            chartEntries.add(new Entry(budget.publicTransport, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart8));
         }
-        if (budget.socialPolicy > 0D)
+        if (budget.socialPolicy > 0f)
         {
             chartLabels.add(getString(R.string.social_policy));
-            chartEntries.add(new Entry((float) budget.socialPolicy, i++));
+            chartEntries.add(new Entry(budget.socialPolicy, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart9));
         }
-        if (budget.spirituality > 0D)
+        if (budget.spirituality > 0f)
         {
             chartLabels.add(getString(R.string.spirituality));
-            chartEntries.add(new Entry((float) budget.spirituality, i++));
+            chartEntries.add(new Entry(budget.spirituality, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart10));
         }
-        if (budget.welfare > 0D)
+        if (budget.welfare > 0f)
         {
             chartLabels.add(getString(R.string.welfare));
-            chartEntries.add(new Entry((float) budget.welfare, i++));
+            chartEntries.add(new Entry(budget.welfare, i++));
             budgetColours.add(ContextCompat.getColor(context, R.color.colorChart11));
         }
 

@@ -34,13 +34,13 @@ public class MortalityCause implements Parcelable {
     @Attribute
     public String type;
     @Text
-    public double value;
+    public float value;
 
     public MortalityCause() { super(); }
 
     protected MortalityCause(Parcel in) {
         type = in.readString();
-        value = in.readDouble();
+        value = in.readFloat();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MortalityCause implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(type);
-        dest.writeDouble(value);
+        dest.writeFloat(value);
     }
 
     @SuppressWarnings("unused")

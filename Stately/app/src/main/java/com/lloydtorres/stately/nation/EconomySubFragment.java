@@ -146,28 +146,28 @@ public class EconomySubFragment extends Fragment {
         Context context = getContext();
 
         int i = 0;
-        if (sectors.government > 0D)
+        if (sectors.government > 0f)
         {
             chartLabels.add(getString(R.string.government));
-            chartEntries.add(new Entry((float) sectors.government, i++));
+            chartEntries.add(new Entry(sectors.government, i++));
             sectorColours.add(ContextCompat.getColor(context, R.color.colorSector0));
         }
-        if (sectors.stateOwned > 0D)
+        if (sectors.stateOwned > 0f)
         {
             chartLabels.add(getString(R.string.state_owned));
-            chartEntries.add(new Entry((float) sectors.stateOwned, i++));
+            chartEntries.add(new Entry(sectors.stateOwned, i++));
             sectorColours.add(ContextCompat.getColor(context, R.color.colorSector1));
         }
-        if (sectors.privateSector > 0D)
+        if (sectors.privateSector > 0f)
         {
             chartLabels.add(getString(R.string.private_sector));
-            chartEntries.add(new Entry((float) sectors.privateSector, i++));
+            chartEntries.add(new Entry(sectors.privateSector, i++));
             sectorColours.add(ContextCompat.getColor(context, R.color.colorSector2));
         }
-        if (sectors.blackMarket > 0D)
+        if (sectors.blackMarket > 0f)
         {
             chartLabels.add(getString(R.string.black_market));
-            chartEntries.add(new Entry((float) sectors.blackMarket, i++));
+            chartEntries.add(new Entry(sectors.blackMarket, i++));
             sectorColours.add(ContextCompat.getColor(context, R.color.colorSector3));
         }
 

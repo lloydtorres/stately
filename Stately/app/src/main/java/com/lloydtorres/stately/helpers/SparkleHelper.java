@@ -703,8 +703,8 @@ public class SparkleHelper {
 
         if (voteTotal > 0)
         {
-            float votePercentFor = (((float) voteFor) * 100f)/voteTotal;
-            float votePercentAgainst = (((float) voteAgainst) * 100f)/voteTotal;
+            float votePercentFor = (voteFor * 100f)/voteTotal;
+            float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
 
             List<String> chartLabels = new ArrayList<String>();
             List<Entry> chartEntries = new ArrayList<Entry>();
@@ -712,9 +712,9 @@ public class SparkleHelper {
             // Set data
             int i = 0;
             chartLabels.add(c.getString(R.string.wa_for));
-            chartEntries.add(new Entry((float) votePercentFor, i++));
+            chartEntries.add(new Entry(votePercentFor, i++));
             chartLabels.add(c.getString(R.string.wa_against));
-            chartEntries.add(new Entry((float) votePercentAgainst, i++));
+            chartEntries.add(new Entry(votePercentAgainst, i++));
 
             // Set colour and disable chart labels
             PieDataSet dataSet = new PieDataSet(chartEntries, "");

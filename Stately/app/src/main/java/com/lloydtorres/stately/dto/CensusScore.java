@@ -32,13 +32,13 @@ public class CensusScore implements Parcelable {
     @Attribute
     public int id;
     @Text
-    public double value;
+    public float value;
 
     public CensusScore() { super(); }
 
     protected CensusScore(Parcel in) {
         id = in.readInt();
-        value = in.readDouble();
+        value = in.readFloat();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CensusScore implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeDouble(value);
+        dest.writeFloat(value);
     }
 
     @SuppressWarnings("unused")

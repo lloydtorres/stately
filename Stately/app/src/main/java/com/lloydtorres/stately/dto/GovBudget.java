@@ -31,45 +31,45 @@ import org.simpleframework.xml.Root;
 public class GovBudget implements Parcelable {
 
     @Element(name="ADMINISTRATION")
-    public double admin;
+    public float admin;
     @Element(name="DEFENCE")
-    public double defense;
+    public float defense;
     @Element(name="EDUCATION")
-    public double education;
+    public float education;
     @Element(name="ENVIRONMENT")
-    public double environment;
+    public float environment;
     @Element(name="HEALTHCARE")
-    public double healthcare;
+    public float healthcare;
     @Element(name="COMMERCE")
-    public double industry;
+    public float industry;
     @Element(name="INTERNATIONALAID")
-    public double internationalAid;
+    public float internationalAid;
     @Element(name="LAWANDORDER")
-    public double lawAndOrder;
+    public float lawAndOrder;
     @Element(name="PUBLICTRANSPORT")
-    public double publicTransport;
+    public float publicTransport;
     @Element(name="SOCIALEQUALITY")
-    public double socialPolicy;
+    public float socialPolicy;
     @Element(name="SPIRITUALITY")
-    public double spirituality;
+    public float spirituality;
     @Element(name="WELFARE")
-    public double welfare;
+    public float welfare;
 
     public GovBudget() { super(); }
 
     protected GovBudget(Parcel in) {
-        admin = in.readDouble();
-        defense = in.readDouble();
-        education = in.readDouble();
-        environment = in.readDouble();
-        healthcare = in.readDouble();
-        industry = in.readDouble();
-        internationalAid = in.readDouble();
-        lawAndOrder = in.readDouble();
-        publicTransport = in.readDouble();
-        socialPolicy = in.readDouble();
-        spirituality = in.readDouble();
-        welfare = in.readDouble();
+        admin = in.readFloat();
+        defense = in.readFloat();
+        education = in.readFloat();
+        environment = in.readFloat();
+        healthcare = in.readFloat();
+        industry = in.readFloat();
+        internationalAid = in.readFloat();
+        lawAndOrder = in.readFloat();
+        publicTransport = in.readFloat();
+        socialPolicy = in.readFloat();
+        spirituality = in.readFloat();
+        welfare = in.readFloat();
     }
 
     @Override
@@ -79,18 +79,18 @@ public class GovBudget implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(admin);
-        dest.writeDouble(defense);
-        dest.writeDouble(education);
-        dest.writeDouble(environment);
-        dest.writeDouble(healthcare);
-        dest.writeDouble(industry);
-        dest.writeDouble(internationalAid);
-        dest.writeDouble(lawAndOrder);
-        dest.writeDouble(publicTransport);
-        dest.writeDouble(socialPolicy);
-        dest.writeDouble(spirituality);
-        dest.writeDouble(welfare);
+        dest.writeFloat(admin);
+        dest.writeFloat(defense);
+        dest.writeFloat(education);
+        dest.writeFloat(environment);
+        dest.writeFloat(healthcare);
+        dest.writeFloat(industry);
+        dest.writeFloat(internationalAid);
+        dest.writeFloat(lawAndOrder);
+        dest.writeFloat(publicTransport);
+        dest.writeFloat(socialPolicy);
+        dest.writeFloat(spirituality);
+        dest.writeFloat(welfare);
     }
 
     @SuppressWarnings("unused")

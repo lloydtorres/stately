@@ -212,12 +212,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             List<PollOption> results = p.options;
             Collections.sort(results);
 
-            float voteTotal = 0;
+            int voteTotal = 0;
             List<String> chartLabels = new ArrayList<String>();
             for (int i=0; i<results.size(); i++)
             {
                 inflateOption(options, i+1, results.get(i).text, results.get(i).votes);
-                voteTotal += (float) results.get(i).votes;
+                voteTotal += results.get(i).votes;
                 chartLabels.add(String.format(context.getString(R.string.region_option_index), i+1));
             }
 
@@ -226,7 +226,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 List<Entry> chartEntries = new ArrayList<Entry>();
                 for (int i=0; i<results.size(); i++)
                 {
-                    chartEntries.add(new Entry(((float) results.get(i).votes * 100f)/voteTotal, i));
+                    chartEntries.add(new Entry((results.get(i).votes * 100f)/voteTotal, i));
                 }
 
                 PieDataSet dataSet = new PieDataSet(chartEntries, "");
