@@ -161,7 +161,7 @@ public class PeopleSubFragment extends Fragment {
         // setup data
         chartLabels = new ArrayList<String>();
         List<Entry> chartEntries = new ArrayList<Entry>();
-        List<MortalityCause> causes = mNation.mortalityRoot.causes;
+        List<MortalityCause> causes = mNation.causes;
 
         for (int i=0; i < causes.size(); i++)
         {

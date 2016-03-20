@@ -22,7 +22,11 @@ import android.os.Parcelable;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -128,8 +132,8 @@ public class Nation implements Parcelable {
     public String sensible;
     @Element(name="CRIME")
     public String crime;
-    @Element(name="DEATHS")
-    public Mortality mortalityRoot;
+    @ElementList(name="DEATHS")
+    public List<MortalityCause> causes;
 
     @Element(name="GOVTDESC")
     public String govtDesc;
@@ -145,8 +149,8 @@ public class Nation implements Parcelable {
     @Element(name="SECTORS")
     public Sectors sectors;
 
-    @Element(name="HAPPENINGS")
-    public Happenings happeningsRoot;
+    @ElementList(name="HAPPENINGS")
+    public List<Event> events;
 
     public Nation()
     {
@@ -190,14 +194,24 @@ public class Nation implements Parcelable {
         notable = in.readString();
         sensible = in.readString();
         crime = in.readString();
-        mortalityRoot = (Mortality) in.readValue(Mortality.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            causes = new ArrayList<MortalityCause>();
+            in.readList(causes, MortalityCause.class.getClassLoader());
+        } else {
+            causes = null;
+        }
         govtDesc = in.readString();
         govBudget = (GovBudget) in.readValue(GovBudget.class.getClassLoader());
         industryDesc = in.readString();
         poorest = in.readLong();
         richest = in.readLong();
         sectors = (Sectors) in.readValue(Sectors.class.getClassLoader());
-        happeningsRoot = (Happenings) in.readValue(Happenings.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            events = new ArrayList<Event>();
+            in.readList(events, Event.class.getClassLoader());
+        } else {
+            events = null;
+        }
     }
 
     @Override
@@ -243,14 +257,24 @@ public class Nation implements Parcelable {
         dest.writeString(notable);
         dest.writeString(sensible);
         dest.writeString(crime);
-        dest.writeValue(mortalityRoot);
+        if (causes == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(causes);
+        }
         dest.writeString(govtDesc);
         dest.writeValue(govBudget);
         dest.writeString(industryDesc);
         dest.writeLong(poorest);
         dest.writeLong(richest);
         dest.writeValue(sectors);
-        dest.writeValue(happeningsRoot);
+        if (events == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(events);
+        }
     }
 
     @SuppressWarnings("unused")

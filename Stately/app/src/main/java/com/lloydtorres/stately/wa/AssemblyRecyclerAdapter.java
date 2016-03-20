@@ -69,7 +69,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         AssemblyStats s = new AssemblyStats(sc.numNations, sc.numDelegates);
         cards.add(s);
 
-        List<Event> happen = sc.happeningsRoot.events;
+        List<Event> happen = sc.events;
         Collections.sort(happen);
 
         cards.addAll(happen);

@@ -22,7 +22,11 @@ import android.os.Parcelable;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -51,8 +55,8 @@ public class Assembly implements Parcelable {
     public int numNations;
     @Element(name="NUMDELEGATES")
     public int numDelegates;
-    @Element(name="HAPPENINGS")
-    public Happenings happeningsRoot;
+    @ElementList(name="HAPPENINGS")
+    public List<Event> events;
 
     public Assembly() {
         super();
@@ -63,7 +67,12 @@ public class Assembly implements Parcelable {
         lastResolution = in.readString();
         numNations = in.readInt();
         numDelegates = in.readInt();
-        happeningsRoot = (Happenings) in.readValue(Happenings.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            events = new ArrayList<Event>();
+            in.readList(events, Event.class.getClassLoader());
+        } else {
+            events = null;
+        }
     }
 
     @Override
@@ -77,7 +86,12 @@ public class Assembly implements Parcelable {
         dest.writeString(lastResolution);
         dest.writeInt(numNations);
         dest.writeInt(numDelegates);
-        dest.writeValue(happeningsRoot);
+        if (events == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(events);
+        }
     }
 
     @SuppressWarnings("unused")

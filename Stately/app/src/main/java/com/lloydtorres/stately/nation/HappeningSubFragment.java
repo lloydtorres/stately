@@ -82,7 +82,7 @@ public class HappeningSubFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<Event> events = mNation.happeningsRoot.events;
+        List<Event> events = mNation.events;
         Collections.sort(events);
 
         mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
