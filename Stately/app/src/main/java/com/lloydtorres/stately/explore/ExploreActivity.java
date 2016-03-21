@@ -456,8 +456,9 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     /**
      * Gets the required local ID for a target page.
      * @param url Target page URL
+     * @param password Password for region moves (can be null)
      */
-    private void getLocalId(final String url)
+    private void getLocalId(final String url, final String password)
     {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -479,7 +480,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                                 postEndorsement(localid);
                                 break;
                             default:
-                                handleRegionMove(localid);
+                                postRegionMove(localid, password);
                                 break;
                         }
                     }
@@ -592,9 +593,8 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
     /**
      * Handles which dialog to show for confirmation/password when moving regions.
-     * @param localid The required localid
      */
-    public void handleRegionMove(final String localid)
+    public void handleRegionMove()
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         LayoutInflater inflater = getLayoutInflater();
@@ -610,7 +610,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 {
                     password = fPassView.getText().toString();
                 }
-                postRegionMove(localid, password);
+                getLocalId(String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
                 dialog.dismiss();
             }
         };
@@ -724,10 +724,10 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             case R.id.nav_send_telegram:
                 SparkleHelper.startTelegramCompose(this, name, TelegramComposeActivity.NO_REPLY_ID);
             case R.id.nav_endorse:
-                getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)));
+                getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
                 return true;
             case R.id.nav_move:
-                getLocalId(String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(id)));
+                handleRegionMove();
                 return true;
             case R.id.nav_explore:
                 // Open an explore dialog to keep going
