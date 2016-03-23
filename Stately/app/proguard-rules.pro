@@ -18,3 +18,6 @@
 
 -keep class com.lloydtorres.stately.dto.** { *; }
 -dontwarn com.squareup.okhttp.**
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+}
