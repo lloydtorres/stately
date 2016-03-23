@@ -19,6 +19,7 @@ Stately
 
 ### Revision History
 
+* **1.4.2** - Additional safety checks, bug fixes and improvements.
 * **1.4.1** - Bug fixes and improvements.
 * **1.4.0** - Telegram support, increased network timeout.
 * **1.3.4** - Bug fixes and improvements.
