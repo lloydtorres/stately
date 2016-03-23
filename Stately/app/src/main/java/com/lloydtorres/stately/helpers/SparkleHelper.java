@@ -1055,9 +1055,9 @@ public class SparkleHelper {
         setStyledTextView(c, t, holder);
     }
 
-    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w.*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w.*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=(\\w*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w*?)\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
