@@ -23,6 +23,7 @@
             android:layout_toLeftOf="@+id/card_delta_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingRight="12dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/card_delta_name"
@@ -46,7 +47,7 @@
             android:adjustViewBounds="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:fontFamily="sans-serif-light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
