@@ -69,6 +69,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
 
     private int replyId = NO_REPLY_ID;
     private String recipients;
+    private boolean isInProgress = false;
 
     private View mView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -80,6 +81,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telegram_compose);
+        isInProgress = false;
 
         // Either get data from intent or restore state
         if (getIntent() != null) {
@@ -215,6 +217,13 @@ public class TelegramComposeActivity extends AppCompatActivity {
      */
     private void getTelegramCheckValue(final List<String> recipients)
     {
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
@@ -237,6 +246,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
@@ -260,6 +270,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
@@ -271,6 +282,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        isInProgress = false;
                         String textResponse = Jsoup.parse(response, SparkleHelper.BASE_URI).text();
                         if (textResponse.contains(SENT_CONFIRM_1) || textResponse.contains(SENT_CONFIRM_2))
                         {
@@ -286,6 +298,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
@@ -336,6 +349,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }

@@ -84,6 +84,7 @@ public class ResolutionActivity extends AppCompatActivity {
     private int councilId;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean isInProgress;
 
     private TextView title;
     private TextView target;
@@ -101,6 +102,7 @@ public class ResolutionActivity extends AppCompatActivity {
     private LineChart votingHistory;
     private TextView voteHistoryFor;
     private TextView voteHistoryAgainst;
+    private View view;
 
     private ImageView iconVoteFor;
     private ImageView iconVoteAgainst;
@@ -111,6 +113,8 @@ public class ResolutionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wa_council);
+        isInProgress = false;
+        view = findViewById(R.id.wa_council_main);
 
         // Either get data from intent or restore state
         if (getIntent() != null)
@@ -211,7 +215,6 @@ public class ResolutionActivity extends AppCompatActivity {
      */
     private void queryResolution(int chamberId)
     {
-        final View fView = findViewById(R.id.wa_council_main);
         String targetURL = String.format(AssemblyActive.QUERY, chamberId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -226,7 +229,7 @@ public class ResolutionActivity extends AppCompatActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -236,11 +239,11 @@ public class ResolutionActivity extends AppCompatActivity {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         }){
@@ -256,7 +259,7 @@ public class ResolutionActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
 
@@ -266,7 +269,6 @@ public class ResolutionActivity extends AppCompatActivity {
      */
     private void queryVoteStatus(final AssemblyActive a)
     {
-        final View fView = findViewById(R.id.wa_council_main);
         UserLogin u = SparkleHelper.getActiveUser(this);
         String targetURL = String.format(WaVoteStatus.QUERY, u.nationId);
 
@@ -283,7 +285,7 @@ public class ResolutionActivity extends AppCompatActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -293,11 +295,11 @@ public class ResolutionActivity extends AppCompatActivity {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         }){
@@ -313,7 +315,7 @@ public class ResolutionActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
 
@@ -430,7 +432,13 @@ public class ResolutionActivity extends AppCompatActivity {
      */
     private void getLocalId(final String url, final int p)
     {
-        final View view = findViewById(R.id.wa_council_main);
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -453,6 +461,7 @@ public class ResolutionActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -475,6 +484,7 @@ public class ResolutionActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -487,7 +497,6 @@ public class ResolutionActivity extends AppCompatActivity {
      */
     private void postVote(final String url, final String localid, final int p)
     {
-        final View view = findViewById(R.id.wa_council_main);
         final String votePost;
         switch (p)
         {
@@ -518,6 +527,7 @@ public class ResolutionActivity extends AppCompatActivity {
                                 SparkleHelper.makeSnackbar(view, getString(R.string.wa_resolution_vote_undecided));
                                 break;
                         }
+                        isInProgress = false;
                         startQueryResolution();
                     }
                 }, new Response.ErrorListener() {
@@ -525,6 +535,7 @@ public class ResolutionActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -556,6 +567,7 @@ public class ResolutionActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }

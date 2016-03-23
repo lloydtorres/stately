@@ -87,6 +87,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private int pastOffset = 0;
     private boolean postable = false;
     private Post replyTarget = null;
+    private boolean isInProgress;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
@@ -95,6 +96,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private ImageView.OnClickListener postMessageListener;
     private RelativeLayout messageReplyContainer;
     private TextView messageReplyContent;
+    private View view;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -104,6 +106,8 @@ public class MessageBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_board);
+        view = findViewById(R.id.message_board_coordinator);
+        isInProgress = false;
 
         if (getIntent() != null)
         {
@@ -221,13 +225,11 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryMessages(final int offset, final int direction, final boolean initialRun)
     {
-        final View fView = findViewById(R.id.message_board_coordinator);
-
         // stop if this is the 11th time the query has been called moving forward
         if (direction == SCAN_FORWARD && offset >= 110)
         {
             pastOffset = offset;
-            SparkleHelper.makeSnackbar(fView, getString(R.string.rmb_backload_error));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backload_error));
             refreshRecycler(SCAN_FORWARD, 0);
             return;
         }
@@ -245,17 +247,17 @@ public class MessageBoardActivity extends AppCompatActivity {
                             switch (direction)
                             {
                                 case SCAN_BACKWARD:
-                                    processMessageResponseBackward(fView, messageResponse);
+                                    processMessageResponseBackward(view, messageResponse);
                                     break;
                                 default:
-                                    processMessageResponseForward(fView, messageResponse, offset, initialRun);
+                                    processMessageResponseForward(view, messageResponse, offset, initialRun);
                                     break;
                             }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             mSwipeRefreshLayout.setRefreshing(false);
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -264,11 +266,11 @@ public class MessageBoardActivity extends AppCompatActivity {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         }){
@@ -284,7 +286,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
 
@@ -434,9 +436,15 @@ public class MessageBoardActivity extends AppCompatActivity {
             return;
         }
 
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
         startSwipeRefresh();
         messagePostButton.setOnClickListener(null);
-        final View view = findViewById(R.id.message_board_coordinator);
         String targetURL = String.format(Region.GET_QUERY, SparkleHelper.getIdFromName(regionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -461,6 +469,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -483,6 +492,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -493,7 +503,6 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void postActualMessage(final String chk)
     {
-        final View view = findViewById(R.id.message_board_coordinator);
         String targetURL = String.format(RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
@@ -501,6 +510,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         mSwipeRefreshLayout.setRefreshing(false);
+                        isInProgress = false;
                         messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
                         setReplyMessage(null);
@@ -511,6 +521,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 messagePostButton.setOnClickListener(postMessageListener);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
@@ -556,6 +567,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             messagePostButton.setOnClickListener(postMessageListener);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -590,7 +602,6 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void postMessageDelete(final int pos, final int id)
     {
-        final View view = findViewById(R.id.message_board_coordinator);
         String targetURL = String.format(RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,

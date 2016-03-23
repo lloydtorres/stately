@@ -98,6 +98,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
     private boolean isEndorsed;
     private boolean isMoveable;
     private boolean isPassword;
+    private boolean isInProgress;
 
     private NationFragment nFragment;
     private RegionFragment rFragment;
@@ -108,6 +109,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         view = findViewById(R.id.explore_coordinator);
+        isInProgress = false;
 
         if (getIntent() != null)
         {
@@ -460,6 +462,13 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
      */
     private void getLocalId(final String url, final String password)
     {
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -488,6 +497,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -509,6 +519,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -532,6 +543,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 // actual success since post gets redirected
                 if (error instanceof ServerError)
                 {
+                    isInProgress = false;
                     if (isEndorsed)
                     {
                         SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_withdraw_endorse_response), name));
@@ -546,6 +558,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 else
                 {
                     SparkleHelper.logError(error.toString());
+                    isInProgress = false;
                     if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                         SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                     }
@@ -587,6 +600,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -596,6 +610,12 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
      */
     public void handleRegionMove()
     {
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
@@ -652,6 +672,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                     public void onResponse(String response) {
                         Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(response);
                         Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(response);
+                        isInProgress = false;
 
                         if (moveSuccess.find())
                         {
@@ -673,6 +694,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -710,6 +732,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }

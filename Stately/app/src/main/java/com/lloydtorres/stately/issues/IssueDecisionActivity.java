@@ -69,6 +69,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
     private Nation mNation;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean isInProgress;
+    private View view;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -78,6 +80,8 @@ public class IssueDecisionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_decision);
+        view = findViewById(R.id.issue_decision_main);
+        isInProgress = false;
 
         // Either get data from intent or restore state
         if (getIntent() != null)
@@ -140,7 +144,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
      */
     private void queryIssueInfo()
     {
-        final View view = findViewById(R.id.issue_decision_main);
         String targetURL = String.format(IssueOption.QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -268,6 +271,12 @@ public class IssueDecisionActivity extends AppCompatActivity {
      */
     public void setAdoptPosition(final IssueOption option)
     {
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -320,13 +329,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
      */
     public void postAdoptPosition(final IssueOption option)
     {
-        final View view = findViewById(R.id.issue_decision_main);
+        isInProgress = true;
         String targetURL = String.format(IssueOption.POST_QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        isInProgress = false;
                         if (!IssueOption.DISMISS_HEADER.equals(option.header))
                         {
                             if (response.contains(LEGISLATION_PASSED))
@@ -353,6 +363,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -383,6 +394,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
