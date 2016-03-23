@@ -22,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusDelta;
@@ -97,7 +98,7 @@ public class IssueResultsActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        if (response == null && news != null)
+        if (news != null)
         {
             setRecyclerAdapter();
         }
@@ -122,6 +123,13 @@ public class IssueResultsActivity extends AppCompatActivity {
      */
     private void processResultsData(String response)
     {
+        if (response == null)
+        {
+            View view = findViewById(R.id.results_coordinator);
+            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+            return;
+        }
+
         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
 
         // Get talking point and reclassification
