@@ -195,15 +195,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         // If the textbox exists in the page, it means that the user has posting rights
                         if (d.select("textarea[name=message]").first() != null) {
-                            messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
-                            messageResponder.setVisibility(View.VISIBLE);
-                            messageContainer = (EditText) findViewById(R.id.responder_content);
-                            messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
-                            messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
-                            messagePostButton.setOnClickListener(postMessageListener);
-                            messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
-                            messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
-                            postable = true;
+                            enablePostingRights();
                         }
                         queryPostingRightsCallback();
                     }
@@ -212,6 +204,11 @@ public class MessageBoardActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 // If an error occurs, fail gracefully and query messages anyway
+                // Also fallback: if unable to query posting rights, just base it off region membership
+                if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
+                {
+                    enablePostingRights();
+                }
                 queryPostingRightsCallback();
             }
         }){
@@ -230,6 +227,19 @@ public class MessageBoardActivity extends AppCompatActivity {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
+    }
+
+    private void enablePostingRights()
+    {
+        messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
+        messageResponder.setVisibility(View.VISIBLE);
+        messageContainer = (EditText) findViewById(R.id.responder_content);
+        messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
+        messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
+        messagePostButton.setOnClickListener(postMessageListener);
+        messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+        messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
+        postable = true;
     }
 
     private void queryPostingRightsCallback()
