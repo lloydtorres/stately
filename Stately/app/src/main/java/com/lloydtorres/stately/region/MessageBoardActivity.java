@@ -154,7 +154,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                 }
             }
         });
-        processRegionMembership();
+        queryPostingRights();
     }
 
     public void setToolbar(Toolbar t) {
@@ -181,23 +181,59 @@ public class MessageBoardActivity extends AppCompatActivity {
     }
 
     /**
-     * Enables message respond box if member of region, then calls on function to load messages.
+     * Enables message respond box if user has posting rights, then calls on function to load messages.
      */
-    private void processRegionMembership()
+    private void queryPostingRights()
     {
-        if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
-        {
-            messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
-            messageResponder.setVisibility(View.VISIBLE);
-            messageContainer = (EditText) findViewById(R.id.responder_content);
-            messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
-            messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
-            messagePostButton.setOnClickListener(postMessageListener);
-            messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
-            messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
-            postable = true;
-        }
+        startSwipeRefresh();
+        String targetURL = String.format(RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
 
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        // If the textbox exists in the page, it means that the user has posting rights
+                        if (d.select("textarea[name=message]").first() != null) {
+                            messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
+                            messageResponder.setVisibility(View.VISIBLE);
+                            messageContainer = (EditText) findViewById(R.id.responder_content);
+                            messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
+                            messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
+                            messagePostButton.setOnClickListener(postMessageListener);
+                            messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+                            messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
+                            postable = true;
+                        }
+                        queryPostingRightsCallback();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                // If an error occurs, fail gracefully and query messages anyway
+                queryPostingRightsCallback();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    private void queryPostingRightsCallback()
+    {
         if (messages.posts.size() <= 0)
         {
             startSwipeRefresh();
