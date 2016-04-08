@@ -974,16 +974,16 @@ public class SparkleHelper {
      * Regex patterns
      */
 
-    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(\\w*)\\?tgid=[0-9].*");
+    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=([\\w-]*)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)\\?tgid=[0-9].*");
     public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](.*?)\\[\\/nation\\]");
     public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.*?\\](.*?)\\[\\/nation\\]");
     public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(.*?)\\]");
     public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](.*?)\\[\\/region\\]");
     public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(.*?)\\]");
-    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=(\\w*)(?:\\/|)\\]");
-    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(\\w*)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=([\\w-]*)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)(?:\\/|)\\]");
 
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
@@ -1055,9 +1055,9 @@ public class SparkleHelper {
         setStyledTextView(c, t, holder);
     }
 
-    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=(\\w*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=(\\w*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
