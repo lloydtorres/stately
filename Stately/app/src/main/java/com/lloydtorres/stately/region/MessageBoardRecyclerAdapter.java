@@ -180,7 +180,16 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             {
                 SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), SparkleHelper.CLICKY_NATION_MODE);
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
-                SparkleHelper.setBbCodeFormatting(context, cardContent, post.message);
+                String postContent = post.message;
+                if (post.status == Post.POST_SUPPRESSED && post.suppressor != null)
+                {
+                    postContent = String.format(context.getString(R.string.rmb_suppressed), post.suppressor) + "<strike>" + postContent + "</strike>";
+                }
+                if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED)
+                {
+                    postContent = "[i]" + postContent + "[/i]";
+                }
+                SparkleHelper.setBbCodeFormatting(context, cardContent, postContent);
             }
             else
             {
@@ -210,7 +219,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && post.message != null && !post.message.equals(DELETED_CONTENT))
+            if (pos != RecyclerView.NO_POSITION && post.message != null && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
             {
                 if (replyIndex == pos)
                 {
@@ -230,7 +239,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             {
                 String selfName = SparkleHelper.getActiveUser(context).nationId;
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION && selfName.equals(post.name) && !post.message.equals(DELETED_CONTENT))
+                if (pos != RecyclerView.NO_POSITION && selfName.equals(post.name) && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
                 {
                     ((MessageBoardActivity) context).confirmDelete(pos, post.id);
                     return true;

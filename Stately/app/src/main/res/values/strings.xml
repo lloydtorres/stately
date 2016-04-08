@@ -212,6 +212,7 @@
     <!-- Region message board -->
     <string name="region_rmb">RMB: %1$s</string>
     <string name="spoiler_warn">SPOILER</string>
+    <string name="rmb_suppressed">[i]Suppressed by [nation=%1$s][/i]\n\n</string>
     <string name="clicky_link">[external link]</string>
     <string name="rmb_no_content">Nothing to see here!</string>
     <string name="rmb_caught_up">All caught up!</string>
