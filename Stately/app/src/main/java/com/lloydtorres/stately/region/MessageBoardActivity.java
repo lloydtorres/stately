@@ -185,6 +185,14 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryPostingRights()
     {
+        // If user is a member of this region, enable posting rights immediately without querying
+        if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
+        {
+            enablePostingRights();
+            queryPostingRightsCallback();
+            return;
+        }
+
         startSwipeRefresh();
         String targetURL = String.format(RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
 
@@ -204,11 +212,6 @@ public class MessageBoardActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 // If an error occurs, fail gracefully and query messages anyway
-                // Also fallback: if unable to query posting rights, just base it off region membership
-                if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
-                {
-                    enablePostingRights();
-                }
                 queryPostingRightsCallback();
             }
         }){
