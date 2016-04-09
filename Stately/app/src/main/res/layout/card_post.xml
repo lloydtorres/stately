@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -11,7 +12,8 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     card_view:cardBackgroundColor="@android:color/white"
-    card_view:contentPadding="20dp" >
+    card_view:contentPadding="20dp"
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,6 +45,68 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
             tools:text="Ha ha that's so funny!" />
+        <RelativeLayout
+            android:id="@+id/card_post_actions_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/card_post_like"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_marginLeft="-8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                app:srcCompat="@drawable/ic_like"/>
+            <TextView
+                android:id="@+id/card_post_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/card_post_like"
+                android:layout_toEndOf="@+id/card_post_like"
+                tools:text="123"/>
+            <ImageView
+                android:id="@+id/card_post_delete"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_delete"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/card_post_reply"
+                android:layout_toStartOf="@+id/card_post_reply" />
+            <ImageView
+                android:id="@+id/card_post_reply"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_marginRight="-8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_reply"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
