@@ -42,12 +42,13 @@ public class Nation implements Parcelable {
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
                                         + "+demonym+demonym2+demonym2plural+customreligion+animal"
-                                        + "+censusscore+rcensus+wcensus"
+                                        + "+census+wcensus"
                                         + "+gavote+scvote+endorsements"
                                         + "+notable+sensibilities+crime+deaths"
                                         + "+govtdesc+govt"
                                         + "+industrydesc+poorest+richest+sectors"
                                         + "+happenings"
+                                        + ";scale=all;mode=score+rank+rrank+prank+prrank"
                                         + "&v=" + SparkleHelper.API_VERSION;
 
     public static final String QUERY_HTML = "https://www.nationstates.net/nation=%s/template-overall=none";
@@ -112,12 +113,10 @@ public class Nation implements Parcelable {
     @Element(name="ANIMAL")
     public String animal;
 
-    @Element(name="CENSUSSCORE")
-    public CensusScore censusScore;
-    @Element(name="RCENSUS")
-    public int rCensus;
+    @ElementList(name="CENSUS")
+    public List<CensusDetailedRank> census;
     @Element(name="WCENSUS")
-    public int wCensus;
+    public CensusBasicRank wCensus;
 
     @Element(name="GAVOTE", required=false)
     public String gaVote;
@@ -185,9 +184,13 @@ public class Nation implements Parcelable {
         demPlural = in.readString();
         religion = in.readString();
         animal = in.readString();
-        censusScore = (CensusScore) in.readValue(CensusScore.class.getClassLoader());
-        rCensus = in.readInt();
-        wCensus = in.readInt();
+        if (in.readByte() == 0x01) {
+            census = new ArrayList<CensusDetailedRank>();
+            in.readList(census, CensusDetailedRank.class.getClassLoader());
+        } else {
+            census = null;
+        }
+        wCensus = (CensusBasicRank) in.readValue(CensusBasicRank.class.getClassLoader());
         gaVote = in.readString();
         scVote = in.readString();
         endorsements = in.readString();
@@ -248,9 +251,13 @@ public class Nation implements Parcelable {
         dest.writeString(demPlural);
         dest.writeString(religion);
         dest.writeString(animal);
-        dest.writeValue(censusScore);
-        dest.writeInt(rCensus);
-        dest.writeInt(wCensus);
+        if (census == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(census);
+        }
+        dest.writeValue(wCensus);
         dest.writeString(gaVote);
         dest.writeString(scVote);
         dest.writeString(endorsements);

@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -443,7 +444,8 @@ public class OverviewSubFragment extends Fragment {
         animal.setText(mNation.animal);
 
         censusTitle = (TextView) view.findViewById(R.id.nation_census_title);
-        int censusId = mNation.censusScore.id;
+        int censusId = mNation.wCensus.id;
+        int censusRawId = mNation.wCensus.id;
         // if census ID is out of bounds, set it as unknown
         if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
         {
@@ -453,11 +455,12 @@ public class OverviewSubFragment extends Fragment {
 
         censusTitle.setText(String.format(getString(R.string.card_overview_other_census_title), worldCensusItem[0]));
         censusContent = (TextView) view.findViewById(R.id.nation_census_content);
-        censusContent.setText(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), mNation.censusScore.value), worldCensusItem[1]));
-        if (mNation.rCensus > 0)
+        CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
+        censusContent.setText(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
+        if (detailedRank.regionRank > 0)
         {
-            censusContent.append(String.format(getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(mNation.rCensus), mNation.region));
+            censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.singlePrecision.format(detailedRank.regionRankPercent)));
         }
-        censusContent.append(String.format(getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(mNation.wCensus)));
+        censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.singlePrecision.format(detailedRank.worldRankPercent)));
     }
 }

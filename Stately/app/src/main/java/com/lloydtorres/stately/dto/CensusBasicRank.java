@@ -27,18 +27,17 @@ import org.simpleframework.xml.Text;
  * Created by Lloyd on 2016-02-21.
  * Stores information on a given census score from a nation.
  */
-@Root(name="CENSUSSCORE", strict=false)
-public class CensusScore implements Parcelable {
+public class CensusBasicRank implements Parcelable {
     @Attribute
     public int id;
     @Text
-    public float value;
+    public int value;
 
-    public CensusScore() { super(); }
+    public CensusBasicRank() { super(); }
 
-    protected CensusScore(Parcel in) {
+    protected CensusBasicRank(Parcel in) {
         id = in.readInt();
-        value = in.readFloat();
+        value = in.readInt();
     }
 
     @Override
@@ -49,19 +48,19 @@ public class CensusScore implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeFloat(value);
+        dest.writeInt(value);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusScore> CREATOR = new Parcelable.Creator<CensusScore>() {
+    public static final Parcelable.Creator<CensusBasicRank> CREATOR = new Parcelable.Creator<CensusBasicRank>() {
         @Override
-        public CensusScore createFromParcel(Parcel in) {
-            return new CensusScore(in);
+        public CensusBasicRank createFromParcel(Parcel in) {
+            return new CensusBasicRank(in);
         }
 
         @Override
-        public CensusScore[] newArray(int size) {
-            return new CensusScore[size];
+        public CensusBasicRank[] newArray(int size) {
+            return new CensusBasicRank[size];
         }
     };
 }

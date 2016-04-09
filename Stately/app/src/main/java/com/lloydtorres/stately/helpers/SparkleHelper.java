@@ -55,6 +55,7 @@ import org.kefirsf.bb.TextProcessor;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -208,6 +209,8 @@ public class SparkleHelper {
 
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+    // Displays a given float to up to one decimal point precision.
+    public static final DecimalFormat singlePrecision = new DecimalFormat("#.#");
 
     /**
      * VALIDATION
