@@ -64,6 +64,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public static final String NATION_DATA = "nationData";
     public static final int DISMISSED = -1;
     private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
+    private static final String STORY_SO_FAR = "The Story So Far";
 
     private Issue issue;
     private Nation mNation;
@@ -208,6 +209,10 @@ public class IssueDecisionActivity extends AppCompatActivity {
         if (d.select("div.dilemmachain").first() != null)
         {
             issueText = issueInfoRaw.select("p").get(1).text();
+            if (d.text().contains(STORY_SO_FAR))
+            {
+                issueText = issueText + "<br><br>" + issueInfoRaw.select("p").get(2).text();
+            }
         }
         issue.content = issueText;
 
