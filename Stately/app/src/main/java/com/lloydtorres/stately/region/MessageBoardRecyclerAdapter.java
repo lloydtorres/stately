@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.helpers.NameListDialog;
@@ -126,6 +127,55 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyItemChanged(i);
     }
 
+    /**
+     * Mark a message as either liked or unliked
+     * @param pos Position of message in adapter
+     * @param like True to like, false to unlike
+     */
+    public void setLikeStatus(int pos, boolean like)
+    {
+        if (context == null)
+        {
+            return;
+        }
+
+        Post targetPost = messages.get(pos);
+        String userId = SparkleHelper.getActiveUser(context).nationId;
+        if (like)
+        {
+            // Either set the user as the only liker, or append their id to the string
+            if (targetPost.likedBy == null || targetPost.likedBy.length() <= 0)
+            {
+                targetPost.likedBy = userId;
+            }
+            else
+            {
+                targetPost.likedBy = targetPost.likedBy + ":" + userId;
+            }
+            targetPost.likes++;
+        }
+        else
+        {
+            // If string contains user ID, remove it
+            if (targetPost.likedBy != null && targetPost.likedBy.contains(userId))
+            {
+                String[] likes = targetPost.likedBy.split(":");
+                ArrayList<String> properLikes = new ArrayList<String>();
+                for (String li : likes)
+                {
+                    if (!li.equals(userId))
+                    {
+                        properLikes.add(li);
+                    }
+                }
+                targetPost.likedBy = Joiner.on(":").skipNulls().join(properLikes);
+                targetPost.likes--;
+            }
+        }
+        messages.set(pos, targetPost);
+        notifyItemChanged(pos);
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -186,6 +236,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private ImageView deleteButton;
         private ImageView replyButton;
 
+        private View.OnClickListener likeClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION)
+                {
+                    boolean curLikeStatus = post.likedBy != null && post.likedBy.contains(SparkleHelper.getActiveUser(context).nationId);
+                    ((MessageBoardActivity) context).setLikeStatus(pos, post.id, !curLikeStatus);
+                }
+            }
+        };
+
         private View.OnClickListener replyClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,8 +290,6 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
             deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
             replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
-
-            actionsHolder.setVisibility(isPostable ? View.VISIBLE : View.GONE);
         }
 
         public void init(Post p)
@@ -251,23 +311,36 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 SparkleHelper.setBbCodeFormatting(context, cardContent, postContent);
 
                 // Setup actions holder
-                if (isPostable && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
+                if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED)
                 {
                     actionsHolder.setVisibility(View.VISIBLE);
-                    // All posts can be replied to
-                    replyButton.setOnClickListener(replyClickListener);
-                    // Only user's own posts can be deleted
-                    if (context != null && SparkleHelper.getActiveUser(context).nationId.equals(post.name))
+
+                    if (isPostable)
                     {
-                        deleteButton.setVisibility(View.VISIBLE);
-                        deleteButton.setOnClickListener(deleteClickListener);
+                        // All posts can be replied to
+                        replyButton.setOnClickListener(replyClickListener);
+                        // Only user's own posts can be deleted
+                        if (context != null && SparkleHelper.getActiveUser(context).nationId.equals(post.name))
+                        {
+                            deleteButton.setVisibility(View.VISIBLE);
+                            deleteButton.setOnClickListener(deleteClickListener);
+                        }
+                        else
+                        {
+                            deleteButton.setVisibility(View.GONE);
+                            deleteButton.setOnClickListener(null);
+                        }
                     }
                     else
                     {
+                        replyButton.setVisibility(View.GONE);
+                        replyButton.setOnClickListener(null);
                         deleteButton.setVisibility(View.GONE);
                         deleteButton.setOnClickListener(null);
                     }
-                    // @TODO: Like button and like list
+
+                    // like button and count are visible to all
+                    likeButton.setOnClickListener(likeClickListener);
                     likeCount.setText(SparkleHelper.getPrettifiedNumber(post.likes));
                     // Only build liked list if there are likes
                     if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0)

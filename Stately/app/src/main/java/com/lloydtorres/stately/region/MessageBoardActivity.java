@@ -73,6 +73,9 @@ public class MessageBoardActivity extends AppCompatActivity {
     public static final String BOARD_MESSAGES = "messages";
     public static final String BOARD_PAST_OFFSET = "pastOffset";
 
+    public static final String PARAM_LIKE = "rmblike";
+    public static final String PARAM_UNLIKE = "rmbunlike";
+
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
     private static final int SCAN_FORWARD = 1;
@@ -86,6 +89,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
     private boolean postable = false;
+    private boolean likable = false;
     private Post replyTarget = null;
     private boolean isInProgress;
 
@@ -190,6 +194,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             enablePostingRights();
             queryPostingRightsCallback();
+            likable = true;
             return;
         }
 
@@ -623,6 +628,63 @@ public class MessageBoardActivity extends AppCompatActivity {
     }
 
     /**
+     * Sends a request to like or unlike a specified post.
+     * @param pos Position of the post in the adapter.
+     * @param id ID of the post to un/like
+     * @param sendLike True if like should be sent, false if unlike
+     */
+    public void setLikeStatus(final int pos, final int id, final boolean sendLike)
+    {
+        if (!likable)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_cant_like));
+            return;
+        }
+
+        // Set like status in UI immediately for user friendliness
+        ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, sendLike);
+
+        String targetURL = String.format(RegionMessages.LIKE_QUERY, sendLike ? PARAM_LIKE : PARAM_UNLIKE, id);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // If success, do nothing
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                // Undo action on error
+                ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, !sendLike);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            // Undo action on error
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, !sendLike);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
      * Public convenience class to confirm if post should be deleted.
      * @param pos Position of the deleted post
      * @param id
@@ -672,7 +734,6 @@ public class MessageBoardActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
-                messagePostButton.setOnClickListener(postMessageListener);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -695,7 +756,6 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            messagePostButton.setOnClickListener(postMessageListener);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }

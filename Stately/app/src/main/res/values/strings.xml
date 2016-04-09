@@ -225,6 +225,7 @@
     <string name="rmb_delete">Delete</string>
     <string name="rmb_reply_format">[quote=%1$s;%2$d]%3$s[/quote]\n</string>
     <string name="rmb_likes">Likes</string>
+    <string name="rmb_cant_like">Can\'t like posts in a foreign region.</string>
 
     <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>
