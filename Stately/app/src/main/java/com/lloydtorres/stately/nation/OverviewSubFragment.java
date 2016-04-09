@@ -388,7 +388,7 @@ public class OverviewSubFragment extends Fragment {
         priority.setText(mNation.govtPriority);
 
         tax = (TextView) view.findViewById(R.id.nation_tax);
-        tax.setText(String.format(getString(R.string.percent), mNation.tax));
+        tax.setText(String.format(Locale.US, getString(R.string.percent), mNation.tax));
     }
 
     /**
