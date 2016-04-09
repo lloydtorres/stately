@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/message_board_main"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/message_board_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingPrefix">
 
 <include layout="@layout/content_message_board"
     android:layout_height="match_parent"
@@ -37,7 +40,7 @@ android:layout_height="match_parent">
             android:id="@+id/responder_reply_icon"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_reply"/>
+            app:srcCompat="@drawable/ic_reply"/>
         <TextView
             android:id="@+id/responder_reply_content"
             android:layout_width="wrap_content"
@@ -72,7 +75,7 @@ android:layout_height="match_parent">
             android:layout_gravity="end"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_post"/>
+            app:srcCompat="@drawable/ic_post"/>
     </RelativeLayout>
 </LinearLayout>
 
