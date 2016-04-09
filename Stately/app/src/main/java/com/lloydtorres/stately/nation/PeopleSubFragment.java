@@ -35,6 +35,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-12.
@@ -139,7 +140,7 @@ public class PeopleSubFragment extends Fragment {
                 SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
                 mNation.demPlural);
 
-        String waCategory = mNation.govType.toLowerCase().replace(" ", "_").replace("-", "_");
+        String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
         if (waCategoryDescriptors.containsKey(waCategory))
         {
             summaryContent += "<br /><br />" + String.format(getString(waCategoryDescriptors.get(waCategory)), mNation.demPlural);
