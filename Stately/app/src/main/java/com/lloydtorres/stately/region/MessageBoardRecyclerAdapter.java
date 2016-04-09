@@ -117,6 +117,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public void setAsDeleted(int i)
     {
         messages.get(i).message = DELETED_CONTENT;
+        messages.get(i).status = Post.POST_DELETED;
         notifyItemChanged(i);
     }
 
