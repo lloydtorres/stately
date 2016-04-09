@@ -18,6 +18,7 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -31,10 +32,12 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -145,6 +148,23 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         {
             postCard.deselect();
         }
+
+        if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0)
+        {
+            // If current user is in the like list, highlight the like buttons
+            if (context != null && message.likedBy.contains(SparkleHelper.getActiveUser(context).nationId))
+            {
+                postCard.like();
+            }
+            else
+            {
+                postCard.unlike();
+            }
+        }
+        else
+        {
+            postCard.unlike();
+        }
     }
 
     @Override
@@ -248,6 +268,33 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         deleteButton.setOnClickListener(null);
                     }
                     // @TODO: Like button and like list
+                    likeCount.setText(SparkleHelper.getPrettifiedNumber(post.likes));
+                    // Only build liked list if there are likes
+                    if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0)
+                    {
+                        String[] likes = post.likedBy.split(":");
+                        ArrayList<String> properLikes = new ArrayList<String>();
+                        for (String li : likes)
+                        {
+                            properLikes.add(SparkleHelper.getNameFromId(li));
+                        }
+                        final ArrayList<String> fLikes = properLikes;
+                        likeCount.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FragmentManager fm = ((MessageBoardActivity) context).getSupportFragmentManager();
+                                NameListDialog nameListDialog = new NameListDialog();
+                                nameListDialog.setTitle(context.getString(R.string.rmb_likes));
+                                nameListDialog.setNames(fLikes);
+                                nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+                                nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        likeCount.setOnClickListener(null);
+                    }
                 }
                 else
                 {
@@ -280,6 +327,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         {
             cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
             replyButton.setImageResource(R.drawable.ic_reply);
+        }
+
+        public void like()
+        {
+            likeButton.setImageResource(R.drawable.ic_liked);
+            likeCount.setTextColor(ContextCompat.getColor(context, R.color.colorChart1));
+        }
+
+        public void unlike()
+        {
+            likeButton.setImageResource(R.drawable.ic_like);
+            likeCount.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
         }
     }
 

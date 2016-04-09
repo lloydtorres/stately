@@ -73,7 +73,7 @@
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 android:textSize="15sp"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-light"
                 android:textColor="@color/colorSecondaryText"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/card_post_like"
