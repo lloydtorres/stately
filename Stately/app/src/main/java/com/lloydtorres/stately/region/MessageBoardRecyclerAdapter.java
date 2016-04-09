@@ -24,7 +24,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -47,12 +49,12 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private Context context;
     private List<Post> messages;
     private int replyIndex = NO_SELECTION;
-    private boolean enableClick = false;
+    private boolean isPostable = false;
 
     public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec)
     {
         context = c;
-        enableClick = ec;
+        isPostable = ec;
         setMessages(p);
     }
 
@@ -150,7 +152,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return messages.size();
     }
 
-    public class PostCard extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class PostCard extends RecyclerView.ViewHolder {
 
         private Context context;
         private Post post;
@@ -158,6 +160,41 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private TextView cardAuthor;
         private TextView cardTime;
         private HtmlTextView cardContent;
+        private RelativeLayout actionsHolder;
+        private ImageView likeButton;
+        private TextView likeCount;
+        private ImageView deleteButton;
+        private ImageView replyButton;
+
+        private View.OnClickListener replyClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && post.message != null)
+                {
+                    if (replyIndex == pos)
+                    {
+                        ((MessageBoardActivity) context).setReplyMessage(null);
+                    }
+                    else
+                    {
+                        ((MessageBoardActivity) context).setReplyMessage(post, pos);
+                        setReplyIndex(pos);
+                    }
+                }
+            }
+        };
+
+        private View.OnClickListener deleteClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION)
+                {
+                    ((MessageBoardActivity) context).confirmDelete(pos, post.id);
+                }
+            }
+        };
 
         public PostCard(Context c, View v) {
             super(v);
@@ -166,12 +203,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);
             cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+            actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
+            likeButton = (ImageView) v.findViewById(R.id.card_post_like);
+            likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
+            deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
+            replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
 
-            if (enableClick)
-            {
-                v.setOnClickListener(this);
-                v.setOnLongClickListener(this);
-            }
+            actionsHolder.setVisibility(isPostable ? View.VISIBLE : View.GONE);
         }
 
         public void init(Post p)
@@ -191,6 +229,30 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     postContent = "[i]" + postContent + "[/i]";
                 }
                 SparkleHelper.setBbCodeFormatting(context, cardContent, postContent);
+
+                // Setup actions holder
+                if (isPostable && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
+                {
+                    actionsHolder.setVisibility(View.VISIBLE);
+                    // All posts can be replied to
+                    replyButton.setOnClickListener(replyClickListener);
+                    // Only user's own posts can be deleted
+                    if (context != null && SparkleHelper.getActiveUser(context).nationId.equals(post.name))
+                    {
+                        deleteButton.setVisibility(View.VISIBLE);
+                        deleteButton.setOnClickListener(deleteClickListener);
+                    }
+                    else
+                    {
+                        deleteButton.setVisibility(View.GONE);
+                        deleteButton.setOnClickListener(null);
+                    }
+                    // @TODO: Like button and like list
+                }
+                else
+                {
+                    actionsHolder.setVisibility(View.GONE);
+                }
             }
             else
             {
@@ -204,50 +266,20 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 );
                 params.setMargins(0, 0, 0, 0);
                 cardContent.setLayoutParams(params);
+                actionsHolder.setVisibility(View.GONE);
             }
         }
 
         public void select()
         {
             cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+            replyButton.setImageResource(R.drawable.ic_clear);
         }
 
         public void deselect()
         {
             cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
-        }
-
-        @Override
-        public void onClick(View v) {
-            int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && post.message != null && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
-            {
-                if (replyIndex == pos)
-                {
-                    ((MessageBoardActivity) context).setReplyMessage(null);
-                }
-                else
-                {
-                    ((MessageBoardActivity) context).setReplyMessage(post, pos);
-                    setReplyIndex(pos);
-                }
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (context != null)
-            {
-                String selfName = SparkleHelper.getActiveUser(context).nationId;
-                int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION && selfName.equals(post.name) && (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED))
-                {
-                    ((MessageBoardActivity) context).confirmDelete(pos, post.id);
-                    return true;
-                }
-            }
-
-            return false;
+            replyButton.setImageResource(R.drawable.ic_reply);
         }
     }
 
