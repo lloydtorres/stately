@@ -236,7 +236,7 @@ public class SparkleHelper {
      */
     public static String getIdFromName(String n)
     {
-        return n.toLowerCase().replace(" ", "_");
+        return n.toLowerCase(Locale.US).replace(" ", "_");
     }
 
     /**
@@ -770,7 +770,7 @@ public class SparkleHelper {
         String targetActivity = EXPLORE_TARGET;
 
         // Name needs to be formatted back to its NationStates ID first for the URL.
-        targetActivity = targetActivity + nTarget.toLowerCase().replace(" ", "_");
+        targetActivity = targetActivity + nTarget.toLowerCase(Locale.US).replace(" ", "_");
         targetActivity = String.format(urlFormat, targetActivity, mode, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);

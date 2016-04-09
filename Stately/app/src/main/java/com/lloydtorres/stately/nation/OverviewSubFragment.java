@@ -36,6 +36,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -170,11 +171,11 @@ public class OverviewSubFragment extends Fragment {
         time = (TextView) view.findViewById(R.id.nation_time);
         if (mNation.foundedAgo.equals("0"))
         {
-            time.setText(String.format(getString(R.string.nation_time_founded), getString(R.string.nation_time_immemorial), mNation.lastActivityAgo.toLowerCase()));
+            time.setText(String.format(getString(R.string.nation_time_founded), getString(R.string.nation_time_immemorial), mNation.lastActivityAgo.toLowerCase(Locale.US)));
         }
         else
         {
-            time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo.toLowerCase()));
+            time.setText(String.format(getString(R.string.nation_time_founded), mNation.foundedAgo, mNation.lastActivityAgo.toLowerCase(Locale.US)));
         }
     }
 
