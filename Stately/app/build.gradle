@@ -20,16 +20,16 @@ android {
         targetSdkVersion 23
         versionCode 16
         versionName "1.4.2"
-        generatedDensities = []
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    aaptOptions {
-        additionalParameters "--no-version-vectors"
     }
 }
 
@@ -50,18 +50,18 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:cardview-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.google.guava:guava:19.0'
     compile 'com.github.orangegangsters:swipy:1.2.2@aar'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.3'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     compile 'org.atteo:evo-inflector:1.2'
     compile 'org.jsoup:jsoup:1.8.3'
-    compile 'org.sufficientlysecure:html-textview:1.4'
+    compile 'org.sufficientlysecure:html-textview:1.5'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile "org.kefirsf:kefirbb:1.1"
 }
