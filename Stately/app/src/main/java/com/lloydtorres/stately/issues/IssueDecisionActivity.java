@@ -204,6 +204,11 @@ public class IssueDecisionActivity extends AppCompatActivity {
         Elements issueInfoRaw = issueInfoContainer.children();
 
         String issueText = issueInfoRaw.select("p").first().text();
+        // If this is an issue chain, grab the second paragraph instead
+        if (d.select("div.dilemmachain").first() != null)
+        {
+            issueText = issueInfoRaw.select("p").get(1).text();
+        }
         issue.content = issueText;
 
         issue.options = new ArrayList<IssueOption>();
