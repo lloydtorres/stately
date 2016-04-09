@@ -25,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-17.
@@ -49,7 +50,7 @@ public class PieChartListener implements OnChartValueSelectedListener {
         // Show item label and percentage on click.
         if (pieChart != null)
         {
-            pieChart.setCenterText(String.format(mContext.getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
+            pieChart.setCenterText(String.format(Locale.US, mContext.getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
         }
     }
 

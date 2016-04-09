@@ -36,6 +36,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-12.
@@ -116,7 +117,7 @@ public class GovernmentSubFragment extends Fragment {
         budgetTotal = (TextView) view.findViewById(R.id.nation_expenditures_total);
 
         long budgetHolder = (long) (mNation.gdp * (mNation.sectors.government/100d));
-        budgetTotal.setText(String.format(getString(R.string.card_government_expenditures_budget_flavour), SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency), mNation.sectors.government));
+        budgetTotal.setText(String.format(Locale.US, getString(R.string.card_government_expenditures_budget_flavour), SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency), mNation.sectors.government));
     }
 
     /**
