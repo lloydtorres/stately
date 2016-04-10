@@ -628,6 +628,14 @@ public class MessageBoardActivity extends AppCompatActivity {
     }
 
     /**
+     * Called if user tries to like their own post.
+     */
+    public void selfLikeStatus()
+    {
+        SparkleHelper.makeSnackbar(view, getString(R.string.rmb_self_like));
+    }
+
+    /**
      * Sends a request to like or unlike a specified post.
      * @param pos Position of the post in the adapter.
      * @param id ID of the post to un/like

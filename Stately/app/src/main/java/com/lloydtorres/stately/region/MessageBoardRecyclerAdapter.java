@@ -242,8 +242,17 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION)
                 {
-                    boolean curLikeStatus = post.likedBy != null && post.likedBy.contains(SparkleHelper.getActiveUser(context).nationId);
-                    ((MessageBoardActivity) context).setLikeStatus(pos, post.id, !curLikeStatus);
+                    String userId = SparkleHelper.getActiveUser(context).nationId;
+                    // Users can't like their own posts
+                    if (!SparkleHelper.getIdFromName(post.name).equals(userId))
+                    {
+                        boolean curLikeStatus = post.likedBy != null && post.likedBy.contains(userId);
+                        ((MessageBoardActivity) context).setLikeStatus(pos, post.id, !curLikeStatus);
+                    }
+                    else
+                    {
+                        ((MessageBoardActivity) context).selfLikeStatus();
+                    }
                 }
             }
         };
