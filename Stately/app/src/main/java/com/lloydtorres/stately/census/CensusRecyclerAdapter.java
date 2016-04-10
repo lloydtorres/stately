@@ -375,7 +375,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Override
         public void onClick(View v) {
             int newMode = mode == CensusSortDialog.CENSUS_MODE_NATION ? TrendsActivity.TREND_NATION : TrendsActivity.TREND_REGION;
-            SparkleHelper.startTrends(context, target, newMode,censusData.id);
+            SparkleHelper.startTrends(context, target, newMode, censusData.id);
         }
     }
 }

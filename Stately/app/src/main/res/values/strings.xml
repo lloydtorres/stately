@@ -117,6 +117,7 @@
     <string name="card_overview_other_census_content">%1$s — %2$s</string>
     <string name="card_overview_other_census_region">\n#%1$s in %2$s (top %3$s%%)</string>
     <string name="card_overview_other_census_world">\n#%1$s in the world (top %2$s%%)</string>
+    <string name="card_overview_census_button">Trends for %1$s</string>
 
     <!-- Nation subfragment cards -->
     <string name="card_main_title_summary">Summary</string>

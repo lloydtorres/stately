@@ -29,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.census.UserTrendsOnClickListener;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
@@ -102,6 +104,8 @@ public class OverviewSubFragment extends Fragment {
     private TextView animal;
     private TextView censusTitle;
     private TextView censusContent;
+    private LinearLayout censusButton;
+    private TextView censusButtonLabel;
 
     public void setNation(Nation n)
     {
@@ -194,6 +198,7 @@ public class OverviewSubFragment extends Fragment {
         civilRightsPts.setText(String.valueOf(mNation.freedomPts.civilRightsPts));
         int civColInd = mNation.freedomPts.civilRightsPts / 7;
         civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[civColInd]));
+        civilRightsCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
         economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
         economyDesc = (TextView) view.findViewById(R.id.overview_economy);
@@ -203,6 +208,7 @@ public class OverviewSubFragment extends Fragment {
         economyPts.setText(String.valueOf(mNation.freedomPts.economyPts));
         int econColInd = mNation.freedomPts.economyPts / 7;
         economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[econColInd]));
+        economyCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_ECONOMY));
 
         politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
         politicalDesc = (TextView) view.findViewById(R.id.overview_polifree);
@@ -212,6 +218,7 @@ public class OverviewSubFragment extends Fragment {
         politicalPts.setText(String.valueOf(mNation.freedomPts.politicalPts));
         int polColInd = mNation.freedomPts.politicalPts / 7;
         politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[polColInd]));
+        politicalCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
     }
 
     /**
@@ -462,5 +469,10 @@ public class OverviewSubFragment extends Fragment {
             censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.singlePrecision.format(detailedRank.regionRankPercent)));
         }
         censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.singlePrecision.format(detailedRank.worldRankPercent)));
+
+        censusButtonLabel = (TextView) view.findViewById(R.id.nation_census_button_text);
+        censusButtonLabel.setText(String.format(getString(R.string.card_overview_census_button), worldCensusItem[0]));
+        censusButton = (LinearLayout) view.findViewById(R.id.nation_census_button);
+        censusButton.setOnClickListener(new UserTrendsOnClickListener(getContext(), mNation.wCensus.id));
     }
 }
