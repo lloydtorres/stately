@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -7,7 +8,8 @@
     android:layout_height="match_parent"
     android:paddingTop="4dp"
     android:paddingBottom="20dp"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +38,8 @@
                         android:id="@+id/icon_gov"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_gov"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_gov"/>
                     <TextView
                         android:id="@+id/nation_gov_type"
                         android:textSize="15sp"
@@ -58,7 +61,8 @@
                         android:id="@+id/icon_region"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_region"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_region"/>
                     <TextView
                         android:id="@+id/nation_region"
                         android:textSize="15sp"
@@ -80,7 +84,8 @@
                         android:id="@+id/icon_influence"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_influence"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_influence"/>
                     <TextView
                         android:id="@+id/nation_influence"
                         android:textSize="15sp"
@@ -102,7 +107,8 @@
                         android:id="@+id/icon_population"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_population"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_population"/>
                     <TextView
                         android:id="@+id/nation_population"
                         android:textSize="15sp"
@@ -124,7 +130,8 @@
                         android:id="@+id/icon_motto"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_motto"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_motto"/>
                     <TextView
                         android:id="@+id/nation_motto"
                         android:textSize="15sp"
@@ -147,7 +154,8 @@
                         android:id="@+id/icon_time"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_time"/>
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_time"/>
                     <TextView
                         android:id="@+id/nation_time"
                         android:textSize="15sp"
@@ -711,109 +719,150 @@
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:contentPadding="20dp" >
-
+            card_view:cardBackgroundColor="@android:color/white" >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/card_overview_other_title"
-                    android:textSize="15sp"
-                    android:fontFamily="sans-serif"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/card_overview_other_title" />
                 <LinearLayout
-                    android:id="@+id/card_overview_other_demonym"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="20dp">
                     <TextView
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif-light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
-                        android:text="@string/card_overview_other_demonym" />
-                    <TextView
-                        android:id="@+id/nation_demonym"
+                        android:id="@+id/card_overview_other_title"
                         android:textSize="15sp"
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
-                        tools:text="Mignonese (noun/adjective, plural Mignonese)" />
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/card_overview_other_title" />
+                    <LinearLayout
+                        android:id="@+id/card_overview_other_demonym"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:text="@string/card_overview_other_demonym" />
+                        <TextView
+                            android:id="@+id/nation_demonym"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryText"
+                            tools:text="Mignonese (noun/adjective, plural Mignonese)" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/card_overview_other_religion"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:text="@string/card_overview_other_religion" />
+                        <TextView
+                            android:id="@+id/nation_religion"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryText"
+                            tools:text="None" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/card_overview_other_animal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:text="@string/card_overview_other_animal" />
+                        <TextView
+                            android:id="@+id/nation_animal"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryText"
+                            tools:text="Starling" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/card_overview_other_census"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/nation_census_title"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:text="@string/card_overview_other_census_title" />
+                        <TextView
+                            android:id="@+id/nation_census_content"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryText"
+                            tools:text="@string/card_overview_other_census_content" />
+                    </LinearLayout>
                 </LinearLayout>
+                <include layout="@layout/view_divider" />
                 <LinearLayout
-                    android:id="@+id/card_overview_other_religion"
+                    android:id="@+id/nation_census_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif-light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
-                        android:text="@string/card_overview_other_religion" />
-                    <TextView
-                        android:id="@+id/nation_religion"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
-                        tools:text="None" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/card_overview_other_animal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif-light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
-                        android:text="@string/card_overview_other_animal" />
-                    <TextView
-                        android:id="@+id/nation_animal"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
-                        tools:text="Starling" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/card_overview_other_census"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/nation_census_title"
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif-light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
-                        android:text="@string/card_overview_other_census_title" />
-                    <TextView
-                        android:id="@+id/nation_census_content"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
-                        tools:text="@string/card_overview_other_census_content" />
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/nation_census_button_text"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
+                            android:text="@string/card_overview_census_button"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+                        <TextView
+                            android:visibility="invisible"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="sans-serif-light"
+                            android:text=""/>
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

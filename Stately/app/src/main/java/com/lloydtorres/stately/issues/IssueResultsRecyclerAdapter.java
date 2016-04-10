@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
@@ -226,7 +227,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public class CensusDeltaCard extends RecyclerView.ViewHolder {
+    public class CensusDeltaCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CensusDelta delta;
+
         private Context context;
         private CardView cardHolder;
         private TextView title;
@@ -241,10 +244,12 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             title = (TextView) v.findViewById(R.id.card_delta_name);
             unit = (TextView) v.findViewById(R.id.card_delta_unit);
             value = (TextView) v.findViewById(R.id.card_delta_value);
+            v.setOnClickListener(this);
         }
 
-        public void init(CensusDelta delta)
+        public void init(CensusDelta d)
         {
+            delta = d;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
             int censusId = delta.censusId;
@@ -258,6 +263,12 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             unit.setText(censusType[1]);
             String valueHolder = delta.isPositive ? "+"+delta.delta : "-"+delta.delta;
             value.setText(valueHolder);
+        }
+
+        @Override
+        public void onClick(View v) {
+            String userId = SparkleHelper.getActiveUser(context).nationId;
+            SparkleHelper.startTrends(context, userId, TrendsActivity.TREND_NATION, delta.censusId);
         }
     }
 }

@@ -43,6 +43,8 @@ public class Region implements Parcelable {
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
                                         + "+happenings+history"
+                                        + "+census"
+                                        + ";scale=all;mode=score+rank+prank"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String GET_QUERY = "https://www.nationstates.net/region=%s";
     public static final String QUERY_HTML = "https://www.nationstates.net/region=%s/template-overall=none";
@@ -81,6 +83,9 @@ public class Region implements Parcelable {
     @ElementList(name="EMBASSIES", required=false)
     public List<Embassy> embassies;
 
+    @ElementList(name="CENSUS")
+    public List<CensusDetailedRank> census;
+
     @ElementList(name="HAPPENINGS")
     public List<Event> happenings;
     @ElementList(name="HISTORY")
@@ -117,6 +122,12 @@ public class Region implements Parcelable {
             in.readList(embassies, Embassy.class.getClassLoader());
         } else {
             embassies = null;
+        }
+        if (in.readByte() == 0x01) {
+            census = new ArrayList<CensusDetailedRank>();
+            in.readList(census, CensusDetailedRank.class.getClassLoader());
+        } else {
+            census = null;
         }
         if (in.readByte() == 0x01) {
             happenings = new ArrayList<Event>();
@@ -167,6 +178,12 @@ public class Region implements Parcelable {
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(embassies);
+        }
+        if (census == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(census);
         }
         if (happenings == null) {
             dest.writeByte((byte) (0x00));

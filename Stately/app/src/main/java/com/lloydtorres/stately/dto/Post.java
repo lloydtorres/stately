@@ -30,6 +30,11 @@ import org.simpleframework.xml.Root;
 @Root(name="POST", strict=false)
 public class Post implements Parcelable, Comparable<Post> {
 
+    public static final int POST_REGULAR = 0;
+    public static final int POST_SUPPRESSED = 1;
+    public static final int POST_DELETED = 2;
+    public static final int POST_BANHAMMERED = 9;
+
     @Attribute(required=false)
     public int id;
 
@@ -39,6 +44,14 @@ public class Post implements Parcelable, Comparable<Post> {
     public String name;
     @Element(name="MESSAGE", required=false)
     public String message;
+    @Element(name="STATUS", required=false)
+    public int status;
+    @Element(name="SUPPRESSOR", required=false)
+    public String suppressor;
+    @Element(name="LIKES", required=false)
+    public int likes;
+    @Element(name="LIKERS", required=false)
+    public String likedBy;
 
     public Post() { super(); }
 
@@ -47,6 +60,10 @@ public class Post implements Parcelable, Comparable<Post> {
         timestamp = in.readLong();
         name = in.readString();
         message = in.readString();
+        status = in.readInt();
+        suppressor = in.readString();
+        likes = in.readInt();
+        likedBy = in.readString();
     }
 
     @Override
@@ -60,6 +77,10 @@ public class Post implements Parcelable, Comparable<Post> {
         dest.writeLong(timestamp);
         dest.writeString(name);
         dest.writeString(message);
+        dest.writeInt(status);
+        dest.writeString(suppressor);
+        dest.writeInt(likes);
+        dest.writeString(likedBy);
     }
 
     @SuppressWarnings("unused")

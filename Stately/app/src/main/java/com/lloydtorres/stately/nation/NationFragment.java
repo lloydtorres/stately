@@ -34,10 +34,15 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.CensusSortDialog;
+import com.lloydtorres.stately.census.CensusSubFragment;
+import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.PrimeActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by Lloyd on 2016-01-13.
@@ -52,7 +57,8 @@ public class NationFragment extends Fragment {
     private final int PEOPLE_TAB = 1;
     private final int GOV_TAB = 2;
     private final int ECONOMY_TAB = 3;
-    private final int HAPPEN_TAB = 4;
+    private final int RANKINGS_TAB = 4;
+    private final int HAPPEN_TAB = 5;
 
     private Nation mNation;
 
@@ -61,6 +67,7 @@ public class NationFragment extends Fragment {
     private PeopleSubFragment peopleSubFragment;
     private GovernmentSubFragment governmentSubFragment;
     private EconomySubFragment economySubFragment;
+    private CensusSubFragment censusSubFragment;
     private HappeningSubFragment happeningSubFragment;
 
     // variables used for nation views
@@ -231,6 +238,13 @@ public class NationFragment extends Fragment {
         economySubFragment = new EconomySubFragment();
         economySubFragment.setNation(mNation);
 
+        censusSubFragment = new CensusSubFragment();
+        ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
+        censusHolder.addAll(mNation.census);
+        censusSubFragment.setTarget(SparkleHelper.getIdFromName(mNation.name));
+        censusSubFragment.setCensusData(censusHolder);
+        censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_NATION);
+
         happeningSubFragment = new HappeningSubFragment();
         happeningSubFragment.setNation(mNation);
 
@@ -287,6 +301,8 @@ public class NationFragment extends Fragment {
                     return governmentSubFragment;
                 case ECONOMY_TAB:
                     return economySubFragment;
+                case RANKINGS_TAB:
+                    return censusSubFragment;
                 case HAPPEN_TAB:
                     return happeningSubFragment;
                 default:

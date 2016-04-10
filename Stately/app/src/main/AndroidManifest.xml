@@ -46,6 +46,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".census.TrendsActivity"
+            android:label="@string/trends_title_generic"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.WithStatusBar">
+        </activity>
+        <activity
             android:name=".issues.IssueDecisionActivity"
             android:label="@string/menu_issues"
             android:screenOrientation="sensorPortrait"

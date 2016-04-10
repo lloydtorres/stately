@@ -42,6 +42,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.CensusSortDialog;
+import com.lloydtorres.stately.census.CensusSubFragment;
+import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -51,6 +54,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,7 +72,8 @@ public class RegionFragment extends Fragment {
     private final int OVERVIEW_TAB = 0;
     private final int COMMUNITY_TAB = 1;
     private final int GOV_TAB = 2;
-    private final int HAPPEN_TAB = 3;
+    private final int CENSUS_TAB = 3;
+    private final int HAPPEN_TAB = 4;
 
     private String mRegionName;
     private Region mRegion;
@@ -78,6 +83,7 @@ public class RegionFragment extends Fragment {
     private RegionOverviewSubFragment regionOverviewSubFragment;
     private RegionCommunitySubFragment regionCommunitySubFragment;
     private RegionGovernanceSubFragment regionGovernanceSubFragment;
+    private CensusSubFragment censusSubFragment;
     private RegionHappeningSubFragment regionHappeningSubFragment;
 
     // variables used for mRegion views
@@ -244,6 +250,13 @@ public class RegionFragment extends Fragment {
         regionGovernanceSubFragment = new RegionGovernanceSubFragment();
         regionGovernanceSubFragment.setRegion(mRegion);
 
+        censusSubFragment = new CensusSubFragment();
+        ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
+        censusHolder.addAll(mRegion.census);
+        censusSubFragment.setTarget(SparkleHelper.getIdFromName(mRegion.name));
+        censusSubFragment.setCensusData(censusHolder);
+        censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_REGION);
+
         regionHappeningSubFragment = new RegionHappeningSubFragment();
         regionHappeningSubFragment.setRegion(mRegion);
 
@@ -369,6 +382,8 @@ public class RegionFragment extends Fragment {
                     return regionCommunitySubFragment;
                 case GOV_TAB:
                     return regionGovernanceSubFragment;
+                case CENSUS_TAB:
+                    return censusSubFragment;
                 case HAPPEN_TAB:
                     return regionHappeningSubFragment;
                 default:
