@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.census;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -52,14 +53,16 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String[] WORLD_CENSUS_ITEMS;
 
     private Context context;
+    private CensusSubFragment fragment;
     private ArrayList<CensusDetailedRank> censusData;
     private int sortOrder = SORT_MODE_WORLD_PERCENT;
     private boolean isAscending = true;
     private int mode;
 
-    public CensusRecyclerAdapter(Context c, ArrayList<CensusDetailedRank> cen, int m)
+    public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, int m)
     {
-        context = c;
+        context = c.getContext();
+        fragment = c;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
 
         Collections.sort(cen, getSort());
@@ -115,6 +118,19 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         return isAscending ? comparator : sortDescending(comparator);
+    }
+
+    /**
+     * Sorts the list of census data based on the passed-in criteria and direction.
+     * @param criteria Sort order (as specified by the constants)
+     * @param a True if ascending, false if descending
+     */
+    public void sort(int criteria, boolean a)
+    {
+        sortOrder = criteria;
+        isAscending = a;
+        Collections.sort(censusData, getSort());
+        notifyDataSetChanged();
     }
 
     @Override
@@ -246,7 +262,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      * View holders.
      */
 
-    public class SortButtonCard extends RecyclerView.ViewHolder {
+    public class SortButtonCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView buttonText;
 
@@ -254,11 +270,23 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         {
             super(v);
             buttonText = (TextView) v.findViewById(R.id.card_button_text);
+            v.setOnClickListener(this);
         }
 
         public void init()
         {
             buttonText.setText(getSortLabel());
+        }
+
+        @Override
+        public void onClick(View v) {
+            FragmentManager fm = fragment.getActivity().getSupportFragmentManager();
+            CensusSortDialog censusSortDialog = new CensusSortDialog();
+            censusSortDialog.setMode(mode);
+            censusSortDialog.setSortOrder(sortOrder);
+            censusSortDialog.setIsAscending(isAscending);
+            censusSortDialog.setAdapter(CensusRecyclerAdapter.this);
+            censusSortDialog.show(fm, CensusSortDialog.DIALOG_TAG);
         }
     }
 

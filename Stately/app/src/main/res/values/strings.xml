@@ -248,6 +248,8 @@
     <string name="census_sort_descending">Descending</string>
 
     <string name="census_sort_label">Sort by: %1$s (%2$s)</string>
+    <string name="census_sort_dialog_title">Sort by</string>
+    <string name="census_sort_confirm">Sort</string>
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>

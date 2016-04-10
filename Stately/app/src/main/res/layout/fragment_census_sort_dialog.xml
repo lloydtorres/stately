@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:checkedButton="@+id/census_sort_name">
+        android:checkedButton="@+id/census_sort_score">
         <RadioButton android:id="@+id/census_sort_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,10 +48,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
-        android:checkedButton="@+id/census_sort_descending">
+        android:checkedButton="@+id/census_sort_ascending">
         <RadioButton android:id="@+id/census_sort_ascending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
             android:text="@string/census_sort_ascending"
             android:textSize="15sp"/>
         <RadioButton android:id="@+id/census_sort_descending"

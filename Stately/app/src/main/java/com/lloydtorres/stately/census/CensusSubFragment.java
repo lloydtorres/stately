@@ -38,9 +38,6 @@ public class CensusSubFragment extends Fragment {
     public static final String CENSUS_DATA_KEY = "censusData";
     public static final String MODE_KEY = "censusMode";
 
-    public static final int CENSUS_MODE_NATION = 0;
-    public static final int CENSUS_MODE_REGION = 1;
-
     private ArrayList<CensusDetailedRank> censusData;
     private int censusMode;
 
@@ -90,7 +87,7 @@ public class CensusSubFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerAdapter = new CensusRecyclerAdapter(getContext(), censusData, censusMode);
+        mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, censusMode);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

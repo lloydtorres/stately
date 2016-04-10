@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
@@ -241,7 +242,7 @@ public class NationFragment extends Fragment {
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
         censusHolder.addAll(mNation.census);
         censusSubFragment.setCensusData(censusHolder);
-        censusSubFragment.setMode(CensusSubFragment.CENSUS_MODE_NATION);
+        censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_NATION);
 
         happeningSubFragment = new HappeningSubFragment();
         happeningSubFragment.setNation(mNation);
