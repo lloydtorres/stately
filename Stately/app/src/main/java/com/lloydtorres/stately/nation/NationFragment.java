@@ -241,6 +241,7 @@ public class NationFragment extends Fragment {
         censusSubFragment = new CensusSubFragment();
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
         censusHolder.addAll(mNation.census);
+        censusSubFragment.setTarget(SparkleHelper.getIdFromName(mNation.name));
         censusSubFragment.setCensusData(censusHolder);
         censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_NATION);
 

@@ -37,13 +37,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
@@ -707,25 +704,9 @@ public class ResolutionActivity extends AppCompatActivity {
         LineData data = new LineData(xLabels, dataSets);
 
         // formatting
-        Legend cLegend = votingHistory.getLegend();
-        cLegend.setEnabled(false);
-
-        XAxis xAxis = votingHistory.getXAxis();
-        xAxis.setLabelsToSkip(23);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        YAxis yAxisRight = votingHistory.getAxisRight();
-        yAxisRight.setEnabled(false);
-
-        YAxis yAxisLeft = votingHistory.getAxisLeft();
-        yAxisLeft.setValueFormatter(new LargeValueFormatter());
-
-        votingHistory.setDoubleTapToZoomEnabled(false);
-        votingHistory.setDescription("");
-        votingHistory.setDragEnabled(true);
-        votingHistory.setScaleYEnabled(false);
-        votingHistory.setDrawGridBackground(false);
-        votingHistory.setOnChartValueSelectedListener(new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst));
+        votingHistory = SparkleHelper.getFormattedLineChart(votingHistory,
+                new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst),
+                23, false);
 
         votingHistory.setData(data);
         votingHistory.invalidate();

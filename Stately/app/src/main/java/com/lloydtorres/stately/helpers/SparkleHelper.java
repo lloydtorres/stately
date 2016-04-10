@@ -32,15 +32,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -209,6 +215,7 @@ public class SparkleHelper {
 
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+    public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
     // Displays a given float to up to one decimal point precision.
     public static final DecimalFormat singlePrecision = new DecimalFormat("#.#");
 
@@ -338,6 +345,16 @@ public class SparkleHelper {
         }
 
         return template;
+    }
+
+    /**
+     * Returns a formatted date (with no year) given a time in UTC seconds.
+     * @param sec UTC seconds
+     * @return Formatted date with no year
+     */
+    public static String getDateNoYearFromUTC(long sec)
+    {
+        return sdfNoYear.format(new Date(sec * 1000L));
     }
 
     /**
@@ -494,6 +511,39 @@ public class SparkleHelper {
     }
 
     /**
+     * Formats a line chart in a standardized manner
+     * @param chart LineChart to format
+     * @param listener Listener to attach to chart
+     * @param skip Number of values to skip
+     * @param legend True if show legend, false if hide legend
+     * @return Formatted linechart
+     */
+    public static LineChart getFormattedLineChart(LineChart chart, OnChartValueSelectedListener listener, int skip, boolean legend)
+    {
+        Legend cLegend = chart.getLegend();
+        cLegend.setEnabled(legend);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setLabelsToSkip(skip);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis yAxisRight = chart.getAxisRight();
+        yAxisRight.setEnabled(false);
+
+        YAxis yAxisLeft = chart.getAxisLeft();
+        yAxisLeft.setValueFormatter(new LargeValueFormatter());
+
+        chart.setDoubleTapToZoomEnabled(false);
+        chart.setDescription("");
+        chart.setDragEnabled(true);
+        chart.setScaleYEnabled(false);
+        chart.setDrawGridBackground(false);
+        chart.setOnChartValueSelectedListener(listener);
+
+        return chart;
+    }
+
+    /**
      * LOGINS & SESSION DATA
      * These update, return and remove data about the current login and its session data.
      */
@@ -632,9 +682,10 @@ public class SparkleHelper {
      */
 
     /**
-     * Starts the ExploreNationActivity for the given nation ID.
+     * Starts the ExploreActivity for the given ID and mode.
      * @param c App context
      * @param n The nation ID
+     * @param mode Mode if nation or region
      */
     public static void startExploring(Context c, String n, int mode)
     {
@@ -642,6 +693,22 @@ public class SparkleHelper {
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_ID, n);
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_MODE, mode);
         c.startActivity(exploreActivityLaunch);
+    }
+
+    /**
+     * Starts the TrendsActivity for the given target and census ID.
+     * @param c App context
+     * @param target Target ID
+     * @param mode Mode if nation or region
+     * @param id Census ID
+     */
+    public static void startTrends(Context c, String target, int mode, int id)
+    {
+        Intent trendsActivityLaunch = new Intent(c, TrendsActivity.class);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_TARGET, target);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_MODE, mode);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_ID, id);
+        c.startActivity(trendsActivityLaunch);
     }
 
     /**

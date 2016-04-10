@@ -253,6 +253,7 @@ public class RegionFragment extends Fragment {
         censusSubFragment = new CensusSubFragment();
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
         censusHolder.addAll(mRegion.census);
+        censusSubFragment.setTarget(SparkleHelper.getIdFromName(mRegion.name));
         censusSubFragment.setCensusData(censusHolder);
         censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_REGION);
 

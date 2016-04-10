@@ -57,9 +57,10 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private ArrayList<CensusDetailedRank> censusData;
     private int sortOrder = SORT_MODE_WORLD_PERCENT;
     private boolean isAscending = true;
+    private String target;
     private int mode;
 
-    public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, int m)
+    public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, String t, int m)
     {
         context = c.getContext();
         fragment = c;
@@ -68,6 +69,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Collections.sort(cen, getSort());
         censusData = cen;
 
+        target = t;
         mode = m;
     }
 
@@ -290,7 +292,9 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public class CensusCard extends RecyclerView.ViewHolder {
+    public class CensusCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CensusDetailedRank censusData;
+
         private CardView cardHolder;
         private TextView title;
         private TextView unit;
@@ -303,10 +307,13 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             title = (TextView) v.findViewById(R.id.card_delta_name);
             unit = (TextView) v.findViewById(R.id.card_delta_unit);
             value = (TextView) v.findViewById(R.id.card_delta_value);
+            v.setOnClickListener(this);
         }
 
         public void init(CensusDetailedRank data)
         {
+            censusData = data;
+
             int censusColorIndex;
             if (sortOrder == SORT_MODE_SCORE || sortOrder == SORT_MODE_WORLD_RANK || sortOrder == SORT_MODE_WORLD_PERCENT)
             {
@@ -319,7 +326,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             censusColorIndex = (SparkleHelper.freedomColours.length - 1) - censusColorIndex;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[censusColorIndex]));
 
-            int censusId = data.id;
+            int censusId = censusData.id;
             // if census ID is out of bounds, set it as unknown
             if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
             {
@@ -332,37 +339,43 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             switch (sortOrder)
             {
                 case SORT_MODE_SCORE:
-                    value.setText(SparkleHelper.getPrettifiedNumber(data.score));
+                    value.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
                     break;
                 case SORT_MODE_WORLD_RANK:
-                    value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(data.worldRank)));
+                    value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.worldRank)));
                     break;
                 case SORT_MODE_WORLD_PERCENT:
-                    value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(data.worldRankPercent)));
+                    value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(censusData.worldRankPercent)));
                     break;
                 case SORT_MODE_REGION_RANK:
-                    if (data.regionRank <= 0)
+                    if (censusData.regionRank <= 0)
                     {
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
-                        value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(data.regionRank)));
+                        value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.regionRank)));
                     }
                     break;
                 case SORT_MODE_REGION_PERCENT:
-                    if (data.regionRankPercent <= 0)
+                    if (censusData.regionRankPercent <= 0)
                     {
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
-                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(data.regionRankPercent)));
+                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(censusData.regionRankPercent)));
                     }
                     break;
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            int newMode = mode == CensusSortDialog.CENSUS_MODE_NATION ? TrendsActivity.TREND_NATION : TrendsActivity.TREND_REGION;
+            SparkleHelper.startTrends(context, target, newMode,censusData.id);
         }
     }
 }

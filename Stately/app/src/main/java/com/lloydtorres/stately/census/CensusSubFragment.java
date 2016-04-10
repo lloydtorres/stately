@@ -35,15 +35,19 @@ import java.util.ArrayList;
  * by the user. Takes in a list of census data as well as mode.
  */
 public class CensusSubFragment extends Fragment {
+    public static final String TARGET_KEY = "target";
     public static final String CENSUS_DATA_KEY = "censusData";
     public static final String MODE_KEY = "censusMode";
 
+    private String target;
     private ArrayList<CensusDetailedRank> censusData;
     private int censusMode;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
+
+    public void setTarget(String t) { target = t; }
 
     public void setCensusData(ArrayList<CensusDetailedRank> c)
     {
@@ -65,10 +69,11 @@ public class CensusSubFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         // Restore save state
-        if (savedInstanceState != null && censusData == null)
+        if (savedInstanceState != null)
         {
             censusMode = savedInstanceState.getInt(MODE_KEY);
             censusData = savedInstanceState.getParcelableArrayList(CENSUS_DATA_KEY);
+            target = savedInstanceState.getString(TARGET_KEY);
         }
 
         if (censusData != null)
@@ -87,7 +92,7 @@ public class CensusSubFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, censusMode);
+        mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
@@ -99,6 +104,10 @@ public class CensusSubFragment extends Fragment {
         if (censusData != null)
         {
             outState.putParcelableArrayList(CENSUS_DATA_KEY, censusData);
+        }
+        if (target != null)
+        {
+            outState.putString(TARGET_KEY, target);
         }
     }
 }

@@ -19,7 +19,6 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -28,20 +27,17 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-04-10.
- * This contains a list of data points for a given census scale's history.
+ * Holder for a given census scale's history.
  */
-@Root(name="SCALE", strict=false)
+@Root(name="CENSUS", strict=false)
 public class CensusHistoryScale implements Parcelable {
 
-    @Attribute
-    public int id;
-    @ElementList(name="POINT")
+    @ElementList(name="SCALE")
     public List<CensusHistoryPoint> points;
 
     public CensusHistoryScale() { super(); }
 
     protected CensusHistoryScale(Parcel in) {
-        id = in.readInt();
         if (in.readByte() == 0x01) {
             points = new ArrayList<CensusHistoryPoint>();
             in.readList(points, CensusHistoryPoint.class.getClassLoader());
@@ -57,7 +53,6 @@ public class CensusHistoryScale implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
         if (points == null) {
             dest.writeByte((byte) (0x00));
         } else {
