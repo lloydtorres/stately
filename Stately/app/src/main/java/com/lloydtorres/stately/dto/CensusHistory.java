@@ -36,6 +36,9 @@ public class CensusHistory implements Parcelable {
                                         + ";scale=%d;mode=history"
                                         + ";from=%d&to=%d"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final long SIXTY_DAYS_IN_SECONDS = 5184000;
+    public static final String NATION_HISTORY = "nation";
+    public static final String REGION_HISTORY = "region";
 
     @Element(name="NAME")
     public String name;
