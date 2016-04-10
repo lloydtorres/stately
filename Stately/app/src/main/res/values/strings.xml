@@ -251,6 +251,11 @@
     <string name="census_sort_dialog_title">Sort by</string>
     <string name="census_sort_confirm">Sort</string>
 
+    <!-- Trends -->
+    <string name="trends_title_generic">Trends</string>
+    <string name="trends_title">Trends: %1$s</string>
+    <string name="trends_datasets">Datasets</string>
+
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>
     <string name="no_issues">No issues available at the moment.</string>
