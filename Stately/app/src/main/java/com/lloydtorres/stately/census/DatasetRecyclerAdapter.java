@@ -58,7 +58,8 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DatasetEntry datasetEntry = (DatasetEntry) holder;
-        datasetEntry.init(datasets.get(position));
+        Dataset d = datasets.get(position);
+        datasetEntry.init(d);
     }
 
     @Override
@@ -81,7 +82,6 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             dataset = d;
             datasetName.setText(dataset.name);
-            datasetName.setTypeface(datasetName.getTypeface(), dataset.selected ? Typeface.BOLD : Typeface.NORMAL);
         }
 
         @Override
@@ -91,6 +91,16 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 ((TrendsActivity) activity).queryNewDataset(dataset.id);
             }
             selfDialog.dismiss();
+        }
+
+        public void select()
+        {
+            datasetName.setTypeface(datasetName.getTypeface(), Typeface.BOLD);
+        }
+
+        public void unselect()
+        {
+            datasetName.setTypeface(datasetName.getTypeface(), Typeface.NORMAL);
         }
     }
 }
