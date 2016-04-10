@@ -216,8 +216,6 @@ public class SparkleHelper {
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
-    // Displays a given float to up to one decimal point precision.
-    public static final DecimalFormat singlePrecision = new DecimalFormat("#.#");
 
     /**
      * VALIDATION

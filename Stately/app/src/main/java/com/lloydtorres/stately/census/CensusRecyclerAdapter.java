@@ -345,7 +345,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.worldRank)));
                     break;
                 case SORT_MODE_WORLD_PERCENT:
-                    value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(censusData.worldRankPercent)));
+                    value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
                     break;
                 case SORT_MODE_REGION_RANK:
                     if (censusData.regionRank <= 0)
@@ -366,7 +366,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     }
                     else
                     {
-                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.singlePrecision.format(censusData.regionRankPercent)));
+                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
                     }
                     break;
             }
