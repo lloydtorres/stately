@@ -7,15 +7,16 @@ Stately
 
 ### Features
 
-* Browse your nation's data: stats, people, government, economy, and happenings.
+* Browse your nation's data: stats, people, government, economy, rankings and happenings.
 * Respond to issues encountered by your nation.
+* Discover trends in national and regional census statistics.
 * Login and switch between different nations.
-* Read, compose and reply to telegrams.
+* Read, write and reply to telegrams.
 * Browse through regional factbooks and communities.
-* Read more and post on your own region's RMB.
-* Observe and vote on current World Assembly proceedings.
+* Read, quote, post and do more in RMBs.
+* Observe and vote on current World Assembly resolutions.
 * Compile all your happenings together with the Activity Feed.
-* Explore, endorse and move to other nations and regions in NationStates.
+* Explore, endorse nations and move to different regions in NationStates.
 
 ### Revision History
 
