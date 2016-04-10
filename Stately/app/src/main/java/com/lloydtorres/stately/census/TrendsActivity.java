@@ -90,6 +90,9 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     private TextView unit;
     private TextView date;
     private TextView value;
+    private TextView max;
+    private TextView min;
+    private TextView avg;
     private LineChart chart;
 
     @Override
@@ -113,6 +116,9 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         unit = (TextView) findViewById(R.id.trends_unit);
         date = (TextView) findViewById(R.id.trends_date);
         value = (TextView) findViewById(R.id.trends_value);
+        max = (TextView) findViewById(R.id.trends_max);
+        min = (TextView) findViewById(R.id.trends_min);
+        avg = (TextView) findViewById(R.id.trends_avg);
         chart = (LineChart) findViewById(R.id.trends_chart);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.trends_refresher);
@@ -244,9 +250,33 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         // Set selected indicator text to latest data
         resetDataSelected();
 
+        // Calculate max, min, average
+        List<CensusHistoryPoint> datapoints = dataset.scale.points;
+
+        float maxVal = Float.MIN_VALUE;
+        float minVal = Float.MAX_VALUE;
+        float total = 0;
+        for (int i=0; i < datapoints.size(); i++)
+        {
+            float value = datapoints.get(i).score;
+            if (value > maxVal)
+            {
+                maxVal = value;
+            }
+            if (value < minVal)
+            {
+                minVal = value;
+            }
+            total += value;
+        }
+        float avgVal = total / datapoints.size();
+
+        max.setText(SparkleHelper.getPrettifiedNumber(maxVal));
+        min.setText(SparkleHelper.getPrettifiedNumber(minVal));
+        avg.setText(SparkleHelper.getPrettifiedNumber(avgVal));
+
         // Set up chart
         final float lineWidth = 2.5f;
-        List<CensusHistoryPoint> datapoints = dataset.scale.points;
         List<Entry> historyEntries = new ArrayList<Entry>();
         for (int i=0; i < datapoints.size(); i++)
         {

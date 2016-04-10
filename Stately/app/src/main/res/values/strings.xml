@@ -256,6 +256,9 @@
     <string name="trends_title_generic">Trends</string>
     <string name="trends_title">Trends: %1$s</string>
     <string name="trends_datasets">Datasets</string>
+    <string name="trends_max">Maximum</string>
+    <string name="trends_min">Minimum</string>
+    <string name="trends_avg">Average</string>
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>
