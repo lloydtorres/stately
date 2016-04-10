@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -166,6 +167,19 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
                 queryDataset();
             }
         });
+    }
+
+    /**
+     * Public function for DatasetDialog; allows it to scan for a new dataset.
+     * @param i Census ID
+     */
+    public void queryNewDataset(int i)
+    {
+        if (i != id)
+        {
+            id = i;
+            startQueryDataset();
+        }
     }
 
     /**
@@ -359,7 +373,10 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
                 finish();
                 return true;
             case R.id.nav_dataset:
-                // @TODO dialog to switch to different dataset + callback
+                FragmentManager fm = getSupportFragmentManager();
+                DatasetDialog dialog = new DatasetDialog();
+                dialog.setDatasets(WORLD_CENSUS_ITEMS, id);
+                dialog.show(fm, DatasetDialog.DIALOG_TAG);
                 return true;
         }
         return super.onOptionsItemSelected(item);
