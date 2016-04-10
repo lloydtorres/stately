@@ -188,6 +188,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     private void queryDataset()
     {
+        chart.highlightValues(null);
         String queryMode = mode == TREND_NATION ? CensusHistory.NATION_HISTORY : CensusHistory.REGION_HISTORY;
         long curTime = System.currentTimeMillis() / 1000L;
         long sixtyDaysAgo = curTime - CensusHistory.SIXTY_DAYS_IN_SECONDS;
