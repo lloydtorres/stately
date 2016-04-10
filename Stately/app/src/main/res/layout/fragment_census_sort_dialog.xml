@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <RadioGroup
+        android:id="@+id/census_sort_category_radio_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:checkedButton="@+id/census_sort_name">
+        <RadioButton android:id="@+id/census_sort_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_score"
+            android:textSize="15sp"/>
+        <RadioButton android:id="@+id/census_sort_world_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_world_rank"
+            android:textSize="15sp"/>
+        <RadioButton android:id="@+id/census_sort_world_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_world_percent"
+            android:textSize="15sp"/>
+        <RadioButton android:id="@+id/census_sort_region_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_region_rank"
+            android:textSize="15sp"/>
+        <RadioButton android:id="@+id/census_sort_region_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_region_percent"
+            android:textSize="15sp"/>
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/census_sort_order_radio_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:checkedButton="@+id/census_sort_descending">
+        <RadioButton android:id="@+id/census_sort_ascending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/census_sort_ascending"
+            android:textSize="15sp"/>
+        <RadioButton android:id="@+id/census_sort_descending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/census_sort_descending"
+            android:textSize="15sp"/>
+    </RadioGroup>
+
+</LinearLayout>

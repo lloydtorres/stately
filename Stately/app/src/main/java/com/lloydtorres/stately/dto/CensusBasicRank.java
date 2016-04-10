@@ -20,7 +20,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
 /**

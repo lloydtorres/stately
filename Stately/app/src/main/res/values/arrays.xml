@@ -5,6 +5,7 @@
         <item>People</item>
         <item>Government</item>
         <item>Economy</item>
+        <item>Rankings</item>
         <item>Happenings</item>
     </string-array>
     <string-array name="region_tabs">
