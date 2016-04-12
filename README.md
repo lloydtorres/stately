@@ -3,7 +3,8 @@ Stately
 
 **Stately** is an unofficial [NationStates](http://www.nationstates.net/) app for Android.
 
-[Google Play Link](https://play.google.com/store/apps/details?id=com.lloydtorres.stately)
+[Stately on Google Play](https://play.google.com/store/apps/details?id=com.lloydtorres.stately)
+[Stately on the Amazon Appstore](http://www.amazon.com/gp/product/B01E4R7T1C/ref=mas_pm_stately_for_nationstates)
 
 ### Features
 
