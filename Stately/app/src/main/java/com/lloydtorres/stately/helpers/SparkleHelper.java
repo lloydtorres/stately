@@ -210,6 +210,7 @@ public class SparkleHelper {
     public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
             .or(CharMatcher.WHITESPACE)
             .or(CharMatcher.anyOf("-"))
+            .or(CharMatcher.anyOf("_"))
             .precomputed();
 
     // Initialized to provide human-readable date strings for Date objects
