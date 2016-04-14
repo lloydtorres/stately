@@ -512,11 +512,12 @@ public class SparkleHelper {
      * Formats a line chart in a standardized manner
      * @param chart LineChart to format
      * @param listener Listener to attach to chart
+     * @param valueFormatter True if large value formatter should be used
      * @param skip Number of values to skip
      * @param legend True if show legend, false if hide legend
      * @return Formatted linechart
      */
-    public static LineChart getFormattedLineChart(LineChart chart, OnChartValueSelectedListener listener, int skip, boolean legend)
+    public static LineChart getFormattedLineChart(LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend)
     {
         Legend cLegend = chart.getLegend();
         cLegend.setEnabled(legend);
@@ -529,7 +530,10 @@ public class SparkleHelper {
         yAxisRight.setEnabled(false);
 
         YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setValueFormatter(new LargeValueFormatter());
+        if (valueFormatter)
+        {
+            yAxisLeft.setValueFormatter(new LargeValueFormatter());
+        }
 
         chart.setDoubleTapToZoomEnabled(false);
         chart.setDescription("");

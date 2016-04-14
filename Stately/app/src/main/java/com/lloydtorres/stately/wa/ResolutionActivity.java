@@ -706,7 +706,7 @@ public class ResolutionActivity extends AppCompatActivity {
         // formatting
         votingHistory = SparkleHelper.getFormattedLineChart(votingHistory,
                 new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst),
-                23, false);
+                true, 23, false);
 
         votingHistory.setData(data);
         votingHistory.invalidate();

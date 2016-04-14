@@ -321,7 +321,8 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         LineData dataFinal = new LineData(xLabels, dataSets);
 
         // formatting
-        chart = SparkleHelper.getFormattedLineChart(chart, this, 6, false);
+        boolean isLargeValue = maxVal >= 1000f;
+        chart = SparkleHelper.getFormattedLineChart(chart, this, isLargeValue, 6, false);
         chart.setData(dataFinal);
         chart.invalidate();
 
