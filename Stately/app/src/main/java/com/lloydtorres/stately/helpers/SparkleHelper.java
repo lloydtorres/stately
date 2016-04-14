@@ -28,7 +28,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
@@ -1242,7 +1241,7 @@ public class SparkleHelper {
     /**
      * Overloaded to deal with spoilers.
      */
-    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, final FragmentManager fm)
+    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, FragmentManager fm)
     {
         if (t instanceof HtmlTextView)
         {
@@ -1268,27 +1267,17 @@ public class SparkleHelper {
 
         for (int i=0; i < spoilers.size(); i++)
         {
-            final Spoiler s = spoilers.get(i);
+            Spoiler s = spoilers.get(i);
             int start = rawSpan.indexOf(s.replacer);
             if (start != -1)
             {
                 int end = start + s.replacer.length();
-                ClickableSpan clickyDialog = new ClickableSpan() {
-                    @Override
-                    public void onClick(View widget) {
-                        HtmlDialog htmlDialog = new HtmlDialog();
-                        htmlDialog.setTitle(s.title);
-                        htmlDialog.setRawContent(s.content);
-                        htmlDialog.setFragmentManager(fm);
-                        htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);
-                    }
-                };
+                SpoilerSpan clickyDialog = new SpoilerSpan(c, s, fm);
                 span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
-        // Restyle the new spans
-        styleLinkifiedTextView(c, t);
+        t.setText(span);
     }
 
     /**

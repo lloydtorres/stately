@@ -22,6 +22,7 @@ Stately
 
 ### Revision History
 
+* **1.5.2** - Hotfix for spoiler links.
 * **1.5.1** - Better spoiler support, bug fixes.
 * **1.5.0** - RMB improvements, census rankings/trends, vectorized icons, bug fixes and improvements.
 * **1.4.2** - Additional safety checks, bug fixes and improvements.
