@@ -97,8 +97,11 @@ public class RegionGovernanceSubFragment extends Fragment {
 
         for (int i=0; i<officers.size(); i++)
         {
-            inflateOfficerEntry(inflater, officersLayout, officers.get(i).office, officers.get(i).name);
-            tracker++;
+            if (officers.get(i).office != null || officers.get(i).name != null)
+            {
+                inflateOfficerEntry(inflater, officersLayout, officers.get(i).office, officers.get(i).name);
+                tracker++;
+            }
         }
 
         if (tracker <= 0)
