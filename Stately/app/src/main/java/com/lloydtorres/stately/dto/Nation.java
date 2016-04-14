@@ -38,7 +38,7 @@ public class Nation implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
                                         + "banner+flag+name+type+wa"
                                         + "+category+region+influence+population+founded+lastactivity+motto"
-                                        + "+freedom+freedomscores"
+                                        + "+freedom"
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
                                         + "+demonym+demonym2+demonym2plural+customreligion+animal"
@@ -81,8 +81,6 @@ public class Nation implements Parcelable {
 
     @Element(name="FREEDOM")
     public Freedom freedomDesc;
-    @Element(name="FREEDOMSCORES")
-    public FreedomScores freedomPts;
 
     @Element(name="LEADER", required=false)
     public String leader;
@@ -170,7 +168,6 @@ public class Nation implements Parcelable {
         lastActivityAgo = in.readString();
         motto = in.readString();
         freedomDesc = (Freedom) in.readValue(Freedom.class.getClassLoader());
-        freedomPts = (FreedomScores) in.readValue(FreedomScores.class.getClassLoader());
         leader = in.readString();
         capital = in.readString();
         govtPriority = in.readString();
@@ -237,7 +234,6 @@ public class Nation implements Parcelable {
         dest.writeString(lastActivityAgo);
         dest.writeString(motto);
         dest.writeValue(freedomDesc);
-        dest.writeValue(freedomPts);
         dest.writeString(leader);
         dest.writeString(capital);
         dest.writeString(govtPriority);

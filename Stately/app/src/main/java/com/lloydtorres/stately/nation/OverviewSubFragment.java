@@ -195,8 +195,9 @@ public class OverviewSubFragment extends Fragment {
         civilRightsPts = (TextView) view.findViewById(R.id.overview_civrights_pts);
 
         civilRightsDesc.setText(mNation.freedomDesc.civilRightsDesc);
-        civilRightsPts.setText(String.valueOf(mNation.freedomPts.civilRightsPts));
-        int civColInd = mNation.freedomPts.civilRightsPts / 7;
+        int civilRightsScore = (int) mNation.census.get(TrendsActivity.CENSUS_CIVIL_RIGHTS).score;
+        civilRightsPts.setText(String.valueOf(civilRightsScore));
+        int civColInd = civilRightsScore / 7;
         civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[civColInd]));
         civilRightsCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
@@ -205,8 +206,9 @@ public class OverviewSubFragment extends Fragment {
         economyPts = (TextView) view.findViewById(R.id.overview_economy_pts);
 
         economyDesc.setText(mNation.freedomDesc.economyDesc);
-        economyPts.setText(String.valueOf(mNation.freedomPts.economyPts));
-        int econColInd = mNation.freedomPts.economyPts / 7;
+        int economyScore = (int) mNation.census.get(TrendsActivity.CENSUS_ECONOMY).score;
+        economyPts.setText(String.valueOf(economyScore));
+        int econColInd = economyScore / 7;
         economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[econColInd]));
         economyCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_ECONOMY));
 
@@ -215,8 +217,9 @@ public class OverviewSubFragment extends Fragment {
         politicalPts = (TextView) view.findViewById(R.id.overview_polifree_pts);
 
         politicalDesc.setText(mNation.freedomDesc.politicalDesc);
-        politicalPts.setText(String.valueOf(mNation.freedomPts.politicalPts));
-        int polColInd = mNation.freedomPts.politicalPts / 7;
+        int politicalFreedomScore = (int) mNation.census.get(TrendsActivity.CENSUS_POLITICAL_FREEDOM).score;
+        politicalPts.setText(String.valueOf(politicalFreedomScore));
+        int polColInd = politicalFreedomScore / 7;
         politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[polColInd]));
         politicalCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
     }
