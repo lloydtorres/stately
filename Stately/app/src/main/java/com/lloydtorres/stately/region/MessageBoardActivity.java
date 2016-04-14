@@ -776,7 +776,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         Collections.sort(messages.posts);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable);
+            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable, getSupportFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else

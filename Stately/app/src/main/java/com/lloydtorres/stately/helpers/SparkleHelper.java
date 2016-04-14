@@ -22,11 +22,13 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +50,7 @@ import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
@@ -1061,8 +1064,6 @@ public class SparkleHelper {
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
     public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
-    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
-    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
     public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
@@ -1073,8 +1074,9 @@ public class SparkleHelper {
      * @param c App context
      * @param t TextView
      * @param content Target content
+     * @param fm FragmentManager to show spoiler dialogs in
      */
-    public static void setBbCodeFormatting(Context c, TextView t, String content)
+    public static void setBbCodeFormatting(Context c, TextView t, String content, FragmentManager fm)
     {
         String holder = content.trim();
         holder = holder.replace("\n", "<br>");
@@ -1106,8 +1108,6 @@ public class SparkleHelper {
         holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
         holder = regexReplace(holder, BBCODE_PRE, "<code>%s</code>");
-        holder = regexReplace(holder, BBCODE_SPOILER, "<br /><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
-        holder = regexDoubleReplace(holder, BBCODE_SPOILER_2, "<br /><b>---" + c.getString(R.string.spoiler_warn) + ": %s---</b><br />%s<br/><b>---" + c.getString(R.string.spoiler_warn) + "---</b><br />");
         holder = regexExtract(holder, BBCODE_PROPOSAL);
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
@@ -1115,6 +1115,14 @@ public class SparkleHelper {
         holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = regexQuoteFormat(c, t, holder);
+
+        // Extract and replace spoilers
+        List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
+        for (int i=0; i < spoilers.size(); i++)
+        {
+            Spoiler s = spoilers.get(i);
+            holder = holder.replace(s.raw, s.replacer);
+        }
 
         // Linkify nations and regions
         holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, CLICKY_NATION_MODE);
@@ -1124,7 +1132,48 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, CLICKY_REGION_MODE);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        setStyledTextView(c, t, holder);
+        setStyledTextView(c, t, holder, spoilers, fm);
+    }
+
+    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
+
+    /**
+     * Helper function that extracts spoilers from BBCode for later use.
+     * @param c App context
+     * @param target Target content
+     * @return List of spoilers
+     */
+    public static List<Spoiler> getSpoilerReplacePairs(Context c, String target)
+    {
+        String holder = target;
+        List<Spoiler> spoilers = new ArrayList<Spoiler>();
+        int id = 0;
+
+        // Handle spoilers without titles first
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(BBCODE_SPOILER, holder, false);
+        for (Map.Entry<String, String> n : set) {
+            Spoiler s = new Spoiler();
+            s.content = n.getValue();
+            s.raw = n.getKey();
+            s.replacer = String.format(c.getString(R.string.spoiler_warn_link), id++);
+            spoilers.add(s);
+        }
+
+        // Handle spoilers with titles next
+        Matcher m = BBCODE_SPOILER_2.matcher(holder);
+        while (m.find())
+        {
+            Spoiler s = new Spoiler();
+            // Gets rid of HTML in title
+            s.title = Jsoup.parse(m.group(1)).text();
+            s.content = m.group(2);
+            s.raw = m.group();
+            s.replacer = String.format(c.getString(R.string.spoiler_warn_title_link), id++, s.title);
+            spoilers.add(s);
+        }
+
+        return spoilers;
     }
 
     public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
@@ -1187,6 +1236,58 @@ public class SparkleHelper {
         {
             t.setText(Html.fromHtml(holder));
         }
+        styleLinkifiedTextView(c, t);
+    }
+
+    /**
+     * Overloaded to deal with spoilers.
+     */
+    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, final FragmentManager fm)
+    {
+        if (t instanceof HtmlTextView)
+        {
+            try
+            {
+                ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+            }
+            catch(Exception e) {
+                logError(e.toString());
+                t.setText(c.getString(R.string.bbcode_parse_error));
+                t.setTypeface(t.getTypeface(), Typeface.ITALIC);
+            }
+        }
+        else
+        {
+            t.setText(Html.fromHtml(holder));
+        }
+
+        // Deal with spoilers here
+        styleLinkifiedTextView(c, t);   // Ensures TextView contains a spannable
+        Spannable span = (Spannable) t.getText();
+        String rawSpan = span.toString();
+
+        for (int i=0; i < spoilers.size(); i++)
+        {
+            final Spoiler s = spoilers.get(i);
+            int start = rawSpan.indexOf(s.replacer);
+            if (start != -1)
+            {
+                int end = start + s.replacer.length();
+                ClickableSpan clickyDialog = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        HtmlDialog htmlDialog = new HtmlDialog();
+                        htmlDialog.setTitle(s.title);
+                        htmlDialog.setRawContent(s.content);
+                        htmlDialog.setFragmentManager(fm);
+                        htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);
+                    }
+                };
+                span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        // Restyle the new spans
         styleLinkifiedTextView(c, t);
     }
 

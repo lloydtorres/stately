@@ -100,7 +100,7 @@ public class RegionOverviewSubFragment extends Fragment {
             factbook = (HtmlTextView) view.findViewById(R.id.region_factbook);
             if (mRegion.factbook != null)
             {
-                SparkleHelper.setBbCodeFormatting(getContext(), factbook, mRegion.factbook);
+                SparkleHelper.setBbCodeFormatting(getContext(), factbook, mRegion.factbook, getFragmentManager());
             }
             else
             {

@@ -76,7 +76,7 @@ public class RegionCommunitySubFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerAdapter = new CommunityRecyclerAdapter(getContext(), mRegion);
+        mRecyclerAdapter = new CommunityRecyclerAdapter(getContext(), mRegion, getFragmentManager());
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

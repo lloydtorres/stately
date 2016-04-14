@@ -18,6 +18,7 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -58,12 +59,14 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private List<Object> cards;
     private Context context;
+    private FragmentManager fm;
 
-    public CommunityRecyclerAdapter(Context c, Region mRegion)
+    public CommunityRecyclerAdapter(Context c, Region mRegion, FragmentManager f)
     {
         cards = new ArrayList<Object>();
 
         context = c;
+        fm = f;
         // This adds a button to the RMB
         cards.add(mRegion.name);
 
@@ -202,7 +205,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             if (p.text != null && p.text.length() > 0)
             {
-                SparkleHelper.setBbCodeFormatting(context, content, p.text);
+                SparkleHelper.setBbCodeFormatting(context, content, p.text, fm);
             }
             else
             {

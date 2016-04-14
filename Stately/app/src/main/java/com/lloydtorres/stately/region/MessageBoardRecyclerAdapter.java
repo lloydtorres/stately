@@ -51,13 +51,15 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int EMPTY_INDICATOR = -1;
 
     private Context context;
+    private FragmentManager fm;
     private List<Post> messages;
     private int replyIndex = NO_SELECTION;
     private boolean isPostable = false;
 
-    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec)
+    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec, FragmentManager f)
     {
         context = c;
+        fm = f;
         isPostable = ec;
         setMessages(p);
     }
@@ -317,7 +319,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 {
                     postContent = "[i]" + postContent + "[/i]";
                 }
-                SparkleHelper.setBbCodeFormatting(context, cardContent, postContent);
+                SparkleHelper.setBbCodeFormatting(context, cardContent, postContent, fm);
 
                 // Setup actions holder
                 if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED)
