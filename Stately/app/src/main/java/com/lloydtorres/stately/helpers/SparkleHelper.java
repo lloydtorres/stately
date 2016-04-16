@@ -124,7 +124,7 @@ public class SparkleHelper {
     // Whitelisted protocols
     public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
     // Current NationStates API version
-    public static final String API_VERSION = "7";
+    public static final String API_VERSION = "8";
     // NationStates API
     public static final String DOMAIN_URI = "nationstates.net";
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
