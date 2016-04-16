@@ -35,9 +35,9 @@ public class CensusDetailedRank implements Parcelable {
     public int id;
     @Element(name="SCORE")
     public float score;
-    @Element(name="RANK")
+    @Element(name="RANK", required=false)
     public int worldRank;
-    @Element(name="PRANK")
+    @Element(name="PRANK", required=false)
     public float worldRankPercent;
     @Element(name="RRANK", required=false)
     public int regionRank;

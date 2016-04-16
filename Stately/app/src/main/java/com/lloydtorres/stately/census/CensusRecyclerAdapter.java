@@ -342,10 +342,26 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     value.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
                     break;
                 case SORT_MODE_WORLD_RANK:
-                    value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.worldRank)));
+                    if (censusData.worldRank <= 0)
+                    {
+                        value.setText(context.getString(R.string.census_blank));
+                        cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
+                    }
+                    else
+                    {
+                        value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.worldRank)));
+                    }
                     break;
                 case SORT_MODE_WORLD_PERCENT:
-                    value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
+                    if (censusData.worldRankPercent <= 0)
+                    {
+                        value.setText(context.getString(R.string.census_blank));
+                        cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
+                    }
+                    else
+                    {
+                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
+                    }
                     break;
                 case SORT_MODE_REGION_RANK:
                     if (censusData.regionRank <= 0)

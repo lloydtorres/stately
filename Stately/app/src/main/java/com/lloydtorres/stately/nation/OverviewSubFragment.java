@@ -471,8 +471,11 @@ public class OverviewSubFragment extends Fragment {
         {
             censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
         }
-        censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
-
+        if (detailedRank.worldRank > 0)
+        {
+            censusContent.append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
+        }
+        
         censusButtonLabel = (TextView) view.findViewById(R.id.nation_census_button_text);
         censusButtonLabel.setText(String.format(getString(R.string.card_overview_census_button), worldCensusItem[0]));
         censusButton = (LinearLayout) view.findViewById(R.id.nation_census_button);

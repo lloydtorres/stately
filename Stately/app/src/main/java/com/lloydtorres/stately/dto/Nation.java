@@ -113,7 +113,7 @@ public class Nation implements Parcelable {
 
     @ElementList(name="CENSUS")
     public List<CensusDetailedRank> census;
-    @Element(name="WCENSUS")
+    @Element(name="WCENSUS", required=false)
     public CensusBasicRank wCensus;
 
     @Element(name="GAVOTE", required=false)
