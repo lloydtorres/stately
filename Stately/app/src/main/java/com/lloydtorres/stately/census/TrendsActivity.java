@@ -188,6 +188,11 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     private void queryDataset()
     {
+        if (chart == null)
+        {
+            return;
+        }
+
         chart.highlightValues(null);
         String queryMode = mode == TREND_NATION ? CensusHistory.NATION_HISTORY : CensusHistory.REGION_HISTORY;
         long curTime = System.currentTimeMillis() / 1000L;
@@ -246,6 +251,11 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     private void processDataset(CensusHistory data)
     {
+        if (chart == null)
+        {
+            return;
+        }
+
         // Set passed in dataset as new global dataset
         dataset = data;
 
