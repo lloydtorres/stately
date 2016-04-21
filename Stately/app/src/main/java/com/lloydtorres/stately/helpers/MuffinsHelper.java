@@ -83,6 +83,7 @@ public class MuffinsHelper {
     public static final String REGION_TELEGRAM = "toplinetgcat-3";
     public static final String RECRUITMENT_TELEGRAM = "toplinetgcat-1";
     public static final String MODERATOR_TELEGRAM = "toplinetgcat-11";
+    public static final String WELCOME_TELEGRAM = "tag: welcome";
 
     /**
      * Takes in a JSoup Elements object containing raw telegrams from NS HTML.
@@ -204,6 +205,12 @@ public class MuffinsHelper {
      */
     public static void processRecipientsHeader(Document targetDoc, Telegram targetTelegram)
     {
+        // Check for tag:welcome here to set telegram type (since it's contained in the recepients area)
+        if (targetDoc.text().contains(WELCOME_TELEGRAM))
+        {
+            targetTelegram.type = Telegram.TELEGRAM_WELCOME;
+        }
+
         targetTelegram.recipients = new ArrayList<String>();
 
         Elements nationsRaw = targetDoc.select("a.nlink");

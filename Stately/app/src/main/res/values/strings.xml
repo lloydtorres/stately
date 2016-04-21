@@ -289,6 +289,7 @@
     <string name="telegrams_compose">Compose Telegram</string>
     <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
     <string name="telegrams_alert_region">Regional Telegram</string>
+    <string name="telegram_alert_welcome">Regional Welcome Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
     <string name="telegrams_recipients">to %1$s</string>
     <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
