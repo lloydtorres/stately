@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:key="setting_autologin"
-        android:title="@string/setting_autologin"
-        android:defaultValue="true"
-        android:icon="@null" />
-    <CheckBoxPreference
-        android:key="setting_issueconfirm"
-        android:title="@string/setting_issueconfirm"
-        android:defaultValue="true"
-        android:icon="@null" />
-    <CheckBoxPreference
-        android:key="setting_crashreport"
-        android:title="@string/setting_crashreport"
-        android:defaultValue="true"
-        android:icon="@null" />
+    <PreferenceCategory
+        android:title="@string/setting_title_behavior"
+        android:key="setting_behavior">
+        <CheckBoxPreference
+            android:key="setting_autologin"
+            android:title="@string/setting_autologin"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <CheckBoxPreference
+            android:key="setting_issueconfirm"
+            android:title="@string/setting_issueconfirm"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <CheckBoxPreference
+            android:key="setting_crashreport"
+            android:title="@string/setting_crashreport"
+            android:defaultValue="true"
+            android:icon="@null" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_title_about"
+        android:key="setting_about">
+        <ListPreference
+            android:key="info"
+            android:title="@string/app_version"
+            android:summary="@string/setting_developer_info"
+            android:selectable="false"
+            android:icon="@null" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

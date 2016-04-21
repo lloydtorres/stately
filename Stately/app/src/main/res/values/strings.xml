@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Stately</string>
+    <string name="app_version">Stately 1.5.3</string>
     <string name="app_header">Stately/1.5.3 (User %1$s)</string>
     <string name="app_header_nouser">Stately/1.5.3 (No User)</string>
 
@@ -334,11 +335,14 @@
     <string name="wa_post_undecided">Withdraw Vote</string>
 
     <!-- Settings -->
+    <string name="setting_title_behavior">App Behavior</string>
     <string name="setting_autologin">Log in automatically</string>
     <string name="setting_issueconfirm">Confirm issue decisions</string>
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
+    <string name="setting_title_about">About</string>
+    <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres</string>
 
     <!-- WA category descriptors -->
     <string name="wa_anarchy">The %1$s live in a state of perpetual fear, as a complete breakdown of social order has led to the rise of order through biker gangs.</string>
