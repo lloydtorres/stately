@@ -324,6 +324,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 censusColorIndex = (int) (data.regionRankPercent / 7);
             }
             censusColorIndex = (SparkleHelper.freedomColours.length - 1) - censusColorIndex;
+            // Sanity checks
+            censusColorIndex = Math.min(Math.max(censusColorIndex, 0), (SparkleHelper.freedomColours.length - 1));
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[censusColorIndex]));
 
             int censusId = censusData.id;
