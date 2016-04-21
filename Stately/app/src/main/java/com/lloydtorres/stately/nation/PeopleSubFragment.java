@@ -79,6 +79,7 @@ public class PeopleSubFragment extends Fragment {
         waCategoryDescriptors.put("corrupt_dictatorship", R.string.wa_corrupt_dictatorship);
         waCategoryDescriptors.put("democratic_socialists", R.string.wa_democratic_socialists);
         waCategoryDescriptors.put("father_knows_best_state", R.string.wa_father_knows_best_state);
+        waCategoryDescriptors.put("mother_knows_best_state", R.string.wa_father_knows_best_state);
         waCategoryDescriptors.put("free_market_paradise", R.string.wa_free_market_paradise);
         waCategoryDescriptors.put("inoffensive_centrist_democracy", R.string.wa_inoffensive_centrist_democracy);
         waCategoryDescriptors.put("iron_fist_consumerists", R.string.wa_iron_fist_consumerists);
