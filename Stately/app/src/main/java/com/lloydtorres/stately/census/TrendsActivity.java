@@ -76,6 +76,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     public static final int CENSUS_CIVIL_RIGHTS = 0;
     public static final int CENSUS_ECONOMY = 1;
     public static final int CENSUS_POLITICAL_FREEDOM = 2;
+    public static final int CENSUS_INFLUENCE = 65;
 
     private String[] WORLD_CENSUS_ITEMS;
 

@@ -74,6 +74,7 @@
     <string name="nation_wa_delegate">WA Delegate</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
     <string name="nation_time_immemorial">since time immemorial</string>
+    <string name="nation_power_template">%1$s (%2$s)</string>
 
     <!-- Nation freedom card -->
     <string name="overview_label_civrights">Civil Rights</string>

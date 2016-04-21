@@ -164,7 +164,7 @@ public class OverviewSubFragment extends Fragment {
         SparkleHelper.activityLinkBuilder(getContext(), region, mNation.region, mNation.region, mNation.region, SparkleHelper.CLICKY_REGION_MODE);
 
         influence = (TextView) view.findViewById(R.id.nation_influence);
-        influence.setText(mNation.influence);
+        influence.setText(String.format(Locale.US, getString(R.string.nation_power_template), mNation.influence, SparkleHelper.getPrettifiedNumber(mNation.census.get(TrendsActivity.CENSUS_INFLUENCE).score)));
 
         population = (TextView) view.findViewById(R.id.nation_population);
         population.setText(SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase));
