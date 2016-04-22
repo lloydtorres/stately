@@ -1066,6 +1066,7 @@ public class SparkleHelper {
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
     public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
+    public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
     public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
 
     /**
@@ -1110,6 +1111,7 @@ public class SparkleHelper {
         holder = regexExtract(holder, BBCODE_PROPOSAL);
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
+        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"https://www.nationstates.net/%s\">%s</a>");
         holder = regexDoubleReplace(holder, BBCODE_URL, "<a href=\"%s\">%s</a>");
         holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
         holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
