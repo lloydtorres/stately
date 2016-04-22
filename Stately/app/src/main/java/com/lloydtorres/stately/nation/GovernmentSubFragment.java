@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -30,6 +31,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.census.UserTrendsOnClickListener;
 import com.lloydtorres.stately.dto.GovBudget;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -49,6 +52,7 @@ public class GovernmentSubFragment extends Fragment {
     private Nation mNation;
 
     private TextView govDesc;
+    private LinearLayout censusGovernmentSize;
     private TextView budgetTotal;
     private PieChart budgetChart;
 
@@ -106,6 +110,9 @@ public class GovernmentSubFragment extends Fragment {
         descContent = descContent.replace(". ", ".<br /><br />");
 
         govDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
+
+        censusGovernmentSize = (LinearLayout) view.findViewById(R.id.card_government_size_census);
+        censusGovernmentSize.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_GOVERNMENT_SIZE));
     }
 
     /**

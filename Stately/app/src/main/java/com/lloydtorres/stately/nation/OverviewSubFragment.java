@@ -80,12 +80,14 @@ public class OverviewSubFragment extends Fragment {
     private TextView capital;
     private TextView priority;
     private TextView tax;
+    private LinearLayout censusTaxation;
 
     // economy cards
     private TextView currency;
     private TextView gdp;
     private TextView industry;
     private TextView income;
+    private LinearLayout censusEconomicOutput;
 
     // wa cards
     private CardView waCard;
@@ -400,6 +402,9 @@ public class OverviewSubFragment extends Fragment {
 
         tax = (TextView) view.findViewById(R.id.nation_tax);
         tax.setText(String.format(Locale.US, getString(R.string.percent), mNation.tax));
+
+        censusTaxation = (LinearLayout) view.findViewById(R.id.card_overview_gov_tax_census);
+        censusTaxation.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_TAXATION));
     }
 
     /**
@@ -419,6 +424,9 @@ public class OverviewSubFragment extends Fragment {
 
         income = (TextView) view.findViewById(R.id.nation_income);
         income.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency));
+
+        censusEconomicOutput = (LinearLayout) view.findViewById(R.id.card_overview_econ_gdp_census);
+        censusEconomicOutput.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_ECONOMIC_OUTPUT));
     }
 
     /**

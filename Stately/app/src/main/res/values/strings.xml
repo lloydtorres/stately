@@ -88,6 +88,7 @@
     <string name="card_overview_gov_capital">Capital</string>
     <string name="card_overview_gov_priority">Priority</string>
     <string name="card_overview_gov_tax">Income Tax</string>
+    <string name="card_overview_gov_tax_census">Trends for Taxation</string>
 
     <!-- Nation economy card -->
     <string name="card_overview_econ_title">Economy</string>
@@ -95,6 +96,7 @@
     <string name="card_overview_econ_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_overview_econ_industry">Major Industry</string>
     <string name="card_overview_econ_income">Average Income</string>
+    <string name="card_overview_econ_gdp_census">Trends for Economic Output</string>
 
     <!-- Nation WA card -->
     <string name="card_overview_wa_title">World Assembly</string>
@@ -127,11 +129,13 @@
 
     <!-- Nation people subfragment -->
     <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
+    <string name="card_people_crime_census">Trends for Crime</string>
     <string name="card_people_mortality_title">Mortality</string>
     <string name="animal_attack_original">Animal Attack</string>
     <string name="animal_attack_madlibs">%1$s Attack</string>
 
     <!-- Nation government subfragment -->
+    <string name="card_government_size_census">Trends for Government Size</string>
     <string name="card_government_expenditures_title">Expenditures</string>
     <string name="card_government_expenditures_budget">Total</string>
     <string name="card_government_expenditures_budget_flavour">%1$s (%2$.1f%% of GDP)</string>
@@ -151,6 +155,7 @@
     <string name="welfare">Welfare</string>
 
     <!-- Nation economy subfragment -->
+    <string name="card_economy_avg_income_census">Trends for Average Income</string>
     <string name="card_economy_analysis_title">Analysis</string>
     <string name="card_economy_analysis_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_economy_analysis_per_capita">GDP Per Capita</string>

@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -30,6 +31,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.census.UserTrendsOnClickListener;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -48,6 +51,7 @@ public class EconomySubFragment extends Fragment {
     private Nation mNation;
 
     private TextView econDesc;
+    private LinearLayout censusAvgIncome;
     private TextView gdpTotal;
     private TextView gdpPerCapitaAvg;
     private TextView gdpPerCapitaPoor;
@@ -108,6 +112,9 @@ public class EconomySubFragment extends Fragment {
         descContent = descContent.replace(". ", ".<br /><br />");
 
         econDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
+
+        censusAvgIncome = (LinearLayout) view.findViewById(R.id.card_economy_avg_income_census);
+        censusAvgIncome.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_AVERAGE_INCOME));
     }
 
     /**
