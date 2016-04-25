@@ -441,6 +441,8 @@ public class SparkleHelper {
         }
     }
     
+    public static final Pattern CURRENCY_PLURALIZE = Pattern.compile("^(.+?)( +of .+)?$");
+    
     /**
      * Takes in a currency name from the NationStates API and formats it to the
      * NS format.
@@ -449,9 +451,12 @@ public class SparkleHelper {
      */
     public static String getCurrencyFormatted(String currency)
     {
-        String[] words = currency.split(" ");
-        words[0] = English.plural(words[0]);
-        return Joiner.on(" ").join(words);
+        Matcher m = CURRENCY_PLURALIZE.matcher(currency);
+        m.matches();
+        String pluralize = m.group(1);
+        String suffix = m.group(2);
+        pluralize = English.plural(pluralize);
+        return Joiner.on("").skipNulls().join(pluralize, suffix);
     }
 
     /**
