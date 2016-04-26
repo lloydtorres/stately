@@ -347,7 +347,7 @@
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
     <string name="setting_title_about">About</string>
-    <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres</string>
+    <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributors: Jannes Höke</string>
 
     <!-- WA category descriptors -->
     <string name="wa_anarchy">The %1$s live in a state of perpetual fear, as a complete breakdown of social order has led to the rise of order through biker gangs.</string>
