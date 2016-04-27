@@ -171,6 +171,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             case TELEGRAMS_FRAGMENT:
                 f = getTelegramsFragment();
                 currentPosition = R.id.nav_telegrams;
+                break;
             case ACTIVITY_FEED_FRAGMENT:
                 f = getActivityFeed();
                 currentPosition = R.id.nav_activityfeed;
@@ -290,6 +291,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     break;
                 case R.id.nav_telegrams:
                     fChoose = getTelegramsFragment();
+                    navInit = TELEGRAMS_FRAGMENT;
                     break;
                 case R.id.nav_activityfeed:
                     fChoose = getActivityFeed();
