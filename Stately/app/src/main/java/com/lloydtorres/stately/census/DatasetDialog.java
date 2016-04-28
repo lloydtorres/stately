@@ -98,5 +98,10 @@ public class DatasetDialog extends DialogFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerAdapter = new DatasetRecyclerAdapter(getActivity(), this, datasets);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+
+        int position = ((DatasetRecyclerAdapter) mRecyclerAdapter).getSelectedPosition();
+        if (position != DatasetRecyclerAdapter.INVALID_POSITION) {
+            mLayoutManager.scrollToPosition(position);
+        }
     }
 }

@@ -35,6 +35,8 @@ import java.util.Collections;
  * A recycler adapter for the dataset dialog.
  */
 public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int INVALID_POSITION = -1;
+
     private FragmentActivity activity;
     private DatasetDialog selfDialog;
     private ArrayList<Dataset> datasets;
@@ -65,6 +67,16 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return datasets.size();
+    }
+
+    public int getSelectedPosition() {
+        for (int i=0; i<datasets.size(); i++) {
+            if (datasets.get(i).selected) {
+                return i;
+            }
+        }
+
+        return INVALID_POSITION;
     }
 
     public class DatasetEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
