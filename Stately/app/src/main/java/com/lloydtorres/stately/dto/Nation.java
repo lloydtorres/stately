@@ -41,7 +41,7 @@ public class Nation implements Parcelable {
                                         + "+freedom"
                                         + "+customleader+customcapital+govtpriority+tax"
                                         + "+currency+gdp+income+majorindustry"
-                                        + "+demonym+demonym2+demonym2plural+customreligion+animal"
+                                        + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
                                         + "+census+wcensus"
                                         + "+gavote+scvote+endorsements"
                                         + "+notable+sensibilities+crime+deaths"
@@ -110,6 +110,8 @@ public class Nation implements Parcelable {
     public String religion;
     @Element(name="ANIMAL")
     public String animal;
+    @Element(name="ANIMALTRAIT")
+    public String animalTrait;
 
     @ElementList(name="CENSUS")
     public List<CensusDetailedRank> census;
@@ -181,6 +183,7 @@ public class Nation implements Parcelable {
         demPlural = in.readString();
         religion = in.readString();
         animal = in.readString();
+        animalTrait = in.readString();
         if (in.readByte() == 0x01) {
             census = new ArrayList<CensusDetailedRank>();
             in.readList(census, CensusDetailedRank.class.getClassLoader());
@@ -247,6 +250,7 @@ public class Nation implements Parcelable {
         dest.writeString(demPlural);
         dest.writeString(religion);
         dest.writeString(animal);
+        dest.writeString(animalTrait);
         if (census == null) {
             dest.writeByte((byte) (0x00));
         } else {

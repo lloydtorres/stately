@@ -115,6 +115,7 @@
     <string name="card_overview_other_demonym_txt2">%1$s (noun/adjective, plural %2$s)</string>
     <string name="card_overview_other_religion">Religion</string>
     <string name="card_overview_other_animal">National Animal</string>
+    <string name="card_overview_other_animal_template">%1$s — %2$s.</string>
     <string name="card_overview_other_census_title">Today\'s Census: %1$s</string>
     <string name="card_overview_other_census_content">%1$s — %2$s</string>
     <string name="card_overview_other_census_region">\n#%1$s in %2$s (top %3$s%%)</string>

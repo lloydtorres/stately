@@ -457,7 +457,7 @@ public class OverviewSubFragment extends Fragment {
         }
 
         animal = (TextView) view.findViewById(R.id.nation_animal);
-        animal.setText(mNation.animal);
+        animal.setText(String.format(getString(R.string.card_overview_other_animal_template), mNation.animal, mNation.animalTrait));
 
         censusTitle = (TextView) view.findViewById(R.id.nation_census_title);
         int censusId = mNation.wCensus.id;
