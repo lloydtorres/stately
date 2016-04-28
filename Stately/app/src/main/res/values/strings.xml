@@ -100,8 +100,6 @@
 
     <!-- Nation WA card -->
     <string name="card_overview_wa_title">World Assembly</string>
-    <string name="card_overview_wa_overview">%1$s is a member of the World Assembly.</string>
-    <string name="card_overview_wa_delegate">\n\n%1$s also represents %2$s in the World Assembly as its delegate.</string>
     <string name="card_overview_wa_endorsements">Endorsements</string>
     <string name="card_overview_wa_novote">%1$s: No vote on the resolution.</string>
     <string name="card_overview_wa_vote">%1$s: Voted %2$s the resolution.</string>

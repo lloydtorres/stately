@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -89,8 +90,9 @@ public class OverviewSubFragment extends Fragment {
     private TextView income;
     private LinearLayout censusEconomicOutput;
 
-    // wa cards
-    private CardView waCard;
+    // wa section
+    private RelativeLayout waMember;
+    private LinearLayout waSection;
     private TextView isWaMember;
     private LinearLayout endorsementsHolder;
     private TextView endorsementsCount;
@@ -134,7 +136,7 @@ public class OverviewSubFragment extends Fragment {
         {
             initMainCard(view);
             initFreedomCards(view);
-            initAssemblyCard(view);
+            initAssemblySection(view);
             initGovernmentCard(view);
             initEconomyCard(view);
             initOtherCard(view);
@@ -230,23 +232,19 @@ public class OverviewSubFragment extends Fragment {
      * Initialize the World Assembly card if needed.
      * @param view
      */
-    private void initAssemblyCard(View view)
+    private void initAssemblySection(View view)
     {
-        waCard = (CardView) view.findViewById(R.id.card_overview_wa);
+        waMember = (RelativeLayout) view.findViewById(R.id.nation_wa_member);
+        waSection = (LinearLayout) view.findViewById(R.id.card_overview_section_wa);
 
         // Only show if member of the WA (or delegate)
         if (SparkleHelper.isWaMember(getContext(), mNation.waState))
         {
-            waCard.setVisibility(View.VISIBLE);
+            waSection.setVisibility(View.VISIBLE);
+            waMember.setVisibility(View.VISIBLE);
 
-            isWaMember = (TextView) view.findViewById(R.id.card_overview_wa_overview);
-            isWaMember.setText(String.format(getString(R.string.card_overview_wa_overview), mNation.name));
-
-            // Add additional text if delegate
-            if (mNation.waState.equals(getString(R.string.nation_wa_delegate)))
-            {
-                isWaMember.append(String.format(getString(R.string.card_overview_wa_delegate), mNation.name, mNation.region));
-            }
+            isWaMember = (TextView) view.findViewById(R.id.nation_wa_status);
+            isWaMember.setText(mNation.waState);
 
             // Show endorsements section if endorsements exist
             if (mNation.endorsements != null && mNation.endorsements.length() > 0)
