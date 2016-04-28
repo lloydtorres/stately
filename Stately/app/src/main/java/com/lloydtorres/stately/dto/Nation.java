@@ -110,7 +110,7 @@ public class Nation implements Parcelable {
     public String religion;
     @Element(name="ANIMAL")
     public String animal;
-    @Element(name="ANIMALTRAIT")
+    @Element(name="ANIMALTRAIT", required=false)
     public String animalTrait;
 
     @ElementList(name="CENSUS")
