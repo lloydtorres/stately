@@ -92,7 +92,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 viewHolder = new TelegramPreviewCard(context, previewCard);
                 break;
             default:
-                View emptyCard = inflater.inflate(R.layout.card_post, parent, false);
+                View emptyCard = inflater.inflate(R.layout.card_happening, parent, false);
                 viewHolder = new NoTelegramsCard(context, emptyCard);
                 break;
         }
@@ -353,11 +353,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public NoTelegramsCard(Context c, View v)
         {
             super(v);
-            TextView cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
-            TextView cardTime = (TextView) v.findViewById(R.id.card_post_time);
-            HtmlTextView cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+            TextView cardTime = (TextView) v.findViewById(R.id.card_happening_time);
+            TextView cardContent = (TextView) v.findViewById(R.id.card_happening_content);
             cardTime.setVisibility(View.GONE);
-            cardAuthor.setVisibility(View.GONE);
             cardContent.setText(c.getString(R.string.rmb_no_content));
             cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
