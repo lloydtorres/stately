@@ -284,17 +284,19 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                             nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
 
                             // Map out government priorities
-                            switch (nationResponse.govtPriority)
-                            {
-                                case "Defence":
-                                    nationResponse.govtPriority = getString(R.string.defense);
-                                    break;
-                                case "Commerce":
-                                    nationResponse.govtPriority = getString(R.string.industry);
-                                    break;
-                                case "Social Equality":
-                                    nationResponse.govtPriority = getString(R.string.social_policy);
-                                    break;
+                            if (nationResponse.govtPriority != null) {
+                                switch (nationResponse.govtPriority)
+                                {
+                                    case "Defence":
+                                        nationResponse.govtPriority = getString(R.string.defense);
+                                        break;
+                                    case "Commerce":
+                                        nationResponse.govtPriority = getString(R.string.industry);
+                                        break;
+                                    case "Social Equality":
+                                        nationResponse.govtPriority = getString(R.string.social_policy);
+                                        break;
+                                }
                             }
 
                             setName(nationResponse.name);
@@ -326,7 +328,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                             initFragment(nationResponse);
                         }
                         catch (Exception e) {
-                            SparkleHelper.logError(toString());
+                            SparkleHelper.logError(e.toString());
                             setExploreStatus(getString(R.string.login_error_parsing));
                         }
                     }

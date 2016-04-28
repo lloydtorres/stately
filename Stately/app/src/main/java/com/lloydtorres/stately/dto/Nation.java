@@ -86,7 +86,7 @@ public class Nation implements Parcelable {
     public String leader;
     @Element(name="CAPITAL", required=false)
     public String capital;
-    @Element(name="GOVTPRIORITY")
+    @Element(name="GOVTPRIORITY", required=false)
     public String govtPriority;
     @Element(name="TAX")
     public double tax;

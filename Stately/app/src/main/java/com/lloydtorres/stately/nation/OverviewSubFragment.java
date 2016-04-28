@@ -79,6 +79,7 @@ public class OverviewSubFragment extends Fragment {
     private TextView leader;
     private LinearLayout capitalLayout;
     private TextView capital;
+    private LinearLayout priorityLayout;
     private TextView priority;
     private TextView tax;
     private LinearLayout censusTaxation;
@@ -395,8 +396,16 @@ public class OverviewSubFragment extends Fragment {
             capitalLayout.setVisibility(View.GONE);
         }
 
-        priority = (TextView) view.findViewById(R.id.nation_priority);
-        priority.setText(mNation.govtPriority);
+        if (mNation.govtPriority != null)
+        {
+            priority = (TextView) view.findViewById(R.id.nation_priority);
+            priority.setText(mNation.govtPriority);
+        }
+        else
+        {
+            priorityLayout = (LinearLayout) view.findViewById(R.id.card_overview_gov_priority);
+            priorityLayout.setVisibility(View.GONE);
+        }
 
         tax = (TextView) view.findViewById(R.id.nation_tax);
         tax.setText(String.format(Locale.US, getString(R.string.percent), mNation.tax));

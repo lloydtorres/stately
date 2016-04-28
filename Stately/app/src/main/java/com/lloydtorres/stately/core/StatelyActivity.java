@@ -535,18 +535,21 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
 
                             // Map out government priorities
-                            switch (nationResponse.govtPriority)
-                            {
-                                case "Defence":
-                                    nationResponse.govtPriority = getString(R.string.defense);
-                                    break;
-                                case "Commerce":
-                                    nationResponse.govtPriority = getString(R.string.industry);
-                                    break;
-                                case "Social Equality":
-                                    nationResponse.govtPriority = getString(R.string.social_policy);
-                                    break;
+                            if (nationResponse.govtPriority != null) {
+                                switch (nationResponse.govtPriority)
+                                {
+                                    case "Defence":
+                                        nationResponse.govtPriority = getString(R.string.defense);
+                                        break;
+                                    case "Commerce":
+                                        nationResponse.govtPriority = getString(R.string.industry);
+                                        break;
+                                    case "Social Equality":
+                                        nationResponse.govtPriority = getString(R.string.social_policy);
+                                        break;
+                                }
                             }
+
                             mNation = nationResponse;
                             SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
 
