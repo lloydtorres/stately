@@ -269,6 +269,7 @@
     <string name="trends_max">Maximum</string>
     <string name="trends_min">Minimum</string>
     <string name="trends_avg">Average</string>
+    <string name="trends_empty">No data found.</string>
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>

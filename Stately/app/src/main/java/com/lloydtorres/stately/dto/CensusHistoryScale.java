@@ -32,7 +32,7 @@ import java.util.List;
 @Root(name="CENSUS", strict=false)
 public class CensusHistoryScale implements Parcelable {
 
-    @ElementList(name="SCALE")
+    @ElementList(name="SCALE", required=false)
     public List<CensusHistoryPoint> points;
 
     public CensusHistoryScale() { super(); }

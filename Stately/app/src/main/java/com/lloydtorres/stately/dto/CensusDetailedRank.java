@@ -33,7 +33,7 @@ public class CensusDetailedRank implements Parcelable {
 
     @Attribute
     public int id;
-    @Element(name="SCORE")
+    @Element(name="SCORE", required=false)
     public float score;
     @Element(name="RANK", required=false)
     public int worldRank;

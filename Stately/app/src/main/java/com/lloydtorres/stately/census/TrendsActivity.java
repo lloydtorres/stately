@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.census;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -98,8 +100,11 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     private TextView date;
     private TextView value;
     private TextView max;
+    private RelativeLayout maxHolder;
     private TextView min;
+    private RelativeLayout minHolder;
     private TextView avg;
+    private RelativeLayout avgHolder;
     private LineChart chart;
 
     @Override
@@ -124,13 +129,18 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         date = (TextView) findViewById(R.id.trends_date);
         value = (TextView) findViewById(R.id.trends_value);
         max = (TextView) findViewById(R.id.trends_max);
+        maxHolder = (RelativeLayout) findViewById(R.id.trends_max_holder);
         min = (TextView) findViewById(R.id.trends_min);
+        minHolder = (RelativeLayout) findViewById(R.id.trends_min_holder);
         avg = (TextView) findViewById(R.id.trends_avg);
+        avgHolder = (RelativeLayout) findViewById(R.id.trends_avg_holder);
         chart = (LineChart) findViewById(R.id.trends_chart);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.trends_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setEnabled(false);
+
+        setTrendHeaderSubheader();
 
         if (dataset == null)
         {
@@ -161,6 +171,18 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         getSupportActionBar().setTitle(t);
     }
 
+    private void setTrendHeaderSubheader() {
+        // Set header title and subtitle
+        int censusId = id;
+        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
+        {
+            censusId = WORLD_CENSUS_ITEMS.length - 1;
+        }
+        String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+        title.setText(censusType[0]);
+        unit.setText(censusType[1]);
+    }
+
     /**
      * Convenience class to show refresh animation on dataset query.
      */
@@ -181,11 +203,8 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     public void queryNewDataset(int i)
     {
-        if (i != id)
-        {
-            id = i;
-            startQueryDataset();
-        }
+        id = i;
+        startQueryDataset();
     }
 
     /**
@@ -213,7 +232,21 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
                         Persister serializer = new Persister();
                         try {
                             censusResponse = serializer.read(CensusHistory.class, response);
-                            processDataset(censusResponse);
+
+                            // Set titles
+                            String newTitle = String.format(getString(R.string.trends_title), censusResponse.name);
+                            setToolbarTitle(newTitle);
+
+                            setTrendHeaderSubheader();
+
+                            if (censusResponse.scale.points != null)
+                            {
+                                processDataset(censusResponse);
+                            }
+                            else
+                            {
+                                setNoDataFound(true);
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -264,19 +297,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
 
         // Set passed in dataset as new global dataset
         dataset = data;
-
-        // Set titles
-        String newTitle = String.format(getString(R.string.trends_title), dataset.name);
-        setToolbarTitle(newTitle);
-
-        int censusId = id;
-        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-        {
-            censusId = WORLD_CENSUS_ITEMS.length - 1;
-        }
-        String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
-        title.setText(censusType[0]);
-        unit.setText(censusType[1]);
+        setNoDataFound(false);
 
         // Set selected indicator text to latest data
         resetDataSelected();
@@ -363,6 +384,26 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     {
         date.setText(SparkleHelper.getDateNoYearFromUTC(point.timestamp));
         value.setText(SparkleHelper.getPrettifiedNumber(point.score));
+    }
+
+    /**
+     * Styles the view if the data returned from NS was empty.
+     */
+    private void setNoDataFound(boolean isDataNotFound)
+    {
+        date.setTypeface(date.getTypeface(), isDataNotFound ? Typeface.ITALIC : Typeface.NORMAL);
+
+        int visibilityState = isDataNotFound ? View.GONE : View.VISIBLE;
+        value.setVisibility(visibilityState);
+        maxHolder.setVisibility(visibilityState);
+        minHolder.setVisibility(visibilityState);
+        avgHolder.setVisibility(visibilityState);
+        chart.setVisibility(visibilityState);
+
+        if (isDataNotFound) {
+            date.setText(getString(R.string.trends_empty));
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

@@ -29,9 +29,9 @@ import org.simpleframework.xml.Root;
 @Root(name="POINT", strict=false)
 public class CensusHistoryPoint implements Parcelable {
 
-    @Element(name="TIMESTAMP")
+    @Element(name="TIMESTAMP", required=false)
     public long timestamp;
-    @Element(name="SCORE")
+    @Element(name="SCORE", required=false)
     public float score;
 
     public CensusHistoryPoint() { super(); }

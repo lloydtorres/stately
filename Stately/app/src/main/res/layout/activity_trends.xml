@@ -99,6 +99,7 @@
                                 android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                         <RelativeLayout
+                            android:id="@+id/trends_max_holder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp">
@@ -125,6 +126,7 @@
                                 android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                         <RelativeLayout
+                            android:id="@+id/trends_min_holder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
@@ -150,6 +152,7 @@
                                 android:layout_alignParentEnd="true" />
                         </RelativeLayout>
                         <RelativeLayout
+                            android:id="@+id/trends_avg_holder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView

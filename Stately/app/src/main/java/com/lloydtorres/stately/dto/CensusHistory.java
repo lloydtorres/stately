@@ -42,7 +42,7 @@ public class CensusHistory implements Parcelable {
 
     @Element(name="NAME")
     public String name;
-    @Element(name="CENSUS")
+    @Element(name="CENSUS", required=false)
     public CensusHistoryScale scale;
 
     public CensusHistory() { super(); }
