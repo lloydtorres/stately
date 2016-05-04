@@ -251,9 +251,10 @@
     <string name="census_sort_world_percent">World top percent</string>
     <string name="census_sort_region_rank">Region rank</string>
     <string name="census_sort_region_percent">Region top percent</string>
-    <string name="census_rank">#%1$s</string>
+    <string name="census_hash_symbol">#</string>
     <string name="census_blank">—</string>
-    <string name="census_percent">+%1$s%%</string>
+    <string name="census_top">Top</string>
+    <string name="census_percent">%1$s%%</string>
 
     <string name="census_sort_ascending">Ascending</string>
     <string name="census_sort_descending">Descending</string>

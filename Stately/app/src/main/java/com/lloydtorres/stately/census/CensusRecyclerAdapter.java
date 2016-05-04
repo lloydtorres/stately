@@ -60,6 +60,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String target;
     private int mode;
 
+    private int TWO_DP_IN_PIXELS;
+
     public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, String t, int m)
     {
         context = c.getContext();
@@ -71,6 +73,9 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         target = t;
         mode = m;
+
+        float dpScale = context.getResources().getDisplayMetrics().density;
+        TWO_DP_IN_PIXELS = (int) (2*dpScale + 0.5f);
     }
 
     private String getSortLabel()
@@ -298,6 +303,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         private CardView cardHolder;
         private TextView title;
         private TextView unit;
+        private TextView superScript;
         private TextView value;
 
         public CensusCard(View v)
@@ -306,6 +312,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
             title = (TextView) v.findViewById(R.id.card_delta_name);
             unit = (TextView) v.findViewById(R.id.card_delta_unit);
+            superScript = (TextView) v.findViewById(R.id.card_delta_superscript);
             value = (TextView) v.findViewById(R.id.card_delta_value);
             v.setOnClickListener(this);
         }
@@ -341,49 +348,66 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             switch (sortOrder)
             {
                 case SORT_MODE_SCORE:
+                    superScript.setVisibility(View.GONE);
                     value.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
                     break;
                 case SORT_MODE_WORLD_RANK:
                     if (censusData.worldRank <= 0)
                     {
+                        superScript.setVisibility(View.GONE);
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
-                        value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.worldRank)));
+                        superScript.setVisibility(View.VISIBLE);
+                        superScript.setPadding(0, 0, TWO_DP_IN_PIXELS, 0);
+                        superScript.setText(context.getString(R.string.census_hash_symbol));
+                        value.setText(SparkleHelper.getPrettifiedNumber(censusData.worldRank));
                     }
                     break;
                 case SORT_MODE_WORLD_PERCENT:
                     if (censusData.worldRankPercent <= 0)
                     {
+                        superScript.setVisibility(View.GONE);
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
+                        superScript.setVisibility(View.VISIBLE);
+                        superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
+                        superScript.setText(context.getString(R.string.census_top));
                         value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
                     }
                     break;
                 case SORT_MODE_REGION_RANK:
                     if (censusData.regionRank <= 0)
                     {
+                        superScript.setVisibility(View.GONE);
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
-                        value.setText(String.format(context.getString(R.string.census_rank), SparkleHelper.getPrettifiedNumber(censusData.regionRank)));
+                        superScript.setVisibility(View.VISIBLE);
+                        superScript.setPadding(0, 0, TWO_DP_IN_PIXELS, 0);
+                        superScript.setText(context.getString(R.string.census_hash_symbol));
+                        value.setText(SparkleHelper.getPrettifiedNumber(censusData.regionRank));
                     }
                     break;
                 case SORT_MODE_REGION_PERCENT:
                     if (censusData.regionRankPercent <= 0)
                     {
+                        superScript.setVisibility(View.GONE);
                         value.setText(context.getString(R.string.census_blank));
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else
                     {
+                        superScript.setVisibility(View.VISIBLE);
+                        superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
+                        superScript.setText(context.getString(R.string.census_top));
                         value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
                     }
                     break;
