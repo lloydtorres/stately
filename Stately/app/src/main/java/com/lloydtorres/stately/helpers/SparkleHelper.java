@@ -1014,8 +1014,12 @@ public class SparkleHelper {
             target = target.replace("@@POPULATION@@", getPrettifiedNumber(nationData.popBase));
             target = target.replace("@@TYPE@@", nationData.prename);
             target = target.replace("@@ANIMAL@@", nationData.animal);
+            target = target.replace("@@ucfirst(ANIMAL)@@", nationData.animal);
+            target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
+            target = target.replace("@@ucfirst(PL(ANIMAL))@@", English.plural(nationData.animal));
             target = target.replace("@@CURRENCY@@", nationData.currency);
             target = target.replace("@@PL(CURRENCY)@@", getCurrencyFormatted(nationData.currency));
+            target = target.replace("@@ucfirst(PL(CURRENCY))@@", getCurrencyFormatted(nationData.currency));
             target = target.replace("@@SLOGAN@@", nationData.motto);
             target = target.replace("@@DEMONYM@@", nationData.demAdjective);
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
