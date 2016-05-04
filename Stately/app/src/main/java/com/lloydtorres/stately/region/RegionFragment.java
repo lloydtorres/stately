@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -97,6 +98,7 @@ public class RegionFragment extends Fragment {
     private LayoutAdapter tabsAdapter;
 
     private Toolbar toolbar;
+    private ProgressBar progressBar;
     private Activity mActivity;
 
     public void setRegionName(String n)
@@ -129,6 +131,8 @@ public class RegionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.region_progress_bar);
 
         initToolbar(view);
 
@@ -282,6 +286,8 @@ public class RegionFragment extends Fragment {
 
     private void updateRegion(final View view)
     {
+        progressBar.setVisibility(View.VISIBLE);
+
         String targetURL = String.format(Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
@@ -311,6 +317,8 @@ public class RegionFragment extends Fragment {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                         }
+
+                        progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -320,6 +328,7 @@ public class RegionFragment extends Fragment {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
+                progressBar.setVisibility(View.GONE);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -350,6 +359,7 @@ public class RegionFragment extends Fragment {
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+            progressBar.setVisibility(View.GONE);
         }
     }
 
