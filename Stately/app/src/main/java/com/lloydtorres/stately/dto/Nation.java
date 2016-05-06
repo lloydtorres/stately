@@ -89,7 +89,7 @@ public class Nation implements Parcelable {
     @Element(name="GOVTPRIORITY", required=false)
     public String govtPriority;
     @Element(name="TAX")
-    public double tax;
+    public float tax;
 
     @Element(name="CURRENCY")
     public String currency;
@@ -173,7 +173,7 @@ public class Nation implements Parcelable {
         leader = in.readString();
         capital = in.readString();
         govtPriority = in.readString();
-        tax = in.readDouble();
+        tax = in.readFloat();
         currency = in.readString();
         gdp = in.readLong();
         income = in.readLong();
@@ -240,7 +240,7 @@ public class Nation implements Parcelable {
         dest.writeString(leader);
         dest.writeString(capital);
         dest.writeString(govtPriority);
-        dest.writeDouble(tax);
+        dest.writeFloat(tax);
         dest.writeString(currency);
         dest.writeLong(gdp);
         dest.writeLong(income);
