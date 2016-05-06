@@ -32,7 +32,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.census.UserTrendsOnClickListener;
+import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -114,7 +114,7 @@ public class EconomySubFragment extends Fragment {
         econDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
 
         censusAvgIncome = (LinearLayout) view.findViewById(R.id.card_economy_avg_income_census);
-        censusAvgIncome.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_AVERAGE_INCOME));
+        censusAvgIncome.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_AVERAGE_INCOME));
     }
 
     /**

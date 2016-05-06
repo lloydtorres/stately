@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.census.UserTrendsOnClickListener;
+import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
@@ -204,7 +204,7 @@ public class OverviewSubFragment extends Fragment {
         civilRightsPts.setText(String.valueOf(civilRightsScore));
         int civColInd = civilRightsScore / 7;
         civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[civColInd]));
-        civilRightsCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_CIVIL_RIGHTS));
+        civilRightsCard.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
         economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
         economyDesc = (TextView) view.findViewById(R.id.overview_economy);
@@ -215,7 +215,7 @@ public class OverviewSubFragment extends Fragment {
         economyPts.setText(String.valueOf(economyScore));
         int econColInd = economyScore / 7;
         economyCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[econColInd]));
-        economyCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_ECONOMY));
+        economyCard.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_ECONOMY));
 
         politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
         politicalDesc = (TextView) view.findViewById(R.id.overview_polifree);
@@ -226,7 +226,7 @@ public class OverviewSubFragment extends Fragment {
         politicalPts.setText(String.valueOf(politicalFreedomScore));
         int polColInd = politicalFreedomScore / 7;
         politicalCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), SparkleHelper.freedomColours[polColInd]));
-        politicalCard.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
+        politicalCard.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
     }
 
     /**
@@ -411,7 +411,7 @@ public class OverviewSubFragment extends Fragment {
         tax.setText(String.format(Locale.US, getString(R.string.percent), mNation.tax));
 
         censusTaxation = (LinearLayout) view.findViewById(R.id.card_overview_gov_tax_census);
-        censusTaxation.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_TAXATION));
+        censusTaxation.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_TAXATION));
     }
 
     /**
@@ -433,7 +433,7 @@ public class OverviewSubFragment extends Fragment {
         income.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency));
 
         censusEconomicOutput = (LinearLayout) view.findViewById(R.id.card_overview_econ_gdp_census);
-        censusEconomicOutput.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_ECONOMIC_OUTPUT));
+        censusEconomicOutput.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_ECONOMIC_OUTPUT));
     }
 
     /**
@@ -501,6 +501,6 @@ public class OverviewSubFragment extends Fragment {
         censusButtonLabel = (TextView) view.findViewById(R.id.nation_census_button_text);
         censusButtonLabel.setText(String.format(getString(R.string.card_overview_census_button), worldCensusItem[0]));
         censusButton = (LinearLayout) view.findViewById(R.id.nation_census_button);
-        censusButton.setOnClickListener(new UserTrendsOnClickListener(getContext(), mNation.wCensus.id));
+        censusButton.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), mNation.wCensus.id));
     }
 }

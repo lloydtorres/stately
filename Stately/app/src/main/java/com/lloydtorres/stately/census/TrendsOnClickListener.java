@@ -25,20 +25,21 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  * Created by Lloyd on 2016-04-10.
  * Convenience class for creating an OnClickListener to a user's trend given a census ID.
  */
-public class UserTrendsOnClickListener implements View.OnClickListener {
+public class TrendsOnClickListener implements View.OnClickListener {
 
     private Context context;
+    private String nationId;
     private int id;
 
-    public UserTrendsOnClickListener(Context c, int i)
+    public TrendsOnClickListener(Context c, String n, int i)
     {
         context = c;
+        nationId = n;
         id = i;
     }
 
     @Override
     public void onClick(View v) {
-        String userId = SparkleHelper.getActiveUser(context).nationId;
-        SparkleHelper.startTrends(context, userId, TrendsActivity.TREND_NATION, id);
+        SparkleHelper.startTrends(context, nationId, TrendsActivity.TREND_NATION, id);
     }
 }

@@ -32,7 +32,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.census.UserTrendsOnClickListener;
+import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.GovBudget;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -112,7 +112,7 @@ public class GovernmentSubFragment extends Fragment {
         govDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
 
         censusGovernmentSize = (LinearLayout) view.findViewById(R.id.card_government_size_census);
-        censusGovernmentSize.setOnClickListener(new UserTrendsOnClickListener(getContext(), TrendsActivity.CENSUS_GOVERNMENT_SIZE));
+        censusGovernmentSize.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_GOVERNMENT_SIZE));
     }
 
     /**
