@@ -33,6 +33,7 @@ import com.lloydtorres.stately.R;
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String SETTING_AUTOLOGIN = "setting_autologin";
     public static final String SETTING_ISSUECONFIRM = "setting_issueconfirm";
+    public static final String SETTING_EXITCONFIRM = "setting_exitconfirm";
     public static final String SETTING_CRASHREPORT = "setting_crashreport";
 
     private SharedPreferences storage;

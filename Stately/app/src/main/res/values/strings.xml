@@ -70,6 +70,11 @@
     <!-- Logout confirm -->
     <string name="logout_confirm">Log out?</string>
 
+    <!-- Exit confirm -->
+    <string name="setting_exitconfirm">Confirm exit</string>
+    <string name="exit_confirm">Exit Stately?</string>
+    <string name="exit">Exit</string>
+
     <!-- Nation main card -->
     <string name="nation_wa_member">WA Member</string>
     <string name="nation_wa_delegate">WA Delegate</string>

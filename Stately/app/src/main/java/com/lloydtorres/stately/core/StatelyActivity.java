@@ -18,7 +18,9 @@ package com.lloydtorres.stately.core;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -98,10 +100,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private ImageView nationFlag;
     private TextView nationNameView;
 
+    private SharedPreferences storage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stately);
+
+        storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get nation object from intent or restore state
         if (getIntent() != null)
@@ -260,10 +266,34 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         {
             drawer.closeDrawer(GravityCompat.START);
         }
+        else if (currentPosition != R.id.nav_nation) {
+            initNavigationView(NATION_FRAGMENT);
+        }
         else
         {
-            super.onBackPressed();
+            if (storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true)) {
+                confirmExit();
+            }
+            else {
+                super.onBackPressed();
+            }
         }
+    }
+
+    public void confirmExit()
+    {
+        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        dialogBuilder.setTitle(R.string.exit_confirm)
+                .setPositiveButton(R.string.exit, dialogListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
     }
 
     @Override
