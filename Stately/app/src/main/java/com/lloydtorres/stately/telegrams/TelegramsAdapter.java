@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.helpers.MuffinsHelper;
@@ -233,7 +232,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (telegram.recipients != null && telegram.recipients.size() > 0)
             {
-                String recipientsContent = String.format(context.getString(R.string.telegrams_recipients), Joiner.on(", ").skipNulls().join(telegram.recipients));
+                String recipientsContent = String.format(context.getString(R.string.telegrams_recipients), SparkleHelper.joinStringList(telegram.recipients, ", "));
                 SparkleHelper.setHappeningsFormatting(context, recipients, recipientsContent);
             }
             else
@@ -292,7 +291,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     {
                         recipients.add(SparkleHelper.getNameFromId(r));
                     }
-                    String fRecipients = Joiner.on(", ").skipNulls().join(recipients);
+                    String fRecipients = SparkleHelper.joinStringList(recipients, ", ");
                     SparkleHelper.startTelegramCompose(context, fRecipients, telegram.id);
                 }
             });
@@ -331,7 +330,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
                 headerContents.addAll(t.recipients);
             }
-            SparkleHelper.setHappeningsFormatting(context, header, Joiner.on(", ").skipNulls().join(headerContents));
+            SparkleHelper.setHappeningsFormatting(context, header, SparkleHelper.joinStringList(headerContents, ", "));
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());

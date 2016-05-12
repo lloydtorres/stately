@@ -46,7 +46,6 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 Stately uses the following open-source libraries:
 
 * [Evo Inflector](https://github.com/atteo/evo-inflector)
-* [Guava](https://github.com/google/guava)
 * [HtmlTextView](https://github.com/SufficientlySecure/html-textview)
 * [jsoup](http://jsoup.org/)
 * [KefirBB](https://github.com/kefirfromperm/kefirbb)

@@ -37,7 +37,6 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -312,7 +311,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("chk", chk);
-                params.put("tgto", Joiner.on(", ").skipNulls().join(recipients));
+                params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
                 if (replyId == NO_REPLY_ID)
                 {
                     params.put("recruitregion", "region");

@@ -43,9 +43,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Nation;
@@ -208,13 +205,6 @@ public class SparkleHelper {
     public static final int[] waColourFor = { R.color.colorChart0 };
     public static final int[] waColourAgainst = { R.color.colorChart1 };
 
-    // Used for string verification for nation and region IDs
-    public static final CharMatcher CHAR_MATCHER = CharMatcher.JAVA_LETTER_OR_DIGIT
-            .or(CharMatcher.WHITESPACE)
-            .or(CharMatcher.anyOf("-"))
-            .or(CharMatcher.anyOf("_"))
-            .precomputed();
-
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
@@ -224,6 +214,8 @@ public class SparkleHelper {
      * These are functions used to validate inputs.
      */
 
+    public static final Pattern VALID_NATION_NAME = Pattern.compile("^[A-za-z0-9-_ ]+$");
+
     /**
      * Checks if the passed in name is a valid NationStates name (i.e. A-Z, a-z, 0-9, -, (space)).
      * @param name The name to be checked.
@@ -231,7 +223,8 @@ public class SparkleHelper {
      */
     public static boolean isValidName(String name)
     {
-        return CHAR_MATCHER.matchesAllOf(name);
+        Matcher validator = VALID_NATION_NAME.matcher(name);
+        return validator.matches();
     }
 
     /**
@@ -272,18 +265,26 @@ public class SparkleHelper {
             for (String sw: subWords)
             {
                 // Transform word from lower case to proper case.
-                // This is very hacky, I know.
-                properSubWords.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, sw));
+                String prop = "";
+                if (sw.length() <= 1)
+                {
+                    prop = sw.substring(0, 1).toUpperCase(Locale.US);
+                }
+                else
+                {
+                    prop = sw.substring(0, 1).toUpperCase(Locale.US) + sw.substring(1);
+                }
+                properSubWords.add(prop);
             }
 
             // Join the word back with dashes and add it to main list.
             // If the original target word had no dashes, this would only have an element of one.
-            String subFin = Joiner.on("-").join(properSubWords);
+            String subFin = joinStringList(properSubWords, "-");
             properWords.add(subFin);
         }
 
         // Join all the proper words back together with spaces.
-        return Joiner.on(" ").skipNulls().join(properWords);
+        return joinStringList(properWords, " ");
     }
 
     /**
@@ -456,7 +457,14 @@ public class SparkleHelper {
         String pluralize = m.group(1);
         String suffix = m.group(2);
         pluralize = English.plural(pluralize);
-        return Joiner.on("").skipNulls().join(pluralize, suffix);
+
+        if (suffix != null) {
+            return pluralize + suffix;
+        }
+        else
+        {
+            return pluralize;
+        }
     }
 
     /**
@@ -702,6 +710,31 @@ public class SparkleHelper {
      * UTILITY
      * These are convenient tools to call from any class.
      */
+
+    /**
+     * Takes in a list of strings and a delimiter and returns a string that combines
+     * the elements of the list, separated by the delimiter.
+     * @param list List of strings to join.
+     * @param delimiter Delimiter to separate each string.
+     * @return Merged string.
+     */
+    public static String joinStringList(List<String> list, String delimiter)
+    {
+        if (list == null || list.size() < 0) { return ""; }
+
+        StringBuilder mergedString = new StringBuilder();
+        for (int i=0; i < list.size(); i++) {
+            if (list.get(i) != null)
+            {
+                mergedString.append(list.get(i));
+
+                if (i < list.size() - 1) {
+                    mergedString.append(delimiter);
+                }
+            }
+        }
+        return mergedString.toString();
+    }
 
     /**
      * Starts the ExploreActivity for the given ID and mode.

@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -109,7 +108,7 @@ public class RegionOverviewSubFragment extends Fragment {
             }
 
             tags = (TextView) view.findViewById(R.id.region_tags);
-            String tagCombine = Joiner.on(", ").skipNulls().join(mRegion.tags);
+            String tagCombine = SparkleHelper.joinStringList(mRegion.tags, ", ");
             tags.setText(tagCombine);
         }
 

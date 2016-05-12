@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Joiner;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.helpers.NameListDialog;
@@ -170,7 +169,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         properLikes.add(li);
                     }
                 }
-                targetPost.likedBy = Joiner.on(":").skipNulls().join(properLikes);
+                targetPost.likedBy = SparkleHelper.joinStringList(properLikes, ":");
                 targetPost.likes--;
             }
         }
