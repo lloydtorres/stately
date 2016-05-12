@@ -257,30 +257,21 @@ public class SparkleHelper {
 
         for (String w : words)
         {
-            // IDs can also be separated by dashes, but we want to preserve this.
-            String[] subWords = w.split("-");
-            // A list of properly-formatted words connected by a dash.
-            List<String> properSubWords = new ArrayList<String>();
-
-            for (String sw: subWords)
+            // Transform word from lower case to proper case.
+            String prop = "";
+            if (w.length() == 0)
             {
-                // Transform word from lower case to proper case.
-                String prop = "";
-                if (sw.length() <= 1)
-                {
-                    prop = sw.substring(0, 1).toUpperCase(Locale.US);
-                }
-                else
-                {
-                    prop = sw.substring(0, 1).toUpperCase(Locale.US) + sw.substring(1);
-                }
-                properSubWords.add(prop);
+                prop = w;
             }
-
-            // Join the word back with dashes and add it to main list.
-            // If the original target word had no dashes, this would only have an element of one.
-            String subFin = joinStringList(properSubWords, "-");
-            properWords.add(subFin);
+            else if (w.length() == 1)
+            {
+                prop = w.substring(0, 1).toUpperCase(Locale.US);
+            }
+            else
+            {
+                prop = w.substring(0, 1).toUpperCase(Locale.US) + w.substring(1);
+            }
+            properWords.add(prop);
         }
 
         // Join all the proper words back together with spaces.
