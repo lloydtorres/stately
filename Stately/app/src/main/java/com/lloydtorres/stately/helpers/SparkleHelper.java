@@ -437,11 +437,11 @@ public class SparkleHelper {
     
     /**
      * Takes in a currency name from the NationStates API and formats it to the
-     * NS format.
+     * plural form using NS format.
      * @param currency The currency unit.
-     * @return A nicely-formatted currency-string in NS format.
+     * @return A nicely-formatted pluralized currency string in NS format.
      */
-    public static String getCurrencyFormatted(String currency)
+    public static String getCurrencyPlural(String currency)
     {
         Matcher m = CURRENCY_PLURALIZE.matcher(currency);
         m.matches();
@@ -473,7 +473,7 @@ public class SparkleHelper {
         if (money < 1000000L)
         {
             // If the money is less than 1 million, we don't need a suffix.
-            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyFormatted(currency));
+            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyPlural(currency));
         }
         else
         {
@@ -496,7 +496,7 @@ public class SparkleHelper {
                 money /= 1000000000000L;
             }
 
-            return String.format(c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyFormatted(currency));
+            return String.format(c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
         }
 
     }
@@ -1042,8 +1042,8 @@ public class SparkleHelper {
             target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
             target = target.replace("@@ucfirst(PL(ANIMAL))@@", English.plural(nationData.animal));
             target = target.replace("@@CURRENCY@@", nationData.currency);
-            target = target.replace("@@PL(CURRENCY)@@", getCurrencyFormatted(nationData.currency));
-            target = target.replace("@@ucfirst(PL(CURRENCY))@@", getCurrencyFormatted(nationData.currency));
+            target = target.replace("@@PL(CURRENCY)@@", getCurrencyPlural(nationData.currency));
+            target = target.replace("@@ucfirst(PL(CURRENCY))@@", getCurrencyPlural(nationData.currency));
             target = target.replace("@@SLOGAN@@", nationData.motto);
             target = target.replace("@@DEMONYM@@", nationData.demAdjective);
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
