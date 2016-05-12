@@ -44,6 +44,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -297,7 +298,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        if (storage.getBoolean("setting_issueconfirm", true))
+        if (storage.getBoolean(SettingsActivity.SETTING_ISSUECONFIRM, true))
         {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);

@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
+import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
 
 import io.fabric.sdk.android.Fabric;
@@ -37,7 +38,7 @@ public class StatelyApp extends SugarApp {
 
         // analytics
         storage = PreferenceManager.getDefaultSharedPreferences(this);
-        if (storage.getBoolean("setting_crashreport", true))
+        if (storage.getBoolean(SettingsActivity.SETTING_CRASHREPORT, true))
         {
             Fabric.with(this, new Crashlytics());
         }

@@ -31,6 +31,9 @@ import com.lloydtorres.stately.R;
  * An activity to show app settings.
  */
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static final String SETTING_AUTOLOGIN = "setting_autologin";
+    public static final String SETTING_ISSUECONFIRM = "setting_issueconfirm";
+    public static final String SETTING_CRASHREPORT = "setting_crashreport";
 
     private SharedPreferences storage;
     private static AlertDialog.Builder dialogBuilder;
@@ -76,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("setting_crashreport")) {
+        if (key.equals(SETTING_CRASHREPORT)) {
             dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
         }
     }

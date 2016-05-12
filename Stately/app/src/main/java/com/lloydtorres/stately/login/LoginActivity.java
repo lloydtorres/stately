@@ -40,6 +40,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // If settings allows it and user login exists, try logging in first
-        if (storage.getBoolean("setting_autologin", true))
+        if (storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true))
         {
             UserLogin u = SparkleHelper.getActiveUser(this);
             if (u != null)
