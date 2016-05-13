@@ -481,6 +481,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                         if (input == null)
                         {
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            isInProgress = false;
                             return;
                         }
 
@@ -748,6 +749,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
                 return true;
             case R.id.nav_send_telegram:
                 SparkleHelper.startTelegramCompose(this, name, TelegramComposeActivity.NO_REPLY_ID);
+                return true;
             case R.id.nav_endorse:
                 getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
                 return true;
