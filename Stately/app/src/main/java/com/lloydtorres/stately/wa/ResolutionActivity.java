@@ -200,6 +200,7 @@ public class ResolutionActivity extends AppCompatActivity {
                 break;
             case Assembly.SECURITY_COUNCIL:
                 getSupportActionBar().setTitle(getString(R.string.wa_security_council));
+                break;
         }
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
