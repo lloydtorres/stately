@@ -258,20 +258,7 @@ public class SparkleHelper {
         for (String w : words)
         {
             // Transform word from lower case to proper case.
-            String prop = "";
-            if (w.length() == 0)
-            {
-                prop = w;
-            }
-            else if (w.length() == 1)
-            {
-                prop = w.substring(0, 1).toUpperCase(Locale.US);
-            }
-            else
-            {
-                prop = w.substring(0, 1).toUpperCase(Locale.US) + w.substring(1);
-            }
-            properWords.add(prop);
+            properWords.add(toNormalCase(w));
         }
 
         // Join all the proper words back together with spaces.
@@ -431,6 +418,29 @@ public class SparkleHelper {
 
             return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
         }
+    }
+
+    /**
+     * Helper function that capitalizes the first letter of a word.
+     * @param w
+     * @return
+     */
+    public static String toNormalCase(String w)
+    {
+        String prop = "";
+        if (w.length() == 0)
+        {
+            prop = w;
+        }
+        else if (w.length() == 1)
+        {
+            prop = w.substring(0, 1).toUpperCase(Locale.US);
+        }
+        else
+        {
+            prop = w.substring(0, 1).toUpperCase(Locale.US) + w.substring(1);
+        }
+        return prop;
     }
     
     public static final Pattern CURRENCY_PLURALIZE = Pattern.compile("^(.+?)( +of .+)?$");
@@ -1038,12 +1048,12 @@ public class SparkleHelper {
             target = target.replace("@@POPULATION@@", getPrettifiedNumber(nationData.popBase));
             target = target.replace("@@TYPE@@", nationData.prename);
             target = target.replace("@@ANIMAL@@", nationData.animal);
-            target = target.replace("@@ucfirst(ANIMAL)@@", nationData.animal);
+            target = target.replace("@@ucfirst(ANIMAL)@@", toNormalCase(nationData.animal));
             target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
-            target = target.replace("@@ucfirst(PL(ANIMAL))@@", English.plural(nationData.animal));
+            target = target.replace("@@ucfirst(PL(ANIMAL))@@", toNormalCase(English.plural(nationData.animal)));
             target = target.replace("@@CURRENCY@@", nationData.currency);
             target = target.replace("@@PL(CURRENCY)@@", getCurrencyPlural(nationData.currency));
-            target = target.replace("@@ucfirst(PL(CURRENCY))@@", getCurrencyPlural(nationData.currency));
+            target = target.replace("@@ucfirst(PL(CURRENCY))@@", toNormalCase(getCurrencyPlural(nationData.currency)));
             target = target.replace("@@SLOGAN@@", nationData.motto);
             target = target.replace("@@DEMONYM@@", nationData.demAdjective);
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
