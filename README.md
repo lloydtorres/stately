@@ -20,6 +20,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.5.5** - Remove Guava, confirm app exit, UI changes, bug fixes and improvements.
 * **1.5.4** - Bug fixes and improvements.
 * **1.5.3** - Bug fixes.
 * **1.5.2** - Hotfix for spoiler links.
