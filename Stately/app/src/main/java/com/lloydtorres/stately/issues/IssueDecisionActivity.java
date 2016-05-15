@@ -120,6 +120,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setTitle(String.format(getString(R.string.issue_number), issue.id));
 
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
