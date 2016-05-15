@@ -66,6 +66,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public static final int DISMISSED = -1;
     private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
     private static final String STORY_SO_FAR = "The Story So Far";
+    private static final String NOT_AVAILABLE = "Issue Not Available";
 
     private Issue issue;
     private Nation mNation;
@@ -194,6 +195,14 @@ public class IssueDecisionActivity extends AppCompatActivity {
      */
     private void processIssueInfo(View v, Document d)
     {
+        // First check if the issue is still available
+        if (d.text().contains(NOT_AVAILABLE))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(v, String.format(getString(R.string.issue_unavailable), mNation.name));
+            return;
+        }
+
         Element issueInfoContainer = d.select("div#dilemma").first();
 
         if (issueInfoContainer == null)

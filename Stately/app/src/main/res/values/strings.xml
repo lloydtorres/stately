@@ -281,6 +281,7 @@
     <string name="next_issue">Next issue expected %1$s.</string>
     <string name="no_issues">No issues available at the moment.</string>
     <string name="issue_number">Issue #%1$d</string>
+    <string name="issue_unavailable">This issue is not available to %1$s.</string>
     <string name="issue_select_option">Adopt this position</string>
     <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
     <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
