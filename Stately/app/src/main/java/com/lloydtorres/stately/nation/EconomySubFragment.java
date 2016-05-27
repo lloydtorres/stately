@@ -198,4 +198,14 @@ public class EconomySubFragment extends Fragment {
         }
         super.onPause();
     }
+
+    @Override
+    public void onDestroy()
+    {
+        if (sectorChart != null)
+        {
+            sectorChart = null;
+        }
+        super.onDestroy();
+    }
 }

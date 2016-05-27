@@ -208,4 +208,14 @@ public class PeopleSubFragment extends Fragment {
         }
         super.onPause();
     }
+
+    @Override
+    public void onDestroy()
+    {
+        if (mortalityChart != null)
+        {
+            mortalityChart = null;
+        }
+        super.onDestroy();
+    }
 }

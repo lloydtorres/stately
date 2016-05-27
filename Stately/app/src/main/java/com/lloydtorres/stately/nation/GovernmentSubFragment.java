@@ -238,4 +238,14 @@ public class GovernmentSubFragment extends Fragment {
         }
         super.onPause();
     }
+
+    @Override
+    public void onDestroy()
+    {
+        if (budgetChart != null)
+        {
+            budgetChart = null;
+        }
+        super.onDestroy();
+    }
 }
