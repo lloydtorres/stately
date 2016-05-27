@@ -38,6 +38,7 @@ import java.util.ArrayList;
  */
 public class DatasetDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_dataset_dialog";
+    public static final String DATASETS_KEY = "datasets";
 
     // RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -67,6 +68,12 @@ public class DatasetDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Restore state
+        if (savedInstanceState != null && datasets == null)
+        {
+            datasets = savedInstanceState.getParcelable(DATASETS_KEY);
+        }
+
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
@@ -102,6 +109,17 @@ public class DatasetDialog extends DialogFragment {
         int position = ((DatasetRecyclerAdapter) mRecyclerAdapter).getSelectedPosition();
         if (position != DatasetRecyclerAdapter.INVALID_POSITION) {
             mLayoutManager.scrollToPosition(position);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        if (datasets != null)
+        {
+            savedInstanceState.putParcelableArrayList(DATASETS_KEY, datasets);
         }
     }
 }

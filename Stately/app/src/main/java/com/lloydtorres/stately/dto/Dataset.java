@@ -16,11 +16,14 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Lloyd on 2016-04-10.
  * Represents one trend dataset.
  */
-public class Dataset implements Comparable<Dataset> {
+public class Dataset implements Comparable<Dataset>, Parcelable {
     public String name;
     public int id;
     public boolean selected;
@@ -31,4 +34,35 @@ public class Dataset implements Comparable<Dataset> {
     public int compareTo(Dataset another) {
         return name.compareTo(another.name);
     }
+
+    protected Dataset(Parcel in) {
+        name = in.readString();
+        id = in.readInt();
+        selected = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(id);
+        dest.writeByte((byte) (selected ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Dataset> CREATOR = new Parcelable.Creator<Dataset>() {
+        @Override
+        public Dataset createFromParcel(Parcel in) {
+            return new Dataset(in);
+        }
+
+        @Override
+        public Dataset[] newArray(int size) {
+            return new Dataset[size];
+        }
+    };
 }
