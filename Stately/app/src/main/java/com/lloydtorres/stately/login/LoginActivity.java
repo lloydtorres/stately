@@ -261,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("logging_in", "1");
-                params.put("nation", name);
+                params.put("nation", SparkleHelper.getIdFromName(name));
                 params.put("password", pass);
                 params.put("submit", "Login");
                 params.put("autologin", "yes");
