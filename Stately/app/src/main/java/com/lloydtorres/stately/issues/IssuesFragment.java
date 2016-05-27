@@ -232,6 +232,11 @@ public class IssuesFragment extends Fragment {
 
             // Get issue ID and name
             Element issueMain = issueContents.select("a").first();
+
+            if (issueMain == null) {
+                continue;
+            }
+
             String issueLink = issueMain.attr("href");
             int issueId = Integer.valueOf(issueLink.replace("page=show_dilemma/dilemma=", ""));
             issueCore.id = issueId;
