@@ -54,7 +54,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.github.orangegangsters:swipy:1.2.3@aar'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.3'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.5'
     compile 'org.atteo:evo-inflector:1.2'
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'org.sufficientlysecure:html-textview:1.6'
