@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login_main"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -15,34 +16,52 @@
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:src="@drawable/stately"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:text="@string/for_nationstates" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
 
-    <EditText
-        android:id="@+id/field_username"
-        android:layout_width="250dp"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:textSize="17sp"
-        android:background="@android:color/white"
-        android:inputType="textCapWords|textNoSuggestions"
-        android:hint="@string/username_hint"
-        android:nextFocusForward="@+id/field_password"/>
-    <EditText
-        android:id="@+id/field_password"
-        android:layout_marginTop="3dp"
-        android:layout_width="250dp"
+        android:theme="@style/TextLoginField">
+        <EditText
+            android:id="@+id/field_username"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:hint="@string/username_hint"
+            android:fontFamily="sans-serif"
+            android:textColor="@android:color/white"
+            android:nextFocusForward="@+id/field_password"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="10dp"
-        android:textSize="17sp"
-        android:background="@android:color/white"
-        android:inputType="textWebPassword"
-        android:hint="@string/password"
-        android:nextFocusForward="@+id/login_button"/>
+        android:theme="@style/TextLoginField">
+        <EditText
+            android:id="@+id/field_password"
+            android:layout_marginTop="3dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textWebPassword"
+            android:hint="@string/password"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif"
+            android:nextFocusForward="@+id/login_button"/>
+    </android.support.design.widget.TextInputLayout>
+
     <Button
         android:id="@+id/login_button"
         android:layout_marginTop="20dp"
