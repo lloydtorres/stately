@@ -198,7 +198,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.coordinator_app_bar, f)
-                .commit();
+                .commitNow();
     }
 
     /**
@@ -345,7 +345,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             // Switch fragments
             fm.beginTransaction()
                     .replace(R.id.coordinator_app_bar, fChoose)
-                    .commit();
+                    .commitNow();
 
             drawer.closeDrawer(GravityCompat.START);
             return true;

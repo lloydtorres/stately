@@ -442,7 +442,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, nFragment)
-                .commit();
+                .commitNow();
     }
 
     private void initFragment(Region mRegion)
@@ -454,7 +454,7 @@ public class ExploreActivity extends AppCompatActivity implements PrimeActivity 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, rFragment)
-                .commit();
+                .commitNow();
     }
 
     /**
