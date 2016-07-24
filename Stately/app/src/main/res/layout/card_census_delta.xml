@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_census_delta_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -49,7 +50,18 @@
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/card_delta_trend"
+                android:visibility="gone"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="-2dp"
+                android:layout_marginLeft="-6dp"
+                android:padding="4dp"
+                app:srcCompat="@drawable/ic_trend_up"
+                tools:visibility="visible"/>
             <TextView
                 android:id="@+id/card_delta_superscript"
                 android:visibility="gone"
@@ -60,12 +72,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@android:color/white"
+                android:textAlignment="center"
                 tools:text="@string/census_top"
-                tools:visibility="visible"/>
+                tools:visibility="gone"/>
             <TextView
                 android:id="@+id/card_delta_value"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-light"
+                android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"

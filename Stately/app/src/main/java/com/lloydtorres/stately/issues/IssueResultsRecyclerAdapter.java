@@ -234,6 +234,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private CardView cardHolder;
         private TextView title;
         private TextView unit;
+        private ImageView trend;
         private TextView value;
 
         public CensusDeltaCard(Context c, View v)
@@ -243,6 +244,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
             title = (TextView) v.findViewById(R.id.card_delta_name);
             unit = (TextView) v.findViewById(R.id.card_delta_unit);
+            trend = (ImageView) v.findViewById(R.id.card_delta_trend);
+            trend.setVisibility(View.VISIBLE);
             value = (TextView) v.findViewById(R.id.card_delta_value);
             v.setOnClickListener(this);
         }
@@ -261,8 +264,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
             title.setText(censusType[0]);
             unit.setText(censusType[1]);
-            String valueHolder = delta.isPositive ? "+"+delta.delta : "-"+delta.delta;
-            value.setText(valueHolder);
+            trend.setImageResource(delta.isPositive ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
+            value.setText(delta.delta);
         }
 
         @Override
