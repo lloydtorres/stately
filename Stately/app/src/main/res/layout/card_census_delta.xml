@@ -57,7 +57,6 @@
                 android:visibility="gone"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="-2dp"
                 android:layout_marginLeft="-6dp"
                 android:padding="4dp"
                 app:srcCompat="@drawable/ic_trend_up"
