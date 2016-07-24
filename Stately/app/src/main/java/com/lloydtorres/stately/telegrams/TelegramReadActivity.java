@@ -101,6 +101,8 @@ public class TelegramReadActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        startQueryTelegramConvo();
     }
 
     private void setToolbar(Toolbar t) {
@@ -220,12 +222,6 @@ public class TelegramReadActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        startQueryTelegramConvo();
     }
 
     @Override
