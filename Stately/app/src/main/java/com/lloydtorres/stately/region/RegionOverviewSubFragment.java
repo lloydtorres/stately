@@ -93,6 +93,11 @@ public class RegionOverviewSubFragment extends Fragment {
                 founder.setText(getString(R.string.region_filler_none));
             }
 
+            if (!"0".equals(mRegion.founded))
+            {
+                founder.append(" " + String.format(getString(R.string.region_founded_append), mRegion.founded));
+            }
+
             power = (TextView) view.findViewById(R.id.region_power);
             power.setText(mRegion.power);
 

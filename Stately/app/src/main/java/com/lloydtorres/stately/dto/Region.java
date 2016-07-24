@@ -38,7 +38,7 @@ public class Region implements Parcelable {
 
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q="
                                         + "name+flag+numnations"
-                                        + "+delegate+delegatevotes+founder+power"
+                                        + "+delegate+delegatevotes+founder+founded+power"
                                         + "+factbook+tags"
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
@@ -63,6 +63,8 @@ public class Region implements Parcelable {
     public int delegateVotes;
     @Element(name="FOUNDER")
     public String founder;
+    @Element(name="FOUNDED")
+    public String founded;
     @Element(name="POWER")
     public String power;
 
@@ -100,6 +102,7 @@ public class Region implements Parcelable {
         delegate = in.readString();
         delegateVotes = in.readInt();
         founder = in.readString();
+        founded = in.readString();
         power = in.readString();
         factbook = in.readString();
         if (in.readByte() == 0x01) {
@@ -156,6 +159,7 @@ public class Region implements Parcelable {
         dest.writeString(delegate);
         dest.writeInt(delegateVotes);
         dest.writeString(founder);
+        dest.writeString(founded);
         dest.writeString(power);
         dest.writeString(factbook);
         if (tags == null) {
