@@ -40,11 +40,13 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public int id;
     public int type;
     public long timestamp;
+    public boolean isUnread;
     public String sender;
     public boolean isNation;
     public List<String> recipients;
     public String preview;
     public String content;
+    public String regionTarget;
 
     public Telegram() { super(); }
 
@@ -52,6 +54,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         id = in.readInt();
         type = in.readInt();
         timestamp = in.readLong();
+        isUnread = in.readByte() != 0x00;
         sender = in.readString();
         isNation = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
@@ -62,6 +65,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         }
         preview = in.readString();
         content = in.readString();
+        regionTarget = in.readString();
     }
 
     @Override
@@ -74,6 +78,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         dest.writeInt(id);
         dest.writeInt(type);
         dest.writeLong(timestamp);
+        dest.writeByte((byte) (isUnread ? 0x01 : 0x00));
         dest.writeString(sender);
         dest.writeByte((byte) (isNation ? 0x01 : 0x00));
         if (recipients == null) {
@@ -84,6 +89,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         }
         dest.writeString(preview);
         dest.writeString(content);
+        dest.writeString(regionTarget);
     }
 
     @SuppressWarnings("unused")

@@ -67,6 +67,8 @@ import java.util.regex.Pattern;
  * Note that the "generics" in this function expect content from a NS telegrams page.
  */
 public class MuffinsHelper {
+    public static final String TG_UNREAD = "tg_new";
+
     public static final String SEND_ARROW = "→";
     public static final String SEND_ARROW_SENDER_REGEX = "(?s)^(.*?)" + SEND_ARROW;
     public static final String SEND_ARROW_RECIPIENT_REGEX = "(?s)" + SEND_ARROW + "(.*?)$";
@@ -129,6 +131,9 @@ public class MuffinsHelper {
                 }
             }
 
+            // Check if unread
+            tel.isUnread = rt.classNames().contains(TG_UNREAD);
+
             // Get to/from fields
             Element headerRaw = rt.select("div.tg_headers").first();
             String headerRawHtml = headerRaw.html();
@@ -164,6 +169,13 @@ public class MuffinsHelper {
             {
                 String contentRawHtml = rt.select("div.tgmsg").first().html();
                 processTelegramContent(contentRawHtml, tel);
+            }
+
+            if (tel.type == Telegram.TELEGRAM_RECRUITMENT) {
+                Element targetRegion = rt.select("input[name=region_name]").first();
+                if (targetRegion != null) {
+                    tel.regionTarget = targetRegion.attr("value");
+                }
             }
 
             scannedTelegrams.add(tel);
