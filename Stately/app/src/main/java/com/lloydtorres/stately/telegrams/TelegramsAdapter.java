@@ -35,6 +35,7 @@ import com.lloydtorres.stately.helpers.MuffinsHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +216,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView reply;
         private ImageView replyAll;
 
+        private LinearLayout regionVisitButton;
+        private TextView regionVisitButtonContent;
+
         public TelegramCard(Context c, View v) {
             super(v);
             context = c;
@@ -228,6 +232,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             replyHolder = (LinearLayout) v.findViewById(R.id.card_telegram_actions_holder);
             reply = (ImageView) v.findViewById(R.id.card_telegram_reply);
             replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
+            regionVisitButton = (LinearLayout) v.findViewById(R.id.card_telegram_region_holder);
+            regionVisitButtonContent = (TextView) v.findViewById(R.id.card_telegram_region_text);
         }
 
         public void init(Telegram t)
@@ -300,6 +306,23 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     SparkleHelper.startTelegramCompose(context, fRecipients, telegram.id);
                 }
             });
+
+            if (telegram.type == Telegram.TELEGRAM_RECRUITMENT
+                    && telegram.regionTarget != null
+                    && telegram.regionTarget.length() > 0) {
+                regionVisitButton.setVisibility(View.VISIBLE);
+                regionVisitButtonContent.setText(String.format(context.getString(R.string.telegrams_region_explore), telegram.regionTarget));
+                regionVisitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SparkleHelper.startExploring(context, SparkleHelper.getIdFromName(telegram.regionTarget), SparkleHelper.CLICKY_REGION_MODE);
+                    }
+                });
+            }
+            else {
+                regionVisitButton.setVisibility(View.GONE);
+                regionVisitButton.setOnClickListener(null);
+            }
         }
     }
 

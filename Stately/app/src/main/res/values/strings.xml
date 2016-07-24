@@ -306,6 +306,7 @@
     <string name="telegram_alert_welcome">Regional Welcome Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
     <string name="telegrams_recipients">to %1$s</string>
+    <string name="telegrams_region_explore">Visit %1$s</string>
     <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
     <string name="telegrams_empty_convo">No telegrams found.</string>
     <string name="telegrams_reply">Reply to Telegram</string>
