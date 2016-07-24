@@ -153,38 +153,43 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * @param icon
      * @param text
      */
-    public void setAlertState(int type, RelativeLayout holder, ImageView icon, TextView text)
+    public void setAlertState(int type, boolean isPreview, RelativeLayout holder, ImageView icon, TextView text)
     {
         if (type != Telegram.TELEGRAM_GENERIC)
         {
             holder.setVisibility(View.VISIBLE);
 
-            int iconRes = R.drawable.ic_alert_recruitment;
+            int iconRes = isPreview ? R.drawable.ic_alert_recruitment : R.drawable.ic_alert_recruitment_white;
             int alertColor = R.color.colorChart1;
             int alertContent = R.string.telegrams_alert_recruitment;
 
             switch (type)
             {
                 case Telegram.TELEGRAM_REGION:
-                    iconRes = R.drawable.ic_region_green;
+                    iconRes = isPreview ? R.drawable.ic_region_green : R.drawable.ic_region_white;
                     alertColor = R.color.colorChart3;
                     alertContent = R.string.telegrams_alert_region;
                     break;
                 case Telegram.TELEGRAM_WELCOME:
-                    iconRes = R.drawable.ic_region_green;
+                    iconRes = isPreview ? R.drawable.ic_region_green : R.drawable.ic_region_white;
                     alertColor = R.color.colorChart3;
                     alertContent = R.string.telegram_alert_welcome;
                     break;
                 case Telegram.TELEGRAM_MODERATOR:
-                    iconRes = R.drawable.ic_alert_moderator;
+                    iconRes = isPreview ? R.drawable.ic_alert_moderator : R.drawable.ic_alert_moderator_white;
                     alertColor = R.color.colorChart3;
                     alertContent = R.string.telegrams_alert_mod;
                     break;
             }
 
             icon.setImageResource(iconRes);
-            text.setTextColor(ContextCompat.getColor(context, alertColor));
             text.setText(context.getString(alertContent));
+            if (isPreview) {
+                text.setTextColor(ContextCompat.getColor(context, alertColor));
+            }
+            else {
+                holder.setBackgroundColor(ContextCompat.getColor(context, alertColor));
+            }
         }
         else
         {
@@ -241,7 +246,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
 
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
-            setAlertState(telegram.type, alertHolder, alertIcon, alertText);
+            setAlertState(telegram.type, false, alertHolder, alertIcon, alertText);
             SparkleHelper.setTelegramHtmlFormatting(context, content, telegram.content);
 
             final String curNation = SparkleHelper.getActiveUser(context).nationId;
@@ -332,7 +337,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
             SparkleHelper.setHappeningsFormatting(context, header, SparkleHelper.joinStringList(headerContents, ", "));
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
-            setAlertState(telegram.type, alertHolder, alertIcon, alertText);
+            setAlertState(telegram.type, true, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());
         }
 
