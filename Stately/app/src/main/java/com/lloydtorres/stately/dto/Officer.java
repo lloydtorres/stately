@@ -29,6 +29,11 @@ import org.simpleframework.xml.Root;
 @Root(name="OFFICER", strict=false)
 public class Officer implements Parcelable, Comparable<Officer> {
 
+    // Officers are ordered from smallest to greatest; this numbering puts
+    // the delegate and the founder first and second, respectively.
+    public static final int DELEGATE_ORDER = -2;
+    public static final int FOUNDER_ORDER = -1;
+
     @Element(name="NATION", required=false)
     public String name;
     @Element(name="OFFICE", required=false)
@@ -37,6 +42,13 @@ public class Officer implements Parcelable, Comparable<Officer> {
     public int order;
 
     public Officer() { super(); }
+
+    public Officer(String n, String off, int ord) {
+        super();
+        name = n;
+        office = off;
+        order = ord;
+    }
 
     protected Officer(Parcel in) {
         name = in.readString();

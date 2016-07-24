@@ -33,10 +33,13 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.Embassy;
+import com.lloydtorres.stately.dto.Officer;
 import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.WaVote;
+import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
@@ -56,16 +59,37 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public final int BUTTON_CARD = 0;
     public final int POLL_CARD = 1;
     public final int WA_CARD = 2;
+    public final int OFFICER_CARD = 3;
+    public final int EMBASSY_CARD = 4;
 
     private List<Object> cards;
     private Context context;
+    private Region mRegion;
     private FragmentManager fm;
 
-    public CommunityRecyclerAdapter(Context c, Region mRegion, FragmentManager f)
+    // Because instanceof doesn't accept generics...
+    private class OfficerHolder {
+        public List<Officer> officers;
+
+        public OfficerHolder(List<Officer> off) {
+            officers = off;
+        }
+    }
+
+    private class EmbassyHolder {
+        public ArrayList<String> embassies;
+
+        public EmbassyHolder(ArrayList<String> emb) {
+            embassies = emb;
+        }
+    }
+
+    public CommunityRecyclerAdapter(Context c, Region r, FragmentManager f)
     {
         cards = new ArrayList<Object>();
 
         context = c;
+        mRegion = r;
         fm = f;
         // This adds a button to the RMB
         cards.add(mRegion.name);
@@ -86,11 +110,40 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             mRegion.scVote.chamber = Assembly.SECURITY_COUNCIL;
             cards.add(mRegion.scVote);
         }
+
+        List<Officer> officers = new ArrayList<Officer>(mRegion.officers);
+        if (!"0".equals(mRegion.delegate))
+        {
+            officers.add(new Officer(mRegion.delegate, c.getString(R.string.card_region_wa_delegate), Officer.DELEGATE_ORDER));
+        }
+        if (!"0".equals(mRegion.founder))
+        {
+            officers.add(new Officer(mRegion.founder, c.getString(R.string.card_region_founder), Officer.FOUNDER_ORDER));
+        }
+        Collections.sort(officers);
+        cards.add(new OfficerHolder(officers));
+
+        ArrayList<String> embassyList = new ArrayList<String>();
+        if (mRegion.embassies != null && mRegion.embassies.size() > 0)
+        {
+            // Only add active embassies
+            for (Embassy e : mRegion.embassies)
+            {
+                if (e.type == null)
+                {
+                    embassyList.add(e.name);
+                }
+            }
+        }
+        Collections.sort(embassyList);
+        if (embassyList.size() > 0) {
+            cards.add(new EmbassyHolder(embassyList));
+        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder;
+        RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
@@ -102,9 +155,17 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 View pollCard = inflater.inflate(R.layout.card_poll, parent, false);
                 viewHolder = new PollCard(context, pollCard);
                 break;
-            default:
+            case WA_CARD:
                 View waCard = inflater.inflate(R.layout.card_region_wa, parent, false);
                 viewHolder = new RegionWaCard(context, waCard);
+                break;
+            case OFFICER_CARD:
+                View officerCard = inflater.inflate(R.layout.card_officers, parent, false);
+                viewHolder = new OfficerCard(context, officerCard);
+                break;
+            case EMBASSY_CARD:
+                View embassyCard = inflater.inflate(R.layout.card_embassies, parent, false);
+                viewHolder = new EmbassyCard(context, embassyCard);
                 break;
         }
         return viewHolder;
@@ -121,9 +182,17 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 PollCard pollCard = (PollCard) holder;
                 pollCard.init((Poll) cards.get(position));
                 break;
-            default:
+            case WA_CARD:
                 RegionWaCard waVoteCard = (RegionWaCard) holder;
                 waVoteCard.init((WaVote) cards.get(position));
+                break;
+            case OFFICER_CARD:
+                OfficerCard officerCard = (OfficerCard) holder;
+                officerCard.init((OfficerHolder) cards.get(position));
+                break;
+            case EMBASSY_CARD:
+                EmbassyCard embassyCard = (EmbassyCard) holder;
+                embassyCard.init((EmbassyHolder) cards.get(position));
                 break;
         }
     }
@@ -146,6 +215,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         else if (cards.get(position) instanceof WaVote)
         {
             return WA_CARD;
+        }
+        else if (cards.get(position) instanceof OfficerHolder) {
+            return OFFICER_CARD;
+        }
+        else if (cards.get(position) instanceof EmbassyHolder) {
+            return EMBASSY_CARD;
         }
         return -1;
     }
@@ -316,6 +391,81 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 chart.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    public class OfficerCard extends RecyclerView.ViewHolder {
+
+        private Context context;
+        private LayoutInflater inflater;
+        private LinearLayout officersLayout;
+        private TextView noOfficers;
+
+        public OfficerCard(Context c, View itemView) {
+            super(itemView);
+            context = c;
+            inflater = LayoutInflater.from(context);
+            officersLayout = (LinearLayout) itemView.findViewById(R.id.card_region_officers_layout);
+            noOfficers = (TextView) itemView.findViewById(R.id.governance_none);
+        }
+
+        public void init(OfficerHolder offhold) {
+            List<Officer> officers = offhold.officers;
+
+            if (officers.size() <= 0) {
+                noOfficers.setText(String.format(context.getString(R.string.region_filler_no_officers), mRegion.name));
+                noOfficers.setVisibility(View.VISIBLE);
+            }
+            else {
+                for (int i=0; i<officers.size(); i++)
+                {
+                    if (officers.get(i).office != null && officers.get(i).name != null)
+                    {
+                        inflateOfficerEntry(officersLayout, officers.get(i).office, officers.get(i).name);
+                    }
+                }
+            }
+        }
+
+        private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation)
+        {
+            View delegateView = inflater.inflate(R.layout.view_cardentry, null);
+            TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
+            TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
+            label.setText(SparkleHelper.getHtmlFormatting(position));
+            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), SparkleHelper.CLICKY_NATION_MODE);
+            officersLayout.addView(delegateView);
+        }
+    }
+
+    public class EmbassyCard extends RecyclerView.ViewHolder {
+
+        private Context context;
+        private CardView embassyCard;
+        private TextView embassyNum;
+
+        public EmbassyCard(Context c, View itemView) {
+            super(itemView);
+            context = c;
+            embassyCard = (CardView) itemView.findViewById(R.id.card_region_embassies);
+            embassyNum = (TextView) itemView.findViewById(R.id.card_region_embassies_num);
+        }
+
+        public void init(EmbassyHolder embhold) {
+            ArrayList<String> embassyList = embhold.embassies;
+
+            embassyNum.setText(String.valueOf(embassyList.size()));
+            final ArrayList<String> embassies = embassyList;
+            embassyCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NameListDialog nameListDialog = new NameListDialog();
+                    nameListDialog.setTitle(context.getString(R.string.card_region_embassies));
+                    nameListDialog.setNames(embassies);
+                    nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+                    nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+                }
+            });
         }
     }
 
