@@ -185,13 +185,12 @@
     <!-- Activity Feed -->
     <string name="activityfeed_subscriptions">Subscriptions</string>
     <string name="subscriptions_curnation">Current nation</string>
-    <string name="subscriptions_switch">Switch nation list (first 10)</string>
-    <string name="subscriptions_dossier_n">Dossier: Nations (first 10)</string>
+    <string name="subscriptions_switch">Switch nation list</string>
+    <string name="subscriptions_dossier_n">Dossier: Nations</string>
     <string name="subscriptions_region">Current region</string>
-    <string name="subscriptions_dossier_r">Dossier: Regions (first 10)</string>
+    <string name="subscriptions_dossier_r">Dossier: Regions</string>
     <string name="subscriptions_wa">World Assembly</string>
     <string name="update">Update</string>
-    <string name="activityfeed_append">%%%%%1$s%%%%: %2$s</string>
     <string name="activityfeed_dossier_n">Dossier: Nations</string>
     <string name="activityfeed_dossier_r">Dossier: Regions</string>
     <string name="dossier_n_none">There are no nations in the Dossier.</string>

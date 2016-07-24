@@ -62,8 +62,9 @@ import org.simpleframework.xml.core.Persister;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,7 +76,6 @@ public class ActivityFeedFragment extends Fragment {
     public static final String NATION_KEY = "nationName";
     public static final String REGION_KEY = "regionName";
     public static final String DOSSIER_QUERY = "https://www.nationstates.net/page=dossier/template-overall=none";
-    private static final int SWITCH_LIMIT = 10;
 
     private static final String DOSSIER_CONFIRM = "Your Dossier is a collection of intelligence on nations and regions of interest.";
     private static final String NO_NATIONS = "You have no nations in your Dossier.";
@@ -96,7 +96,7 @@ public class ActivityFeedFragment extends Fragment {
     private List<Event> events;
     private String nationName;
     private String regionName;
-    private List<UserLogin> dossierNations = new ArrayList<UserLogin>();
+    private ArrayList<String> dossierNations = new ArrayList<String>();
     private List<String> dossierRegions = new ArrayList<String>();
 
     private AlertDialog.Builder dialogBuilder;
@@ -164,9 +164,7 @@ public class ActivityFeedFragment extends Fragment {
                 {
                     return;
                 }
-
-                events = new ArrayList<Event>();
-                queryHappenings(buildHappeningsQuery());
+                startQueryHappenings(false);
             }
         });
 
@@ -205,7 +203,7 @@ public class ActivityFeedFragment extends Fragment {
                 else
                 {
                     // Just query regular happenings otherwise
-                    queryHappenings(buildHappeningsQuery());
+                    queryNationalHappenings();
                 }
             }
         });
@@ -249,10 +247,7 @@ public class ActivityFeedFragment extends Fragment {
                                 for (Element e : nations)
                                 {
                                     String id = e.attr("href").replace(NATION_LINK_PREFIX, "");
-                                    UserLogin n = new UserLogin();
-                                    n.nationId = id;
-                                    n.name = SparkleHelper.getNameFromId(id);
-                                    dossierNations.add(n);
+                                    dossierNations.add(SparkleHelper.getNameFromId(id));
                                 }
                             }
 
@@ -282,7 +277,7 @@ public class ActivityFeedFragment extends Fragment {
                                 }
                             }
 
-                            queryHappenings(buildHappeningsQuery());
+                            queryNationalHappenings();
                         }
                         else
                         {
@@ -330,24 +325,20 @@ public class ActivityFeedFragment extends Fragment {
     }
 
     /**
-     * Builds the list to be passed into queryHappenings();
-     * If it's a UserLogin --> Nation
-     * If it's a String --> Region
-     * If it's an Integer --> World Assembly
+     * First part of query sequence. Builds a list of nations then performs the query.
      */
-    private List<Object> buildHappeningsQuery()
-    {
-        List<Object> q = new ArrayList<Object>();
-        UserLogin curNation = SparkleHelper.getActiveUser(getContext());
+    private void queryNationalHappenings() {
+
+        // Build list of nations to query
+        // Used for enforcing unique nations
+        Set<String> nationQuery = new LinkedHashSet<String>();
 
         // Include current nation?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_NATION, true))
         {
-            q.add(curNation);
+            UserLogin curNation = SparkleHelper.getActiveUser(getContext());
+            nationQuery.add(curNation.nationId);
         }
-
-        // Used for enforcing unique nations
-        Set<String> uniqueEnforcer = new HashSet<String>();
 
         // Include switch nations?
         if (storage.getBoolean(SubscriptionsDialog.SWITCH_NATIONS, true))
@@ -357,216 +348,258 @@ public class ActivityFeedFragment extends Fragment {
             Collections.sort(switchNations);
             for (UserLogin u : switchNations)
             {
-                if (u.nationId.equals(curNation.nationId))
-                {
-                    switchNations.remove(u);
-                    break;
-                }
-            }
-
-            // Only get first 10
-            if (switchNations.size() >= SWITCH_LIMIT)
-            {
-                switchNations = switchNations.subList(0, SWITCH_LIMIT);
-            }
-            q.addAll(switchNations);
-
-            // Add to unique enforcer
-            for (UserLogin s : switchNations)
-            {
-                uniqueEnforcer.add(s.nationId);
+                nationQuery.add(u.nationId);
             }
         }
 
         // Include dossier nations?
         if (storage.getBoolean(SubscriptionsDialog.DOSSIER_NATIONS, true))
         {
-            // Only add entries not already being queried
-            // and limit to 10
-            int dossierNationCounter = 0;
-            for (UserLogin n : dossierNations)
-            {
-                if (!uniqueEnforcer.contains(n.nationId))
-                {
-                    if (++dossierNationCounter > SWITCH_LIMIT)
-                    {
-                        break;
-                    }
-                    q.add(n);
-                }
-            }
+            nationQuery.addAll(dossierNations);
         }
 
-        // Flag to track if self region was added
-        boolean regionAdded = false;
+        if (nationQuery.size() >= 0) {
+            String target = String.format(Locale.ENGLISH, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
+                    new Response.Listener<String>() {
+                        HappeningFeed happeningResponse = null;
+                        @Override
+                        public void onResponse(String response) {
+                            if (getActivity() == null || !isAdded())
+                            {
+                                return;
+                            }
+
+                            Persister serializer = new Persister();
+                            try {
+                                happeningResponse = serializer.read(HappeningFeed.class, response);
+                                events.addAll(happeningResponse.happenings);
+                            }
+                            catch (Exception e) {
+                                SparkleHelper.logError(e.toString());
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            }
+                            queryRegionalHappenings();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (getActivity() == null || !isAdded())
+                    {
+                        return;
+                    }
+                    SparkleHelper.logError(error.toString());
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                        // No connection, just show results now
+                        finishHappeningQuery();
+                    }
+                    else if (error instanceof ServerError)
+                    {
+                        // if some data seems missing, continue anyway
+                        queryRegionalHappenings();
+                    }
+                    else
+                    {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                        queryRegionalHappenings();
+                    }
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    if (getActivity() != null && isAdded())
+                    {
+                        UserLogin u = SparkleHelper.getActiveUser(getContext());
+                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    }
+                    return params;
+                }
+            };
+
+            if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+            {
+                // No connection, just show results now
+                finishHappeningQuery();
+                SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            }
+        }
+        else {
+            queryRegionalHappenings();
+        }
+    }
+
+    /**
+     * Second part of query sequence. Builds a list of regions then performs the query.
+     */
+    private void queryRegionalHappenings() {
+        // Build list of regions to query
+        // Used for enforcing unique regions
+        Set<String> regionQuery = new LinkedHashSet<String>();
 
         // Include current region?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true))
         {
-            q.add(regionName);
-            regionAdded = true;
+            regionQuery.add(regionName);
         }
 
         // Include dossier regions?
         if (storage.getBoolean(SubscriptionsDialog.DOSSIER_REGIONS, true))
         {
-            List<String> fDossierRegions = new ArrayList<String>();
-            if (regionAdded)
-            {
-                // If region already added, we need to get rid of the self-region entry
-                for (String r : dossierRegions)
-                {
-                    if (!r.equals(regionName))
-                    {
-                        fDossierRegions.add(r);
-                    }
-                }
-            }
-            else
-            {
-                fDossierRegions = dossierRegions;
-            }
-
-            // Only get first 10
-            if (fDossierRegions.size() >= SWITCH_LIMIT)
-            {
-                fDossierRegions = fDossierRegions.subList(0, SWITCH_LIMIT);
-            }
-
-            q.addAll(fDossierRegions);
+            regionQuery.addAll(dossierRegions);
         }
 
-        // Include World Assembly?
-        if (storage.getBoolean(SubscriptionsDialog.WORLD_ASSEMBLY, true))
-        {
-            q.add(0);
-        }
+        if (regionQuery.size() >= 0) {
+            String target = String.format(Locale.ENGLISH, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
 
-        return q;
-    }
-
-    /**
-     * Convenience method for handling happening queries.
-     * @param query Remaining queries
-     */
-    private void queryHappenings(List<Object> query)
-    {
-        if (query.size() <= 0)
-        {
-            Collections.sort(events);
-            mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-        else
-        {
-            Object q = query.remove(0);
-
-            String url = "";
-            String appendName = null;
-            // If query is for a nation
-            if (q instanceof UserLogin)
-            {
-                url = String.format(HappeningFeed.QUERY_NATION, ((UserLogin) q).nationId);
-            }
-            // If query is for a region
-            else if (q instanceof String)
-            {
-                url = String.format(HappeningFeed.QUERY_REGION, SparkleHelper.getIdFromName((String) q));
-                appendName = (String) q;
-            }
-            // If query is for the World Assembly
-            else if (q instanceof Integer)
-            {
-                url = HappeningFeed.QUERY_WA;
-            }
-            queryHappeningsHeavy(url, query, appendName);
-        }
-    }
-
-    /**
-     * Heavy-lifting for querying happenings.
-     * @param target Target URL
-     * @param remainingQueries Queries remaining that need to be run
-     * @param appendName If target name needs to be appended to happenings
-     */
-    private void queryHappeningsHeavy(final String target, final List<Object> remainingQueries, final String appendName)
-    {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
-                new Response.Listener<String>() {
-                    HappeningFeed happeningResponse = null;
-                    @Override
-                    public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
-                            return;
-                        }
-
-                        Persister serializer = new Persister();
-                        try {
-                            happeningResponse = serializer.read(HappeningFeed.class, response);
-                            List<Event> queriedHappenings = happeningResponse.happenings;
-
-                            if (appendName != null)
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
+                    new Response.Listener<String>() {
+                        HappeningFeed happeningResponse = null;
+                        @Override
+                        public void onResponse(String response) {
+                            if (getActivity() == null || !isAdded())
                             {
-                                for (Event e : queriedHappenings)
-                                {
-                                    e.content = String.format(getString(R.string.activityfeed_append), appendName, e.content);
-                                }
+                                return;
                             }
 
-                            events.addAll(queriedHappenings);
-                            queryHappenings(remainingQueries);
+                            Persister serializer = new Persister();
+                            try {
+                                happeningResponse = serializer.read(HappeningFeed.class, response);
+                                events.addAll(happeningResponse.happenings);
+                            }
+                            catch (Exception e) {
+                                SparkleHelper.logError(e.toString());
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            }
+                            queryAssemblyHappenings();
                         }
-                        catch (Exception e) {
-                            SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
-                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (getActivity() == null || !isAdded())
+                    {
+                        return;
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
-                    return;
+                    SparkleHelper.logError(error.toString());
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                        // No connection, just show results now
+                        finishHappeningQuery();
+                    }
+                    else if (error instanceof ServerError)
+                    {
+                        // if some data seems missing, continue anyway
+                        queryAssemblyHappenings();
+                    }
+                    else
+                    {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                        queryRegionalHappenings();
+                    }
                 }
-                SparkleHelper.logError(error.toString());
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                    // force queryHappenings to load recyclerview
-                    queryHappenings(new ArrayList<Object>());
+            }){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    if (getActivity() != null && isAdded())
+                    {
+                        UserLogin u = SparkleHelper.getActiveUser(getContext());
+                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    }
+                    return params;
                 }
-                else if (error instanceof ServerError)
-                {
-                    // if some data seems missing, continue anyway
-                    queryHappenings(remainingQueries);
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
-                    // force queryHappenings to load recyclerview
-                    queryHappenings(new ArrayList<Object>());
-                }
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded())
-                {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                }
-                return params;
-            }
-        };
+            };
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
-            // force queryHappenings to load recyclerview
-            queryHappenings(new ArrayList<Object>());
-            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+            {
+                // No connection, just show results now
+                finishHappeningQuery();
+                SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            }
         }
+        else {
+            queryAssemblyHappenings();
+        }
+    }
+
+    /**
+     * Third part of query sequence. Checks if WA happenings should be queried.
+     */
+    private void queryAssemblyHappenings() {
+        if (storage.getBoolean(SubscriptionsDialog.WORLD_ASSEMBLY, true))
+        {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, HappeningFeed.QUERY_WA,
+                    new Response.Listener<String>() {
+                        HappeningFeed happeningResponse = null;
+                        @Override
+                        public void onResponse(String response) {
+                            if (getActivity() == null || !isAdded())
+                            {
+                                return;
+                            }
+
+                            Persister serializer = new Persister();
+                            try {
+                                happeningResponse = serializer.read(HappeningFeed.class, response);
+                                events.addAll(happeningResponse.happenings);
+                            }
+                            catch (Exception e) {
+                                SparkleHelper.logError(e.toString());
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            }
+                            finishHappeningQuery();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (getActivity() == null || !isAdded())
+                    {
+                        return;
+                    }
+                    SparkleHelper.logError(error.toString());
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                    }
+                    else
+                    {
+                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                    }
+                    finishHappeningQuery();
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> params = new HashMap<String, String>();
+                    if (getActivity() != null && isAdded())
+                    {
+                        UserLogin u = SparkleHelper.getActiveUser(getContext());
+                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                    }
+                    return params;
+                }
+            };
+
+            if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+            {
+                finishHappeningQuery();
+                SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            }
+        }
+        else {
+            finishHappeningQuery();
+        }
+    }
+
+    /**
+     * Sets up the list of happenings and finishes the queries.
+     */
+    private void finishHappeningQuery() {
+        Collections.sort(events);
+        mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -617,15 +650,10 @@ public class ActivityFeedFragment extends Fragment {
     {
         if (dossierNations.size() > 0)
         {
-            ArrayList<String> dossierNationNames = new ArrayList<String>();
-            for (UserLogin u : dossierNations)
-            {
-                dossierNationNames.add(u.name);
-            }
-            Collections.sort(dossierNationNames);
+            Collections.sort(dossierNations);
             NameListDialog nameListDialog = new NameListDialog();
             nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
-            nameListDialog.setNames(dossierNationNames);
+            nameListDialog.setNames(dossierNations);
             nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
         }

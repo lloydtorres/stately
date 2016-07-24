@@ -64,6 +64,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -719,19 +720,21 @@ public class SparkleHelper {
      * @param delimiter Delimiter to separate each string.
      * @return Merged string.
      */
-    public static String joinStringList(List<String> list, String delimiter)
+    public static String joinStringList(Collection<String> list, String delimiter)
     {
         if (list == null || list.size() < 0) { return ""; }
 
         StringBuilder mergedString = new StringBuilder();
-        for (int i=0; i < list.size(); i++) {
-            if (list.get(i) != null)
+        int i = 0;
+        for (String s : list) {
+            if (s != null)
             {
-                mergedString.append(list.get(i));
+                mergedString.append(s);
 
                 if (i < list.size() - 1) {
                     mergedString.append(delimiter);
                 }
+                i++;
             }
         }
         return mergedString.toString();
