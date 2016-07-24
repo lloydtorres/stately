@@ -216,7 +216,7 @@
     <string name="card_region_poll">Poll</string>
     <string name="region_option_index">Option %1$d</string>
     <string name="card_region_wa_vote">%1$s Resolution</string>
-    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d FOR to %2$d AGAINST.</string>
+    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d for to %2$d against.</string>
     <string name="card_region_wa_link">Open the %1$s resolution</string>
     <string name="poll_votes_template">%1$s (%2$d %3$s)</string>
     <string name="votes_null">No votes have been recorded yet!</string>
@@ -331,12 +331,12 @@
     <string name="wa_nominee_template">%1$s \u2014 %2$s</string>
     <string name="wa_resolution">Resolution</string>
     <string name="wa_resolution_vote_default">Vote on this resolution</string>
-    <string name="wa_resolution_vote_for">Voted FOR this resolution.</string>
-    <string name="wa_resolution_vote_against">Voted AGAINST this resolution.</string>
+    <string name="wa_resolution_vote_for">Voted for this resolution.</string>
+    <string name="wa_resolution_vote_against">Voted against this resolution.</string>
     <string name="wa_resolution_vote_undecided">No vote for this resolution.</string>
     <string name="wa_vote_dialog_title">Resolution Vote</string>
-    <string name="wa_vote_dialog_for">Vote FOR</string>
-    <string name="wa_vote_dialog_against">Vote AGAINST</string>
+    <string name="wa_vote_dialog_for">For</string>
+    <string name="wa_vote_dialog_against">Against</string>
     <string name="wa_vote_dialog_undecided">No vote</string>
     <string name="wa_vote_dialog_submit">Submit Vote</string>
     <string name="wa_vote_breakdown">Vote Breakdown</string>

@@ -361,6 +361,8 @@ public class ResolutionActivity extends AppCompatActivity {
                 findViewById(R.id.view_divider).setVisibility(View.GONE);
                 iconVoteFor.setVisibility(View.VISIBLE);
                 histIconVoteFor.setVisibility(View.VISIBLE);
+                iconVoteAgainst.setVisibility(View.GONE);
+                histIconVoteAgainst.setVisibility(View.GONE);
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart0));
                 voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_for));
@@ -372,6 +374,8 @@ public class ResolutionActivity extends AppCompatActivity {
                 findViewById(R.id.view_divider).setVisibility(View.GONE);
                 iconVoteAgainst.setVisibility(View.VISIBLE);
                 histIconVoteAgainst.setVisibility(View.VISIBLE);
+                iconVoteFor.setVisibility(View.GONE);
+                histIconVoteFor.setVisibility(View.GONE);
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.colorChart1));
                 voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.white));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_against));
