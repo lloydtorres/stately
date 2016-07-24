@@ -209,20 +209,22 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class PostcardCard extends RecyclerView.ViewHolder {
         private Context context;
-        private TextView title;
+        private TextView nationName;
+        private TextView postContent;
         private ImageView img;
 
         public PostcardCard(Context c, View v) {
             super(v);
             context = c;
-            title = (TextView) v.findViewById(R.id.card_postcard_title);
+            nationName = (TextView) v.findViewById(R.id.card_postcard_nation) ;
+            postContent = (TextView) v.findViewById(R.id.card_postcard_title);
             img = (ImageView) v.findViewById(R.id.card_postcard_img);
         }
 
         public void init(IssuePostcard card)
         {
-            String titleContent = String.format(context.getString(R.string.issue_postcard), card.title.trim());
-            SparkleHelper.setIssueResultsFormatting(context, title, mNation, titleContent);
+            nationName.setText(mNation.name);
+            SparkleHelper.setIssueResultsFormatting(context, postContent, mNation, card.title.trim());
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }

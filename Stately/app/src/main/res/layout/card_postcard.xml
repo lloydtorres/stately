@@ -12,19 +12,11 @@
     android:layout_marginRight="8dp"
     card_view:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <RelativeLayout
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/card_postcard_title"
-            android:textSize="14sp"
-            android:padding="20dp"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            tools:text="@string/issue_postcard" />
         <ImageView
             android:id="@+id/card_postcard_img"
             android:layout_height="200dp"
@@ -33,6 +25,32 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:src="@drawable/gray" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/card_postcard_nation"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="7"
+            tools:text="Pasloehagen" />
+        <TextView
+            android:id="@+id/card_postcard_title"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="7"
+            tools:text="Test Postcard Content"
+            android:layout_alignBottom="@+id/card_postcard_img"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
