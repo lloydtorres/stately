@@ -43,6 +43,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_gov"/>
                         <TextView
                             android:id="@+id/nation_gov_type"
@@ -65,6 +68,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_region"/>
                         <TextView
                             android:id="@+id/nation_region"
@@ -90,6 +96,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_menu_wa"/>
                         <TextView
                             android:id="@+id/nation_wa_status"
@@ -112,6 +121,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_influence"/>
                         <TextView
                             android:id="@+id/nation_influence"
@@ -134,6 +146,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_population"/>
                         <TextView
                             android:id="@+id/nation_population"
@@ -156,6 +171,9 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             app:srcCompat="@drawable/ic_motto"/>
                         <TextView
                             android:id="@+id/nation_motto"
@@ -179,7 +197,10 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="4dp"
-                            app:srcCompat="@drawable/ic_time"/>
+                            app:srcCompat="@drawable/ic_time"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
                         <TextView
                             android:id="@+id/nation_time"
                             android:textSize="15sp"
