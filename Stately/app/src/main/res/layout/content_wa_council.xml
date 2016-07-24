@@ -196,11 +196,19 @@
                     android:id="@+id/wa_resolution_vote"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp">
+                    <ImageView
+                        android:id="@+id/wa_resolution_button_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="-4dp"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_wa_green"/>
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
