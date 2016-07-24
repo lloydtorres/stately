@@ -72,9 +72,8 @@ public class RegionFragment extends Fragment {
     // Constants used to determine view pager index.
     private final int OVERVIEW_TAB = 0;
     private final int COMMUNITY_TAB = 1;
-    private final int GOV_TAB = 2;
-    private final int CENSUS_TAB = 3;
-    private final int HAPPEN_TAB = 4;
+    private final int CENSUS_TAB = 2;
+    private final int HAPPEN_TAB = 3;
 
     private String mRegionName;
     private Region mRegion;
@@ -83,7 +82,6 @@ public class RegionFragment extends Fragment {
     // sub fragments
     private RegionOverviewSubFragment regionOverviewSubFragment;
     private RegionCommunitySubFragment regionCommunitySubFragment;
-    private RegionGovernanceSubFragment regionGovernanceSubFragment;
     private CensusSubFragment censusSubFragment;
     private RegionHappeningSubFragment regionHappeningSubFragment;
 
@@ -251,9 +249,6 @@ public class RegionFragment extends Fragment {
         regionCommunitySubFragment = new RegionCommunitySubFragment();
         regionCommunitySubFragment.setRegion(mRegion);
 
-        regionGovernanceSubFragment = new RegionGovernanceSubFragment();
-        regionGovernanceSubFragment.setRegion(mRegion);
-
         censusSubFragment = new CensusSubFragment();
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
         censusHolder.addAll(mRegion.census);
@@ -390,8 +385,6 @@ public class RegionFragment extends Fragment {
                     return regionOverviewSubFragment;
                 case COMMUNITY_TAB:
                     return regionCommunitySubFragment;
-                case GOV_TAB:
-                    return regionGovernanceSubFragment;
                 case CENSUS_TAB:
                     return censusSubFragment;
                 case HAPPEN_TAB:
