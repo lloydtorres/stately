@@ -12,7 +12,11 @@ public class NationOverviewCardData {
     public String population;
     public String motto;
     public String established;
-    public String lastSeen;
+
+    public String waState;
+    public String endorsements;
+    public String gaVote;
+    public String scVote;
 
     public NationOverviewCardData() { super(); }
 }
