@@ -46,6 +46,7 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -135,7 +136,7 @@ public class TelegramReadActivity extends AppCompatActivity {
      */
     private void queryTelegramConvo()
     {
-        String targetURL = String.format(Telegram.GET_CONVERSATION, id);
+        String targetURL = String.format(Locale.US, Telegram.GET_CONVERSATION, id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

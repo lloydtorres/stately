@@ -46,6 +46,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -156,7 +157,7 @@ public class AssemblyMainFragment extends Fragment {
      */
     private void queryWorldAssemblyHeavy(final View view, final int chamberId)
     {
-        String targetURL = String.format(Assembly.QUERY, chamberId);
+        String targetURL = String.format(Locale.US, Assembly.QUERY, chamberId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

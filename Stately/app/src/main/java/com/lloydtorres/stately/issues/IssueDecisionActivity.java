@@ -53,6 +53,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -148,7 +149,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
      */
     private void queryIssueInfo()
     {
-        String targetURL = String.format(IssueOption.QUERY, issue.id);
+        String targetURL = String.format(Locale.US, IssueOption.QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -351,7 +352,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     public void postAdoptPosition(final IssueOption option)
     {
         isInProgress = true;
-        String targetURL = String.format(IssueOption.POST_QUERY, issue.id);
+        String targetURL = String.format(Locale.US, IssueOption.POST_QUERY, issue.id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
                 new Response.Listener<String>() {

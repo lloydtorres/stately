@@ -95,11 +95,11 @@ public class OverviewSubFragment extends Fragment {
     private RelativeLayout waMember;
     private LinearLayout waSection;
     private TextView isWaMember;
-    private LinearLayout endorsementsHolder;
+    private RelativeLayout endorsementsHolder;
     private TextView endorsementsCount;
-    private LinearLayout gaVoteHolder;
+    private RelativeLayout gaVoteHolder;
     private TextView gaVote;
-    private LinearLayout scVoteHolder;
+    private RelativeLayout scVoteHolder;
     private TextView scVote;
 
     // other cards
@@ -250,7 +250,7 @@ public class OverviewSubFragment extends Fragment {
             // Show endorsements section if endorsements exist
             if (mNation.endorsements != null && mNation.endorsements.length() > 0)
             {
-                endorsementsHolder = (LinearLayout) view.findViewById(R.id.nation_wa_endorsements);
+                endorsementsHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_endorsements);
                 endorsementsHolder.setVisibility(View.VISIBLE);
 
                 // Build endorsements list
@@ -288,7 +288,7 @@ public class OverviewSubFragment extends Fragment {
             // Show vote state in General Assembly if exists
             if (mNation.gaVote != null)
             {
-                gaVoteHolder = (LinearLayout) view.findViewById(R.id.nation_wa_ga_vote);
+                gaVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_ga_vote);
                 gaVoteHolder.setVisibility(View.VISIBLE);
 
                 gaVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_ga);
@@ -298,7 +298,7 @@ public class OverviewSubFragment extends Fragment {
             // Show vote state in Security council if exists
             if (mNation.scVote != null)
             {
-                scVoteHolder = (LinearLayout) view.findViewById(R.id.nation_wa_sc_vote);
+                scVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_sc_vote);
                 scVoteHolder.setVisibility(View.VISIBLE);
 
                 scVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_sc);
@@ -314,7 +314,7 @@ public class OverviewSubFragment extends Fragment {
      * @param vote
      * @param councilId
      */
-    private void setAssemblyVoteState(LinearLayout holder, TextView content, String vote, int councilId)
+    private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote, int councilId)
     {
         // Intent to open the ResolutionActivity
         Intent resolutionActivityLaunch = new Intent(getContext(), ResolutionActivity.class);

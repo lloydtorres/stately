@@ -900,7 +900,7 @@ public class SparkleHelper {
 
         // Name needs to be formatted back to its NationStates ID first for the URL.
         targetActivity = targetActivity + nTarget.toLowerCase(Locale.US).replace(" ", "_");
-        targetActivity = String.format(urlFormat, targetActivity, mode, nTarget);
+        targetActivity = String.format(Locale.US, urlFormat, targetActivity, mode, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);
         setStyledTextView(c, t, tempHolder);

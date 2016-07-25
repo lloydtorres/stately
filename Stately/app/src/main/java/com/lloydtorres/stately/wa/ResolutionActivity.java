@@ -60,6 +60,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -215,7 +216,7 @@ public class ResolutionActivity extends AppCompatActivity {
      */
     private void queryResolution(int chamberId)
     {
-        String targetURL = String.format(AssemblyActive.QUERY, chamberId);
+        String targetURL = String.format(Locale.US, AssemblyActive.QUERY, chamberId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

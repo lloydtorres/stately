@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -195,7 +196,7 @@ public class TelegramsFragment extends Fragment {
             return;
         }
 
-        String targetURL = String.format(Telegram.GET_TELEGRAM, activeFolder.value, offset);
+        String targetURL = String.format(Locale.US, Telegram.GET_TELEGRAM, activeFolder.value, offset);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

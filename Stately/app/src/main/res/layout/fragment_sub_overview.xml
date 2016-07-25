@@ -222,7 +222,7 @@
                     android:orientation="vertical"
                     tools:visibility="visible">
                     <include layout="@layout/view_divider" />
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/nation_wa_endorsements"
                         android:visibility="gone"
                         android:layout_width="match_parent"
@@ -233,33 +233,29 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         tools:visibility="visible">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <TextView
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorPrimary"
-                                android:text="@string/card_overview_wa_endorsements"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true" />
-                            <TextView
-                                android:id="@+id/nation_wa_num_endorsements"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="30sp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:adjustViewBounds="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="sans-serif-light"
-                                tools:text="10"/>
-                        </RelativeLayout>
-                    </LinearLayout>
-                    <LinearLayout
+                        <TextView
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
+                            android:text="@string/card_overview_wa_endorsements"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+                        <TextView
+                            android:id="@+id/nation_wa_num_endorsements"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="30sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="sans-serif-light"
+                            tools:text="10"/>
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:id="@+id/nation_wa_ga_vote"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -271,34 +267,30 @@
                         android:visibility="gone"
                         tools:background="@color/colorChart0"
                         tools:visibility="visible">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <TextView
-                                android:id="@+id/card_overview_wa_vote_ga"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                tools:text="@string/card_overview_wa_vote"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true" />
-                            <TextView
-                                android:visibility="invisible"
-                                android:textSize="30sp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorSecondaryText"
-                                android:adjustViewBounds="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="sans-serif-light"
-                                android:text=""/>
-                        </RelativeLayout>
-                    </LinearLayout>
-                    <LinearLayout
+                        <TextView
+                            android:id="@+id/card_overview_wa_vote_ga"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            tools:text="@string/card_overview_wa_vote"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+                        <TextView
+                            android:visibility="invisible"
+                            android:textSize="30sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:adjustViewBounds="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="sans-serif-light"
+                            android:text=""/>
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:id="@+id/nation_wa_sc_vote"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -310,33 +302,29 @@
                         android:visibility="gone"
                         tools:background="@color/colorChart12"
                         tools:visibility="visible">
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <TextView
-                                android:id="@+id/card_overview_wa_vote_sc"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/white"
-                                tools:text="@string/card_overview_wa_novote"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true" />
-                            <TextView
-                                android:visibility="invisible"
-                                android:textSize="30sp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorSecondaryText"
-                                android:adjustViewBounds="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="sans-serif-light"
-                                android:text=""/>
-                        </RelativeLayout>
-                    </LinearLayout>
+                        <TextView
+                            android:id="@+id/card_overview_wa_vote_sc"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            tools:text="@string/card_overview_wa_novote"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+                        <TextView
+                            android:visibility="invisible"
+                            android:textSize="30sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorSecondaryText"
+                            android:adjustViewBounds="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="sans-serif-light"
+                            android:text=""/>
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

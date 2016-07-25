@@ -359,7 +359,7 @@ public class ActivityFeedFragment extends Fragment {
         }
 
         if (nationQuery.size() >= 0) {
-            String target = String.format(Locale.ENGLISH, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
+            String target = String.format(Locale.US, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
                     new Response.Listener<String>() {
@@ -452,7 +452,7 @@ public class ActivityFeedFragment extends Fragment {
         }
 
         if (regionQuery.size() >= 0) {
-            String target = String.format(Locale.ENGLISH, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
+            String target = String.format(Locale.US, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
                     new Response.Listener<String>() {

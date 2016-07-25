@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -288,7 +289,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             return;
         }
 
-        String targetURL = String.format(RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset);
+        String targetURL = String.format(Locale.US, RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -652,7 +653,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         // Set like status in UI immediately for user friendliness
         ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, sendLike);
 
-        String targetURL = String.format(RegionMessages.LIKE_QUERY, sendLike ? PARAM_LIKE : PARAM_UNLIKE, id);
+        String targetURL = String.format(Locale.US, RegionMessages.LIKE_QUERY, sendLike ? PARAM_LIKE : PARAM_UNLIKE, id);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -721,7 +722,7 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void postMessageDelete(final int pos, final int id)
     {
-        String targetURL = String.format(RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
+        String targetURL = String.format(Locale.US, RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
