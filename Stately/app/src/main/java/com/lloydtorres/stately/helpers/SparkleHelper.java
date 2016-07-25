@@ -1298,7 +1298,7 @@ public class SparkleHelper {
         {
             try
             {
-                ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+                ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
                 logError(e.toString());
@@ -1322,7 +1322,7 @@ public class SparkleHelper {
         {
             try
             {
-                ((HtmlTextView)t).setHtmlFromString(holder, new HtmlTextView.RemoteImageGetter());
+                ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
                 logError(e.toString());
