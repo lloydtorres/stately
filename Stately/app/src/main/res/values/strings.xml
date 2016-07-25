@@ -94,7 +94,6 @@
     <string name="card_overview_gov_capital">Capital</string>
     <string name="card_overview_gov_priority">Priority</string>
     <string name="card_overview_gov_tax">Income Tax</string>
-    <string name="card_overview_gov_tax_census">Trends for Taxation</string>
 
     <!-- Nation economy card -->
     <string name="card_overview_econ_title">Economy</string>
@@ -102,7 +101,6 @@
     <string name="card_overview_econ_gdp">Gross Domestic Product (GDP)</string>
     <string name="card_overview_econ_industry">Major Industry</string>
     <string name="card_overview_econ_income">Average Income</string>
-    <string name="card_overview_econ_gdp_census">Trends for Economic Output</string>
 
     <!-- Nation WA card -->
     <string name="card_overview_wa_endorsements">Endorsements</string>
@@ -123,8 +121,8 @@
     <string name="card_overview_other_animal_template">%1$s — %2$s.</string>
     <string name="card_overview_other_census_title">Today\'s Census: %1$s</string>
     <string name="card_overview_other_census_content">%1$s — %2$s</string>
-    <string name="card_overview_other_census_region">\n#%1$s in %2$s (top %3$s%%)</string>
-    <string name="card_overview_other_census_world">\n#%1$s in the world (top %2$s%%)</string>
+    <string name="card_overview_other_census_region">#%1$s in %2$s (top %3$s%%)</string>
+    <string name="card_overview_other_census_world">#%1$s in the world (top %2$s%%)</string>
     <string name="card_overview_census_button">Trends for %1$s</string>
 
     <!-- Nation subfragment cards -->
