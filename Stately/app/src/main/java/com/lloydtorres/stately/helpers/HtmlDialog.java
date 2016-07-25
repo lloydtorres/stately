@@ -87,15 +87,7 @@ public class HtmlDialog extends DialogFragment {
 
         content = (HtmlTextView) view.findViewById(R.id.dialog_html_content);
         SparkleHelper.setBbCodeFormatting(getContext(), content, raw, fm);
-
-        if (title != null)
-        {
-            getDialog().setTitle(String.format(getString(R.string.spoiler_warn_title), title));
-        }
-        else
-        {
-            getDialog().setTitle(getString(R.string.spoiler_warn));
-        }
+        getDialog().setTitle(title);
 
         return view;
     }

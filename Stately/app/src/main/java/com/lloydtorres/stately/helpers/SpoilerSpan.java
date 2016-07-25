@@ -46,7 +46,7 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void onClick(View widget) {
         HtmlDialog htmlDialog = new HtmlDialog();
-        htmlDialog.setTitle(spoiler.title);
+        htmlDialog.setTitle(spoiler.title != null ? String.format(context.getString(R.string.spoiler_warn_title), spoiler.title) : context.getString(R.string.spoiler_warn));
         htmlDialog.setRawContent(spoiler.content);
         htmlDialog.setFragmentManager(fm);
         htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);
