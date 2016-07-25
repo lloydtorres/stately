@@ -48,7 +48,7 @@ import java.util.Locale;
 public class PeopleSubFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNation";
 
-    private HashMap<String, Integer> waCategoryDescriptors;
+    private static final HashMap<String, Integer> waCategoryDescriptors;
 
     private Nation mNation;
 
@@ -64,10 +64,7 @@ public class PeopleSubFragment extends Fragment {
         mNation = n;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    static {
         // Create hash map for WA category descriptors
         waCategoryDescriptors = new HashMap<String, Integer>();
         waCategoryDescriptors.put("anarchy", R.string.wa_anarchy);
@@ -98,6 +95,11 @@ public class PeopleSubFragment extends Fragment {
         waCategoryDescriptors.put("right_wing_utopia", R.string.wa_right_wing_utopia);
         waCategoryDescriptors.put("scandinavian_liberal_paradise", R.string.wa_scandinavian_liberal_paradise);
         waCategoryDescriptors.put("tyranny_by_majority", R.string.wa_tyranny_by_majority);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
