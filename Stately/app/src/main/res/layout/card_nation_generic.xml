@@ -43,7 +43,6 @@
                 android:id="@+id/card_nation_generic_details_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical"/>
         </LinearLayout>
         <LinearLayout

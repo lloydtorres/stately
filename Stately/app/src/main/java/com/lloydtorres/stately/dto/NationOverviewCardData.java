@@ -8,8 +8,8 @@ public class NationOverviewCardData {
     public String category;
     public String region;
     public String inflDesc;
-    public int inflScore;
-    public String population;
+    public float inflScore;
+    public int population;
     public String motto;
     public String established;
     public String lastSeen;

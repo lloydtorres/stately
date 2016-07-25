@@ -52,12 +52,10 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private List<Object> cards;
     private Context context;
-    private LayoutInflater inflater;
     private FragmentManager fm;
 
     public NationCardsRecyclerAdapter(Context c, List<Object> cds, FragmentManager f) {
         context = c;
-        inflater = LayoutInflater.from(context);
         cards = cds;
         fm = f;
 
@@ -76,15 +74,15 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 break;
             case CARD_FREEDOMS:
                 View freedomCard = inflater.inflate(R.layout.card_nation_freedom, parent, false);
-                viewHolder = new NationOverviewCard(freedomCard);
+                viewHolder = new NationFreedomCard(freedomCard);
                 break;
             case CARD_GENERIC:
                 View genericCard = inflater.inflate(R.layout.card_nation_generic, parent, false);
-                viewHolder = new NationOverviewCard(genericCard);
+                viewHolder = new NationGenericCard(genericCard);
                 break;
             case CARD_CHART:
                 View chartCard = inflater.inflate(R.layout.card_nation_chart, parent, false);
-                viewHolder = new NationOverviewCard(chartCard);
+                viewHolder = new NationChartCard(chartCard);
                 break;
         }
 
@@ -183,7 +181,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             govType.setText(data.category);
             SparkleHelper.activityLinkBuilder(context, region, data.region, data.region, data.region, SparkleHelper.CLICKY_REGION_MODE);
             influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
-            population.setText(data.population);
+            population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
             if (data.established.equals("0"))
             {
@@ -364,14 +362,14 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    private void inflateEntry(LinearLayout targetLayout, String title, String content)
+    private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content)
     {
         View entryView = inflater.inflate(R.layout.view_cardentry, null);
         TextView titleView = (TextView) entryView.findViewById(R.id.cardentry_label);
         TextView contentView = (TextView) entryView.findViewById(R.id.cardentry_content);
         titleView.setText(SparkleHelper.getHtmlFormatting(title));
         contentView.setText(SparkleHelper.getHtmlFormatting(content));
-        targetLayout.addView(contentView);
+        targetLayout.addView(entryView);
     }
 
     public class NationGenericCard extends RecyclerView.ViewHolder {
@@ -381,6 +379,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private LinearLayout detailsHolder;
         private LinearLayout trendButton;
         private TextView trendContent;
+        private LayoutInflater inflater;
 
         public NationGenericCard(View itemView) {
             super(itemView);
@@ -392,6 +391,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         public void init(NationGenericCardData data) {
+            inflater = LayoutInflater.from(context);
+
             title.setText(data.title);
             if (data.mainContent != null && data.mainContent.length() > 0) {
                 content.setVisibility(View.VISIBLE);
@@ -404,7 +405,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 detailsHolder.setVisibility(View.VISIBLE);
                 detailsHolder.removeAllViews();
                 for (Map.Entry<String, String> entry : data.items.entrySet()) {
-                    inflateEntry(detailsHolder, entry.getKey(), entry.getValue());
+                    inflateEntry(inflater, detailsHolder, entry.getKey(), entry.getValue());
                 }
             }
             else {
@@ -437,6 +438,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private TextView title;
         private LinearLayout details;
         private PieChart chart;
+        private LayoutInflater inflater;
 
         public NationChartCard(View itemView) {
             super(itemView);
@@ -446,12 +448,24 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         public void init(NationChartCardData data) {
+            inflater = LayoutInflater.from(context);
+
             List<String> chartLabels = new ArrayList<String>();
             List<Entry> chartEntries = new ArrayList<Entry>();
 
             if (data.mode == NationChartCardData.MODE_PEOPLE) {
-                title.setText(context.getString(R.string.card_people_mortality_title));
                 details.setVisibility(View.GONE);
+                details.removeAllViews();
+            }
+            else {
+                details.setVisibility(View.VISIBLE);
+                for (Map.Entry<String, String> entry : data.details.entrySet()) {
+                    inflateEntry(inflater, details, entry.getKey(), entry.getValue());
+                }
+            }
+
+            if (data.mode == NationChartCardData.MODE_PEOPLE) {
+                title.setText(context.getString(R.string.card_people_mortality_title));
 
                 // setup data
                 List<MortalityCause> causes = data.mortalityList;
@@ -484,7 +498,6 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             else if (data.mode == NationChartCardData.MODE_GOV) {
                 title.setText(context.getString(R.string.card_government_expenditures_title));
-                details.setVisibility(View.VISIBLE);
 
                 // setup data
                 GovBudget budget = data.govBudget;
@@ -578,7 +591,6 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             else if (data.mode == NationChartCardData.MODE_ECON) {
                 title.setText(context.getString(R.string.card_economy_analysis_title));
-                details.setVisibility(View.VISIBLE);
 
                 // setup data
                 Sectors sectors = data.sectors;
