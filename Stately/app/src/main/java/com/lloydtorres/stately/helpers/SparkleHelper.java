@@ -1208,28 +1208,28 @@ public class SparkleHelper {
     {
         String holder = target;
         List<Spoiler> spoilers = new ArrayList<Spoiler>();
-        int id = 0;
 
         // Handle spoilers without titles first
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(BBCODE_SPOILER, holder, false);
-        for (Map.Entry<String, String> n : set) {
+        Matcher m1 = BBCODE_SPOILER.matcher(holder);
+        while (m1.find())
+        {
             Spoiler s = new Spoiler();
-            s.content = n.getValue();
-            s.raw = n.getKey();
-            s.replacer = String.format(c.getString(R.string.spoiler_warn_link), id++);
+            s.content = m1.group(1);
+            s.raw = m1.group();
+            s.replacer = c.getString(R.string.spoiler_warn_link);
             spoilers.add(s);
         }
 
         // Handle spoilers with titles next
-        Matcher m = BBCODE_SPOILER_2.matcher(holder);
-        while (m.find())
+        Matcher m2 = BBCODE_SPOILER_2.matcher(holder);
+        while (m2.find())
         {
             Spoiler s = new Spoiler();
             // Gets rid of HTML in title
-            s.title = Jsoup.parse(m.group(1)).text();
-            s.content = m.group(2);
-            s.raw = m.group();
-            s.replacer = String.format(c.getString(R.string.spoiler_warn_title_link), id++, s.title);
+            s.title = Jsoup.parse(m2.group(1)).text();
+            s.content = m2.group(2);
+            s.raw = m2.group();
+            s.replacer = String.format(c.getString(R.string.spoiler_warn_title_link), s.title);
             spoilers.add(s);
         }
 
@@ -1325,14 +1325,17 @@ public class SparkleHelper {
         styleLinkifiedTextView(c, t);   // Ensures TextView contains a spannable
         Spannable span = (Spannable) t.getText();
         String rawSpan = span.toString();
+        int startFromIndex = 0;
 
         for (int i=0; i < spoilers.size(); i++)
         {
             Spoiler s = spoilers.get(i);
-            int start = rawSpan.indexOf(s.replacer);
+            SparkleHelper.logError(s.content);
+            int start = rawSpan.indexOf(s.replacer, startFromIndex);
             if (start != -1)
             {
                 int end = start + s.replacer.length();
+                startFromIndex = end;
                 SpoilerSpan clickyDialog = new SpoilerSpan(c, s, fm);
                 span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

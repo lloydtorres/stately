@@ -225,9 +225,9 @@
     <!-- Region message board -->
     <string name="region_rmb">RMB: %1$s</string>
     <string name="spoiler_warn">Spoiler</string>
-    <string name="spoiler_warn_link">[spoiler (id-%1$d)]</string>
+    <string name="spoiler_warn_link">[spoiler]</string>
     <string name="spoiler_warn_title">Spoiler: %1$s</string>
-    <string name="spoiler_warn_title_link">[spoiler (id-%1$d): %2$s]</string>
+    <string name="spoiler_warn_title_link">[spoiler: %1$s]</string>
     <string name="rmb_suppressed">[i]Suppressed by [nation=%1$s][/i]\n\n</string>
     <string name="clicky_link">[external link]</string>
     <string name="rmb_no_content">Nothing to see here!</string>
