@@ -16,28 +16,23 @@
 
 package com.lloydtorres.stately.nation;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.dto.NationChartCardData;
+import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -50,16 +45,11 @@ public class EconomySubFragment extends Fragment {
 
     private Nation mNation;
 
-    private TextView econDesc;
-    private LinearLayout censusAvgIncome;
-    private TextView gdpTotal;
-    private TextView gdpPerCapitaAvg;
-    private TextView gdpPerCapitaPoor;
-    private TextView gdpPerCapitaRich;
-    private PieChart sectorChart;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mRecyclerAdapter;
 
-    // Labels used for the pie chart
-    private List<String> chartLabels;
+    private List<Object> cards;
 
     public void setNation(Nation n)
     {
@@ -73,7 +63,7 @@ public class EconomySubFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sub_economy, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         // Restore state
         if (savedInstanceState != null && mNation == null)
@@ -83,9 +73,35 @@ public class EconomySubFragment extends Fragment {
 
         if (mNation != null)
         {
-            initEconDesc(view);
-            initGDP(view);
-            initSectorChart(view);
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            cards = new ArrayList<Object>();
+
+            NationGenericCardData ngcSummary = new NationGenericCardData();
+            ngcSummary.title = getString(R.string.card_main_title_summary);
+            String descContent = mNation.industryDesc;
+            descContent = descContent.replace(". ", ".<br /><br />");
+            ngcSummary.mainContent = descContent;
+            ngcSummary.nationCensusTarget = mNation.name;
+            ngcSummary.idCensusTarget = TrendsActivity.CENSUS_AVERAGE_INCOME;
+            cards.add(ngcSummary);
+
+            NationChartCardData nccExpenditures = new NationChartCardData();
+            nccExpenditures.details = new LinkedHashMap<String, String>();
+            nccExpenditures.details.put(getString(R.string.card_economy_analysis_gdp), SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
+            StringBuilder perCapitaText = new StringBuilder(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
+            perCapitaText.append("<br>").append(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
+            perCapitaText.append("<br>").append(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
+            nccExpenditures.details.put(getString(R.string.card_economy_analysis_per_capita), perCapitaText.toString());
+            nccExpenditures.mode = NationChartCardData.MODE_ECON;
+            nccExpenditures.sectors = mNation.sectors;
+            cards.add(nccExpenditures);
+
+            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         return view;
@@ -100,112 +116,5 @@ public class EconomySubFragment extends Fragment {
         }
     }
 
-    /**
-     * Set up first card with economic description from NationStates.
-     * @param view
-     */
-    private void initEconDesc(View view)
-    {
-        econDesc = (TextView) view.findViewById(R.id.nation_industrydesc);
 
-        String descContent = mNation.industryDesc;
-        descContent = descContent.replace(". ", ".<br /><br />");
-
-        econDesc.setText(SparkleHelper.getHtmlFormatting(descContent));
-
-        censusAvgIncome = (LinearLayout) view.findViewById(R.id.card_economy_avg_income_census);
-        censusAvgIncome.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_AVERAGE_INCOME));
-    }
-
-    /**
-     * Initialize the card text content on GDP data from NationStates
-     * @param view
-     */
-    private void initGDP(View view)
-    {
-        gdpTotal = (TextView) view.findViewById(R.id.nation_gdp_total);
-        gdpTotal.setText(SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
-
-        gdpPerCapitaAvg = (TextView) view.findViewById(R.id.nation_gdp_per_capita_avg);
-        gdpPerCapitaAvg.setText(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
-
-        gdpPerCapitaPoor = (TextView) view.findViewById(R.id.nation_gdp_per_capita_poor);
-        gdpPerCapitaPoor.setText(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
-
-        gdpPerCapitaRich = (TextView) view.findViewById(R.id.nation_gdp_per_capita_rich);
-        gdpPerCapitaRich.setText(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
-    }
-
-    /**
-     * Initialize the pie chart showing the economic sector breakdown
-     * @param view
-     */
-    private void initSectorChart(View view)
-    {
-        sectorChart = (PieChart) view.findViewById(R.id.nation_sectors);
-
-        // setup data
-        chartLabels = new ArrayList<String>();
-        List<Entry> chartEntries = new ArrayList<Entry>();
-        Sectors sectors = mNation.sectors;
-
-        List<Integer> sectorColours = new ArrayList<Integer>();
-        Context context = getContext();
-
-        int i = 0;
-        if (sectors.government > 0f)
-        {
-            chartLabels.add(getString(R.string.government));
-            chartEntries.add(new Entry(sectors.government, i++));
-            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector0));
-        }
-        if (sectors.stateOwned > 0f)
-        {
-            chartLabels.add(getString(R.string.state_owned));
-            chartEntries.add(new Entry(sectors.stateOwned, i++));
-            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector1));
-        }
-        if (sectors.privateSector > 0f)
-        {
-            chartLabels.add(getString(R.string.private_sector));
-            chartEntries.add(new Entry(sectors.privateSector, i++));
-            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector2));
-        }
-        if (sectors.blackMarket > 0f)
-        {
-            chartLabels.add(getString(R.string.black_market));
-            chartEntries.add(new Entry(sectors.blackMarket, i++));
-            sectorColours.add(ContextCompat.getColor(context, R.color.colorSector3));
-        }
-
-        // Disable data labels, set colours and data
-        PieDataSet dataSet = new PieDataSet(chartEntries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(sectorColours);
-        PieData dataFull = new PieData(chartLabels, dataSet);
-
-        sectorChart = SparkleHelper.getFormattedPieChart(context, sectorChart, chartLabels);
-        sectorChart.setData(dataFull);
-        sectorChart.invalidate();
-    }
-
-    @Override
-    public void onPause()
-    {
-        if (sectorChart != null)
-        {
-            sectorChart = null;
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        if (sectorChart != null)
-        {
-            sectorChart = null;
-        }
-        super.onDestroy();
-    }
 }

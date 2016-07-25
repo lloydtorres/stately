@@ -18,21 +18,17 @@ package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.census.TrendsOnClickListener;
-import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.NationChartCardData;
+import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -52,12 +48,11 @@ public class PeopleSubFragment extends Fragment {
 
     private Nation mNation;
 
-    private TextView summaryDesc;
-    private LinearLayout censusCrime;
-    private PieChart mortalityChart;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mRecyclerAdapter;
 
-    // Labels on the mortality chart
-    private List<String> chartLabels;
+    private List<Object> cards;
 
     public void setNation(Nation n)
     {
@@ -104,7 +99,7 @@ public class PeopleSubFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sub_people, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         // Restore state
         if (savedInstanceState != null && mNation == null)
@@ -114,8 +109,42 @@ public class PeopleSubFragment extends Fragment {
 
         if (mNation != null)
         {
-            initSummaryDesc(view);
-            initMortalityChart(view);
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            cards = new ArrayList<Object>();
+
+            NationGenericCardData ngcSummary = new NationGenericCardData();
+            ngcSummary.title = getString(R.string.card_main_title_summary);
+            StringBuilder summaryContent = new StringBuilder(String.format(getString(R.string.card_people_summarydesc_flavour),
+                    mNation.prename,
+                    mNation.name,
+                    mNation.notable,
+                    mNation.sensible,
+                    SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
+                    mNation.demPlural));
+
+            String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
+            if (waCategoryDescriptors.containsKey(waCategory))
+            {
+                summaryContent.append("<br /><br />").append(String.format(getString(waCategoryDescriptors.get(waCategory)), mNation.demPlural));
+            }
+            summaryContent.append("<br /><br />").append(mNation.crime);
+            ngcSummary.mainContent = summaryContent.toString();
+            ngcSummary.nationCensusTarget = mNation.name;
+            ngcSummary.idCensusTarget = TrendsActivity.CENSUS_CRIME;
+            cards.add(ngcSummary);
+
+            NationChartCardData nccMortality = new NationChartCardData();
+            nccMortality.mode = NationChartCardData.MODE_PEOPLE;
+            nccMortality.mortalityList = mNation.causes;
+            nccMortality.animal = mNation.animal;
+            cards.add(nccMortality);
+
+            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         return view;
@@ -129,95 +158,5 @@ public class PeopleSubFragment extends Fragment {
         {
             outState.putParcelable(NATION_DATA_KEY, mNation);
         }
-    }
-
-    /**
-     * Initialize the first card showing a mockup of the people descriptors in NationStates.
-     * @param view
-     */
-    private void initSummaryDesc(View view)
-    {
-        summaryDesc = (TextView) view.findViewById(R.id.nation_summarydesc);
-
-        String summaryContent = String.format(getString(R.string.card_people_summarydesc_flavour),
-                mNation.prename,
-                mNation.name,
-                mNation.notable,
-                mNation.sensible,
-                SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
-                mNation.demPlural);
-
-        String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
-        if (waCategoryDescriptors.containsKey(waCategory))
-        {
-            summaryContent += "<br /><br />" + String.format(getString(waCategoryDescriptors.get(waCategory)), mNation.demPlural);
-        }
-
-        summaryContent += "<br /><br />" + mNation.crime;
-
-        summaryDesc.setText(SparkleHelper.getHtmlFormatting(summaryContent));
-
-        censusCrime = (LinearLayout) view.findViewById(R.id.card_people_crime_census);
-        censusCrime.setOnClickListener(new TrendsOnClickListener(getContext(), SparkleHelper.getIdFromName(mNation.name), TrendsActivity.CENSUS_CRIME));
-    }
-
-    /**
-     * Initialize the mortality pie chart.
-     * @param view
-     */
-    private void initMortalityChart(View view)
-    {
-        mortalityChart = (PieChart) view.findViewById(R.id.nation_mortality_chart);
-
-        // setup data
-        chartLabels = new ArrayList<String>();
-        List<Entry> chartEntries = new ArrayList<Entry>();
-        List<MortalityCause> causes = mNation.causes;
-
-        for (int i=0; i < causes.size(); i++)
-        {
-            // NationStates API stores this as Animal Attack instead of
-            // using the actual national animal, so replace that
-            if (getString(R.string.animal_attack_original).equals(causes.get(i).type))
-            {
-                chartLabels.add(String.format(getString(R.string.animal_attack_madlibs), mNation.animal));
-            }
-            else
-            {
-                chartLabels.add(causes.get(i).type);
-            }
-            Entry n = new Entry(causes.get(i).value, i);
-            chartEntries.add(n);
-        }
-
-        // Disable labels, set values and colours
-        PieDataSet dataSet = new PieDataSet(chartEntries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(SparkleHelper.chartColours, getActivity());
-        PieData dataFull = new PieData(chartLabels, dataSet);
-
-        mortalityChart = SparkleHelper.getFormattedPieChart(getContext(), mortalityChart, chartLabels);
-        mortalityChart.setData(dataFull);
-        mortalityChart.invalidate();
-    }
-
-    @Override
-    public void onPause()
-    {
-        if (mortalityChart != null)
-        {
-            mortalityChart = null;
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        if (mortalityChart != null)
-        {
-            mortalityChart = null;
-        }
-        super.onDestroy();
     }
 }

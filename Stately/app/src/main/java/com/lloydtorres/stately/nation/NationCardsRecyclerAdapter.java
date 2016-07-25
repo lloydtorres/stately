@@ -396,7 +396,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             title.setText(data.title);
             if (data.mainContent != null && data.mainContent.length() > 0) {
                 content.setVisibility(View.VISIBLE);
-                content.setText(data.mainContent);
+                content.setText(SparkleHelper.getHtmlFormatting(data.mainContent));
             }
             else {
                 content.setVisibility(View.GONE);
