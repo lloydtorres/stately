@@ -362,6 +362,17 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, true, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());
+
+            if (telegram.isUnread) {
+                header.setTypeface(null, Typeface.BOLD);
+                timestamp.setTypeface(null, Typeface.BOLD_ITALIC);
+                alertText.setTypeface(null, Typeface.BOLD);
+            }
+            else {
+                header.setTypeface(null, Typeface.NORMAL);
+                timestamp.setTypeface(null, Typeface.ITALIC);
+                alertText.setTypeface(null, Typeface.NORMAL);
+            }
         }
 
         @Override
@@ -371,6 +382,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Intent readActivityIntent = new Intent(context, TelegramReadActivity.class);
                 readActivityIntent.putExtra(TelegramReadActivity.ID_DATA, telegram.id);
                 readActivityIntent.putExtra(TelegramReadActivity.TITLE_DATA, header.getText().toString());
+
+                telegram.isUnread = false;
+                header.setTypeface(null, Typeface.NORMAL);
+                timestamp.setTypeface(null, Typeface.ITALIC);
+                alertText.setTypeface(null, Typeface.NORMAL);
+                notifyItemChanged(getAdapterPosition());
+
                 context.startActivity(readActivityIntent);
             }
         }
