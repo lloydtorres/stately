@@ -35,7 +35,6 @@ import com.lloydtorres.stately.helpers.MuffinsHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
