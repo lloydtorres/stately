@@ -4,7 +4,7 @@ package com.lloydtorres.stately.dto;
  * Created by Lloyd on 2016-07-24.
  * A holder for freedom score data in the nation overview tab.
  */
-public class NationFreedomCardsData {
+public class NationFreedomCardData {
     public String civDesc;
     public int civScore;
     public String econDesc;
@@ -12,5 +12,5 @@ public class NationFreedomCardsData {
     public String poliDesc;
     public int poliScore;
 
-    public NationFreedomCardsData() { super(); }
+    public NationFreedomCardData() { super(); }
 }
