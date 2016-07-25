@@ -1003,6 +1003,20 @@ public class SparkleHelper {
         return holder;
     }
 
+    /**
+     * Wrapper for Html.fromHtml, which has different calls depending on the API version.
+     * @param src
+     * @return
+     */
+    public static Spanned fromHtml(String src) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(src, Html.FROM_HTML_MODE_COMPACT);
+        }
+        else {
+            return Html.fromHtml(src);
+        }
+    }
+
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
 
@@ -1037,7 +1051,7 @@ public class SparkleHelper {
         }
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        t.setText(Html.fromHtml(holder));
+        t.setText(SparkleHelper.fromHtml(holder));
         styleLinkifiedTextView(c, t);
     }
 
@@ -1100,7 +1114,7 @@ public class SparkleHelper {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-        return Html.fromHtml(holder);
+        return SparkleHelper.fromHtml(holder);
     }
 
     /**
@@ -1294,7 +1308,7 @@ public class SparkleHelper {
         }
         else
         {
-            t.setText(Html.fromHtml(holder));
+            t.setText(SparkleHelper.fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
     }
@@ -1318,7 +1332,7 @@ public class SparkleHelper {
         }
         else
         {
-            t.setText(Html.fromHtml(holder));
+            t.setText(SparkleHelper.fromHtml(holder));
         }
 
         // Deal with spoilers here
