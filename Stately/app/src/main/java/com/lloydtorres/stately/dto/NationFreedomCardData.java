@@ -5,6 +5,7 @@ package com.lloydtorres.stately.dto;
  * A holder for freedom score data in the nation overview tab.
  */
 public class NationFreedomCardData {
+    public String nationTarget;
     public String civDesc;
     public int civScore;
     public String econDesc;
