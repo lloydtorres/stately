@@ -56,11 +56,11 @@ import java.util.List;
  */
 public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for the different types of cards
-    public final int BUTTON_CARD = 0;
-    public final int POLL_CARD = 1;
-    public final int WA_CARD = 2;
-    public final int OFFICER_CARD = 3;
-    public final int EMBASSY_CARD = 4;
+    public static final int BUTTON_CARD = 0;
+    public static final int POLL_CARD = 1;
+    public static final int WA_CARD = 2;
+    public static final int OFFICER_CARD = 3;
+    public static final int EMBASSY_CARD = 4;
 
     private List<Object> cards;
     private Context context;
