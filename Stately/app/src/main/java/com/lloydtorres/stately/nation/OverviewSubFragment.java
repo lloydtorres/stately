@@ -178,16 +178,16 @@ public class OverviewSubFragment extends Fragment {
             String[] worldCensusItem = WORLD_CENSUS_ITEMS[censusId].split("##");
             String todayCensusTitle = String.format(getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
             CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
-            String todayCensusContent = String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]);
+            StringBuilder todayCensusContent = new StringBuilder(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
             if (detailedRank.regionRank > 0)
             {
-                todayCensusContent += "<br>" + String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent));
+                todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
             }
             if (detailedRank.worldRank > 0)
             {
-                todayCensusContent += "<br>" + String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent));
+                todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
             }
-            ngcOther.items.put(todayCensusTitle, todayCensusContent);
+            ngcOther.items.put(todayCensusTitle, todayCensusContent.toString());
             ngcOther.nationCensusTarget = mNation.name;
             ngcOther.idCensusTarget = censusId;
             cards.add(ngcOther);
