@@ -312,7 +312,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 String postContent = post.message;
                 if (post.status == Post.POST_SUPPRESSED && post.suppressor != null)
                 {
-                    postContent = String.format(context.getString(R.string.rmb_suppressed), post.suppressor) + "<strike>" + postContent + "</strike>";
+                    postContent = String.format(context.getString(R.string.rmb_suppressed), post.suppressor, postContent);
                 }
                 if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED)
                 {

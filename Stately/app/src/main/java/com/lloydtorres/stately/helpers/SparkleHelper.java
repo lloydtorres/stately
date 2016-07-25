@@ -1155,7 +1155,7 @@ public class SparkleHelper {
         holder = holder.replace("\n", "<br>");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br").addTags("strike"));
+        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
         holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, CLICKY_NATION_MODE);
