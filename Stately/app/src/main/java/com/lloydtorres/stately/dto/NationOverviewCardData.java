@@ -12,6 +12,7 @@ public class NationOverviewCardData {
     public String population;
     public String motto;
     public String established;
+    public String lastSeen;
 
     public String waState;
     public String endorsements;
