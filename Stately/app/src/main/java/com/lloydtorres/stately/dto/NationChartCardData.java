@@ -15,6 +15,7 @@ public class NationChartCardData {
     public int mode;
     public LinkedHashMap<String, String> details;
     public List<MortalityCause> mortalityList;
+    public String animal;
     public GovBudget govBudget;
     public Sectors sectors;
 
