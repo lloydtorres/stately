@@ -50,11 +50,13 @@ public class TelegramReadActivity extends AppCompatActivity {
     public static final String TITLE_DATA = "titleData";
     public static final String TELEGRAM_DATA_2 = "telegramData2";
     public static final String FOLDER_DATA = "folderData";
+    public static final String SEL_FOLDER_DATA = "selectedFolderData";
     public static final String CHK_DATA = "chkData";
 
     private String title;
     private Telegram telegram;
     private ArrayList<TelegramFolder> folders;
+    private int selectedFolder;
     private String chkValue;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -74,6 +76,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         {
             telegram = getIntent().getParcelableExtra(TELEGRAM_DATA_2);
             folders = getIntent().getParcelableArrayListExtra(FOLDER_DATA);
+            selectedFolder = getIntent().getIntExtra(SEL_FOLDER_DATA, 0);
             title = getIntent().getStringExtra(TITLE_DATA);
             chkValue = getIntent().getStringExtra(CHK_DATA);
         }
@@ -82,6 +85,7 @@ public class TelegramReadActivity extends AppCompatActivity {
             title = savedInstanceState.getString(TITLE_DATA);
             telegram = savedInstanceState.getParcelable(TELEGRAM_DATA_2);
             folders = savedInstanceState.getParcelableArrayList(FOLDER_DATA);
+            selectedFolder = savedInstanceState.getInt(SEL_FOLDER_DATA, 0);
             chkValue = savedInstanceState.getString(CHK_DATA);
         }
 
@@ -171,6 +175,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         if (folders != null)
         {
             savedInstanceState.putParcelableArrayList(FOLDER_DATA, folders);
+            savedInstanceState.putInt(SEL_FOLDER_DATA, selectedFolder);
         }
         if (chkValue != null)
         {
@@ -196,6 +201,7 @@ public class TelegramReadActivity extends AppCompatActivity {
             if (folders == null)
             {
                 folders = savedInstanceState.getParcelableArrayList(FOLDER_DATA);
+                selectedFolder = savedInstanceState.getInt(SEL_FOLDER_DATA, 0);
             }
             if (chkValue == null)
             {

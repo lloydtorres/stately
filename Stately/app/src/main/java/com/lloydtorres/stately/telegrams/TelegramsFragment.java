@@ -382,14 +382,14 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams, folders, chkValue);
+            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams, folders, selectedFolder, chkValue);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else
         {
             oldSize = mRecyclerAdapter.getItemCount();
             ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
-            ((TelegramsAdapter) mRecyclerAdapter).setFolders(folders);
+            ((TelegramsAdapter) mRecyclerAdapter).setFolders(folders, selectedFolder);
         }
         mSwipeRefreshLayout.setRefreshing(false);
 

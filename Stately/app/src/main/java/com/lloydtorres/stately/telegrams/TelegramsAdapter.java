@@ -55,13 +55,14 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context context;
     private List<Telegram> telegrams;
     private ArrayList<TelegramFolder> folders;
+    private int selectedFolder;
     private String chkValue;
 
-    public TelegramsAdapter(Context c, List<Telegram> t, ArrayList<TelegramFolder> f, String chk)
+    public TelegramsAdapter(Context c, List<Telegram> t, ArrayList<TelegramFolder> f, int sf, String chk)
     {
         context = c;
         setTelegrams(t);
-        setFolders(f);
+        setFolders(f, sf);
         isPreview = true;
         chkValue = chk;
     }
@@ -91,8 +92,14 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
-    public void setFolders(ArrayList<TelegramFolder> f) {
+    /**
+     * Sets a list of telegram folders and the index of the current folder.
+     * @param f
+     * @param sf
+     */
+    public void setFolders(ArrayList<TelegramFolder> f, int sf) {
         folders = f;
+        selectedFolder = sf;
     }
 
     @Override
@@ -385,6 +392,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 readActivityIntent.putParcelableArrayListExtra(TelegramReadActivity.FOLDER_DATA, folders);
                 readActivityIntent.putExtra(TelegramReadActivity.TITLE_DATA, header.getText().toString());
                 readActivityIntent.putExtra(TelegramReadActivity.CHK_DATA, chkValue);
+                readActivityIntent.putExtra(TelegramReadActivity.SEL_FOLDER_DATA, selectedFolder);
 
                 telegram.isUnread = false;
                 header.setTypeface(null, Typeface.NORMAL);
