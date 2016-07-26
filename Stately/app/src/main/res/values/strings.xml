@@ -302,6 +302,10 @@
     <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>
     <string name="telegrams_empty_convo">No telegrams found.</string>
     <string name="telegrams_reply">Reply to Telegram</string>
+    <string name="telegrams_archive">Archive</string>
+    <string name="telegrams_move">Move</string>
+    <string name="telegrams_delete">Delete</string>
+    <string name="telegrams_report">Report</string>
     <string name="telegrams_to">To</string>
     <string name="telegrams_to_hint">Nations (comma separated)</string>
     <string name="telegrams_from">From</string>

@@ -16,12 +16,15 @@
 
 package com.lloydtorres.stately.telegrams;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -40,6 +43,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-03-11.
@@ -56,6 +61,8 @@ public class TelegramReadActivity extends AppCompatActivity {
     public static final int TELEGRAM_READ_RESULTS = 12345;
     public static final String TELEGRAM_READ_RESULTS_ID = "telegramReadResultsId";
     public static final int TELEGRAM_READ_RESULTS_NULL = -1;
+
+    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\(.*\\)$");
 
     private String title;
     private Telegram telegram;
@@ -152,12 +159,40 @@ public class TelegramReadActivity extends AppCompatActivity {
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
+    private void buildReturnDataAndExit(int id) {
+        Intent returnData = new Intent();
+        returnData.putExtra(TELEGRAM_READ_RESULTS_ID, id);
+        setResult(RESULT_OK, returnData);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        String curNation = "@@" + SparkleHelper.getActiveUser(this).nationId + "@@";
+        if (!curNation.equals(SparkleHelper.getIdFromName(telegram.sender))) {
+            Matcher m = TELEGRAM_FOLDER_ARCHIVE.matcher(folders.get(selectedFolder).name);
+            inflater.inflate(m.matches() ? R.menu.activity_telegram_read_noarchive : R.menu.activity_telegram_read, menu);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                finish();
+                buildReturnDataAndExit(TELEGRAM_READ_RESULTS_NULL);
+                return true;
+            case R.id.telegrams_archive:
+                return true;
+            case R.id.telegrams_move:
+                return true;
+            case R.id.telegrams_delete:
+                return true;
+            case R.id.telegrams_report:
+                // @TODO: Implement reporting
                 return true;
         }
         return super.onOptionsItemSelected(item);
