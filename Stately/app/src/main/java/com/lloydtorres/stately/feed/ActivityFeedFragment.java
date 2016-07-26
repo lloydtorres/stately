@@ -44,13 +44,13 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.NameListDialog;
-import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
