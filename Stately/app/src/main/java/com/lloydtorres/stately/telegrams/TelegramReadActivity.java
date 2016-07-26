@@ -47,7 +47,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-03-11.
@@ -64,8 +63,6 @@ public class TelegramReadActivity extends AppCompatActivity {
     public static final int TELEGRAM_READ_RESULTS = 12345;
     public static final String TELEGRAM_READ_RESULTS_ID = "telegramReadResultsId";
     public static final int TELEGRAM_READ_RESULTS_NULL = -1;
-
-    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\(.*\\)$");
 
     private String title;
     private Telegram telegram;
@@ -178,7 +175,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         boolean isFolderFound = false;
 
         for (TelegramFolder f : folders) {
-            Matcher m = TELEGRAM_FOLDER_ARCHIVE.matcher(f.name);
+            Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(f.name);
             if (m.matches()) {
                 startMoveTelegram(f.value);
                 isFolderFound = true;
@@ -281,8 +278,12 @@ public class TelegramReadActivity extends AppCompatActivity {
             return;
         }
 
+        String templateURL = Telegram.DELETE_TELEGRAM;
+        if (TelegramFolder.TELEGRAM_FOLDER_DELETED.equals(folders.get(selectedFolder).name)) {
+            templateURL = Telegram.PERMDELETE_TELEGRAM;
+        }
         final int telegramId = telegram.id;
-        String targetURL = String.format(Locale.US, Telegram.DELETE_TELEGRAM, telegramId, chkValue);
+        String targetURL = String.format(Locale.US, templateURL, telegramId, chkValue);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -326,7 +327,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         String curNation = "@@" + SparkleHelper.getActiveUser(this).nationId + "@@";
         if (!curNation.equals(SparkleHelper.getIdFromName(telegram.sender))) {
-            Matcher m = TELEGRAM_FOLDER_ARCHIVE.matcher(folders.get(selectedFolder).name);
+            Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(folders.get(selectedFolder).name);
             inflater.inflate(m.matches() ? R.menu.activity_telegram_read_noarchive : R.menu.activity_telegram_read, menu);
             return true;
         }

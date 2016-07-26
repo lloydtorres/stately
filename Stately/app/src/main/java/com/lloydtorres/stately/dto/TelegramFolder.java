@@ -19,11 +19,17 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Lloyd on 2016-03-09.
  * Contains data about a telegram folder.
  */
 public class TelegramFolder implements Parcelable {
+    public static final String TELEGRAM_FOLDER_SENT = "Sent Items";
+    public static final String TELEGRAM_FOLDER_DELETED = "Deleted Items";
+    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\(.*\\)$");
+
     public String name;
     public String value;
 
