@@ -93,10 +93,9 @@ public class MuffinsHelper {
      * Returns a list of telegrams obtained from the raw telegrams.
      * @param rawTelegramsContainer See above
      * @param selfName Name of current logged in nation
-     * @param isPreview Flag for whether or not these telegrams are only meant as previews
      * @return See above
      */
-    public static ArrayList<Telegram> processRawTelegrams(Element rawTelegramsContainer, String selfName, boolean isPreview)
+    public static ArrayList<Telegram> processRawTelegrams(Element rawTelegramsContainer, String selfName)
     {
         Elements rawTelegrams = rawTelegramsContainer.select("div.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
@@ -160,17 +159,10 @@ public class MuffinsHelper {
                 processSenderHeader(senderHeaderRaw, tel, selfName);
             }
 
-            if (isPreview)
-            {
-                Element previewRaw = rt.select("div.tgsample").first();
-                tel.preview = Jsoup.clean(previewRaw.text(), Whitelist.none().addTags("br"));
-                tel.content = null;
-            }
-            else
-            {
-                String contentRawHtml = rt.select("div.tgmsg").first().html();
-                processTelegramContent(contentRawHtml, tel);
-            }
+            Element previewRaw = rt.select("div.tgsample").first();
+            tel.preview = Jsoup.clean(previewRaw.text(), Whitelist.none().addTags("br"));
+            String contentRawHtml = rt.select("div.tgmsg").first().html();
+            processTelegramContent(contentRawHtml, tel);
 
             if (tel.type == Telegram.TELEGRAM_RECRUITMENT) {
                 Element targetRegion = rt.select("input[name=region_name]").first();

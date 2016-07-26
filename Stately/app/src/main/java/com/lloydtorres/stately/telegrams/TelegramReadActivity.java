@@ -25,25 +25,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -54,13 +47,15 @@ import java.util.Map;
  */
 public class TelegramReadActivity extends AppCompatActivity {
     // Keys for intent data and saved preferences
-    public static final String ID_DATA = "idData";
     public static final String TITLE_DATA = "titleData";
-    public static final String TELEGRAM_DATA = "telegramData";
+    public static final String TELEGRAM_DATA_2 = "telegramData2";
+    public static final String FOLDER_DATA = "folderData";
+    public static final String CHK_DATA = "chkData";
 
-    private int id;
     private String title;
-    private ArrayList<Telegram> telegrams;
+    private Telegram telegram;
+    private ArrayList<TelegramFolder> folders;
+    private String chkValue;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View view;
@@ -77,14 +72,17 @@ public class TelegramReadActivity extends AppCompatActivity {
         // Either get data from intent or restore state
         if (getIntent() != null)
         {
-            id = getIntent().getIntExtra(ID_DATA, 0);
+            telegram = getIntent().getParcelableExtra(TELEGRAM_DATA_2);
+            folders = getIntent().getParcelableArrayListExtra(FOLDER_DATA);
             title = getIntent().getStringExtra(TITLE_DATA);
+            chkValue = getIntent().getStringExtra(CHK_DATA);
         }
         if (savedInstanceState != null)
         {
-            id = savedInstanceState.getInt(ID_DATA);
             title = savedInstanceState.getString(TITLE_DATA);
-            telegrams = savedInstanceState.getParcelableArrayList(TELEGRAM_DATA);
+            telegram = savedInstanceState.getParcelable(TELEGRAM_DATA_2);
+            folders = savedInstanceState.getParcelableArrayList(FOLDER_DATA);
+            chkValue = savedInstanceState.getString(CHK_DATA);
         }
 
         view = findViewById(R.id.refreshview_main);
@@ -101,8 +99,9 @@ public class TelegramReadActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        startQueryTelegramConvo();
+        mRecyclerAdapter = new TelegramsAdapter(this, telegram);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        markAsRead();
     }
 
     private void setToolbar(Toolbar t) {
@@ -115,102 +114,34 @@ public class TelegramReadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    /**
-     * Hack to show SwipeRefreshLayout load; starts querying data about a telegram convo.
-     */
-    private void startQueryTelegramConvo()
-    {
-        // hack to get swiperefreshlayout to show initially while loading
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-                queryTelegramConvo();
-            }
-        });
-    }
+    private void markAsRead() {
+        if (chkValue == null) {
+            return;
+        }
 
-    /**
-     * Queries a convo for a particular telegram ID.
-     */
-    private void queryTelegramConvo()
-    {
-        String targetURL = String.format(Locale.US, Telegram.GET_CONVERSATION, id);
+        String targetURL = String.format(Locale.US, Telegram.MARK_READ, telegram.id, chkValue);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processRawTelegramConvo(d);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                }
             }
         }){
             @Override
             public Map<String, String> getHeaders() {
                 Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
                 params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
                 params.put("Cookie", String.format("autologin=%s", u.autologin));
                 return params;
             }
         };
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
-        }
-    }
-
-    /**
-     * Processes the raw conversation data from NS.
-     * @param d Document containing raw data
-     */
-    private void processRawTelegramConvo(Document d)
-    {
-        Element telegramsContainer = d.select("div.widebox").first();
-
-        if (telegramsContainer == null)
-        {
-            // safety check
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
-            return;
-        }
-
-        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(this).nationId, false);
-        if (scannedTelegrams.size() > 0)
-        {
-            Collections.sort(scannedTelegrams);
-            Collections.reverse(scannedTelegrams);
-            telegrams = scannedTelegrams;
-            mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
-            int scrollIndex = ((TelegramsAdapter) mRecyclerAdapter).getIndexOfId(id);
-            if (scrollIndex != -1)
-            {
-                mLayoutManager.scrollToPosition(scrollIndex);
-            }
-        }
-        else
-        {
-            SparkleHelper.makeSnackbar(view, getString(R.string.telegrams_empty_convo));
-        }
-
-        mSwipeRefreshLayout.setRefreshing(false);
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     @Override
@@ -229,14 +160,21 @@ public class TelegramReadActivity extends AppCompatActivity {
     {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(ID_DATA, id);
         if (title != null)
         {
             savedInstanceState.putString(TITLE_DATA, title);
         }
-        if (telegrams != null)
+        if (telegram != null)
         {
-            savedInstanceState.putParcelableArrayList(TELEGRAM_DATA, telegrams);
+            savedInstanceState.putParcelable(TELEGRAM_DATA_2, telegram);
+        }
+        if (folders != null)
+        {
+            savedInstanceState.putParcelableArrayList(FOLDER_DATA, folders);
+        }
+        if (chkValue != null)
+        {
+            savedInstanceState.putString(CHK_DATA, chkValue);
         }
     }
 
@@ -245,16 +183,23 @@ public class TelegramReadActivity extends AppCompatActivity {
     {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        id = savedInstanceState.getInt(ID_DATA);
         if (savedInstanceState != null)
         {
             if (title == null)
             {
                 title = savedInstanceState.getString(TITLE_DATA);
             }
-            if (telegrams == null)
+            if (telegram == null)
             {
-                telegrams = savedInstanceState.getParcelableArrayList(TELEGRAM_DATA);
+                telegram = savedInstanceState.getParcelable(TELEGRAM_DATA_2);
+            }
+            if (folders == null)
+            {
+                folders = savedInstanceState.getParcelableArrayList(FOLDER_DATA);
+            }
+            if (chkValue == null)
+            {
+                chkValue = savedInstanceState.getString(CHK_DATA);
             }
         }
     }

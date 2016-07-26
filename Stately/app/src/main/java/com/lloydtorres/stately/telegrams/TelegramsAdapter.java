@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -50,20 +51,35 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final int FULL_CARD = 1;
     private final int EMPTY_CARD = 2;
 
+    private boolean isPreview;
     private Context context;
     private List<Telegram> telegrams;
+    private ArrayList<TelegramFolder> folders;
+    private String chkValue;
 
-    public TelegramsAdapter(Context c, List<Telegram> t)
+    public TelegramsAdapter(Context c, List<Telegram> t, ArrayList<TelegramFolder> f, String chk)
     {
         context = c;
-        setTelgrams(t);
+        setTelegrams(t);
+        setFolders(f);
+        isPreview = true;
+        chkValue = chk;
+    }
+
+    public TelegramsAdapter(Context c, Telegram t)
+    {
+        context = c;
+        List<Telegram> holder = new ArrayList<Telegram>();
+        holder.add(t);
+        setTelegrams(holder);
+        isPreview = false;
     }
 
     /**
      * Sets the contents of this telegram adapter.
      * @param t List of telegrams
      */
-    public void setTelgrams(List<Telegram> t)
+    public void setTelegrams(List<Telegram> t)
     {
         telegrams = t;
         if (telegrams.size() <= 0)
@@ -73,6 +89,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegrams.add(empty);
         }
         notifyDataSetChanged();
+    }
+
+    public void setFolders(ArrayList<TelegramFolder> f) {
+        folders = f;
     }
 
     @Override
@@ -119,30 +139,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if (telegrams.get(position).content != null)
-        {
-            return FULL_CARD;
-        }
-        if (telegrams.get(position).preview != null)
-        {
-            return PREVIEW_CARD;
-        }
-        else
+        if (telegrams.get(position).id == EMPTY_INDICATOR)
         {
             return EMPTY_CARD;
         }
-    }
-
-    public int getIndexOfId(int id)
-    {
-        for (int i=0; i<telegrams.size(); i++)
-        {
-            if (telegrams.get(i).id == id)
-            {
-                return i;
-            }
+        else {
+            return isPreview ? PREVIEW_CARD : FULL_CARD;
         }
-        return -1;
     }
 
     /**
@@ -378,8 +381,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (telegram != null)
             {
                 Intent readActivityIntent = new Intent(context, TelegramReadActivity.class);
-                readActivityIntent.putExtra(TelegramReadActivity.ID_DATA, telegram.id);
+                readActivityIntent.putExtra(TelegramReadActivity.TELEGRAM_DATA_2, telegram);
+                readActivityIntent.putParcelableArrayListExtra(TelegramReadActivity.FOLDER_DATA, folders);
                 readActivityIntent.putExtra(TelegramReadActivity.TITLE_DATA, header.getText().toString());
+                readActivityIntent.putExtra(TelegramReadActivity.CHK_DATA, chkValue);
 
                 telegram.isUnread = false;
                 header.setTypeface(null, Typeface.NORMAL);

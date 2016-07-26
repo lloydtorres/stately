@@ -39,11 +39,11 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -89,6 +89,7 @@ public class TelegramsFragment extends Fragment {
     private int selectedFolder;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
+    public String chkValue;
 
     @Override
     public void onAttach(Context context) {
@@ -206,6 +207,10 @@ public class TelegramsFragment extends Fragment {
                             return;
                         }
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element chkHolder = d.select("input[name=chk]").first();
+                        if (chkHolder != null) {
+                            chkValue = chkHolder.attr("value");
+                        }
                         processRawTelegrams(d, direction, firstRun);
                     }
                 }, new Response.ErrorListener() {
@@ -282,7 +287,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         // Build telegram objects from raw telegrams
-        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId, true);
+        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId);
         switch (direction)
         {
             case SCAN_FORWARD:
@@ -377,13 +382,14 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams);
+            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams, folders, chkValue);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else
         {
             oldSize = mRecyclerAdapter.getItemCount();
-            ((TelegramsAdapter) mRecyclerAdapter).setTelgrams(telegrams);
+            ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
+            ((TelegramsAdapter) mRecyclerAdapter).setFolders(folders);
         }
         mSwipeRefreshLayout.setRefreshing(false);
 
