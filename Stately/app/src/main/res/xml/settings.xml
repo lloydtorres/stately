@@ -29,7 +29,7 @@
     <PreferenceCategory
         android:title="@string/setting_title_about"
         android:key="setting_about">
-        <ListPreference
+        <Preference
             android:key="info"
             android:title="@string/app_version"
             android:summary="@string/setting_developer_info"
