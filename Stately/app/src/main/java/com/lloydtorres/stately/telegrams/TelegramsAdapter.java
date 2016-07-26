@@ -156,6 +156,20 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     /**
+     * Deletes a telegram and notifies the adapter of removal if its ID matches the specified Id.
+     * @param id
+     */
+    public void invalidateTelegram(int id) {
+        for (int i=0; i<telegrams.size(); i++) {
+            if (telegrams.get(i).id == id) {
+                telegrams.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
+    /**
      * Changes the telegram alert to a certain style depending on its type.
      * @param type Telegram type
      * @param holder
