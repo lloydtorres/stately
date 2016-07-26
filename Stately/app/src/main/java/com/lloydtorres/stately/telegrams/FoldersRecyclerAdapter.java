@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +33,23 @@ import java.util.ArrayList;
  * A recycler adapter for the folders dialog.
  */
 public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Fragment fragmentInstance;
+    private TelegramsFragment fragmentInstance;
+    private TelegramReadActivity activityInstance;
     private FoldersDialog selfDialog;
     private ArrayList<TelegramFolder> folders;
     private int selected;
 
-    public FoldersRecyclerAdapter(Fragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
+    public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
     {
         fragmentInstance = fr;
+        selfDialog = d;
+        folders = f;
+        selected = s;
+    }
+
+    public FoldersRecyclerAdapter(TelegramReadActivity tra, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
+    {
+        activityInstance = tra;
         selfDialog = d;
         folders = f;
         selected = s;
@@ -95,9 +103,15 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && fragmentInstance instanceof TelegramsFragment)
+            if (pos != RecyclerView.NO_POSITION)
             {
-                ((TelegramsFragment) fragmentInstance).setSelectedFolder(pos);
+                if (fragmentInstance != null) {
+                    fragmentInstance.setSelectedFolder(pos);
+                }
+                else
+                {
+                    activityInstance.startMoveTelegram(folders.get(pos).value);
+                }
             }
             selfDialog.dismiss();
         }

@@ -412,6 +412,7 @@ public class TelegramsFragment extends Fragment {
     private void showFoldersDialog(FragmentManager fm)
     {
         FoldersDialog foldersDialog = new FoldersDialog();
+        foldersDialog.setFragment(this);
         foldersDialog.setFolders(folders);
         foldersDialog.setSelected(selectedFolder);
         foldersDialog.show(fm, FoldersDialog.DIALOG_TAG);

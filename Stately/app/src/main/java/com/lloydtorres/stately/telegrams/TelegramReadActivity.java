@@ -79,7 +79,6 @@ public class TelegramReadActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
-    private AlertDialog.Builder dialogBuilder;
     private DialogInterface.OnClickListener archiveClickListener;
     private DialogInterface.OnClickListener deleteClickListener;
 
@@ -111,7 +110,6 @@ public class TelegramReadActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setToolbar(toolbar);
 
-        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         archiveClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -210,12 +208,43 @@ public class TelegramReadActivity extends AppCompatActivity {
         }
     }
 
+    private void startMoveTelegram() {
+        ArrayList<TelegramFolder> moveableFolders = new ArrayList<TelegramFolder>();
+        for (int i=0; i<folders.size(); i++) {
+            String name = folders.get(i).name;
+            Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name);
+            if (i == selectedFolder ||
+                    TelegramFolder.TELEGRAM_FOLDER_SENT.equals(name) ||
+                    TelegramFolder.TELEGRAM_FOLDER_DELETED.equals(name) ||
+                    m.matches()) {
+                continue;
+            }
+            moveableFolders.add(folders.get(i));
+        }
+
+        if (moveableFolders.size() <= 0) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+            dialogBuilder
+                    .setTitle(getString(R.string.telegrams_move))
+                    .setMessage(getString(R.string.telegrams_move_none))
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show();
+        }
+        else {
+            FoldersDialog foldersDialog = new FoldersDialog();
+            foldersDialog.setFolders(moveableFolders);
+            foldersDialog.setActivity(this);
+            foldersDialog.setSelected(FoldersDialog.NO_SELECTION);
+            foldersDialog.show(getSupportFragmentManager(), FoldersDialog.DIALOG_TAG);
+        }
+    }
+
     /**
      * Wrapper for call to move a telegram to some folder.
      * This lets the app show fancy loading animation in the meantime.
      * @param targetFolder
      */
-    private void startMoveTelegram(final String targetFolder) {
+    public void startMoveTelegram(final String targetFolder) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -237,7 +266,12 @@ public class TelegramReadActivity extends AppCompatActivity {
         }
 
         final int telegramId = telegram.id;
-        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, telegramId, targetFolder, chkValue);
+        String finalTarget = targetFolder;
+        // Telegrams to be sent to inbox just use a blank parameter
+        if (TelegramFolder.TELEGRAM_FOLDER_INBOX_VAL.equals(targetFolder)) {
+            finalTarget = "";
+        }
+        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, telegramId, finalTarget, chkValue);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -358,6 +392,7 @@ public class TelegramReadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
@@ -371,7 +406,7 @@ public class TelegramReadActivity extends AppCompatActivity {
                         .show();
                 return true;
             case R.id.telegrams_move:
-                // @TODO: Implement moving telegrams
+                startMoveTelegram();
                 return true;
             case R.id.telegrams_delete:
                 dialogBuilder

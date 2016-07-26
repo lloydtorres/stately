@@ -41,6 +41,8 @@ public class FoldersDialog extends DialogFragment {
     public static final String FOLDERS_KEY = "folders";
     public static final String SELECTED_KEY = "selected";
 
+    public static final int NO_SELECTION = -1;
+
     // RecyclerView variables
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -48,6 +50,8 @@ public class FoldersDialog extends DialogFragment {
 
     private ArrayList<TelegramFolder> folders;
     private int selected;
+    private TelegramsFragment telegramsFragment;
+    private TelegramReadActivity telegramReadActivity;
 
     public void setFolders(ArrayList<TelegramFolder> f)
     {
@@ -57,6 +61,14 @@ public class FoldersDialog extends DialogFragment {
     public void setSelected(int s)
     {
         selected = s;
+    }
+
+    public void setFragment(TelegramsFragment tf) {
+        telegramsFragment = tf;
+    }
+
+    public void setActivity(TelegramReadActivity tra) {
+        telegramReadActivity = tra;
     }
 
     @Override
@@ -85,7 +97,13 @@ public class FoldersDialog extends DialogFragment {
             selected = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        getDialog().setTitle(getString(R.string.telegrams_folders));
+        if (telegramsFragment != null) {
+            getDialog().setTitle(getString(R.string.telegrams_folders));
+        }
+        else {
+            getDialog().setTitle(getString(R.string.telegrams_move));
+        }
+
         initRecycler(view);
 
         return view;
@@ -97,7 +115,12 @@ public class FoldersDialog extends DialogFragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerAdapter = new FoldersRecyclerAdapter(getParentFragment(), this, folders, selected);
+        if (telegramsFragment != null) {
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders, selected);
+        }
+        else {
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramReadActivity, this, folders, selected);
+        }
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

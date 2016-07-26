@@ -308,6 +308,7 @@
     <string name="telegrams_report">Report</string>
     <string name="telegrams_archive_confirm">Archive telegram?</string>
     <string name="telegrams_delete_confirm">Delete telegram?</string>
+    <string name="telegrams_move_none">No other folders are available.</string>
     <string name="telegrams_action_error">An error occurred. Try reopening this telegram.</string>
     <string name="telegrams_to">To</string>
     <string name="telegrams_to_hint">Nations (comma separated)</string>
