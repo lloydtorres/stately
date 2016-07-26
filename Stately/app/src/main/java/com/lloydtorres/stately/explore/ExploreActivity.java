@@ -48,7 +48,7 @@ import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NullActionCallback;
-import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
@@ -70,7 +70,7 @@ import java.util.regex.Pattern;
  * or through this Uri: com.lloydtorres.stately.explore://<name>/<mode>
  * Requires a name to be passed in; does error checking as well.
  */
-public class ExploreActivity extends AppCompatActivity implements PrimeActivity {
+public class ExploreActivity extends AppCompatActivity implements IToolbarActivity {
     // Keys for intent data
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";

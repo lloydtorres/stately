@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.core;
 
 import android.support.v7.widget.Toolbar;
 
@@ -22,6 +22,6 @@ import android.support.v7.widget.Toolbar;
  * Created by Lloyd on 2016-01-17.
  * A contract for activities that use toolbar-setting fragments, such as the NationFragment.
  */
-public interface PrimeActivity {
+public interface IToolbarActivity {
     void setToolbar(Toolbar t);
 }

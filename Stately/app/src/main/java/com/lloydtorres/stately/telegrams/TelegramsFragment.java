@@ -44,7 +44,7 @@ import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.MuffinsHelper;
-import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -131,9 +131,9 @@ public class TelegramsFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.message_board_toolbar);
         toolbar.setTitle(getString(R.string.menu_telegrams));
 
-        if (mActivity != null && mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof IToolbarActivity)
         {
-            ((PrimeActivity) mActivity).setToolbar(toolbar);
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         // Set up refresher to reload data on refresh

@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.IToolbarActivity;
 
 /**
  * Created by Lloyd on 2016-01-14.
@@ -55,9 +56,9 @@ public class GenericFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_generic, container, false);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_generic);
 
-        if (mActivity instanceof PrimeActivity)
+        if (mActivity instanceof IToolbarActivity)
         {
-            ((PrimeActivity) mActivity).setToolbar(toolbar);
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         return view;

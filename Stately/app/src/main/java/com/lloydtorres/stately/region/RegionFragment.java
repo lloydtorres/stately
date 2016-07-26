@@ -49,7 +49,7 @@ import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
@@ -163,9 +163,9 @@ public class RegionFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
-        if (mActivity != null && mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof IToolbarActivity)
         {
-            ((PrimeActivity) mActivity).setToolbar(toolbar);
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed

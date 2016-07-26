@@ -39,7 +39,7 @@ import com.lloydtorres.stately.census.CensusSubFragment;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -131,9 +131,9 @@ public class NationFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
         toolbar.setTitle("");
 
-        if (mActivity instanceof PrimeActivity)
+        if (mActivity instanceof IToolbarActivity)
         {
-            ((PrimeActivity) mActivity).setToolbar(toolbar);
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed

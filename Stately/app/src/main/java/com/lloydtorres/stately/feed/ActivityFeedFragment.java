@@ -50,7 +50,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
 import com.lloydtorres.stately.helpers.NameListDialog;
-import com.lloydtorres.stately.helpers.PrimeActivity;
+import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
@@ -149,9 +149,9 @@ public class ActivityFeedFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getString(R.string.menu_activityfeed));
 
-        if (mActivity != null && mActivity instanceof PrimeActivity)
+        if (mActivity != null && mActivity instanceof IToolbarActivity)
         {
-            ((PrimeActivity) mActivity).setToolbar(toolbar);
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         // Set up refresher to reload data on refresh
