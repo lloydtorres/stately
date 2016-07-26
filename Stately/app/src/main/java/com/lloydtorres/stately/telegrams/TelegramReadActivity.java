@@ -16,9 +16,11 @@
 
 package com.lloydtorres.stately.telegrams;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -77,6 +79,10 @@ public class TelegramReadActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
+    private AlertDialog.Builder dialogBuilder;
+    private DialogInterface.OnClickListener archiveClickListener;
+    private DialogInterface.OnClickListener deleteClickListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +110,22 @@ public class TelegramReadActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setToolbar(toolbar);
+
+        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        archiveClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                archiveTelegram();
+                dialog.dismiss();
+            }
+        };
+        deleteClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startDeleteTelegram();
+                dialog.dismiss();
+            }
+        };
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setEnabled(false);
@@ -342,12 +364,21 @@ public class TelegramReadActivity extends AppCompatActivity {
                 buildReturnDataAndExit(TELEGRAM_READ_RESULTS_NULL);
                 return true;
             case R.id.telegrams_archive:
-                archiveTelegram();
+                dialogBuilder
+                        .setTitle(getString(R.string.telegrams_archive_confirm))
+                        .setPositiveButton(getString(R.string.telegrams_archive), archiveClickListener)
+                        .setNegativeButton(getString(R.string.explore_negative), null)
+                        .show();
                 return true;
             case R.id.telegrams_move:
+                // @TODO: Implement moving telegrams
                 return true;
             case R.id.telegrams_delete:
-                startDeleteTelegram();
+                dialogBuilder
+                        .setTitle(getString(R.string.telegrams_delete_confirm))
+                        .setPositiveButton(getString(R.string.telegrams_delete), deleteClickListener)
+                        .setNegativeButton(getString(R.string.explore_negative), null)
+                        .show();
                 return true;
             case R.id.telegrams_report:
                 // @TODO: Implement reporting
