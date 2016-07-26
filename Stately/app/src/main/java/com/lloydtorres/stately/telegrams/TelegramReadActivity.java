@@ -53,6 +53,10 @@ public class TelegramReadActivity extends AppCompatActivity {
     public static final String SEL_FOLDER_DATA = "selectedFolderData";
     public static final String CHK_DATA = "chkData";
 
+    public static final int TELEGRAM_READ_RESULTS = 12345;
+    public static final String TELEGRAM_READ_RESULTS_ID = "telegramReadResultsId";
+    public static final int TELEGRAM_READ_RESULTS_NULL = -1;
+
     private String title;
     private Telegram telegram;
     private ArrayList<TelegramFolder> folders;

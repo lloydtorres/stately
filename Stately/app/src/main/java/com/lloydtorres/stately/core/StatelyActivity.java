@@ -279,6 +279,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void confirmExit()
     {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {

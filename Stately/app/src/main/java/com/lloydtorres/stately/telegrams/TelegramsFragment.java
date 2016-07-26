@@ -18,6 +18,7 @@ package com.lloydtorres.stately.telegrams;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -438,6 +439,17 @@ public class TelegramsFragment extends Fragment {
         for (Telegram t : telegrams)
         {
             uniqueEnforcer.add(t.id);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TelegramReadActivity.TELEGRAM_READ_RESULTS && resultCode == Activity.RESULT_OK) {
+            int deleteId = data.getIntExtra(TelegramReadActivity.TELEGRAM_READ_RESULTS_ID, TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL);
+            if (deleteId != TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL) {
+                ((TelegramsAdapter) mRecyclerAdapter).invalidateTelegram(deleteId);
+                pastOffset = Math.max(0, pastOffset-1);
+            }
         }
     }
 
