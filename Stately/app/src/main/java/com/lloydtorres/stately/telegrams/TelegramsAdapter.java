@@ -53,14 +53,16 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private boolean isPreview;
     private Context context;
+    private TelegramsFragment fragment;
     private List<Telegram> telegrams;
     private ArrayList<TelegramFolder> folders;
     private int selectedFolder;
     private String chkValue;
 
-    public TelegramsAdapter(Context c, List<Telegram> t, ArrayList<TelegramFolder> f, int sf, String chk)
+    public TelegramsAdapter(TelegramsFragment tf, List<Telegram> t, ArrayList<TelegramFolder> f, int sf, String chk)
     {
-        context = c;
+        context = tf.getContext();
+        fragment = tf;
         setTelegrams(t);
         setFolders(f, sf);
         isPreview = true;
@@ -414,7 +416,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 alertText.setTypeface(null, Typeface.NORMAL);
                 notifyItemChanged(getAdapterPosition());
 
-                context.startActivity(readActivityIntent);
+                fragment.startActivityForResult(readActivityIntent, TelegramReadActivity.TELEGRAM_READ_RESULTS);
             }
         }
     }

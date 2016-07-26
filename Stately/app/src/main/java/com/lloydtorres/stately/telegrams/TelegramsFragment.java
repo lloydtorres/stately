@@ -383,7 +383,7 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new TelegramsAdapter(getContext(), telegrams, folders, selectedFolder, chkValue);
+            mRecyclerAdapter = new TelegramsAdapter(this, telegrams, folders, selectedFolder, chkValue);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else
