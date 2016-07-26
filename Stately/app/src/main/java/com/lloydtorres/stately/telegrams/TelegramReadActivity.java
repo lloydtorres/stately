@@ -28,8 +28,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
@@ -129,13 +132,15 @@ public class TelegramReadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * Sends a GET request to NS to mark a certain telegram as read.
+     */
     private void markAsRead() {
         if (chkValue == null) {
             return;
         }
 
         String targetURL = String.format(Locale.US, Telegram.MARK_READ, telegram.id, chkValue);
-
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -166,6 +171,156 @@ public class TelegramReadActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Wrapper to call on NS to archive a telegram.
+     */
+    private void archiveTelegram() {
+        boolean isFolderFound = false;
+
+        for (TelegramFolder f : folders) {
+            Matcher m = TELEGRAM_FOLDER_ARCHIVE.matcher(f.name);
+            if (m.matches()) {
+                startMoveTelegram(f.value);
+                isFolderFound = true;
+                break;
+            }
+        }
+
+        if (!isFolderFound) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.telegrams_action_error));
+        }
+    }
+
+    /**
+     * Wrapper for call to move a telegram to some folder.
+     * This lets the app show fancy loading animation in the meantime.
+     * @param targetFolder
+     */
+    private void startMoveTelegram(final String targetFolder) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                moveTelegram(targetFolder);
+            }
+        });
+    }
+
+    /**
+     * The actual call to move a telegram to some folder.
+     * @param targetFolder
+     */
+    private void moveTelegram(final String targetFolder) {
+        if (chkValue == null) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.telegrams_action_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        final int telegramId = telegram.id;
+        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, telegramId, targetFolder, chkValue);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        buildReturnDataAndExit(telegramId);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Wrapper for call to delete a telegram
+     * This lets the app show fancy loading animation in the meantime.
+     */
+    private void startDeleteTelegram() {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                deleteTelegram();
+            }
+        });
+    }
+
+    /**
+     * The actual call to move a telegram to some folder.
+     */
+    private void deleteTelegram() {
+        if (chkValue == null) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.telegrams_action_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        final int telegramId = telegram.id;
+        String targetURL = String.format(Locale.US, Telegram.DELETE_TELEGRAM, telegramId, chkValue);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        buildReturnDataAndExit(telegramId);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -186,10 +341,12 @@ public class TelegramReadActivity extends AppCompatActivity {
                 buildReturnDataAndExit(TELEGRAM_READ_RESULTS_NULL);
                 return true;
             case R.id.telegrams_archive:
+                archiveTelegram();
                 return true;
             case R.id.telegrams_move:
                 return true;
             case R.id.telegrams_delete:
+                startDeleteTelegram();
                 return true;
             case R.id.telegrams_report:
                 // @TODO: Implement reporting
