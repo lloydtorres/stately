@@ -166,6 +166,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (telegrams.get(i).id == id) {
                 telegrams.remove(i);
                 notifyItemRemoved(i);
+
+                if (telegrams.size() <= 0) {
+                    Telegram empty = new Telegram();
+                    empty.id = EMPTY_INDICATOR;
+                    telegrams.add(empty);
+                    notifyDataSetChanged();
+                }
                 break;
             }
         }
