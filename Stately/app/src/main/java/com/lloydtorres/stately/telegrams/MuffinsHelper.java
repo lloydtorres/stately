@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.telegrams;
 
 /*
 
@@ -50,6 +50,7 @@ package com.lloydtorres.stately.helpers;
  */
 
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
