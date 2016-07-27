@@ -71,11 +71,14 @@ import java.util.Set;
 public class MessageBoardActivity extends AppCompatActivity {
     // Keys for Intent data
     public static final String BOARD_REGION_NAME = "regionName";
+    public static final String BOARD_TARGET_ID = "targetId";
     public static final String BOARD_MESSAGES = "messages";
     public static final String BOARD_PAST_OFFSET = "pastOffset";
 
     public static final String PARAM_LIKE = "rmblike";
     public static final String PARAM_UNLIKE = "rmbunlike";
+
+    public static final int NO_LATEST = -1;
 
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
@@ -91,6 +94,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private String regionName;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
+    private int latestId = NO_LATEST;
     private boolean postable = false;
     private boolean likable = false;
     private Post replyTarget = null;
@@ -121,6 +125,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             messages = new RegionMessages();
             messages.posts = new ArrayList<Post>();
             regionName = getIntent().getStringExtra(BOARD_REGION_NAME);
+            latestId = getIntent().getIntExtra(BOARD_TARGET_ID, NO_LATEST);
             uniqueEnforcer = new HashSet<Integer>();
         }
         if (savedInstanceState != null)
@@ -128,6 +133,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
             regionName = savedInstanceState.getString(BOARD_REGION_NAME);
             pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, RMB_LOAD_COUNT);
+            latestId = savedInstanceState.getInt(BOARD_TARGET_ID, NO_LATEST);
             rebuildUniqueEnforcer();
         }
 
@@ -240,6 +246,9 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * When this is called, it enables a bunch of views that lets the user post in the RMB.
+     */
     private void enablePostingRights()
     {
         messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
@@ -253,6 +262,11 @@ public class MessageBoardActivity extends AppCompatActivity {
         postable = true;
     }
 
+    /**
+     * Called after checking a user's posting rights.
+     * If there are no messages stored, start query. If there's messages available
+     * (meaning they were restored from an old session), just show those messages.
+     */
     private void queryPostingRightsCallback()
     {
         if (messages.posts.size() <= 0)
@@ -263,7 +277,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         // Otherwise just show it normally
         else
         {
-            refreshRecycler(SCAN_FORWARD, 0);
+            refreshRecycler(SCAN_FORWARD, 0, false);
         }
     }
 
@@ -282,16 +296,13 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryMessages(final int offset, final int direction, final boolean initialRun)
     {
-        // stop if this is the 11th time the query has been called moving forward
-        if (direction == SCAN_FORWARD && offset >= RMB_LOAD_COUNT * 11)
-        {
-            pastOffset = offset;
-            SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backload_error));
-            refreshRecycler(SCAN_FORWARD, 0);
-            return;
+        String targetURL;
+        if (direction == SCAN_FORWARD && latestId != NO_LATEST) {
+            targetURL = String.format(Locale.US, RegionMessages.QUERY_ID, SparkleHelper.getIdFromName(regionName), latestId, RMB_LOAD_COUNT);
         }
-
-        String targetURL = String.format(Locale.US, RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset, RMB_LOAD_COUNT);
+        else {
+            targetURL = String.format(Locale.US, RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset, RMB_LOAD_COUNT);
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -304,10 +315,10 @@ public class MessageBoardActivity extends AppCompatActivity {
                             switch (direction)
                             {
                                 case SCAN_BACKWARD:
-                                    processMessageResponseBackward(view, messageResponse);
+                                    processMessageResponseBackward(messageResponse);
                                     break;
                                 default:
-                                    processMessageResponseForward(view, messageResponse, offset, initialRun);
+                                    processMessageResponseForward(messageResponse, initialRun);
                                     break;
                             }
                         }
@@ -349,10 +360,9 @@ public class MessageBoardActivity extends AppCompatActivity {
 
     /**
      * Used to scan for previous messages.
-     * @param view Activity view
      * @param m Message response
      */
-    private void processMessageResponseBackward(View view, RegionMessages m)
+    private void processMessageResponseBackward(RegionMessages m)
     {
         // If there's nothing in the current messages, then there's probably nothing in the past
         if (messages.posts.size() <= 0 || m.posts.size() <= 0)
@@ -383,7 +393,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         if (timeCounter >= quarterMessages)
         {
             pastOffset += timeCounter;
-            refreshRecycler(SCAN_BACKWARD, m.posts.size());
+            refreshRecycler(SCAN_BACKWARD, m.posts.size(), false);
         }
         // If less than a quarter were from the past, adjust the offset and try again
         else if (timeCounter < quarterMessages && timeCounter >= 1)
@@ -405,14 +415,12 @@ public class MessageBoardActivity extends AppCompatActivity {
      * Process the response after querying for RMB messages (scanning forward).
      * Depending on the response, we may have to check again if there's more messages to get.
      * @param m The response
-     * @param offset The current offset
      * @param initialRun if this is the first time the process is being run
      */
-    private void processMessageResponseForward(View view, RegionMessages m, int offset, boolean initialRun)
+    private void processMessageResponseForward(RegionMessages m, boolean initialRun)
     {
-        int uniqueMessages = 0;
-
         // Only add unique posts to our list
+        int uniqueMessages = 0;
         for (Post p : m.posts)
         {
             if (!uniqueEnforcer.contains(p.id))
@@ -422,29 +430,25 @@ public class MessageBoardActivity extends AppCompatActivity {
                 uniqueMessages++;
             }
         }
-
         pastOffset += uniqueMessages;
-
-        // If this is the initial run, don't keep going
-        if (!initialRun && uniqueMessages >= RMB_LOAD_COUNT)
+        if (uniqueMessages <= 0)
         {
-            // In this case, all the messages were unique, so there may be more messages to load
-            queryMessages(offset + RMB_LOAD_COUNT, SCAN_FORWARD, false);
-        }
-        else
-        {
-            if (uniqueMessages <= 0)
+            if (!initialRun)
             {
-                if (!initialRun)
-                {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
-                }
-                mSwipeRefreshLayout.setRefreshing(false);
+                SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
             }
-            
-            // We've reached the point where we already have the messages, so put everything back together
-            refreshRecycler(SCAN_FORWARD, 0);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
+
+        // If this is the first run and the latest ID was specified, then jump to top since
+        // that's what the user should want.
+        boolean shouldJumpToTop = initialRun && latestId != NO_LATEST;
+        // Figure out the new latest value.
+        Collections.sort(messages.posts);
+        latestId = messages.posts.get(messages.posts.size()-1).id;
+
+        // We've reached the point where we already have the messages, so put everything back together
+        refreshRecycler(SCAN_FORWARD, 0, shouldJumpToTop);
     }
 
     /**
@@ -773,7 +777,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     /**
      * Refreshes the contents of the recycler
      */
-    private void refreshRecycler(int direction, int newItems)
+    private void refreshRecycler(int direction, int newItems, boolean jumpToTop)
     {
         Collections.sort(messages.posts);
         if (mRecyclerAdapter == null)

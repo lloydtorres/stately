@@ -224,7 +224,6 @@
     <string name="clicky_link">[external link]</string>
     <string name="rmb_no_content">Nothing to see here!</string>
     <string name="rmb_caught_up">All caught up!</string>
-    <string name="rmb_backload_error">Too many messages to load, some were skipped.</string>
     <string name="rmb_backtrack_error">Can\'t catch up with the volume of posts.</string>
     <string name="bbcode_parse_error">A parsing error was encountered: couldn\'t load content.</string>
     <string name="rmb_message_hint">Post a message…</string>
