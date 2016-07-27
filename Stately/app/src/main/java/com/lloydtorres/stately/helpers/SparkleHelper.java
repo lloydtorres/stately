@@ -119,8 +119,11 @@ public class SparkleHelper {
     // Uri to invoke the ExploreActivity
     public static final String EXPLORE_PROTOCOL = "com.lloydtorres.stately.explore";
     public static final String EXPLORE_TARGET = EXPLORE_PROTOCOL + "://";
+    // Uri to invoke MessageBoardActivity
+    public static final String RMB_PROTOCOL = "com.lloydtorres.stately.rmb";
+    public static final String RMB_TARGET = RMB_PROTOCOL + "://";
     // Whitelisted protocols
-    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL};
+    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL, RMB_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "8";
     // NationStates API
@@ -1019,6 +1022,7 @@ public class SparkleHelper {
 
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
+    public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+\" rel=\"nofollow\">");
 
     /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
@@ -1028,7 +1032,13 @@ public class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
-        String holder = getHtmlFormatting(content).toString();
+        String holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + content;
+        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
+
+        // Replace RMB links with targets to the RMB activity
+        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + RMB_TARGET + "%s/%s\">");
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
@@ -1344,7 +1354,6 @@ public class SparkleHelper {
         for (int i=0; i < spoilers.size(); i++)
         {
             Spoiler s = spoilers.get(i);
-            SparkleHelper.logError(s.content);
             int start = rawSpan.indexOf(s.replacer, startFromIndex);
             if (start != -1)
             {

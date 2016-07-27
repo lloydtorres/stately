@@ -124,9 +124,15 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messages = new RegionMessages();
             messages.posts = new ArrayList<Post>();
-            regionName = getIntent().getStringExtra(BOARD_REGION_NAME);
-            latestId = getIntent().getIntExtra(BOARD_TARGET_ID, NO_LATEST);
             uniqueEnforcer = new HashSet<Integer>();
+
+            if (getIntent().getData() != null) {
+                regionName = SparkleHelper.getNameFromId(getIntent().getData().getHost());
+                latestId = Integer.valueOf(getIntent().getData().getLastPathSegment());
+            } else {
+                regionName = getIntent().getStringExtra(BOARD_REGION_NAME);
+                latestId = getIntent().getIntExtra(BOARD_TARGET_ID, NO_LATEST);
+            }
         }
         if (savedInstanceState != null)
         {
@@ -791,15 +797,19 @@ public class MessageBoardActivity extends AppCompatActivity {
         }
         mSwipeRefreshLayout.setRefreshing(false);
 
-        switch (direction)
-        {
-            case SCAN_FORWARD:
-                mLayoutManager.scrollToPosition(messages.posts.size()-1);
-                break;
-            case SCAN_BACKWARD:
-                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
-                ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
-                break;
+        if (jumpToTop) {
+            mLayoutManager.scrollToPosition(0);
+        } else {
+            switch (direction)
+            {
+                case SCAN_FORWARD:
+                    mLayoutManager.scrollToPosition(messages.posts.size()-1);
+                    break;
+                case SCAN_BACKWARD:
+                    ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
+                    ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
+                    break;
+            }
         }
     }
 
