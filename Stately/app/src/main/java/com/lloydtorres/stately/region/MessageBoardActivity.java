@@ -82,6 +82,8 @@ public class MessageBoardActivity extends AppCompatActivity {
     private static final int SCAN_FORWARD = 1;
     private static final int SCAN_SAME = 2;
 
+    private static final int RMB_LOAD_COUNT = 100;
+
     private static final String CONFIRM_DELETE = "self-deleted by";
     private AlertDialog.Builder dialogBuilder;
 
@@ -125,7 +127,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
             regionName = savedInstanceState.getString(BOARD_REGION_NAME);
-            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, 10);
+            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, RMB_LOAD_COUNT);
             rebuildUniqueEnforcer();
         }
 
@@ -281,7 +283,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     private void queryMessages(final int offset, final int direction, final boolean initialRun)
     {
         // stop if this is the 11th time the query has been called moving forward
-        if (direction == SCAN_FORWARD && offset >= 110)
+        if (direction == SCAN_FORWARD && offset >= RMB_LOAD_COUNT * 11)
         {
             pastOffset = offset;
             SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backload_error));
@@ -289,7 +291,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             return;
         }
 
-        String targetURL = String.format(Locale.US, RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset);
+        String targetURL = String.format(Locale.US, RegionMessages.QUERY, SparkleHelper.getIdFromName(regionName), offset, RMB_LOAD_COUNT);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -365,31 +367,30 @@ public class MessageBoardActivity extends AppCompatActivity {
         // Count the number of obtained posts that were posted earlier than the current earliest
         long earliestCurrentDate = messages.posts.get(0).timestamp;
         int timeCounter = 0;
+        // Only add posts that are older than the current oldest post
         for (Post p : m.posts)
         {
             if (p.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(p.id))
             {
                 timeCounter++;
+                messages.posts.add(p);
+                uniqueEnforcer.add(p.id);
             }
         }
 
-        // If all messages were from the past, we're good
-        if (timeCounter >= m.posts.size())
+        // If at least 25% of messages were from the past, we're good
+        int quarterMessages = (int)(m.posts.size() * 0.25);
+        if (timeCounter >= quarterMessages)
         {
-            pastOffset += m.posts.size();
-            messages.posts.addAll(m.posts);
-            for (Post p : m.posts)
-            {
-                uniqueEnforcer.add(p.id);
-            }
+            pastOffset += timeCounter;
             refreshRecycler(SCAN_BACKWARD, m.posts.size());
         }
-        // If only some messages were from the past, adjust the offset and try again
-        else if (timeCounter < 10 && timeCounter >= 1)
+        // If less than a quarter were from the past, adjust the offset and try again
+        else if (timeCounter < quarterMessages && timeCounter >= 1)
         {
-            // If only n/10 messages were older than the earliest, then we should move
-            // our offset by 10 - n to get all 10 old messages
-            pastOffset += (10 - timeCounter);
+            // Since we already added the 25% of posts that are guaranteed to be old, we can
+            // shift the offset by the size of the sample received and get the next batch
+            pastOffset += m.posts.size();
             queryMessages(pastOffset, SCAN_FORWARD, false);
         }
         // If all messages are not from the past, stop and complain
@@ -425,10 +426,10 @@ public class MessageBoardActivity extends AppCompatActivity {
         pastOffset += uniqueMessages;
 
         // If this is the initial run, don't keep going
-        if (!initialRun && uniqueMessages >= 10)
+        if (!initialRun && uniqueMessages >= RMB_LOAD_COUNT)
         {
             // In this case, all the messages were unique, so there may be more messages to load
-            queryMessages(offset + 10, SCAN_FORWARD, false);
+            queryMessages(offset + RMB_LOAD_COUNT, SCAN_FORWARD, false);
         }
         else
         {
@@ -845,7 +846,7 @@ public class MessageBoardActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
         {
-            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, 10);
+            pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, RMB_LOAD_COUNT);
             if (messages == null)
             {
                 messages = savedInstanceState.getParcelable(BOARD_MESSAGES);

@@ -34,7 +34,7 @@ import java.util.List;
 @Root(name="REGION", strict=false)
 public class RegionMessages implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q=messages;offset=%d"
+    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q=messages;offset=%d;limit=%d"
                                             + "&v=" + SparkleHelper.API_VERSION;
     public static final String LIKE_QUERY = "https://www.nationstates.net/page=ajax3/a=%s/postid=%d";
     public static final String RAW_QUERY = "https://www.nationstates.net/page=display_region_rmb/region=%s/template-overall=none";
