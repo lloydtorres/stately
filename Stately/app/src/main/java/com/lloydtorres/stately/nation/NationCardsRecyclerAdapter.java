@@ -468,6 +468,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             List<String> chartLabels = new ArrayList<String>();
             List<Entry> chartEntries = new ArrayList<Entry>();
+            List<Integer> chartColours = new ArrayList<Integer>();
 
             if (data.mode == NationChartCardData.MODE_PEOPLE) {
                 details.setVisibility(View.GONE);
@@ -480,174 +481,157 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             }
 
-            if (data.mode == NationChartCardData.MODE_PEOPLE) {
-                title.setText(context.getString(R.string.card_people_mortality_title));
+            switch (data.mode) {
+                case NationChartCardData.MODE_PEOPLE:
+                    title.setText(context.getString(R.string.card_people_mortality_title));
 
-                // setup data
-                List<MortalityCause> causes = data.mortalityList;
+                    // setup data
+                    List<MortalityCause> causes = data.mortalityList;
 
-                for (int i=0; i < causes.size(); i++)
-                {
-                    // NationStates API stores this as Animal Attack instead of
-                    // using the actual national animal, so replace that
-                    if (context.getString(R.string.animal_attack_original).equals(causes.get(i).type))
+                    for (int i=0; i < causes.size(); i++)
                     {
-                        chartLabels.add(String.format(context.getString(R.string.animal_attack_madlibs), data.animal));
+                        // NationStates API stores this as Animal Attack instead of
+                        // using the actual national animal, so replace that
+                        if (context.getString(R.string.animal_attack_original).equals(causes.get(i).type))
+                        {
+                            chartLabels.add(String.format(context.getString(R.string.animal_attack_madlibs), data.animal));
+                        }
+                        else
+                        {
+                            chartLabels.add(causes.get(i).type);
+                        }
+                        Entry n = new Entry(causes.get(i).value, i);
+                        chartEntries.add(n);
                     }
-                    else
+
+                    for (int i=0; i<SparkleHelper.chartColours.length; i++) {
+                        chartColours.add(ContextCompat.getColor(context, SparkleHelper.chartColours[i]));
+                    }
+                    break;
+                case NationChartCardData.MODE_GOV:
+                    title.setText(context.getString(R.string.card_government_expenditures_title));
+
+                    // setup data
+                    GovBudget budget = data.govBudget;
+
+                    // Have to add it one by one, how horrifying
+                    int i = 0;
+                    if (budget.admin > 0f)
                     {
-                        chartLabels.add(causes.get(i).type);
+                        chartLabels.add(context.getString(R.string.administration));
+                        chartEntries.add(new Entry(budget.admin, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
                     }
-                    Entry n = new Entry(causes.get(i).value, i);
-                    chartEntries.add(n);
-                }
+                    if (budget.defense > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.defense));
+                        chartEntries.add(new Entry(budget.defense, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
+                    }
+                    if (budget.education > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.education));
+                        chartEntries.add(new Entry(budget.education, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart2));
+                    }
+                    if (budget.environment > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.environment));
+                        chartEntries.add(new Entry(budget.environment, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart3));
+                    }
+                    if (budget.healthcare > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.healthcare));
+                        chartEntries.add(new Entry(budget.healthcare, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart4));
+                    }
+                    if (budget.industry > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.industry));
+                        chartEntries.add(new Entry(budget.industry, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart5));
+                    }
+                    if (budget.internationalAid > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.international_aid));
+                        chartEntries.add(new Entry(budget.internationalAid, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart6));
+                    }
+                    if (budget.lawAndOrder > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.law_and_order));
+                        chartEntries.add(new Entry(budget.lawAndOrder, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart7));
+                    }
+                    if (budget.publicTransport > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.public_transport));
+                        chartEntries.add(new Entry(budget.publicTransport, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart8));
+                    }
+                    if (budget.socialPolicy > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.social_policy));
+                        chartEntries.add(new Entry(budget.socialPolicy, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart9));
+                    }
+                    if (budget.spirituality > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.spirituality));
+                        chartEntries.add(new Entry(budget.spirituality, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart10));
+                    }
+                    if (budget.welfare > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.welfare));
+                        chartEntries.add(new Entry(budget.welfare, i++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorChart11));
+                    }
+                    break;
+                case NationChartCardData.MODE_ECON:
+                    title.setText(context.getString(R.string.card_economy_analysis_title));
 
-                // Disable labels, set values and colours
-                PieDataSet dataSet = new PieDataSet(chartEntries, "");
-                dataSet.setDrawValues(false);
-                dataSet.setColors(SparkleHelper.chartColours, context);
-                PieData dataFull = new PieData(chartLabels, dataSet);
+                    // setup data
+                    Sectors sectors = data.sectors;
 
-                chart = SparkleHelper.getFormattedPieChart(context, chart, chartLabels);
-                chart.setData(dataFull);
-                chart.invalidate();
+                    int j = 0;
+                    if (sectors.government > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.government));
+                        chartEntries.add(new Entry(sectors.government, j++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorSector0));
+                    }
+                    if (sectors.stateOwned > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.state_owned));
+                        chartEntries.add(new Entry(sectors.stateOwned, j++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorSector1));
+                    }
+                    if (sectors.privateSector > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.private_sector));
+                        chartEntries.add(new Entry(sectors.privateSector, j++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorSector2));
+                    }
+                    if (sectors.blackMarket > 0f)
+                    {
+                        chartLabels.add(context.getString(R.string.black_market));
+                        chartEntries.add(new Entry(sectors.blackMarket, j++));
+                        chartColours.add(ContextCompat.getColor(context, R.color.colorSector3));
+                    }
+                    break;
             }
-            else if (data.mode == NationChartCardData.MODE_GOV) {
-                title.setText(context.getString(R.string.card_government_expenditures_title));
 
-                // setup data
-                GovBudget budget = data.govBudget;
+            // Disable data labels, set colours and data
+            PieDataSet dataSet = new PieDataSet(chartEntries, "");
+            dataSet.setDrawValues(false);
+            dataSet.setColors(chartColours);
+            PieData dataFull = new PieData(chartLabels, dataSet);
 
-                List<Integer> budgetColours = new ArrayList<Integer>();
-
-                // Have to add it one by one, how horrifying
-                int i = 0;
-                if (budget.admin > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.administration));
-                    chartEntries.add(new Entry(budget.admin, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart0));
-                }
-                if (budget.defense > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.defense));
-                    chartEntries.add(new Entry(budget.defense, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart1));
-                }
-                if (budget.education > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.education));
-                    chartEntries.add(new Entry(budget.education, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart2));
-                }
-                if (budget.environment > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.environment));
-                    chartEntries.add(new Entry(budget.environment, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart3));
-                }
-                if (budget.healthcare > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.healthcare));
-                    chartEntries.add(new Entry(budget.healthcare, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart4));
-                }
-                if (budget.industry > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.industry));
-                    chartEntries.add(new Entry(budget.industry, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart5));
-                }
-                if (budget.internationalAid > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.international_aid));
-                    chartEntries.add(new Entry(budget.internationalAid, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart6));
-                }
-                if (budget.lawAndOrder > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.law_and_order));
-                    chartEntries.add(new Entry(budget.lawAndOrder, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart7));
-                }
-                if (budget.publicTransport > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.public_transport));
-                    chartEntries.add(new Entry(budget.publicTransport, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart8));
-                }
-                if (budget.socialPolicy > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.social_policy));
-                    chartEntries.add(new Entry(budget.socialPolicy, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart9));
-                }
-                if (budget.spirituality > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.spirituality));
-                    chartEntries.add(new Entry(budget.spirituality, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart10));
-                }
-                if (budget.welfare > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.welfare));
-                    chartEntries.add(new Entry(budget.welfare, i++));
-                    budgetColours.add(ContextCompat.getColor(context, R.color.colorChart11));
-                }
-
-                // Disable chart labels, set colours, set data
-                PieDataSet dataSet = new PieDataSet(chartEntries, "");
-                dataSet.setDrawValues(false);
-                dataSet.setColors(budgetColours);
-                PieData dataFull = new PieData(chartLabels, dataSet);
-
-                chart = SparkleHelper.getFormattedPieChart(context, chart, chartLabels);
-                chart.setData(dataFull);
-                chart.invalidate();
-            }
-            else if (data.mode == NationChartCardData.MODE_ECON) {
-                title.setText(context.getString(R.string.card_economy_analysis_title));
-
-                // setup data
-                Sectors sectors = data.sectors;
-                List<Integer> sectorColours = new ArrayList<Integer>();
-
-                int i = 0;
-                if (sectors.government > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.government));
-                    chartEntries.add(new Entry(sectors.government, i++));
-                    sectorColours.add(ContextCompat.getColor(context, R.color.colorSector0));
-                }
-                if (sectors.stateOwned > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.state_owned));
-                    chartEntries.add(new Entry(sectors.stateOwned, i++));
-                    sectorColours.add(ContextCompat.getColor(context, R.color.colorSector1));
-                }
-                if (sectors.privateSector > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.private_sector));
-                    chartEntries.add(new Entry(sectors.privateSector, i++));
-                    sectorColours.add(ContextCompat.getColor(context, R.color.colorSector2));
-                }
-                if (sectors.blackMarket > 0f)
-                {
-                    chartLabels.add(context.getString(R.string.black_market));
-                    chartEntries.add(new Entry(sectors.blackMarket, i++));
-                    sectorColours.add(ContextCompat.getColor(context, R.color.colorSector3));
-                }
-
-                // Disable data labels, set colours and data
-                PieDataSet dataSet = new PieDataSet(chartEntries, "");
-                dataSet.setDrawValues(false);
-                dataSet.setColors(sectorColours);
-                PieData dataFull = new PieData(chartLabels, dataSet);
-
-                chart = SparkleHelper.getFormattedPieChart(context, chart, chartLabels);
-                chart.setData(dataFull);
-                chart.invalidate();
-            }
+            chart = SparkleHelper.getFormattedPieChart(context, chart, chartLabels);
+            chart.setData(dataFull);
+            chart.invalidate();
         }
     }
 }
