@@ -124,8 +124,11 @@ public class SparkleHelper {
     // Uri to invoke MessageBoardActivity
     public static final String RMB_PROTOCOL = "com.lloydtorres.stately.rmb";
     public static final String RMB_TARGET = RMB_PROTOCOL + "://";
+    // Uri to invoke ReportActivity
+    public static final String REPORT_PROTOCOL = "com.lloydtorres.stately.report";
+    public static final String REPORT_TARGET = REPORT_PROTOCOL + "://";
     // Whitelisted protocols
-    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL, RMB_PROTOCOL};
+    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL, RMB_PROTOCOL, REPORT_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "8";
     // NationStates API
@@ -1283,6 +1286,7 @@ public class SparkleHelper {
     public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
@@ -1307,6 +1311,10 @@ public class SparkleHelper {
 
         holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
         holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
+
+        holder = regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + REPORT_TARGET + "%s\">");
+
+        logError(holder);
 
         holder = regexReplace(holder, PARAGRAPH, "<br>%s");
 

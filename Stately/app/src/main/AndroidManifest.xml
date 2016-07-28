@@ -97,6 +97,11 @@
             android:label="@string/report_title"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.WithStatusBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="com.lloydtorres.stately.report" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".settings.SettingsActivity"

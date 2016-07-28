@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content">
                 <RelativeLayout
                     android:id="@+id/report_target_holder"
+                    android:layout_marginBottom="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
@@ -47,7 +48,6 @@
                         android:text="@string/report_target" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView

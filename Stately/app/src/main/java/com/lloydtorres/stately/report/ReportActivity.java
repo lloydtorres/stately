@@ -73,10 +73,15 @@ public class ReportActivity extends AppCompatActivity {
         // Either get data from intent or restore state
         if (getIntent() != null)
         {
-            targetId = getIntent().getIntExtra(REPORT_ID, 0);
-            targetName = SparkleHelper.getNameFromId(getIntent().getStringExtra(REPORT_USER));
-            type = getIntent().getIntExtra(REPORT_TYPE, REPORT_TYPE_TASK);
-            // @TODO: Handle URL intents.
+            if (getIntent().getData() != null) {
+                targetId = Integer.valueOf(getIntent().getData().getHost());
+                type = REPORT_TYPE_TASK;
+            }
+            else {
+                targetId = getIntent().getIntExtra(REPORT_ID, 0);
+                targetName = SparkleHelper.getNameFromId(getIntent().getStringExtra(REPORT_USER));
+                type = getIntent().getIntExtra(REPORT_TYPE, REPORT_TYPE_TASK);
+            }
         }
         if (savedInstanceState != null)
         {
@@ -103,14 +108,14 @@ public class ReportActivity extends AppCompatActivity {
         String reportType = "";
         targetHolder.setVisibility(View.VISIBLE);
         switch (type) {
-            case REPORT_TYPE_TASK:
-                targetHolder.setVisibility(View.GONE);
-                break;
             case REPORT_TYPE_RMB:
                 reportType = getString(R.string.report_rmb_post);
                 break;
             case REPORT_TYPE_TELEGRAM:
                 reportType = getString(R.string.report_telegram);
+                break;
+            default:
+                targetHolder.setVisibility(View.GONE);
                 break;
         }
         reportTarget.setText(String.format(getString(R.string.report_target), reportType, targetId, targetName));
