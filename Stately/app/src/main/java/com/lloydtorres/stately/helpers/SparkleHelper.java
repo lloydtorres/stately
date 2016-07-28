@@ -50,6 +50,7 @@ import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
+import com.lloydtorres.stately.report.ReportActivity;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import com.r0adkll.slidr.model.SlidrConfig;
 
@@ -800,6 +801,21 @@ public class SparkleHelper {
         Intent loginActivityLaunch = new Intent(c, LoginActivity.class);
         loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
         c.startActivity(loginActivityLaunch);
+    }
+
+    /**
+     * Launches a ReportActivity with the fields filled in.
+     * @param c App context
+     * @param type Type of report to file
+     * @param id Target ID of the report
+     * @param user Target user of the report
+     */
+    public static void startReport(Context c, int type, int id, String user) {
+        Intent reportActivityLaunch = new Intent(c, ReportActivity.class);
+        reportActivityLaunch.putExtra(ReportActivity.REPORT_TYPE, type);
+        reportActivityLaunch.putExtra(ReportActivity.REPORT_ID, id);
+        reportActivityLaunch.putExtra(ReportActivity.REPORT_USER, user);
+        c.startActivity(reportActivityLaunch);
     }
 
     /**

@@ -43,6 +43,7 @@ import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.report.ReportActivity;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
@@ -418,7 +419,7 @@ public class TelegramReadActivity extends AppCompatActivity {
                         .show();
                 return true;
             case R.id.telegrams_report:
-                // @TODO: Implement reporting
+                SparkleHelper.startReport(this, ReportActivity.REPORT_TYPE_TELEGRAM, telegram.id, telegram.sender.replace("@@", ""));
                 return true;
         }
         return super.onOptionsItemSelected(item);
