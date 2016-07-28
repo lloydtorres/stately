@@ -53,6 +53,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -108,6 +109,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
         view = findViewById(R.id.explore_coordinator);
         isInProgress = false;
 

@@ -54,6 +54,7 @@ Stately uses the following open-source libraries:
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
 * [Picasso](https://github.com/square/picasso)
 * [Simple XML](http://simple.sourceforge.net/)
+* [Slidr](https://github.com/r0adkll/Slidr)
 * [Sugar ORM](https://github.com/satyan/sugar)
 * [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)
 * [Volley](http://developer.android.com/training/volley/index.html)

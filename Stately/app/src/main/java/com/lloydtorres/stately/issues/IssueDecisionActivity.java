@@ -45,6 +45,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -84,6 +85,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_decision);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
         view = findViewById(R.id.issue_decision_main);
         isInProgress = false;
 

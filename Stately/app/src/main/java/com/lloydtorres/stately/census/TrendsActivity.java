@@ -51,6 +51,7 @@ import com.lloydtorres.stately.dto.CensusHistoryPoint;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.r0adkll.slidr.Slidr;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -111,6 +112,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trends);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
 

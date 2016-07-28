@@ -43,6 +43,7 @@ import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +87,7 @@ public class TelegramReadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_refreshview);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         // Either get data from intent or restore state
         if (getIntent() != null)

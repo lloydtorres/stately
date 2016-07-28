@@ -51,6 +51,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+import com.r0adkll.slidr.model.SlidrConfig;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -212,6 +213,9 @@ public class SparkleHelper {
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
+
+    // Configuration for Slidr (for dem fancy sliding effects)
+    public static final SlidrConfig slidrConfig = new SlidrConfig.Builder().edge(true).build();
 
     /**
      * VALIDATION

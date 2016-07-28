@@ -25,6 +25,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.r0adkll.slidr.Slidr;
 
 /**
  * Created by Lloyd on 2016-01-27.
@@ -43,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setToolbar(toolbar);

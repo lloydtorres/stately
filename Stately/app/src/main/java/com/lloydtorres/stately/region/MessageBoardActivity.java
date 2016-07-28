@@ -50,6 +50,7 @@ import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -117,6 +118,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_board);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
         view = findViewById(R.id.message_board_coordinator);
         isInProgress = false;
 

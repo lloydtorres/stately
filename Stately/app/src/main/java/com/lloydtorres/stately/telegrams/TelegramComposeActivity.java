@@ -43,6 +43,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -80,6 +81,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telegram_compose);
+        Slidr.attach(this, SparkleHelper.slidrConfig);
         isInProgress = false;
 
         // Either get data from intent or restore state
