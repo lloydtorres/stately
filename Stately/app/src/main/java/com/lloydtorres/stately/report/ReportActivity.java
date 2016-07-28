@@ -16,8 +16,10 @@
 
 package com.lloydtorres.stately.report;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -30,9 +32,22 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.r0adkll.slidr.Slidr;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-07-28.
@@ -46,10 +61,21 @@ public class ReportActivity extends AppCompatActivity {
     private static final String REPORT_CATEGORY = "reportCategory";
     private static final String REPORT_CONTENT = "reportContent";
 
+    // Types of reports
     public static final int REPORT_TYPE_TASK = 0;
     public static final int REPORT_TYPE_RMB = 1;
     public static final int REPORT_TYPE_TELEGRAM = 2;
 
+    // Target URL for reports
+    public static final String REPORT_URL = "https://www.nationstates.net/page=help";
+
+    // Headers to send when submitting report
+    private static final int HEADER_GHR_INAPPROPRIATE = 1;
+    private static final int HEADER_GHR_SPAMMER = 3;
+    private static final int HEADER_GHR_MODREPLY = 8;
+    private static final int HEADER_GHR_OTHER = 9;
+
+    // If no category selected
     private static final int CATEGORY_NONE = -1;
 
     private View view;
@@ -65,6 +91,9 @@ public class ReportActivity extends AppCompatActivity {
     private int type;
     private int categoryHolder = CATEGORY_NONE;
     private String contentHolder;
+
+    private boolean isInProgress = false;
+    private DialogInterface.OnClickListener dialogListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +129,19 @@ public class ReportActivity extends AppCompatActivity {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.report_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setEnabled(false);
+
+        dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mSwipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        sendReport();
+                    }
+                });
+            }
+        };
 
         view = findViewById(R.id.report_main);
         targetHolder = (RelativeLayout) findViewById(R.id.report_target_holder);
@@ -150,6 +192,123 @@ public class ReportActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**
+     * Wrapper for sending the report to NS servers.
+     */
+    private void startSendReport() {
+        String reportText = reportContent.getText().toString();
+        if (reportText.length() <= 0) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.report_blank));
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        dialogBuilder.setTitle(R.string.report_confirm)
+                .setPositiveButton(R.string.report_send_confirm, dialogListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+    }
+
+    private void sendReport() {
+        if (isInProgress)
+        {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
+        String typeHeader;
+        String reasonHeader;
+        switch (type) {
+            case REPORT_TYPE_RMB:
+                typeHeader = getString(R.string.report_header_rmb_post);
+                reasonHeader = getString(R.string.report_header_reason);
+                break;
+            case REPORT_TYPE_TELEGRAM:
+                typeHeader = getString(R.string.report_header_telegram);
+                reasonHeader = getString(R.string.report_header_reason);
+                break;
+            case REPORT_TYPE_TASK:
+                typeHeader = getString(R.string.report_header_task);
+                reasonHeader = getString(R.string.report_header_response);
+                break;
+            default:
+                typeHeader = "";
+                reasonHeader = "";
+                break;
+        }
+        final String commentHeader = String.format(Locale.US, getString(R.string.report_header_comment_template),
+                typeHeader, targetId, reasonHeader, reportContent.getText().toString());
+
+        final int problemHeader;
+        if (type == REPORT_TYPE_TASK) {
+            problemHeader = HEADER_GHR_MODREPLY;
+        }
+        else {
+            switch (reportCategorySelect.getCheckedRadioButtonId()) {
+                case R.id.report_inappropriate:
+                    problemHeader = HEADER_GHR_INAPPROPRIATE;
+                    break;
+                case R.id.report_spam:
+                    problemHeader = HEADER_GHR_SPAMMER;
+                    break;
+                default:
+                    problemHeader = HEADER_GHR_OTHER;
+                    break;
+            }
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REPORT_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        isInProgress = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("problem", Integer.toString(problemHeader));
+                params.put("comment", commentHeader);
+                params.put("submit", "1");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -165,7 +324,7 @@ public class ReportActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.nav_send_report:
-                // @TODO: Actually send report
+                startSendReport();
                 return true;
         }
         return super.onOptionsItemSelected(item);

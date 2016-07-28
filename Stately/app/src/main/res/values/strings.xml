@@ -360,7 +360,15 @@
     <string name="report_spam">…a spammer.</string>
     <string name="report_other">…something else.</string>
     <string name="report_describe_hint">Please describe the problem…</string>
-    <string name="report_blank">Please describe the problem before sending the report.</string>
+    <string name="report_blank">Report seems empty.</string>
+    <string name="report_confirm">Send report to NationStates moderators?</string>
+    <string name="report_send_confirm">Send</string>
+    <string name="report_header_comment_template">%1$s ID:#%2$d\n\n%3$s:\n%4$s\n\n(sent via Stately)</string>
+    <string name="report_header_telegram">Telegram</string>
+    <string name="report_header_rmb_post">RMB Post</string>
+    <string name="report_header_task">Task</string>
+    <string name="report_header_reason">Reason for report</string>
+    <string name="report_header_response">Response</string>
 
     <!-- Settings -->
     <string name="setting_title_behavior">App Behavior</string>
