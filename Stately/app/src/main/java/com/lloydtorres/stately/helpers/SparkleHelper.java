@@ -1314,8 +1314,6 @@ public class SparkleHelper {
 
         holder = regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + REPORT_TARGET + "%s\">");
 
-        logError(holder);
-
         holder = regexReplace(holder, PARAGRAPH, "<br>%s");
 
         holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
