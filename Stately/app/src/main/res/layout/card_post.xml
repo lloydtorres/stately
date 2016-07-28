@@ -90,6 +90,20 @@
                 app:srcCompat="@drawable/ic_delete"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/card_post_reply"
+                android:layout_toStartOf="@+id/card_post_reply"
+                tools:visibility="gone" />
+            <ImageView
+                android:id="@+id/card_post_report"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_report"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/card_post_reply"
                 android:layout_toStartOf="@+id/card_post_reply" />
             <ImageView
                 android:id="@+id/card_post_reply"

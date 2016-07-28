@@ -34,6 +34,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.report.ReportActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -235,6 +236,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private ImageView likeButton;
         private TextView likeCount;
         private ImageView deleteButton;
+        private ImageView reportButton;
         private ImageView replyButton;
 
         private View.OnClickListener likeClickListener = new View.OnClickListener() {
@@ -288,6 +290,17 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
+        private View.OnClickListener reportClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION)
+                {
+                    SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_RMB, post.id, post.name);
+                }
+            }
+        };
+
         public PostCard(Context c, View v) {
             super(v);
             context = c;
@@ -299,6 +312,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             likeButton = (ImageView) v.findViewById(R.id.card_post_like);
             likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
             deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
+            reportButton = (ImageView) v.findViewById(R.id.card_post_report);
             replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
         }
 
@@ -334,11 +348,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         {
                             deleteButton.setVisibility(View.VISIBLE);
                             deleteButton.setOnClickListener(deleteClickListener);
+                            reportButton.setVisibility(View.GONE);
+                            reportButton.setOnClickListener(null);
                         }
                         else
                         {
                             deleteButton.setVisibility(View.GONE);
                             deleteButton.setOnClickListener(null);
+                            reportButton.setVisibility(View.VISIBLE);
+                            reportButton.setOnClickListener(reportClickListener);
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
+                            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                            reportButton.setLayoutParams(params);
                         }
                     }
                     else
@@ -347,6 +368,12 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         replyButton.setOnClickListener(null);
                         deleteButton.setVisibility(View.GONE);
                         deleteButton.setOnClickListener(null);
+
+                        reportButton.setVisibility(View.VISIBLE);
+                        reportButton.setOnClickListener(reportClickListener);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
+                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        reportButton.setLayoutParams(params);
                     }
 
                     // like button and count are visible to all
