@@ -19,6 +19,7 @@ package com.lloydtorres.stately.report;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +56,7 @@ public class ReportActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RelativeLayout targetHolder;
     private TextView reportTarget;
+    private CardView reportCategoryHolder;
     private RadioGroup reportCategorySelect;
     private EditText reportContent;
 
@@ -102,23 +104,32 @@ public class ReportActivity extends AppCompatActivity {
         view = findViewById(R.id.report_main);
         targetHolder = (RelativeLayout) findViewById(R.id.report_target_holder);
         reportTarget = (TextView) findViewById(R.id.report_target);
+        reportCategoryHolder = (CardView) findViewById(R.id.report_category_holder);
         reportCategorySelect = (RadioGroup) findViewById(R.id.report_category);
         reportContent = (EditText) findViewById(R.id.report_content);
 
-        String reportType = "";
         targetHolder.setVisibility(View.VISIBLE);
-        switch (type) {
-            case REPORT_TYPE_RMB:
-                reportType = getString(R.string.report_rmb_post);
-                break;
-            case REPORT_TYPE_TELEGRAM:
-                reportType = getString(R.string.report_telegram);
-                break;
-            default:
-                targetHolder.setVisibility(View.GONE);
-                break;
+        reportCategoryHolder.setVisibility(View.VISIBLE);
+
+        // If replying to mod mail, use this message instead
+        if (type == REPORT_TYPE_TASK) {
+            reportTarget.setText(String.format(getString(R.string.report_mod_reply), targetId));
+            reportCategoryHolder.setVisibility(View.GONE);
+        } else {
+            String reportType = "";
+            switch (type) {
+                case REPORT_TYPE_RMB:
+                    reportType = getString(R.string.report_rmb_post);
+                    break;
+                case REPORT_TYPE_TELEGRAM:
+                    reportType = getString(R.string.report_telegram);
+                    break;
+                default:
+                    targetHolder.setVisibility(View.GONE);
+                    break;
+            }
+            reportTarget.setText(String.format(getString(R.string.report_target), reportType, targetId, targetName));
         }
-        reportTarget.setText(String.format(getString(R.string.report_target), reportType, targetId, targetName));
 
         if (categoryHolder != CATEGORY_NONE) {
             reportCategorySelect.check(categoryHolder);

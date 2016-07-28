@@ -351,6 +351,7 @@
     <string name="report_title">Report</string>
     <string name="report_send">Send Report</string>
     <string name="report_target">Reporting %1$s #%2$d from %3$s to the NationStates moderation team.</string>
+    <string name="report_mod_reply">Replying to moderator telegram (task #%1$d).</string>
     <string name="report_telegram">telegram</string>
     <string name="report_rmb_post">RMB post</string>
     <string name="report_checklist">Be specific.\nTell us who is involved.\nBe nice to the moderators!</string>
