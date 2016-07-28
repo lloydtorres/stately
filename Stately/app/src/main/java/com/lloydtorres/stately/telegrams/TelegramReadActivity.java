@@ -388,9 +388,8 @@ public class TelegramReadActivity extends AppCompatActivity {
         if (!curNation.equals(SparkleHelper.getIdFromName(telegram.sender))) {
             Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(folders.get(selectedFolder).name);
             inflater.inflate(m.matches() ? R.menu.activity_telegram_read_noarchive : R.menu.activity_telegram_read, menu);
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Override
