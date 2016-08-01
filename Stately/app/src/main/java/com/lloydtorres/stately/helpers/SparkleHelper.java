@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -1162,8 +1163,9 @@ public class SparkleHelper {
     public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(.*?)\\]");
     public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](.*?)\\[\\/region\\]");
     public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(.*?)\\]");
-    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=([\\w-]*)(?:\\/|)\\]");
-    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)(?:\\/|)\\]");
+    public static final String  NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|)";
+    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=([\\w-]*)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=([\\w-]*)(?:\\/|)\\]");
 
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
@@ -1173,7 +1175,6 @@ public class SparkleHelper {
     public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
 
     /**
      * Transform NationStates' BBCode-formatted content into HTML
@@ -1218,9 +1219,7 @@ public class SparkleHelper {
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"https://www.nationstates.net/%s\">%s</a>");
-        holder = regexDoubleReplace(holder, BBCODE_URL, "<a href=\"%s\">%s</a>");
-        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexGenericUrlFormat(c, holder);
         holder = regexQuoteFormat(c, t, holder);
 
         // Extract and replace spoilers
@@ -1316,8 +1315,7 @@ public class SparkleHelper {
 
         holder = regexReplace(holder, PARAGRAPH, "<br>%s");
 
-        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(https?:\\/\\/[^\\s\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
-        holder = holder.replaceAll("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\?\\[\\<]+)", "<a href=\"$1\">" + c.getString(R.string.clicky_link) + "</a>");
+        holder = regexGenericUrlFormat(c, holder);
 
         setStyledTextView(c, t, holder);
     }
@@ -1461,6 +1459,62 @@ public class SparkleHelper {
             holder = holder.replace(n.getKey(), replacer);
         }
         holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
+        return holder;
+    }
+
+    public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
+    public static final Pattern RAW_HTTP_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)((?:http|https):\\/\\/[^\\s\\[\\<]+)");
+    public static final Pattern RAW_WWW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)");
+
+    /**
+     * Finds all raw URL links and URL tags and linkifies them properly in a nice format.
+     * @param c App context.
+     * @param content Target string.
+     * @return Parsed results.
+     */
+    public static String regexGenericUrlFormat(Context c, String content) {
+        String holder = content;
+
+        Map<String, String> replaceBasic = new HashMap<String, String>();
+        Matcher m0 = BBCODE_URL.matcher(holder);
+        while (m0.find())
+        {
+            String template = "<a href=\"%s\">%s</a>";
+            Uri link = Uri.parse(m0.group(1));
+            if (link.getScheme() == null) {
+                template = "<a href=\"http://%s\">%s</a>";
+            }
+            String replaceText = String.format(Locale.US, template, m0.group(1), m0.group(2));
+            replaceBasic.put(m0.group(), replaceText);
+        }
+        Set<Map.Entry<String, String>> setBasic = replaceBasic.entrySet();
+        for (Map.Entry<String, String> e : setBasic) {
+            holder = holder.replace(e.getKey(), e.getValue());
+        }
+
+        Map<String, String> replaceRaw = new HashMap<String, String>();
+
+        Matcher m1 = RAW_HTTP_LINK.matcher(holder);
+        while (m1.find())
+        {
+            Uri link = Uri.parse(m1.group(1));
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), m1.group(1), link.getHost());
+            replaceRaw.put(m1.group(), replaceText);
+        }
+
+        Matcher m2 = RAW_WWW_LINK.matcher(holder);
+        while (m2.find())
+        {
+            Uri link = Uri.parse("http://" + m2.group(1));
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_www), m2.group(1), link.getHost());
+            replaceRaw.put(m2.group(), replaceText);
+        }
+
+        Set<Map.Entry<String, String>> set = replaceRaw.entrySet();
+        for (Map.Entry<String, String> e : set) {
+            holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.getKey() + "\\E(?=$|[\\s\\[\\<])", e.getValue());
+        }
+
         return holder;
     }
 
