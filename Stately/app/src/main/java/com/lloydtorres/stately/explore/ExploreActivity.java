@@ -452,7 +452,6 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         // Initializes and inflates the region fragment
         rFragment = new RegionFragment();
         rFragment.setRegion(mRegion);
-        rFragment.setNoRefreshState(true);
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, rFragment)

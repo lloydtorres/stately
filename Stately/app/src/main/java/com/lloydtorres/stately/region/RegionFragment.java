@@ -77,7 +77,6 @@ public class RegionFragment extends Fragment {
 
     private String mRegionName;
     private Region mRegion;
-    private boolean noRefresh;
 
     // sub fragments
     private RegionOverviewSubFragment regionOverviewSubFragment;
@@ -106,10 +105,6 @@ public class RegionFragment extends Fragment {
     public void setRegion(Region r)
     {
         mRegion = r;
-    }
-    public void setNoRefreshState(boolean b)
-    {
-        noRefresh = b;
     }
 
     @Override
