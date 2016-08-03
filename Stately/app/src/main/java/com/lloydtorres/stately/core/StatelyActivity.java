@@ -460,6 +460,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     {
         RegionFragment regionFragment = new RegionFragment();
         regionFragment.setRegionName(mNation.region);
+        regionFragment.setRMBUnreadCountText(rmbCountView.getText().toString());
 
         return regionFragment;
     }
@@ -637,10 +638,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 targetView.setVisibility(View.VISIBLE);
             }
             catch (Exception e) {
+                targetView.setText("");
                 targetView.setVisibility(View.GONE);
             }
         }
         else {
+            targetView.setText("");
             targetView.setVisibility(View.GONE);
         }
     }

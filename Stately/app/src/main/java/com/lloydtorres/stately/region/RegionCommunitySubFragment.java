@@ -34,8 +34,10 @@ import com.lloydtorres.stately.dto.Region;
  */
 public class RegionCommunitySubFragment extends Fragment {
     public static final String REGION_KEY = "mRegion";
+    public static final String REGION_RMB_UNREAD_KEY = "rmbUnreadCountText";
 
     private Region mRegion;
+    private String rmbUnreadCountText;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -45,6 +47,7 @@ public class RegionCommunitySubFragment extends Fragment {
     {
         mRegion = r;
     }
+    public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class RegionCommunitySubFragment extends Fragment {
         if (savedInstanceState != null && mRegion == null)
         {
             mRegion = savedInstanceState.getParcelable(REGION_KEY);
+            rmbUnreadCountText = savedInstanceState.getString(REGION_RMB_UNREAD_KEY);
         }
 
         if (mRegion != null)
@@ -76,7 +80,7 @@ public class RegionCommunitySubFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerAdapter = new CommunityRecyclerAdapter(getContext(), mRegion, getFragmentManager());
+        mRecyclerAdapter = new CommunityRecyclerAdapter(getContext(), getFragmentManager(), mRegion, rmbUnreadCountText);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
@@ -87,6 +91,10 @@ public class RegionCommunitySubFragment extends Fragment {
         if (mRegion != null)
         {
             outState.putParcelable(REGION_KEY, mRegion);
+        }
+        if (rmbUnreadCountText != null)
+        {
+            outState.putString(REGION_RMB_UNREAD_KEY, rmbUnreadCountText);
         }
     }
 }

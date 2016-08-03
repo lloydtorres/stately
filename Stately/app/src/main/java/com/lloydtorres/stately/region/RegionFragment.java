@@ -68,6 +68,7 @@ import java.util.Map;
 public class RegionFragment extends Fragment {
     public static final String REGION_NAME_KEY = "mRegionName";
     public static final String REGION_DATA_KEY = "mRegionData";
+    public static final String REGION_RMB_UNREAD_KEY = "rmbUnreadCountData";
 
     // Constants used to determine view pager index.
     private final int OVERVIEW_TAB = 0;
@@ -77,6 +78,7 @@ public class RegionFragment extends Fragment {
 
     private String mRegionName;
     private Region mRegion;
+    private String rmbUnreadCountText;
 
     // sub fragments
     private RegionOverviewSubFragment regionOverviewSubFragment;
@@ -106,6 +108,7 @@ public class RegionFragment extends Fragment {
     {
         mRegion = r;
     }
+    public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
 
     @Override
     public void onAttach(Context context) {
@@ -134,6 +137,7 @@ public class RegionFragment extends Fragment {
         {
             mRegionName = savedInstanceState.getString(REGION_NAME_KEY);
             mRegion = savedInstanceState.getParcelable(REGION_DATA_KEY);
+            rmbUnreadCountText = savedInstanceState.getString(REGION_RMB_UNREAD_KEY);
         }
 
         if (mRegion != null)
@@ -243,6 +247,7 @@ public class RegionFragment extends Fragment {
 
         regionCommunitySubFragment = new RegionCommunitySubFragment();
         regionCommunitySubFragment.setRegion(mRegion);
+        regionCommunitySubFragment.setRMBUnreadCountText(rmbUnreadCountText);
 
         censusSubFragment = new CensusSubFragment();
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
@@ -264,6 +269,7 @@ public class RegionFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(REGION_NAME_KEY, mRegionName);
         savedInstanceState.putParcelable(REGION_DATA_KEY, mRegion);
+        savedInstanceState.putString(REGION_RMB_UNREAD_KEY, rmbUnreadCountText);
     }
 
     @Override

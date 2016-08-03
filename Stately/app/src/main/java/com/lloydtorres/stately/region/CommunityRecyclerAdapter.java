@@ -67,6 +67,16 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private Region mRegion;
     private FragmentManager fm;
 
+    private class RMBButtonHolder {
+        public String regionName;
+        public String unreadCount;
+
+        public RMBButtonHolder(String name, String unread) {
+            regionName = name;
+            unreadCount = unread;
+        }
+    }
+
     // Because instanceof doesn't accept generics...
     private class OfficerHolder {
         public List<Officer> officers;
@@ -84,15 +94,17 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    public CommunityRecyclerAdapter(Context c, Region r, FragmentManager f)
+    public CommunityRecyclerAdapter(Context c, FragmentManager f, Region r, String rmbUnreadText)
     {
         cards = new ArrayList<Object>();
 
         context = c;
         mRegion = r;
         fm = f;
+
         // This adds a button to the RMB
-        cards.add(mRegion.name);
+        RMBButtonHolder button = new RMBButtonHolder(mRegion.name, rmbUnreadText);
+        cards.add(button);
 
         if (mRegion.poll != null)
         {
@@ -176,7 +188,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         switch (holder.getItemViewType()) {
             case BUTTON_CARD:
                 MessageBoardCard rmbCard = (MessageBoardCard) holder;
-                rmbCard.init((String) cards.get(position));
+                rmbCard.init((RMBButtonHolder) cards.get(position));
                 break;
             case POLL_CARD:
                 PollCard pollCard = (PollCard) holder;
@@ -204,7 +216,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (cards.get(position) instanceof String)
+        if (cards.get(position) instanceof RMBButtonHolder)
         {
             return BUTTON_CARD;
         }
@@ -231,19 +243,26 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public class MessageBoardCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context context;
-        private CardView buttonCard;
+        private TextView unreadCounter;
         private String regionName;
 
         public MessageBoardCard(Context c, View v) {
             super(v);
             context = c;
-            buttonCard = (CardView) v.findViewById(R.id.card_button_main);
+            unreadCounter = (TextView) v.findViewById(R.id.card_button_num);
             v.setOnClickListener(this);
         }
 
-        public void init(String n)
+        public void init(RMBButtonHolder bh)
         {
-            regionName = n;
+            regionName = bh.regionName;
+            if (bh.unreadCount != null && bh.unreadCount.length() > 0) {
+                unreadCounter.setVisibility(View.VISIBLE);
+                unreadCounter.setText(bh.unreadCount);
+            }
+            else {
+                unreadCounter.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
