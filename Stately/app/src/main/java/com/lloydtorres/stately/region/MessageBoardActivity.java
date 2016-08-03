@@ -212,6 +212,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             enablePostingRights();
             queryPostingRightsCallback();
             likable = true;
+            markBoardAsRead();
             return;
         }
 
@@ -288,6 +289,35 @@ public class MessageBoardActivity extends AppCompatActivity {
         {
             refreshRecycler(SCAN_FORWARD, 0, false);
         }
+    }
+
+    /**
+     * Performs a GET request on the NS region page, which should mark the RMB as read and clear the unread count.
+     */
+    private void markBoardAsRead()
+    {
+        String targetURL = String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+        DashHelper.getInstance(this).addRequest(stringRequest);
     }
 
     /**
