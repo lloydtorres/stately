@@ -30,7 +30,8 @@
         <item
             android:id="@+id/nav_wa"
             android:icon="@drawable/ic_menu_wa"
-            android:title="@string/menu_wa" />
+            android:title="@string/menu_wa"
+            app:actionLayout="@layout/view_drawercounter"/>
 
     </group>
 

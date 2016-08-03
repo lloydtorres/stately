@@ -112,6 +112,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private TextView issueCountView;
     private TextView telegramCountView;
     private TextView rmbCountView;
+    private TextView waCountView;
 
     private SharedPreferences storage;
 
@@ -183,6 +184,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         issueCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_issues).getActionView();
         telegramCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_telegrams).getActionView();
         rmbCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_region).getActionView();
+        waCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_wa).getActionView();
 
         Fragment f;
         switch (start)
@@ -617,6 +619,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         Element rmbCountContainer = d.select("div.rmbnewnumber").first();
         setUnreadCount(rmbCountView, rmbCountContainer);
+
+        Element waLink = d.select("a[href*=page=un]").first();
+        if (waLink != null) {
+            Element waCountContainer = waLink.select("div.notificationnumber").first();
+            setUnreadCount(waCountView, waCountContainer);
+        }
     }
 
     /**
