@@ -19,10 +19,6 @@
             android:title="@string/menu_telegrams"
             app:actionLayout="@layout/view_drawercounter"/>
         <item
-            android:id="@+id/nav_activityfeed"
-            android:icon="@drawable/ic_activityfeed"
-            android:title="@string/menu_activityfeed" />
-        <item
             android:id="@+id/nav_region"
             android:icon="@drawable/ic_menu_region"
             android:title="@string/menu_region"
@@ -32,6 +28,10 @@
             android:icon="@drawable/ic_menu_wa"
             android:title="@string/menu_wa"
             app:actionLayout="@layout/view_drawercounter"/>
+        <item
+            android:id="@+id/nav_activityfeed"
+            android:icon="@drawable/ic_activityfeed"
+            android:title="@string/menu_activityfeed" />
 
     </group>
 
