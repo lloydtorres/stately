@@ -60,15 +60,25 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * The core Stately activity. This is where the magic happens.
  */
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IToolbarActivity {
+
+    // Target URL for query to get unread counts
+    public static final String QUERY_UNREAD = "https://www.nationstates.net/page=blank";
 
     // Keys used for intents
     public static final String NATION_DATA = "mNationData";
@@ -98,6 +108,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private ImageView nationBanner;
     private ImageView nationFlag;
     private TextView nationNameView;
+
+    private TextView issueCountView;
+    private TextView telegramCountView;
+    private TextView rmbCountView;
 
     private SharedPreferences storage;
 
@@ -165,6 +179,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(start).setChecked(true);
         initNavBanner();
+
+        issueCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_issues).getActionView();
+        telegramCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_telegrams).getActionView();
+        rmbCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_region).getActionView();
 
         Fragment f;
         switch (start)
@@ -243,8 +261,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onResume()
     {
-        // Redownload nation data on resume
         super.onResume();
+        // Redownload nation data on resume
+        // isLoaded will only be false on first run, true on all subsequent runs
+        // This prevents nation data from being redundantly loaded twice.
         if (isLoaded)
         {
             updateNation(mNation.name, false);
@@ -253,6 +273,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         {
             isLoaded = true;
         }
+
+        // Get the unread counts from the NS site.
+        queryUnreadCounts();
     }
 
     @Override
@@ -350,8 +373,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             fm.beginTransaction()
                     .replace(R.id.coordinator_app_bar, fChoose)
                     .commitNow();
-
             drawer.closeDrawer(GravityCompat.START);
+
+            // Update the unread counts whenever a new main fragment is selected.
+            queryUnreadCounts();
+
             return true;
         }
         // Other selections
@@ -544,6 +570,79 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 .setNegativeButton(R.string.explore_negative, null)
                 .show();
 
+    }
+
+    /**
+     * Starts the process to get unread counts from the NS site.
+     */
+    private void queryUnreadCounts() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, QUERY_UNREAD,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        processUnreadCounts(d);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String,String> params = new HashMap<String, String>();
+                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
+                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
+                params.put("Cookie", String.format("autologin=%s", u.autologin));
+                return params;
+            }
+        };
+
+        DashHelper.getInstance(this).addRequest(stringRequest);
+    }
+
+    /**
+     * Given the parsed HTML document, grabs the elements containing the unread counts.
+     * @param d Parsed document from NS.
+     */
+    private void processUnreadCounts(Document d) {
+        // Set the issue unread count
+        Element issueCountContainer = d.select("div#notificationnumber-issues").first();
+        setUnreadCount(issueCountView, issueCountContainer);
+
+        Element telegramCountContainer = d.select("div#notificationnumber-telegrams").first();
+        setUnreadCount(telegramCountView, telegramCountContainer);
+
+        Element rmbCountContainer = d.select("div.rmbnewnumber").first();
+        setUnreadCount(rmbCountView, rmbCountContainer);
+    }
+
+    /**
+     * Helper function to sanitize string counts and put and style them in the navigation drawer.
+     * @param targetView The TextView where the count will end up in.
+     * @param rawContainer The HTML element containing text for the unread count.
+     */
+    private void setUnreadCount(TextView targetView, Element rawContainer) {
+        if (rawContainer != null) {
+            try {
+                int count = NumberFormat.getNumberInstance(Locale.US).parse(rawContainer.text()).intValue();
+
+                if (count > 100) {
+                    targetView.setText(getString(R.string.menu_unread_count_over100));
+                }
+                else {
+                    targetView.setText(String.valueOf(count));
+                }
+                targetView.setVisibility(View.VISIBLE);
+            }
+            catch (Exception e) {
+                targetView.setVisibility(View.GONE);
+            }
+        }
+        else {
+            targetView.setVisibility(View.GONE);
+        }
     }
 
     /**

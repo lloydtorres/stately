@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:id="@+id/grp1"
         android:checkableBehavior="single">
@@ -10,11 +11,13 @@
         <item
             android:id="@+id/nav_issues"
             android:icon="@drawable/ic_menu_issues"
-            android:title="@string/menu_issues" />
+            android:title="@string/menu_issues"
+            app:actionLayout="@layout/view_drawercounter"/>
         <item
             android:id="@+id/nav_telegrams"
             android:icon="@drawable/ic_menu_telegrams"
-            android:title="@string/menu_telegrams" />
+            android:title="@string/menu_telegrams"
+            app:actionLayout="@layout/view_drawercounter"/>
         <item
             android:id="@+id/nav_activityfeed"
             android:icon="@drawable/ic_activityfeed"
@@ -22,7 +25,8 @@
         <item
             android:id="@+id/nav_region"
             android:icon="@drawable/ic_menu_region"
-            android:title="@string/menu_region" />
+            android:title="@string/menu_region"
+            app:actionLayout="@layout/view_drawercounter"/>
         <item
             android:id="@+id/nav_wa"
             android:icon="@drawable/ic_menu_wa"

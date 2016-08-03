@@ -35,6 +35,8 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Log Out</string>
 
+    <string name="menu_unread_count_over100">100+</string>
+
     <!-- Time -->
     <string name="time_moments_template">%1$s %2$s</string>
     <string name="time_generic_template">%1$d %2$s %3$s</string>
