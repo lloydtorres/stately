@@ -244,7 +244,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private Context context;
         private TextView unreadCounter;
-        private String regionName;
+        private RMBButtonHolder buttonData;
 
         public MessageBoardCard(Context c, View v) {
             super(v);
@@ -255,7 +255,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void init(RMBButtonHolder bh)
         {
-            regionName = bh.regionName;
+            buttonData = bh;
             if (bh.unreadCount != null && bh.unreadCount.length() > 0) {
                 unreadCounter.setVisibility(View.VISIBLE);
                 unreadCounter.setText(bh.unreadCount);
@@ -267,8 +267,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onClick(View v) {
+            unreadCounter.setVisibility(View.INVISIBLE);
+            buttonData.unreadCount = null;
+            notifyItemChanged(getAdapterPosition());
+
             Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
-            messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, regionName);
+            messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, buttonData.regionName);
             context.startActivity(messageBoardActivity);
         }
     }
