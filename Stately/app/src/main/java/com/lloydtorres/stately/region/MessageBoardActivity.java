@@ -277,12 +277,13 @@ public class MessageBoardActivity extends AppCompatActivity {
      */
     private void queryPostingRightsCallback()
     {
+        // If there are no messages, load them from NS
         if (messages.posts.size() <= 0)
         {
             startSwipeRefresh();
-            startQueryMessages(SCAN_FORWARD);
+            startQueryMessages(SCAN_FORWARD, true);
         }
-        // Otherwise just show it normally
+        // Otherwise, they already here so just show it normally
         else
         {
             refreshRecycler(SCAN_FORWARD, 0, false);
@@ -292,10 +293,10 @@ public class MessageBoardActivity extends AppCompatActivity {
     /**
      * Load swipe refresher and start loading messages.
      */
-    private void startQueryMessages(int direction)
+    private void startQueryMessages(int direction, boolean firstRun)
     {
         startSwipeRefresh();
-        queryMessages(0, direction, true);
+        queryMessages(0, direction, firstRun);
     }
 
     /**
@@ -513,7 +514,7 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         startSwipeRefresh();
         messagePostButton.setOnClickListener(null);
-        String targetURL = String.format(Region.GET_QUERY, SparkleHelper.getIdFromName(regionName));
+        String targetURL = String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -582,7 +583,7 @@ public class MessageBoardActivity extends AppCompatActivity {
                         messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
                         setReplyMessage(null);
-                        startQueryMessages(SCAN_FORWARD);
+                        startQueryMessages(SCAN_FORWARD, false);
                     }
                 }, new Response.ErrorListener() {
             @Override
