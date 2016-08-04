@@ -126,7 +126,7 @@ public class NameListDialog extends DialogFragment {
             int recyclerHeight = mRecyclerView.getLayoutParams().height;
             if (recyclerHeight > screenHeight * 0.75)
             {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.5));
                 mRecyclerView.setLayoutParams(lp);
             }
         }
