@@ -287,7 +287,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View v) {
-            FragmentManager fm = fragment.getActivity().getSupportFragmentManager();
+            FragmentManager fm = fragment.getFragmentManager();
             CensusSortDialog censusSortDialog = new CensusSortDialog();
             censusSortDialog.setMode(mode);
             censusSortDialog.setSortOrder(sortOrder);
