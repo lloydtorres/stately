@@ -25,8 +25,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -102,23 +104,6 @@ public class SwitchNationDialog extends DialogFragment {
     {
         // Base recycler stuff
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
-
-        /*
-        // If the recyclerview is too big for the screen, resize it
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        if (getActivity() != null && isAdded())
-        {
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int screenHeight = displaymetrics.heightPixels;
-            int recyclerHeight = mRecyclerView.getHeight();
-
-            if (((float)recyclerHeight)/screenHeight > 2)
-            {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, screenHeight/2);
-                mRecyclerView.setLayoutParams(lp);
-            }
-        }*/
-
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -150,6 +135,26 @@ public class SwitchNationDialog extends DialogFragment {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // If the recyclerview is larger than 75% of the screen height, resize
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        if (getActivity() != null && isAdded())
+        {
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int screenHeight = displaymetrics.heightPixels;
+            int recyclerHeight = mRecyclerView.getLayoutParams().height;
+            if (recyclerHeight > screenHeight * 0.75)
+            {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                mRecyclerView.setLayoutParams(lp);
+            }
+        }
     }
 
     @Override
