@@ -330,7 +330,6 @@ public class ResolutionActivity extends AppCompatActivity {
     {
         FragmentManager fm = getSupportFragmentManager();
         VoteDialog voteDialog = new VoteDialog();
-        voteDialog.setListener(this);
         voteDialog.setChoice(vote);
         voteDialog.show(fm, VoteDialog.DIALOG_TAG);
     }

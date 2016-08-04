@@ -39,14 +39,8 @@ public class VoteDialog extends DialogFragment {
 
     private RadioGroup voteToggleState;
     private int choice;
-    private ResolutionActivity activity;
 
     public VoteDialog() { }
-
-    public void setListener(ResolutionActivity a)
-    {
-        activity = a;
-    }
 
     public void setChoice(int c)
     {
@@ -110,7 +104,7 @@ public class VoteDialog extends DialogFragment {
 
         if (mode != choice)
         {
-            activity.submitVote(mode);
+            ((ResolutionActivity) getActivity()).submitVote(mode);
         }
     }
 }
