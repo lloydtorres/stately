@@ -138,11 +138,11 @@ public class ActivityFeedFragment extends Fragment {
         {
             if (nationName == null)
             {
-                nationName = savedInstanceState.getParcelable(NATION_KEY);
+                nationName = savedInstanceState.getString(NATION_KEY);
             }
             if (regionName == null)
             {
-                regionName = savedInstanceState.getParcelable(REGION_KEY);
+                regionName = savedInstanceState.getString(REGION_KEY);
             }
         }
 

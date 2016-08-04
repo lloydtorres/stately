@@ -71,7 +71,7 @@ public class DatasetDialog extends DialogFragment {
         // Restore state
         if (savedInstanceState != null && datasets == null)
         {
-            datasets = savedInstanceState.getParcelable(DATASETS_KEY);
+            datasets = savedInstanceState.getParcelableArrayList(DATASETS_KEY);
         }
 
         AppCompatDialog dialog = null;
