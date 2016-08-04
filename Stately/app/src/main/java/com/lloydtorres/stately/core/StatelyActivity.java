@@ -78,7 +78,7 @@ import java.util.Map;
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IToolbarActivity {
 
     // Target URL for query to get unread counts
-    public static final String QUERY_UNREAD = "https://www.nationstates.net/page=blank";
+    public static final String QUERY_UNREAD = "https://rift.nationstates.net/page=blank";
 
     // Keys used for intents
     public static final String NATION_DATA = "mNationData";
