@@ -40,6 +40,7 @@ public class NSStringRequest extends StringRequest {
     private int method;
     private Map<String, String> params = new HashMap<String, String>();
     private boolean noPin = false;
+    private String autologinOverride;
 
     public NSStringRequest(Context c, int m, String target,
                            Response.Listener<String> listener,
@@ -52,6 +53,8 @@ public class NSStringRequest extends StringRequest {
     public void disablePin(boolean b) {
         noPin = b;
     }
+
+    public void setAutologinOverride(String a) { autologinOverride = a; }
 
     public void setParams(Map<String, String> p) { params = p; }
 
@@ -69,13 +72,14 @@ public class NSStringRequest extends StringRequest {
         if (u != null && u.nationId != null) {
             params.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header), u.nationId));
 
+            String autoHeader = autologinOverride == null ? u.autologin : autologinOverride;
             // Case 1: If only autologin cookie is available/pin cookie is invalid
-            if ((noPin || u.pin == null || PIN_INVALID.equals(u.pin)) && u.autologin != null) {
-                params.put("Cookie", String.format(Locale.US, "autologin=%s", u.autologin));
+            if ((noPin || u.pin == null || PIN_INVALID.equals(u.pin)) && autoHeader != null) {
+                params.put("Cookie", String.format(Locale.US, "autologin=%s", autoHeader));
             }
             // Case 2: If both autologin and pin cookies are available and pin cookie is good
             else if (u.autologin != null && u.pin != null && !PIN_INVALID.equals(u.pin)) {
-                params.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", u.autologin, u.pin));
+                params.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", autoHeader, u.pin));
             }
             // Case 3: Both are missing, don't do anything
         }
