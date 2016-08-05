@@ -206,7 +206,7 @@ public class NationFragment extends Fragment {
         nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename).toString());
 
         DashHelper dashie = DashHelper.getInstance(getContext());
-        dashie.loadImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
+        dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
         dashie.loadImage(mNation.flagURL, nationFlag, true);
 
         overviewSubFragment = new OverviewSubFragment();

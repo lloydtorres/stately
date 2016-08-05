@@ -49,6 +49,9 @@ package com.lloydtorres.stately.telegrams;
 
  */
 
+import android.content.Context;
+import android.widget.TextView;
+
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -259,5 +262,43 @@ public class MuffinsHelper {
             return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_REGEX));
         }
         return null;
+    }
+
+    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
+    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
+    public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
+
+    /**
+     * Formats raw HTML from a telegram into something the app can understand.
+     * @param c App context
+     * @param t TextView
+     * @param content Target content
+     */
+    public static void setTelegramHtmlFormatting(Context c, TextView t, String content)
+    {
+        String holder = content.trim();
+        holder = holder.replace("\n", "<br />");
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
+        holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
+        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+        holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
+
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_NATION_MODE + "\">%s</a>");
+
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
+
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + SparkleHelper.REPORT_TARGET + "%s\">");
+
+        holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
+
+        holder = SparkleHelper.regexGenericUrlFormat(c, holder);
+
+        SparkleHelper.setStyledTextView(c, t, holder);
     }
 }

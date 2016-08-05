@@ -605,7 +605,7 @@ public class ResolutionActivity extends AppCompatActivity {
         voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
 
         SparkleHelper.setBbCodeFormatting(this, content, mResolution.content, getSupportFragmentManager());
-        if (!SparkleHelper.setWaVotingBreakdown(this, votingBreakdown, mResolution.votesFor, mResolution.votesAgainst))
+        if (!SparkleHelper.getWaVotingChart(this, votingBreakdown, mResolution.votesFor, mResolution.votesAgainst))
         {
             votingBreakdown.setVisibility(View.GONE);
             nullVote.setVisibility(View.VISIBLE);

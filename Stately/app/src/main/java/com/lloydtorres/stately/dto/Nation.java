@@ -53,6 +53,10 @@ public class Nation implements Parcelable {
 
     public static final String QUERY_HTML = "https://www.nationstates.net/nation=%s/template-overall=none";
 
+    // String template used to get nation banners from NationStates
+    // @param: banner_id
+    public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
+
     @Element(name="BANNER")
     public String bannerKey;
     @Element(name="FLAG")
@@ -296,4 +300,14 @@ public class Nation implements Parcelable {
             return new Nation[size];
         }
     };
+
+    /**
+     * Return the URL of a nation banner.
+     * @param id The banner ID.
+     * @return The URL to the banner.
+     */
+    public static String getBannerURL(String id)
+    {
+        return String.format(BANNER_TEMPLATE, id);
+    }
 }

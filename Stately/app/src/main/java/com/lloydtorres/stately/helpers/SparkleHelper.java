@@ -46,7 +46,6 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -143,10 +142,6 @@ public class SparkleHelper {
     public static final String VAR_AUTOLOGIN = "var_autologin";
     public static final String VAR_REGION = "var_region";
     public static final String VAR_WA_MEMBER = "var_wa_member";
-
-    // String template used to get nation banners from NationStates
-    // @param: banner_id
-    public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
 
     // The number of hours a resolution is on the WA chamber floor
     public static final int WA_RESOLUTION_DURATION = 96;
@@ -276,16 +271,6 @@ public class SparkleHelper {
 
         // Join all the proper words back together with spaces.
         return joinStringList(properWords, " ");
-    }
-
-    /**
-     * Return the URL of a nation banner.
-     * @param id The banner ID.
-     * @return The URL to the banner.
-     */
-    public static String getBannerURL(String id)
-    {
-        return String.format(BANNER_TEMPLATE, id);
     }
 
     /**
@@ -548,6 +533,50 @@ public class SparkleHelper {
 
         p.setOnChartValueSelectedListener(new PieChartListener(c, p, chartLabels));
         return p;
+    }
+
+    /**
+     * Formats a pie chart displaying current voting breakdown for a WA resolution.
+     * @param c Context
+     * @param p Pie chart
+     * @param voteFor Number of votes for
+     * @param voteAgainst Number of votes against
+     */
+    public static boolean getWaVotingChart(Context c, PieChart p, float voteFor, float voteAgainst)
+    {
+        // Calculate percentages (floating point math FTW!)
+        float voteTotal = voteFor + voteAgainst;
+
+        if (voteTotal > 0)
+        {
+            float votePercentFor = (voteFor * 100f)/voteTotal;
+            float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
+
+            List<String> chartLabels = new ArrayList<String>();
+            List<Entry> chartEntries = new ArrayList<Entry>();
+
+            // Set data
+            int i = 0;
+            chartLabels.add(c.getString(R.string.wa_for));
+            chartEntries.add(new Entry(votePercentFor, i++));
+            chartLabels.add(c.getString(R.string.wa_against));
+            chartEntries.add(new Entry(votePercentAgainst, i++));
+
+            // Set colour and disable chart labels
+            PieDataSet dataSet = new PieDataSet(chartEntries, "");
+            dataSet.setDrawValues(false);
+            dataSet.setColors(waColours, c);
+            PieData dataFull = new PieData(chartLabels, dataSet);
+
+            // formatting
+            p = getFormattedPieChart(c, p, chartLabels);
+            p.setData(dataFull);
+            p.invalidate();
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -847,50 +876,6 @@ public class SparkleHelper {
     }
 
     /**
-     * Formats a pie chart displaying current voting breakdown for a WA resolution.
-     * @param c Context
-     * @param p Pie chart
-     * @param voteFor Number of votes for
-     * @param voteAgainst Number of votes against
-     */
-    public static boolean setWaVotingBreakdown(Context c, PieChart p, float voteFor, float voteAgainst)
-    {
-        // Calculate percentages (floating point math FTW!)
-        float voteTotal = voteFor + voteAgainst;
-
-        if (voteTotal > 0)
-        {
-            float votePercentFor = (voteFor * 100f)/voteTotal;
-            float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
-
-            List<String> chartLabels = new ArrayList<String>();
-            List<Entry> chartEntries = new ArrayList<Entry>();
-
-            // Set data
-            int i = 0;
-            chartLabels.add(c.getString(R.string.wa_for));
-            chartEntries.add(new Entry(votePercentFor, i++));
-            chartLabels.add(c.getString(R.string.wa_against));
-            chartEntries.add(new Entry(votePercentAgainst, i++));
-
-            // Set colour and disable chart labels
-            PieDataSet dataSet = new PieDataSet(chartEntries, "");
-            dataSet.setDrawValues(false);
-            dataSet.setColors(waColours, c);
-            PieData dataFull = new PieData(chartLabels, dataSet);
-
-            // formatting
-            p = getFormattedPieChart(c, p, chartLabels);
-            p.setData(dataFull);
-            p.invalidate();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Checks if the given string indicates that the given stat is for a WA member.
      * @param c App context
      * @param stat WA state indicator
@@ -1056,7 +1041,7 @@ public class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content)
     {
-        String holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + content;
+        String holder = "<base href=\"" + BASE_URI_NOSLASH + "\">" + content;
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
@@ -1087,55 +1072,6 @@ public class SparkleHelper {
         // In case there are no nations or regions to linkify, set and style TextView here too
         t.setText(SparkleHelper.fromHtml(holder));
         styleLinkifiedTextView(c, t);
-    }
-
-    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target)
-    {
-        if (nationData != null && target != null)
-        {
-            target = target.replace("@@NAME@@", nationData.name);
-            target = target.replace("@@REGION@@", nationData.region);
-            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
-            target = target.replace("@@POPULATION@@", getPrettifiedNumber(nationData.popBase));
-            target = target.replace("@@TYPE@@", nationData.prename);
-            target = target.replace("@@ANIMAL@@", nationData.animal);
-            target = target.replace("@@ucfirst(ANIMAL)@@", toNormalCase(nationData.animal));
-            target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
-            target = target.replace("@@ucfirst(PL(ANIMAL))@@", toNormalCase(English.plural(nationData.animal)));
-            target = target.replace("@@CURRENCY@@", nationData.currency);
-            target = target.replace("@@PL(CURRENCY)@@", getCurrencyPlural(nationData.currency));
-            target = target.replace("@@ucfirst(PL(CURRENCY))@@", toNormalCase(getCurrencyPlural(nationData.currency)));
-            target = target.replace("@@SLOGAN@@", nationData.motto);
-            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
-            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
-            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
-
-            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
-            if (nationData.capital != null)
-            {
-                valCapital = nationData.capital;
-            }
-            target = target.replace("@@CAPITAL@@", valCapital);
-            target = target.replace("@@$nation->query_capital()@@", valCapital);
-
-            String valLeader = c.getString(R.string.issue_leader_none);
-            if (nationData.leader != null)
-            {
-                valLeader = nationData.leader;
-            }
-            target = target.replace("@@LEADER@@", valLeader);
-            target = target.replace("@@$nation->query_leader()@@", valLeader);
-
-            String valReligion = c.getString(R.string.issue_religion_none);
-            if (nationData.religion != null)
-            {
-                valReligion = nationData.religion;
-            }
-            target = target.replace("@@FAITH@@", valReligion);
-            target = target.replace("@@$nation->query_faith()@@", valReligion);
-        }
-
-        t.setText(getHtmlFormatting(target).toString());
     }
 
     /**
@@ -1280,44 +1216,6 @@ public class SparkleHelper {
         }
 
         return spoilers;
-    }
-
-    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
-    public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
-
-    /**
-     * Formats raw HTML from a telegram into something the app can understand.
-     * @param c App context
-     * @param t TextView
-     * @param content Target content
-     */
-    public static void setTelegramHtmlFormatting(Context c, TextView t, String content)
-    {
-        String holder = content.trim();
-        holder = holder.replace("\n", "<br />");
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
-        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
-        holder = holder.replace("<a href=\"//" + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
-        holder = holder.replace("<a href=\"//www." + DOMAIN_URI + "/", "<a href=\"" + BASE_URI);
-        holder = holder.replace("<a href=\"/", "<a href=\"" + BASE_URI);
-
-        holder = regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "\">%s</a>");
-
-        holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
-        holder = regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "\">%s</a>");
-
-        holder = regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + REPORT_TARGET + "%s\">");
-
-        holder = regexReplace(holder, PARAGRAPH, "<br>%s");
-
-        holder = regexGenericUrlFormat(c, holder);
-
-        setStyledTextView(c, t, holder);
     }
 
     /**

@@ -36,6 +36,8 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.atteo.evo.inflector.English;
+
 import java.util.List;
 
 /**
@@ -149,6 +151,55 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
+    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target)
+    {
+        if (nationData != null && target != null)
+        {
+            target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@REGION@@", nationData.region);
+            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
+            target = target.replace("@@POPULATION@@", SparkleHelper.getPrettifiedNumber(nationData.popBase));
+            target = target.replace("@@TYPE@@", nationData.prename);
+            target = target.replace("@@ANIMAL@@", nationData.animal);
+            target = target.replace("@@ucfirst(ANIMAL)@@", SparkleHelper.toNormalCase(nationData.animal));
+            target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
+            target = target.replace("@@ucfirst(PL(ANIMAL))@@", SparkleHelper.toNormalCase(English.plural(nationData.animal)));
+            target = target.replace("@@CURRENCY@@", nationData.currency);
+            target = target.replace("@@PL(CURRENCY)@@", SparkleHelper.getCurrencyPlural(nationData.currency));
+            target = target.replace("@@ucfirst(PL(CURRENCY))@@", SparkleHelper.toNormalCase(SparkleHelper.getCurrencyPlural(nationData.currency)));
+            target = target.replace("@@SLOGAN@@", nationData.motto);
+            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
+            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
+            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
+
+            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
+            if (nationData.capital != null)
+            {
+                valCapital = nationData.capital;
+            }
+            target = target.replace("@@CAPITAL@@", valCapital);
+            target = target.replace("@@$nation->query_capital()@@", valCapital);
+
+            String valLeader = c.getString(R.string.issue_leader_none);
+            if (nationData.leader != null)
+            {
+                valLeader = nationData.leader;
+            }
+            target = target.replace("@@LEADER@@", valLeader);
+            target = target.replace("@@$nation->query_leader()@@", valLeader);
+
+            String valReligion = c.getString(R.string.issue_religion_none);
+            if (nationData.religion != null)
+            {
+                valReligion = nationData.religion;
+            }
+            target = target.replace("@@FAITH@@", valReligion);
+            target = target.replace("@@$nation->query_faith()@@", valReligion);
+        }
+
+        t.setText(SparkleHelper.getHtmlFormatting(target).toString());
+    }
+
     public class NewsCard extends RecyclerView.ViewHolder {
         private Context context;
         private TextView title;
@@ -164,7 +215,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(String n)
         {
             title.setText(context.getString(R.string.issue_breaking));
-            SparkleHelper.setIssueResultsFormatting(context, content, mNation, n);
+            setIssueResultsFormatting(context, content, mNation, n);
         }
     }
 
@@ -202,7 +253,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(IssueResultHeadline headline)
         {
             headline.headline = headline.headline.trim();
-            SparkleHelper.setIssueResultsFormatting(context, title, mNation, headline.headline);
+            setIssueResultsFormatting(context, title, mNation, headline.headline);
             DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
         }
     }
@@ -224,7 +275,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(IssuePostcard card)
         {
             nationName.setText(mNation.name);
-            SparkleHelper.setIssueResultsFormatting(context, postContent, mNation, card.title.trim());
+            setIssueResultsFormatting(context, postContent, mNation, card.title.trim());
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }

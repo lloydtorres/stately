@@ -233,7 +233,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         nationNameView.setText(mNation.name);
 
         DashHelper dashie = DashHelper.getInstance(this);
-        dashie.loadImage(SparkleHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
+        dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
         dashie.loadImage(mNation.flagURL, nationFlag, true);
     }
 
