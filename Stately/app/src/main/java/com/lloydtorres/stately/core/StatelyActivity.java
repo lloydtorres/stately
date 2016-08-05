@@ -41,7 +41,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -50,6 +49,7 @@ import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.ActivityFeedFragment;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.GenericFragment;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.login.LoginActivity;
@@ -67,10 +67,8 @@ import org.simpleframework.xml.core.Persister;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * The core Stately activity. This is where the magic happens.
@@ -579,7 +577,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Starts the process to get unread counts from the NS site.
      */
     private void queryUnreadCounts() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, QUERY_UNREAD,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, QUERY_UNREAD,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -591,16 +589,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
@@ -666,7 +655,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         final View fView = findViewById(R.id.drawer_layout);
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(name));
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     Nation nationResponse = null;
                     @Override

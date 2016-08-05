@@ -34,13 +34,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.jsoup.Jsoup;
@@ -49,9 +48,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -155,7 +152,7 @@ public class IssuesFragment extends Fragment {
     {
         String targetURL = Issue.QUERY;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -183,19 +180,7 @@ public class IssuesFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded())
-                {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    params.put("Cookie", String.format("autologin=%s", u.autologin));
-                }
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

@@ -38,13 +38,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -56,10 +55,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -199,7 +196,7 @@ public class TelegramsFragment extends Fragment {
 
         String targetURL = String.format(Locale.US, Telegram.GET_TELEGRAM, activeFolder.value, offset);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -231,19 +228,7 @@ public class TelegramsFragment extends Fragment {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded())
-                {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    params.put("Cookie", String.format("autologin=%s", u.autologin));
-                }
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

@@ -36,20 +36,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.report.ReportActivity;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 
 /**
@@ -161,7 +158,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         }
 
         String targetURL = String.format(Locale.US, Telegram.MARK_READ, telegram.id, chkValue);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -170,16 +167,7 @@ public class TelegramReadActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         DashHelper.getInstance(this).addRequest(stringRequest);
     }
@@ -275,7 +263,7 @@ public class TelegramReadActivity extends AppCompatActivity {
             finalTarget = "";
         }
         String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, telegramId, finalTarget, chkValue);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -295,16 +283,7 @@ public class TelegramReadActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -343,7 +322,7 @@ public class TelegramReadActivity extends AppCompatActivity {
         }
         final int telegramId = telegram.id;
         String targetURL = String.format(Locale.US, templateURL, telegramId, chkValue);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -363,16 +342,7 @@ public class TelegramReadActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(TelegramReadActivity.this);
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

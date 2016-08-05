@@ -36,7 +36,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -48,18 +47,16 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusHistoryPoint;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.r0adkll.slidr.Slidr;
 
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-04-10.
@@ -226,7 +223,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         long sixtyDaysAgo = curTime - CensusHistory.SIXTY_DAYS_IN_SECONDS;
 
         String targetURL = String.format(Locale.US, CensusHistory.QUERY, queryMode, SparkleHelper.getIdFromName(target), id, sixtyDaysAgo, curTime);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     CensusHistory censusResponse = null;
                     @Override
@@ -269,15 +266,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

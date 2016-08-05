@@ -36,11 +36,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.r0adkll.slidr.Slidr;
@@ -225,7 +224,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         }
         isInProgress = true;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Telegram.SEND_TELEGRAM,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -256,16 +255,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -277,7 +267,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
 
     private void sendTelegram(final List<String> recipients, final String chk)
     {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Telegram.SEND_TELEGRAM,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -307,44 +297,27 @@ public class TelegramComposeActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("chk", chk);
-                params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
-                if (replyId == NO_REPLY_ID)
-                {
-                    params.put("recruitregion", "region");
-                    params.put("recruitregionrealname", SparkleHelper.getRegionSessionData(getApplicationContext()));
-                    params.put("send", "1");
-                }
-                else
-                {
-                    params.put("in_reply_to", String.valueOf(replyId));
-                    if (recipients.size() > 1)
-                    {
-                        params.put("send_to_all", "1");
-                    }
-                    else
-                    {
-                        params.put("send", "1");
-                    }
-                }
-                params.put("message", content.getText().toString());
-                return params;
-            }
+        });
 
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("chk", chk);
+        params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
+        if (replyId == NO_REPLY_ID) {
+            params.put("recruitregion", "region");
+            params.put("recruitregionrealname", SparkleHelper.getRegionSessionData(getApplicationContext()));
+            params.put("send", "1");
+        }
+        else {
+            params.put("in_reply_to", String.valueOf(replyId));
+            if (recipients.size() > 1) {
+                params.put("send_to_all", "1");
             }
-        };
+            else {
+                params.put("send", "1");
+            }
+        }
+        params.put("message", content.getText().toString());
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

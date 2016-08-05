@@ -38,10 +38,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.r0adkll.slidr.Slidr;
@@ -260,7 +259,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, REPORT_URL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, REPORT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -282,26 +281,13 @@ public class ReportActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("problem", Integer.toString(problemHeader));
-                params.put("comment", commentHeader);
-                params.put("submit", "1");
-                return params;
-            }
+        });
 
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("problem", Integer.toString(problemHeader));
+        params.put("comment", commentHeader);
+        params.put("submit", "1");
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

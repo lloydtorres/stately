@@ -36,13 +36,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.r0adkll.slidr.Slidr;
@@ -153,7 +152,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
     {
         String targetURL = String.format(Locale.US, IssueOption.QUERY, issue.id);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -173,16 +172,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -356,7 +346,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
         isInProgress = true;
         String targetURL = String.format(Locale.US, IssueOption.POST_QUERY, issue.id);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -396,24 +386,11 @@ public class IssueDecisionActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put(option.header, "1");
-                return params;
-            }
+        });
 
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
+        Map<String,String> params = new HashMap<String, String>();
+        params.put(option.header, "1");
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

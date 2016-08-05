@@ -40,7 +40,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.core.StatelyActivity;
@@ -48,6 +47,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
@@ -273,7 +273,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         name = SparkleHelper.getIdFromName(name);
         String targetURL = String.format(Nation.QUERY, name);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     Nation nationResponse = null;
                     @Override
@@ -331,15 +331,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     setExploreStatus(getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -355,7 +347,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
     {
         String targetURL = String.format(Region.QUERY, name);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     Region regionResponse = null;
                     @Override
@@ -395,15 +387,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     setExploreStatus(getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -447,7 +431,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         }
         isInProgress = true;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -485,16 +469,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -510,7 +485,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
      */
     private void postEndorsement(final String localid)
     {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ENDORSE_URL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, ENDORSE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -547,35 +522,18 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     }
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("nation", SparkleHelper.getIdFromName(id));
-                params.put("localid", localid);
+        });
 
-                if (isEndorsed)
-                {
-                    params.put("action", UNENDORSE_REQUEST);
-                }
-                else
-                {
-                    params.put("action", ENDORSE_REQUEST);
-                }
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("nation", SparkleHelper.getIdFromName(id));
+        params.put("localid", localid);
+        if (isEndorsed) {
+            params.put("action", UNENDORSE_REQUEST);
+        }
+        else {
+            params.put("action", ENDORSE_REQUEST);
+        }
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -645,7 +603,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
      */
     private void postRegionMove(final String localid, final String password)
     {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Region.CHANGE_QUERY,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, Region.CHANGE_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -682,32 +640,16 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("move_region", "1");
-                params.put("region_name", SparkleHelper.getIdFromName(id));
-                params.put("localid", localid);
+        });
 
-                if (password != null)
-                {
-                    params.put("password", password);
-                }
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                UserLogin u = SparkleHelper.getActiveUser(getBaseContext());
-                params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                params.put("Cookie", String.format("autologin=%s", u.autologin));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("move_region", "1");
+        params.put("region_name", SparkleHelper.getIdFromName(id));
+        params.put("localid", localid);
+        if (password != null) {
+            params.put("password", password);
+        }
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

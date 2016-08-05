@@ -34,20 +34,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.core.Persister;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -159,7 +156,7 @@ public class AssemblyMainFragment extends Fragment {
     {
         String targetURL = String.format(Locale.US, Assembly.QUERY, chamberId);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     Assembly waResponse = null;
                     @Override
@@ -210,17 +207,7 @@ public class AssemblyMainFragment extends Fragment {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded()) {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                }
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {

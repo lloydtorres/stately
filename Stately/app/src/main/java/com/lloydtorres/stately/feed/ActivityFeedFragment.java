@@ -42,7 +42,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.Event;
@@ -50,6 +49,7 @@ import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -61,11 +61,9 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -214,7 +212,7 @@ public class ActivityFeedFragment extends Fragment {
      */
     private void queryDossier()
     {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, DOSSIER_QUERY,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, DOSSIER_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -303,19 +301,7 @@ public class ActivityFeedFragment extends Fragment {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                if (getActivity() != null && isAdded())
-                {
-                    UserLogin u = SparkleHelper.getActiveUser(getContext());
-                    params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    params.put("Cookie", String.format("autologin=%s", u.autologin));
-                }
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
         {
@@ -361,7 +347,7 @@ public class ActivityFeedFragment extends Fragment {
         if (nationQuery.size() >= 0) {
             String target = String.format(Locale.US, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
                         @Override
@@ -406,18 +392,7 @@ public class ActivityFeedFragment extends Fragment {
                         queryRegionalHappenings();
                     }
                 }
-            }){
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String,String> params = new HashMap<String, String>();
-                    if (getActivity() != null && isAdded())
-                    {
-                        UserLogin u = SparkleHelper.getActiveUser(getContext());
-                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    }
-                    return params;
-                }
-            };
+            });
 
             if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
             {
@@ -454,7 +429,7 @@ public class ActivityFeedFragment extends Fragment {
         if (regionQuery.size() >= 0) {
             String target = String.format(Locale.US, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, target,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
                         @Override
@@ -499,18 +474,7 @@ public class ActivityFeedFragment extends Fragment {
                         queryRegionalHappenings();
                     }
                 }
-            }){
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String,String> params = new HashMap<String, String>();
-                    if (getActivity() != null && isAdded())
-                    {
-                        UserLogin u = SparkleHelper.getActiveUser(getContext());
-                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    }
-                    return params;
-                }
-            };
+            });
 
             if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
             {
@@ -530,7 +494,7 @@ public class ActivityFeedFragment extends Fragment {
     private void queryAssemblyHappenings() {
         if (storage.getBoolean(SubscriptionsDialog.WORLD_ASSEMBLY, true))
         {
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, HappeningFeed.QUERY_WA,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, HappeningFeed.QUERY_WA,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
                         @Override
@@ -568,18 +532,7 @@ public class ActivityFeedFragment extends Fragment {
                     }
                     finishHappeningQuery();
                 }
-            }){
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String,String> params = new HashMap<String, String>();
-                    if (getActivity() != null && isAdded())
-                    {
-                        UserLogin u = SparkleHelper.getActiveUser(getContext());
-                        params.put("User-Agent", String.format(getString(R.string.app_header), u.nationId));
-                    }
-                    return params;
-                }
-            };
+            });
 
             if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
             {
