@@ -31,20 +31,23 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
     public String nationId;
     public String name;
     public String autologin;
+    public String pin;
 
     public UserLogin() { super(); }
 
-    public UserLogin(String i, String n, String a)
+    public UserLogin(String i, String n, String a, String p)
     {
         nationId = i;
         name = n;
         autologin = a;
+        pin = p;
     }
 
     protected UserLogin(Parcel in) {
         nationId = in.readString();
         name = in.readString();
         autologin = in.readString();
+        pin = in.readString();
     }
 
     @Override
@@ -57,6 +60,7 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
         dest.writeString(nationId);
         dest.writeString(name);
         dest.writeString(autologin);
+        dest.writeString(pin);
     }
 
     @SuppressWarnings("unused")

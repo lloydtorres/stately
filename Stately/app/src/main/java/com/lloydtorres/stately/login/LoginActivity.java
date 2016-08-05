@@ -32,12 +32,12 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private boolean isLoggingIn;
     private String autologin;
+    private String pin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         final View view = findViewById(R.id.activity_login_main);
         String targetURL = LOGIN_TARGET;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -177,15 +178,8 @@ public class LoginActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("User-Agent", getString(R.string.app_header_nouser));
-                params.put("Cookie", String.format("autologin=%s", autologin));
-                return params;
-            }
-        };
+        });
+        stringRequest.disablePin(true);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -229,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String targetURL = LOGIN_TARGET;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -256,27 +250,15 @@ public class LoginActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("logging_in", "1");
-                params.put("nation", SparkleHelper.getIdFromName(name));
-                params.put("password", pass);
-                params.put("submit", "Login");
-                params.put("autologin", "yes");
+        });
 
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("User-Agent", getString(R.string.app_header_nouser));
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("logging_in", "1");
+        params.put("nation", SparkleHelper.getIdFromName(name));
+        params.put("password", pass);
+        params.put("submit", "Login");
+        params.put("autologin", "yes");
+        stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
@@ -304,6 +286,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (c.getName().equals("pin"))
             {
+                pin = c.getValue();
                 pinFlag =  true;
             }
         }
@@ -320,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(nationName));
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     Nation nationResponse = null;
                     @Override
@@ -329,7 +312,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             nationResponse = Nation.parseNationFromXML(getApplicationContext(), serializer, response);
 
-                            SparkleHelper.setActiveUser(getApplicationContext(), nationName, autologin);
+                            SparkleHelper.setActiveUser(getApplicationContext(), nationName, autologin, pin);
                             SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
@@ -360,14 +343,7 @@ public class LoginActivity extends AppCompatActivity {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("User-Agent", getString(R.string.app_header_nouser));
-                return params;
-            }
-        };
+        });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {

@@ -140,6 +140,7 @@ public class SparkleHelper {
     // Keys to user name and autologin and other session variables
     public static final String VAR_NAME = "var_name";
     public static final String VAR_AUTOLOGIN = "var_autologin";
+    public static final String VAR_PIN = "var_pin";
     public static final String VAR_REGION = "var_region";
     public static final String VAR_WA_MEMBER = "var_wa_member";
 
@@ -626,11 +627,12 @@ public class SparkleHelper {
      * @param c App context
      * @param name User name
      * @param autologin User autologin cookie
+     * @param pin  User pin cookie
      */
-    public static void setActiveUser(Context c, String name, String autologin)
+    public static void setActiveUser(Context c, String name, String autologin, String pin)
     {
         // Save user into database
-        UserLogin u = new UserLogin(getIdFromName(name), name, autologin);
+        UserLogin u = new UserLogin(getIdFromName(name), name, autologin, pin);
         u.save();
 
         // Save user into shared preferences
@@ -638,6 +640,7 @@ public class SparkleHelper {
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(VAR_NAME, name);
         editor.putString(VAR_AUTOLOGIN, autologin);
+        editor.putString(VAR_PIN, pin);
         editor.commit();
     }
 
@@ -692,9 +695,10 @@ public class SparkleHelper {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         String name = storage.getString(VAR_NAME, null);
         String autologin = storage.getString(VAR_AUTOLOGIN, null);
+        String pin = storage.getString(VAR_PIN, null);
         if (name != null && autologin != null)
         {
-            UserLogin u = new UserLogin(getIdFromName(name), name, autologin);
+            UserLogin u = new UserLogin(getIdFromName(name), name, autologin, pin);
             return u;
         }
 
@@ -733,6 +737,7 @@ public class SparkleHelper {
         SharedPreferences.Editor editor = storage.edit();
         editor.remove(VAR_NAME);
         editor.remove(VAR_AUTOLOGIN);
+        editor.remove(VAR_PIN);
         editor.commit();
     }
 
