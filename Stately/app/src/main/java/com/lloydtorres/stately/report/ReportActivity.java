@@ -42,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.r0adkll.slidr.Slidr;
 
@@ -149,6 +150,7 @@ public class ReportActivity extends AppCompatActivity {
         reportCategoryHolder = (CardView) findViewById(R.id.report_category_holder);
         reportCategorySelect = (RadioGroup) findViewById(R.id.report_category);
         reportContent = (EditText) findViewById(R.id.report_content);
+        reportContent.setCustomSelectionActionModeCallback(new NullActionCallback());
 
         targetHolder.setVisibility(View.VISIBLE);
         reportCategoryHolder.setVisibility(View.VISIBLE);
