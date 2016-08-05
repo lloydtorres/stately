@@ -280,26 +280,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            nationResponse = serializer.read(Nation.class, response);
-
-                            // Switch flag URL to https
-                            nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
-
-                            // Map out government priorities
-                            if (nationResponse.govtPriority != null) {
-                                switch (nationResponse.govtPriority)
-                                {
-                                    case "Defence":
-                                        nationResponse.govtPriority = getString(R.string.defense);
-                                        break;
-                                    case "Commerce":
-                                        nationResponse.govtPriority = getString(R.string.industry);
-                                        break;
-                                    case "Social Equality":
-                                        nationResponse.govtPriority = getString(R.string.social_policy);
-                                        break;
-                                }
-                            }
+                            nationResponse = Nation.parseNationFromXML(getApplicationContext(), serializer, response);
 
                             setName(nationResponse.name);
 
@@ -381,15 +362,9 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = serializer.read(Region.class, response);
+                            regionResponse = Region.parseRegionXML(getApplicationContext(), serializer, response);
 
                             setName(regionResponse.name);
-
-                            // Switch flag URL to https
-                            if (regionResponse.flagURL != null)
-                            {
-                                regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
-                            }
 
                             // determine moveable state
                             String curRegion = SparkleHelper.getRegionSessionData(getApplicationContext());

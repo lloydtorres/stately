@@ -298,13 +298,7 @@ public class RegionFragment extends Fragment {
 
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = serializer.read(Region.class, response);
-
-                            // Switch flag URL to https
-                            if (regionResponse.flagURL != null)
-                            {
-                                regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
-                            }
+                            regionResponse = Region.parseRegionXML(getContext(), serializer, response);
 
                             mRegion = regionResponse;
                             getAllRegionViews(view);

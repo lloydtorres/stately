@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,6 +25,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,4 +216,16 @@ public class Region implements Parcelable {
             return new Region[size];
         }
     };
+
+    public static Region parseRegionXML(Context c, Persister serializer, String response) throws Exception {
+        Region regionResponse = serializer.read(Region.class, response);
+
+        // Switch flag URL to https
+        if (regionResponse.flagURL != null)
+        {
+            regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
+        }
+
+        return regionResponse;
+    }
 }

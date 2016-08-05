@@ -16,14 +16,17 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -309,5 +312,38 @@ public class Nation implements Parcelable {
     public static String getBannerURL(String id)
     {
         return String.format(BANNER_TEMPLATE, id);
+    }
+
+    /**
+     * Factory for deserializing a Nation XML.
+     * @param c App context
+     * @param serializer SimpleXML deserializer
+     * @param response XML response
+     * @return Nation object
+     * @throws Exception
+     */
+    public static Nation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
+        Nation nationResponse = serializer.read(Nation.class, response);
+
+        // Switch flag URL to https
+        nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
+
+        // Map out government priorities
+        if (nationResponse.govtPriority != null) {
+            switch (nationResponse.govtPriority)
+            {
+                case "Defence":
+                    nationResponse.govtPriority = c.getString(R.string.defense);
+                    break;
+                case "Commerce":
+                    nationResponse.govtPriority = c.getString(R.string.industry);
+                    break;
+                case "Social Equality":
+                    nationResponse.govtPriority = c.getString(R.string.social_policy);
+                    break;
+            }
+        }
+
+        return nationResponse;
     }
 }
