@@ -80,8 +80,10 @@ public class NSStringRequest extends StringRequest {
             // Case 2: If both autologin and pin cookies are available and pin cookie is good
             else if (u.autologin != null && u.pin != null && !PIN_INVALID.equals(u.pin)) {
                 params.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", autoHeader, u.pin));
+                params.put("Pin", u.pin);
             }
             // Case 3: Both are missing, don't do anything
+            // ...
         }
         else {
             params.put("User-Agent", context.getString(R.string.app_header_nouser));

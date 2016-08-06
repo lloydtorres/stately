@@ -43,6 +43,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.UnreadData;
+import com.lloydtorres.stately.dto.UserData;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
@@ -60,12 +62,8 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -74,9 +72,6 @@ import java.util.Locale;
  * The core Stately activity. This is where the magic happens.
  */
 public class StatelyActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IToolbarActivity {
-
-    // Target URL for query to get unread counts
-    public static final String QUERY_UNREAD = "https://dark.nationstates.net/page=blank";
 
     // Keys used for intents
     public static final String NATION_DATA = "mNationData";
@@ -574,74 +569,65 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     }
 
     /**
-     * Starts the process to get unread counts from the NS site.
+     * Starts the process to get unread counts from the NS API.
      */
     private void queryUnreadCounts() {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, QUERY_UNREAD,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processUnreadCounts(d);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-            }
-        });
+        if (mNation != null) {
+            String target = String.format(Locale.US, UserData.UNREAD_QUERY, SparkleHelper.getIdFromName(mNation.name));
+            NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, target,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Persister serializer = new Persister();
+                            try {
+                                UserData userData = serializer.read(UserData.class, response);
+                                processUnreadCounts(userData.unread);
+                            }
+                            catch (Exception e) {
+                                SparkleHelper.logError(e.toString());
+                                // Do nothing for dat ~seamless experience~
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    SparkleHelper.logError(error.toString());
+                }
+            });
 
-        DashHelper.getInstance(this).addRequest(stringRequest);
+            DashHelper.getInstance(this).addRequest(stringRequest);
+        }
     }
 
     /**
      * Given the parsed HTML document, grabs the elements containing the unread counts.
-     * @param d Parsed document from NS.
+     * @param d Unread object from NS API.
      */
-    private void processUnreadCounts(Document d) {
-        // Set the issue unread count
-        Element issueCountContainer = d.select("div#notificationnumber-issues").first();
-        setUnreadCount(issueCountView, issueCountContainer);
-
-        Element telegramCountContainer = d.select("div#notificationnumber-telegrams").first();
-        setUnreadCount(telegramCountView, telegramCountContainer);
-
-        Element rmbCountContainer = d.select("div.rmbnewnumber").first();
-        setUnreadCount(rmbCountView, rmbCountContainer);
-
-        Element waLink = d.select("a[href*=page=un]").first();
-        if (waLink != null) {
-            Element waCountContainer = waLink.select("div.notificationnumber").first();
-            setUnreadCount(waCountView, waCountContainer);
-        }
+    private void processUnreadCounts(UnreadData d) {
+        setUnreadCount(issueCountView, d.issues);
+        setUnreadCount(telegramCountView, d.telegrams);
+        setUnreadCount(rmbCountView, d.rmb);
+        setUnreadCount(waCountView, d.wa);
     }
 
     /**
      * Helper function to sanitize string counts and put and style them in the navigation drawer.
      * @param targetView The TextView where the count will end up in.
-     * @param rawContainer The HTML element containing text for the unread count.
+     * @param count The number of unreads for the given category.
      */
-    private void setUnreadCount(TextView targetView, Element rawContainer) {
-        if (rawContainer != null && targetView != null) {
-            try {
-                int count = NumberFormat.getNumberInstance(Locale.US).parse(rawContainer.text()).intValue();
-
-                if (count > 100) {
-                    targetView.setText(getString(R.string.menu_unread_count_over100));
-                }
-                else {
-                    targetView.setText(String.valueOf(count));
-                }
-                targetView.setVisibility(View.VISIBLE);
+    private void setUnreadCount(TextView targetView, int count) {
+        if (targetView != null) {
+            targetView.setVisibility(View.VISIBLE);
+            if (count > 100) {
+                targetView.setText(getString(R.string.menu_unread_count_over100));
             }
-            catch (Exception e) {
+            else if (count > 0) {
+                targetView.setText(String.valueOf(count));
+            }
+            else {
                 targetView.setText("");
                 targetView.setVisibility(View.GONE);
             }
-        }
-        else {
-            targetView.setText("");
-            targetView.setVisibility(View.GONE);
         }
     }
 

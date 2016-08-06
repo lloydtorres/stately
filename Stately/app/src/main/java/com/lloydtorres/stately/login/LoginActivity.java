@@ -345,6 +345,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        stringRequest.disablePin(true);
+        stringRequest.setAutologinOverride(null);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
