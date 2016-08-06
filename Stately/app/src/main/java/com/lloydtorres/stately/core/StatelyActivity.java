@@ -85,9 +85,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public static final int NATION_FRAGMENT = 0;
     public static final int ISSUES_FRAGMENT = 1;
     public static final int TELEGRAMS_FRAGMENT = 2;
-    public static final int ACTIVITY_FEED_FRAGMENT = 3;
-    public static final int REGION_FRAGMENT = 4;
-    public static final int WA_FRAGMENT = 5;
+    public static final int REGION_FRAGMENT = 3;
+    public static final int WA_FRAGMENT = 4;
+    public static final int ACTIVITY_FEED_FRAGMENT = 5;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
@@ -622,7 +622,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * @param rawContainer The HTML element containing text for the unread count.
      */
     private void setUnreadCount(TextView targetView, Element rawContainer) {
-        if (rawContainer != null) {
+        if (rawContainer != null && targetView != null) {
             try {
                 int count = NumberFormat.getNumberInstance(Locale.US).parse(rawContainer.text()).intValue();
 
