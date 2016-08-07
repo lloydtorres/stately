@@ -22,10 +22,26 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <WebView
-        android:id="@+id/register_webview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:orientation="vertical"
+        android:background="#EEE"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <ProgressBar
+            android:id="@+id/register_progress_bar"
+            style="@style/MaterialProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_marginTop="-8dp"
+            android:layout_marginBottom="-4dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+        <WebView
+            android:id="@+id/register_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

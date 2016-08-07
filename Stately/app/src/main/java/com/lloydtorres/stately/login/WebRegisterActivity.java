@@ -21,8 +21,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.lloydtorres.stately.R;
 
@@ -38,6 +40,7 @@ public class WebRegisterActivity extends AppCompatActivity {
     public static final String FINISHED_URL_PART = "https://m.nationstates.net/nation=";
 
     private WebView mWebView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,9 @@ public class WebRegisterActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.register_toolbar);
         setToolbar(toolbar);
+
+        progressBar = (ProgressBar) findViewById(R.id.register_progress_bar);
+
 
         // Initialize WebView
         mWebView = (WebView) findViewById(R.id.register_webview);
@@ -57,10 +63,16 @@ public class WebRegisterActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (url != null && url.contains(FINISHED_URL_PART)) {
                     setResult(RESULT_OK);
                     finish();
                 }
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
             }
         });
 
