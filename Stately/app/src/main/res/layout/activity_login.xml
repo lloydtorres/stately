@@ -25,7 +25,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="30dp"/>
+        android:layout_height="24dp"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
@@ -44,13 +44,12 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextLoginField">
         <EditText
             android:id="@+id/field_password"
-            android:layout_marginTop="3dp"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -63,7 +62,7 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
@@ -76,7 +75,6 @@
 
     <Button
         android:id="@+id/register_button"
-        android:layout_marginTop="4dp"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
