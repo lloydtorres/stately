@@ -16,10 +16,13 @@
 
 package com.lloydtorres.stately.login;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private Button login;
+    private Button createNation;
     private boolean isLoggingIn;
     private String autologin;
     private String pin;
@@ -91,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.field_password);
         password.setCustomSelectionActionModeCallback(new NullActionCallback());
         login = (Button) findViewById(R.id.login_button);
+        createNation = (Button) findViewById(R.id.register_button);
 
         // Set cookie handler
         cookies = new CookieManager();
@@ -355,6 +360,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * Callback for the 'Create New Nation' button.
+     * Opens a dialog to confirm the start of nation creation.
+     * @param v
+     */
+    public void startCreateNation(View v) {
+        DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent createNationIntent = new Intent(LoginActivity.this, WebRegisterActivity.class);
+                startActivityForResult(createNationIntent, WebRegisterActivity.REGISTER_RESULT);
+            }
+        };
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        dialogBuilder.setTitle(R.string.create_nation)
+                .setMessage(R.string.create_nation_redirect)
+                .setPositiveButton(R.string.create_continue, dialogListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+            dialogBuilder.setTitle(R.string.create_nation)
+                    .setMessage(R.string.create_finish)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
+        }
+    }
+
+    /**
      * Get the login state (i.e. if the login process is currently being done).
      * @return The login state (true or not).
      */
@@ -374,12 +412,14 @@ public class LoginActivity extends AppCompatActivity {
             username.setVisibility(View.GONE);
             password.setVisibility(View.GONE);
             login.setText(getString(R.string.log_in_load));
+            createNation.setVisibility(View.GONE);
         }
         else
         {
             username.setVisibility(View.VISIBLE);
             password.setVisibility(View.VISIBLE);
             login.setText(getString(R.string.log_in));
+            createNation.setVisibility(View.VISIBLE);
         }
         isLoggingIn = stat;
     }

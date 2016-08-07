@@ -74,4 +74,17 @@
         android:textSize="17sp"
         android:onClick="verifyUsername"/>
 
+    <Button
+        android:id="@+id/register_button"
+        android:layout_marginTop="4dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:background="@android:color/transparent"
+        android:textColor="@android:color/white"
+        android:text="@string/create_nation"
+        android:layout_gravity="center_horizontal"
+        android:textSize="17sp"
+        android:onClick="startCreateNation"/>
+
 </LinearLayout>

@@ -33,6 +33,8 @@ import com.lloydtorres.stately.R;
 public class WebRegisterActivity extends AppCompatActivity {
 
     public static final String REGISTER_URL = "https://m.nationstates.net/page=create_nation";
+    public static final int REGISTER_RESULT = 54321;
+
     public static final String FINISHED_URL_PART = "m.nationstates3.net/nation=";
 
     private WebView mWebView;
@@ -56,6 +58,7 @@ public class WebRegisterActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 if (url != null && url.contains(FINISHED_URL_PART)) {
+                    setResult(RESULT_OK);
                     finish();
                 }
             }
@@ -79,6 +82,7 @@ public class WebRegisterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
+                setResult(RESULT_CANCELED);
                 finish();
                 return true;
         }
