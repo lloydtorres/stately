@@ -71,7 +71,7 @@
     <string name="explore_move_wrong_password">Incorrect password.</string>
 
     <!-- Switch nation -->
-    <string name="switch_single_warn">No other nations are saved in Stately. Log in to a different nation?</string>
+    <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
     <string name="add_nation">Add Nation</string>
 
     <!-- Logout confirm -->
