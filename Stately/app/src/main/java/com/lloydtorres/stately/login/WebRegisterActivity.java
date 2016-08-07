@@ -35,7 +35,7 @@ public class WebRegisterActivity extends AppCompatActivity {
     public static final String REGISTER_URL = "https://m.nationstates.net/page=create_nation";
     public static final int REGISTER_RESULT = 54321;
 
-    public static final String FINISHED_URL_PART = "m.nationstates3.net/nation=";
+    public static final String FINISHED_URL_PART = "https://m.nationstates.net/nation=";
 
     private WebView mWebView;
 
