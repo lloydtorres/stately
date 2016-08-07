@@ -9,6 +9,7 @@
     <string name="username_hint">Nation Name</string>
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
+    <string name="create_nation">Create New Nation</string>
     <string name="log_in_load">Logging In…</string>
 
     <string name="login_error_autologin">Try logging in again.</string>

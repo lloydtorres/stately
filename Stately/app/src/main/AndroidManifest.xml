@@ -17,6 +17,7 @@
         <meta-data android:name="VERSION" android:value="2" />
         <meta-data android:name="QUERY_LOG" android:value="false" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.lloydtorres.stately.dto" />
+        <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/app_name"
@@ -26,6 +27,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.WebRegisterActivity"
+            android:label="@string/create_nation"
+            android:theme="@style/AppTheme.WithStatusBar">
         </activity>
         <activity
             android:name=".core.StatelyActivity"
