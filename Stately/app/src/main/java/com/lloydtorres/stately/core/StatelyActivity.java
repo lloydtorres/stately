@@ -98,7 +98,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private boolean isLoaded = false;
     private int navInit = NATION_FRAGMENT;
 
-    private Nation mNation;
+    private UserNation mNation;
     private ImageView nationBanner;
     private ImageView nationFlag;
     private TextView nationNameView;
@@ -145,6 +145,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         else
         {
             initNavigationView(navInit);
+            if (mNation.unread != null) {
+                processUnreadCounts(mNation.unread);
+            }
         }
     }
 
@@ -269,9 +272,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         {
             isLoaded = true;
         }
-
-        // Get the unread counts from the NS site.
-        queryUnreadCounts();
     }
 
     @Override
@@ -660,6 +660,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             else
                             {
                                 initNavBanner();
+                                if (mNation.unread != null) {
+                                    processUnreadCounts(mNation.unread);
+                                }
                             }
                         }
                         catch (Exception e) {
