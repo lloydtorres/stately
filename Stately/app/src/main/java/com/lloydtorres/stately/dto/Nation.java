@@ -38,21 +38,23 @@ import java.util.List;
 @Root(name="NATION", strict=false)
 public class Nation implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
-                                        + "banner+flag+name+type+wa"
-                                        + "+category+region+influence+population+founded+lastactivity+motto"
-                                        + "+freedom"
-                                        + "+customleader+customcapital+govtpriority+tax"
-                                        + "+currency+gdp+income+majorindustry"
-                                        + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
-                                        + "+census+wcensus"
-                                        + "+gavote+scvote+endorsements"
-                                        + "+notable+sensibilities+crime+deaths"
-                                        + "+govtdesc+govt"
-                                        + "+industrydesc+poorest+richest+sectors"
-                                        + "+happenings"
-                                        + ";scale=all;mode=score+rank+rrank+prank+prrank"
-                                        + "&v=" + SparkleHelper.API_VERSION;
+    public static final String BASE_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
+                                                + "banner+flag+name+type+wa"
+                                                + "+category+region+influence+population+founded+lastactivity+motto"
+                                                + "+freedom"
+                                                + "+customleader+customcapital+govtpriority+tax"
+                                                + "+currency+gdp+income+majorindustry"
+                                                + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
+                                                + "+census+wcensus"
+                                                + "+gavote+scvote+endorsements"
+                                                + "+notable+sensibilities+crime+deaths"
+                                                + "+govtdesc+govt"
+                                                + "+industrydesc+poorest+richest+sectors"
+                                                + "+happenings";
+
+    public static final String CENSUS_MODIFIER = ";scale=all;mode=score+rank+rrank+prank+prrank";
+
+    public static final String QUERY = BASE_QUERY + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
 
     public static final String QUERY_HTML = "https://www.nationstates.net/nation=%s/template-overall=none";
 

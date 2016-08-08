@@ -46,6 +46,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UnreadData;
 import com.lloydtorres.stately.dto.UserData;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.ActivityFeedFragment;
@@ -639,16 +640,16 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void updateNation(String name, final boolean firstLaunch)
     {
         final View fView = findViewById(R.id.drawer_layout);
-        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(name));
+        String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(name));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
-                    Nation nationResponse = null;
+                    UserNation nationResponse = null;
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            nationResponse = Nation.parseNationFromXML(getApplicationContext(), serializer, response);
+                            nationResponse = UserNation.parseNationFromXML(getApplicationContext(), serializer, response);
 
                             mNation = nationResponse;
                             SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
