@@ -29,13 +29,13 @@ import org.simpleframework.xml.Root;
 @Root(name="UNREAD", strict=false)
 public class UnreadData implements Parcelable {
 
-    @Element(name="ISSUES")
+    @Element(name="ISSUES", required=false)
     public int issues;
-    @Element(name="TELEGRAMS")
+    @Element(name="TELEGRAMS", required=false)
     public int telegrams;
-    @Element(name="RMB")
+    @Element(name="RMB", required=false)
     public int rmb;
-    @Element(name="WA")
+    @Element(name="WA", required=false)
     public int wa;
 
     public UnreadData() { super(); }

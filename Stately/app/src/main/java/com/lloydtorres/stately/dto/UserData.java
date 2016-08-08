@@ -34,7 +34,7 @@ public class UserData implements Parcelable {
     public static final String UNREAD_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=unread"
                                             + "&v=" + SparkleHelper.API_VERSION;
 
-    @Element(name="UNREAD")
+    @Element(name="UNREAD", required=false)
     public UnreadData unread;
 
     public UserData() { super(); }

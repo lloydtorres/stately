@@ -37,7 +37,7 @@ public class UserNation extends Nation {
     public static final String QUERY = BASE_QUERY + "+unread"
                                 + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
 
-    @Element(name="UNREAD")
+    @Element(name="UNREAD", required=false)
     public UnreadData unread;
 
     public UserNation() { super(); }
