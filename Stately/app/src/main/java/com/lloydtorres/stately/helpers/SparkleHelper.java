@@ -764,17 +764,6 @@ public class SparkleHelper {
         editor.remove(VAR_NAME);
         editor.remove(VAR_AUTOLOGIN);
         editor.remove(VAR_PIN);
-        editor.commit();
-    }
-
-    /**
-     * Removes session data.
-     * @param c App context
-     */
-    public static void removeSessionData(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
         editor.remove(VAR_REGION);
         editor.remove(VAR_WA_MEMBER);
         editor.commit();
