@@ -38,7 +38,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -143,9 +142,10 @@ public class LoginActivity extends AppCompatActivity {
      * Builds an auth-required NS API call that downloads nation data and starts the app on success.
      * Shows appropriate errors otherwise.
      * @param nationId Target nation's ID.
+     * @param u UserLogin data (if available)
      * @return No frills NSStringRequest
      */
-    private NSStringRequest buildUserAuthRequest(String nationId) {
+    private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
         String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -156,6 +156,10 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
 
+                            if (u != null) {
+                                SparkleHelper.setActiveAutologin(LoginActivity.this, u.autologin);
+                                SparkleHelper.setActivePin(LoginActivity.this, u.pin);
+                            }
                             SparkleHelper.setActiveUser(LoginActivity.this, nationResponse.name);
                             SparkleHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
@@ -199,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param pass Password
      */
     private void verifyAccount(String user, String pass) {
-        NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user));
+        NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user), null);
         stringRequest.setPassword(pass);
         executeRequest(stringRequest);
     }
@@ -212,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void verifyAccount(UserLogin u) {
         setLoginState(true);
-        NSStringRequest stringRequest = buildUserAuthRequest(u.nationId);
+        NSStringRequest stringRequest = buildUserAuthRequest(u.nationId, u);
         stringRequest.setUserData(u);
         executeRequest(stringRequest);
     }
