@@ -175,6 +175,11 @@ public class NSStringRequest extends StringRequest {
         return newAutologin;
     }
 
+    /**
+     * Stopgap for fixing malformed autologin tokens. Decodes URL format but adds the +s back in.
+     * @param input
+     * @return
+     */
     private String sketchyUrlDecode(String input) {
         try {
             input = URLDecoder.decode(input, "UTF-8");
