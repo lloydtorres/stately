@@ -146,7 +146,8 @@ public class LoginActivity extends AppCompatActivity {
      * @return No frills NSStringRequest
      */
     private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
-        String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        final String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        final String oldActivePin = SparkleHelper.getActivePin(this);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     UserNation nationResponse = null;
@@ -158,7 +159,12 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (u != null) {
                                 SparkleHelper.setActiveAutologin(LoginActivity.this, u.autologin);
-                                SparkleHelper.setActivePin(LoginActivity.this, u.pin);
+
+                                // Only override pin if it hasn't been changed by the server
+                                String newActivePin = SparkleHelper.getActivePin(LoginActivity.this);
+                                if (newActivePin != null && oldActivePin != null && newActivePin.equals(oldActivePin)) {
+                                    SparkleHelper.setActivePin(LoginActivity.this, u.pin);
+                                }
                             }
                             SparkleHelper.setActiveUser(LoginActivity.this, nationResponse.name);
                             SparkleHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);

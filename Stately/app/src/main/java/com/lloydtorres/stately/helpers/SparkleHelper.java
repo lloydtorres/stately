@@ -732,6 +732,17 @@ public class SparkleHelper {
     }
 
     /**
+     * Retrieve the current value for the active pin.
+     * @param c App context.
+     * @return The stored active pin.
+     */
+    public static String getActivePin(Context c)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getString(VAR_PIN, null);
+    }
+
+    /**
      * Returns the current member region in the current session.
      * @param c App context
      * @return ID of region
