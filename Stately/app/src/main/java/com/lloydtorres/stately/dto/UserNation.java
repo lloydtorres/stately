@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
@@ -82,26 +81,6 @@ public class UserNation extends Nation {
      */
     public static UserNation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
         UserNation nationResponse = serializer.read(UserNation.class, response);
-
-        // Switch flag URL to https
-        nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
-
-        // Map out government priorities
-        if (nationResponse.govtPriority != null) {
-            switch (nationResponse.govtPriority)
-            {
-                case "Defence":
-                    nationResponse.govtPriority = c.getString(R.string.defense);
-                    break;
-                case "Commerce":
-                    nationResponse.govtPriority = c.getString(R.string.industry);
-                    break;
-                case "Social Equality":
-                    nationResponse.govtPriority = c.getString(R.string.social_policy);
-                    break;
-            }
-        }
-
-        return nationResponse;
+        return ((UserNation) fieldReplacer(c, nationResponse));
     }
 }

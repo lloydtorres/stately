@@ -326,7 +326,10 @@ public class Nation implements Parcelable {
      */
     public static Nation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
         Nation nationResponse = serializer.read(Nation.class, response);
+        return fieldReplacer(c, nationResponse);
+    }
 
+    protected static Nation fieldReplacer(Context c, Nation nationResponse) {
         // Switch flag URL to https
         nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
 
