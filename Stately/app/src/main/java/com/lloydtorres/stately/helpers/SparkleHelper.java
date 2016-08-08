@@ -626,20 +626,46 @@ public class SparkleHelper {
      * Sets the currently logged-in user in shared prefs and saves them into the database.
      * @param c App context
      * @param name User name
-     * @param autologin User autologin cookie
-     * @param pin  User pin cookie
      */
-    public static void setActiveUser(Context c, String name, String autologin, String pin)
+    public static void setActiveUser(Context c, String name)
     {
+        // Assume that the autologin and PIN in shared prefs are correct
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        String autologin = storage.getString(VAR_AUTOLOGIN, null);
+        String pin = storage.getString(VAR_PIN, null);
+
         // Save user into database
         UserLogin u = new UserLogin(getIdFromName(name), name, autologin, pin);
         u.save();
 
         // Save user into shared preferences
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(VAR_NAME, name);
+        editor.commit();
+    }
+
+    /**
+     * Sets the current user's autologin token in shared prefs.
+     * @param c App context
+     * @param autologin User autologin cookie
+     */
+    public static void setActiveAutologin(Context c, String autologin)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
         editor.putString(VAR_AUTOLOGIN, autologin);
+        editor.commit();
+    }
+
+    /**
+     * Sets the current user's PIN in shared prefs.
+     * @param c App context
+     * @param pin  User pin cookie
+     */
+    public static void setActivePin(Context c, String pin)
+    {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
         editor.putString(VAR_PIN, pin);
         editor.commit();
     }

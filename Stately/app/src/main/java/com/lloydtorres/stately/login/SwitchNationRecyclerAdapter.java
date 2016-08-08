@@ -87,8 +87,7 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (pos != RecyclerView.NO_POSITION)
             {
                 Intent loginActivityLaunch = new Intent(context, LoginActivity.class);
-                loginActivityLaunch.putExtra(LoginActivity.USERNAME_KEY, login.name);
-                loginActivityLaunch.putExtra(LoginActivity.AUTOLOGIN_KEY, login.autologin);
+                loginActivityLaunch.putExtra(LoginActivity.USERDATA_KEY, login);
                 loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
                 context.startActivity(loginActivityLaunch);
                 selfDialog.dismiss();

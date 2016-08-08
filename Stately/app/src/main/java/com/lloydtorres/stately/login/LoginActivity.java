@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
@@ -39,6 +40,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
@@ -47,40 +49,22 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.HttpCookie;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by Lloyd on 2016-01-13.
  * The launcher activity for Stately!
  * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
-    public static final String USERNAME_KEY = "username";
-    public static final String AUTOLOGIN_KEY = "autologin";
-    public static final String NOAUTOLOGIN_KEY = "disableAutoLogin";
+    public static final String USERDATA_KEY = "userdata";
+    public static final String NOAUTOLOGIN_KEY = "noAutologin";
 
-    // Cookie shenanigans
-    private static final String LOGIN_TARGET = "https://www.nationstates.net/";
-    private static final URI LOGIN_URI = URI.create(LOGIN_TARGET);
-    private static final String LOGIN_DOMAIN = "nationstates.net";
-    private static final long LOGIN_EXPIRY = 12960000; // about 5 months in seconds
-    private CookieManager cookies;
-    private SharedPreferences storage;
-
+    private View view;
     private EditText username;
     private EditText password;
     private Button login;
     private Button createNation;
     private boolean isLoggingIn;
-    private String autologin;
-    private String pin;
+    private SharedPreferences storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
         storage = PreferenceManager.getDefaultSharedPreferences(this);
 
+        view = findViewById(R.id.activity_login_main);
         username = (EditText) findViewById(R.id.field_username);
         username.setCustomSelectionActionModeCallback(new NullActionCallback());
         password = (EditText) findViewById(R.id.field_password);
@@ -97,26 +82,20 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
 
-        // Set cookie handler
-        cookies = new CookieManager();
-        cookies.getCookieStore().removeAll();
-        cookies.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookies);
-
         // If activity was launched by an intent, handle that first
         if (getIntent() != null)
         {
-            String username = getIntent().getStringExtra(USERNAME_KEY);
-            String autologin = getIntent().getStringExtra(AUTOLOGIN_KEY);
-            boolean noAutoLogin = getIntent().getBooleanExtra(NOAUTOLOGIN_KEY, false);
+            UserLogin userdata = getIntent().getParcelableExtra(USERDATA_KEY);
+            boolean noAutologin = getIntent().getBooleanExtra(NOAUTOLOGIN_KEY, false);
 
-            if (username != null && autologin != null)
+            if (userdata != null)
             {
-                verifyAutologin(username, autologin);
+                verifyAccount(userdata);
+                return;
             }
-            // Prevent autologin
-            if (noAutoLogin)
-            {
+
+            // If the launching intent doesn't want to autologin, skip that
+            if (noAutologin) {
                 return;
             }
         }
@@ -127,70 +106,12 @@ public class LoginActivity extends AppCompatActivity {
             UserLogin u = SparkleHelper.getActiveUser(this);
             if (u != null)
             {
-                verifyAutologin(u.name, u.autologin);
+                verifyAccount(u);
             }
         }
         else
         {
             SparkleHelper.removeActiveUser(this);
-        }
-    }
-
-    /**
-     * Verify that the stored autologin cookie is correct.
-     * Proceeds to load nation data if correct, resets otherwise.
-     * @param name Name of the nation
-     */
-    private void verifyAutologin(final String name, final String autologin)
-    {
-        setLoginState(true);
-
-        HttpCookie cookie = new HttpCookie("autologin", autologin);
-        cookie.setPath("/");
-        cookie.setDomain(LOGIN_DOMAIN);
-        cookie.setMaxAge(LOGIN_EXPIRY);
-        cookies.getCookieStore().add(LOGIN_URI, cookie);
-
-        final View view = findViewById(R.id.activity_login_main);
-        String targetURL = LOGIN_TARGET;
-
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (handleCookieResponse())
-                        {
-                            queryNation(view, name);
-                        }
-                        else
-                        {
-                            // Reset if not successful
-                            setLoginState(false);
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_autologin));
-                            SparkleHelper.removeActiveUser(getApplicationContext());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-                setLoginState(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                }
-            }
-        });
-        stringRequest.disablePin(true);
-        stringRequest.setAutologinOverride(autologin);
-
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
-            setLoginState(false);
         }
     }
 
@@ -207,7 +128,8 @@ public class LoginActivity extends AppCompatActivity {
             String name = username.getText().toString();
             if (SparkleHelper.isValidName(name) && name.length() > 0)
             {
-                verifyPassword(view, name);
+                String pass = password.getText().toString();
+                verifyAccount(name, pass);
             }
             else
             {
@@ -218,108 +140,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * This verifies the password entered by the user. If so, download the actual nation data.
-     * @param view View
-     * @param name Nation name
+     * Builds an auth-required NS API call that downloads nation data and starts the app on success.
+     * Shows appropriate errors otherwise.
+     * @param nationId Target nation's ID.
+     * @return No frills NSStringRequest
      */
-    private void verifyPassword(final View view, final String name)
-    {
-        final String pass = password.getText().toString();
-        cookies.getCookieStore().removeAll();
-
-        String targetURL = LOGIN_TARGET;
-
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
+    private NSStringRequest buildUserAuthRequest(String nationId) {
+        String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (handleCookieResponse())
-                        {
-                            queryNation(view, name);
-                        }
-                        else
-                        {
-                            setLoginState(false);
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                SparkleHelper.logError(error.toString());
-                setLoginState(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                }
-            }
-        });
-
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("logging_in", "1");
-        params.put("nation", SparkleHelper.getIdFromName(name));
-        params.put("password", pass);
-        params.put("submit", "Login");
-        params.put("autologin", "yes");
-        stringRequest.setParams(params);
-
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
-        }
-    }
-
-    /**
-     * This verifies if the login was successful, by checking if the autologin cookie was created.
-     * Also performs operations to note the username and password.
-     * @return If login was successful or not
-     */
-    private boolean handleCookieResponse()
-    {
-        boolean autologinFlag = false;
-        boolean pinFlag = false;
-
-        List<HttpCookie> cookieResponse = cookies.getCookieStore().getCookies();
-        for (HttpCookie c : cookieResponse)
-        {
-            if (c.getName().equals("autologin"))
-            {
-                autologin = c.getValue();
-                autologinFlag =  true;
-            }
-            if (c.getName().equals("pin"))
-            {
-                pin = c.getValue();
-                pinFlag =  true;
-            }
-        }
-        return autologinFlag && pinFlag;
-    }
-
-    /**
-     * Downloads nation data for specified nation.
-     * If successful, start the main StatelyActivity.
-     * @param view
-     * @param nationName
-     */
-    private void queryNation(final View view, final String nationName)
-    {
-        String targetURL = String.format(Nation.QUERY, SparkleHelper.getIdFromName(nationName));
-
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
-                new Response.Listener<String>() {
-                    Nation nationResponse = null;
+                    UserNation nationResponse = null;
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            nationResponse = Nation.parseNationFromXML(getApplicationContext(), serializer, response);
+                            nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
 
-                            SparkleHelper.setActiveUser(getApplicationContext(), nationName, autologin, pin);
-                            SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
+                            SparkleHelper.setActiveUser(LoginActivity.this, nationResponse.name);
+                            SparkleHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                             nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
@@ -340,7 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else if (error instanceof ServerError)
+                else if (error instanceof ServerError || error instanceof AuthFailureError)
                 {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
                 }
@@ -350,12 +188,44 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        stringRequest.disablePin(true);
-        stringRequest.setAutologinOverride(null);
+        return stringRequest;
+    }
 
+    /**
+     * Builds an authenticated user request and executes it.
+     * This version relies on the user/pass combo typed in by the user.
+     * (For normal logins.)
+     * @param user Username
+     * @param pass Password
+     */
+    private void verifyAccount(String user, String pass) {
+        NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user));
+        stringRequest.setPassword(pass);
+        executeRequest(stringRequest);
+    }
+
+    /**
+     * Builds an authenticated user request and executes it.
+     * This version relies on a UserLogin object passed to it, either from autologin or
+     * by the nation switcher.
+     * @param u
+     */
+    private void verifyAccount(UserLogin u) {
+        setLoginState(true);
+        NSStringRequest stringRequest = buildUserAuthRequest(u.nationId);
+        stringRequest.setUserData(u);
+        executeRequest(stringRequest);
+    }
+
+    /**
+     * Executes the provided string request, if the app won't go overboard the limit.
+     * @param stringRequest
+     */
+    private void executeRequest(NSStringRequest stringRequest) {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+            setLoginState(false);
         }
     }
 
