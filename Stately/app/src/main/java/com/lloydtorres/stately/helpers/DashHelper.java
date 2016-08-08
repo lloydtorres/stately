@@ -128,6 +128,14 @@ public class DashHelper {
     }
 
     /**
+     * Sets the number of calls that have been made to the server.
+     * @param n
+     */
+    public synchronized void setNumCalls(int n) {
+        numCalls = n;
+    }
+
+    /**
      * Determines if adding a request will violate rate limits.
      * @return True if request can be granted, false otherwise
      */

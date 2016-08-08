@@ -112,6 +112,17 @@ public class NSStringRequest extends StringRequest {
             SparkleHelper.setActiveAutologin(context, responseHeaders.get("X-Autologin"));
         }
 
+        if (responseHeaders.containsKey("X-Ratelimit-Requests-Seen")) {
+            try {
+                int serverCount = Integer.parseInt(responseHeaders.get("X-Ratelimit-Requests-Seen"));
+                DashHelper dashie = DashHelper.getInstance(context);
+                dashie.setNumCalls(serverCount);
+            }
+            catch (Exception e) {
+                SparkleHelper.logError(e.toString());
+            }
+        }
+
         return super.parseNetworkResponse(response);
     }
 
