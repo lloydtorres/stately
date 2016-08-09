@@ -29,6 +29,8 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-08-05.
@@ -102,16 +104,31 @@ public class NSStringRequest extends StringRequest {
         return params;
     }
 
+    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+|;\\s*)pin=(\\d+)(?:$|;\\s*|\\s+)");
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         Map<String, String> responseHeaders = response.headers;
+
+        // Update PIN if new one available
         if (responseHeaders.containsKey("X-Pin") && !PIN_INVALID.equals(responseHeaders.get("X-Pin"))) {
             SparkleHelper.setActivePin(context, responseHeaders.get("X-Pin"));
         }
+
+        // Update PIN from cookie if available AND X-Pin not provided
+        if (responseHeaders.containsKey("Set-Cookie") && !responseHeaders.containsKey("X-Pin")) {
+            Matcher m = COOKIE_PIN.matcher(responseHeaders.get("Set-Cookie"));
+            if (m.matches() && !PIN_INVALID.equals(m.group(1))) {
+                SparkleHelper.setActivePin(context, m.group(1));
+            }
+        }
+
+        // Update autologin if new one available
         if (responseHeaders.containsKey("X-Autologin")) {
             SparkleHelper.setActiveAutologin(context, responseHeaders.get("X-Autologin"));
         }
 
+        // Sync number of requests seen by server with internal count
         if (responseHeaders.containsKey("X-Ratelimit-Requests-Seen")) {
             try {
                 int serverCount = Integer.parseInt(responseHeaders.get("X-Ratelimit-Requests-Seen"));
