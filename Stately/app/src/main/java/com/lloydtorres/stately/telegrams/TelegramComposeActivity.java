@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -316,7 +317,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
                 params.put("send", "1");
             }
         }
-        params.put("message", content.getText().toString());
+        params.put("message", Html.escapeHtml(content.getText().toString()));
         stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))

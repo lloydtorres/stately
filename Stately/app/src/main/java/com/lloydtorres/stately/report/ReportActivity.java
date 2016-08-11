@@ -23,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -285,7 +286,7 @@ public class ReportActivity extends AppCompatActivity {
 
         Map<String,String> params = new HashMap<String, String>();
         params.put("problem", Integer.toString(problemHeader));
-        params.put("comment", commentHeader);
+        params.put("comment", Html.escapeHtml(commentHeader));
         params.put("submit", "1");
         stringRequest.setParams(params);
 

@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -608,7 +609,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             quoteMessage = String.format(getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
             newMessage = quoteMessage + newMessage;
         }
-        params.put("message", newMessage);
+        params.put("message", Html.escapeHtml(newMessage));
         params.put("lodge_message", "1");
         stringRequest.setParams(params);
 
