@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
 public class NSStringRequest extends StringRequest {
 
     public static final String PIN_INVALID = "-1";
-    public static final String ENCODING = "ISO-8859-1";
 
     private Context context;
     private UserLogin userDataOverride = null;
@@ -100,7 +99,7 @@ public class NSStringRequest extends StringRequest {
 
         // Only include x-www-form-urlencoded for POSTs
         if (method == Request.Method.POST) {
-            params.put("Content-Type", "application/x-www-form-urlencoded");
+            params.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         }
         return params;
     }
@@ -142,12 +141,6 @@ public class NSStringRequest extends StringRequest {
         }
 
         return super.parseNetworkResponse(response);
-    }
-
-    @Override
-    protected String getParamsEncoding() {
-        // NS uses ISO-8859-1 instead of UTF-8, so override encoding for POSTs.
-        return ENCODING;
     }
 
     /**
