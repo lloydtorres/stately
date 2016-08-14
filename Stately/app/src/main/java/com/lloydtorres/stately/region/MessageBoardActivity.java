@@ -462,6 +462,12 @@ public class MessageBoardActivity extends AppCompatActivity {
 
         // We've reached the point where we already have the messages, so put everything back together
         refreshRecycler(SCAN_FORWARD, 0, shouldJumpToTop);
+
+        // Mark board as read if this is the user's region's RMB
+        if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
+        {
+            markBoardAsRead();
+        }
     }
 
     /**
