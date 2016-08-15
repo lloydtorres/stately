@@ -11,7 +11,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 * Respond to issues encountered by your nation.
 * Discover trends in national and regional census statistics.
 * Login and switch between different nations.
-* Read, write and reply to telegrams.
+* Read, organize, write and reply to telegrams.
 * Browse through regional factbooks and communities.
 * Read, quote, post and do more in RMBs.
 * Observe and vote on current World Assembly resolutions.
@@ -20,6 +20,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.6.0** - API-based login, drawer unread count, telegram organization, reporting, swipe to close screens.
 * **1.5.5** - Remove Guava, confirm app exit, UI changes, bug fixes and improvements.
 * **1.5.4** - Bug fixes and improvements.
 * **1.5.3** - Bug fixes.
