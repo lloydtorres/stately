@@ -28,10 +28,11 @@
         android:layout_height="24dp"/>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/holder_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextLoginField">
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/field_username"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -44,11 +45,12 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/holder_password"
         android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextLoginField">
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/field_password"
             android:layout_width="250dp"
             android:layout_height="wrap_content"

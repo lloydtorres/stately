@@ -24,7 +24,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="TextLoginField" parent="TextAppearance.AppCompat">
+    <style name="TextLoginField" parent="Widget.Design.TextInputLayout">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:textSize">17sp</item>

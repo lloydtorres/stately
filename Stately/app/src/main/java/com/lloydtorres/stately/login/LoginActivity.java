@@ -22,11 +22,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -58,8 +59,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final String NOAUTOLOGIN_KEY = "noAutologin";
 
     private View view;
-    private EditText username;
-    private EditText password;
+    private AppCompatEditText username;
+    private AppCompatEditText password;
+    private TextInputLayout userHolder;
+    private TextInputLayout passHolder;
     private Button login;
     private Button createNation;
     private boolean isLoggingIn;
@@ -74,10 +77,12 @@ public class LoginActivity extends AppCompatActivity {
         storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         view = findViewById(R.id.activity_login_main);
-        username = (EditText) findViewById(R.id.field_username);
+        username = (AppCompatEditText) findViewById(R.id.field_username);
         username.setCustomSelectionActionModeCallback(new NullActionCallback());
-        password = (EditText) findViewById(R.id.field_password);
+        password = (AppCompatEditText) findViewById(R.id.field_password);
         password.setCustomSelectionActionModeCallback(new NullActionCallback());
+        userHolder = (TextInputLayout) findViewById(R.id.holder_user);
+        passHolder = (TextInputLayout) findViewById(R.id.holder_password);
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
 
@@ -289,15 +294,15 @@ public class LoginActivity extends AppCompatActivity {
     {
         if (stat)
         {
-            username.setVisibility(View.GONE);
-            password.setVisibility(View.GONE);
+            userHolder.setVisibility(View.GONE);
+            passHolder.setVisibility(View.GONE);
             login.setText(getString(R.string.log_in_load));
             createNation.setVisibility(View.GONE);
         }
         else
         {
-            username.setVisibility(View.VISIBLE);
-            password.setVisibility(View.VISIBLE);
+            userHolder.setVisibility(View.VISIBLE);
+            passHolder.setVisibility(View.VISIBLE);
             login.setText(getString(R.string.log_in));
             createNation.setVisibility(View.VISIBLE);
         }
