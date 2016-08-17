@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_nation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".core.StatelyActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_container"
@@ -22,7 +22,7 @@
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:gravity="bottom"
                 android:background="@android:color/white"
                 android:orientation="vertical"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="false">
 
                 <ImageView
                     android:id="@+id/nation_banner"
