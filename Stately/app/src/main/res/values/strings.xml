@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Stately</string>
-    <string name="app_version">Stately 1.6.0</string>
-    <string name="app_header">Stately/1.6.0 (User %1$s; Droid/Fire)</string>
-    <string name="app_header_nouser">Stately/1.6.0 (No User; Droid/Fire)</string>
+    <string name="app_version">Stately 1.6.1</string>
+    <string name="app_header">Stately/1.6.1 (User %1$s; Droid/Fire)</string>
+    <string name="app_header_nouser">Stately/1.6.1 (No User; Droid/Fire)</string>
 
     <!-- Login -->
     <string name="for_nationstates">for NationStates</string>
