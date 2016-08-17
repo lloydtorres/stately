@@ -21,10 +21,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
@@ -39,7 +39,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 public class ExploreDialog extends DialogFragment {
     public static final String DIALOG_TAG = "fragment_explore_dialog";
 
-    private EditText exploreSearch;
+    private AppCompatEditText exploreSearch;
     private RadioGroup exploreToggleState;
 
     public ExploreDialog() { }
@@ -49,7 +49,7 @@ public class ExploreDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
 
-        exploreSearch = (EditText) dialogView.findViewById(R.id.explore_searchbar);
+        exploreSearch = (AppCompatEditText) dialogView.findViewById(R.id.explore_searchbar);
         exploreSearch.setCustomSelectionActionModeCallback(new NullActionCallback());
         exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
 

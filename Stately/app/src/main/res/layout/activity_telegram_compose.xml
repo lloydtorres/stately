@@ -50,7 +50,7 @@
                         android:textSize="15sp"
                         android:textColor="@color/colorSecondaryText"
                         android:text="@string/telegrams_to"/>
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/telegram_compose_recipients"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 android:layout_height="match_parent"
                 card_view:cardBackgroundColor="@android:color/white"
                 card_view:contentPadding="16dp">
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/telegram_compose_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

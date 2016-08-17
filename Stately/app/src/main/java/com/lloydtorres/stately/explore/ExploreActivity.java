@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +31,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -556,9 +556,9 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
-        EditText passView = (EditText) dialogView.findViewById(R.id.move_password);
+        AppCompatEditText passView = (AppCompatEditText) dialogView.findViewById(R.id.move_password);
         passView.setCustomSelectionActionModeCallback(new NullActionCallback());
-        final EditText fPassView = passView;
+        final AppCompatEditText fPassView = passView;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

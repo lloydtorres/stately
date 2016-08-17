@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -28,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -73,9 +73,9 @@ public class TelegramComposeActivity extends AppCompatActivity {
 
     private View mView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private EditText recipientsField;
+    private AppCompatEditText recipientsField;
     private TextView senderField;
-    private EditText content;
+    private AppCompatEditText content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.telegram_compose_toolbar);
         setToolbar(toolbar);
 
-        recipientsField = (EditText) findViewById(R.id.telegram_compose_recipients);
+        recipientsField = (AppCompatEditText) findViewById(R.id.telegram_compose_recipients);
         recipientsField.setCustomSelectionActionModeCallback(new NullActionCallback());
         if (recipients != null && recipients.length() > 0)
         {
@@ -114,7 +114,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         senderField = (TextView) findViewById(R.id.telegram_compose_sender);
         senderField.setText(SparkleHelper.getActiveUser(this).name);
 
-        content = (EditText) findViewById(R.id.telegram_compose_content);
+        content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
         content.setCustomSelectionActionModeCallback(new NullActionCallback());
         content.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

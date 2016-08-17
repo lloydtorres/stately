@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -28,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -85,7 +85,7 @@ public class ReportActivity extends AppCompatActivity {
     private TextView reportTarget;
     private CardView reportCategoryHolder;
     private RadioGroup reportCategorySelect;
-    private EditText reportContent;
+    private AppCompatEditText reportContent;
 
     private int targetId;
     private String targetName;
@@ -149,7 +149,7 @@ public class ReportActivity extends AppCompatActivity {
         reportTarget = (TextView) findViewById(R.id.report_target);
         reportCategoryHolder = (CardView) findViewById(R.id.report_category_holder);
         reportCategorySelect = (RadioGroup) findViewById(R.id.report_category);
-        reportContent = (EditText) findViewById(R.id.report_content);
+        reportContent = (AppCompatEditText) findViewById(R.id.report_content);
         reportContent.setCustomSelectionActionModeCallback(new NullActionCallback());
 
         targetHolder.setVisibility(View.VISIBLE);

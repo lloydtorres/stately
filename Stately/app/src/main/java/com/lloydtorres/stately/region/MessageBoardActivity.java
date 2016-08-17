@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +29,6 @@ import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -103,7 +103,7 @@ public class MessageBoardActivity extends AppCompatActivity {
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
-    private EditText messageContainer;
+    private AppCompatEditText messageContainer;
     private ImageView messagePostButton;
     private ImageView.OnClickListener postMessageListener;
     private RelativeLayout messageReplyContainer;
@@ -253,7 +253,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     {
         messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
         messageResponder.setVisibility(View.VISIBLE);
-        messageContainer = (EditText) findViewById(R.id.responder_content);
+        messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
         messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
         messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
         messagePostButton.setOnClickListener(postMessageListener);
