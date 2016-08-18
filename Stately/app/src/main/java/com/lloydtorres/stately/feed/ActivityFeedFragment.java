@@ -341,10 +341,13 @@ public class ActivityFeedFragment extends Fragment {
         // Include dossier nations?
         if (storage.getBoolean(SubscriptionsDialog.DOSSIER_NATIONS, true))
         {
-            nationQuery.addAll(dossierNations);
+            for (String n : dossierNations)
+            {
+                nationQuery.add(SparkleHelper.getIdFromName(n));
+            }
         }
 
-        if (nationQuery.size() >= 0) {
+        if (nationQuery.size() > 0) {
             String target = String.format(Locale.US, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
 
             NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
@@ -423,10 +426,13 @@ public class ActivityFeedFragment extends Fragment {
         // Include dossier regions?
         if (storage.getBoolean(SubscriptionsDialog.DOSSIER_REGIONS, true))
         {
-            regionQuery.addAll(dossierRegions);
+            for (String r : dossierRegions)
+            {
+                regionQuery.add(SparkleHelper.getIdFromName(r));
+            }
         }
 
-        if (regionQuery.size() >= 0) {
+        if (regionQuery.size() > 0) {
             String target = String.format(Locale.US, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
 
             NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
@@ -471,7 +477,7 @@ public class ActivityFeedFragment extends Fragment {
                     else
                     {
                         SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
-                        queryRegionalHappenings();
+                        queryAssemblyHappenings();
                     }
                 }
             });
