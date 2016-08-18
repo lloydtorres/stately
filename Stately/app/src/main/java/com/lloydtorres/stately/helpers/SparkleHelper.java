@@ -1063,6 +1063,7 @@ public class SparkleHelper {
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
     public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+\" rel=\"nofollow\">");
+    public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+)\" rel=\"nofollow\">");
 
     /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
@@ -1079,6 +1080,9 @@ public class SparkleHelper {
 
         // Replace RMB links with targets to the RMB activity
         holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + RMB_TARGET + "%s/%s\">");
+
+        // Replace internal links with valid links
+        holder = regexReplace(holder, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
 
         // Linkify nations (@@NATION@@)
         holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
