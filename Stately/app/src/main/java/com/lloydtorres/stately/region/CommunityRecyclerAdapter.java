@@ -313,6 +313,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             List<PollOption> results = p.options;
             Collections.sort(results);
 
+            options.removeAllViews();
             int voteTotal = 0;
             List<String> chartLabels = new ArrayList<String>();
             for (int i=0; i<results.size(); i++)
@@ -324,6 +325,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             if (voteTotal > 0)
             {
+                breakdown.setVisibility(View.VISIBLE);
+                nullVote.setVisibility(View.GONE);
+
                 List<Entry> chartEntries = new ArrayList<Entry>();
                 for (int i=0; i<results.size(); i++)
                 {
@@ -435,11 +439,14 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         public void init(OfficerHolder offhold) {
             List<Officer> officers = offhold.officers;
 
+            officersLayout.removeAllViews();
             if (officers.size() <= 0) {
                 noOfficers.setText(String.format(context.getString(R.string.region_filler_no_officers), mRegion.name));
                 noOfficers.setVisibility(View.VISIBLE);
+                officersLayout.setVisibility(View.GONE);
             }
             else {
+                officersLayout.setVisibility(View.VISIBLE);
                 for (int i=0; i<officers.size(); i++)
                 {
                     if (officers.get(i).office != null && officers.get(i).name != null)
