@@ -299,7 +299,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void init(Poll p)
         {
-            question.setText(p.title);
+            question.setText(SparkleHelper.fromHtml(p.title));
 
             if (p.text != null && p.text.length() > 0)
             {
