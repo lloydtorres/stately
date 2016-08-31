@@ -485,7 +485,7 @@ public class MessageBoardActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
         }
-        else
+        else if (mRecyclerAdapter != null)
         {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
             messageReplyContainer.setVisibility(View.GONE);
