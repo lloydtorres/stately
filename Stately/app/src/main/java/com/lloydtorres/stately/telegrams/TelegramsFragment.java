@@ -430,7 +430,7 @@ public class TelegramsFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TelegramReadActivity.TELEGRAM_READ_RESULTS && resultCode == Activity.RESULT_OK) {
+        if (requestCode == TelegramReadActivity.TELEGRAM_READ_RESULTS && resultCode == Activity.RESULT_OK && data != null) {
             int deleteId = data.getIntExtra(TelegramReadActivity.TELEGRAM_READ_RESULTS_ID, TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL);
             if (deleteId != TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL) {
                 ((TelegramsAdapter) mRecyclerAdapter).invalidateTelegram(deleteId);
