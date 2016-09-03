@@ -285,6 +285,7 @@ public class MuffinsHelper {
         holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"//forum." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"http://forum." + SparkleHelper.DOMAIN_URI + "/");
         holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
 
