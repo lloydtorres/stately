@@ -131,7 +131,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         public void init(Issue issue)
         {
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
-            issueNo.setText(String.format(context.getString(R.string.issue_number), issue.id));
+            if (issue.chain != null) {
+                issueNo.setText(String.format(context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+            }
+            else {
+                issueNo.setText(String.format(context.getString(R.string.issue_number), issue.id));
+            }
             content.setText(SparkleHelper.getHtmlFormatting(issue.content).toString());
         }
     }

@@ -57,7 +57,8 @@ import java.util.regex.Pattern;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends Fragment {
-    private static final String NEXT_ISSUE_REGEX = "\\$\\('#nextdilemmacountdown'\\)\\.countdown\\(\\{timestamp:new Date\\(([0-9]*?)\\)\\}\\);";
+    private static final Pattern NEXT_ISSUE_REGEX = Pattern.compile("\\$\\('#nextdilemmacountdown'\\)\\.countdown\\(\\{timestamp:new Date\\(([0-9]*?)\\)\\}\\);");
+    private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+)\\] (.+)$");
 
     private Activity mActivity;
     private View mView;
@@ -223,10 +224,15 @@ public class IssuesFragment extends Fragment {
             }
 
             String issueLink = issueMain.attr("href");
-            int issueId = Integer.valueOf(issueLink.replace("page=show_dilemma/dilemma=", ""));
-            issueCore.id = issueId;
-            String issueName = issueMain.text();
-            issueCore.title = issueName;
+            issueCore.id = Integer.valueOf(issueLink.replace("page=show_dilemma/dilemma=", ""));
+            Matcher chainMatcher = CHAIN_ISSUE_REGEX.matcher(issueMain.text());
+            if (chainMatcher.find()) {
+                issueCore.chain = chainMatcher.group(1);
+                issueCore.title = chainMatcher.group(2);
+            }
+            else {
+                issueCore.title = issueMain.text();
+            }
 
             issues.add(issueCore);
         }
@@ -242,7 +248,7 @@ public class IssuesFragment extends Fragment {
         {
             String nextUpdate = getString(R.string.no_issues);
 
-            Matcher m = Pattern.compile(NEXT_ISSUE_REGEX).matcher(d.html());
+            Matcher m = NEXT_ISSUE_REGEX.matcher(d.html());
             if (m.find())
             {
                 long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;

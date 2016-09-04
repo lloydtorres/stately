@@ -123,7 +123,12 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             issue = i;
 
             title.setText(issue.title);
-            id.setText(String.format(context.getString(R.string.issue_number), issue.id));
+            if (issue.chain != null) {
+                id.setText(String.format(context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+            }
+            else {
+                id.setText(String.format(context.getString(R.string.issue_number), issue.id));
+            }
         }
 
         @Override

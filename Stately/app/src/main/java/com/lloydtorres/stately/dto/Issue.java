@@ -30,6 +30,7 @@ public class Issue implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/page=dilemmas/template-overall=none";
 
     public int id;
+    public String chain;
     public String title;
     public String content;
     public List<IssueOption> options;
@@ -38,6 +39,7 @@ public class Issue implements Parcelable {
 
     protected Issue(Parcel in) {
         id = in.readInt();
+        chain = in.readString();
         title = in.readString();
         content = in.readString();
         if (in.readByte() == 0x01) {
@@ -56,6 +58,7 @@ public class Issue implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
+        dest.writeString(chain);
         dest.writeString(title);
         dest.writeString(content);
         if (options == null) {
