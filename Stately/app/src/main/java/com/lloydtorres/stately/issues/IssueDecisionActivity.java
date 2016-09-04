@@ -223,43 +223,38 @@ public class IssueDecisionActivity extends AppCompatActivity {
         issue.options = new ArrayList<IssueOption>();
 
         Element optionHolderMain = issueInfoRaw.select("ol.diloptions").first();
-        if (optionHolderMain == null)
+        if (optionHolderMain != null)
         {
-            // safety check
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
-            return;
-        }
+            Elements optionsHolder = optionHolderMain.select("li");
 
-        Elements optionsHolder = optionHolderMain.select("li");
-
-        int i = 0;
-        for (Element option : optionsHolder)
-        {
-            IssueOption issueOption = new IssueOption();
-            issueOption.index = i++;
-
-            Element button = option.select("button").first();
-            if (button != null)
+            int i = 0;
+            for (Element option : optionsHolder)
             {
-                issueOption.header = button.attr("name");
-            }
-            else
-            {
-                issueOption.header = IssueOption.SELECTED_HEADER;
-            }
+                IssueOption issueOption = new IssueOption();
+                issueOption.index = i++;
 
-            Element optionContentHolder = option.select("p").first();
-            if (optionContentHolder == null)
-            {
-                // safety check
-                mSwipeRefreshLayout.setRefreshing(false);
-                SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
-                return;
-            }
+                Element button = option.select("button").first();
+                if (button != null)
+                {
+                    issueOption.header = button.attr("name");
+                }
+                else
+                {
+                    issueOption.header = IssueOption.SELECTED_HEADER;
+                }
 
-            issueOption.content = optionContentHolder.text();
-            issue.options.add(issueOption);
+                Element optionContentHolder = option.select("p").first();
+                if (optionContentHolder == null)
+                {
+                    // safety check
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
+                    return;
+                }
+
+                issueOption.content = optionContentHolder.text();
+                issue.options.add(issueOption);
+            }
         }
 
         IssueOption dismissOption = new IssueOption();
