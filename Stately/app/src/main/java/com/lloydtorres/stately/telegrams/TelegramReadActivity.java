@@ -52,6 +52,7 @@ import java.util.regex.Matcher;
 /**
  * Created by Lloyd on 2016-03-11.
  * Shows the contents of a particular telegram and any telegrams part of its conversation.
+ * @TODO: Deprecate! Move archiving/moving/deleting logic to TelegramsFragment. Convert this to convo reader.
  */
 public class TelegramReadActivity extends AppCompatActivity {
     // Keys for intent data and saved preferences

@@ -59,33 +59,61 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/card_telegram_from"
-                android:textSize="15sp"
-                android:fontFamily="sans-serif"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryText"
-                tools:text="Kaugummi" />
-            <TextView
-                android:id="@+id/card_telegram_to"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif-light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                android:textColor="@color/colorSecondaryText"
-                android:text="@string/telegrams_recipients"/>
-            <TextView
-                android:id="@+id/card_telegram_time"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                android:textColor="@color/colorSecondaryText"
-                tools:text="3 days ago"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/card_telegram_metadata_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/card_telegram_popup_menu"
+                    android:layout_toStartOf="@+id/card_telegram_popup_menu"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/card_telegram_from"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimaryText"
+                        tools:text="Kaugummi" />
+                    <TextView
+                        android:id="@+id/card_telegram_to"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorSecondaryText"
+                        android:text="@string/telegrams_recipients"/>
+                    <TextView
+                        android:id="@+id/card_telegram_time"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorSecondaryText"
+                        tools:text="3 days ago"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/card_telegram_popup_menu"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="-8dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/ic_popup_menu"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center_vertical" />
+            </RelativeLayout>
             <org.sufficientlysecure.htmltextview.HtmlTextView
                 android:id="@+id/card_telegram_content"
                 android:textSize="15sp"

@@ -50,6 +50,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public String preview;
     public String content;
     public String regionTarget;
+    public boolean isExpanded;
 
     public Telegram() { super(); }
 
@@ -69,6 +70,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         preview = in.readString();
         content = in.readString();
         regionTarget = in.readString();
+        isExpanded = in.readByte() != 0x00;
     }
 
     @Override
@@ -93,6 +95,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         dest.writeString(preview);
         dest.writeString(content);
         dest.writeString(regionTarget);
+        dest.writeByte((byte) (isExpanded ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

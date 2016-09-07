@@ -20,8 +20,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,35 +40,36 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * Created by Lloyd on 2016-03-09.
  * An adapter used for displaying telegrams. Can be used for previews and full telegrams.
  */
 public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // constants for setting the mode for the expanded telegram popup menu
+    public static final int POPUP_NONE = 0;
+    public static final int POPUP_ARCHIVE = 1;
+    public static final int POPUP_NORMAL = 2;
+
     private static final int EMPTY_INDICATOR = -1;
 
     // constants for the different types of cards
-    private final int PREVIEW_CARD = 0;
-    private final int FULL_CARD = 1;
-    private final int EMPTY_CARD = 2;
+    private static final int PREVIEW_CARD = 0;
+    private static final int FULL_CARD = 1;
+    private static final int EMPTY_CARD = 2;
 
-    private boolean isPreview;
     private Context context;
-    private TelegramsFragment fragment;
     private List<Telegram> telegrams;
-    private ArrayList<TelegramFolder> folders;
-    private int selectedFolder;
-    private String chkValue;
+    private TelegramsFragment fragment;
+    private int displayMode;
 
-    public TelegramsAdapter(TelegramsFragment tf, List<Telegram> t, ArrayList<TelegramFolder> f, int sf, String chk)
+    public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName)
     {
+        setTelegrams(t);
         context = tf.getContext();
         fragment = tf;
-        setTelegrams(t);
-        setFolders(f, sf);
-        isPreview = true;
-        chkValue = chk;
+        setFolder(folderName);
     }
 
     public TelegramsAdapter(Context c, Telegram t)
@@ -75,7 +78,6 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         List<Telegram> holder = new ArrayList<Telegram>();
         holder.add(t);
         setTelegrams(holder);
-        isPreview = false;
     }
 
     /**
@@ -95,13 +97,16 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     /**
-     * Sets a list of telegram folders and the index of the current folder.
-     * @param f
-     * @param sf
+     * Defines the display mode of the PopupMenu used for expanded telegrams.
+     * @param name
      */
-    public void setFolders(ArrayList<TelegramFolder> f, int sf) {
-        folders = f;
-        selectedFolder = sf;
+    public void setFolder(String name) {
+        if (TelegramFolder.TELEGRAM_FOLDER_SENT.equals(name)) {
+            displayMode = POPUP_NONE;
+        } else {
+            displayMode = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name).matches() ? POPUP_ARCHIVE : POPUP_NORMAL;
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -153,7 +158,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return EMPTY_CARD;
         }
         else {
-            return isPreview ? PREVIEW_CARD : FULL_CARD;
+            return telegrams.get(position).isExpanded ? FULL_CARD : PREVIEW_CARD;
         }
     }
 
@@ -229,7 +234,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class TelegramCard extends RecyclerView.ViewHolder {
+    public class TelegramCard extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
         private Context context;
         private Telegram telegram;
@@ -237,6 +242,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView sender;
         private TextView recipients;
         private TextView timestamp;
+
+        private ImageView popupMenuButton;
 
         private RelativeLayout alertHolder;
         private ImageView alertIcon;
@@ -256,6 +263,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             sender = (TextView) v.findViewById(R.id.card_telegram_from);
             recipients = (TextView) v.findViewById(R.id.card_telegram_to);
             timestamp = (TextView) v.findViewById(R.id.card_telegram_time);
+            popupMenuButton = (ImageView) v.findViewById(R.id.card_telegram_popup_menu);
             alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_alert_holder);
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
             alertText = (TextView) v.findViewById(R.id.card_telegram_alert_message);
@@ -265,6 +273,22 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
             regionVisitButton = (LinearLayout) v.findViewById(R.id.card_telegram_region_holder);
             regionVisitButtonContent = (TextView) v.findViewById(R.id.card_telegram_region_text);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (telegram != null)
+            {
+                telegram.isExpanded = false;
+                notifyItemChanged(getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            // @TODO: Call on the appropriate methods (take from TelegramReadActivity).
+            return false;
         }
 
         public void init(Telegram t)
@@ -272,10 +296,27 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegram = t;
             SparkleHelper.setHappeningsFormatting(context, sender, telegram.sender);
 
+            // @TODO: Instantiate PopupMenu on click.
+            switch (displayMode) {
+                case POPUP_NONE:
+                    popupMenuButton.setVisibility(View.GONE);
+                    popupMenuButton.setOnClickListener(null);
+                    break;
+                case POPUP_ARCHIVE:
+                    popupMenuButton.setVisibility(View.VISIBLE);
+                    popupMenuButton.setOnClickListener(null);
+                    break;
+                case POPUP_NORMAL:
+                    popupMenuButton.setVisibility(View.VISIBLE);
+                    popupMenuButton.setOnClickListener(null);
+                    break;
+            }
+
             if (telegram.recipients != null && telegram.recipients.size() > 0)
             {
                 String recipientsContent = String.format(context.getString(R.string.telegrams_recipients), SparkleHelper.joinStringList(telegram.recipients, ", "));
                 SparkleHelper.setHappeningsFormatting(context, recipients, recipientsContent);
+                recipients.setVisibility(View.VISIBLE);
             }
             else
             {
@@ -410,20 +451,14 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
             if (telegram != null)
             {
-                Intent readActivityIntent = new Intent(context, TelegramReadActivity.class);
-                readActivityIntent.putExtra(TelegramReadActivity.TELEGRAM_DATA_2, telegram);
-                readActivityIntent.putParcelableArrayListExtra(TelegramReadActivity.FOLDER_DATA, folders);
-                readActivityIntent.putExtra(TelegramReadActivity.TITLE_DATA, header.getText().toString());
-                readActivityIntent.putExtra(TelegramReadActivity.CHK_DATA, chkValue);
-                readActivityIntent.putExtra(TelegramReadActivity.SEL_FOLDER_DATA, selectedFolder);
-
-                telegram.isUnread = false;
+               telegram.isUnread = false;
                 header.setTypeface(null, Typeface.NORMAL);
                 timestamp.setTypeface(null, Typeface.ITALIC);
                 alertText.setTypeface(null, Typeface.NORMAL);
-                notifyItemChanged(getAdapterPosition());
 
-                fragment.startActivityForResult(readActivityIntent, TelegramReadActivity.TELEGRAM_READ_RESULTS);
+                telegram.isExpanded = true;
+
+                notifyItemChanged(getAdapterPosition());
             }
         }
     }
