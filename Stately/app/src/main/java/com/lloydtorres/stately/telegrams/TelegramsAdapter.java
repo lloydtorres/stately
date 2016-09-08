@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -35,12 +34,12 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.report.ReportActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * Created by Lloyd on 2016-03-09.
@@ -287,7 +286,22 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            // @TODO: Call on the appropriate methods (take from TelegramReadActivity).
+            if (fragment != null && context != null) {
+                switch (item.getItemId()) {
+                    case R.id.telegrams_archive:
+                        fragment.showArchiveTelegramDialog(telegram.id);
+                        return true;
+                    case R.id.telegrams_move:
+                        fragment.showMoveTelegramDialog(telegram.id);
+                        return true;
+                    case R.id.telegrams_delete:
+                        fragment.showDeleteTelegramDialog(telegram.id);
+                        return true;
+                    case R.id.telegrams_report:
+                        SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_TELEGRAM, telegram.id, telegram.sender.replace("@@", ""));
+                        return true;
+                }
+            }
             return false;
         }
 
@@ -296,7 +310,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegram = t;
             SparkleHelper.setHappeningsFormatting(context, sender, telegram.sender);
 
-            // @TODO: Instantiate PopupMenu on click.
+            if (fragment != null) {
+                fragment.markAsRead(telegram.id);
+            }
+
             switch (displayMode) {
                 case POPUP_NONE:
                     popupMenuButton.setVisibility(View.GONE);
@@ -304,11 +321,27 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
                 case POPUP_ARCHIVE:
                     popupMenuButton.setVisibility(View.VISIBLE);
-                    popupMenuButton.setOnClickListener(null);
+                    popupMenuButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PopupMenu popup = new PopupMenu(context, popupMenuButton);
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_archive, popup.getMenu());
+                            popup.setOnMenuItemClickListener(TelegramCard.this);
+                            popup.show();
+                        }
+                    });
                     break;
                 case POPUP_NORMAL:
                     popupMenuButton.setVisibility(View.VISIBLE);
-                    popupMenuButton.setOnClickListener(null);
+                    popupMenuButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PopupMenu popup = new PopupMenu(context, popupMenuButton);
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_normal, popup.getMenu());
+                            popup.setOnMenuItemClickListener(TelegramCard.this);
+                            popup.show();
+                        }
+                    });
                     break;
             }
 

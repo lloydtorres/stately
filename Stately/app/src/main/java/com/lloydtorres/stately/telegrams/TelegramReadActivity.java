@@ -26,7 +26,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -225,7 +224,6 @@ public class TelegramReadActivity extends AppCompatActivity {
         else {
             FoldersDialog foldersDialog = new FoldersDialog();
             foldersDialog.setFolders(moveableFolders);
-            foldersDialog.setActivity(this);
             foldersDialog.setSelected(FoldersDialog.NO_SELECTION);
             foldersDialog.show(getSupportFragmentManager(), FoldersDialog.DIALOG_TAG);
         }
@@ -354,12 +352,12 @@ public class TelegramReadActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        /*MenuInflater inflater = getMenuInflater();
         String curNation = "@@" + SparkleHelper.getActiveUser(this).nationId + "@@";
         if (!curNation.equals(SparkleHelper.getIdFromName(telegram.sender))) {
             Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(folders.get(selectedFolder).name);
-            inflater.inflate(m.matches() ? R.menu.activity_telegram_read_noarchive : R.menu.activity_telegram_read, menu);
-        }
+            inflater.inflate(m.matches() ? R.menu.popup_telegram_read_archive : R.menu.popup_telegram_read_normal, menu);
+        }*/
         return true;
     }
 

@@ -53,7 +53,8 @@ public class FoldersDialog extends DialogFragment {
     private ArrayList<TelegramFolder> folders;
     private int selected;
     private TelegramsFragment telegramsFragment;
-    private TelegramReadActivity telegramReadActivity;
+    private boolean isMove;
+    private int moveTelegramId;
 
     public void setFolders(ArrayList<TelegramFolder> f)
     {
@@ -69,8 +70,12 @@ public class FoldersDialog extends DialogFragment {
         telegramsFragment = tf;
     }
 
-    public void setActivity(TelegramReadActivity tra) {
-        telegramReadActivity = tra;
+    public void setMoveMode(boolean mode) {
+        isMove = mode;
+    }
+
+    public void setMoveTelegramId(int id) {
+        moveTelegramId = id;
     }
 
     @Override
@@ -99,7 +104,7 @@ public class FoldersDialog extends DialogFragment {
             selected = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-        if (telegramsFragment != null) {
+        if (!isMove) {
             getDialog().setTitle(getString(R.string.telegrams_folders));
         }
         else {
@@ -117,11 +122,11 @@ public class FoldersDialog extends DialogFragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        if (telegramsFragment != null) {
+        if (!isMove) {
             mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders, selected);
         }
         else {
-            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramReadActivity, this, folders, selected);
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, moveTelegramId, this, folders, selected);
         }
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
