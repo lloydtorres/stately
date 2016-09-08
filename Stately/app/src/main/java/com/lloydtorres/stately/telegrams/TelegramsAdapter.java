@@ -401,7 +401,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             final String curNation = SparkleHelper.getActiveUser(context).nationId;
             String senderNationCheck = MuffinsHelper.getNationIdFromFormat(telegram.sender);
-            if (isHistory || senderNationCheck == null || (senderNationCheck != null && senderNationCheck.equals(curNation)))
+            if (senderNationCheck == null || (senderNationCheck != null && senderNationCheck.equals(curNation)))
             {
                 replyHolder.setVisibility(View.GONE);
             }
