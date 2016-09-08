@@ -313,6 +313,7 @@
     <string name="telegrams_move">Move</string>
     <string name="telegrams_delete">Delete</string>
     <string name="telegrams_report">Report</string>
+    <string name="telegrams_close">Close</string>
     <string name="telegrams_archive_confirm">Archive telegram?</string>
     <string name="telegrams_delete_confirm">Delete telegram?</string>
     <string name="telegrams_move_none">No other folders are available.</string>

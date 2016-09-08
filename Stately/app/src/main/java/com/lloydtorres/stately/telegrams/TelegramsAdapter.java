@@ -233,7 +233,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class TelegramCard extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+    public class TelegramCard extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
         private Context context;
         private Telegram telegram;
@@ -272,16 +272,6 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
             regionVisitButton = (LinearLayout) v.findViewById(R.id.card_telegram_region_holder);
             regionVisitButtonContent = (TextView) v.findViewById(R.id.card_telegram_region_text);
-            v.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (telegram != null)
-            {
-                telegram.isExpanded = false;
-                notifyItemChanged(getAdapterPosition());
-            }
         }
 
         @Override
@@ -299,6 +289,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         return true;
                     case R.id.telegrams_report:
                         SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_TELEGRAM, telegram.id, telegram.sender.replace("@@", ""));
+                        return true;
+                    case R.id.telegrams_close:
+                        telegram.isExpanded = false;
+                        notifyItemChanged(getAdapterPosition());
                         return true;
                 }
             }

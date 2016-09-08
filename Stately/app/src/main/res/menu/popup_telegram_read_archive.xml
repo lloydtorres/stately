@@ -9,4 +9,7 @@
     <item
         android:id="@+id/telegrams_report"
         android:title="@string/telegrams_report"/>
+    <item
+        android:id="@+id/telegrams_close"
+        android:title="@string/telegrams_close"/>
 </menu>
