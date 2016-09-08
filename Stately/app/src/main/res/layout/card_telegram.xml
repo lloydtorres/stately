@@ -123,13 +123,12 @@
                 android:layout_height="wrap_content"
                 tools:text="\nThe General Assembly resolution Ban on Booby-Trapped Aid was discarded by the WA for rule violations after garnering 11,721 votes in favor and 3,124 votes against." />
             <LinearLayout
-                android:id="@+id/card_telegram_actions_holder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="right">
                 <ImageView
-                    android:id="@+id/card_telegram_reply"
+                    android:id="@+id/card_telegram_history"
                     android:paddingTop="8dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
@@ -137,18 +136,35 @@
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
                     android:layout_gravity="center_vertical"
-                    app:srcCompat="@drawable/ic_reply"/>
-                <ImageView
-                    android:id="@+id/card_telegram_reply_all"
-                    android:paddingTop="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:layout_marginRight="-8dp"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center_vertical"
-                    app:srcCompat="@drawable/ic_reply_all"/>
+                    app:srcCompat="@drawable/ic_telegram_history"/>
+                <LinearLayout
+                    android:id="@+id/card_telegram_actions_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="right">
+                    <ImageView
+                        android:id="@+id/card_telegram_reply"
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/ic_reply"/>
+                    <ImageView
+                        android:id="@+id/card_telegram_reply_all"
+                        android:paddingTop="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_marginRight="-8dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/ic_reply_all"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

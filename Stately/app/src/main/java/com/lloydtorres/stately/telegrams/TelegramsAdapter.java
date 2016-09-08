@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -62,6 +63,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<Telegram> telegrams;
     private TelegramsFragment fragment;
     private int displayMode;
+    private boolean isHistory;
 
     public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName)
     {
@@ -71,12 +73,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         setFolder(folderName);
     }
 
-    public TelegramsAdapter(Context c, Telegram t)
+    public TelegramsAdapter(Context c, List<Telegram> t)
     {
         context = c;
-        List<Telegram> holder = new ArrayList<Telegram>();
-        holder.add(t);
-        setTelegrams(holder);
+        setTelegrams(t);
+        displayMode = POPUP_NONE;
+        isHistory = true;
     }
 
     /**
@@ -157,8 +159,20 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return EMPTY_CARD;
         }
         else {
-            return telegrams.get(position).isExpanded ? FULL_CARD : PREVIEW_CARD;
+            return isHistory ? FULL_CARD : (telegrams.get(position).isExpanded ? FULL_CARD : PREVIEW_CARD);
         }
+    }
+
+    public int getIndexOfId(int id)
+    {
+        for (int i=0; i<telegrams.size(); i++)
+        {
+            if (telegrams.get(i).id == id)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -249,6 +263,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView alertText;
 
         private HtmlTextView content;
+        private ImageView telegramHistoryButton;
         private LinearLayout replyHolder;
         private ImageView reply;
         private ImageView replyAll;
@@ -267,6 +282,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
             alertText = (TextView) v.findViewById(R.id.card_telegram_alert_message);
             content = (HtmlTextView) v.findViewById(R.id.card_telegram_content);
+            telegramHistoryButton = (ImageView) v.findViewById(R.id.card_telegram_history);
             replyHolder = (LinearLayout) v.findViewById(R.id.card_telegram_actions_holder);
             reply = (ImageView) v.findViewById(R.id.card_telegram_reply);
             replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
@@ -276,7 +292,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if (fragment != null && context != null) {
+            if (telegram != null && fragment != null && context != null) {
                 switch (item.getItemId()) {
                     case R.id.telegrams_archive:
                         fragment.showArchiveTelegramDialog(telegram.id);
@@ -354,13 +370,25 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             setAlertState(telegram.type, false, alertHolder, alertIcon, alertText);
             MuffinsHelper.setTelegramHtmlFormatting(context, content, telegram.content);
 
+            if (isHistory) {
+                telegramHistoryButton.setVisibility(View.GONE);
+                telegramHistoryButton.setOnClickListener(null);
+            } else {
+                telegramHistoryButton.setVisibility(View.VISIBLE);
+                telegramHistoryButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent telegramHistoryIntent = new Intent(context, TelegramHistoryActivity.class);
+                        telegramHistoryIntent.putExtra(TelegramHistoryActivity.ID_DATA, telegram.id);
+                        context.startActivity(telegramHistoryIntent);
+                    }
+                });
+            }
+            telegramHistoryButton.setVisibility(isHistory ? View.GONE : View.VISIBLE);
+
             final String curNation = SparkleHelper.getActiveUser(context).nationId;
             String senderNationCheck = MuffinsHelper.getNationIdFromFormat(telegram.sender);
-            if (senderNationCheck != null && senderNationCheck.equals(curNation))
-            {
-                replyHolder.setVisibility(View.GONE);
-            }
-            else if (senderNationCheck == null)
+            if (isHistory || senderNationCheck == null || (senderNationCheck != null && senderNationCheck.equals(curNation)))
             {
                 replyHolder.setVisibility(View.GONE);
             }

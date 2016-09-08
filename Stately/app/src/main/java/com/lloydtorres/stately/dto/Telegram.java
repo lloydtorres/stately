@@ -33,6 +33,7 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final String MOVE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgmove/tgid=%d/dest=%s/chk=%s";
     public static final String DELETE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgdelete/tgid=%d/chk=%s";
     public static final String PERMDELETE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
+    public static final String TELEGRAM_CONVERSATION = "https://www.nationstates.net/page=tg/template-overall=none/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
     public static final int TELEGRAM_RECRUITMENT = 1;

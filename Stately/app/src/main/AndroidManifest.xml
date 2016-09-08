@@ -66,8 +66,8 @@
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
         <activity
-            android:name=".telegrams.TelegramReadActivity"
-            android:label="@string/menu_telegrams"
+            android:name=".telegrams.TelegramHistoryActivity"
+            android:label="@string/telegram_history_title"
             android:theme="@style/AppTheme.WithStatusBar">
         </activity>
         <activity
