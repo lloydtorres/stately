@@ -84,8 +84,6 @@ public class TelegramsFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
-    private AlertDialog.Builder dialogBuilder;
-
     private ArrayList<Telegram> telegrams;
     private ArrayList<TelegramFolder> folders;
     private int selectedFolder;
@@ -160,8 +158,6 @@ public class TelegramsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
 
         startQueryTelegrams(SCAN_FORWARD);
 
@@ -458,6 +454,7 @@ public class TelegramsFragment extends Fragment {
      * Wrappers to call on NS to archive a telegram.
      */
     public void showArchiveTelegramDialog(final int id) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         dialogBuilder
                 .setTitle(getString(R.string.telegrams_archive_confirm))
                 .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
@@ -502,6 +499,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         if (moveableFolders.size() <= 0) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
             dialogBuilder
                     .setTitle(getString(R.string.telegrams_move))
                     .setMessage(getString(R.string.telegrams_move_none))
@@ -583,6 +581,7 @@ public class TelegramsFragment extends Fragment {
     }
 
     public void showDeleteTelegramDialog(final int id) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
         dialogBuilder
             .setTitle(getString(R.string.telegrams_delete_confirm))
             .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {
