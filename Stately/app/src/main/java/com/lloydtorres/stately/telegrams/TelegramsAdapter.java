@@ -50,7 +50,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     // constants for setting the mode for the expanded telegram popup menu
     public static final int POPUP_NONE = 0;
     public static final int POPUP_ARCHIVE = 1;
-    public static final int POPUP_NORMAL = 2;
+    public static final int POPUP_SENT = 2;
+    public static final int POPUP_NORMAL = 3;
 
     private static final int EMPTY_INDICATOR = -1;
 
@@ -103,7 +104,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      */
     public void setFolder(String name) {
         if (TelegramFolder.TELEGRAM_FOLDER_SENT.equals(name)) {
-            displayMode = POPUP_NONE;
+            displayMode = POPUP_SENT;
         } else {
             displayMode = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name).matches() ? POPUP_ARCHIVE : POPUP_NORMAL;
         }
@@ -328,6 +329,18 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case POPUP_NONE:
                     popupMenuButton.setVisibility(View.GONE);
                     popupMenuButton.setOnClickListener(null);
+                    break;
+                case POPUP_SENT:
+                    popupMenuButton.setVisibility(View.VISIBLE);
+                    popupMenuButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PopupMenu popup = new PopupMenu(context, popupMenuButton);
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_sent, popup.getMenu());
+                            popup.setOnMenuItemClickListener(TelegramCard.this);
+                            popup.show();
+                        }
+                    });
                     break;
                 case POPUP_ARCHIVE:
                     popupMenuButton.setVisibility(View.VISIBLE);
