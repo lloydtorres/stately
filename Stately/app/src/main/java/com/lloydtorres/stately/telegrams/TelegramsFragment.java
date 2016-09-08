@@ -555,14 +555,24 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         invalidateTelegram(id);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
@@ -630,12 +640,22 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         invalidateTelegram(id);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
