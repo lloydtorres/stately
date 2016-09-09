@@ -177,7 +177,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return censusData.size();
+        return censusData.size() + 1;
     }
 
     @Override
