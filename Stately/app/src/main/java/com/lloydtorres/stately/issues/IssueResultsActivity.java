@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.issues;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,7 +71,7 @@ public class IssueResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue_results);
+        setContentView(R.layout.fragment_refreshview);
         Slidr.attach(this, SparkleHelper.slidrConfig);
 
         String response = null;
@@ -91,11 +92,14 @@ public class IssueResultsActivity extends AppCompatActivity {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.results_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setToolbar(toolbar);
 
+        SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        swipeRefresh.setEnabled(false);
+
         // Setup recyclerview
-        mRecyclerView = (RecyclerView) findViewById(R.id.results_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -127,7 +131,7 @@ public class IssueResultsActivity extends AppCompatActivity {
     {
         if (response == null)
         {
-            View view = findViewById(R.id.results_coordinator);
+            View view = findViewById(R.id.refreshview_main);
             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
             return;
         }
