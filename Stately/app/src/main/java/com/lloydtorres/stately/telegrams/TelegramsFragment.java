@@ -41,6 +41,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
+import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -431,10 +432,16 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() != null && isAdded()) {
+                            if (getActivity() instanceof StatelyActivity) {
+                                ((StatelyActivity) getActivity()).decrementTelegramUnread();
+                            }
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
             }
         });
 

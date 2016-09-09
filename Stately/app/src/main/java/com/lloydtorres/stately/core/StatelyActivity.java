@@ -632,6 +632,16 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     }
 
     /**
+     * Call used to decrement the telegram unread count by 1 when a telegram is read.
+     */
+    public void decrementTelegramUnread() {
+        if (mNation != null && mNation.unread != null) {
+            mNation.unread.telegrams = Math.max(0, mNation.unread.telegrams - 1);
+            setUnreadCount(telegramCountView, mNation.unread.telegrams);
+        }
+    }
+
+    /**
      * Query NationStates for nation data
      * @param name Target nation name
      * @param firstLaunch Indicates if activity is being launched for the first time
