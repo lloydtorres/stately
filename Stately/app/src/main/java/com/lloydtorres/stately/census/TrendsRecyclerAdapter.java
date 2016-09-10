@@ -22,7 +22,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -37,10 +36,12 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusHistoryPoint;
 import com.lloydtorres.stately.dto.CensusHistoryScale;
+import com.lloydtorres.stately.dto.CensusNationRank;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-09-08.
@@ -50,17 +51,44 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // constants for the different types of items
     private final int TITLE_CARD = 0;
     private final int GRAPH_CARD = 1;
+    private final int DIVIDER_VIEW = 2;
+    private final int RANKING_VIEW = 3;
 
     private List<Object> trendItems;
-    private String[] WORLD_CENSUS_ITEMS;
     private Context context;
 
-    public TrendsRecyclerAdapter(Context c, Integer id, CensusHistory censusData, String[] censusItems) {
+    // Holder for census title and unit header;
+    private class TrendsHeader {
+        public String title;
+        public String unit;
+
+        public TrendsHeader(String t, String u) {
+            title = t;
+            unit = u;
+        }
+    }
+
+    // Holder for rankings type and census name
+    private class TrendsRankTitle {
+        public int mode;
+        public String census;
+
+        public TrendsRankTitle(int m, String c) {
+            mode = m;
+            census = c;
+        }
+    }
+
+    public TrendsRecyclerAdapter(Context c, int mode, String title, String unit, CensusHistory censusData) {
         context = c;
+
         trendItems = new ArrayList<Object>();
-        trendItems.add(id);
+        trendItems.add(new TrendsHeader(title, unit));
         trendItems.add(censusData.scale);
-        WORLD_CENSUS_ITEMS = censusItems;
+        if (censusData.ranks != null) {
+            trendItems.add(new TrendsRankTitle(mode, title));
+            trendItems.addAll(censusData.ranks.ranks);
+        }
     }
 
     @Override
@@ -77,6 +105,14 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 View graphCard = inflater.inflate(R.layout.card_census_trends_graph, parent, false);
                 viewHolder = new GraphCard(graphCard);
                 break;
+            case DIVIDER_VIEW:
+                View rankTitleView = inflater.inflate(R.layout.view_census_trends_ranking_title, parent, false);
+                viewHolder = new RankTitleViewHolder(rankTitleView);
+                break;
+            case RANKING_VIEW:
+                View nationRankView = inflater.inflate(R.layout.view_census_trends_ranking_entry, parent, false);
+                viewHolder = new NationRankViewHolder(nationRankView);
+                break;
         }
         return viewHolder;
     }
@@ -86,11 +122,19 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         switch (holder.getItemViewType()) {
             case TITLE_CARD:
                 TitleCard titleCard = (TitleCard) holder;
-                titleCard.init((Integer) trendItems.get(position));
+                titleCard.init((TrendsHeader) trendItems.get(position));
                 break;
             case GRAPH_CARD:
                 GraphCard graphCard = (GraphCard) holder;
                 graphCard.init((CensusHistoryScale) trendItems.get(position));
+                break;
+            case DIVIDER_VIEW:
+                RankTitleViewHolder rankTitleViewHolder = (RankTitleViewHolder) holder;
+                rankTitleViewHolder.init((TrendsRankTitle) trendItems.get(position));
+                break;
+            case RANKING_VIEW:
+                NationRankViewHolder nationRankViewHolder = (NationRankViewHolder) holder;
+                nationRankViewHolder.init((CensusNationRank) trendItems.get(position));
                 break;
         }
     }
@@ -102,11 +146,17 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (trendItems.get(position) instanceof Integer) {
+        if (trendItems.get(position) instanceof TrendsHeader) {
             return TITLE_CARD;
         }
         else if (trendItems.get(position) instanceof CensusHistoryScale) {
             return GRAPH_CARD;
+        }
+        else if (trendItems.get(position) instanceof TrendsRankTitle) {
+            return DIVIDER_VIEW;
+        }
+        else if (trendItems.get(position) instanceof CensusNationRank) {
+            return RANKING_VIEW;
         }
         return -1;
     }
@@ -114,7 +164,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // Card viewholders
 
     // Title card
-    public class TitleCard extends RecyclerView.ViewHolder {
+    private class TitleCard extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView unit;
 
@@ -124,28 +174,20 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             unit = (TextView) itemView.findViewById(R.id.trends_unit);
         }
 
-        public void init(Integer id) {
-            int censusId = id;
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
-            title.setText(censusType[0]);
-            unit.setText(censusType[1]);
+        public void init(TrendsHeader header) {
+            title.setText(header.title);
+            unit.setText(header.unit);
         }
     }
 
-    public class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
+    // Graph card
+    private class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
         private CensusHistoryScale dataset;
         private TextView date;
         private TextView value;
         private TextView max;
-        private RelativeLayout maxHolder;
         private TextView min;
-        private RelativeLayout minHolder;
         private TextView avg;
-        private RelativeLayout avgHolder;
         private LineChart chart;
 
         public GraphCard(View itemView) {
@@ -153,11 +195,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             date = (TextView) itemView.findViewById(R.id.trends_date);
             value = (TextView) itemView.findViewById(R.id.trends_value);
             max = (TextView) itemView.findViewById(R.id.trends_max);
-            maxHolder = (RelativeLayout) itemView.findViewById(R.id.trends_max_holder);
             min = (TextView) itemView.findViewById(R.id.trends_min);
-            minHolder = (RelativeLayout) itemView.findViewById(R.id.trends_min_holder);
             avg = (TextView) itemView.findViewById(R.id.trends_avg);
-            avgHolder = (RelativeLayout) itemView.findViewById(R.id.trends_avg_holder);
             chart = (LineChart) itemView.findViewById(R.id.trends_chart);
         }
 
@@ -257,6 +296,60 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Override
         public void onNothingSelected() {
             resetDataSelected();
+        }
+    }
+
+    // Title at the beginning of rank list
+    private class RankTitleViewHolder extends RecyclerView.ViewHolder {
+        private TrendsRankTitle titleData;
+        private TextView type;
+        private TextView census;
+
+        public RankTitleViewHolder(View itemView) {
+            super(itemView);
+            type = (TextView) itemView.findViewById(R.id.trends_ranking_type);
+            census = (TextView) itemView.findViewById(R.id.trends_ranking_census);
+        }
+
+        public void init(TrendsRankTitle title) {
+            titleData = title;
+
+            switch (titleData.mode) {
+                case TrendsActivity.TREND_REGION:
+                    type.setText(context.getString(R.string.trends_regional));
+                    break;
+            }
+
+            census.setText(titleData.census);
+        }
+    }
+
+    // Rank entry
+    private class NationRankViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CensusNationRank rankData;
+        private TextView nation;
+        private TextView score;
+        private TextView rank;
+
+        public NationRankViewHolder(View itemView) {
+            super(itemView);
+            nation = (TextView) itemView.findViewById(R.id.trends_ranking_nation);
+            score = (TextView) itemView.findViewById(R.id.trends_ranking_score);
+            rank = (TextView) itemView.findViewById(R.id.trends_ranking_rank);
+            itemView.setOnClickListener(this);
+        }
+
+        public void init(CensusNationRank r) {
+            rankData = r;
+            nation.setText(SparkleHelper.getNameFromId(rankData.name));
+            score.setText(String.format(Locale.US, context.getString(R.string.trends_score_template),
+                    SparkleHelper.getPrettifiedNumber(rankData.score)));
+            rank.setText(SparkleHelper.getPrettifiedNumber(rankData.rank));
+        }
+
+        @Override
+        public void onClick(View view) {
+            SparkleHelper.startExploring(context, rankData.name, SparkleHelper.CLICKY_NATION_MODE);
         }
     }
 }

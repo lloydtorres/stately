@@ -942,7 +942,7 @@ public class SparkleHelper {
         String targetActivity = EXPLORE_TARGET;
 
         // Name needs to be formatted back to its NationStates ID first for the URL.
-        targetActivity = targetActivity + nTarget.toLowerCase(Locale.US).replace(" ", "_");
+        targetActivity = targetActivity + getIdFromName(nTarget);
         targetActivity = String.format(Locale.US, urlFormat, targetActivity, mode, nTarget);
 
         tempHolder = tempHolder.replace(oTarget, targetActivity);

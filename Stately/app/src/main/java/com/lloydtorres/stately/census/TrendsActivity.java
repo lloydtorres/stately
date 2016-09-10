@@ -36,6 +36,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusHistory;
+import com.lloydtorres.stately.dto.CensusNationRankList;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -243,9 +244,28 @@ public class TrendsActivity extends AppCompatActivity {
      */
     private void processDataset(CensusHistory data)
     {
-        mRecyclerAdapter = new TrendsRecyclerAdapter(this, id, data, WORLD_CENSUS_ITEMS);
+        updateStartCounter(data.ranks);
+
+        int censusId = id;
+        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
+        {
+            censusId = WORLD_CENSUS_ITEMS.length - 1;
+        }
+        String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], data);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Updates the counter that tracks where to start querying for nation ranks.
+     * @param rankList
+     */
+    private void updateStartCounter(CensusNationRankList rankList) {
+        if (rankList != null && rankList.ranks.size() > 0) {
+            start += rankList.ranks.size();
+        }
     }
 
     @Override

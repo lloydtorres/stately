@@ -273,6 +273,9 @@
     <string name="trends_min">Minimum</string>
     <string name="trends_avg">Average</string>
     <string name="trends_empty">No data found.</string>
+    <string name="trends_regional">Regional Rankings</string>
+    <string name="trends_world">World Rankings</string>
+    <string name="trends_score_template">Score: %1$s</string>
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>

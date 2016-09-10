@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:orientation="vertical">
+    <include layout="@layout/view_divider" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/white">
+        <TextView
+            android:id="@+id/trends_ranking_type"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            tools:text="@string/trends_regional" />
+        <TextView
+            android:id="@+id/trends_ranking_census"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            tools:text="Industry: Timber Woodchipping" />
+    </LinearLayout>
+</LinearLayout>
