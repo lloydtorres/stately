@@ -9,7 +9,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="20dp" >
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/themedColorHeaderText"
             android:text="@string/card_region_poll" />
         <TextView
             android:id="@+id/card_region_poll_question"
@@ -30,7 +30,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="A tree falls in a forest and no one is around to hear it. Does a hipster have a vinyl recording of it?" />
         <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/card_region_poll_content"
@@ -40,7 +40,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="No, really, do they?" />
         <LinearLayout
             android:id="@+id/card_region_poll_options"

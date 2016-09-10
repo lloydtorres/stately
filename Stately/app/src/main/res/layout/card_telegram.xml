@@ -10,7 +10,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     tools:ignore="MissingPrefix">
 
     <LinearLayout
@@ -75,7 +75,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/themedColorPrimaryText"
                         tools:text="Kaugummi" />
                     <TextView
                         android:id="@+id/card_telegram_to"
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="italic"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         android:text="@string/telegrams_recipients"/>
                     <TextView
                         android:id="@+id/card_telegram_time"
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="italic"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         tools:text="3 days ago"/>
                 </LinearLayout>
                 <ImageView
@@ -118,7 +118,7 @@
                 android:id="@+id/card_telegram_content"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="\nThe General Assembly resolution Ban on Booby-Trapped Aid was discarded by the WA for rule violations after garnering 11,721 votes in favor and 3,124 votes against." />
@@ -200,14 +200,14 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="?attr/themedColorHeaderText"
                         android:text="@string/telegrams_region_explore"
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
                     <TextView
                         android:visibility="invisible"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="?attr/themedColorHeaderText"
                         android:textSize="30sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

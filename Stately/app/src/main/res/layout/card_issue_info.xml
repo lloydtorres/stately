@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
-    card_view:cardBackgroundColor="@android:color/white">
+    card_view:cardBackgroundColor="?attr/themedColorCard">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="Not A Drop To Drink" />
         <TextView
             android:id="@+id/card_issue_info_number"
@@ -29,7 +29,7 @@
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="?attr/themedColorSecondaryText"
             tools:text="@string/issue_number" />
         <TextView
             android:id="@+id/card_issue_option_content"
@@ -38,7 +38,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="Lorem ipsum" />
     </LinearLayout>
 

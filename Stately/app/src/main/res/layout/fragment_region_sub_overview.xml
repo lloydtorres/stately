@@ -21,7 +21,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             card_view:contentPadding="20dp" >
 
             <LinearLayout
@@ -34,7 +34,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="?attr/themedColorHeaderText"
                     android:text="@string/card_region_quick_facts_title" />
                 <LinearLayout
                     android:id="@+id/card_overview_gov_leader"
@@ -47,7 +47,7 @@
                         android:fontFamily="sans-serif-light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         android:text="@string/card_region_wa_delegate" />
                     <TextView
                         android:id="@+id/region_delegate"
@@ -55,7 +55,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/themedColorPrimaryText"
                         tools:text="Mignon (5 votes)" />
                 </LinearLayout>
                 <LinearLayout
@@ -68,7 +68,7 @@
                         android:fontFamily="sans-serif-light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         android:text="@string/card_region_founder" />
                     <TextView
                         android:id="@+id/region_founder"
@@ -76,7 +76,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/themedColorPrimaryText"
                         tools:text="Greater Tern" />
                 </LinearLayout>
                 <LinearLayout
@@ -89,7 +89,7 @@
                         android:fontFamily="sans-serif-light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         android:text="@string/card_region_power" />
                     <TextView
                         android:id="@+id/region_power"
@@ -97,7 +97,7 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/themedColorPrimaryText"
                         tools:text="Very High" />
                 </LinearLayout>
             </LinearLayout>
@@ -111,7 +111,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             card_view:contentPadding="20dp" >
 
             <LinearLayout
@@ -124,7 +124,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="?attr/themedColorHeaderText"
                     android:text="@string/card_region_factbook_title" />
                 <org.sufficientlysecure.htmltextview.HtmlTextView
                     android:id="@+id/region_factbook"
@@ -133,7 +133,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryText"
+                    android:textColor="?attr/themedColorPrimaryText"
                     tools:text="The Arbitration Committee, or Arbcom for short, is an international roundtable where member nations can discuss issues and settle disputes. The Arbcom headquarters is located in Saint Genève, Greater Tern." />
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -145,7 +145,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             card_view:contentPadding="20dp" >
 
             <LinearLayout
@@ -158,7 +158,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="?attr/themedColorHeaderText"
                     android:text="@string/card_region_tags_title" />
                 <TextView
                     android:id="@+id/region_tags"
@@ -167,7 +167,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryText"
+                    android:textColor="?attr/themedColorPrimaryText"
                     tools:text="Small, Password" />
             </LinearLayout>
         </android.support.v7.widget.CardView>

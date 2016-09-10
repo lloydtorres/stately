@@ -9,7 +9,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="20dp" >
 
     <LinearLayout
@@ -29,7 +29,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:paddingRight="10dp"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:layout_toLeftOf="@+id/card_telegram_preview_time"
                 android:layout_toStartOf="@+id/card_telegram_preview_time"
                 tools:text="Kaugummi" />
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 tools:text="3 days ago"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
@@ -83,7 +83,7 @@
             android:layout_marginTop="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="?attr/themedColorSecondaryText"
             android:ellipsize="end"
             android:maxLines="2"
             tools:text="The General Assembly resolution Ban on Booby-Trapped Aid was discarded by the WA for rule violations after garnering 11,721 votes in favor and 3,124 votes against." />

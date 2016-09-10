@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="16dp" >
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="Industry: Timber Woodchipping" />
         <TextView
             android:id="@+id/trends_unit"
@@ -28,7 +28,7 @@
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="?attr/themedColorSecondaryText"
             tools:text="Tasmanian Pulp Environmental Export Index" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -11,7 +11,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white">
+    card_view:cardBackgroundColor="?attr/themedColorCard">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/themedColorHeaderText"
                 tools:text="@string/card_main_title_summary" />
             <TextView
                 android:id="@+id/card_nation_generic_content"
@@ -37,7 +37,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 tools:text="The Imperial Republic of Mignon is notable for its anti-smoking policies, punitive income tax rates, and devotion to social welfare, as well as its compassionate, democratic, cheerful population of 3 billion Mignonese.\n\nCrime is totally unknown, thanks to a very well-funded police force and progressive social policies in education and welfare." />
             <LinearLayout
                 android:id="@+id/card_nation_generic_details_holder"
@@ -75,14 +75,14 @@
                         android:fontFamily="sans-serif"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="?attr/themedColorHeaderText"
                         tools:text="@string/card_overview_census_button"
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
                     <TextView
                         android:visibility="invisible"
-                        android:textColor="@android:color/white"
+                        android:textColor="?attr/themedColorCard"
                         android:textSize="30sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

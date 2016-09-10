@@ -6,6 +6,11 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
+    <color name="colorBackgroundLight">#EEE</color>
+
+    <color name="colorPrimaryRouge">#F44336</color>
+    <color name="colorPrimaryDarkRouge">#D32F2F</color>
+    <color name="colorAccentRouge">#FF5252</color>
 
     <color name="colorFreedom0">#b71c1c</color>
     <color name="colorFreedom1">#BF360C</color>

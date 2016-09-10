@@ -9,7 +9,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="10dp" >
 
     <LinearLayout
@@ -31,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:textSize="30sp"
                 tools:text="54,321"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:textSize="14sp"
                 android:text="@string/wa_members"/>
         </LinearLayout>
@@ -56,14 +56,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:textSize="30sp"
                 tools:text="12,345"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 android:textSize="14sp"
                 android:text="@string/wa_delegates"/>
         </LinearLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="themedColorHeaderText" format="reference|color" />
+    <attr name="themedColorPrimaryText" format="reference|color" />
+    <attr name="themedColorSecondaryText" format="reference|color" />
+    <attr name="themedColorLinkText" format="reference|color" />
+    <attr name="themedColorTab" format="reference" />
+    <attr name="themedColorCard" format="reference|color" />
+    <attr name="themedColorBackground" format="reference|color" />
+</resources>

@@ -26,7 +26,7 @@
             android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#EEE"
+            android:background="?attr/themedColorBackground"
             android:clipToPadding="false" />
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

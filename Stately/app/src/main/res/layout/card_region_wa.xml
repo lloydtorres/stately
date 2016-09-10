@@ -8,7 +8,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white">
+    card_view:cardBackgroundColor="?attr/themedColorCard">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +25,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/themedColorHeaderText"
             android:text="@string/card_region_wa_vote" />
         <TextView
             android:id="@+id/region_wa_vote_filler"
@@ -34,7 +34,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             android:text="@string/region_wa_filler" />
         <TextView
             android:id="@+id/region_wa_null_vote"
@@ -78,14 +78,14 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/themedColorHeaderText"
                 android:text="@string/card_region_wa_link"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
             <TextView
                 android:visibility="invisible"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/themedColorHeaderText"
                 android:textSize="30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

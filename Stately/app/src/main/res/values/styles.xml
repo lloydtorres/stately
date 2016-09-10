@@ -2,12 +2,33 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimary</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorPrimary</item>
+        <item name="themedColorTab">@color/tab_color</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+    </style>
+
+    <style name="AppThemeRouge" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryRouge</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkRouge</item>
+        <item name="colorAccent">@color/colorAccentRouge</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryRouge</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorPrimaryRouge</item>
+        <item name="themedColorTab">@color/tab_color_rouge</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
     </style>
 
     <style name="AppTheme.CoreActivity">

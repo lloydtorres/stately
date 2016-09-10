@@ -22,7 +22,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/themedColorHeaderText"
             tools:text="@string/card_economy_analysis_title" />
         <LinearLayout
             android:id="@+id/card_nation_chart_details_holder"

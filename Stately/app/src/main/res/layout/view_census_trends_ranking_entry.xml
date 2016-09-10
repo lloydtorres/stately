@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="?attr/themedColorCard">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/themedColorLinkText"
                 tools:text="Greater Tern" />
             <TextView
                 android:id="@+id/trends_ranking_score"
@@ -31,7 +31,7 @@
                 android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 tools:text="1,959,005,987,536,900" />
         </LinearLayout>
         <LinearLayout
@@ -50,7 +50,7 @@
                 android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 android:textAlignment="center"
                 android:text="@string/census_hash_symbol"/>
             <TextView
@@ -60,7 +60,7 @@
                 android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 tools:text="123,456" />
         </LinearLayout>
     </RelativeLayout>
