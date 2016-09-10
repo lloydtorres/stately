@@ -52,10 +52,11 @@ import java.util.Locale;
  */
 public class TrendsActivity extends AppCompatActivity {
     // Keys for intent/saved instance data
-    public static final String TREND_TARGET = "trendTarget";
-    public static final String TREND_ID = "trendId";
-    public static final String TREND_MODE = "trendMode";
-    public static final String TREND_DATASET = "trendDataset";
+    public static final String TREND_DATA_TARGET = "trendTarget";
+    public static final String TREND_DATA_ID = "trendId";
+    public static final String TREND_DATA_START = "trendStart";
+    public static final String TREND_DATA_MODE = "trendMode";
+    public static final String TREND_DATA_DATASET = "trendDataset";
 
     public static final int TREND_NATION = 0;
     public static final int TREND_REGION = 1;
@@ -73,6 +74,7 @@ public class TrendsActivity extends AppCompatActivity {
     private String target;
     private int id;
     private int mode;
+    private int start = 1;
     private CensusHistory dataset;
 
     private String[] WORLD_CENSUS_ITEMS;
@@ -92,15 +94,15 @@ public class TrendsActivity extends AppCompatActivity {
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
 
         if (getIntent() != null) {
-            target = getIntent().getStringExtra(TREND_TARGET);
-            id = getIntent().getIntExtra(TREND_ID, 0);
-            mode = getIntent().getIntExtra(TREND_MODE, TREND_NATION);
+            target = getIntent().getStringExtra(TREND_DATA_TARGET);
+            id = getIntent().getIntExtra(TREND_DATA_ID, 0);
+            mode = getIntent().getIntExtra(TREND_DATA_MODE, TREND_NATION);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setToolbar(toolbar);
 
-        view = findViewById(R.id.trends_main);
+        view = findViewById(R.id.refreshview_main);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
@@ -168,11 +170,24 @@ public class TrendsActivity extends AppCompatActivity {
      */
     private void queryDataset()
     {
-        String queryMode = mode == TREND_NATION ? CensusHistory.NATION_HISTORY : CensusHistory.REGION_HISTORY;
+        start = 1;
+
+        String targetURL = "";
+        String queryTarget = "";
         long curTime = System.currentTimeMillis() / 1000L;
         long sixtyDaysAgo = curTime - CensusHistory.SIXTY_DAYS_IN_SECONDS;
 
-        String targetURL = String.format(Locale.US, CensusHistory.QUERY, queryMode, SparkleHelper.getIdFromName(target), id, sixtyDaysAgo, curTime);
+        switch (mode) {
+            case TREND_NATION:
+                queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id, sixtyDaysAgo, curTime);
+                break;
+            case TREND_REGION:
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
+                break;
+        }
+
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     CensusHistory censusResponse = null;
@@ -261,15 +276,16 @@ public class TrendsActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(TREND_ID, id);
-        savedInstanceState.putInt(TREND_MODE, mode);
+        savedInstanceState.putInt(TREND_DATA_ID, id);
+        savedInstanceState.putInt(TREND_DATA_MODE, mode);
+        savedInstanceState.putInt(TREND_DATA_START, start);
         if (target != null)
         {
-            savedInstanceState.putString(TREND_TARGET, target);
+            savedInstanceState.putString(TREND_DATA_TARGET, target);
         }
         if (dataset != null)
         {
-            savedInstanceState.putParcelable(TREND_DATASET, dataset);
+            savedInstanceState.putParcelable(TREND_DATA_DATASET, dataset);
         }
     }
 
@@ -278,15 +294,16 @@ public class TrendsActivity extends AppCompatActivity {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            id = savedInstanceState.getInt(TREND_ID);
-            mode = savedInstanceState.getInt(TREND_MODE);
+            id = savedInstanceState.getInt(TREND_DATA_ID);
+            mode = savedInstanceState.getInt(TREND_DATA_MODE);
+            start = savedInstanceState.getInt(TREND_DATA_START);
             if (target == null)
             {
-                target = savedInstanceState.getString(TREND_TARGET);
+                target = savedInstanceState.getString(TREND_DATA_TARGET);
             }
             if (dataset == null)
             {
-                dataset = savedInstanceState.getParcelable(TREND_DATASET);
+                dataset = savedInstanceState.getParcelable(TREND_DATA_DATASET);
             }
         }
     }

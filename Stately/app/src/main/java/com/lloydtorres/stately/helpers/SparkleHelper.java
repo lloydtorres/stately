@@ -836,9 +836,9 @@ public class SparkleHelper {
     public static void startTrends(Context c, String target, int mode, int id)
     {
         Intent trendsActivityLaunch = new Intent(c, TrendsActivity.class);
-        trendsActivityLaunch.putExtra(TrendsActivity.TREND_TARGET, target);
-        trendsActivityLaunch.putExtra(TrendsActivity.TREND_MODE, mode);
-        trendsActivityLaunch.putExtra(TrendsActivity.TREND_ID, id);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_DATA_TARGET, target);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_DATA_MODE, mode);
+        trendsActivityLaunch.putExtra(TrendsActivity.TREND_DATA_ID, id);
         c.startActivity(trendsActivityLaunch);
     }
 
