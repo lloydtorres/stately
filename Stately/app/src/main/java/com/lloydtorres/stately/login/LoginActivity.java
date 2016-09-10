@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
 
         view = findViewById(R.id.activity_login_main);
         username = (AppCompatEditText) findViewById(R.id.field_username);
