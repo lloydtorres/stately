@@ -37,6 +37,7 @@ import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusHistoryPoint;
 import com.lloydtorres.stately.dto.CensusHistoryScale;
 import com.lloydtorres.stately.dto.CensusNationRank;
+import com.lloydtorres.stately.dto.CensusNationRankList;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -88,6 +89,14 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (censusData.ranks != null) {
             trendItems.add(new TrendsRankTitle(mode, title));
             trendItems.addAll(censusData.ranks.ranks);
+        }
+    }
+
+    public void addNewCensusNationRanks(CensusNationRankList rankList) {
+        if (rankList.ranks != null && rankList.ranks.size() > 0) {
+            int oldSize = trendItems.size();
+            trendItems.addAll(rankList.ranks);
+            notifyItemRangeInserted(oldSize, rankList.ranks.size());
         }
     }
 

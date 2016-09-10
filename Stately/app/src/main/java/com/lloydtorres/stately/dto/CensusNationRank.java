@@ -27,7 +27,7 @@ import org.simpleframework.xml.Root;
  * Model for the census rankings for a particular nation.
  */
 @Root(name="NATION", strict=false)
-public class CensusNationRank implements Parcelable {
+public class CensusNationRank implements Parcelable, Comparable<CensusNationRank> {
     @Element(name="NAME")
     public String name;
     @Element(name="RANK")
@@ -69,4 +69,20 @@ public class CensusNationRank implements Parcelable {
             return new CensusNationRank[size];
         }
     };
+
+    @Override
+    public int compareTo(CensusNationRank another) {
+        if (this.rank > another.rank)
+        {
+            return 1;
+        }
+        else if (this.rank == another.rank)
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 }

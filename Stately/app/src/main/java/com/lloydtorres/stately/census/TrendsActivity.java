@@ -18,7 +18,6 @@ package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,14 +35,18 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusHistory;
+import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.r0adkll.slidr.Slidr;
 
 import org.simpleframework.xml.core.Persister;
 
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -81,7 +84,7 @@ public class TrendsActivity extends AppCompatActivity {
     private String[] WORLD_CENSUS_ITEMS;
 
     private View view;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
@@ -89,7 +92,7 @@ public class TrendsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_refreshview);
+        setContentView(R.layout.activity_trends);
         Slidr.attach(this, SparkleHelper.slidrConfig);
 
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
@@ -100,16 +103,24 @@ public class TrendsActivity extends AppCompatActivity {
             mode = getIntent().getIntExtra(TREND_DATA_MODE, TREND_NATION);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
         setToolbar(toolbar);
 
-        view = findViewById(R.id.refreshview_main);
+        view = findViewById(R.id.trends_main);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
         mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction.equals(SwipyRefreshLayoutDirection.BOTTOM)) {
+                    queryNextRankData();
+                }
+            }
+        });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.trends_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -146,6 +157,8 @@ public class TrendsActivity extends AppCompatActivity {
      */
     private void startQueryDataset()
     {
+        mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -207,20 +220,20 @@ public class TrendsActivity extends AppCompatActivity {
                             }
                             else {
                                 SparkleHelper.makeSnackbar(view, getString(R.string.trends_empty));
-                                mSwipeRefreshLayout.setRefreshing(false);
+                                stopRefreshing();
                             }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
-                            mSwipeRefreshLayout.setRefreshing(false);
+                            stopRefreshing();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
+                stopRefreshing();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -233,7 +246,7 @@ public class TrendsActivity extends AppCompatActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
-            mSwipeRefreshLayout.setRefreshing(false);
+            stopRefreshing();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -244,7 +257,8 @@ public class TrendsActivity extends AppCompatActivity {
      */
     private void processDataset(CensusHistory data)
     {
-        updateStartCounter(data.ranks);
+        dataset = data;
+        updateStartCounter(dataset.ranks);
 
         int censusId = id;
         if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
@@ -253,9 +267,9 @@ public class TrendsActivity extends AppCompatActivity {
         }
         String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
 
-        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], data);
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], dataset);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-        mSwipeRefreshLayout.setRefreshing(false);
+        stopRefreshing();
     }
 
     /**
@@ -265,6 +279,80 @@ public class TrendsActivity extends AppCompatActivity {
     private void updateStartCounter(CensusNationRankList rankList) {
         if (rankList != null && rankList.ranks.size() > 0) {
             start += rankList.ranks.size();
+        }
+    }
+
+    /**
+     * Query the next set of nation census rankings.
+     */
+    private void queryNextRankData() {
+        String queryTarget = "";
+        String targetURL = "";
+
+        switch (mode) {
+            case TREND_REGION:
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                break;
+        }
+
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    CensusNationRankData rankDataResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            rankDataResponse = serializer.read(CensusNationRankData.class, response);
+                            if (rankDataResponse.ranks != null && rankDataResponse.ranks.ranks.size() > 0) {
+                                dataset.ranks.ranks.addAll(rankDataResponse.ranks.ranks);
+                                Collections.sort(dataset.ranks.ranks);
+
+                                int oldItemCount = mRecyclerAdapter.getItemCount()-1;
+                                ((TrendsRecyclerAdapter) mRecyclerAdapter).addNewCensusNationRanks(rankDataResponse.ranks);
+                                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(oldItemCount, 40);
+                                updateStartCounter(rankDataResponse.ranks);
+                            }
+                            else {
+                                SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
+                            }
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                        }
+                        stopRefreshing();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                stopRefreshing();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
+        {
+            stopRefreshing();
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Call to setup the swipe refresher to stop refreshing.
+     */
+    private void stopRefreshing() {
+        mSwipeRefreshLayout.setRefreshing(false);
+        if (mode != TREND_NATION) {
+            mSwipeRefreshLayout.setEnabled(true);
+            mSwipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTTOM);
         }
     }
 
