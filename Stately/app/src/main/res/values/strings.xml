@@ -15,7 +15,6 @@
     <string name="create_finish">Type in your nation name and password to get started.</string>
     <string name="log_in_load">Logging In…</string>
 
-    <string name="login_error_autologin">Try logging in again.</string>
     <string name="login_error_404">Invalid nation name or password.</string>
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
