@@ -14,6 +14,20 @@
         <item>Rankings</item>
         <item>Happenings</item>
     </string-array>
+    <string-array name="themes">
+        <item>Stately Vert</item>
+        <item>Mercantile Noir</item>
+        <item>Royalist Bleu</item>
+        <item>Commie Rouge</item>
+        <item>Viral Violet</item>
+    </string-array>
+    <string-array name="themes_data">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
     <string-array name="census">
         <item>Civil Rights##Martin Luther King, Jr. Units</item>
         <item>Economy##Krugman-Greenspan Business Outlook Index</item>

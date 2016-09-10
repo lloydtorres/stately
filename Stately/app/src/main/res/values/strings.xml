@@ -387,6 +387,8 @@
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
+    <string name="setting_title_style">Styling</string>
+    <string name="setting_theme">Theme</string>
     <string name="setting_title_about">About</string>
     <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributors: Jannes Höke</string>
 

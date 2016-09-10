@@ -28,6 +28,19 @@
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory
+        android:title="@string/setting_title_style"
+        android:key="setting_style">
+        <android.support.v7.preference.ListPreference
+            android:title="@string/setting_theme"
+            android:key="setting_theme"
+            android:defaultValue="0"
+            android:entries="@array/themes"
+            android:entryValues="@array/themes_data"
+            android:summary="%1$s"
+            android:icon="@null"/>
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/setting_title_about"
         android:key="setting_about">
         <android.support.v7.preference.Preference
