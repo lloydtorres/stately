@@ -34,7 +34,16 @@
     <style name="AppTheme.CoreActivity">
     </style>
 
+    <style name="AppThemeRouge.CoreActivity">
+    </style>
+
     <style name="AppTheme.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AppThemeRouge.SlidrActivity">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>

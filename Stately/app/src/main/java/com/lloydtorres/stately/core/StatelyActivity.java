@@ -109,6 +109,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        switch(SettingsActivity.getTheme(this)) {
+            case SettingsActivity.THEME_VERT:
+                setTheme(R.style.AppTheme_CoreActivity);
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                setTheme(R.style.AppThemeRouge_CoreActivity);
+                break;
+        }
         setContentView(R.layout.activity_stately);
 
         // Get nation object from intent or restore state

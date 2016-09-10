@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -42,6 +41,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
@@ -53,7 +53,6 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,7 +70,7 @@ import java.util.regex.Pattern;
  * or through this Uri: com.lloydtorres.stately.explore://<name>/<mode>
  * Requires a name to be passed in; does error checking as well.
  */
-public class ExploreActivity extends AppCompatActivity implements IToolbarActivity {
+public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     // Keys for intent data
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";
@@ -109,7 +108,6 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
         view = findViewById(R.id.explore_coordinator);
         isInProgress = false;
 

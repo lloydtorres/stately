@@ -68,6 +68,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        switch(SettingsActivity.getTheme(this)) {
+            case SettingsActivity.THEME_VERT:
+                setTheme(R.style.AppTheme);
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                setTheme(R.style.AppThemeRouge);
+                break;
+        }
         setContentView(R.layout.activity_login);
 
         view = findViewById(R.id.activity_login_main);

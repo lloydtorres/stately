@@ -18,7 +18,6 @@ package com.lloydtorres.stately.issues;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,13 +25,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -46,7 +45,7 @@ import java.util.List;
  * Created by Lloyd on 2016-02-29.
  * This activity shows the results of an issue decision.
  */
-public class IssueResultsActivity extends AppCompatActivity {
+public class IssueResultsActivity extends SlidrActivity {
     public static final String RESPONSE_DATA = "responseData";
     public static final String OPTION_DATA = "optionData";
     public static final String NEWS_DATA = "newsData";
@@ -72,7 +71,6 @@ public class IssueResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_refreshview);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         String response = null;
         // Either get data from intent or restore state

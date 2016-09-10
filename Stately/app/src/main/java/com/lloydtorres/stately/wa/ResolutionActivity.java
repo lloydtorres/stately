@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +41,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.AssemblyActive;
 import com.lloydtorres.stately.dto.Resolution;
@@ -50,7 +50,6 @@ import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,7 +70,7 @@ import java.util.Map;
  * Resolution object (optional). If Resolution is null, it can get it on its own.
  * Also has refreshing!
  */
-public class ResolutionActivity extends AppCompatActivity {
+public class ResolutionActivity extends SlidrActivity {
     // Keys for Intent data
     public static final String TARGET_COUNCIL_ID = "councilId";
     public static final String TARGET_RESOLUTION = "resolution";
@@ -113,7 +112,7 @@ public class ResolutionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wa_council);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
+
         isInProgress = false;
         view = findViewById(R.id.wa_council_main);
 

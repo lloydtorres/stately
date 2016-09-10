@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
@@ -42,7 +42,6 @@ import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +57,7 @@ import java.util.Map;
  * Created by Lloyd on 2016-01-28.
  * This activity displays options for a particular issue.
  */
-public class IssueDecisionActivity extends AppCompatActivity {
+public class IssueDecisionActivity extends SlidrActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
     public static final String NATION_DATA = "nationData";
@@ -82,7 +81,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_refreshview);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
         view = findViewById(R.id.refreshview_main);
         isInProgress = false;
 

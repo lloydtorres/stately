@@ -18,7 +18,6 @@ package com.lloydtorres.stately.telegrams;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,11 +31,11 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,7 +49,7 @@ import java.util.Locale;
  * Created by Lloyd on 2016-03-11.
  * Shows the conversational history of a particular telegram.
  */
-public class TelegramHistoryActivity extends AppCompatActivity {
+public class TelegramHistoryActivity extends SlidrActivity {
     // Keys for intent data and saved preferences
     public static final String ID_DATA = "telegramId";
     public static final String TELEGRAMS_DATA = "telegramsData";
@@ -71,7 +70,6 @@ public class TelegramHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_refreshview);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         // Either get data from intent or restore state
         if (getIntent() != null)

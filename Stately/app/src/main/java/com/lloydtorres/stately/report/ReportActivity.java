@@ -20,7 +20,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -40,11 +39,11 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -54,7 +53,7 @@ import java.util.Map;
  * Created by Lloyd on 2016-07-28.
  * Activity to report user content to the NS moderators.
  */
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends SlidrActivity {
     // Keys for intent data and saved preferences
     public static final String REPORT_ID = "reportId";
     public static final String REPORT_TYPE = "reportType";
@@ -100,7 +99,6 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         // Either get data from intent or restore state
         if (getIntent() != null)

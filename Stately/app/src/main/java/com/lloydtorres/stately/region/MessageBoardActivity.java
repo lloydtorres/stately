@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +40,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionMessages;
@@ -50,7 +50,6 @@ import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import com.r0adkll.slidr.Slidr;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -69,7 +68,7 @@ import java.util.Set;
  * Created by Lloyd on 2016-01-24.
  * An activity that displays the contents of the regional message board.
  */
-public class MessageBoardActivity extends AppCompatActivity {
+public class MessageBoardActivity extends SlidrActivity {
     // Keys for Intent data
     public static final String BOARD_REGION_NAME = "regionName";
     public static final String BOARD_TARGET_ID = "targetId";
@@ -118,7 +117,7 @@ public class MessageBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_board);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
+
         view = findViewById(R.id.message_board_coordinator);
         isInProgress = false;
 

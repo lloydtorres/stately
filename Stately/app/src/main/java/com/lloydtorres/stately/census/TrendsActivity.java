@@ -18,7 +18,6 @@ package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
@@ -42,7 +42,6 @@ import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import com.r0adkll.slidr.Slidr;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -54,7 +53,7 @@ import java.util.Locale;
  * This activity downloads and graphs the history of a given dataset.
  * Users can also switch between different datasets.
  */
-public class TrendsActivity extends AppCompatActivity {
+public class TrendsActivity extends SlidrActivity {
     // Keys for intent/saved instance data
     public static final String TREND_DATA_TARGET = "trendTarget";
     public static final String TREND_DATA_ID = "trendId";
@@ -93,7 +92,6 @@ public class TrendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trends);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
 
