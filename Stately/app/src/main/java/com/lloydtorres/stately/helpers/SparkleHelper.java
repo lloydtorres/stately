@@ -1413,11 +1413,11 @@ public class SparkleHelper {
         while (m0.find())
         {
             String template = "<a href=\"%s\">%s</a>";
-            Uri link = Uri.parse(m0.group(1));
+            Uri link = Uri.parse(m0.group(1)).normalizeScheme();
             if (link.getScheme() == null) {
                 template = "<a href=\"http://%s\">%s</a>";
             }
-            String replaceText = String.format(Locale.US, template, m0.group(1), m0.group(2));
+            String replaceText = String.format(Locale.US, template, link.toString(), m0.group(2));
             replaceBasic.put(m0.group(), replaceText);
         }
         Set<Map.Entry<String, String>> setBasic = replaceBasic.entrySet();
@@ -1430,16 +1430,16 @@ public class SparkleHelper {
         Matcher m1 = RAW_HTTP_LINK.matcher(holder);
         while (m1.find())
         {
-            Uri link = Uri.parse(m1.group(1));
-            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), m1.group(1), link.getHost());
+            Uri link = Uri.parse(m1.group(1)).normalizeScheme();
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             replaceRaw.put(m1.group(), replaceText);
         }
 
         Matcher m2 = RAW_WWW_LINK.matcher(holder);
         while (m2.find())
         {
-            Uri link = Uri.parse("http://" + m2.group(1));
-            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_www), m2.group(1), link.getHost());
+            Uri link = Uri.parse("http://" + m2.group(1)).normalizeScheme();
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             replaceRaw.put(m2.group(), replaceText);
         }
 
