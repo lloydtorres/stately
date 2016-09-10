@@ -381,7 +381,7 @@
     <string name="report_header_response">Response</string>
 
     <!-- Settings -->
-    <string name="setting_title_behavior">App Behavior</string>
+    <string name="setting_title_behavior">General</string>
     <string name="setting_autologin">Log in automatically</string>
     <string name="setting_issueconfirm">Confirm issue decisions</string>
     <string name="setting_crashreport">Send crash reports</string>

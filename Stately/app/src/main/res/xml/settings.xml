@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/setting_title_behavior"
         android:key="setting_behavior">
-        <CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_autologin"
             android:title="@string/setting_autologin"
             android:defaultValue="true"
             android:icon="@null" />
-        <CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_issueconfirm"
             android:title="@string/setting_issueconfirm"
             android:defaultValue="true"
             android:icon="@null" />
-        <CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_exitconfirm"
             android:title="@string/setting_exitconfirm"
             android:defaultValue="true"
             android:icon="@null" />
-        <CheckBoxPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_crashreport"
             android:title="@string/setting_crashreport"
             android:defaultValue="true"
             android:icon="@null" />
-    </PreferenceCategory>
+    </android.support.v7.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/setting_title_about"
         android:key="setting_about">
-        <Preference
+        <android.support.v7.preference.Preference
             android:key="info"
             android:title="@string/app_version"
             android:summary="@string/setting_developer_info"
             android:selectable="false"
             android:icon="@null" />
-    </PreferenceCategory>
+    </android.support.v7.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>
