@@ -19,9 +19,7 @@ package com.lloydtorres.stately.login;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -66,15 +64,12 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private Button createNation;
     private boolean isLoggingIn;
-    private SharedPreferences storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-
-        storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         view = findViewById(R.id.activity_login_main);
         username = (AppCompatEditText) findViewById(R.id.field_username);
@@ -105,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // If settings allows it and user login exists, try logging in first
-        if (storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true))
+        if (SettingsActivity.getAutologinSetting(this))
         {
             UserLogin u = SparkleHelper.getActiveUser(this);
             if (u != null)

@@ -16,9 +16,6 @@
 
 package com.lloydtorres.stately.core;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import com.crashlytics.android.Crashlytics;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
@@ -30,15 +27,13 @@ import io.fabric.sdk.android.Fabric;
  * This class is used for app-wide changes.
  */
 public class StatelyApp extends SugarApp {
-    private SharedPreferences storage; // shared preferences
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         // analytics
-        storage = PreferenceManager.getDefaultSharedPreferences(this);
-        if (storage.getBoolean(SettingsActivity.SETTING_CRASHREPORT, true))
+        if (SettingsActivity.getCrashReportSetting(this))
         {
             Fabric.with(this, new Crashlytics());
         }

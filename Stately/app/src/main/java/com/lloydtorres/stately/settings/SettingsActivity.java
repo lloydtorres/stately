@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.settings;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -86,5 +87,25 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         if (key.equals(SETTING_CRASHREPORT)) {
             dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
         }
+    }
+
+    public static boolean getAutologinSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true);
+    }
+
+    public static boolean getConfirmIssueDecisionSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_ISSUECONFIRM, true);
+    }
+
+    public static boolean getConfirmExitSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true);
+    }
+
+    public static boolean getCrashReportSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_CRASHREPORT, true);
     }
 }

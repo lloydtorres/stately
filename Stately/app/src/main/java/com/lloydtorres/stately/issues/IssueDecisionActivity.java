@@ -18,9 +18,7 @@ package com.lloydtorres.stately.issues;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -286,7 +284,6 @@ public class IssueDecisionActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(this);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -296,7 +293,7 @@ public class IssueDecisionActivity extends AppCompatActivity {
             }
         };
 
-        if (storage.getBoolean(SettingsActivity.SETTING_ISSUECONFIRM, true))
+        if (SettingsActivity.getConfirmIssueDecisionSetting(this))
         {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
