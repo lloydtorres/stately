@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="?attr/themedColorCard">
+        android:background="?attr/colorPrimary">
         <TextView
             android:id="@+id/trends_ranking_type"
             android:textSize="15sp"
@@ -20,7 +20,7 @@
             android:textAllCaps="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorPrimaryText"
+            android:textColor="@android:color/white"
             tools:text="@string/trends_regional" />
         <TextView
             android:id="@+id/trends_ranking_census"
@@ -30,7 +30,7 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorPrimaryText"
+            android:textColor="@android:color/white"
             tools:text="Industry: Timber Woodchipping" />
     </LinearLayout>
 </LinearLayout>
