@@ -80,8 +80,8 @@ public class IssueDecisionActivity extends SlidrActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_refreshview);
-        view = findViewById(R.id.refreshview_main);
+        setContentView(R.layout.activity_issue_decision);
+        view = findViewById(R.id.issuedecision_main);
         isInProgress = false;
 
         // Either get data from intent or restore state
@@ -96,11 +96,11 @@ public class IssueDecisionActivity extends SlidrActivity {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.issuedecision_toolbar);
         setToolbar(toolbar);
 
         // Setup refresher to requery for resolution on swipe
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.issuedecision_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -110,7 +110,7 @@ public class IssueDecisionActivity extends SlidrActivity {
         });
 
         // Setup recyclerview
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.issuedecision_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
