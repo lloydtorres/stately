@@ -382,8 +382,14 @@ public class ResolutionActivity extends SlidrActivity {
                     case SettingsActivity.THEME_VERT:
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
                         break;
+                    case SettingsActivity.THEME_BLEU:
+                        voteButtonIcon.setImageResource(R.drawable.ic_wa_blue);
+                        break;
                     case SettingsActivity.THEME_ROUGE:
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_red);
+                        break;
+                    case SettingsActivity.THEME_VIOLET:
+                        voteButtonIcon.setImageResource(R.drawable.ic_wa_violet);
                         break;
                 }
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));

@@ -21,6 +21,27 @@
         <item name="android:colorAccent">@color/colorPrimary</item>
     </style>
 
+    <!-- Royalist Bleu -->
+    <style name="AppThemeBleu.CoreActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+    </style>
+
+    <style name="AppThemeBleu.SlidrActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDarkBleu</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AlertDialogCustomBleu" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimaryBleu</item>
+        <item name="android:colorAccent">@color/colorPrimaryBleu</item>
+    </style>
+
     <!-- Commie Red -->
     <style name="AppThemeRouge.CoreActivity">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -40,5 +61,26 @@
     <style name="AlertDialogCustomRouge" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorPrimary">@color/colorPrimaryRouge</item>
         <item name="android:colorAccent">@color/colorPrimaryRouge</item>
+    </style>
+
+    <!-- Viral Violet -->
+    <style name="AppThemeViolet.CoreActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+    </style>
+
+    <style name="AppThemeViolet.SlidrActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDarkViolet</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AlertDialogCustomViolet" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimaryViolet</item>
+        <item name="android:colorAccent">@color/colorPrimaryViolet</item>
     </style>
 </resources>

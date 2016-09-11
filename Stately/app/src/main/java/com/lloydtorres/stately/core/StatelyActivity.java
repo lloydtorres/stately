@@ -113,8 +113,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme_CoreActivity);
                 break;
+            case SettingsActivity.THEME_BLEU:
+                setTheme(R.style.AppThemeBleu_CoreActivity);
+                break;
             case SettingsActivity.THEME_ROUGE:
                 setTheme(R.style.AppThemeRouge_CoreActivity);
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                setTheme(R.style.AppThemeViolet_CoreActivity);
                 break;
         }
         setContentView(R.layout.activity_stately);

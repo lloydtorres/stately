@@ -787,13 +787,19 @@ public class SparkleHelper {
      * @return ColorInt
      */
     public static int getThemeButtonColour(Context c) {
-        int linkColor = 0;
+        int linkColor = R.color.colorPrimary;
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 linkColor = R.color.colorPrimary;
                 break;
+            case SettingsActivity.THEME_BLEU:
+                linkColor = R.color.colorPrimaryBleu;
+                break;
             case SettingsActivity.THEME_ROUGE:
                 linkColor = R.color.colorPrimaryRouge;
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                linkColor = R.color.colorPrimaryViolet;
                 break;
         }
         return ContextCompat.getColor(c, linkColor);
@@ -805,20 +811,28 @@ public class SparkleHelper {
      * @return ColorInt
      */
     public static int getThemeLinkColour(Context c) {
-        int linkColor = 0;
+        int linkColor = R.color.colorAccent;
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 linkColor = R.color.colorAccent;
                 break;
+            case SettingsActivity.THEME_BLEU:
+                linkColor = R.color.colorAccentBleu;
+                break;
             case SettingsActivity.THEME_ROUGE:
                 linkColor = R.color.colorAccentRouge;
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                linkColor = R.color.colorAccentViolet;
                 break;
         }
         return ContextCompat.getColor(c, linkColor);
     }
 
     public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
+    public static final int[] refreshColoursBleu = { R.color.colorPrimaryBleu, R.color.colorPrimaryDarkBleu, R.color.colorAccentBleu };
     public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
+    public static final int[] refreshColoursViolet = { R.color.colorPrimaryViolet, R.color.colorPrimaryDarkViolet, R.color.colorAccentViolet };
 
     /**
      * Gets swipe refresh colours for the current theme.
@@ -829,8 +843,12 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return refreshColoursVert;
+            case SettingsActivity.THEME_BLEU:
+                return refreshColoursBleu;
             case SettingsActivity.THEME_ROUGE:
                 return refreshColoursRouge;
+            case SettingsActivity.THEME_VIOLET:
+                return refreshColoursViolet;
             default:
                 return refreshColoursVert;
         }
@@ -845,8 +863,12 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return R.style.MaterialDialog;
+            case SettingsActivity.THEME_BLEU:
+                return R.style.MaterialDialogBleu;
             case SettingsActivity.THEME_ROUGE:
                 return R.style.MaterialDialogRouge;
+            case SettingsActivity.THEME_VIOLET:
+                return R.style.MaterialDialogViolet;
             default:
                 return R.style.MaterialDialog;
         }
@@ -861,8 +883,12 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return R.style.AlertDialogCustom;
+            case SettingsActivity.THEME_BLEU:
+                return R.style.AlertDialogCustomBleu;
             case SettingsActivity.THEME_ROUGE:
                 return R.style.AlertDialogCustomRouge;
+            case SettingsActivity.THEME_VIOLET:
+                return R.style.AlertDialogCustomViolet;
             default:
                 return R.style.AlertDialogCustom;
         }

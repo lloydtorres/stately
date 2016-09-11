@@ -36,6 +36,42 @@
         <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
+    <!-- Royalist Bleu -->
+    <style name="AppThemeBleu" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBleu</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBleu</item>
+        <item name="colorAccent">@color/colorAccentBleu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDarkBleu</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccentBleu</item>
+        <item name="themedColorButton">@color/colorPrimaryBleu</item>
+        <item name="themedColorTab">@color/tab_color_bleu</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post_blue</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_blue</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_blue</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_blue</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_blue</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_blue</item>
+    </style>
+
+    <style name="AppThemeBleu.CoreActivity">
+    </style>
+
+    <style name="AppThemeBleu.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogBleu" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDarkBleu</item>
+    </style>
+
     <!-- Commie Red -->
     <style name="AppThemeRouge" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryRouge</item>
@@ -70,6 +106,42 @@
 
     <style name="MaterialDialogRouge" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimaryDarkRouge</item>
+    </style>
+
+    <!-- Viral Violet -->
+    <style name="AppThemeViolet" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryViolet</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkViolet</item>
+        <item name="colorAccent">@color/colorAccentViolet</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDarkViolet</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccentViolet</item>
+        <item name="themedColorButton">@color/colorPrimaryViolet</item>
+        <item name="themedColorTab">@color/tab_color_violet</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post_violet</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_violet</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_violet</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_violet</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_violet</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_violet</item>
+    </style>
+
+    <style name="AppThemeViolet.CoreActivity">
+    </style>
+
+    <style name="AppThemeViolet.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogViolet" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDarkViolet</item>
     </style>
 
     <!-- Theme Independent Styles -->

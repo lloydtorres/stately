@@ -4,9 +4,17 @@
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#43A047</color>
 
+    <color name="colorPrimaryBleu">#3F51B5</color>
+    <color name="colorPrimaryDarkBleu">#303F9F</color>
+    <color name="colorAccentBleu">#448AFF</color>
+
     <color name="colorPrimaryRouge">#F44336</color>
     <color name="colorPrimaryDarkRouge">#D32F2F</color>
     <color name="colorAccentRouge">#FF5252</color>
+
+    <color name="colorPrimaryViolet">#673AB7</color>
+    <color name="colorPrimaryDarkViolet">#512DA8</color>
+    <color name="colorAccentViolet">#7C4DFF</color>
 
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>

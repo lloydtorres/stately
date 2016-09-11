@@ -32,19 +32,18 @@ public abstract class SlidrActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int primaryColor = 0;
-        int secondaryColor = 0;
-
         switch(SettingsActivity.getTheme(this)) {
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme_SlidrActivity);
-                primaryColor = R.color.colorPrimary;
-                secondaryColor = R.color.colorPrimaryDark;
+                break;
+            case SettingsActivity.THEME_BLEU:
+                setTheme(R.style.AppThemeBleu_SlidrActivity);
                 break;
             case SettingsActivity.THEME_ROUGE:
                 setTheme(R.style.AppThemeRouge_SlidrActivity);
-                primaryColor = R.color.colorPrimaryRouge;
-                secondaryColor = R.color.colorPrimaryDarkRouge;
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                setTheme(R.style.AppThemeViolet_SlidrActivity);
                 break;
         }
 
