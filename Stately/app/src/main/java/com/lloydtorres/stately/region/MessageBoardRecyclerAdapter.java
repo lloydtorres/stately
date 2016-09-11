@@ -35,6 +35,7 @@ import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -429,13 +430,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void select()
         {
-            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+            if (SettingsActivity.getTheme(context) != SettingsActivity.THEME_NOIR) {
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+            }
+            else {
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentNoir));
+            }
             replyButton.setImageResource(R.drawable.ic_clear);
         }
 
         public void deselect()
         {
-            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+            cardContainer.setCardBackgroundColor(SparkleHelper.getThemeCardColour(context));
             replyButton.setImageResource(R.drawable.ic_reply);
         }
 

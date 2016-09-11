@@ -36,6 +36,43 @@
         <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
+    <!-- Mercantile Noir -->
+    <style name="AppThemeNoir" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimaryNoir</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkNoir</item>
+        <item name="colorAccent">@color/colorAccentNoir</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorSecondaryText</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryTextNoir</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorLinkTextNoir</item>
+        <item name="themedColorButton">@color/colorPrimaryTextNoir</item>
+        <item name="themedColorTab">@color/tab_color_noir</item>
+        <item name="themedColorCard">@color/colorPrimaryNoir</item>
+        <item name="themedColorBackground">@color/colorBackgroundNoir</item>
+        <item name="themedDrawablePost">@drawable/ic_post_white</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_white</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_white</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_up</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_white</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_white</item>
+    </style>
+
+    <style name="AppThemeNoir.CoreActivity">
+    </style>
+
+    <style name="AppThemeNoir.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogNoir" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimaryTextNoir</item>
+        <item name="colorAccent">@color/colorPrimaryTextNoir</item>
+    </style>
+
     <!-- Royalist Bleu -->
     <style name="AppThemeBleu" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryBleu</item>

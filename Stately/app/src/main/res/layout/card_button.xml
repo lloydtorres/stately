@@ -10,6 +10,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPaddingLeft="20dp"
     card_view:contentPaddingRight="20dp"
     card_view:contentPaddingTop="10dp"

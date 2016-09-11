@@ -36,6 +36,9 @@ public abstract class SlidrActivity extends AppCompatActivity {
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme_SlidrActivity);
                 break;
+            case SettingsActivity.THEME_NOIR:
+                setTheme(R.style.AppThemeNoir_SlidrActivity);
+                break;
             case SettingsActivity.THEME_BLEU:
                 setTheme(R.style.AppThemeBleu_SlidrActivity);
                 break;

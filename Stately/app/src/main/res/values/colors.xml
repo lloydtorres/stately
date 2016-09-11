@@ -21,6 +21,13 @@
     <color name="colorDivider">#B6B6B6</color>
     <color name="colorBackgroundLight">#EEE</color>
 
+    <color name="colorPrimaryNoir">#212121</color>
+    <color name="colorPrimaryDarkNoir">#101010</color>
+    <color name="colorAccentNoir">#424242</color>
+    <color name="colorPrimaryTextNoir">#FAFAFA</color>
+    <color name="colorBackgroundNoir">#191919</color>
+    <color name="colorLinkTextNoir">#AED581</color>
+
     <color name="colorFreedom0">#b71c1c</color>
     <color name="colorFreedom1">#BF360C</color>
     <color name="colorFreedom2">#D84315</color>

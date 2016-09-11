@@ -382,6 +382,9 @@ public class ResolutionActivity extends SlidrActivity {
                     case SettingsActivity.THEME_VERT:
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
                         break;
+                    case SettingsActivity.THEME_NOIR:
+                        voteButtonIcon.setImageResource(R.drawable.ic_wa_white);
+                        break;
                     case SettingsActivity.THEME_BLEU:
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_blue);
                         break;
@@ -654,7 +657,7 @@ public class ResolutionActivity extends SlidrActivity {
         setFor.setDrawValues(false);
         setFor.setDrawVerticalHighlightIndicator(true);
         setFor.setDrawHorizontalHighlightIndicator(false);
-        setFor.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        setFor.setHighLightColor(SparkleHelper.getThemeButtonColour(this));
         setFor.setHighlightLineWidth(lineWidth);
         setFor.setDrawCircles(false);
         setFor.setLineWidth(lineWidth);
@@ -665,7 +668,7 @@ public class ResolutionActivity extends SlidrActivity {
         setAgainst.setDrawValues(false);
         setAgainst.setDrawVerticalHighlightIndicator(true);
         setAgainst.setDrawHorizontalHighlightIndicator(false);
-        setAgainst.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        setAgainst.setHighLightColor(SparkleHelper.getThemeButtonColour(this));
         setAgainst.setHighlightLineWidth(lineWidth);
         setAgainst.setDrawCircles(false);
         setAgainst.setLineWidth(lineWidth);
@@ -691,7 +694,7 @@ public class ResolutionActivity extends SlidrActivity {
         LineData data = new LineData(xLabels, dataSets);
 
         // formatting
-        votingHistory = SparkleHelper.getFormattedLineChart(votingHistory,
+        votingHistory = SparkleHelper.getFormattedLineChart(this, votingHistory,
                 new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst),
                 true, 23, false);
 

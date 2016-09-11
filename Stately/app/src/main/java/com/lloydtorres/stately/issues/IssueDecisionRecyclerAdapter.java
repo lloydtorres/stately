@@ -185,6 +185,9 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                     case SettingsActivity.THEME_VERT:
                         selectIcon.setImageResource(R.drawable.ic_dismiss_green);
                         break;
+                    case SettingsActivity.THEME_NOIR:
+                        selectIcon.setImageResource(R.drawable.ic_dismiss_white);
+                        break;
                     case SettingsActivity.THEME_BLEU:
                         selectIcon.setImageResource(R.drawable.ic_dismiss_blue);
                         break;

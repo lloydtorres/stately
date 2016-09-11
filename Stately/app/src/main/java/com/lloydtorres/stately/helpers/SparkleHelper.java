@@ -526,6 +526,17 @@ public class SparkleHelper {
         p.setHoleRadius(60f);
         p.setTransparentCircleRadius(65f);
         p.setCenterTextSize(20);
+
+        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
+            int colorPrimaryNoir = ContextCompat.getColor(c, R.color.colorPrimaryNoir);
+            int colorPrimaryTextNoir = ContextCompat.getColor(c, R.color.colorPrimaryTextNoir);
+
+            p.setHoleColor(colorPrimaryNoir);
+            p.setTransparentCircleColor(colorPrimaryNoir);
+            p.setCenterTextColor(colorPrimaryTextNoir);
+            cLegend.setTextColor(colorPrimaryTextNoir);
+        }
+
         p.setRotationEnabled(false);
 
         p.setOnChartValueSelectedListener(new PieChartListener(c, p, chartLabels));
@@ -585,7 +596,7 @@ public class SparkleHelper {
      * @param legend True if show legend, false if hide legend
      * @return Formatted linechart
      */
-    public static LineChart getFormattedLineChart(LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend)
+    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend)
     {
         Legend cLegend = chart.getLegend();
         cLegend.setEnabled(legend);
@@ -601,6 +612,13 @@ public class SparkleHelper {
         if (valueFormatter)
         {
             yAxisLeft.setValueFormatter(new LargeValueFormatter());
+        }
+
+        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
+            int textColorNoir = ContextCompat.getColor(c, R.color.colorPrimaryTextNoir);
+            cLegend.setTextColor(textColorNoir);
+            xAxis.setTextColor(textColorNoir);
+            yAxisLeft.setTextColor(textColorNoir);
         }
 
         chart.setDoubleTapToZoomEnabled(false);
@@ -782,6 +800,19 @@ public class SparkleHelper {
      */
 
     /**
+     * Gets the primary colour for the current theme.
+     * @param c Context
+     * @return ColorInt
+     */
+    public static int getThemeCardColour(Context c) {
+        int linkColor = R.color.white;
+        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
+            linkColor = R.color.colorPrimaryNoir;
+        }
+        return ContextCompat.getColor(c, linkColor);
+    }
+
+    /**
      * Gets the colours to use for card buttons.
      * @param c Context
      * @return ColorInt
@@ -791,6 +822,9 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 linkColor = R.color.colorPrimary;
+                break;
+            case SettingsActivity.THEME_NOIR:
+                linkColor = R.color.colorPrimaryTextNoir;
                 break;
             case SettingsActivity.THEME_BLEU:
                 linkColor = R.color.colorPrimaryBleu;
@@ -816,6 +850,9 @@ public class SparkleHelper {
             case SettingsActivity.THEME_VERT:
                 linkColor = R.color.colorAccent;
                 break;
+            case SettingsActivity.THEME_NOIR:
+                linkColor = R.color.colorLinkTextNoir;
+                break;
             case SettingsActivity.THEME_BLEU:
                 linkColor = R.color.colorAccentBleu;
                 break;
@@ -830,6 +867,7 @@ public class SparkleHelper {
     }
 
     public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
+    public static final int[] refreshColoursNoir = { R.color.colorPrimaryNoir, R.color.colorPrimaryDarkNoir, R.color.colorAccentNoir };
     public static final int[] refreshColoursBleu = { R.color.colorPrimaryBleu, R.color.colorPrimaryDarkBleu, R.color.colorAccentBleu };
     public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
     public static final int[] refreshColoursViolet = { R.color.colorPrimaryViolet, R.color.colorPrimaryDarkViolet, R.color.colorAccentViolet };
@@ -843,6 +881,8 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return refreshColoursVert;
+            case SettingsActivity.THEME_NOIR:
+                return refreshColoursNoir;
             case SettingsActivity.THEME_BLEU:
                 return refreshColoursBleu;
             case SettingsActivity.THEME_ROUGE:
@@ -863,6 +903,8 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return R.style.MaterialDialog;
+            case SettingsActivity.THEME_NOIR:
+                return R.style.MaterialDialogNoir;
             case SettingsActivity.THEME_BLEU:
                 return R.style.MaterialDialogBleu;
             case SettingsActivity.THEME_ROUGE:
@@ -883,6 +925,8 @@ public class SparkleHelper {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
                 return R.style.AlertDialogCustom;
+            case SettingsActivity.THEME_NOIR:
+                return R.style.AlertDialogCustomNoir;
             case SettingsActivity.THEME_BLEU:
                 return R.style.AlertDialogCustomBleu;
             case SettingsActivity.THEME_ROUGE:

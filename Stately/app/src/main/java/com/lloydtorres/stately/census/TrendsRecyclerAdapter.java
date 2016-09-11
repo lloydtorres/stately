@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.census;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,7 +253,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             lineHistoryData.setDrawValues(false);
             lineHistoryData.setDrawVerticalHighlightIndicator(true);
             lineHistoryData.setDrawHorizontalHighlightIndicator(false);
-            lineHistoryData.setHighLightColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+            lineHistoryData.setHighLightColor(SparkleHelper.getThemeButtonColour(context));
             lineHistoryData.setHighlightLineWidth(lineWidth);
             lineHistoryData.setDrawCircles(false);
             lineHistoryData.setLineWidth(lineWidth);
@@ -271,7 +270,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = SparkleHelper.getFormattedLineChart(chart, this, isLargeValue, 6, false);
+            chart = SparkleHelper.getFormattedLineChart(context, chart, this, isLargeValue, 6, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }

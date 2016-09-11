@@ -21,6 +21,27 @@
         <item name="android:colorAccent">@color/colorPrimary</item>
     </style>
 
+    <!-- Mercantile Noir -->
+    <style name="AppThemeNoir.CoreActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+    </style>
+
+    <style name="AppThemeNoir.SlidrActivity">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDarkNoir</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AlertDialogCustomNoir" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimaryTextNoir</item>
+        <item name="android:colorAccent">@color/colorPrimaryTextNoir</item>
+    </style>
+
     <!-- Royalist Bleu -->
     <style name="AppThemeBleu.CoreActivity">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
