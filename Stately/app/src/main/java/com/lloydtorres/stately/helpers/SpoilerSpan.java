@@ -55,6 +55,6 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void updateDrawState(TextPaint ds) {
         ds.setUnderlineText(false);
-        ds.setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        ds.setColor(ContextCompat.getColor(context, URLSpanNoUnderline.getLinkColour(context)));
     }
 }
