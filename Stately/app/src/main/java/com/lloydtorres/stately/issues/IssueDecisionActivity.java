@@ -101,7 +101,7 @@ public class IssueDecisionActivity extends SlidrActivity {
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

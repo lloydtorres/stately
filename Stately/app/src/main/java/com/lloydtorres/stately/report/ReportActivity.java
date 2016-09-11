@@ -126,7 +126,7 @@ public class ReportActivity extends SlidrActivity {
         setToolbar(toolbar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.report_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         dialogListener = new DialogInterface.OnClickListener() {

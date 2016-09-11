@@ -90,7 +90,7 @@ public class TelegramComposeActivity extends SlidrActivity {
 
         mView = findViewById(R.id.telegram_compose_main);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.telegram_compose_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.telegram_compose_toolbar);

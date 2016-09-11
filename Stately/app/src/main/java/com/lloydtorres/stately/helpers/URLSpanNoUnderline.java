@@ -17,12 +17,8 @@
 package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
-
-import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.settings.SettingsActivity;
 
 /**
  * Created by Lloyd on 2016-01-20.
@@ -41,19 +37,6 @@ public class URLSpanNoUnderline extends URLSpan {
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
         ds.setUnderlineText(false);
-        ds.setColor(ContextCompat.getColor(context, getLinkColour(context)));
-    }
-
-    public static int getLinkColour(Context c) {
-        int linkColor = 0;
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                linkColor = R.color.colorAccent;
-                break;
-            case SettingsActivity.THEME_ROUGE:
-                linkColor = R.color.colorAccentRouge;
-                break;
-        }
-        return linkColor;
+        ds.setColor(SparkleHelper.getThemeLinkColour(context));
     }
 }

@@ -135,7 +135,7 @@ public class ResolutionActivity extends SlidrActivity {
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.wa_resolution_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -379,7 +379,7 @@ public class ResolutionActivity extends SlidrActivity {
                 histIconVoteAgainst.setVisibility(View.GONE);
                 voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-                voteButtonContent.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                voteButtonContent.setTextColor(SparkleHelper.getThemeButtonColour(this));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_default));
                 voteChoice = VoteDialog.VOTE_UNDECIDED;
             }

@@ -18,7 +18,6 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
@@ -55,6 +54,6 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void updateDrawState(TextPaint ds) {
         ds.setUnderlineText(false);
-        ds.setColor(ContextCompat.getColor(context, URLSpanNoUnderline.getLinkColour(context)));
+        ds.setColor(SparkleHelper.getThemeLinkColour(context));
     }
 }

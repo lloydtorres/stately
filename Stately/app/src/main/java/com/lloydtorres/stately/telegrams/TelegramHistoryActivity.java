@@ -89,7 +89,7 @@ public class TelegramHistoryActivity extends SlidrActivity {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setEnabled(false);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
 
         // Setup recyclerview
         mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);

@@ -107,7 +107,7 @@ public class TrendsActivity extends SlidrActivity {
         view = findViewById(R.id.trends_main);
 
         mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override

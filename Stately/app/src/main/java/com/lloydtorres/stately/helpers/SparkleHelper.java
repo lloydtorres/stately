@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -51,6 +52,7 @@ import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import com.r0adkll.slidr.model.SlidrConfig;
 
@@ -193,12 +195,6 @@ public class SparkleHelper {
             R.color.colorFreedom12,
             R.color.colorFreedom13,
             R.color.colorFreedom14
-    };
-
-    // An array of colours used to decorate the SwipeRefresher
-    public static final int[] refreshColours = {    R.color.colorPrimary,
-            R.color.colorPrimaryDark,
-            R.color.colorAccent
     };
 
     // An array of colours used for WA votes
@@ -778,6 +774,61 @@ public class SparkleHelper {
         editor.remove(VAR_REGION);
         editor.remove(VAR_WA_MEMBER);
         editor.commit();
+    }
+
+    /**
+     * THEMES
+     * Functions used to get theme-specific data (e.g. colours).
+     */
+
+    /**
+     * Gets the colours to use for card buttons.
+     * @param c Context
+     * @return ColorInt
+     */
+    public static int getThemeButtonColour(Context c) {
+        int linkColor = 0;
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                linkColor = R.color.colorPrimary;
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                linkColor = R.color.colorPrimaryRouge;
+                break;
+        }
+        return ContextCompat.getColor(c, linkColor);
+    }
+
+    /**
+     * Gets the colours to use for links.
+     * @param c Context
+     * @return ColorInt
+     */
+    public static int getThemeLinkColour(Context c) {
+        int linkColor = 0;
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                linkColor = R.color.colorAccent;
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                linkColor = R.color.colorAccentRouge;
+                break;
+        }
+        return ContextCompat.getColor(c, linkColor);
+    }
+
+    public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
+    public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
+
+    public static int[] getThemeRefreshColours(Context c) {
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                return refreshColoursVert;
+            case SettingsActivity.THEME_ROUGE:
+                return refreshColoursRouge;
+            default:
+                return refreshColoursVert;
+        }
     }
 
     /**

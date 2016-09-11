@@ -163,7 +163,7 @@ public class MessageBoardActivity extends SlidrActivity {
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
