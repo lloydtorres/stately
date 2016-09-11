@@ -551,7 +551,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
         AppCompatEditText passView = (AppCompatEditText) dialogView.findViewById(R.id.move_password);

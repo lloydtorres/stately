@@ -260,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.create_nation)
                 .setMessage(R.string.create_nation_redirect)
                 .setPositiveButton(R.string.create_continue, dialogListener)
@@ -271,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)
                     .setMessage(R.string.create_finish)
                     .setPositiveButton(R.string.got_it, null)

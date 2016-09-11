@@ -202,7 +202,7 @@ public class ReportActivity extends SlidrActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.report_confirm)
                 .setPositiveButton(R.string.report_send_confirm, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)

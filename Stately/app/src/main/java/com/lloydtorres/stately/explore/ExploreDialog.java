@@ -60,7 +60,7 @@ public class ExploreDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_explore)
                 .setView(dialogView)
                 .setPositiveButton(R.string.explore_positive, dialogListener)

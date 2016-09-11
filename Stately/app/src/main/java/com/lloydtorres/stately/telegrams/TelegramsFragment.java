@@ -461,7 +461,7 @@ public class TelegramsFragment extends Fragment {
      * Wrappers to call on NS to archive a telegram.
      */
     public void showArchiveTelegramDialog(final int id) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
                 .setTitle(getString(R.string.telegrams_archive_confirm))
                 .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
@@ -506,7 +506,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         if (moveableFolders.size() <= 0) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
             dialogBuilder
                     .setTitle(getString(R.string.telegrams_move))
                     .setMessage(getString(R.string.telegrams_move_none))
@@ -598,7 +598,7 @@ public class TelegramsFragment extends Fragment {
     }
 
     public void showDeleteTelegramDialog(final int id) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
             .setTitle(getString(R.string.telegrams_delete_confirm))
             .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {

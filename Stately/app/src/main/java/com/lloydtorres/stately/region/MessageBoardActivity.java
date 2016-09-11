@@ -147,7 +147,7 @@ public class MessageBoardActivity extends SlidrActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
-        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mLayoutManager = new LinearLayoutManager(this);

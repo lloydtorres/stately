@@ -73,11 +73,11 @@ public class NameListDialog extends DialogFragment {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            dialog = new AppCompatDialog(getActivity(), R.style.AlertDialogCustom);
+            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
         }
         else
         {
-            dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
+            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;

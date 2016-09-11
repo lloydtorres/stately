@@ -63,11 +63,11 @@ public class SwitchNationDialog extends DialogFragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            setStyle(DialogFragment.STYLE_NORMAL, R.style.AlertDialogCustom);
+            setStyle(DialogFragment.STYLE_NORMAL, SparkleHelper.getThemeLollipopDialog(getContext()));
         }
         else
         {
-            setStyle(DialogFragment.STYLE_NORMAL, R.style.MaterialDialog);
+            setStyle(DialogFragment.STYLE_NORMAL, SparkleHelper.getThemeMaterialDialog(getContext()));
         }
     }
 
@@ -92,7 +92,7 @@ public class SwitchNationDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_switch)
                 .setView(view)
                 .setPositiveButton(R.string.add_nation, dialogListener);

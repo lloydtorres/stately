@@ -64,7 +64,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         storage = PreferenceManager.getDefaultSharedPreferences(this);
         storage.registerOnSharedPreferenceChangeListener(this);
 
-        dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
     }
 
     private void setToolbar(Toolbar toolbar)

@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-02-08.
@@ -102,7 +103,7 @@ public class SubscriptionsDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.activityfeed_subscriptions)
                 .setView(dialogView)
                 .setPositiveButton(R.string.update, dialogListener)

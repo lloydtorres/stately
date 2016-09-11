@@ -820,6 +820,11 @@ public class SparkleHelper {
     public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
     public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
 
+    /**
+     * Gets swipe refresh colours for the current theme.
+     * @param c Context
+     * @return
+     */
     public static int[] getThemeRefreshColours(Context c) {
         switch (SettingsActivity.getTheme(c)) {
             case SettingsActivity.THEME_VERT:
@@ -828,6 +833,38 @@ public class SparkleHelper {
                 return refreshColoursRouge;
             default:
                 return refreshColoursVert;
+        }
+    }
+
+    /**
+     * Gets the theme for the older MaterialDialogs for the current theme.
+     * @param c App context.
+     * @return Theme ID for the dialog.
+     */
+    public static int getThemeMaterialDialog(Context c) {
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                return R.style.MaterialDialog;
+            case SettingsActivity.THEME_ROUGE:
+                return R.style.MaterialDialogRouge;
+            default:
+                return R.style.MaterialDialog;
+        }
+    }
+
+    /**
+     * Gets the theme for the newer Lollipop AlertDialogs for the current theme.
+     * @param c App context.
+     * @return Theme ID for the dialog.
+     */
+    public static int getThemeLollipopDialog(Context c) {
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                return R.style.AlertDialogCustom;
+            case SettingsActivity.THEME_ROUGE:
+                return R.style.AlertDialogCustomRouge;
+            default:
+                return R.style.AlertDialogCustom;
         }
     }
 

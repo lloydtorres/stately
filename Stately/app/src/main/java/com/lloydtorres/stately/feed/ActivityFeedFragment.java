@@ -122,7 +122,7 @@ public class ActivityFeedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
         events = new ArrayList<Event>();
-        dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
         setHasOptionsMenu(true);
     }
 

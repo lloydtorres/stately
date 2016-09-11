@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.TelegramFolder;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 
@@ -83,11 +84,11 @@ public class FoldersDialog extends DialogFragment {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            dialog = new AppCompatDialog(getActivity(), R.style.AlertDialogCustom);
+            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
         }
         else
         {
-            dialog = new AppCompatDialog(getActivity(), R.style.MaterialDialog);
+            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
