@@ -6,6 +6,7 @@
     <attr name="themedColorLinkText" format="reference|color" />
     <attr name="themedColorButton" format="reference|color" />
     <attr name="themedColorTab" format="reference" />
+    <attr name="themedColorNavDrawer" format="reference" />
     <attr name="themedColorCard" format="reference|color" />
     <attr name="themedColorBackground" format="reference|color" />
     <attr name="themedDrawablePost" format="reference" />

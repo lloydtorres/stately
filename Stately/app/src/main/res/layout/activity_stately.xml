@@ -18,6 +18,6 @@
         app:headerLayout="@layout/nav_header_stately"
         app:menu="@menu/activity_nation_drawer"
         app:itemIconTint="?attr/themedColorTab"
-        app:itemTextColor="?attr/themedColorTab"/>
+        app:itemTextColor="?attr/themedColorNavDrawer"/>
 
 </android.support.v4.widget.DrawerLayout>

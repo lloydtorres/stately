@@ -13,6 +13,7 @@
         <item name="themedColorLinkText">@color/colorAccent</item>
         <item name="themedColorButton">@color/colorPrimary</item>
         <item name="themedColorTab">@color/tab_color</item>
+        <item name="themedColorNavDrawer">@color/nav_color</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
         <item name="themedDrawablePost">@drawable/ic_post</item>
@@ -49,6 +50,7 @@
         <item name="themedColorLinkText">@color/colorLinkTextNoir</item>
         <item name="themedColorButton">@color/colorPrimaryTextNoir</item>
         <item name="themedColorTab">@color/tab_color_noir</item>
+        <item name="themedColorNavDrawer">@color/tab_color_noir</item>
         <item name="themedColorCard">@color/colorPrimaryNoir</item>
         <item name="themedColorBackground">@color/colorBackgroundNoir</item>
         <item name="themedDrawablePost">@drawable/ic_post_white</item>
@@ -86,6 +88,7 @@
         <item name="themedColorLinkText">@color/colorAccentBleu</item>
         <item name="themedColorButton">@color/colorPrimaryBleu</item>
         <item name="themedColorTab">@color/tab_color_bleu</item>
+        <item name="themedColorNavDrawer">@color/nav_color_bleu</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
         <item name="themedDrawablePost">@drawable/ic_post_blue</item>
@@ -122,6 +125,7 @@
         <item name="themedColorLinkText">@color/colorAccentRouge</item>
         <item name="themedColorButton">@color/colorPrimaryRouge</item>
         <item name="themedColorTab">@color/tab_color_rouge</item>
+        <item name="themedColorNavDrawer">@color/nav_color_rouge</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
         <item name="themedDrawablePost">@drawable/ic_post_red</item>
@@ -158,6 +162,7 @@
         <item name="themedColorLinkText">@color/colorAccentViolet</item>
         <item name="themedColorButton">@color/colorPrimaryViolet</item>
         <item name="themedColorTab">@color/tab_color_violet</item>
+        <item name="themedColorNavDrawer">@color/nav_color_violet</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
         <item name="themedDrawablePost">@drawable/ic_post_violet</item>
