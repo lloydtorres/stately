@@ -123,6 +123,9 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
                 break;
             case SETTING_THEME:
                 isChangeThemeTriggered = true;
+                if (slidrInterface != null) {
+                    slidrInterface.lock();
+                }
                 break;
         }
     }

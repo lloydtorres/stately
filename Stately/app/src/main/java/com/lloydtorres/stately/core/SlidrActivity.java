@@ -23,12 +23,15 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 /**
  * Created by Lloyd on 2016-09-10.
  * Base activity for all activities using the 'AppTheme.SlidrActivity' theme.
  */
 public abstract class SlidrActivity extends AppCompatActivity {
+
+    protected SlidrInterface slidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public abstract class SlidrActivity extends AppCompatActivity {
                 break;
         }
 
-        Slidr.attach(this, SparkleHelper.slidrConfig);
+        slidrInterface = Slidr.attach(this, SparkleHelper.slidrConfig);
         super.onCreate(savedInstanceState);
     }
 }
