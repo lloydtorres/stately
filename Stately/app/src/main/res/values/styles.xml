@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Stately Vert -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,8 +15,28 @@
         <item name="themedColorTab">@color/tab_color</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_green</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_green</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_green</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_green</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_green</item>
     </style>
 
+    <style name="AppTheme.CoreActivity">
+    </style>
+
+    <style name="AppTheme.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Commie Red -->
     <style name="AppThemeRouge" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryRouge</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkRouge</item>
@@ -31,18 +51,15 @@
         <item name="themedColorTab">@color/tab_color_rouge</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
-    </style>
-
-    <style name="AppTheme.CoreActivity">
+        <item name="themedDrawablePost">@drawable/ic_post_red</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_red</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_red</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_red</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_red</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_red</item>
     </style>
 
     <style name="AppThemeRouge.CoreActivity">
-    </style>
-
-    <style name="AppTheme.SlidrActivity">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppThemeRouge.SlidrActivity">
@@ -51,14 +68,11 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="MaterialDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorPrimaryDark</item>
-    </style>
-
     <style name="MaterialDialogRouge" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimaryDarkRouge</item>
     </style>
 
+    <!-- Theme Independent Styles -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

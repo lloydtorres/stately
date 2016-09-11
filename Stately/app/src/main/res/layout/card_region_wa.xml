@@ -68,7 +68,7 @@
             android:layout_marginRight="3dp"
             android:layout_marginLeft="-7dp"
             android:padding="8dp"
-            app:srcCompat="@drawable/ic_wa_green"/>
+            app:srcCompat="?attr/themedDrawableWa"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

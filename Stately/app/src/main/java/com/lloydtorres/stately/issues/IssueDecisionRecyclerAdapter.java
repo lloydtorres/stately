@@ -29,6 +29,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,7 +181,14 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             {
                 contentHolder.setVisibility(View.GONE);
                 selectContent.setText(context.getString(R.string.issue_dismiss_issue));
-                selectIcon.setImageResource(R.drawable.ic_dismiss_green);
+                switch (SettingsActivity.getTheme(context)) {
+                    case SettingsActivity.THEME_VERT:
+                        selectIcon.setImageResource(R.drawable.ic_dismiss_green);
+                        break;
+                    case SettingsActivity.THEME_ROUGE:
+                        selectIcon.setImageResource(R.drawable.ic_dismiss_red);
+                        break;
+                }
                 divider.setVisibility(View.GONE);
             }
         }

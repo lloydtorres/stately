@@ -65,7 +65,7 @@
                     android:layout_marginRight="3dp"
                     android:layout_marginLeft="-6dp"
                     android:padding="4dp"
-                    app:srcCompat="@drawable/ic_trend_green"/>
+                    app:srcCompat="?attr/themedDrawableTrend"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

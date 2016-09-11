@@ -50,6 +50,7 @@ import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -377,7 +378,14 @@ public class ResolutionActivity extends SlidrActivity {
                 histIconVoteFor.setVisibility(View.GONE);
                 iconVoteAgainst.setVisibility(View.GONE);
                 histIconVoteAgainst.setVisibility(View.GONE);
-                voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
+                switch (SettingsActivity.getTheme(this)) {
+                    case SettingsActivity.THEME_VERT:
+                        voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
+                        break;
+                    case SettingsActivity.THEME_ROUGE:
+                        voteButtonIcon.setImageResource(R.drawable.ic_wa_red);
+                        break;
+                }
                 voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
                 voteButtonContent.setTextColor(SparkleHelper.getThemeButtonColour(this));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_default));
