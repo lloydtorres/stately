@@ -403,7 +403,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, nFragment)
-                .commitNow();
+                .commit();
     }
 
     private void initFragment(Region mRegion)
@@ -414,7 +414,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.explore_coordinator, rFragment)
-                .commitNow();
+                .commit();
     }
 
     /**
