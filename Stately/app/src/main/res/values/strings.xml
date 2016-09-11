@@ -82,7 +82,7 @@
     <string name="exit">Exit</string>
 
     <!-- Nation main card -->
-    <string name="nation_government_custom">&lt;strike&gt;%1$s&lt;/strike&gt;&lt;br&gt;%2$s</string>
+    <string name="nation_government_custom">&lt;font color=&quot;#727272&quot;&gt;&lt;strike&gt;%1$s&lt;/strike&gt;&lt;/font&gt;&lt;br&gt;%2$s</string>
     <string name="nation_wa_member">WA Member</string>
     <string name="nation_wa_delegate">WA Delegate</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
