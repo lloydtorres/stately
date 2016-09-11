@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.explore;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -41,8 +42,13 @@ public class ExploreDialog extends DialogFragment {
 
     private AppCompatEditText exploreSearch;
     private RadioGroup exploreToggleState;
+    private Activity activityCloseOnFinish;
 
     public ExploreDialog() { }
+
+    public void setActivityCloseOnFinish(Activity closeOnFinish) {
+        activityCloseOnFinish = closeOnFinish;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)  {
@@ -90,5 +96,9 @@ public class ExploreDialog extends DialogFragment {
 
         String name = exploreSearch.getText().toString();
         SparkleHelper.startExploring(getContext(), name, mode);
+
+        if (activityCloseOnFinish != null) {
+            activityCloseOnFinish.finish();
+        }
     }
 }

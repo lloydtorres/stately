@@ -35,10 +35,19 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="@string/explore_default"
             android:textColor="@android:color/white"
             android:textSize="20sp"/>
+        <ImageView
+            android:id="@+id/explore_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="openExploreDialog"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_menu_explore"
+            tools:visibility="visible"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

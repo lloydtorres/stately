@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.NetworkError;
@@ -92,6 +93,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private String name;
     private int mode;
     private TextView statusMessage;
+    private ImageView exploreButton;
     private boolean noRefresh;
     private boolean isMe;
     private boolean isEndorsable;
@@ -150,6 +152,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         getSupportActionBar().hide();
 
         statusMessage = (TextView) findViewById(R.id.explore_status);
+        exploreButton = (ImageView) findViewById(R.id.explore_button);
 
         verifyInput(id);
     }
@@ -212,12 +215,12 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     }
 
     /**
-     * Used for setting a message while the explore fragment is loading.
-     * @param s Message
+     * Sets a message on the activity and makes the explore button visible.
+     * @param s
      */
-    private void setExploreStatus(String s)
-    {
+    private void setExploreStatusError(String s) {
         statusMessage.setText(s);
+        exploreButton.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -253,10 +256,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             switch (mode)
             {
                 case SparkleHelper.CLICKY_NATION_MODE:
-                    setExploreStatus(getString(R.string.explore_error_404_nation));
+                    setExploreStatusError(getString(R.string.explore_error_404_nation));
                     break;
                 default:
-                    setExploreStatus(getString(R.string.region_404));
+                    setExploreStatusError(getString(R.string.region_404));
                     break;
             }
         }
@@ -310,7 +313,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            setExploreStatus(getString(R.string.login_error_parsing));
+                            setExploreStatusError(getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -318,22 +321,22 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    setExploreStatus(getString(R.string.login_error_no_internet));
+                    setExploreStatusError(getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    setExploreStatus(getString(R.string.explore_error_404_nation));
+                    setExploreStatusError(getString(R.string.explore_error_404_nation));
                 }
                 else
                 {
-                    setExploreStatus(getString(R.string.login_error_generic));
+                    setExploreStatusError(getString(R.string.login_error_generic));
                 }
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
-            setExploreStatus(getString(R.string.rate_limit_error));
+            setExploreStatusError(getString(R.string.rate_limit_error));
         }
     }
 
@@ -366,7 +369,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            setExploreStatus(getString(R.string.login_error_parsing));
+                            setExploreStatusError(getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -374,22 +377,22 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    setExploreStatus(getString(R.string.login_error_no_internet));
+                    setExploreStatusError(getString(R.string.login_error_no_internet));
                 }
                 else if (error instanceof ServerError)
                 {
-                    setExploreStatus(getString(R.string.region_404));
+                    setExploreStatusError(getString(R.string.region_404));
                 }
                 else
                 {
-                    setExploreStatus(getString(R.string.login_error_generic));
+                    setExploreStatusError(getString(R.string.login_error_generic));
                 }
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
-            setExploreStatus(getString(R.string.rate_limit_error));
+            setExploreStatusError(getString(R.string.rate_limit_error));
         }
     }
 
@@ -656,6 +659,28 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
     }
 
+    /**
+     * Opens the explore dialog.
+     */
+    private void openExploreDialog(boolean closeOnFinish) {
+        FragmentManager fm = getSupportFragmentManager();
+        ExploreDialog exploreDialog = new ExploreDialog();
+
+        if (closeOnFinish) {
+            exploreDialog.setActivityCloseOnFinish(this);
+        }
+
+        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
+    }
+
+    /**
+     * Callback from layout.
+     * @param v
+     */
+    public void openExploreDialog(View v) {
+        openExploreDialog(true);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -674,9 +699,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 return true;
             case R.id.nav_explore:
                 // Open an explore dialog to keep going
-                FragmentManager fm = getSupportFragmentManager();
-                ExploreDialog editNameDialog = new ExploreDialog();
-                editNameDialog.show(fm, ExploreDialog.DIALOG_TAG);
+                openExploreDialog(false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
