@@ -91,8 +91,9 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
             case android.R.id.home:
                 if (isChangeThemeTriggered) {
                     setupNewTheme();
+                } else {
+                    finish();
                 }
-                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -102,6 +103,9 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public void onBackPressed() {
         if (isChangeThemeTriggered) {
             setupNewTheme();
+        }
+        else {
+            super.onBackPressed();
         }
     }
 
