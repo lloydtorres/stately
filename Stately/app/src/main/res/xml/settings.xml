@@ -38,6 +38,14 @@
             android:entryValues="@array/themes_data"
             android:summary="%1$s"
             android:icon="@null"/>
+        <android.support.v7.preference.ListPreference
+            android:title="@string/setting_category"
+            android:key="setting_category"
+            android:defaultValue="2"
+            android:entries="@array/gov_category_settings"
+            android:entryValues="@array/gov_category_data"
+            android:summary="%1$s"
+            android:icon="@null"/>
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory

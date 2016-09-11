@@ -28,6 +28,16 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="gov_category_settings">
+        <item>Conservative</item>
+        <item>Liberal</item>
+        <item>Neutral</item>>
+    </string-array>
+    <string-array name="gov_category_data">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="census">
         <item>Civil Rights##Martin Luther King, Jr. Units</item>
         <item>Economy##Krugman-Greenspan Business Outlook Index</item>
@@ -171,5 +181,65 @@
         <item>The %1$s are free to succeed or fail in life on their own merits; the successful tend to enjoy an opulent (but moralistic) lifestyle, while the failures can be seen crowding out most jails.</item>
         <item>The %1$s enjoy extensive civil rights and enjoy a level of social equality free from the usual accompanying government corruption.</item>
         <item>The %1$s enjoy great social freedoms and frequent elections, where the majority of the populace regularly votes to increase its benefits at the expense of various hapless minorities.</item>
+    </string-array>
+    <string-array name="gov_conservative">
+        <item>Lawless Wasteland</item>
+        <item>Slightly Oppressive But A Little Discipline Never Hurt Anyone State</item>
+        <item>Temporary Conservative State of Emergency</item>
+        <item>Decent Hardworking Self-Starters</item>
+        <item>Freedom-Loving Libertarians</item>
+        <item>Nation-Hating Hippies</item>
+        <item>Aspirational Worker State</item>
+        <item>Conservative Paradise</item>
+        <item>Patriotic Business Zone</item>
+        <item>Entrepreneurial Freedom Zone</item>
+        <item>Corrupt Liberal Dictatorship</item>
+        <item>Hell</item>
+        <item>Suspiciously Liberal Dictatorship</item>
+        <item>Suspiciously Liberal Dictatorship</item>
+        <item>Paradise</item>
+        <item>Communists</item>
+        <item>Champions of Commerce</item>
+        <item>Inevitably Bloody Result of Liberal Ideals Mugged By Reality </item>
+        <item>Deluded Tax and Spend Hypocrites</item>
+        <item>Drugged-Out Hippies</item>
+        <item>Ivory Tower Reality Disconnect Zone</item>
+        <item>Government-Enforced Political Correctness Society</item>
+        <item>Ordinary Decent Hardworking People</item>
+        <item>New York Crimes So-Called Democracy</item>
+        <item>Communist Dictatorship</item>
+        <item>Utopia</item>
+        <item>Gay Marriage State</item>
+        <item>Thieves</item>
+    </string-array>
+    <string-array name="gov_liberal">
+        <item>Post-Revolution Embryonic Society</item>
+        <item>Mouth-Breathing Creationists</item>
+        <item>Temporary Liberal State of Emergency</item>
+        <item>Corporate Slave State</item>
+        <item>Self-Congratulatory Merchant Bankers</item>
+        <item>Brave Progressives</item>
+        <item>Consumerist Wage Drones</item>
+        <item>Conservative Hell</item>
+        <item>Blood-Sucking Capitalist Leeches</item>
+        <item>Halliburton</item>
+        <item>Well-Meaning Dictatorship</item>
+        <item>Ordinary Caring Intelligent World Citizens</item>
+        <item>Suspiciously Conservative Democracy</item>
+        <item>Suspiciously Conservative Democracy</item>
+        <item>Randroids</item>
+        <item>Fascists</item>
+        <item>Imperialist Pig Dog Oppressors</item>
+        <item>Equality and Tolerance Society</item>
+        <item>Paradise</item>
+        <item>Utopia</item>
+        <item>Open-Minded Education State</item>
+        <item>Slightly Overzealous Peoples Democracy</item>
+        <item>Narrow-Minded Backwoodsy Bigots</item>
+        <item>Corporate-Dominated Sham Democracy</item>
+        <item>Fascist Dictatorship</item>
+        <item>Corrupt Thieving Uneducated Fascist Fundamentalists</item>
+        <item>Normal</item>
+        <item>Tyranny by Bourgeois</item>
     </string-array>
 </resources>

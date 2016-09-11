@@ -34,7 +34,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     app:srcCompat="@drawable/ic_gov"/>
-                <TextView
+                <org.sufficientlysecure.htmltextview.HtmlTextView
                     android:id="@+id/nation_gov_type"
                     android:textSize="15sp"
                     android:fontFamily="sans-serif"

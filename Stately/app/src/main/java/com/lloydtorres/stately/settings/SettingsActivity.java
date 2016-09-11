@@ -41,12 +41,17 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final String SETTING_EXITCONFIRM = "setting_exitconfirm";
     public static final String SETTING_CRASHREPORT = "setting_crashreport";
     public static final String SETTING_THEME = "setting_theme";
+    public static final String SETTING_GOVERNMENT = "setting_category";
 
     public static final int THEME_VERT = 0;
     public static final int THEME_NOIR = 1;
     public static final int THEME_BLEU = 2;
     public static final int THEME_ROUGE = 3;
     public static final int THEME_VIOLET = 4;
+
+    public static final int GOV_CONSERVATIVE = 0;
+    public static final int GOV_LIBERAL = 1;
+    public static final int GOV_NEUTRAL = 2;
 
     private static AlertDialog.Builder dialogBuilder;
 
@@ -122,6 +127,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
                 dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
                 break;
             case SETTING_THEME:
+            case SETTING_GOVERNMENT:
                 isChangeThemeTriggered = true;
                 if (slidrInterface != null) {
                     slidrInterface.lock();
@@ -160,5 +166,17 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
             SparkleHelper.logError(e.toString());
         }
         return theme;
+    }
+
+    public static int getGovernmentSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        int mode = GOV_NEUTRAL;
+        try {
+            mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT, String.valueOf(GOV_NEUTRAL)));
+        }
+        catch (Exception e) {
+            SparkleHelper.logError(e.toString());
+        }
+        return mode;
     }
 }

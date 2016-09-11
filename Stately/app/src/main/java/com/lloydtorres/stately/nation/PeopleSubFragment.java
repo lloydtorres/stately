@@ -44,7 +44,7 @@ import java.util.Locale;
 public class PeopleSubFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNation";
 
-    private static final HashMap<String, String> waCategoryDescriptors = new HashMap<String, String>();
+    private final HashMap<String, String> waCategoryDescriptors = new HashMap<String, String>();
 
     private Nation mNation;
 

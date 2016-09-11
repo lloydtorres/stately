@@ -32,8 +32,10 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +50,9 @@ public class OverviewSubFragment extends Fragment {
     private String[] WORLD_CENSUS_ITEMS;
 
     private Nation mNation;
+
+    private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
+    private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -64,6 +69,15 @@ public class OverviewSubFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+
+        String[] govTypes = getResources().getStringArray(R.array.gov_types);
+        String[] govConservative = getResources().getStringArray(R.array.gov_conservative);
+        String[] govLiberal = getResources().getStringArray(R.array.gov_liberal);
+
+        for (int i = 0; i < govTypes.length; i++) {
+            waCategoryConservative.put(govTypes[i], govConservative[i]);
+            waCategoryLiberal.put(govTypes[i], govLiberal[i]);
+        }
     }
 
     @Override
@@ -86,7 +100,29 @@ public class OverviewSubFragment extends Fragment {
             cards = new ArrayList<Object>();
 
             NationOverviewCardData nocData = new NationOverviewCardData();
-            nocData.category = mNation.govType;
+
+            // Set up custom government category depending on user preferences
+            String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
+            String customCategory = null;
+            if (SettingsActivity.getGovernmentSetting(getContext()) == SettingsActivity.GOV_CONSERVATIVE
+                    && waCategoryConservative.containsKey(waCategory)) {
+                customCategory = waCategoryConservative.get(waCategory);
+
+            }
+            else if (SettingsActivity.getGovernmentSetting(getContext()) == SettingsActivity.GOV_LIBERAL
+                    && waCategoryLiberal.containsKey(waCategory)) {
+                customCategory = waCategoryLiberal.get(waCategory);
+            }
+
+            if (customCategory != null) {
+                nocData.category = String.format(Locale.US, getString(R.string.nation_government_custom),
+                        mNation.govType, customCategory);
+                SparkleHelper.logError(nocData.category);
+            }
+            else {
+                nocData.category = mNation.govType;
+            }
+
             nocData.region = mNation.region;
             nocData.inflDesc = mNation.influence;
             nocData.inflScore = mNation.census.get(TrendsActivity.CENSUS_INFLUENCE).score;

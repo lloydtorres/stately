@@ -48,6 +48,8 @@ import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -153,7 +155,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationOverviewCard extends RecyclerView.ViewHolder {
 
-        private TextView govType;
+        private HtmlTextView govType;
         private TextView region;
         private TextView influence;
         private TextView population;
@@ -174,7 +176,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public NationOverviewCard(View view) {
             super(view);
-            govType = (TextView) view.findViewById(R.id.nation_gov_type);
+            govType = (HtmlTextView) view.findViewById(R.id.nation_gov_type);
             region = (TextView) view.findViewById(R.id.nation_region);
             influence = (TextView) view.findViewById(R.id.nation_influence);
             population = (TextView) view.findViewById(R.id.nation_population);
@@ -194,7 +196,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         public void init(NationOverviewCardData data) {
-            govType.setText(data.category);
+            govType.setHtml(data.category);
             SparkleHelper.activityLinkBuilder(context, region, data.region, data.region, data.region, SparkleHelper.CLICKY_REGION_MODE);
             influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
