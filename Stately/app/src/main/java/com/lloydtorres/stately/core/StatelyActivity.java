@@ -225,7 +225,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.coordinator_app_bar, f)
-                .commitNow();
+                .commit();
     }
 
     /**
@@ -379,7 +379,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             // Switch fragments
             fm.beginTransaction()
                     .replace(R.id.coordinator_app_bar, fChoose)
-                    .commitNow();
+                    .commit();
             drawer.closeDrawer(GravityCompat.START);
 
             // Update the unread counts whenever a new main fragment is selected.
