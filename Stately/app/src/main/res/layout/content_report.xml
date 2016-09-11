@@ -96,24 +96,27 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:checkedButton="@+id/report_inappropriate">
-                    <RadioButton android:id="@+id/report_inappropriate"
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_inappropriate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_inappropriate"
-                        android:textSize="15sp"/>
-                    <RadioButton android:id="@+id/report_spam"
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_spam"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_spam"
-                        android:textSize="15sp"/>
-                    <RadioButton android:id="@+id/report_other"
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_other"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_other"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
                 </RadioGroup>
             </LinearLayout>
         </android.support.v7.widget.CardView>

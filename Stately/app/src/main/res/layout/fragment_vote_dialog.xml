@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
@@ -10,23 +11,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:orientation="vertical">
-        <RadioButton android:id="@+id/vote_radio_for"
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/vote_radio_for"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/wa_vote_dialog_for"
-            android:textSize="15sp"/>
-        <RadioButton android:id="@+id/vote_radio_against"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/vote_radio_against"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="@string/wa_vote_dialog_against"
-            android:textSize="15sp"/>
-        <RadioButton android:id="@+id/vote_radio_undecided"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/vote_radio_undecided"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="@string/wa_vote_dialog_undecided"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
     </RadioGroup>
 
 </LinearLayout>

@@ -198,4 +198,11 @@
         <item name="colorControlActivated">@android:color/white</item>
     </style>
 
+    <style name="ExploreField" parent="Widget.Design.TextInputLayout">
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">?attr/themedColorPrimaryText</item>
+        <item name="colorControlNormal">?attr/themedColorPrimaryText</item>
+        <item name="colorControlActivated">?attr/themedColorPrimaryText</item>
+    </style>
+
 </resources>
