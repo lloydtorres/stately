@@ -219,13 +219,13 @@
                             android:fontFamily="sans-serif"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/themedColorHeaderText"
+                            android:textColor="?attr/themedColorButton"
                             android:text="@string/wa_resolution_vote_default"
                             android:layout_centerVertical="true"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true" />
                         <TextView
-                            android:textColor="?attr/themedColorHeaderText"
+                            android:textColor="?attr/themedColorButton"
                             android:textSize="30sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

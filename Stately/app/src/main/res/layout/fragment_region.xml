@@ -107,8 +107,8 @@
             android:background="?attr/themedColorCard"
             android:textColor = "?attr/themedColorSecondaryText"
             app:pstsTabTextColor = "?attr/themedColorTab"
-            app:pstsIndicatorColor = "?attr/themedColorHeaderText"
-            app:pstsUnderlineColor = "?attr/themedColorHeaderText" />
+            app:pstsIndicatorColor = "?attr/themedColorButton"
+            app:pstsUnderlineColor = "?attr/themedColorButton" />
 
     </android.support.design.widget.AppBarLayout>
 

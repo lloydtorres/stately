@@ -26,7 +26,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorHeaderText"
+            android:textColor="?attr/themedColorButton"
             android:text="@string/card_region_rmb" />
         <TextView
             android:visibility="invisible"
@@ -38,7 +38,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorHeaderText"
+            android:textColor="?attr/themedColorButton"
             tools:text="88" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

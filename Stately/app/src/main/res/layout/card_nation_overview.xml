@@ -225,14 +225,14 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/themedColorHeaderText"
+                    android:textColor="?attr/themedColorButton"
                     android:text="@string/card_overview_wa_endorsements"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
                 <TextView
                     android:id="@+id/nation_wa_num_endorsements"
-                    android:textColor="?attr/themedColorHeaderText"
+                    android:textColor="?attr/themedColorButton"
                     android:textSize="30sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
