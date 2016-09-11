@@ -112,4 +112,64 @@
         <item>Residency##Days</item>
         <item>Unknown##Mystery Units</item>
     </string-array>
+    <string-array name="gov_types">
+        <item>anarchy</item>
+        <item>authoritarian_democracy</item>
+        <item>benevolent_dictatorship</item>
+        <item>capitalist_paradise</item>
+        <item>capitalizt</item>
+        <item>civil_rights_lovefest</item>
+        <item>compulsory_consumerist_state</item>
+        <item>conservative_democracy</item>
+        <item>corporate_bordello</item>
+        <item>corporate_police_state</item>
+        <item>corrupt_dictatorship</item>
+        <item>democratic_socialists</item>
+        <item>father_knows_best_state</item>
+        <item>mother_knows_best_state</item>
+        <item>free_market_paradise</item>
+        <item>inoffensive_centrist_democracy</item>
+        <item>iron_fist_consumerists</item>
+        <item>iron_fist_socialists</item>
+        <item>left_leaning_college_state</item>
+        <item>left_wing_utopia</item>
+        <item>liberal_democratic_socialists</item>
+        <item>libertarian_police_state</item>
+        <item>moralistic_democracy</item>
+        <item>new_york_times_democracy</item>
+        <item>psychotic_dictatorship</item>
+        <item>right_wing_utopia</item>
+        <item>scandinavian_liberal_paradise</item>
+        <item>tyranny_by_majority</item>
+    </string-array>
+    <string-array name="gov_descriptors">
+        <item>The %1$s live in a state of perpetual fear, as a complete breakdown of social order has led to the rise of order through biker gangs.</item>
+        <item>The %1$s are prohibited from doing almost everything except voting, which they do timidly and conservatively.</item>
+        <item>The %1$s enjoy great individual freedoms in everything except elections, which, where they exist at all, are populist shams for a dictatorship government that has no intention of ever giving up power.</item>
+        <item>The %1$s are either ruled by a sleek, efficient government or a conglomerate of multinational corporations; it\'s difficult to tell which.</item>
+        <item>The %1$s enjoy some of the most opulent lifestyles in the region, unless they are unemployed or working class, in which case they are variously starving to death or crippled by easily preventable diseases.</item>
+        <item>The %1$s hold their civil and political rights very dear, although the wealthy and those in business tend to be viewed with suspicion.</item>
+        <item>The %1$s are rabid consumers, partly through choice and partly because the government tells them to and dissenters tend to vanish from their homes at night.</item>
+        <item>The %1$s are known throughout the region for their efficiency and work ethic, as well as their general suspicion of leisure.</item>
+        <item>The %1$s are effectively ruled by a group of massive corporations, who run for political office and provide their well-off citizens with world-class goods and services. Their poorer citizens, however, are mostly starving to death while being urged to go out and get real jobs. The populace has reasonably extensive civil rights, although these are mostly aimed at allowing them to buy whatever they like.</item>
+        <item>The %1$s are ruled with an iron fist by the corrupt, dictatorship government, which oppresses anyone who isn\'t on the board of a Fortune 500 company. Large corporations tend to be above the law, and use their financial clout to gain ever-increasing government benefits at the expense of the poor and unemployed.</item>
+        <item>The %1$s are ruled with an iron fist by the dictatorship government, which ensures that no one outside the party gets too rich. In their personal lives, however, citizens are relatively unoppressed; it remains to be seen whether this is because the government genuinely cares about its people, or if it hasn\'t gotten around to stamping out civil rights yet.</item>
+        <item>The %1$s are fiercely patriotic and enjoy great social equality; they tend to view other, more capitalist countries as somewhat immoral and corrupt.</item>
+        <item>The %1$s are ruled by a mostly-benevolent dictator, who grants the populace the freedom to live their own lives but watches carefully for anyone to slip up.</item>
+        <item>The %1$s are ruled by a mostly-benevolent dictator, who grants the populace the freedom to live their own lives but watches carefully for anyone to slip up.</item>
+        <item>The %1$s enjoy frequent elections, which are uniformly corrupted by big-spending corporations buying politicians who best suit their interests.</item>
+        <item>The %1$s have some civil rights, but not too many, enjoy the freedom to spend their money however they like, to a point, and take part in free and open elections, although not too often.</item>
+        <item>The %1$s are kept under strict control by the oppressive government, which measures its success by the nation\'s GDP and refers to individual citizens as \"human resources.\"</item>
+        <item>The %1$s are ruled with an iron fist by the socialist government, which grants its people the freedom to do whatever they like so long as it doesn\'t involve getting richer than anybody else or challenging the government.</item>
+        <item>The %1$s enjoy extensive civil freedoms, particularly in social issues, while business tends to be more regulated.</item>
+        <item>The %1$s are free to do what they want with their own bodies, and vote for whoever they like in elections; if they go into business, however, they are regulated to within an inch of their lives.</item>
+        <item>The %1$s love a good election, and the government gives them plenty of them. Universities tend to be full of students debating the merits of various civil and political rights, while businesses are tightly regulated and the wealthy viewed with suspicion.</item>
+        <item>The %1$s are proud of their wide-ranging civil freedoms, and those who aren\'t tend to be dragged off the streets by men in dark suits and hustled into cars with tinted windows.</item>
+        <item>The %1$s are highly moralistic and fiercely conservative, in the sense that they tend to believe most things should be outlawed. People who have good jobs and work quietly at them are lauded; others are viewed with suspicion.</item>
+        <item>The %1$s enjoy a sensible mix of personal and economic freedoms, while the political process is open and the people\'s right to vote held sacrosanct.</item>
+        <item>The %1$s are ruled without fear or favor by a psychotic dictator, who outlaws just about everything and refers to the populace as \"my little playthings.\"</item>
+        <item>The %1$s are free to succeed or fail in life on their own merits; the successful tend to enjoy an opulent (but moralistic) lifestyle, while the failures can be seen crowding out most jails.</item>
+        <item>The %1$s enjoy extensive civil rights and enjoy a level of social equality free from the usual accompanying government corruption.</item>
+        <item>The %1$s enjoy great social freedoms and frequent elections, where the majority of the populace regularly votes to increase its benefits at the expense of various hapless minorities.</item>
+    </string-array>
 </resources>

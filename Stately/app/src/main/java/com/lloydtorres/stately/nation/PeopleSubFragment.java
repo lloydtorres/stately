@@ -44,7 +44,7 @@ import java.util.Locale;
 public class PeopleSubFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNation";
 
-    private static final HashMap<String, Integer> waCategoryDescriptors;
+    private static final HashMap<String, String> waCategoryDescriptors = new HashMap<String, String>();
 
     private Nation mNation;
 
@@ -59,42 +59,16 @@ public class PeopleSubFragment extends Fragment {
         mNation = n;
     }
 
-    static {
-        // Create hash map for WA category descriptors
-        waCategoryDescriptors = new HashMap<String, Integer>();
-        waCategoryDescriptors.put("anarchy", R.string.wa_anarchy);
-        waCategoryDescriptors.put("authoritarian_democracy", R.string.wa_authoritarian_democracy);
-        waCategoryDescriptors.put("benevolent_dictatorship", R.string.wa_benevolent_dictatorship);
-        waCategoryDescriptors.put("capitalist_paradise", R.string.wa_capitalist_paradise);
-        waCategoryDescriptors.put("capitalizt", R.string.wa_capitalizt);
-        waCategoryDescriptors.put("civil_rights_lovefest", R.string.wa_civil_rights_lovefest);
-        waCategoryDescriptors.put("compulsory_consumerist_state", R.string.wa_compulsory_consumerist_state);
-        waCategoryDescriptors.put("conservative_democracy", R.string.wa_conservative_democracy);
-        waCategoryDescriptors.put("corporate_bordello", R.string.wa_corporate_bordello);
-        waCategoryDescriptors.put("corporate_police_state", R.string.wa_corporate_police_state);
-        waCategoryDescriptors.put("corrupt_dictatorship", R.string.wa_corrupt_dictatorship);
-        waCategoryDescriptors.put("democratic_socialists", R.string.wa_democratic_socialists);
-        waCategoryDescriptors.put("father_knows_best_state", R.string.wa_father_knows_best_state);
-        waCategoryDescriptors.put("mother_knows_best_state", R.string.wa_father_knows_best_state);
-        waCategoryDescriptors.put("free_market_paradise", R.string.wa_free_market_paradise);
-        waCategoryDescriptors.put("inoffensive_centrist_democracy", R.string.wa_inoffensive_centrist_democracy);
-        waCategoryDescriptors.put("iron_fist_consumerists", R.string.wa_iron_fist_consumerists);
-        waCategoryDescriptors.put("iron_fist_socialists", R.string.wa_iron_fist_socialists);
-        waCategoryDescriptors.put("left_leaning_college_state", R.string.wa_left_leaning_college_state);
-        waCategoryDescriptors.put("left_wing_utopia", R.string.wa_left_wing_utopia);
-        waCategoryDescriptors.put("liberal_democratic_socialists", R.string.wa_liberal_democratic_socialists);
-        waCategoryDescriptors.put("libertarian_police_state", R.string.wa_libertarian_police_state);
-        waCategoryDescriptors.put("moralistic_democracy", R.string.wa_moralistic_democracy);
-        waCategoryDescriptors.put("new_york_times_democracy", R.string.wa_new_york_times_democracy);
-        waCategoryDescriptors.put("psychotic_dictatorship", R.string.wa_psychotic_dictatorship);
-        waCategoryDescriptors.put("right_wing_utopia", R.string.wa_right_wing_utopia);
-        waCategoryDescriptors.put("scandinavian_liberal_paradise", R.string.wa_scandinavian_liberal_paradise);
-        waCategoryDescriptors.put("tyranny_by_majority", R.string.wa_tyranny_by_majority);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String[] govTypes = getResources().getStringArray(R.array.gov_types);
+        String[] govDescriptors = getResources().getStringArray(R.array.gov_descriptors);
+
+        for (int i = 0; i < govTypes.length; i++) {
+            waCategoryDescriptors.put(govTypes[i], govDescriptors[i]);
+        }
     }
 
     @Override
@@ -129,7 +103,7 @@ public class PeopleSubFragment extends Fragment {
             String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
             if (waCategoryDescriptors.containsKey(waCategory))
             {
-                summaryContent.append("<br /><br />").append(String.format(getString(waCategoryDescriptors.get(waCategory)), mNation.demPlural));
+                summaryContent.append("<br /><br />").append(String.format(waCategoryDescriptors.get(waCategory), mNation.demPlural));
             }
             summaryContent.append("<br /><br />").append(mNation.crime);
             ngcSummary.mainContent = summaryContent.toString();
