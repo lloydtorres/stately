@@ -16,14 +16,8 @@
 
 package com.lloydtorres.stately.wa;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.core.IToolbarActivity;
+import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.DashHelper;
@@ -51,21 +45,22 @@ import java.util.Locale;
  * A fragment part of the StatelyActivity used to show the World Assembly.
  * Gets WA data on its own, can also refresh!
  */
-public class AssemblyMainFragment extends Fragment {
+public class AssemblyMainFragment extends RefreshviewFragment {
     public static final String VOTE_STATUS_KEY = "voteStatus";
-
-    private Activity mActivity;
-    private View mView;
-    private Toolbar toolbar;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
 
     private Assembly genAssembly;
     private Assembly secCouncil;
     private WaVoteStatus voteStatus;
+
+    private void setGeneralAssembly(Assembly g)
+    {
+        genAssembly = g;
+    }
+
+    private void setSecurityCouncil(Assembly s)
+    {
+        secCouncil = s;
+    }
 
     public void setVoteStatus(WaVoteStatus w)
     {
@@ -73,22 +68,11 @@ public class AssemblyMainFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        // Get activity for manipulation
-        super.onAttach(context);
-        mActivity = (Activity) context;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
+        mView = super.onCreateView(inflater, container, savedInstanceState);
+
+        toolbar.setTitle(getString(R.string.menu_wa));
 
         // Restore state
         if (savedInstanceState != null && voteStatus == null)
@@ -96,29 +80,12 @@ public class AssemblyMainFragment extends Fragment {
             voteStatus = savedInstanceState.getParcelable(VOTE_STATUS_KEY);
         }
 
-        toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
-        toolbar.setTitle(getString(R.string.menu_wa));
-
-        if (mActivity != null && mActivity instanceof IToolbarActivity)
-        {
-            ((IToolbarActivity) mActivity).setToolbar(toolbar);
-        }
-
-        // Set up refresher to reload data on refresh
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(getContext()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                                                         @Override
                                                         public void onRefresh() {
                                                             queryWorldAssembly(mView);
                                                         }
                                                  });
-
-        // Setup recyclerview
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
@@ -216,16 +183,6 @@ public class AssemblyMainFragment extends Fragment {
         }
     }
 
-    private void setGeneralAssembly(Assembly g)
-    {
-        genAssembly = g;
-    }
-
-    private void setSecurityCouncil(Assembly s)
-    {
-        secCouncil = s;
-    }
-
     private void refreshRecycler()
     {
         mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil, voteStatus);
@@ -242,13 +199,5 @@ public class AssemblyMainFragment extends Fragment {
         {
             savedInstanceState.putParcelable(VOTE_STATUS_KEY, voteStatus);
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        // Detach activity on destroy
-        super.onDestroy();
-        mActivity = null;
     }
 }
