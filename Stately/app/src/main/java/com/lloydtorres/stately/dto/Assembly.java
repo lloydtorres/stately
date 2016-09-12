@@ -33,7 +33,7 @@ import java.util.List;
  * This is a DTO to hold the results of a query to the World Assembly API.
  */
 @Root(name="WA", strict=false)
-public class Assembly implements Parcelable {
+public class Assembly extends BaseAssembly implements Parcelable {
 
     public static final int GENERAL_ASSEMBLY = 1;
     public static final int SECURITY_COUNCIL = 2;
@@ -44,9 +44,6 @@ public class Assembly implements Parcelable {
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String TARGET_GA = "https://www.nationstates.net/page=ga/template-overall=none";
     public static final String TARGET_SC = "https://www.nationstates.net/page=sc/template-overall=none";
-
-    @Element(name="RESOLUTION", required=false)
-    public Resolution resolution;
 
     @Element(name="LASTRESOLUTION")
     public String lastResolution;
@@ -63,7 +60,7 @@ public class Assembly implements Parcelable {
     }
 
     protected Assembly(Parcel in) {
-        resolution = (Resolution) in.readValue(Resolution.class.getClassLoader());
+        super(in);
         lastResolution = in.readString();
         numNations = in.readInt();
         numDelegates = in.readInt();
@@ -82,7 +79,7 @@ public class Assembly implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(resolution);
+        super.writeToParcel(dest, flags);
         dest.writeString(lastResolution);
         dest.writeInt(numNations);
         dest.writeInt(numDelegates);

@@ -43,7 +43,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.AssemblyActive;
+import com.lloydtorres.stately.dto.BaseAssembly;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
@@ -77,7 +77,7 @@ public class ResolutionActivity extends SlidrActivity {
     public static final String TARGET_RESOLUTION = "resolution";
     public static final String TARGET_VOTE_STATUS = "voteStatus";
 
-    private AssemblyActive mAssembly;
+    private BaseAssembly mAssembly;
     private Resolution mResolution;
     private WaVoteStatus voteStatus;
     private int councilId;
@@ -175,7 +175,7 @@ public class ResolutionActivity extends SlidrActivity {
         // Otherwise just show it normally
         else
         {
-            AssemblyActive tmp = new AssemblyActive();
+            BaseAssembly tmp = new BaseAssembly();
             tmp.resolution = mResolution;
             setVoteStatus(voteStatus);
             setResolution(tmp);
@@ -218,16 +218,16 @@ public class ResolutionActivity extends SlidrActivity {
      */
     private void queryResolution(int chamberId)
     {
-        String targetURL = String.format(Locale.US, AssemblyActive.QUERY, chamberId);
+        String targetURL = String.format(Locale.US, BaseAssembly.QUERY, chamberId);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
-                    AssemblyActive waResponse = null;
+                    BaseAssembly waResponse = null;
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            waResponse = serializer.read(AssemblyActive.class, response);
+                            waResponse = serializer.read(BaseAssembly.class, response);
                             queryVoteStatus(waResponse);
                         }
                         catch (Exception e) {
@@ -262,7 +262,7 @@ public class ResolutionActivity extends SlidrActivity {
      * Called from queryResolution(). Checks the current nation's WA voting rights.
      * @param a The resolution data to be passed to setResolution().
      */
-    private void queryVoteStatus(final AssemblyActive a)
+    private void queryVoteStatus(final BaseAssembly a)
     {
         UserLogin u = SparkleHelper.getActiveUser(this);
         String targetURL = String.format(WaVoteStatus.QUERY, u.nationId);
@@ -563,7 +563,7 @@ public class ResolutionActivity extends SlidrActivity {
      * Fill in the resolution activity with the given data.
      * @param res
      */
-    private void setResolution(AssemblyActive res)
+    private void setResolution(BaseAssembly res)
     {
         mAssembly = res;
         mResolution = mAssembly.resolution;

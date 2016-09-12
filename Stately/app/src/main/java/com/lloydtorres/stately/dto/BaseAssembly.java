@@ -30,16 +30,16 @@ import org.simpleframework.xml.Root;
  * as well as voting history to minimize the amount of data to be downloaded.
  */
 @Root(name="WA", strict=false)
-public class AssemblyActive implements Parcelable {
+public class BaseAssembly implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q=resolution+votetrack"
                                             + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="RESOLUTION")
     public Resolution resolution;
 
-    public AssemblyActive() { super(); }
+    public BaseAssembly() { super(); }
 
-    protected AssemblyActive(Parcel in) {
+    protected BaseAssembly(Parcel in) {
         resolution = (Resolution) in.readValue(Resolution.class.getClassLoader());
     }
 
@@ -54,15 +54,15 @@ public class AssemblyActive implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<AssemblyActive> CREATOR = new Parcelable.Creator<AssemblyActive>() {
+    public static final Parcelable.Creator<BaseAssembly> CREATOR = new Parcelable.Creator<BaseAssembly>() {
         @Override
-        public AssemblyActive createFromParcel(Parcel in) {
-            return new AssemblyActive(in);
+        public BaseAssembly createFromParcel(Parcel in) {
+            return new BaseAssembly(in);
         }
 
         @Override
-        public AssemblyActive[] newArray(int size) {
-            return new AssemblyActive[size];
+        public BaseAssembly[] newArray(int size) {
+            return new BaseAssembly[size];
         }
     };
 }
