@@ -37,9 +37,9 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 

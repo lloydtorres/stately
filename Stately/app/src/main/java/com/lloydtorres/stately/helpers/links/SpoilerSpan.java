@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.links;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +24,8 @@ import android.view.View;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Spoiler;
+import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.HtmlDialog;
 
 /**
  * Created by Lloyd on 2016-04-13.

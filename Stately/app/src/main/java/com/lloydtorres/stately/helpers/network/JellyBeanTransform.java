@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.network;
 
 import android.content.Context;
 import android.graphics.Bitmap;

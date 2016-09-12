@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.dialogs;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.List;
 

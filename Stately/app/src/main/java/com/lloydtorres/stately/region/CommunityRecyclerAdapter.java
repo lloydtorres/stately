@@ -39,8 +39,8 @@ import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.WaVote;
-import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;

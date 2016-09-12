@@ -47,9 +47,9 @@ import com.lloydtorres.stately.dto.AssemblyActive;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.jsoup.Jsoup;

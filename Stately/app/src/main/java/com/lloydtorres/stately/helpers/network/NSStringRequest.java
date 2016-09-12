@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.network;
 
 import android.content.Context;
 
@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.net.URLDecoder;
 import java.util.HashMap;

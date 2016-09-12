@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.happenings;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-16.

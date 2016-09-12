@@ -44,8 +44,8 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
-import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;

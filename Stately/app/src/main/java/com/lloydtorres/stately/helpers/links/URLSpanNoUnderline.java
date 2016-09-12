@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.links;
 
 import android.content.Context;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
+
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-01-20.

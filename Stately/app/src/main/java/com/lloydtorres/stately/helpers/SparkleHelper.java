@@ -50,6 +50,8 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.links.SpoilerSpan;
+import com.lloydtorres.stately.helpers.links.URLSpanNoUnderline;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.report.ReportActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;

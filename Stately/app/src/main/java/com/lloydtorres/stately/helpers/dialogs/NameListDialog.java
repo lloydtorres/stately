@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.dialogs;
 
 import android.app.Dialog;
 import android.os.Build;
@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

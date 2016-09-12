@@ -39,10 +39,10 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Telegram;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

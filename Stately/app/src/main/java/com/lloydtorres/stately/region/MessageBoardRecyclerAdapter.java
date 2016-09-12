@@ -32,8 +32,8 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
-import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.report.ReportActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 

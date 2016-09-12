@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.happenings;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -40,9 +40,9 @@ import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.HappeningsSubFragment;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.happenings.HappeningsSubFragment;
+import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import java.util.ArrayList;
 

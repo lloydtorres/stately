@@ -32,9 +32,9 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.WaVoteStatus;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import org.simpleframework.xml.core.Persister;
 

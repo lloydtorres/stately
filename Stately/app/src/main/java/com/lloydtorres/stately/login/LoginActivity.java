@@ -39,10 +39,10 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;

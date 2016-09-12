@@ -38,9 +38,9 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.jsoup.Jsoup;

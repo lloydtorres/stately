@@ -41,11 +41,11 @@ import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.EventRecyclerAdapter;
-import com.lloydtorres.stately.helpers.NSStringRequest;
-import com.lloydtorres.stately.helpers.NameListDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
+import com.lloydtorres.stately.helpers.happenings.EventRecyclerAdapter;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

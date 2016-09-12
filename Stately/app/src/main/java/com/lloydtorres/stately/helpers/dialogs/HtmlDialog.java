@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers;
+package com.lloydtorres.stately.helpers.dialogs;
 
 import android.app.Dialog;
 import android.os.Build;
@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
