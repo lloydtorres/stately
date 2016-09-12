@@ -17,14 +17,11 @@
 package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ import java.util.ArrayList;
  * This fragment displays a nation or region's census scores and rankings, which are sortable
  * by the user. Takes in a list of census data as well as mode.
  */
-public class CensusSubFragment extends Fragment {
+public class CensusSubFragment extends RecyclerSubFragment {
     public static final String TARGET_KEY = "target";
     public static final String CENSUS_DATA_KEY = "censusData";
     public static final String MODE_KEY = "censusMode";
@@ -42,10 +39,6 @@ public class CensusSubFragment extends Fragment {
     private String target;
     private ArrayList<CensusDetailedRank> censusData;
     private int censusMode;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
 
     public void setTarget(String t) { target = t; }
 
@@ -60,13 +53,8 @@ public class CensusSubFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore save state
         if (savedInstanceState != null)
@@ -78,22 +66,11 @@ public class CensusSubFragment extends Fragment {
 
         if (censusData != null)
         {
-            initCensusRecycler(view);
+            mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         return view;
-    }
-
-    private void initCensusRecycler(View view)
-    {
-        // Setup recycler view
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     @Override

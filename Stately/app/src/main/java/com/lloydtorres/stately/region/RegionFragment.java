@@ -46,8 +46,10 @@ import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.HappeningsSubFragment;
 import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -81,7 +83,7 @@ public class RegionFragment extends Fragment {
     private RegionOverviewSubFragment regionOverviewSubFragment;
     private RegionCommunitySubFragment regionCommunitySubFragment;
     private CensusSubFragment censusSubFragment;
-    private RegionHappeningSubFragment regionHappeningSubFragment;
+    private HappeningsSubFragment regionHappeningsSubFragment;
 
     // variables used for mRegion views
     private TextView regionName;
@@ -253,8 +255,10 @@ public class RegionFragment extends Fragment {
         censusSubFragment.setCensusData(censusHolder);
         censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_REGION);
 
-        regionHappeningSubFragment = new RegionHappeningSubFragment();
-        regionHappeningSubFragment.setRegion(mRegion);
+        regionHappeningsSubFragment = new HappeningsSubFragment();
+        ArrayList<Event> events = new ArrayList<Event>(mRegion.happenings);
+        events.addAll(mRegion.history);
+        regionHappeningsSubFragment.setHappenings(events);
 
         initTabs(view);
     }
@@ -367,7 +371,7 @@ public class RegionFragment extends Fragment {
                 case CENSUS_TAB:
                     return censusSubFragment;
                 case HAPPEN_TAB:
-                    return regionHappeningSubFragment;
+                    return regionHappeningsSubFragment;
                 default:
                     return new Fragment();
             }

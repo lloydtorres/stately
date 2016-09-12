@@ -38,8 +38,10 @@ import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.HappeningsSubFragment;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public class NationFragment extends Fragment {
     private GovernmentSubFragment governmentSubFragment;
     private EconomySubFragment economySubFragment;
     private CensusSubFragment censusSubFragment;
-    private HappeningSubFragment happeningSubFragment;
+    private HappeningsSubFragment happeningsSubFragment;
 
     // variables used for nation views
     private TextView nationName;
@@ -228,8 +230,9 @@ public class NationFragment extends Fragment {
         censusSubFragment.setCensusData(censusHolder);
         censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_NATION);
 
-        happeningSubFragment = new HappeningSubFragment();
-        happeningSubFragment.setNation(mNation);
+        happeningsSubFragment = new HappeningsSubFragment();
+        ArrayList<Event> nationHappenings = new ArrayList<Event>(mNation.events);
+        happeningsSubFragment.setHappenings(nationHappenings);
 
         initTabs(view);
     }
@@ -287,7 +290,7 @@ public class NationFragment extends Fragment {
                 case RANKINGS_TAB:
                     return censusSubFragment;
                 case HAPPEN_TAB:
-                    return happeningSubFragment;
+                    return happeningsSubFragment;
                 default:
                     return new Fragment();
             }

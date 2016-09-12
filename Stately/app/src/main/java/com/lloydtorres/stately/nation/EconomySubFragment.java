@@ -17,69 +17,31 @@
 package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.NationChartCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * Created by Lloyd on 2016-01-12.
  * A sub-fragment within the Nation fragment showing economic data.
  * Takes in nation object.
  */
-public class EconomySubFragment extends Fragment {
-    public static final String NATION_DATA_KEY = "mNation";
-
-    private Nation mNation;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
-
-    private List<Object> cards;
-
-    public void setNation(Nation n)
-    {
-        mNation = n;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class EconomySubFragment extends NationSubFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
-
-        // Restore state
-        if (savedInstanceState != null && mNation == null)
-        {
-            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
-        }
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         if (mNation != null)
         {
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
-            mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            cards = new ArrayList<Object>();
-
             NationGenericCardData ngcSummary = new NationGenericCardData();
             ngcSummary.title = getString(R.string.card_main_title_summary);
             String descContent = mNation.industryDesc;
@@ -100,21 +62,9 @@ public class EconomySubFragment extends Fragment {
             nccExpenditures.sectors = mNation.sectors;
             cards.add(nccExpenditures);
 
-            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
-            mRecyclerView.setAdapter(mRecyclerAdapter);
+            initRecyclerAdapter();
         }
 
         return view;
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mNation != null)
-        {
-            outState.putParcelable(NATION_DATA_KEY, mNation);
-        }
-    }
-
-
 }

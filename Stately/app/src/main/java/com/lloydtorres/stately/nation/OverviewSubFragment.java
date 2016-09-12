@@ -17,9 +17,6 @@
 package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,17 +24,14 @@ import android.view.ViewGroup;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -45,25 +39,10 @@ import java.util.Locale;
  * A sub-fragment of the Nation fragment showing overview stats about a nation.
  * Takes in a Nation object.
  */
-public class OverviewSubFragment extends Fragment {
-    public static final String NATION_DATA_KEY = "mNation";
+public class OverviewSubFragment extends NationSubFragment {
     private String[] WORLD_CENSUS_ITEMS;
-
-    private Nation mNation;
-
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
-
-    private List<Object> cards;
-
-    public void setNation(Nation n)
-    {
-        mNation = n;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,23 +61,10 @@ public class OverviewSubFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recycler, container, false);
-
-        // Restore state
-        if (savedInstanceState != null && mNation == null)
-        {
-            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
-        }
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         if (mNation != null)
         {
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
-            mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            cards = new ArrayList<Object>();
-
             NationOverviewCardData nocData = new NationOverviewCardData();
 
             // Set up custom government category depending on user preferences
@@ -228,22 +194,9 @@ public class OverviewSubFragment extends Fragment {
             ngcOther.idCensusTarget = censusId;
             cards.add(ngcOther);
 
-            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
-            mRecyclerView.setAdapter(mRecyclerAdapter);
+            initRecyclerAdapter();
         }
 
         return view;
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // Save state
-        super.onSaveInstanceState(outState);
-        if (mNation != null)
-        {
-            outState.putParcelable(NATION_DATA_KEY, mNation);
-        }
-    }
-
-
 }
