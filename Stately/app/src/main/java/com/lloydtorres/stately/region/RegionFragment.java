@@ -295,7 +295,7 @@ public class RegionFragment extends Fragment {
 
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = Region.parseRegionXML(getContext(), serializer, response);
+                            regionResponse = Region.parseRegionXML(serializer, response);
 
                             mRegion = regionResponse;
                             getAllRegionViews(view);

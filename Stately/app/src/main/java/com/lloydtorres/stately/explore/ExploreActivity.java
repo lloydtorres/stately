@@ -355,7 +355,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = Region.parseRegionXML(getApplicationContext(), serializer, response);
+                            regionResponse = Region.parseRegionXML(serializer, response);
 
                             setName(regionResponse.name);
 
