@@ -18,6 +18,7 @@ package com.lloydtorres.stately.nation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -37,6 +38,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.GovBudget;
 import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.NationChartCardData;
@@ -53,7 +55,6 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-07-24.
@@ -68,11 +69,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private String[] WORLD_CENSUS_ITEMS;
 
-    private List<Object> cards;
+    private List<Parcelable> cards;
     private Context context;
     private FragmentManager fm;
 
-    public NationCardsRecyclerAdapter(Context c, List<Object> cds, FragmentManager f) {
+    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f) {
         context = c;
         cards = cds;
         fm = f;
@@ -422,8 +423,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             if (data.items != null && data.items.size() > 0) {
                 detailsHolder.setVisibility(View.VISIBLE);
                 detailsHolder.removeAllViews();
-                for (Map.Entry<String, String> entry : data.items.entrySet()) {
-                    inflateEntry(inflater, detailsHolder, entry.getKey(), entry.getValue());
+                for (DataPair entry : data.items) {
+                    inflateEntry(inflater, detailsHolder, entry.key, entry.value);
                 }
             }
             else {
@@ -478,8 +479,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             else {
                 details.setVisibility(View.VISIBLE);
-                for (Map.Entry<String, String> entry : data.details.entrySet()) {
-                    inflateEntry(inflater, details, entry.getKey(), entry.getValue());
+                for (DataPair entry : data.details) {
+                    inflateEntry(inflater, details, entry.key, entry.value);
                 }
             }
 

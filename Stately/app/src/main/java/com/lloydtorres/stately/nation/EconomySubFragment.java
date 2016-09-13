@@ -16,18 +16,12 @@
 
 package com.lloydtorres.stately.nation;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.NationChartCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-
-import java.util.LinkedHashMap;
 
 /**
  * Created by Lloyd on 2016-01-12.
@@ -37,34 +31,24 @@ import java.util.LinkedHashMap;
 public class EconomySubFragment extends NationSubFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    protected void initData() {
+        NationGenericCardData ngcSummary = new NationGenericCardData();
+        ngcSummary.title = getString(R.string.card_main_title_summary);
+        String descContent = mNation.industryDesc;
+        descContent = descContent.replace(". ", ".<br /><br />");
+        ngcSummary.mainContent = descContent;
+        ngcSummary.nationCensusTarget = mNation.name;
+        ngcSummary.idCensusTarget = TrendsActivity.CENSUS_AVERAGE_INCOME;
+        cards.add(ngcSummary);
 
-        if (mNation != null)
-        {
-            NationGenericCardData ngcSummary = new NationGenericCardData();
-            ngcSummary.title = getString(R.string.card_main_title_summary);
-            String descContent = mNation.industryDesc;
-            descContent = descContent.replace(". ", ".<br /><br />");
-            ngcSummary.mainContent = descContent;
-            ngcSummary.nationCensusTarget = mNation.name;
-            ngcSummary.idCensusTarget = TrendsActivity.CENSUS_AVERAGE_INCOME;
-            cards.add(ngcSummary);
-
-            NationChartCardData nccExpenditures = new NationChartCardData();
-            nccExpenditures.details = new LinkedHashMap<String, String>();
-            nccExpenditures.details.put(getString(R.string.card_economy_analysis_gdp), SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency));
-            StringBuilder perCapitaText = new StringBuilder(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
-            perCapitaText.append("<br>").append(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
-            perCapitaText.append("<br>").append(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
-            nccExpenditures.details.put(getString(R.string.card_economy_analysis_per_capita), perCapitaText.toString());
-            nccExpenditures.mode = NationChartCardData.MODE_ECON;
-            nccExpenditures.sectors = mNation.sectors;
-            cards.add(nccExpenditures);
-
-            initRecyclerAdapter();
-        }
-
-        return view;
+        NationChartCardData nccExpenditures = new NationChartCardData();
+        nccExpenditures.details.add(new DataPair(getString(R.string.card_economy_analysis_gdp), SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency)));
+        StringBuilder perCapitaText = new StringBuilder(String.format(getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
+        perCapitaText.append("<br>").append(String.format(getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
+        perCapitaText.append("<br>").append(String.format(getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
+        nccExpenditures.details.add(new DataPair(getString(R.string.card_economy_analysis_per_capita), perCapitaText.toString()));
+        nccExpenditures.mode = NationChartCardData.MODE_ECON;
+        nccExpenditures.sectors = mNation.sectors;
+        cards.add(nccExpenditures);
     }
 }

@@ -17,9 +17,6 @@
 package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
@@ -51,41 +48,32 @@ public class PeopleSubFragment extends NationSubFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    protected void initData() {
+        NationGenericCardData ngcSummary = new NationGenericCardData();
+        ngcSummary.title = getString(R.string.card_main_title_summary);
+        StringBuilder summaryContent = new StringBuilder(String.format(getString(R.string.card_people_summarydesc_flavour),
+                mNation.prename,
+                mNation.name,
+                mNation.notable,
+                mNation.sensible,
+                SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
+                mNation.demPlural));
 
-        if (mNation != null)
+        String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
+        if (waCategoryDescriptors.containsKey(waCategory))
         {
-            NationGenericCardData ngcSummary = new NationGenericCardData();
-            ngcSummary.title = getString(R.string.card_main_title_summary);
-            StringBuilder summaryContent = new StringBuilder(String.format(getString(R.string.card_people_summarydesc_flavour),
-                    mNation.prename,
-                    mNation.name,
-                    mNation.notable,
-                    mNation.sensible,
-                    SparkleHelper.getPopulationFormatted(getContext(), mNation.popBase),
-                    mNation.demPlural));
-
-            String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
-            if (waCategoryDescriptors.containsKey(waCategory))
-            {
-                summaryContent.append("<br /><br />").append(String.format(waCategoryDescriptors.get(waCategory), mNation.demPlural));
-            }
-            summaryContent.append("<br /><br />").append(mNation.crime);
-            ngcSummary.mainContent = summaryContent.toString();
-            ngcSummary.nationCensusTarget = mNation.name;
-            ngcSummary.idCensusTarget = TrendsActivity.CENSUS_CRIME;
-            cards.add(ngcSummary);
-
-            NationChartCardData nccMortality = new NationChartCardData();
-            nccMortality.mode = NationChartCardData.MODE_PEOPLE;
-            nccMortality.mortalityList = mNation.causes;
-            nccMortality.animal = mNation.animal;
-            cards.add(nccMortality);
-
-            initRecyclerAdapter();
+            summaryContent.append("<br /><br />").append(String.format(waCategoryDescriptors.get(waCategory), mNation.demPlural));
         }
+        summaryContent.append("<br /><br />").append(mNation.crime);
+        ngcSummary.mainContent = summaryContent.toString();
+        ngcSummary.nationCensusTarget = mNation.name;
+        ngcSummary.idCensusTarget = TrendsActivity.CENSUS_CRIME;
+        cards.add(ngcSummary);
 
-        return view;
+        NationChartCardData nccMortality = new NationChartCardData();
+        nccMortality.mode = NationChartCardData.MODE_PEOPLE;
+        nccMortality.mortalityList = mNation.causes;
+        nccMortality.animal = mNation.animal;
+        cards.add(nccMortality);
     }
 }

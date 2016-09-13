@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.nation;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +26,16 @@ import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.Nation;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Lloyd on 2016-09-12.
  * Nation-specific sub-fragments.
  */
-public class NationSubFragment extends RecyclerSubFragment {
-    public static final String NATION_DATA_KEY = "mNation";
+public abstract class NationSubFragment extends RecyclerSubFragment {
+    public static final String CARDS_DATA = "cards";
 
     protected Nation mNation;
-    protected List<Object> cards = new ArrayList<Object>();
+    protected ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
     public void setNation(Nation n)
     {
@@ -52,12 +52,20 @@ public class NationSubFragment extends RecyclerSubFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore state
-        if (savedInstanceState != null && mNation == null) {
-            mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
+        if (savedInstanceState != null && cards == null) {
+            cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
         }
+
+        if ((cards == null || cards.size() <= 0) && mNation != null) {
+            initData();
+        }
+
+        initRecyclerAdapter();
 
         return view;
     }
+
+    protected abstract void initData();
 
     protected void initRecyclerAdapter() {
         mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
@@ -67,9 +75,9 @@ public class NationSubFragment extends RecyclerSubFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mNation != null)
+        if (cards != null)
         {
-            outState.putParcelable(NATION_DATA_KEY, mNation);
+            outState.putParcelableArrayList(CARDS_DATA, cards);
         }
     }
 }
