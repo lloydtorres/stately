@@ -35,6 +35,7 @@
                 android:textSize="30sp"
                 tools:text="54,321"/>
             <TextView
+                android:id="@+id/card_wa_members_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
@@ -60,6 +61,7 @@
                 android:textSize="30sp"
                 tools:text="12,345"/>
             <TextView
+                android:id="@+id/card_wa_delegates_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"

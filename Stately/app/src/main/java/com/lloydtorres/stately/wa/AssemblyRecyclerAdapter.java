@@ -31,6 +31,7 @@ import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.happenings.HappeningCard;
 
 import java.util.ArrayList;
@@ -114,7 +115,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             case STATS_CARD:
                 StatsCard statsCard = (StatsCard) holder;
-                statsCard.init((DataIntPair) cards.get(position));
+                statsCard.init((DataIntPair) cards.get(position),
+                        context.getString(R.string.wa_members),
+                        context.getString(R.string.wa_delegates));
                 break;
             default:
                 HappeningCard happeningCard = (HappeningCard) holder;
@@ -256,25 +259,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
 
             cardContent.setText(SparkleHelper.getHtmlFormatting(a.lastResolution));
-        }
-    }
-
-    // Card for stats on members and delegates
-    public class StatsCard extends RecyclerView.ViewHolder {
-
-        private TextView cardMembers;
-        private TextView cardDelegates;
-
-        public StatsCard(View v) {
-            super(v);
-            cardMembers = (TextView) v.findViewById(R.id.card_wa_members);
-            cardDelegates = (TextView) v.findViewById(R.id.card_wa_delegates);
-        }
-
-        public void init(DataIntPair s)
-        {
-            cardMembers.setText(SparkleHelper.getPrettifiedNumber(s.members));
-            cardDelegates.setText(SparkleHelper.getPrettifiedNumber(s.delegates));
         }
     }
 }
