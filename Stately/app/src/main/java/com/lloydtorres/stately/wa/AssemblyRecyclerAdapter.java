@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.AssemblyStats;
+import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -66,7 +66,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         cards.add(ga);
         cards.add(sc);
 
-        AssemblyStats s = new AssemblyStats(sc.numNations, sc.numDelegates);
+        DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
         cards.add(s);
 
         List<Event> happen = sc.events;
@@ -114,7 +114,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             case STATS_CARD:
                 StatsCard statsCard = (StatsCard) holder;
-                statsCard.init((AssemblyStats) cards.get(position));
+                statsCard.init((DataIntPair) cards.get(position));
                 break;
             default:
                 HappeningCard happeningCard = (HappeningCard) holder;
@@ -135,7 +135,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             Assembly a = (Assembly) cards.get(position);
             return a.resolution.name != null ? ACTIVE_CARD : INACTIVE_CARD;
         }
-        else if (cards.get(position) instanceof AssemblyStats)
+        else if (cards.get(position) instanceof DataIntPair)
         {
             return STATS_CARD;
         }
@@ -271,7 +271,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             cardDelegates = (TextView) v.findViewById(R.id.card_wa_delegates);
         }
 
-        public void init(AssemblyStats s)
+        public void init(DataIntPair s)
         {
             cardMembers.setText(SparkleHelper.getPrettifiedNumber(s.members));
             cardDelegates.setText(SparkleHelper.getPrettifiedNumber(s.delegates));
