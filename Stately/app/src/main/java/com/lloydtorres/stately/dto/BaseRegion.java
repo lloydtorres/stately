@@ -22,7 +22,11 @@ import android.os.Parcelable;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.core.Persister;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lloyd on 2016-09-11.
@@ -33,7 +37,8 @@ public class BaseRegion implements Parcelable {
 
     public static final String BASE_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q="
                                                 + "name+flag+numnations"
-                                                + "+delegate+delegatevotes+founder+founded+factbook"
+                                                + "+delegate+delegatevotes+founder+founded"
+                                                + "+factbook+tags"
                                                 + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="NAME")
@@ -55,6 +60,9 @@ public class BaseRegion implements Parcelable {
     @Element(name="FACTBOOK", required=false)
     public String factbook;
 
+    @ElementList(name="TAGS")
+    public List<String> tags;
+
     public BaseRegion() { super(); }
 
     protected BaseRegion(Parcel in) {
@@ -66,6 +74,12 @@ public class BaseRegion implements Parcelable {
         founder = in.readString();
         founded = in.readString();
         factbook = in.readString();
+        if (in.readByte() == 0x01) {
+            tags = new ArrayList<String>();
+            in.readList(tags, String.class.getClassLoader());
+        } else {
+            tags = null;
+        }
     }
 
     @Override
@@ -83,6 +97,12 @@ public class BaseRegion implements Parcelable {
         dest.writeString(founder);
         dest.writeString(founded);
         dest.writeString(factbook);
+        if (tags == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(tags);
+        }
     }
 
     @SuppressWarnings("unused")

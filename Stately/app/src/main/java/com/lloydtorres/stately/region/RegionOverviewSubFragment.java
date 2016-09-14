@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.region;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -71,32 +72,10 @@ public class RegionOverviewSubFragment extends Fragment {
         if (mRegion != null)
         {
             delegate = (TextView) view.findViewById(R.id.region_delegate);
-            if (!"0".equals(mRegion.delegate))
-            {
-                String delegateProper = SparkleHelper.getNameFromId(mRegion.delegate);
-                String delegateTemplate = String.format(getString(R.string.region_delegate_votes), mRegion.delegate, mRegion.delegateVotes, English.plural(getString(R.string.region_filler_vote), mRegion.delegateVotes));
-                SparkleHelper.activityLinkBuilder(getContext(), delegate, delegateTemplate, mRegion.delegate, delegateProper, SparkleHelper.CLICKY_NATION_MODE);
-            }
-            else
-            {
-                delegate.setText(getString(R.string.region_filler_none));
-            }
+            initWaDelegate(getContext(), delegate, mRegion.delegate, mRegion.delegateVotes);
 
             founder = (TextView) view.findViewById(R.id.region_founder);
-            if (!"0".equals(mRegion.founder))
-            {
-                String founderProper = SparkleHelper.getNameFromId(mRegion.founder);
-                SparkleHelper.activityLinkBuilder(getContext(), founder, mRegion.founder, mRegion.founder, founderProper, SparkleHelper.CLICKY_NATION_MODE);
-            }
-            else
-            {
-                founder.setText(getString(R.string.region_filler_none));
-            }
-
-            if (!"0".equals(mRegion.founded))
-            {
-                founder.append(" " + String.format(getString(R.string.region_founded_append), mRegion.founded));
-            }
+            initFounder(getContext(), founder, mRegion.founder, mRegion.founded);
 
             power = (TextView) view.findViewById(R.id.region_power);
             power.setText(mRegion.power);
@@ -118,6 +97,34 @@ public class RegionOverviewSubFragment extends Fragment {
         }
 
         return view;
+    }
+
+    public static void initWaDelegate(Context c, TextView tv, String delegateId, int delegateVotes) {
+        if (!"0".equals(delegateId)) {
+            String delegateProper = SparkleHelper.getNameFromId(delegateId);
+            String delegateTemplate = String.format(c.getString(R.string.region_delegate_votes),
+                    delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
+                    English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
+            SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, SparkleHelper.CLICKY_NATION_MODE);
+        }
+        else
+        {
+            tv.setText(c.getString(R.string.region_filler_none));
+        }
+    }
+
+    public static void initFounder(Context c, TextView tv, String founder, String founded) {
+        if (!"0".equals(founder)) {
+            String founderProper = SparkleHelper.getNameFromId(founder);
+            SparkleHelper.activityLinkBuilder(c, tv, founder, founder, founderProper, SparkleHelper.CLICKY_NATION_MODE);
+        }
+        else {
+            tv.setText(c.getString(R.string.region_filler_none));
+        }
+
+        if (!"0".equals(founded)) {
+            tv.append(" " + String.format(c.getString(R.string.region_founded_append), founded));
+        }
     }
 
     @Override

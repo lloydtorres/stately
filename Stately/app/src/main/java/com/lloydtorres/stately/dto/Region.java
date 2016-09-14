@@ -53,9 +53,6 @@ public class Region extends BaseRegion implements Parcelable {
     @Element(name="POWER")
     public String power;
 
-    @ElementList(name="TAGS")
-    public List<String> tags;
-
     @Element(name="POLL", required=false)
     public Poll poll;
     @Element(name="GAVOTE", required=false)
@@ -81,12 +78,6 @@ public class Region extends BaseRegion implements Parcelable {
     protected Region(Parcel in) {
         super(in);
         power = in.readString();
-        if (in.readByte() == 0x01) {
-            tags = new ArrayList<String>();
-            in.readList(tags, String.class.getClassLoader());
-        } else {
-            tags = null;
-        }
         poll = (Poll) in.readValue(Poll.class.getClassLoader());
         gaVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
         scVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
@@ -131,12 +122,6 @@ public class Region extends BaseRegion implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(power);
-        if (tags == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(tags);
-        }
         dest.writeValue(poll);
         dest.writeValue(gaVote);
         dest.writeValue(scVote);

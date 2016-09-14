@@ -30,9 +30,10 @@
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
     <string name="menu_telegrams">Telegrams</string>
-    <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>
+    <string name="menu_world">The World</string>
+    <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_explore">Explore</string>
     <string name="menu_switch">Switch</string>
     <string name="menu_settings">Settings</string>
@@ -357,6 +358,13 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
+
+    <!-- The World -->
+    <string name="world_nations">nations</string>
+    <string name="world_regions">regions</string>
+    <string name="world_featured">Featured Region</string>
+    <string name="world_census">Featured Census</string>
+    <string name="world_census_score">World Score: %1$s</string>
 
     <!-- Report -->
     <string name="report_title">Report</string>

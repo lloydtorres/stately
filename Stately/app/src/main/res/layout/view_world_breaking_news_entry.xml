@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <org.sufficientlysecure.htmltextview.HtmlTextView
+        android:id="@+id/card_world_breaking_news_content"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif"
+        android:textColor="?attr/themedColorPrimaryText"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Following new legislation in Greater Tern, books are so highly regarded in Greater Tern that libraries are often revered as holy shrines." />
+    <include layout="@layout/view_divider" />
+</LinearLayout>

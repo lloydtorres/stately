@@ -39,88 +39,88 @@
         <item>2</item>
     </string-array>
     <string-array name="census">
-        <item>Civil Rights##Martin Luther King, Jr. Units</item>
-        <item>Economy##Krugman-Greenspan Business Outlook Index</item>
-        <item>Political Freedoms##Diebold Election Inking Scale</item>
-        <item>Population##Capita</item>
-        <item>Wealth Gaps##Rich-to-Poor Income Ratio</item>
-        <item>Death Rate##Bus Surprisal Index</item>
-        <item>Compassion##Kitten Softness Rating</item>
-        <item>Eco-Friendliness##Dolphin Recycling Awareness Index</item>
-        <item>Social Conservatism##Bush-Santorum Dawning Terror Index</item>
-        <item>Nudity##Cheeks Per Square Mile</item>
-        <item>Industry: Automobile Manufacturing##Henry Ford Productivity Index</item>
-        <item>Industry: Cheese Exports##Mozzarella Productivity Index</item>
-        <item>Industry: Basket Weaving##Hickory Productivity Index</item>
-        <item>Industry: Information Technology##Fann-Boi Productivity Index</item>
-        <item>Industry: Pizza Delivery##Pepperoni Propulsion Productivity Index</item>
-        <item>Industry: Trout Fishing##Nemo Depletion Efficiency Index</item>
-        <item>Industry: Arms Manufacturing##Charon Conveyancy Index</item>
-        <item>Sector: Agriculture##Mu-Bah-Daggs Productivity Index</item>
-        <item>Industry: Beverage Sales##Addison-Fukk Productivity Rating</item>
-        <item>Industry: Timber Woodchipping##Tasmanian Pulp Environmental Export Index</item>
-        <item>Industry: Mining##Blue Sky Asbestos Index</item>
-        <item>Industry: Insurance##Risk Expulsion Effectiveness Rating</item>
-        <item>Industry: Furniture Restoration##Spitz-Pollish Productivity Index</item>
-        <item>Industry: Retail##Shrinkwrap Consignment Productivity Index</item>
-        <item>Industry: Book Publishing##Bella Potter Productivity e-Index</item>
-        <item>Industry: Gambling##Kelly Criterion Productivity Index</item>
-        <item>Sector: Manufacturing##Gooback-Jerbs Productivity Index</item>
-        <item>Government Size##Bureaucratic Comprehensiveness Rating Scale Index</item>
-        <item>Welfare##Safety Net Mesh Density Rating</item>
-        <item>Public Healthcare##Theresa-Nightingale Rating</item>
-        <item>Law Enforcement##Orwell Orderliness Index</item>
-        <item>Business Subsidization##Gilded Widget Scale</item>
-        <item>Religiousness##Prayers Per Hour</item>
-        <item>Income Equality##Marx-Engels Emancipation Scale</item>
-        <item>Niceness##Average Smiles Per Day</item>
-        <item>Rudeness##Insults Per Minute</item>
-        <item>Intelligence##Quips Per Hour</item>
-        <item>Ignorance##Missed References Per Hour</item>
-        <item>Political Apathy##Whatever</item>
-        <item>Health##Bananas Ingested Per Day</item>
-        <item>Cheerfulness##Percentage of Water Glasses Perceived Half-Full</item>
-        <item>Weather##Meters of Sunlight</item>
-        <item>Compliance##Law-Abiding Acts Per Hour</item>
-        <item>Safety##Bubble-Rapp Safety Rating</item>
-        <item>Lifespan##Years</item>
-        <item>Ideological Radicality##Paul-Nader Subjective Decentrality Index</item>
-        <item>Defense Forces##Total War Preparedness Rating</item>
-        <item>Pacifism##Cheeks Turned Per Day</item>
-        <item>Economic Freedom##Rand Index</item>
-        <item>Taxation##Effective Tax Rate</item>
-        <item>Freedom From Taxation##Hayek Index</item>
-        <item>Corruption##Kickbacks Per Hour</item>
-        <item>Integrity##Percentage of Bribes Refused</item>
-        <item>Authoritarianism##Stalins</item>
-        <item>Youth Rebelliousness##Stark-Dean Displacement Index</item>
-        <item>Culture##Snufflebottom-Wiggendum Pentatonic Scale</item>
-        <item>Employment##Workforce Participation Rate</item>
-        <item>Public Transport##Societal Mobility Rating</item>
-        <item>Tourism##Tourists Per Hour</item>
-        <item>Weaponization##Weapons Per Person</item>
-        <item>Recreational Drug Use##Pineapple Fondness Rating</item>
-        <item>Obesity##Obesity Rate</item>
-        <item>Secularism##Atheism Rate</item>
-        <item>Environmental Beauty##Pounds of Wildlife Per Square Mile</item>
-        <item>Charmlessness##Kardashian Reflex Score</item>
-        <item>Influence##Soft Power Disbursement Rating</item>
-        <item>World Assembly Endorsements##Valid Endorsements</item>
-        <item>Averageness##Average Standardized Normality Scale</item>
-        <item>Human Development Index##HDI</item>
-        <item>Primitiveness##Scary Big Number Scale</item>
-        <item>Scientific Advancement##Kurzweil Singularity Index</item>
-        <item>Inclusiveness##Mandela-Wollstonecraft Non-Discrimination Index</item>
-        <item>Average Income##Standard Monetary Units</item>
-        <item>Average Income of Poor##Standard Monetary Units</item>
-        <item>Average Income of Rich##Standard Monetary Units</item>
-        <item>Public Education##Edu-tellignce® Test Score</item>
-        <item>Economic Output##Standard Monetary Units</item>
-        <item>Crime##Crimes Per Hour</item>
-        <item>Foreign Aid##Clooney Contribution Index</item>
-        <item>Black Market##Standard Monetary Units</item>
-        <item>Residency##Days</item>
-        <item>Unknown##Mystery Units</item>
+        <item>Civil Rights##Martin Luther King, Jr. Units##p20</item>
+        <item>Economy##Krugman-Greenspan Business Outlook Index##e1</item>
+        <item>Political Freedoms##Diebold Election Inking Scale##p23</item>
+        <item>Population##Capita##c15</item>
+        <item>Wealth Gaps##Rich-to-Poor Income Ratio##b17</item>
+        <item>Death Rate##Bus Surprisal Index##l26</item>
+        <item>Compassion##Kitten Softness Rating##q1</item>
+        <item>Eco-Friendliness##Dolphin Recycling Awareness Index##l19</item>
+        <item>Social Conservatism##Bush-Santorum Dawning Terror Index##t19</item>
+        <item>Nudity##Cheeks Per Square Mile##p17</item>
+        <item>Industry: Automobile Manufacturing##Henry Ford Productivity Index##c5</item>
+        <item>Industry: Cheese Exports##Mozzarella Productivity Index##i24</item>
+        <item>Industry: Basket Weaving##Hickory Productivity Index##l19</item>
+        <item>Industry: Information Technology##Fann-Boi Productivity Index##b5</item>
+        <item>Industry: Pizza Delivery##Pepperoni Propulsion Productivity Index##i25</item>
+        <item>Industry: Trout Fishing##Nemo Depletion Efficiency Index##i23</item>
+        <item>Industry: Arms Manufacturing##Charon Conveyancy Index##m1</item>
+        <item>Sector: Agriculture##Mu-Bah-Daggs Productivity Index##a1</item>
+        <item>Industry: Beverage Sales##Addison-Fukk Productivity Rating##i9</item>
+        <item>Industry: Timber Woodchipping##Tasmanian Pulp Environmental Export Index##l8</item>
+        <item>Industry: Mining##Blue Sky Asbestos Index##i22</item>
+        <item>Industry: Insurance##Risk Expulsion Effectiveness Rating##b10</item>
+        <item>Industry: Furniture Restoration##Spitz-Pollish Productivity Index##r5</item>
+        <item>Industry: Retail##Shrinkwrap Consignment Productivity Index##t20</item>
+        <item>Industry: Book Publishing##Bella Potter Productivity e-Index##i21</item>
+        <item>Industry: Gambling##Kelly Criterion Productivity Index##c7</item>
+        <item>Sector: Manufacturing##Gooback-Jerbs Productivity Index##i5</item>
+        <item>Government Size##Bureaucratic Comprehensiveness Rating Scale Index##g1</item>
+        <item>Welfare##Safety Net Mesh Density Rating##l34</item>
+        <item>Public Healthcare##Theresa-Nightingale Rating##n3</item>
+        <item>Law Enforcement##Orwell Orderliness Index##s1</item>
+        <item>Business Subsidization##Gilded Widget Scale##e2</item>
+        <item>Religiousness##Prayers Per Hour##b25</item>
+        <item>Income Equality##Marx-Engels Emancipation Scale##t12</item>
+        <item>Niceness##Average Smiles Per Day##p7</item>
+        <item>Rudeness##Insults Per Minute##l13</item>
+        <item>Intelligence##Quips Per Hour##i10</item>
+        <item>Ignorance##Missed References Per Hour##l6</item>
+        <item>Political Apathy##Whatever##l29</item>
+        <item>Health##Bananas Ingested Per Day##i18</item>
+        <item>Cheerfulness##Percentage of Water Glasses Perceived Half-Full##p24</item>
+        <item>Weather##Meters of Sunlight##o10</item>
+        <item>Compliance##Law-Abiding Acts Per Hour##s2</item>
+        <item>Safety##Bubble-Rapp Safety Rating##l23</item>
+        <item>Lifespan##Years##p22</item>
+        <item>Ideological Radicality##Paul-Nader Subjective Decentrality Index##t8</item>
+        <item>Defense Forces##Total War Preparedness Rating##m8</item>
+        <item>Pacifism##Cheeks Turned Per Day##l43</item>
+        <item>Economic Freedom##Rand Index##i19</item>
+        <item>Taxation##Effective Tax Rate##e5</item>
+        <item>Freedom From Taxation##Hayek Index##e5</item>
+        <item>Corruption##Kickbacks Per Hour##t18</item>
+        <item>Integrity##Percentage of Bribes Refused##t17</item>
+        <item>Authoritarianism##Stalins##k3</item>
+        <item>Youth Rebelliousness##Stark-Dean Displacement Index##u1</item>
+        <item>Culture##Snufflebottom-Wiggendum Pentatonic Scale##t21</item>
+        <item>Employment##Workforce Participation Rate##c13</item>
+        <item>Public Transport##Societal Mobility Rating##i26</item>
+        <item>Tourism##Tourists Per Hour##l9</item>
+        <item>Weaponization##Weapons Per Person##k2</item>
+        <item>Recreational Drug Use##Pineapple Fondness Rating##n5</item>
+        <item>Obesity##Obesity Rate##eg2</item>
+        <item>Secularism##Atheism Rate##b1</item>
+        <item>Environmental Beauty##Pounds of Wildlife Per Square Mile##l16</item>
+        <item>Charmlessness##Kardashian Reflex Score##r8</item>
+        <item>Influence##Soft Power Disbursement Rating##o5</item>
+        <item>World Assembly Endorsements##Valid Endorsements##wa1</item>
+        <item>Averageness##Average Standardized Normality Scale##o9</item>
+        <item>Human Development Index##HDI##c18</item>
+        <item>Primitiveness##Scary Big Number Scale##t2</item>
+        <item>Scientific Advancement##Kurzweil Singularity Index##x1</item>
+        <item>Inclusiveness##Mandela-Wollstonecraft Non-Discrimination Index##q1</item>
+        <item>Average Income##Standard Monetary Units##e4</item>
+        <item>Average Income of Poor##Standard Monetary Units##r3</item>
+        <item>Average Income of Rich##Standard Monetary Units##t27</item>
+        <item>Public Education##Edu-tellignce® Test Score##i17</item>
+        <item>Economic Output##Standard Monetary Units##i6</item>
+        <item>Crime##Crimes Per Hour##r11</item>
+        <item>Foreign Aid##Clooney Contribution Index##e3</item>
+        <item>Black Market##Standard Monetary Units##u2</item>
+        <item>Residency##Days##l14</item>
+        <item>Unknown##Mystery Units##d4</item>
     </string-array>
     <string-array name="gov_types">
         <item>anarchy</item>

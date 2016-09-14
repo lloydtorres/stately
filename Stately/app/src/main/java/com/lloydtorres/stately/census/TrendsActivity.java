@@ -63,6 +63,7 @@ public class TrendsActivity extends SlidrActivity {
 
     public static final int TREND_NATION = 0;
     public static final int TREND_REGION = 1;
+    public static final int TREND_WORLD = 2;
 
     public static final int CENSUS_CIVIL_RIGHTS = 0;
     public static final int CENSUS_ECONOMY = 1;
