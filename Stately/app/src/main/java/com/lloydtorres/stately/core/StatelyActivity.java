@@ -660,7 +660,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void updateNation(String name, final boolean firstLaunch)
     {
         final View fView = findViewById(R.id.drawer_layout);
-        String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(name));
+        String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(name));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

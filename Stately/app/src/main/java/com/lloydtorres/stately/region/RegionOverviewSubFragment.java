@@ -32,6 +32,8 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.util.Locale;
+
 /**
  * Created by Lloyd on 2016-01-22.
  * A sub-fragment of the Region fragment displaying an overview about a region.
@@ -102,7 +104,7 @@ public class RegionOverviewSubFragment extends Fragment {
     public static void initWaDelegate(Context c, TextView tv, String delegateId, int delegateVotes) {
         if (!"0".equals(delegateId)) {
             String delegateProper = SparkleHelper.getNameFromId(delegateId);
-            String delegateTemplate = String.format(c.getString(R.string.region_delegate_votes),
+            String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
                     delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
                     English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
             SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, SparkleHelper.CLICKY_NATION_MODE);
@@ -123,7 +125,7 @@ public class RegionOverviewSubFragment extends Fragment {
         }
 
         if (!"0".equals(founded)) {
-            tv.append(" " + String.format(c.getString(R.string.region_founded_append), founded));
+            tv.append(" " + String.format(Locale.US, c.getString(R.string.region_founded_append), founded));
         }
     }
 

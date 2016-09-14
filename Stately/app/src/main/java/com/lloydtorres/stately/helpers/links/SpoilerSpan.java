@@ -27,6 +27,8 @@ import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.HtmlDialog;
 
+import java.util.Locale;
+
 /**
  * Created by Lloyd on 2016-04-13.
  * A ClickableSpan implementation for spoiler links.
@@ -47,7 +49,7 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void onClick(View widget) {
         HtmlDialog htmlDialog = new HtmlDialog();
-        htmlDialog.setTitle(spoiler.title != null ? String.format(context.getString(R.string.spoiler_warn_title), spoiler.title) : context.getString(R.string.spoiler_warn));
+        htmlDialog.setTitle(spoiler.title != null ? String.format(Locale.US, context.getString(R.string.spoiler_warn_title), spoiler.title) : context.getString(R.string.spoiler_warn));
         htmlDialog.setRawContent(spoiler.content);
         htmlDialog.setFragmentManager(fm);
         htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);

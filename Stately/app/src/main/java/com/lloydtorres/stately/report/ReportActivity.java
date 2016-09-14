@@ -155,7 +155,7 @@ public class ReportActivity extends SlidrActivity {
 
         // If replying to mod mail, use this message instead
         if (type == REPORT_TYPE_TASK) {
-            reportTarget.setText(String.format(getString(R.string.report_mod_reply), targetId));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_mod_reply), targetId));
             reportCategoryHolder.setVisibility(View.GONE);
         } else {
             String reportType = "";
@@ -170,7 +170,7 @@ public class ReportActivity extends SlidrActivity {
                     targetHolder.setVisibility(View.GONE);
                     break;
             }
-            reportTarget.setText(String.format(getString(R.string.report_target), reportType, targetId, targetName));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_target), reportType, targetId, targetName));
         }
 
         if (categoryHolder != CATEGORY_NONE) {

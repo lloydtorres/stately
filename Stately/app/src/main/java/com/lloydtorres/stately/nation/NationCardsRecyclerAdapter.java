@@ -204,11 +204,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
             if (data.established.equals("0"))
             {
-                time.setText(String.format(context.getString(R.string.nation_time_founded), context.getString(R.string.nation_time_immemorial), data.lastSeen.toLowerCase(Locale.US)));
+                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), context.getString(R.string.nation_time_immemorial), data.lastSeen.toLowerCase(Locale.US)));
             }
             else
             {
-                time.setText(String.format(context.getString(R.string.nation_time_founded), data.established, data.lastSeen.toLowerCase(Locale.US)));
+                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), data.established, data.lastSeen.toLowerCase(Locale.US)));
             }
 
             if (SparkleHelper.isWaMember(context, data.waState))
@@ -305,19 +305,19 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             if (context.getString(R.string.wa_vote_state_for).equals(vote))
             {
                 stateColour = SparkleHelper.waColours[0];
-                content.setText(String.format(context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
+                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If voting AGAINST the resolution
             else if (context.getString(R.string.wa_vote_state_against).equals(vote))
             {
                 stateColour = SparkleHelper.waColours[1];
-                content.setText(String.format(context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
+                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If no vote yet
             else
             {
                 stateColour = SparkleHelper.waColours[2];
-                content.setText(String.format(context.getString(R.string.card_overview_wa_novote), assemblyName));
+                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_novote), assemblyName));
             }
 
             holder.setBackgroundColor(ContextCompat.getColor(context, stateColour));
@@ -438,7 +438,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 // if census ID is out of bounds, set it as unknown
                 String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, data.idCensusTarget);
-                trendContent.setText(String.format(context.getString(R.string.card_overview_census_button), worldCensusItem[0]));
+                trendContent.setText(String.format(Locale.US, context.getString(R.string.card_overview_census_button), worldCensusItem[0]));
             }
             else {
                 trendButton.setVisibility(View.GONE);
@@ -492,7 +492,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                         // using the actual national animal, so replace that
                         if (context.getString(R.string.animal_attack_original).equals(causes.get(i).type))
                         {
-                            chartLabels.add(String.format(context.getString(R.string.animal_attack_madlibs), data.animal));
+                            chartLabels.add(String.format(Locale.US, context.getString(R.string.animal_attack_madlibs), data.animal));
                         }
                         else
                         {

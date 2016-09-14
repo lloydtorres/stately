@@ -139,11 +139,11 @@ public class OverviewSubFragment extends NationSubFragment {
         String demonymText;
         if (mNation.demAdjective.equals(mNation.demNoun))
         {
-            demonymText = String.format(getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural);
+            demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural);
         }
         else
         {
-            demonymText = String.format(getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective);
+            demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective);
         }
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_demonym), demonymText));
         if (mNation.religion != null)
@@ -153,7 +153,7 @@ public class OverviewSubFragment extends NationSubFragment {
         String animalText;
         if (mNation.animalTrait != null)
         {
-            animalText = String.format(getString(R.string.card_overview_other_animal_template), mNation.animal, mNation.animalTrait);
+            animalText = String.format(Locale.US, getString(R.string.card_overview_other_animal_template), mNation.animal, mNation.animalTrait);
         }
         else
         {
@@ -162,9 +162,9 @@ public class OverviewSubFragment extends NationSubFragment {
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal), animalText));
         int censusRawId = mNation.wCensus.id;
         String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, mNation.wCensus.id);
-        String todayCensusTitle = String.format(getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
+        String todayCensusTitle = String.format(Locale.US, getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
         CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
-        StringBuilder todayCensusContent = new StringBuilder(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
+        StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US, getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
         if (detailedRank.regionRank > 0)
         {
             todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));

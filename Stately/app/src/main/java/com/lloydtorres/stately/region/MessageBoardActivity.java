@@ -180,7 +180,7 @@ public class MessageBoardActivity extends SlidrActivity {
     public void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(String.format(getString(R.string.region_rmb), regionName));
+        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.region_rmb), regionName));
 
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -216,7 +216,7 @@ public class MessageBoardActivity extends SlidrActivity {
         }
 
         startSwipeRefresh();
-        String targetURL = String.format(RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
+        String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -286,7 +286,7 @@ public class MessageBoardActivity extends SlidrActivity {
      */
     private void markBoardAsRead()
     {
-        String targetURL = String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
+        String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -479,7 +479,7 @@ public class MessageBoardActivity extends SlidrActivity {
         if (replyTarget != null)
         {
             messageReplyContainer.setVisibility(View.VISIBLE);
-            messageReplyContent.setText(String.format(getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+            messageReplyContent.setText(String.format(Locale.US, getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
             messageContainer.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
@@ -523,7 +523,7 @@ public class MessageBoardActivity extends SlidrActivity {
 
         startSwipeRefresh();
         messagePostButton.setOnClickListener(null);
-        String targetURL = String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
+        String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -572,7 +572,7 @@ public class MessageBoardActivity extends SlidrActivity {
      */
     private void postActualMessage(final String chk)
     {
-        String targetURL = String.format(RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
+        String targetURL = String.format(Locale.US, RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
@@ -611,7 +611,7 @@ public class MessageBoardActivity extends SlidrActivity {
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_2);
-            quoteMessage = String.format(getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
+            quoteMessage = String.format(Locale.US, getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
             newMessage = quoteMessage + newMessage;
         }
         params.put("message", Html.escapeHtml(newMessage));

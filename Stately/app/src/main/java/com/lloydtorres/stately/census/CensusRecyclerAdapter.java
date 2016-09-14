@@ -102,7 +102,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         String censusOrder = context.getString(isAscending ? R.string.census_sort_ascending : R.string.census_sort_descending);
         censusOrder = censusOrder.toLowerCase(Locale.US);
 
-        return String.format(censusLabel, censusType, censusOrder);
+        return String.format(Locale.US, censusLabel, censusType, censusOrder);
     }
 
     private Comparator<CensusDetailedRank> getSort()
@@ -372,7 +372,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         superScript.setVisibility(View.VISIBLE);
                         superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
                         superScript.setText(context.getString(R.string.census_top));
-                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
+                        value.setText(String.format(Locale.US, context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
                     }
                     break;
                 case SORT_MODE_REGION_RANK:
@@ -402,7 +402,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         superScript.setVisibility(View.VISIBLE);
                         superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
                         superScript.setText(context.getString(R.string.census_top));
-                        value.setText(String.format(context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
+                        value.setText(String.format(Locale.US, context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
                     }
                     break;
             }

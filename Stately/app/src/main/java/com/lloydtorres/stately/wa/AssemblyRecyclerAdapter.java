@@ -37,6 +37,7 @@ import com.lloydtorres.stately.helpers.happenings.HappeningCard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -192,7 +193,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
 
             cardHeader.setText(a.resolution.name);
-            cardActiveTime.setText(String.format(context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, a.resolution.voteHistoryFor.size()+1)));
+            cardActiveTime.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, a.resolution.voteHistoryFor.size()+1)));
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
 

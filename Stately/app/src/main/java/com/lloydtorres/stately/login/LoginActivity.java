@@ -47,6 +47,8 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
 
+import java.util.Locale;
+
 /**
  * Created by Lloyd on 2016-01-13.
  * The launcher activity for Stately!
@@ -162,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
      * @return No frills NSStringRequest
      */
     private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
-        final String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        final String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
         final String oldActivePin = SparkleHelper.getActivePin(this);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

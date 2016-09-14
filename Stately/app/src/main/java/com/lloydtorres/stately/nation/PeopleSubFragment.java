@@ -51,7 +51,7 @@ public class PeopleSubFragment extends NationSubFragment {
     protected void initData() {
         NationGenericCardData ngcSummary = new NationGenericCardData();
         ngcSummary.title = getString(R.string.card_main_title_summary);
-        StringBuilder summaryContent = new StringBuilder(String.format(getString(R.string.card_people_summarydesc_flavour),
+        StringBuilder summaryContent = new StringBuilder(String.format(Locale.US, getString(R.string.card_people_summarydesc_flavour),
                 mNation.prename,
                 mNation.name,
                 mNation.notable,
@@ -62,7 +62,7 @@ public class PeopleSubFragment extends NationSubFragment {
         String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
         if (waCategoryDescriptors.containsKey(waCategory))
         {
-            summaryContent.append("<br /><br />").append(String.format(waCategoryDescriptors.get(waCategory), mNation.demPlural));
+            summaryContent.append("<br /><br />").append(String.format(Locale.US, waCategoryDescriptors.get(waCategory), mNation.demPlural));
         }
         summaryContent.append("<br /><br />").append(mNation.crime);
         ngcSummary.mainContent = summaryContent.toString();

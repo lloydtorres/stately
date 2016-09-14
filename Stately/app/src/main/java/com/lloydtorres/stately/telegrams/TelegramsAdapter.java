@@ -41,6 +41,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-03-09.
@@ -370,7 +371,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (telegram.recipients != null && telegram.recipients.size() > 0)
             {
-                String recipientsContent = String.format(context.getString(R.string.telegrams_recipients), SparkleHelper.joinStringList(telegram.recipients, ", "));
+                String recipientsContent = String.format(Locale.US, context.getString(R.string.telegrams_recipients), SparkleHelper.joinStringList(telegram.recipients, ", "));
                 SparkleHelper.setHappeningsFormatting(context, recipients, recipientsContent);
                 recipients.setVisibility(View.VISIBLE);
             }
@@ -451,7 +452,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     && telegram.regionTarget != null
                     && telegram.regionTarget.length() > 0) {
                 regionVisitButton.setVisibility(View.VISIBLE);
-                regionVisitButtonContent.setText(String.format(context.getString(R.string.telegrams_region_explore), telegram.regionTarget));
+                regionVisitButtonContent.setText(String.format(Locale.US, context.getString(R.string.telegrams_region_explore), telegram.regionTarget));
                 regionVisitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

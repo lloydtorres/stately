@@ -57,6 +57,7 @@ import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-21.
@@ -239,7 +240,7 @@ public class RegionFragment extends Fragment {
         }
 
         regionName.setText(mRegion.name);
-        regionPop.setText(String.format(getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), English.plural(getString(R.string.region_pop), mRegion.numNations)));
+        regionPop.setText(String.format(Locale.US, getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), English.plural(getString(R.string.region_pop), mRegion.numNations)));
 
         regionOverviewSubFragment = new RegionOverviewSubFragment();
         regionOverviewSubFragment.setRegion(mRegion);
@@ -285,7 +286,7 @@ public class RegionFragment extends Fragment {
     {
         progressBar.setVisibility(View.VISIBLE);
 
-        String targetURL = String.format(Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
+        String targetURL = String.format(Locale.US, Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {

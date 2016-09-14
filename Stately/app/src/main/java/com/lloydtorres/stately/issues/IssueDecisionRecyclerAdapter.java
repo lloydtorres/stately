@@ -33,6 +33,7 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-29.
@@ -133,10 +134,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         {
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
             if (issue.chain != null) {
-                issueNo.setText(String.format(context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
             }
             else {
-                issueNo.setText(String.format(context.getString(R.string.issue_number), issue.id));
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number), issue.id));
             }
             content.setText(SparkleHelper.getHtmlFormatting(issue.content).toString());
         }

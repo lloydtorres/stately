@@ -39,6 +39,7 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 import org.atteo.evo.inflector.English;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-02-29.
@@ -172,7 +173,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
             target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
 
-            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
+            String valCapital = String.format(Locale.US, c.getString(R.string.issue_capital_none), nationData.name);
             if (nationData.capital != null)
             {
                 valCapital = nationData.capital;

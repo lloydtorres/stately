@@ -265,7 +265,7 @@ public class ResolutionActivity extends SlidrActivity {
     private void queryVoteStatus(final BaseAssembly a)
     {
         UserLogin u = SparkleHelper.getActiveUser(this);
-        String targetURL = String.format(WaVoteStatus.QUERY, u.nationId);
+        String targetURL = String.format(Locale.US, WaVoteStatus.QUERY, u.nationId);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -573,10 +573,10 @@ public class ResolutionActivity extends SlidrActivity {
         setTargetView(target, mResolution.category, mResolution.target);
 
         String proposer = SparkleHelper.getNameFromId(mResolution.proposedBy);
-        String proposeTemplate = String.format(getString(R.string.wa_proposed), mResolution.proposedBy);
+        String proposeTemplate = String.format(Locale.US, getString(R.string.wa_proposed), mResolution.proposedBy);
         SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
 
-        voteStart.setText(String.format(getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(this, mResolution.voteHistoryFor.size()+1)));
+        voteStart.setText(String.format(Locale.US, getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(this, mResolution.voteHistoryFor.size()+1)));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
         voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
@@ -615,17 +615,17 @@ public class ResolutionActivity extends SlidrActivity {
                 case "N":
                     // If target is a nation, linkify it.
                     String nationTarget = SparkleHelper.getNameFromId(pair[1]);
-                    String oldTemplate = String.format(template, category, pair[1]);
+                    String oldTemplate = String.format(Locale.US, template, category, pair[1]);
                     SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
                     break;
                 case "R":
                     // If target is a nation, linkify it.
                     String regionTarget = SparkleHelper.getNameFromId(pair[1]);
-                    String oldRegionTemplate = String.format(template, category, pair[1]);
+                    String oldRegionTemplate = String.format(Locale.US, template, category, pair[1]);
                     SparkleHelper.activityLinkBuilder(this, t, oldRegionTemplate, pair[1], regionTarget, SparkleHelper.CLICKY_REGION_MODE);
                     break;
                 default:
-                    t.setText(String.format(template, category, target));
+                    t.setText(String.format(Locale.US, template, category, target));
                     break;
             }
         }
@@ -684,11 +684,11 @@ public class ResolutionActivity extends SlidrActivity {
             // Only add labels for each day
             if (i%24 == 0)
             {
-                xLabels.add(String.format(getString(R.string.wa_x_axis_d), (i/24)+1));
+                xLabels.add(String.format(Locale.US, getString(R.string.wa_x_axis_d), (i/24)+1));
             }
             else
             {
-                xLabels.add(String.format(getString(R.string.wa_x_axis_h), i));
+                xLabels.add(String.format(Locale.US, getString(R.string.wa_x_axis_h), i));
             }
         }
         LineData data = new LineData(xLabels, dataSets);

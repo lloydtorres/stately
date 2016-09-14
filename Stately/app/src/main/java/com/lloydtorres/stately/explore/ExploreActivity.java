@@ -61,6 +61,7 @@ import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -272,7 +273,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private void queryNation(String name)
     {
         name = SparkleHelper.getIdFromName(name);
-        String targetURL = String.format(Nation.QUERY, name);
+        String targetURL = String.format(Locale.US, Nation.QUERY, name);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -346,7 +347,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      */
     private void queryRegion(String name)
     {
-        String targetURL = String.format(Region.QUERY, name);
+        String targetURL = String.format(Locale.US, Region.QUERY, name);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -501,11 +502,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     isInProgress = false;
                     if (isEndorsed)
                     {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_withdraw_endorse_response), name));
+                        SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_withdraw_endorse_response), name));
                     }
                     else
                     {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_endorsed_response), name));
+                        SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_endorsed_response), name));
                     }
 
                     queryNation(id);
@@ -568,7 +569,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 {
                     password = fPassView.getText().toString();
                 }
-                getLocalId(String.format(Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
+                getLocalId(String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
                 dialog.dismiss();
             }
         };
@@ -584,7 +585,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         else
         {
             dialogBuilder
-                    .setTitle(String.format(getString(R.string.explore_region_move), name))
+                    .setTitle(String.format(Locale.US, getString(R.string.explore_region_move), name))
                     .setPositiveButton(getString(R.string.explore_move_confirm), dialogClickListener)
                     .setNegativeButton(getString(R.string.explore_negative), null);
         }
@@ -692,7 +693,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 SparkleHelper.startTelegramCompose(this, name, TelegramComposeActivity.NO_REPLY_ID);
                 return true;
             case R.id.nav_endorse:
-                getLocalId(String.format(Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
+                getLocalId(String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
                 return true;
             case R.id.nav_move:
                 handleRegionMove();

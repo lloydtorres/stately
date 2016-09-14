@@ -31,6 +31,7 @@ import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-28.
@@ -124,10 +125,10 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             title.setText(issue.title);
             if (issue.chain != null) {
-                id.setText(String.format(context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+                id.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
             }
             else {
-                id.setText(String.format(context.getString(R.string.issue_number), issue.id));
+                id.setText(String.format(Locale.US, context.getString(R.string.issue_number), issue.id));
             }
         }
 

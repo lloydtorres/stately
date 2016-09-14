@@ -30,6 +30,7 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -313,7 +314,7 @@ public class Nation implements Parcelable {
      */
     public static String getBannerURL(String id)
     {
-        return String.format(BANNER_TEMPLATE, id);
+        return String.format(Locale.US, BANNER_TEMPLATE, id);
     }
 
     /**

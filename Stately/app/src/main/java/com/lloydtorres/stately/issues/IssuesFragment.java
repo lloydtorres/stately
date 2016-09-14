@@ -43,6 +43,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -209,7 +210,7 @@ public class IssuesFragment extends RefreshviewFragment {
             if (m.find())
             {
                 long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
-                nextUpdate = String.format(getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
+                nextUpdate = String.format(Locale.US, getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
             }
 
             issues.add(nextUpdate);

@@ -264,7 +264,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             List<String> xLabels = new ArrayList<String>();
             for (int i=0; i < datapoints.size(); i++)
             {
-                xLabels.add(String.format(SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
+                xLabels.add(String.format(Locale.US, SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
             }
             LineData dataFinal = new LineData(xLabels, dataSets);
 

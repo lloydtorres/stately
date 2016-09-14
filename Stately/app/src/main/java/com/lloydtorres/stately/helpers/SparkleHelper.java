@@ -292,28 +292,28 @@ public class SparkleHelper {
         if (timeDiffAbs < 60000L)
         {
             // less than a minute
-            template = String.format(c.getString(R.string.time_moments_template), c.getString(R.string.time_moments), pastIndicator);
+            template = String.format(Locale.US, c.getString(R.string.time_moments_template), c.getString(R.string.time_moments), pastIndicator);
         }
         else if (timeDiffAbs < 3600000L)
         {
             // less than an hour
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
             int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(template, minutes, English.plural(c.getString(R.string.time_minute), minutes), pastIndicator);
+            template = String.format(Locale.US, template, minutes, English.plural(c.getString(R.string.time_minute), minutes), pastIndicator);
         }
         else if (timeDiffAbs < 86400000L)
         {
             // less than a day
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
             int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(template, hours, English.plural(c.getString(R.string.time_hour), hours), pastIndicator);
+            template = String.format(Locale.US, template, hours, English.plural(c.getString(R.string.time_hour), hours), pastIndicator);
         }
         else if (timeDiffAbs < 604800000L)
         {
             // less than a week
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
             int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(template, days, English.plural(c.getString(R.string.time_day), days), pastIndicator);
+            template = String.format(Locale.US, template, days, English.plural(c.getString(R.string.time_day), days), pastIndicator);
         }
         else
         {
@@ -373,7 +373,7 @@ public class SparkleHelper {
             popHolder /= 1000D;
         }
 
-        return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(popHolder), suffix);
+        return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(popHolder), suffix);
     }
 
     /**
@@ -413,7 +413,7 @@ public class SparkleHelper {
                 d /= 1000000000000D;
             }
 
-            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
+            return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
         }
     }
 
@@ -480,7 +480,7 @@ public class SparkleHelper {
         if (money < 1000000L)
         {
             // If the money is less than 1 million, we don't need a suffix.
-            return String.format(c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyPlural(currency));
+            return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyPlural(currency));
         }
         else
         {
@@ -503,7 +503,7 @@ public class SparkleHelper {
                 money /= 1000000000000L;
             }
 
-            return String.format(c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
+            return String.format(Locale.US, c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
         }
 
     }
@@ -1198,7 +1198,7 @@ public class SparkleHelper {
         Matcher m = regex.matcher(holder);
         while (m.find())
         {
-            String properFormat = String.format(afterFormat, m.group(1), m.group(2));
+            String properFormat = String.format(Locale.US, afterFormat, m.group(1), m.group(2));
             replacePairs.put(m.group(), properFormat);
         }
 
@@ -1272,7 +1272,7 @@ public class SparkleHelper {
         {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
-            String template = String.format(c.getString(R.string.region_eo), holder);
+            String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
             holder = activityLinkBuilder(c, t, template, "EO:"+newTarget+".", getNameFromId(newTarget), CLICKY_REGION_MODE);
         }
 
@@ -1280,7 +1280,7 @@ public class SparkleHelper {
         {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
-            String template = String.format(c.getString(R.string.region_ec), holder);
+            String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
             holder = activityLinkBuilder(c, t, template, "EC:"+newTarget+".", getNameFromId(newTarget), CLICKY_REGION_MODE);
         }
 
@@ -1426,7 +1426,7 @@ public class SparkleHelper {
             s.title = Jsoup.parse(m2.group(1)).text();
             s.content = m2.group(2);
             s.raw = m2.group();
-            s.replacer = String.format(c.getString(R.string.spoiler_warn_title_link), s.title);
+            s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
             spoilers.add(s);
         }
 
@@ -1520,7 +1520,7 @@ public class SparkleHelper {
         for (Map.Entry<String, String> n : set) {
             // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
             String replacer = n.getValue();
-            String properFormat = String.format(afterFormat, replacer); //Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
+            String properFormat = String.format(Locale.US, afterFormat, replacer); //Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), properFormat);
         }
 
@@ -1563,7 +1563,7 @@ public class SparkleHelper {
         Matcher m = regex.matcher(holder);
         while (m.find())
         {
-            String properFormat = String.format("<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
             replacePairs.put(m.group(), properFormat);
         }
         Set<Map.Entry<String, String>> set = replacePairs.entrySet();

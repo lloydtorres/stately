@@ -49,6 +49,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -320,7 +321,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             {
                 inflateOption(options, i+1, results.get(i).text, results.get(i).votes);
                 voteTotal += results.get(i).votes;
-                chartLabels.add(String.format(context.getString(R.string.region_option_index), i+1));
+                chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
 
             if (voteTotal > 0)
@@ -356,8 +357,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
-            label.setText(String.format(context.getString(R.string.region_option_index), index));
-            content.setText(String.format(context.getString(R.string.poll_votes_template), SparkleHelper.getHtmlFormatting(option), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
+            content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template), SparkleHelper.getHtmlFormatting(option), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
             optionLayout.addView(optionView);
         }
     }
@@ -409,10 +410,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     break;
             }
 
-            title.setText(String.format(context.getString(R.string.card_region_wa_vote), chamberName));
-            linkContent.setText(String.format(context.getString(R.string.card_region_wa_link), chamberName));
+            title.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_vote), chamberName));
+            linkContent.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_link), chamberName));
 
-            filler.setText(String.format(context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
+            filler.setText(String.format(Locale.US, context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
             if (!SparkleHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst))
             {
                 chart.setVisibility(View.GONE);
@@ -441,7 +442,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             officersLayout.removeAllViews();
             if (officers.size() <= 0) {
-                noOfficers.setText(String.format(context.getString(R.string.region_filler_no_officers), mRegion.name));
+                noOfficers.setText(String.format(Locale.US, context.getString(R.string.region_filler_no_officers), mRegion.name));
                 noOfficers.setVisibility(View.VISIBLE);
                 officersLayout.setVisibility(View.GONE);
             }

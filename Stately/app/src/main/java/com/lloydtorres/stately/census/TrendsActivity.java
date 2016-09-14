@@ -211,7 +211,7 @@ public class TrendsActivity extends SlidrActivity {
                             censusResponse = serializer.read(CensusHistory.class, response);
 
                             // Set titles
-                            String newTitle = String.format(getString(R.string.trends_title), censusResponse.name);
+                            String newTitle = String.format(Locale.US, getString(R.string.trends_title), censusResponse.name);
                             setToolbarTitle(newTitle);
 
                             if (censusResponse.scale.points != null) {

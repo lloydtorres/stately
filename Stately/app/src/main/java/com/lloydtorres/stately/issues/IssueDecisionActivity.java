@@ -119,7 +119,7 @@ public class IssueDecisionActivity extends SlidrActivity {
     public void setToolbar(Toolbar t) {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(String.format(getString(R.string.issue_activity_title), mNation.name, issue.id));
+        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, issue.id));
 
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -188,7 +188,7 @@ public class IssueDecisionActivity extends SlidrActivity {
         if (d.text().contains(NOT_AVAILABLE))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(v, String.format(getString(R.string.issue_unavailable), mNation.name));
+            SparkleHelper.makeSnackbar(v, String.format(Locale.US, getString(R.string.issue_unavailable), mNation.name));
             return;
         }
 
@@ -303,7 +303,7 @@ public class IssueDecisionActivity extends SlidrActivity {
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(getString(R.string.issue_option_confirm_adopt), option.index + 1))
+                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index + 1))
                             .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
                     break;
             }
