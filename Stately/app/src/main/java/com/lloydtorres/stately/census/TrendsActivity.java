@@ -259,12 +259,7 @@ public class TrendsActivity extends SlidrActivity {
         dataset = data;
         updateStartCounter(dataset.ranks);
 
-        int censusId = id;
-        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-        {
-            censusId = WORLD_CENSUS_ITEMS.length - 1;
-        }
-        String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+        String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, id);
 
         mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], dataset);
         mRecyclerView.setAdapter(mRecyclerAdapter);

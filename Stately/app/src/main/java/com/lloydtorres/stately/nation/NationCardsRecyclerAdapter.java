@@ -437,12 +437,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 trendButton.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationCensusTarget), data.idCensusTarget));
 
                 // if census ID is out of bounds, set it as unknown
-                int censusId = data.idCensusTarget;
-                if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-                {
-                    censusId = WORLD_CENSUS_ITEMS.length - 1;
-                }
-                String[] worldCensusItem = WORLD_CENSUS_ITEMS[censusId].split("##");
+                String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, data.idCensusTarget);
                 trendContent.setText(String.format(context.getString(R.string.card_overview_census_button), worldCensusItem[0]));
             }
             else {

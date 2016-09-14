@@ -335,13 +335,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             censusColorIndex = Math.min(Math.max(censusColorIndex, 0), (SparkleHelper.freedomColours.length - 1));
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[censusColorIndex]));
 
-            int censusId = censusData.id;
-            // if census ID is out of bounds, set it as unknown
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
             title.setText(censusType[0]);
             unit.setText(censusType[1]);
 

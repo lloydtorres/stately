@@ -308,13 +308,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             delta = d;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
-            int censusId = delta.censusId;
-            // if census ID is out of bounds, set it as unknown
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, delta.censusId);
             title.setText(censusType[0]);
             unit.setText(censusType[1]);
             trend.setImageResource(delta.isPositive ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);

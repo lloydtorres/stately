@@ -160,14 +160,8 @@ public class OverviewSubFragment extends NationSubFragment {
             animalText = mNation.animal;
         }
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal), animalText));
-        int censusId = mNation.wCensus.id;
         int censusRawId = mNation.wCensus.id;
-        // if census ID is out of bounds, set it as unknown
-        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-        {
-            censusId = WORLD_CENSUS_ITEMS.length - 1;
-        }
-        String[] worldCensusItem = WORLD_CENSUS_ITEMS[censusId].split("##");
+        String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, mNation.wCensus.id);
         String todayCensusTitle = String.format(getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
         CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
         StringBuilder todayCensusContent = new StringBuilder(String.format(getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
@@ -181,7 +175,7 @@ public class OverviewSubFragment extends NationSubFragment {
         }
         ngcOther.items.add(new DataPair(todayCensusTitle, todayCensusContent.toString()));
         ngcOther.nationCensusTarget = mNation.name;
-        ngcOther.idCensusTarget = censusId;
+        ngcOther.idCensusTarget = censusRawId;
         cards.add(ngcOther);
     }
 }

@@ -973,6 +973,24 @@ public class SparkleHelper {
     }
 
     /**
+     * Makes sure that the specified ID is within range, then returns the properly-split
+     * data from the raw array. The format returned is [scale, unit, background image]
+     * @param rawCensusData Array of raw census units from arrays.xml
+     * @param id Census ID to use
+     * @return Formatted census data
+     */
+    public static String[] getCensusScale(String[] rawCensusData, int id) {
+        int censusId = id;
+        // if census ID is out of bounds, set it as unknown
+        if (censusId >= rawCensusData.length - 1)
+        {
+            censusId = rawCensusData.length - 1;
+        }
+        String[] censusType = rawCensusData[censusId].split("##");
+        return censusType;
+    }
+
+    /**
      * Starts the ExploreActivity for the given ID and mode.
      * @param c App context
      * @param n The nation ID

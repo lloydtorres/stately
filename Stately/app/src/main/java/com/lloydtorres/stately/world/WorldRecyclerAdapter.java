@@ -309,13 +309,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void init(CensusDetailedRank census) {
             featuredCensus = census;
 
-            int censusId = featuredCensus.id;
-            // if census ID is out of bounds, set it as unknown
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, featuredCensus.id);
 
             censusTitle.setText(censusType[0]);
             censusUnit.setText(censusType[1]);
@@ -362,13 +356,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             censusCard.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.getThemeCardColour(context)));
 
-            int censusId = censusData.id;
-            // if census ID is out of bounds, set it as unknown
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
 
             scale.setText(censusType[0]);
             unit.setText(censusType[1]);
