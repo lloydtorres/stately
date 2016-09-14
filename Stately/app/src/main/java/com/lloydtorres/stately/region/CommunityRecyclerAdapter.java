@@ -18,6 +18,7 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -33,11 +34,12 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.Embassy;
+import com.lloydtorres.stately.dto.EmbassyHolder;
 import com.lloydtorres.stately.dto.Officer;
+import com.lloydtorres.stately.dto.OfficerHolder;
 import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
-import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
@@ -63,95 +65,17 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int OFFICER_CARD = 3;
     public static final int EMBASSY_CARD = 4;
 
-    private List<Object> cards;
     private Context context;
-    private Region mRegion;
     private FragmentManager fm;
+    private List<Parcelable> cards;
+    private String regionName;
 
-    private class RMBButtonHolder {
-        public String regionName;
-        public String unreadCount;
-
-        public RMBButtonHolder(String name, String unread) {
-            regionName = name;
-            unreadCount = unread;
-        }
-    }
-
-    // Because instanceof doesn't accept generics...
-    private class OfficerHolder {
-        public List<Officer> officers;
-
-        public OfficerHolder(List<Officer> off) {
-            officers = off;
-        }
-    }
-
-    private class EmbassyHolder {
-        public ArrayList<String> embassies;
-
-        public EmbassyHolder(ArrayList<String> emb) {
-            embassies = emb;
-        }
-    }
-
-    public CommunityRecyclerAdapter(Context c, FragmentManager f, Region r, String rmbUnreadText)
+    public CommunityRecyclerAdapter(Context c, FragmentManager f, List<Parcelable> crds, String n)
     {
-        cards = new ArrayList<Object>();
-
         context = c;
-        mRegion = r;
         fm = f;
-
-        // This adds a button to the RMB
-        RMBButtonHolder button = new RMBButtonHolder(mRegion.name, rmbUnreadText);
-        cards.add(button);
-
-        if (mRegion.poll != null)
-        {
-            cards.add(mRegion.poll);
-        }
-
-        if (mRegion.gaVote != null && (mRegion.gaVote.voteFor + mRegion.gaVote.voteAgainst) > 0)
-        {
-            mRegion.gaVote.chamber = Assembly.GENERAL_ASSEMBLY;
-            cards.add(mRegion.gaVote);
-        }
-
-        if (mRegion.scVote != null && (mRegion.scVote.voteFor + mRegion.scVote.voteAgainst) > 0)
-        {
-            mRegion.scVote.chamber = Assembly.SECURITY_COUNCIL;
-            cards.add(mRegion.scVote);
-        }
-
-        List<Officer> officers = new ArrayList<Officer>(mRegion.officers);
-        if (!"0".equals(mRegion.delegate))
-        {
-            officers.add(new Officer(mRegion.delegate, c.getString(R.string.card_region_wa_delegate), Officer.DELEGATE_ORDER));
-        }
-        if (!"0".equals(mRegion.founder))
-        {
-            officers.add(new Officer(mRegion.founder, c.getString(R.string.card_region_founder), Officer.FOUNDER_ORDER));
-        }
-        Collections.sort(officers);
-        cards.add(new OfficerHolder(officers));
-
-        ArrayList<String> embassyList = new ArrayList<String>();
-        if (mRegion.embassies != null && mRegion.embassies.size() > 0)
-        {
-            // Only add active embassies
-            for (Embassy e : mRegion.embassies)
-            {
-                if (e.type == null)
-                {
-                    embassyList.add(e.name);
-                }
-            }
-        }
-        Collections.sort(embassyList);
-        if (embassyList.size() > 0) {
-            cards.add(new EmbassyHolder(embassyList));
-        }
+        cards = crds;
+        regionName= n;
     }
 
     @Override
@@ -442,7 +366,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             officersLayout.removeAllViews();
             if (officers.size() <= 0) {
-                noOfficers.setText(String.format(Locale.US, context.getString(R.string.region_filler_no_officers), mRegion.name));
+                noOfficers.setText(String.format(Locale.US, context.getString(R.string.region_filler_no_officers), regionName));
                 noOfficers.setVisibility(View.VISIBLE);
                 officersLayout.setVisibility(View.GONE);
             }
