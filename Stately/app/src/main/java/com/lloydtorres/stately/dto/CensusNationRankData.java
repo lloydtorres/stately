@@ -28,7 +28,7 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-09-10.
  * Model for querying nation census rank data by itself.
  */
-@Root(name="NATION", strict=false)
+@Root(strict=false)
 public class CensusNationRankData implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?%sq="
             + "censusranks"

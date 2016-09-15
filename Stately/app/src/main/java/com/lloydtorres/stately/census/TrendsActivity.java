@@ -199,6 +199,8 @@ public class TrendsActivity extends SlidrActivity {
                 queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
                 targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
                 break;
+            case TREND_WORLD:
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
         }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -211,8 +213,14 @@ public class TrendsActivity extends SlidrActivity {
                             censusResponse = serializer.read(CensusHistory.class, response);
 
                             // Set titles
-                            String newTitle = String.format(Locale.US, getString(R.string.trends_title), censusResponse.name);
-                            setToolbarTitle(newTitle);
+                            String newTitle;
+                            if (mode != TREND_WORLD && censusResponse.name != null) {
+                                newTitle = censusResponse.name;
+                            }
+                            else {
+                                newTitle = getString(R.string.trends_title_world);
+                            }
+                            setToolbarTitle(String.format(Locale.US, getString(R.string.trends_title), newTitle));
 
                             if (censusResponse.scale.points != null) {
                                 processDataset(censusResponse);
@@ -286,6 +294,9 @@ public class TrendsActivity extends SlidrActivity {
         switch (mode) {
             case TREND_REGION:
                 queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                break;
+            case TREND_WORLD:
                 targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
                 break;
         }

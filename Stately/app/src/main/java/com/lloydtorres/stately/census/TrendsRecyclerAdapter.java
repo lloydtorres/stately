@@ -326,6 +326,9 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 case TrendsActivity.TREND_REGION:
                     type.setText(context.getString(R.string.trends_regional));
                     break;
+                case TrendsActivity.TREND_WORLD:
+                    type.setText(context.getString(R.string.trends_world));
+                    break;
             }
 
             census.setText(titleData.census);

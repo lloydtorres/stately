@@ -28,7 +28,7 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-04-10.
  * Model for a given census scale's history;
  */
-@Root(name="NATION", strict=false)
+@Root(strict=false)
 public class CensusHistory implements Parcelable {
 
     public static final String QUERY_BASE = "https://www.nationstates.net/cgi-bin/api.cgi?%sq="
@@ -41,7 +41,7 @@ public class CensusHistory implements Parcelable {
     public static final String NATION_HISTORY = "nation=%s&";
     public static final String REGION_HISTORY = "region=%s&";
 
-    @Element(name="NAME")
+    @Element(name="NAME", required=false)
     public String name;
     @Element(name="CENSUS", required=false)
     public CensusHistoryScale scale;

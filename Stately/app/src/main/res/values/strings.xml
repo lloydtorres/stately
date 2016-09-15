@@ -270,6 +270,7 @@
     <!-- Trends -->
     <string name="trends_title_generic">Trends</string>
     <string name="trends_title">Trends: %1$s</string>
+    <string name="trends_title_world">World</string>
     <string name="trends_datasets">Datasets</string>
     <string name="trends_max">Maximum</string>
     <string name="trends_min">Minimum</string>
