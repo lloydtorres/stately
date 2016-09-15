@@ -23,6 +23,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
  * Model used to store basic region data. This class is specifically used for world featured
  * region queries.
  */
+@Root(name="REGION", strict=false)
 public class BaseRegion implements Parcelable {
 
     public static final String BASE_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q="

@@ -23,6 +23,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.List;
  * Created by Lloyd on 2016-09-11.
  * Model used for storing world data.
  */
+@Root(name="WORLD", strict=false)
 public class World implements Parcelable {
     public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?q="
                                         + "numnations+numregions+featuredregion+happenings"

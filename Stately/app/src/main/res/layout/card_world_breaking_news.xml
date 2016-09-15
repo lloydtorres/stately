@@ -14,7 +14,9 @@
         android:orientation="vertical">
         <TextView
             android:textSize="15sp"
-            android:padding="20dp"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:fontFamily="sans-serif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -15,12 +15,15 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/card_world_census_background"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:src="@drawable/gray"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/card_world_featured_census_holder"
             android:layout_alignBottom="@+id/card_world_featured_census_holder" />
         <LinearLayout
             android:id="@+id/card_world_featured_census_holder"
@@ -36,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/black"
-                tools:text="@string/world_census" />
+                android:shadowRadius="7"
+                android:text="@string/world_census" />
             <TextView
                 android:id="@+id/card_world_featured_census"
                 android:textSize="20sp"
@@ -48,6 +52,7 @@
                 android:layout_marginTop="8dp"
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/black"
+                android:shadowRadius="7"
                 tools:text="Industry: Timber Woodchipping" />
             <TextView
                 android:id="@+id/card_world_featured_census_unit"
@@ -58,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/black"
+                android:shadowRadius="7"
                 tools:text="Tasmanian Pulp Environmental Export Index" />
             <TextView
                 android:id="@+id/card_world_featured_census_score"
@@ -68,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:shadowColor="@android:color/black"
+                android:shadowRadius="7"
                 android:text="@string/world_census_score" />
         </LinearLayout>
     </RelativeLayout>

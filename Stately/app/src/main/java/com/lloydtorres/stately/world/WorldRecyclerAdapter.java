@@ -18,7 +18,6 @@ package com.lloydtorres.stately.world;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -236,7 +235,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     English.plural(context.getString(R.string.region_pop), regionData.numNations)));
             if (regionData.flagURL != null) {
                 flag.setVisibility(View.VISIBLE);
-                DashHelper.getInstance(context).loadImage(regionData.flagURL, flag, true);
+                DashHelper.getInstance(context).loadImage(regionData.flagURL, flag, false);
             } else {
                 flag.setVisibility(View.GONE);
             }
@@ -278,10 +277,16 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             inflater = LayoutInflater.from(context);
             newsHolder.removeAllViews();
+            int index = 0;
             for (Event e : newsItems) {
                 View newsItemView = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
                 HtmlTextView newsContent = (HtmlTextView) newsItemView.findViewById(R.id.card_world_breaking_news_content);
                 SparkleHelper.setHappeningsFormatting(context, newsContent, e.content);
+
+                if (++index >= newsItems.size()) {
+                    newsItemView.findViewById(R.id.view_divider).setVisibility(View.GONE);
+                }
+
                 newsHolder.addView(newsItemView);
             }
         }
@@ -354,17 +359,17 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void init(CensusDetailedRank census) {
             censusData = census;
 
-            censusCard.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.getThemeCardColour(context)));
+            censusCard.setCardBackgroundColor(SparkleHelper.getThemeCardColour(context));
 
             String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
 
             scale.setText(censusType[0]);
             unit.setText(censusType[1]);
-            score.setText(censusData.id);
+            score.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
 
-            scale.setTextColor(ContextCompat.getColor(context, SparkleHelper.getThemeLinkColour(context)));
-            unit.setTextColor(ContextCompat.getColor(context, SparkleHelper.getThemeLinkColour(context)));
-            score.setTextColor(ContextCompat.getColor(context, SparkleHelper.getThemeLinkColour(context)));
+            scale.setTextColor(SparkleHelper.getThemeLinkColour(context));
+            unit.setTextColor(SparkleHelper.getThemeLinkColour(context));
+            score.setTextColor(SparkleHelper.getThemeLinkColour(context));
         }
     }
 }

@@ -60,6 +60,7 @@ import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
+import com.lloydtorres.stately.world.WorldFragment;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -81,7 +82,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public static final int TELEGRAMS_FRAGMENT = 2;
     public static final int REGION_FRAGMENT = 3;
     public static final int WA_FRAGMENT = 4;
-    public static final int ACTIVITY_FEED_FRAGMENT = 5;
+    public static final int WORLD_FRAGMENT = 5;
+    public static final int ACTIVITY_FEED_FRAGMENT = 6;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
     private final int[] noSelect = {    R.id.nav_explore,
@@ -216,6 +218,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             case WA_FRAGMENT:
                 f = getWaFragment();
                 currentPosition = R.id.nav_wa;
+                break;
+            case WORLD_FRAGMENT:
+                f = getWorldFragment();
+                currentPosition = R.id.nav_world;
                 break;
             default:
                 f = getNationFragment();
@@ -370,6 +376,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     fChoose = getWaFragment();
                     navInit = WA_FRAGMENT;
                     break;
+                case R.id.nav_world:
+                    fChoose = getWorldFragment();
+                    navInit = WORLD_FRAGMENT;
+                    break;
                 default:
                     // Backup
                     fChoose = new GenericFragment();
@@ -486,6 +496,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         waFragment.setVoteStatus(voteStatus);
 
         return waFragment;
+    }
+
+    /**
+     * Returns a new World fragment.
+     * @return
+     */
+    private WorldFragment getWorldFragment() {
+        return new WorldFragment();
     }
 
     /**
