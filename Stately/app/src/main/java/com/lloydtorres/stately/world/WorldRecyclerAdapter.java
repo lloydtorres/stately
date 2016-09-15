@@ -39,7 +39,7 @@ import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
-import com.lloydtorres.stately.region.RegionOverviewSubFragment;
+import com.lloydtorres.stately.region.RegionOverviewRecyclerAdapter;
 
 import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -240,8 +240,8 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 flag.setVisibility(View.GONE);
             }
 
-            RegionOverviewSubFragment.initWaDelegate(context, waDelegate, regionData.delegate, regionData.delegateVotes);
-            RegionOverviewSubFragment.initFounder(context, founder, regionData.founder, regionData.founded);
+            RegionOverviewRecyclerAdapter.initWaDelegate(context, waDelegate, regionData.delegate, regionData.delegateVotes);
+            RegionOverviewRecyclerAdapter.initFounder(context, founder, regionData.founder, regionData.founded);
 
             if (regionData.factbook != null) {
                 SparkleHelper.setBbCodeFormatting(context, factbook, regionData.factbook, fragmentManager);
