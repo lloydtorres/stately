@@ -76,7 +76,6 @@ public class OverviewSubFragment extends NationSubFragment {
         if (customCategory != null) {
             nocData.category = String.format(Locale.US, getString(R.string.nation_government_custom),
                     mNation.govType, customCategory);
-            SparkleHelper.logError(nocData.category);
         }
         else {
             nocData.category = mNation.govType;
