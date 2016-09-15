@@ -122,7 +122,6 @@ public class TelegramHistoryActivity extends SlidrActivity {
 
     private void queryTelegramHistory() {
         String targetURL = String.format(Locale.US, Telegram.TELEGRAM_CONVERSATION, mainTelegramId);
-        SparkleHelper.logError(targetURL);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override

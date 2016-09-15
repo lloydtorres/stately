@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.world;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +35,6 @@ import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.BaseRegion;
 import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.explore.ExploreDialog;
-import com.lloydtorres.stately.feed.SubscriptionsDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
