@@ -214,6 +214,7 @@
     <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
+    <string name="card_region_poll_title_author">%1$s — @@%2$s@@</string>
     <string name="region_option_index">Option %1$d</string>
     <string name="card_region_wa_vote">%1$s Resolution</string>
     <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d for to %2$d against.</string>

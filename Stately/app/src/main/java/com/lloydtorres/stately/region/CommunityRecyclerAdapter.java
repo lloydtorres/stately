@@ -224,7 +224,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void init(Poll p)
         {
-            question.setText(SparkleHelper.fromHtml(p.title));
+            SparkleHelper.setHappeningsFormatting(context, question,
+                    String.format(Locale.US, context.getString(R.string.card_region_poll_title_author), p.title, p.author));
 
             if (p.text != null && p.text.length() > 0)
             {
