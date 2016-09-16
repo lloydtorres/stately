@@ -395,7 +395,7 @@ public class ResolutionActivity extends SlidrActivity {
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_violet);
                         break;
                 }
-                voteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+                voteButton.setBackgroundColor(SparkleHelper.getThemeCardColour(this));
                 voteButtonContent.setTextColor(SparkleHelper.getThemeButtonColour(this));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_default));
                 voteChoice = VoteDialog.VOTE_UNDECIDED;
