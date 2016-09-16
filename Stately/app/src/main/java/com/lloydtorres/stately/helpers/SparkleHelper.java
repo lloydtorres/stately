@@ -1170,7 +1170,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
 
         // Basic BBcode processing
-        holder = holder.replace("[hr]", "<br>");
+        holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
 
         // Process lists first (they're problematic!)
         TextProcessor processor = BBProcessorFactory.getInstance().create(c.getResources().openRawResource(R.raw.bbcode));
