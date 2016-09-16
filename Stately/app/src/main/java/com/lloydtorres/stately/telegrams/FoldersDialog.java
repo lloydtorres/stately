@@ -16,22 +16,16 @@
 
 package com.lloydtorres.stately.telegrams;
 
-import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.RecyclerDialogFragment;
 import com.lloydtorres.stately.dto.TelegramFolder;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 
@@ -39,17 +33,12 @@ import java.util.ArrayList;
  * Created by Lloyd on 2016-03-11.
  * A dialog showing the available telegram folders.
  */
-public class FoldersDialog extends DialogFragment {
+public class FoldersDialog extends RecyclerDialogFragment {
     public static final String DIALOG_TAG = "fragment_folder_dialog";
     public static final String FOLDERS_KEY = "folders";
     public static final String SELECTED_KEY = "selected";
 
     public static final int NO_SELECTION = -1;
-
-    // RecyclerView variables
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
 
     private ArrayList<TelegramFolder> folders;
     private int selected;
@@ -80,45 +69,26 @@ public class FoldersDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AppCompatDialog dialog = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Restore saved state
+        if (savedInstanceState != null) {
+            folders = savedInstanceState.getParcelableArrayList(FOLDERS_KEY);
+            selected = savedInstanceState.getInt(SELECTED_KEY);
         }
-        else
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
-        }
-        dialog.setCanceledOnTouchOutside(true);
-        return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // Restore saved state
-        if (savedInstanceState != null)
-        {
-            folders = savedInstanceState.getParcelableArrayList(FOLDERS_KEY);
-            selected = savedInstanceState.getInt(SELECTED_KEY);
-        }
-
-        if (!isMove) {
-            getDialog().setTitle(getString(R.string.telegrams_folders));
-        }
-        else {
-            getDialog().setTitle(getString(R.string.telegrams_move));
-        }
-
-        initRecycler(view);
+        getDialog().setTitle(getString(!isMove ? R.string.telegrams_folders : R.string.telegrams_move));
 
         return view;
     }
 
-    private void initRecycler(View view)
-    {
+    @Override
+    protected void initRecycler(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -130,26 +100,6 @@ public class FoldersDialog extends DialogFragment {
             mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, moveTelegramId, this, folders, selected);
         }
         mRecyclerView.setAdapter(mRecyclerAdapter);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        // If the recyclerview is larger than 75% of the screen height, resize
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        if (getActivity() != null && isAdded())
-        {
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int screenHeight = displaymetrics.heightPixels;
-            int recyclerHeight = mRecyclerView.getLayoutParams().height;
-            if (recyclerHeight > screenHeight * 0.75)
-            {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.5));
-                mRecyclerView.setLayoutParams(lp);
-            }
-        }
     }
 
     @Override

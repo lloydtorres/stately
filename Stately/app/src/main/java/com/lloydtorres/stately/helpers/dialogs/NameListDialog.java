@@ -16,21 +16,15 @@
 
 package com.lloydtorres.stately.helpers.dialogs;
 
-import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.core.RecyclerDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,16 +33,11 @@ import java.util.Collections;
  * Created by Lloyd on 2016-01-19.
  * A dialog showing a list of names a nation has.
  */
-public class NameListDialog extends DialogFragment {
+public class NameListDialog extends RecyclerDialogFragment {
     public static final String DIALOG_TAG = "fragment_endorsement_dialog";
     public static final String TITLE_KEY = "title";
     public static final String NAMES_KEY = "names";
     public static final String TARGET_KEY = "target";
-
-    // RecyclerView variables
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
 
     private ArrayList<String> names;
     private String title;
@@ -70,40 +59,27 @@ public class NameListDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AppCompatDialog dialog = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
-        }
-        else
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
-        }
-        dialog.setCanceledOnTouchOutside(true);
-        return dialog;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Restore saved state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             title = savedInstanceState.getString(TITLE_KEY);
             names = savedInstanceState.getStringArrayList(NAMES_KEY);
             target = savedInstanceState.getInt(TARGET_KEY);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         getDialog().setTitle(title);
-        initRecycler(view);
 
         return view;
     }
 
-    private void initRecycler(View view)
-    {
+    @Override
+    protected void initRecycler(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -111,26 +87,6 @@ public class NameListDialog extends DialogFragment {
         Collections.sort(names);
         mRecyclerAdapter = new NameListRecyclerAdapter(getContext(), this, names, target);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        // If the recyclerview is larger than 75% of the screen height, resize
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        if (getActivity() != null && isAdded())
-        {
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int screenHeight = displaymetrics.heightPixels;
-            int recyclerHeight = mRecyclerView.getLayoutParams().height;
-            if (recyclerHeight > screenHeight * 0.75)
-            {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.5));
-                mRecyclerView.setLayoutParams(lp);
-            }
-        }
     }
 
     @Override

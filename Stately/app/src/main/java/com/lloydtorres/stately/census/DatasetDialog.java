@@ -16,11 +16,7 @@
 
 package com.lloydtorres.stately.census;
 
-import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,8 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.RecyclerDialogFragment;
 import com.lloydtorres.stately.dto.Dataset;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 
@@ -37,19 +33,13 @@ import java.util.ArrayList;
  * Created by Lloyd on 2016-04-10.
  * A dialog showing the available trend datasets.
  */
-public class DatasetDialog extends DialogFragment {
+public class DatasetDialog extends RecyclerDialogFragment {
     public static final String DIALOG_TAG = "fragment_dataset_dialog";
     public static final String DATASETS_KEY = "datasets";
 
-    // RecyclerView variables
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
-
     private ArrayList<Dataset> datasets;
 
-    public void setDatasets(String[] rawDataset, int selected)
-    {
+    public void setDatasets(String[] rawDataset, int selected) {
         datasets = new ArrayList<Dataset>();
 
         for (int i=0; i<rawDataset.length-1; i++)
@@ -68,38 +58,25 @@ public class DatasetDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Restore state
-        if (savedInstanceState != null && datasets == null)
-        {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Restore saved state
+        if (savedInstanceState != null && datasets == null) {
             datasets = savedInstanceState.getParcelableArrayList(DATASETS_KEY);
         }
-
-        AppCompatDialog dialog = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
-        }
-        else
-        {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
-        }
-        dialog.setCanceledOnTouchOutside(true);
-        return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         getDialog().setTitle(getString(R.string.trends_datasets));
-        initRecycler(view);
 
         return view;
     }
 
-    private void initRecycler(View view)
-    {
+    @Override
+    protected void initRecycler(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -114,8 +91,7 @@ public class DatasetDialog extends DialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         if (datasets != null)
