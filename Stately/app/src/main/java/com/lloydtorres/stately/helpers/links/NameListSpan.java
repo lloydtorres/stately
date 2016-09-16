@@ -22,37 +22,33 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.lloydtorres.stately.helpers.dialogs.HtmlDialog;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 /**
- * Created by Lloyd on 2016-04-13.
- * A ClickableSpan implementation for spoiler links.
+ * Created by Lloyd on 2016-09-15.
+ * A clickable span that can show a NameListDialog.
  */
-public class SpoilerSpan extends ClickableSpan {
+public class NameListSpan extends ClickableSpan {
 
     private Context context;
-    private FragmentManager fm;
-    private Spoiler spoiler;
+    private FragmentManager fragmentManager;
+    private NameListDialog nameListDialog;
 
-    public SpoilerSpan(Context c, Spoiler s, FragmentManager f)
-    {
+    public NameListSpan(Context c, FragmentManager fm, String t, ArrayList<String> n, int m) {
         context = c;
-        spoiler = s;
-        fm = f;
+        fragmentManager = fm;
+        nameListDialog = new NameListDialog();
+        nameListDialog.setTitle(t);
+        nameListDialog.setNames(n);
+        nameListDialog.setTarget(m);
     }
 
     @Override
-    public void onClick(View widget) {
-        HtmlDialog htmlDialog = new HtmlDialog();
-        htmlDialog.setTitle(spoiler.title != null ? String.format(Locale.US, context.getString(R.string.spoiler_warn_title), spoiler.title) : context.getString(R.string.spoiler_warn));
-        htmlDialog.setRawContent(spoiler.content);
-        htmlDialog.setFragmentManager(fm);
-        htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);
+    public void onClick(View view) {
+        nameListDialog.show(fragmentManager, NameListDialog.DIALOG_TAG);
     }
 
     @Override

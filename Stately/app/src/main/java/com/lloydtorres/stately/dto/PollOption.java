@@ -37,6 +37,8 @@ public class PollOption implements Parcelable, Comparable<PollOption> {
     public String text;
     @Element(name="VOTES", required=false)
     public int votes;
+    @Element(name="VOTERS", required=false)
+    public String voters;
 
     public PollOption() { super(); }
 
@@ -44,6 +46,7 @@ public class PollOption implements Parcelable, Comparable<PollOption> {
         id = in.readInt();
         text = in.readString();
         votes = in.readInt();
+        voters = in.readString();
     }
 
     @Override
@@ -56,6 +59,7 @@ public class PollOption implements Parcelable, Comparable<PollOption> {
         dest.writeInt(id);
         dest.writeString(text);
         dest.writeInt(votes);
+        dest.writeString(voters);
     }
 
     @SuppressWarnings("unused")

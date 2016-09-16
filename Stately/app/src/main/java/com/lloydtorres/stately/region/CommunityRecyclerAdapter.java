@@ -22,6 +22,10 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +47,7 @@ import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
+import com.lloydtorres.stately.helpers.links.NameListSpan;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;
@@ -244,7 +249,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             List<String> chartLabels = new ArrayList<String>();
             for (int i=0; i<results.size(); i++)
             {
-                inflateOption(options, i+1, results.get(i).text, results.get(i).votes);
+                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters);
                 voteTotal += results.get(i).votes;
                 chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
@@ -276,14 +281,31 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
 
-        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes)
+        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters)
         {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
             label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
-            content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template), SparkleHelper.getHtmlFormatting(option), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template_start), SparkleHelper.getHtmlFormatting(option)));
+
+            Spannable template = new SpannableString(String.format(Locale.US, context.getString(R.string.poll_votes_template_votes), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            if (votes > 0) {
+                String[] rawVoters = voters.split(":");
+                final ArrayList<String> properVoters = new ArrayList<String>();
+                for (String v : rawVoters) {
+                    properVoters.add(SparkleHelper.getNameFromId(v));
+                }
+                NameListSpan span = new NameListSpan(context, fm,
+                        String.format(Locale.US, context.getString(R.string.poll_votes_voter_dialog), index),
+                        properVoters, SparkleHelper.CLICKY_NATION_MODE);
+                template.setSpan(span, 0, template.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                content.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+            content.append(template);
+            content.append(context.getString(R.string.poll_votes_template_end));
+
             optionLayout.addView(optionView);
         }
     }
