@@ -1304,7 +1304,7 @@ public class SparkleHelper {
 
         // Deal with spoilers here
         styleLinkifiedTextView(c, t);   // Ensures TextView contains a spannable
-        Spannable span = (Spannable) t.getText();
+        Spannable span = new SpannableString(t.getText());
         String rawSpan = span.toString();
         int startFromIndex = 0;
 
