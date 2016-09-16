@@ -17,15 +17,10 @@
 package com.lloydtorres.stately.issues;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.core.SlidrActivity;
+import com.lloydtorres.stately.core.RefreshviewActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
@@ -45,7 +40,7 @@ import java.util.List;
  * Created by Lloyd on 2016-02-29.
  * This activity shows the results of an issue decision.
  */
-public class IssueResultsActivity extends SlidrActivity {
+public class IssueResultsActivity extends RefreshviewActivity {
     public static final String RESPONSE_DATA = "responseData";
     public static final String OPTION_DATA = "optionData";
     public static final String NEWS_DATA = "newsData";
@@ -63,25 +58,18 @@ public class IssueResultsActivity extends SlidrActivity {
     private ArrayList<CensusDelta> censusDeltas;
     private Nation mNation;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_refreshview);
 
         String response = null;
         // Either get data from intent or restore state
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             response = getIntent().getStringExtra(RESPONSE_DATA);
             option = getIntent().getParcelableExtra(OPTION_DATA);
             mNation = getIntent().getParcelableExtra(NATION_DATA);
         }
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             news = savedInstanceState.getString(NEWS_DATA);
             option = savedInstanceState.getParcelable(OPTION_DATA);
             headlines = savedInstanceState.getParcelableArrayList(HEADLINES_DATA);
@@ -90,35 +78,14 @@ public class IssueResultsActivity extends SlidrActivity {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
-        setToolbar(toolbar);
+        mSwipeRefreshLayout.setEnabled(false);
 
-        SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
-        swipeRefresh.setEnabled(false);
-
-        // Setup recyclerview
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        if (news != null)
-        {
+        if (news != null) {
             setRecyclerAdapter();
         }
-        else
-        {
+        else {
             processResultsData(response);
         }
-    }
-
-    private void setToolbar(Toolbar t) {
-        setSupportActionBar(t);
-        getSupportActionBar().setElevation(0);
-
-        // Need to be able to get back to previous activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     /**
@@ -228,17 +195,6 @@ public class IssueResultsActivity extends SlidrActivity {
 
         mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent, mNation);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

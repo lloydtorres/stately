@@ -21,10 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.android.volley.NetworkError;
@@ -34,7 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.core.SlidrActivity;
+import com.lloydtorres.stately.core.RefreshviewActivity;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
@@ -57,7 +53,7 @@ import java.util.Map;
  * Created by Lloyd on 2016-01-28.
  * This activity displays options for a particular issue.
  */
-public class IssueDecisionActivity extends SlidrActivity {
+public class IssueDecisionActivity extends RefreshviewActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
     public static final String NATION_DATA = "nationData";
@@ -69,61 +65,33 @@ public class IssueDecisionActivity extends SlidrActivity {
     private Issue issue;
     private Nation mNation;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isInProgress;
-    private View view;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue_decision);
-        view = findViewById(R.id.issuedecision_main);
-        isInProgress = false;
 
+        removePaddingTop();
+
+        isInProgress = false;
         // Either get data from intent or restore state
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             issue = getIntent().getParcelableExtra(ISSUE_DATA);
             mNation = getIntent().getParcelableExtra(NATION_DATA);
         }
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             issue = savedInstanceState.getParcelable(ISSUE_DATA);
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.issuedecision_toolbar);
-        setToolbar(toolbar);
+        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, issue.id));
 
-        // Setup refresher to requery for resolution on swipe
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.issuedecision_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 queryIssueInfo();
             }
         });
-
-        // Setup recyclerview
-        mRecyclerView = (RecyclerView) findViewById(R.id.issuedecision_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-    }
-
-    public void setToolbar(Toolbar t) {
-        setSupportActionBar(t);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, issue.id));
-
-        // Need to be able to get back to previous activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     /**
@@ -153,7 +121,7 @@ public class IssueDecisionActivity extends SlidrActivity {
                     @Override
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processIssueInfo(view, d);
+                        processIssueInfo(mView, d);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -161,11 +129,11 @@ public class IssueDecisionActivity extends SlidrActivity {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
@@ -173,7 +141,7 @@ public class IssueDecisionActivity extends SlidrActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
@@ -278,7 +246,7 @@ public class IssueDecisionActivity extends SlidrActivity {
     {
         if (isInProgress)
         {
-            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.multiple_request_error));
             return;
         }
 
@@ -354,7 +322,7 @@ public class IssueDecisionActivity extends SlidrActivity {
                             }
                             else
                             {
-                                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                             }
                         }
                         else
@@ -369,11 +337,11 @@ public class IssueDecisionActivity extends SlidrActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
@@ -386,19 +354,8 @@ public class IssueDecisionActivity extends SlidrActivity {
         {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
-            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
