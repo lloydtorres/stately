@@ -17,12 +17,14 @@
         android:adjustViewBounds="true"
         android:src="@drawable/stately"/>
     <TextView
+        android:id="@+id/login_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
         android:textColor="@android:color/white"
         android:textSize="15sp"
-        android:text="@string/for_nationstates" />
+        android:text="@string/login_subtitle_neutral" />
 
     <View
         android:layout_width="match_parent"

@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String NOAUTOLOGIN_KEY = "noAutologin";
 
     private View view;
+    private TextView subtitle;
     private AppCompatEditText username;
     private AppCompatEditText password;
     private TextInputLayout userHolder;
@@ -90,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         view = findViewById(R.id.activity_login_main);
+        subtitle = (TextView) findViewById(R.id.login_subtitle);
         username = (AppCompatEditText) findViewById(R.id.field_username);
         username.setCustomSelectionActionModeCallback(new NullActionCallback());
         password = (AppCompatEditText) findViewById(R.id.field_password);
@@ -98,6 +101,18 @@ public class LoginActivity extends AppCompatActivity {
         passHolder = (TextInputLayout) findViewById(R.id.holder_password);
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
+
+        switch (SettingsActivity.getGovernmentSetting(this)) {
+            case SettingsActivity.GOV_CONSERVATIVE:
+                subtitle.setText(getString(R.string.login_subtitle_conservative));
+                break;
+            case SettingsActivity.GOV_LIBERAL:
+                subtitle.setText(getString(R.string.login_subtitle_liberal));
+                break;
+            default:
+                subtitle.setText(getString(R.string.login_subtitle_neutral));
+                break;
+        }
 
         // If activity was launched by an intent, handle that first
         if (getIntent() != null)
