@@ -28,6 +28,52 @@
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory
+        android:title="@string/setting_title_notifs"
+        android:key="setting_notifs_cat">
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs"
+            android:title="@string/setting_notifs"
+            android:defaultValue="false"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_issues"
+            android:title="@string/setting_notifs_issues"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_tgs"
+            android:title="@string/setting_notifs_tgs"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_rmb_mention"
+            android:title="@string/setting_notifs_rmb_mention"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_rmb_quote"
+            android:title="@string/setting_notifs_rmb_quote"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_rmb_like"
+            android:title="@string/setting_notifs_rmb_like"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="setting_notifs_endorse"
+            android:title="@string/setting_notifs_endorse"
+            android:dependency="setting_notifs"
+            android:defaultValue="true"
+            android:icon="@null" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/setting_title_style"
         android:key="setting_style">
         <android.support.v7.preference.ListPreference

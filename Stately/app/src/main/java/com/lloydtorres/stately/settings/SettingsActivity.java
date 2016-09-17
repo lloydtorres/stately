@@ -40,6 +40,15 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final String SETTING_ISSUECONFIRM = "setting_issueconfirm";
     public static final String SETTING_EXITCONFIRM = "setting_exitconfirm";
     public static final String SETTING_CRASHREPORT = "setting_crashreport";
+
+    public static final String SETTING_NOTIFS = "setting_notifs";
+    public static final String SETTING_NOTIFS_ISSUES = "setting_notifs_issues";
+    public static final String SETTING_NOTIFS_TGS = "setting_notifs_tgs";
+    public static final String SETTING_NOTIFS_RMB_MENTION = "setting_notifs_rmb_mention";
+    public static final String SETTING_NOTIFS_RMB_QUOTES = "setting_notifs_rmb_quote";
+    public static final String SETTING_NOTIFS_RMB_LIKE = "setting_notifs_rmb_like";
+    public static final String SETTING_NOTIFS_ENDORSE = "setting_notifs_endorse";
+
     public static final String SETTING_THEME = "setting_theme";
     public static final String SETTING_GOVERNMENT = "setting_category";
 
@@ -136,6 +145,10 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         }
     }
 
+    /**
+     * GENERAL SETTINGS
+     */
+
     public static boolean getAutologinSetting(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true);
@@ -155,6 +168,55 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(SettingsActivity.SETTING_CRASHREPORT, true);
     }
+
+    /**
+     * NOTIFICATIONS SETTINGS
+     */
+
+    public static boolean getNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
+    }
+
+    public static boolean getIssuesNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ISSUES, true);
+    }
+
+    public static boolean getTelegramsNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_TGS, true);
+    }
+
+    public static boolean getRmbMentionNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_MENTION, true);
+    }
+
+    public static boolean getRmbQuoteNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_QUOTES, true);
+    }
+
+    public static boolean getRmbLikeNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_LIKE, true);
+    }
+
+    public static boolean getEndorsementNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ENDORSE, true);
+    }
+
+    /**
+     * STYLING SETTINGS
+     */
 
     public static int getTheme(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
