@@ -322,8 +322,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             telegram = t;
             SparkleHelper.setHappeningsFormatting(context, sender, telegram.sender);
 
-            if (fragment != null) {
+            if (telegram.isUnread && fragment != null) {
                 fragment.markAsRead(telegram.id);
+                telegram.isUnread = false;
             }
 
             switch (displayMode) {
@@ -520,7 +521,6 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
             if (telegram != null)
             {
-               telegram.isUnread = false;
                 header.setTypeface(null, Typeface.NORMAL);
                 timestamp.setTypeface(null, Typeface.ITALIC);
                 alertText.setTypeface(null, Typeface.NORMAL);
