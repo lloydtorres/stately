@@ -25,3 +25,4 @@ proguard/
 
 # Log Files
 *.log
+Stately/app/google-services.json

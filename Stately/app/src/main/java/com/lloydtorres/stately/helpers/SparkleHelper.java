@@ -806,6 +806,33 @@ public class SparkleHelper {
      * @param c Context
      * @return ColorInt
      */
+    public static int getThemePrimaryColour(Context c) {
+        int linkColor = R.color.colorPrimary;
+        switch (SettingsActivity.getTheme(c)) {
+            case SettingsActivity.THEME_VERT:
+                linkColor = R.color.colorPrimary;
+                break;
+            case SettingsActivity.THEME_NOIR:
+                linkColor = R.color.colorPrimaryNoir;
+                break;
+            case SettingsActivity.THEME_BLEU:
+                linkColor = R.color.colorPrimaryBleu;
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                linkColor = R.color.colorPrimaryRouge;
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                linkColor = R.color.colorPrimaryViolet;
+                break;
+        }
+        return ContextCompat.getColor(c, linkColor);
+    }
+
+    /**
+     * Gets the card colour for the current theme.
+     * @param c Context
+     * @return ColorInt
+     */
     public static int getThemeCardColour(Context c) {
         int linkColor = R.color.white;
         if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
