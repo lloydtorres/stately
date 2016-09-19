@@ -16,12 +16,14 @@
 
 package com.lloydtorres.stately.push;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -37,6 +39,7 @@ import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +47,7 @@ import java.util.regex.Pattern;
  * Created by Lloyd on 2016-09-18.
  * Singleton for processing and handling NS notices and notifications.
  */
-public class SpikeHelper {
+public class DragonHelper {
     // Tags and identifiers for different types of notifications
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
     public static final String NOTIFS_ISSUE = "I";
@@ -56,10 +59,9 @@ public class SpikeHelper {
 
     // Keys for shared prefs stuff
     public static final String KEY_FIREBASE = "spike_firebase_token";
-    public static final String KEY_LASTACTIVITY = "spike_last_activity";
 
     // #JustSingletonThings
-    private static SpikeHelper mAssistant;
+    private static DragonHelper mAssistant;
     private static Context mContext;
     private static NotificationManager mNotificationManager;
     private static int mNotifsTg = 0;
@@ -72,7 +74,7 @@ public class SpikeHelper {
      * Private constructor
      * @param c App context
      */
-    private SpikeHelper(Context c) {
+    private DragonHelper(Context c) {
         mContext = c;
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
@@ -82,33 +84,53 @@ public class SpikeHelper {
      * @param c App context
      * @return Singleton
      */
-    public static synchronized SpikeHelper getInstance(Context c) {
+    public static synchronized DragonHelper getInstance(Context c) {
         if (mAssistant == null) {
-            mAssistant = new SpikeHelper(c.getApplicationContext());
+            mAssistant = new DragonHelper(c.getApplicationContext());
         }
         return mAssistant;
     }
 
+    private static final long FIVE_MIN_IN_MS = 5L * 60L * 1000L;
+
     /**
-     * Sets the latest active time in shared prefs. Used to compare which notices to show notifications for.
+     * Sets an alarm for Alphys to query NS for new notices. The alarm time is on whatever the user
+     * selected in settings, starting from the time the function was called. A "jitter" of up to
+     * 5 minutes is added on top to prevent overwhelming the NS servers.
      * @param c App context
-     * @param time Specified time in Unix seconds
      */
-    public static synchronized void setLatestActivityTime(Context c, long time) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putLong(KEY_LASTACTIVITY, time);
-        editor.commit();
+    public static void setAlarmForAlphys(Context c) {
+        // First check if alarms should be set to begin with.
+        if (!SettingsActivity.getNotificationSetting(c)) {
+            return;
+        }
+
+        Intent alphysIntent = new Intent(c, AlphysService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long timeToNextAlarm = System.currentTimeMillis() + SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
+        // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
+        //Random r = new Random();
+        //timeToNextAlarm += (long)(r.nextDouble() * FIVE_MIN_IN_MS);
+
+        // Source:
+        // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
+        AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+        } else {
+            am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+        }
     }
 
     /**
-     * Returns the latest active time in shared prefs. Used to compare which notices to show notifications for.
-     * @param c App context
-     * @return Latest active time in Unix seconds
+     * Cancels any previous alarms set for Alphys.
+     * @param c App context.
      */
-    public static long getLatestActivityTime(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
+    public static void stopAlarmForAlphys(Context c) {
+        Intent alphysIntent = new Intent(c, AlphysService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
     }
 
     /**
@@ -117,13 +139,12 @@ public class SpikeHelper {
      * @param account Name/ID of the nation the notices belong to
      * @param holder NoticeHolder wrapper
      */
-    public synchronized void processNotices(String account, NoticeHolder holder) {
-        long latestActivity = getLatestActivityTime(mContext);
+    public void processNotices(String account, NoticeHolder holder) {
         List<Notice> issueNotices = new ArrayList<Notice>();
 
         for (Notice n : holder.notices) {
             // Only care about new notices since the last activity time
-            if (latestActivity < n.timestamp) {
+            if (n.unread == Notice.NOTICE_UNREAD) {
                 switch (n.type) {
                     // Only care about the notices we can handle
                     case NOTIFS_ISSUE:
@@ -153,6 +174,7 @@ public class SpikeHelper {
         int primaryColour = SparkleHelper.getThemePrimaryColour(mContext);
         return new NotificationCompat.Builder(mContext)
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true)
                 .setColor(primaryColour)
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
@@ -166,7 +188,7 @@ public class SpikeHelper {
      * @param account Name/ID of the nation whom the notices belong to.
      * @param notice The notice to show as a notification.
      */
-    public synchronized void processGenericNotice(String account, Notice notice) {
+    public void processGenericNotice(String account, Notice notice) {
         // Check if the user wants to see notifications for this kind of notice
         if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(mContext)) {
             return;
@@ -216,7 +238,9 @@ public class SpikeHelper {
             case NOTIFS_TG:
                 smallIcon = R.drawable.ic_menu_telegrams;
                 nextActivity = new Intent(mContext, TelegramHistoryActivity.class);
-                int telegramId = Integer.valueOf(NOTIFS_URL_TG.matcher(notice.link).group(1));
+                Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
+                matcherTg.matches();
+                int telegramId = Integer.valueOf(matcherTg.group(1));
                 nextActivity.putExtra(TelegramHistoryActivity.ID_DATA, telegramId);
                 break;
             case NOTIFS_RMB_MENTION:
@@ -225,6 +249,7 @@ public class SpikeHelper {
                 smallIcon = R.drawable.ic_region_white;
                 nextActivity = new Intent(mContext, MessageBoardActivity.class);
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
+                rMatcher.matches();
                 String rName = SparkleHelper.getNameFromId(rMatcher.group(1));
                 int postId = Integer.valueOf(rMatcher.group(2));
                 nextActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, rName);
@@ -234,7 +259,9 @@ public class SpikeHelper {
                 tagId = mNotifsEndorse++;
                 smallIcon = R.drawable.ic_endorse_yes;
                 nextActivity = new Intent(mContext, ExploreActivity.class);
-                nextActivity.putExtra(ExploreActivity.EXPLORE_ID, NOTIFS_URL_ENDORSE.matcher(notice.link).group(1));
+                Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
+                matcherEndorse.matches();
+                nextActivity.putExtra(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
                 nextActivity.putExtra(ExploreActivity.EXPLORE_MODE, SparkleHelper.CLICKY_NATION_MODE);
                 break;
         }
@@ -249,5 +276,4 @@ public class SpikeHelper {
                 .setContentIntent(PendingIntent.getActivity(mContext, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
         mNotificationManager.notify(TAG_PREFIX+tagSuffix, tagId, builder.build());
     }
-
 }

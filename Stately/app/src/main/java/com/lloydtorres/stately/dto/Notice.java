@@ -28,6 +28,10 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="NOTICE", strict=false)
 public class Notice implements Parcelable {
+    public static final int NOTICE_UNREAD = 1;
+
+    @Element(name="NEW", required=false)
+    public int unread;
     @Element(name="TIMESTAMP", required=false)
     public long timestamp;
     @Element(name="TYPE", required=false)
@@ -44,6 +48,7 @@ public class Notice implements Parcelable {
     public Notice() { super(); }
 
     protected Notice(Parcel in) {
+        unread = in.readInt();
         timestamp = in.readLong();
         type = in.readString();
         title = in.readString();
@@ -59,6 +64,7 @@ public class Notice implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(unread);
         dest.writeLong(timestamp);
         dest.writeString(type);
         dest.writeString(title);

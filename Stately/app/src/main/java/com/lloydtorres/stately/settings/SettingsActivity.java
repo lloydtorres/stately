@@ -30,6 +30,7 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.login.LoginActivity;
+import com.lloydtorres.stately.push.DragonHelper;
 
 /**
  * Created by Lloyd on 2016-01-27.
@@ -42,6 +43,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final String SETTING_CRASHREPORT = "setting_crashreport";
 
     public static final String SETTING_NOTIFS = "setting_notifs";
+    public static final String SETTING_NOTIFS_CHECK = "setting_notifs_check";
     public static final String SETTING_NOTIFS_ISSUES = "setting_notifs_issues";
     public static final String SETTING_NOTIFS_TGS = "setting_notifs_tgs";
     public static final String SETTING_NOTIFS_RMB_MENTION = "setting_notifs_rmb_mention";
@@ -61,6 +63,8 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final int GOV_CONSERVATIVE = 0;
     public static final int GOV_LIBERAL = 1;
     public static final int GOV_NEUTRAL = 2;
+
+    public static final int NOTIFS_6_HOURS_IN_SEC = 21600;
 
     private static AlertDialog.Builder dialogBuilder;
 
@@ -135,6 +139,13 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
             case SETTING_CRASHREPORT:
                 dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
                 break;
+            case SETTING_NOTIFS:
+            case SETTING_NOTIFS_CHECK:
+                DragonHelper.stopAlarmForAlphys(this);
+                if (getNotificationSetting(this)) {
+                    DragonHelper.setAlarmForAlphys(this);
+                }
+                break;
             case SETTING_THEME:
             case SETTING_GOVERNMENT:
                 isChangeThemeTriggered = true;
@@ -176,6 +187,18 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static boolean getNotificationSetting(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
+    }
+
+    public static int getNotificationIntervalSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        int interval = NOTIFS_6_HOURS_IN_SEC;
+        try {
+            interval = Integer.valueOf(storage.getString(SettingsActivity.SETTING_NOTIFS_CHECK, String.valueOf(NOTIFS_6_HOURS_IN_SEC)));
+        }
+        catch (Exception e) {
+            SparkleHelper.logError(e.toString());
+        }
+        return interval;
     }
 
     public static boolean getIssuesNotificationSetting(Context c) {

@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.core;
 
 import com.crashlytics.android.Crashlytics;
+import com.lloydtorres.stately.push.DragonHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
 
@@ -36,6 +37,12 @@ public class StatelyApp extends SugarApp {
         if (SettingsActivity.getCrashReportSetting(this))
         {
             Fabric.with(this, new Crashlytics());
+        }
+
+        // notification polling
+        DragonHelper.stopAlarmForAlphys(this);
+        if (SettingsActivity.getNotificationSetting(this)) {
+            DragonHelper.setAlarmForAlphys(this);
         }
     }
 }

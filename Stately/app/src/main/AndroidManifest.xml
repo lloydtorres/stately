@@ -105,6 +105,9 @@
             android:label="@string/menu_settings"
             android:theme="@style/AppTheme.SlidrActivity">
         </activity>
+        <service
+            android:name=".push.AlphysService"
+            android:label="@string/stately_alphys"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="651c62b07195273645b7c74e9b21a68bf3d124cd" />

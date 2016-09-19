@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Stately</string>
     <string name="app_version">Stately 1.6.2</string>
-    <string name="app_header">Stately/1.6.2 (User %1$s; Droid/Fire)</string>
-    <string name="app_header_nouser">Stately/1.6.2 (No User; Droid/Fire)</string>
+    <string name="app_header">Stately/1.6.2 (User %1$s; Droid)</string>
+    <string name="app_header_nouser">Stately/1.6.2 (No User; Droid)</string>
+    <string name="stately_alphys">Stately Notification Polling Service</string>
 
     <!-- Login -->
     <string name="login_subtitle_conservative">Making NationStates Great Again</string>

@@ -31,6 +31,8 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class NoticeHolder implements Parcelable {
+    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=notices";
+
     @ElementList(name="NOTICES")
     public List<Notice> notices;
 
