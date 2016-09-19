@@ -405,6 +405,8 @@
     <string name="got_it">Got It</string>
     <string name="setting_title_notifs">Notifications</string>
     <string name="setting_notifs">Get notifications</string>
+    <string name="setting_notifs_desc">For the currently logged in nation only. Notices must be enabled in NationStates.</string>
+    <string name="setting_notifs_check">Check for new notifications</string>
     <string name="setting_notifs_issues">Issues</string>
     <string name="setting_notifs_tgs">Telegrams</string>
     <string name="setting_notifs_rmb_mention">RMB mentions</string>

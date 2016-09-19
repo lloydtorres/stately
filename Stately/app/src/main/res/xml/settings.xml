@@ -33,8 +33,18 @@
         <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_notifs"
             android:title="@string/setting_notifs"
+            android:summary="@string/setting_notifs_desc"
             android:defaultValue="false"
             android:icon="@null" />
+        <android.support.v7.preference.ListPreference
+            android:title="@string/setting_notifs_check"
+            android:key="setting_notifs_check"
+            android:defaultValue="21600"
+            android:dependency="setting_notifs"
+            android:entries="@array/notifs"
+            android:entryValues="@array/notifs_data"
+            android:summary="%1$s"
+            android:icon="@null"/>
         <android.support.v7.preference.SwitchPreferenceCompat
             android:key="setting_notifs_issues"
             android:title="@string/setting_notifs_issues"

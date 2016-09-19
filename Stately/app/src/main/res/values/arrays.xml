@@ -14,6 +14,22 @@
         <item>Rankings</item>
         <item>Happenings</item>
     </string-array>
+    <string-array name="notifs">
+        <item>Every 30 minutes</item>
+        <item>Every 60 minutes</item>
+        <item>Every 2 hours</item>
+        <item>Every 6 hours</item>
+        <item>Every 12 hours</item>
+        <item>Every 24 hours</item>
+    </string-array>
+    <string-array name="notifs_data">
+        <item>1800</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>21600</item>
+        <item>43200</item>
+        <item>86400</item>
+    </string-array>
     <string-array name="themes">
         <item>Stately Vert</item>
         <item>Mercantile Noir</item>
@@ -31,7 +47,7 @@
     <string-array name="gov_category_settings">
         <item>Conservative</item>
         <item>Liberal</item>
-        <item>Neutral</item>>
+        <item>Neutral</item>
     </string-array>
     <string-array name="gov_category_data">
         <item>0</item>
