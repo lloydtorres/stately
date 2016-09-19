@@ -22,7 +22,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.lloydtorres.stately.R;
@@ -57,6 +59,7 @@ public class DragonHelper {
 
     // Keys for shared prefs stuff
     public static final String KEY_FIREBASE = "spike_firebase_token";
+    public static final String KEY_LASTACTIVITY = "spike_last_activity";
 
     // #JustSingletonThings
     private static DragonHelper mAssistant;
@@ -87,6 +90,26 @@ public class DragonHelper {
             mAssistant = new DragonHelper(c.getApplicationContext());
         }
         return mAssistant;
+    }
+
+    /**
+     * Updates the stored last active time, in Unix seconds.
+     * @param c App context.
+     */
+    public synchronized static void updateLastActiveTime(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
+        editor.commit();
+    }
+
+    /**
+     * Returns the stored last active time, in Unix seconds.
+     * @param c App context.
+     */
+    public static long getLastActiveTime(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
     }
 
     private static final long FIVE_MIN_IN_MS = 5L * 60L * 1000L;
@@ -138,11 +161,12 @@ public class DragonHelper {
      * @param holder NoticeHolder wrapper
      */
     public void processNotices(String account, NoticeHolder holder) {
+        long lastActiveTime = getLastActiveTime(mContext);
         List<Notice> issueNotices = new ArrayList<Notice>();
 
         for (Notice n : holder.notices) {
             // Only care about new notices since the last activity time
-            if (n.unread == Notice.NOTICE_UNREAD) {
+            if (lastActiveTime < n.timestamp && n.unread == Notice.NOTICE_UNREAD) {
                 switch (n.type) {
                     // Only care about the notices we can handle
                     case NOTIFS_ISSUE:

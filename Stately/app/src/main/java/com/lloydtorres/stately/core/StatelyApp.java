@@ -40,6 +40,7 @@ public class StatelyApp extends SugarApp {
         }
 
         // notification polling
+        DragonHelper.updateLastActiveTime(this);
         DragonHelper.stopAlarmForAlphys(this);
         if (SettingsActivity.getNotificationSetting(this)) {
             DragonHelper.setAlarmForAlphys(this);

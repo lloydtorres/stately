@@ -64,7 +64,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final int GOV_LIBERAL = 1;
     public static final int GOV_NEUTRAL = 2;
 
-    public static final int NOTIFS_6_HOURS_IN_SEC = 21600;
+    public static final long NOTIFS_6_HOURS_IN_SEC = 21600L;
 
     private static AlertDialog.Builder dialogBuilder;
 
@@ -189,11 +189,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
     }
 
-    public static int getNotificationIntervalSetting(Context c) {
+    public static long getNotificationIntervalSetting(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        int interval = NOTIFS_6_HOURS_IN_SEC;
+        long interval = NOTIFS_6_HOURS_IN_SEC;
         try {
-            interval = Integer.valueOf(storage.getString(SettingsActivity.SETTING_NOTIFS_CHECK, String.valueOf(NOTIFS_6_HOURS_IN_SEC)));
+            interval = Long.valueOf(storage.getString(SettingsActivity.SETTING_NOTIFS_CHECK, String.valueOf(NOTIFS_6_HOURS_IN_SEC)));
         }
         catch (Exception e) {
             SparkleHelper.logError(e.toString());

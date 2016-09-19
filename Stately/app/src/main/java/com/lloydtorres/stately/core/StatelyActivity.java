@@ -56,6 +56,7 @@ import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.login.SwitchNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.push.DragonHelper;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
@@ -129,6 +130,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 break;
         }
         setContentView(R.layout.activity_stately);
+
+        DragonHelper.updateLastActiveTime(this);
 
         // Get nation object from intent or restore state
         if (getIntent() != null)

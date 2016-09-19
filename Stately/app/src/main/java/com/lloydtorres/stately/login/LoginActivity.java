@@ -44,6 +44,7 @@ import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.push.DragonHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
@@ -90,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
         setContentView(R.layout.activity_login);
+
+        DragonHelper.updateLastActiveTime(this);
 
         view = findViewById(R.id.activity_login_main);
         subtitle = (TextView) findViewById(R.id.login_subtitle);
