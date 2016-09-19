@@ -22,9 +22,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.lloydtorres.stately.R;
@@ -109,8 +107,8 @@ public class DragonHelper {
         PendingIntent pendingIntent = PendingIntent.getService(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         long timeToNextAlarm = System.currentTimeMillis() + SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
         // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
-        //Random r = new Random();
-        //timeToNextAlarm += (long)(r.nextDouble() * FIVE_MIN_IN_MS);
+        Random r = new Random();
+        timeToNextAlarm += (long)(r.nextDouble() * FIVE_MIN_IN_MS);
 
         // Source:
         // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
