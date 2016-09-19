@@ -31,6 +31,7 @@ import com.lloydtorres.stately.dto.NoticeHolder;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.region.MessageBoardActivity;
+import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
 
 import java.util.ArrayList;
@@ -166,6 +167,23 @@ public class SpikeHelper {
      * @param notice The notice to show as a notification.
      */
     public synchronized void processGenericNotice(String account, Notice notice) {
+        // Check if the user wants to see notifications for this kind of notice
+        if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(mContext)) {
+            return;
+        }
+        else if (NOTIFS_RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(mContext)) {
+            return;
+        }
+        else if (NOTIFS_RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(mContext)) {
+            return;
+        }
+        else if (NOTIFS_RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(mContext)) {
+            return;
+        }
+        else if (NOTIFS_ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(mContext)) {
+            return;
+        }
+
         String title = String.format(Locale.US, mContext.getString(R.string.time_moments_template),
                 notice.subject, notice.content);
 
