@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-09-18.
- * Singleton for processing and handling NS notices and notifications.
+ * Helper for processing and handling NS notices and notifications.
  */
 public class DragonHelper {
     // Tags and identifiers for different types of notifications
@@ -59,37 +59,6 @@ public class DragonHelper {
     // Keys for shared prefs stuff
     public static final String KEY_FIREBASE = "spike_firebase_token";
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
-
-    // #JustSingletonThings
-    private static DragonHelper mAssistant;
-    private static Context mContext;
-    private static NotificationManager mNotificationManager;
-    private static int mNotifsTg = 0;
-    private static int mNotifsRmbM = 0;
-    private static int mNotifsRmbQ = 0;
-    private static int mNotifsRmbL = 0;
-    private static int mNotifsEndorse = 0;
-
-    /**
-     * Private constructor
-     * @param c App context
-     */
-    private DragonHelper(Context c) {
-        mContext = c;
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-    }
-
-    /**
-     * Returns the SpikeHelper singleton
-     * @param c App context
-     * @return Singleton
-     */
-    public static synchronized DragonHelper getInstance(Context c) {
-        if (mAssistant == null) {
-            mAssistant = new DragonHelper(c.getApplicationContext());
-        }
-        return mAssistant;
-    }
 
     /**
      * Updates the stored last active time, in Unix seconds.
@@ -163,8 +132,8 @@ public class DragonHelper {
      * @param account Name/ID of the nation the notices belong to
      * @param holder NoticeHolder wrapper
      */
-    public void processNotices(String account, NoticeHolder holder) {
-        long lastActiveTime = getLastActiveTime(mContext);
+    public static void processNotices(Context c, String account, NoticeHolder holder) {
+        long lastActiveTime = getLastActiveTime(c);
 
         for (Notice n : holder.notices) {
             // Only care about new notices since the last activity time
@@ -172,14 +141,14 @@ public class DragonHelper {
                 switch (n.type) {
                     // Only care about the notices we can handle
                     case NOTIFS_ISSUE:
-                        processIssueNotice(account, n);
+                        processIssueNotice(c, account, n);
                         break;
                     case NOTIFS_TG:
                     case NOTIFS_RMB_MENTION:
                     case NOTIFS_RMB_QUOTE:
                     case NOTIFS_RMB_LIKE:
                     case NOTIFS_ENDORSE:
-                        processNotice(account, n);
+                        processNotice(c, account, n);
                 }
             }
         }
@@ -192,9 +161,9 @@ public class DragonHelper {
      * Returns a NotificationCompat builder with set parameters common to all notifications from Stately.
      * @return See above
      */
-    private NotificationCompat.Builder getBaseBuilder() {
-        int primaryColour = SparkleHelper.getThemePrimaryColour(mContext);
-        return new NotificationCompat.Builder(mContext)
+    private static NotificationCompat.Builder getBaseBuilder(Context c) {
+        int primaryColour = SparkleHelper.getThemePrimaryColour(c);
+        return new NotificationCompat.Builder(c)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(primaryColour)
@@ -205,28 +174,31 @@ public class DragonHelper {
      * Builds the notification for issue notices. Unlike other types of notifications, issue
      * notices are limited to one notification. This prevents the status bar from
      * being spammed if the user has more than one nation.
-     * @param account
-     * @param notice
+     * @param c App context
+     * @param account Nation name of notice's source
+     * @param notice Target issue notice
      */
-    public void processIssueNotice(String account, Notice notice) {
+    public static void processIssueNotice(Context c, String account, Notice notice) {
         // Check if the user wants to see notifications for issues
-        if (!SettingsActivity.getIssuesNotificationSetting(mContext)) {
+        if (!SettingsActivity.getIssuesNotificationSetting(c)) {
             return;
         }
 
-        Intent statelyActivity = new Intent(mContext, StatelyActivity.class);
+        Intent statelyActivity = new Intent(c, StatelyActivity.class);
         statelyActivity.putExtra(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
         statelyActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         // Apparently this is necessary: http://stackoverflow.com/a/3168653
         statelyActivity.setAction(Long.toString(System.currentTimeMillis()));
 
-        NotificationCompat.Builder builder = getBaseBuilder()
-                .setContentTitle(mContext.getString(R.string.notifs_new_issue))
+        NotificationCompat.Builder builder = getBaseBuilder(c)
+                .setContentTitle(c.getString(R.string.notifs_new_issue))
                 .setContentText(SparkleHelper.getNameFromId(account))
                 .setSmallIcon(R.drawable.ic_menu_issues)
                 .setOnlyAlertOnce(true)
-                .setContentIntent(PendingIntent.getActivity(mContext, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
-        mNotificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
+                .setContentIntent(PendingIntent.getActivity(c, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
+
+        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
     }
 
     private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+)$");
@@ -235,31 +207,32 @@ public class DragonHelper {
 
     /**
      * Builds and shows a notification for each supported notice type except for issues.
+     * @param c App context
      * @param account Name/ID of the nation whom the notices belong to.
      * @param notice The notice to show as a notification.
      */
-    public void processNotice(String account, Notice notice) {
+    public static void processNotice(Context c, String account, Notice notice) {
         // Check if the user wants to see notifications for this kind of notice
-        if (!SettingsActivity.getIssuesNotificationSetting(mContext)) {
+        if (!SettingsActivity.getIssuesNotificationSetting(c)) {
             return;
         }
-        if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(mContext)) {
+        if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(mContext)) {
+        else if (NOTIFS_RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(mContext)) {
+        else if (NOTIFS_RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(mContext)) {
+        else if (NOTIFS_RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(mContext)) {
+        else if (NOTIFS_ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(c)) {
             return;
         }
 
-        String title = String.format(Locale.US, mContext.getString(R.string.time_moments_template), notice.subject, notice.content);
+        String title = String.format(Locale.US, c.getString(R.string.time_moments_template), notice.subject, notice.content);
         // Remove period from end of notification
         if (title.length() > 1) {
             title = title.substring(0, title.length() - 1);
@@ -267,33 +240,13 @@ public class DragonHelper {
 
         String tagSuffix = notice.type;
 
-        // Handle notification ID
-        int tagId = 0;
-        switch (notice.type) {
-            case NOTIFS_TG:
-                tagId = mNotifsTg++;
-                break;
-            case NOTIFS_RMB_MENTION:
-                tagId = mNotifsRmbM++;
-                break;
-            case NOTIFS_RMB_QUOTE:
-                tagId = mNotifsRmbQ++;
-                break;
-            case NOTIFS_RMB_LIKE:
-                tagId = mNotifsRmbL++;
-                break;
-            case NOTIFS_ENDORSE:
-                tagId = mNotifsEndorse++;
-                break;
-        }
-
         // Handle notification icon and intent
         int smallIcon = 0;
         Intent nextActivity = new Intent();
         switch (notice.type) {
             case NOTIFS_TG:
                 smallIcon = R.drawable.ic_menu_telegrams;
-                nextActivity = new Intent(mContext, TelegramHistoryActivity.class);
+                nextActivity = new Intent(c, TelegramHistoryActivity.class);
                 Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
                 matcherTg.matches();
                 int telegramId = Integer.valueOf(matcherTg.group(1));
@@ -303,7 +256,7 @@ public class DragonHelper {
             case NOTIFS_RMB_QUOTE:
             case NOTIFS_RMB_LIKE:
                 smallIcon = R.drawable.ic_region_white;
-                nextActivity = new Intent(mContext, MessageBoardActivity.class);
+                nextActivity = new Intent(c, MessageBoardActivity.class);
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
                 rMatcher.matches();
                 String rName = SparkleHelper.getNameFromId(rMatcher.group(1));
@@ -312,9 +265,8 @@ public class DragonHelper {
                 nextActivity.putExtra(MessageBoardActivity.BOARD_TARGET_ID, postId);
                 break;
             case NOTIFS_ENDORSE:
-                tagId = mNotifsEndorse++;
                 smallIcon = R.drawable.ic_endorse_yes;
-                nextActivity = new Intent(mContext, ExploreActivity.class);
+                nextActivity = new Intent(c, ExploreActivity.class);
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
                 nextActivity.putExtra(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
@@ -325,11 +277,13 @@ public class DragonHelper {
         // Apparently this is necessary: http://stackoverflow.com/a/3168653
         nextActivity.setAction(Long.toString(System.currentTimeMillis()));
 
-        NotificationCompat.Builder builder = getBaseBuilder()
+        NotificationCompat.Builder builder = getBaseBuilder(c)
                 .setContentTitle(title)
                 .setContentText(SparkleHelper.getNameFromId(account))
                 .setSmallIcon(smallIcon)
-                .setContentIntent(PendingIntent.getActivity(mContext, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
-        mNotificationManager.notify(TAG_PREFIX+tagSuffix, tagId, builder.build());
+                .setContentIntent(PendingIntent.getActivity(c, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
+
+        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TAG_PREFIX+tagSuffix, (int) notice.timestamp, builder.build());
     }
 }

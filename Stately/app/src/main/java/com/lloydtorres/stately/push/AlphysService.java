@@ -68,7 +68,7 @@ public class AlphysService extends IntentService {
                         Persister serializer = new Persister();
                         try {
                             notices = serializer.read(NoticeHolder.class, response);
-                            DragonHelper.getInstance(AlphysService.this).processNotices(active.name, notices);
+                            DragonHelper.processNotices(AlphysService.this, active.name, notices);
                             DragonHelper.updateLastActiveTime(AlphysService.this);
                         }
                         catch (Exception e) {
