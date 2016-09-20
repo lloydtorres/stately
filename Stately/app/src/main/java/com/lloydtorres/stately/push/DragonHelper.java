@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Notice;
 import com.lloydtorres.stately.dto.NoticeHolder;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -36,8 +37,6 @@ import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -166,7 +165,6 @@ public class DragonHelper {
      */
     public void processNotices(String account, NoticeHolder holder) {
         long lastActiveTime = getLastActiveTime(mContext);
-        List<Notice> issueNotices = new ArrayList<Notice>();
 
         for (Notice n : holder.notices) {
             // Only care about new notices since the last activity time
@@ -174,19 +172,17 @@ public class DragonHelper {
                 switch (n.type) {
                     // Only care about the notices we can handle
                     case NOTIFS_ISSUE:
-                        issueNotices.add(n);
+                        processIssueNotice(account, n);
                         break;
                     case NOTIFS_TG:
                     case NOTIFS_RMB_MENTION:
                     case NOTIFS_RMB_QUOTE:
                     case NOTIFS_RMB_LIKE:
                     case NOTIFS_ENDORSE:
-                        processGenericNotice(account, n);
+                        processNotice(account, n);
                 }
             }
         }
-
-        // @TODO: Process issues
     }
 
     // Duration of the LED on/off for notifications
@@ -205,17 +201,48 @@ public class DragonHelper {
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
 
+    /**
+     * Builds the notification for issue notices. Unlike other types of notifications, issue
+     * notices are limited to one notification. This prevents the status bar from
+     * being spammed if the user has more than one nation.
+     * @param account
+     * @param notice
+     */
+    public void processIssueNotice(String account, Notice notice) {
+        // Check if the user wants to see notifications for issues
+        if (!SettingsActivity.getIssuesNotificationSetting(mContext)) {
+            return;
+        }
+
+        Intent statelyActivity = new Intent(mContext, StatelyActivity.class);
+        statelyActivity.putExtra(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
+        statelyActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // Apparently this is necessary: http://stackoverflow.com/a/3168653
+        statelyActivity.setAction(Long.toString(System.currentTimeMillis()));
+
+        NotificationCompat.Builder builder = getBaseBuilder()
+                .setContentTitle(mContext.getString(R.string.notifs_new_issue))
+                .setContentText(SparkleHelper.getNameFromId(account))
+                .setSmallIcon(R.drawable.ic_menu_issues)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(PendingIntent.getActivity(mContext, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
+        mNotificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
+    }
+
     private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+)$");
     private static final Pattern NOTIFS_URL_RMB = Pattern.compile("^region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+$");
     private static final Pattern NOTIFS_URL_ENDORSE = Pattern.compile("^nation=(.+)$");
 
     /**
-     * Builds and shows a notification for every type of notice except for issues.
+     * Builds and shows a notification for each supported notice type except for issues.
      * @param account Name/ID of the nation whom the notices belong to.
      * @param notice The notice to show as a notification.
      */
-    public void processGenericNotice(String account, Notice notice) {
+    public void processNotice(String account, Notice notice) {
         // Check if the user wants to see notifications for this kind of notice
+        if (!SettingsActivity.getIssuesNotificationSetting(mContext)) {
+            return;
+        }
         if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(mContext)) {
             return;
         }
