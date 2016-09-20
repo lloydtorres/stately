@@ -58,10 +58,4 @@ public abstract class SlidrActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        DragonHelper.updateLastActiveTime(this);
-    }
 }

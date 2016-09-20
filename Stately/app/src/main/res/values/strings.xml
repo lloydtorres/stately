@@ -5,6 +5,7 @@
     <string name="app_header_nouser">Stately/1.6.2 (No User; Droid)</string>
     <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
     <string name="stately_alphys">Stately Notification Polling Service</string>
+    <string name="stately_notifs_sub_template">%1$s — Stately for NationStates</string>
 
     <!-- Login -->
     <string name="login_subtitle_conservative">Making NationStates Great Again</string>

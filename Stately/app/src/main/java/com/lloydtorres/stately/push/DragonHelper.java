@@ -161,12 +161,13 @@ public class DragonHelper {
      * Returns a NotificationCompat builder with set parameters common to all notifications from Stately.
      * @return See above
      */
-    private static NotificationCompat.Builder getBaseBuilder(Context c) {
+    private static NotificationCompat.Builder getBaseBuilder(Context c, String account) {
         int primaryColour = SparkleHelper.getThemePrimaryColour(c);
         return new NotificationCompat.Builder(c)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(primaryColour)
+                .setContentText(String.format(Locale.US, c.getString(R.string.stately_notifs_sub_template), SparkleHelper.getNameFromId(account)))
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
 
@@ -190,9 +191,8 @@ public class DragonHelper {
         // Apparently this is necessary: http://stackoverflow.com/a/3168653
         statelyActivity.setAction(Long.toString(System.currentTimeMillis()));
 
-        NotificationCompat.Builder builder = getBaseBuilder(c)
+        NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(c.getString(R.string.notifs_new_issue))
-                .setContentText(SparkleHelper.getNameFromId(account))
                 .setSmallIcon(R.drawable.ic_menu_issues)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(PendingIntent.getActivity(c, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
@@ -277,9 +277,8 @@ public class DragonHelper {
         // Apparently this is necessary: http://stackoverflow.com/a/3168653
         nextActivity.setAction(Long.toString(System.currentTimeMillis()));
 
-        NotificationCompat.Builder builder = getBaseBuilder(c)
+        NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(title)
-                .setContentText(SparkleHelper.getNameFromId(account))
                 .setSmallIcon(smallIcon)
                 .setContentIntent(PendingIntent.getActivity(c, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
 
