@@ -126,8 +126,8 @@ public class DragonHelper {
             return;
         }
 
-        Intent alphysIntent = new Intent(c, AlphysService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent alphysIntent = new Intent(c, AlphysReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         long timeToNextAlarm = System.currentTimeMillis() + SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
         // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
         Random r = new Random();
@@ -138,7 +138,11 @@ public class DragonHelper {
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-        } else {
+        }
+        else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+        }
+        else {
             am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
         }
     }
@@ -228,8 +232,11 @@ public class DragonHelper {
             return;
         }
 
-        String title = String.format(Locale.US, mContext.getString(R.string.time_moments_template),
-                notice.subject, notice.content);
+        String title = String.format(Locale.US, mContext.getString(R.string.time_moments_template), notice.subject, notice.content);
+        // Remove period from end of notification
+        if (title.length() > 1) {
+            title = title.substring(0, title.length() - 1);
+        }
 
         String tagSuffix = notice.type;
 

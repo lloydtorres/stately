@@ -52,13 +52,6 @@ public class AlphysService extends IntentService {
             return;
         }
 
-        // If not enough time has passed since the last active time, don't bother
-        long lastActiveTime = DragonHelper.getLastActiveTime(this);
-        if (((System.currentTimeMillis() / 1000L) - lastActiveTime) < SettingsActivity.getNotificationIntervalSetting(this)) {
-            DragonHelper.setAlarmForAlphys(this);
-            return;
-        }
-
         // If there's no active user, don't even bother.
         final UserLogin active = SparkleHelper.getActiveUser(this);
         if (active == null) {

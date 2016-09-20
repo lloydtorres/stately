@@ -105,6 +105,8 @@
             android:label="@string/menu_settings"
             android:theme="@style/AppTheme.SlidrActivity">
         </activity>
+        <receiver android:name=".push.AlphysReceiver"
+            android:label="@string/stately_alphys_r" />
         <service
             android:name=".push.AlphysService"
             android:label="@string/stately_alphys"/>

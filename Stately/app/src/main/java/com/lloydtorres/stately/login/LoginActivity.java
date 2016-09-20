@@ -92,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_login);
 
-        DragonHelper.updateLastActiveTime(this);
-
         view = findViewById(R.id.activity_login_main);
         subtitle = (TextView) findViewById(R.id.login_subtitle);
         username = (AppCompatEditText) findViewById(R.id.field_username);
@@ -305,6 +303,17 @@ public class LoginActivity extends AppCompatActivity {
                     .setMessage(R.string.create_finish)
                     .setPositiveButton(R.string.got_it, null)
                     .show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // notification polling
+        DragonHelper.updateLastActiveTime(this);
+        DragonHelper.stopAlarmForAlphys(this);
+        if (SettingsActivity.getNotificationSetting(this)) {
+            DragonHelper.setAlarmForAlphys(this);
         }
     }
 

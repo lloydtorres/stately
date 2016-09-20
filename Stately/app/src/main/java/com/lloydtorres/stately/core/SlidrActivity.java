@@ -56,8 +56,12 @@ public abstract class SlidrActivity extends AppCompatActivity {
 
         slidrInterface = Slidr.attach(this, SparkleHelper.slidrConfig);
 
-        DragonHelper.updateLastActiveTime(this);
-
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DragonHelper.updateLastActiveTime(this);
     }
 }

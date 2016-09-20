@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.core;
+package com.lloydtorres.stately.push;
 
-import com.crashlytics.android.Crashlytics;
-import com.lloydtorres.stately.settings.SettingsActivity;
-import com.orm.SugarApp;
-
-import io.fabric.sdk.android.Fabric;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 /**
- * Created by Lloyd on 2016-01-29.
- * This class is used for app-wide changes.
+ * Created by Lloyd on 2016-09-19.
+ * Receiver for broadcasts to AlphysService.
  */
-public class StatelyApp extends SugarApp {
 
+public class AlphysReceiver extends BroadcastReceiver {
     @Override
-    public void onCreate() {
-        super.onCreate();
-
-        // analytics
-        if (SettingsActivity.getCrashReportSetting(this))
-        {
-            Fabric.with(this, new Crashlytics());
-        }
+    public void onReceive(Context context, Intent intent) {
+        Intent alphysIntent = new Intent(context, AlphysService.class);
+        context.startService(alphysIntent);
     }
 }

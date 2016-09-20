@@ -131,8 +131,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         }
         setContentView(R.layout.activity_stately);
 
-        DragonHelper.updateLastActiveTime(this);
-
         // Get nation object from intent or restore state
         if (getIntent() != null)
         {
@@ -281,6 +279,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public void onResume()
     {
         super.onResume();
+        DragonHelper.updateLastActiveTime(this);
+
         // Redownload nation data on resume
         // isLoaded will only be false on first run, true on all subsequent runs
         // This prevents nation data from being redundantly loaded twice.
