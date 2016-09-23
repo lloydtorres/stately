@@ -193,9 +193,15 @@ public class DragonHelper {
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(c.getString(R.string.notifs_new_issue))
-                .setSmallIcon(R.drawable.ic_menu_issues)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(PendingIntent.getActivity(c, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setSmallIcon(R.drawable.ic_menu_issues);
+        }
+        else {
+            builder.setSmallIcon(R.drawable.ic_notifs_kitkat_issue);
+        }
 
         NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
@@ -245,7 +251,11 @@ public class DragonHelper {
         Intent nextActivity = new Intent();
         switch (notice.type) {
             case NOTIFS_TG:
-                smallIcon = R.drawable.ic_menu_telegrams;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    smallIcon = R.drawable.ic_menu_telegrams;
+                } else {
+                    smallIcon = R.drawable.ic_notifs_kitkat_telegram;
+                }
                 nextActivity = new Intent(c, TelegramHistoryActivity.class);
                 Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
                 matcherTg.matches();
@@ -255,7 +265,11 @@ public class DragonHelper {
             case NOTIFS_RMB_MENTION:
             case NOTIFS_RMB_QUOTE:
             case NOTIFS_RMB_LIKE:
-                smallIcon = R.drawable.ic_region_white;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    smallIcon = R.drawable.ic_region_white;
+                } else {
+                    smallIcon = R.drawable.ic_notifs_kitkat_region;
+                }
                 nextActivity = new Intent(c, MessageBoardActivity.class);
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
                 rMatcher.matches();
@@ -265,7 +279,11 @@ public class DragonHelper {
                 nextActivity.putExtra(MessageBoardActivity.BOARD_TARGET_ID, postId);
                 break;
             case NOTIFS_ENDORSE:
-                smallIcon = R.drawable.ic_endorse_yes;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    smallIcon = R.drawable.ic_endorse_yes;
+                } else {
+                    smallIcon = R.drawable.ic_notifs_kitkat_endorse;
+                }
                 nextActivity = new Intent(c, ExploreActivity.class);
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
