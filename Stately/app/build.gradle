@@ -44,7 +44,7 @@ dependencies {
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.3@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
     }
     compile 'com.android.support:appcompat-v7:24.2.1'
