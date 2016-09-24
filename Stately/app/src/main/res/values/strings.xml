@@ -297,11 +297,13 @@
     <string name="issue_activity_title">%1$s: Issue #%2$d</string>
     <string name="issue_unavailable">This issue is not available to %1$s.</string>
     <string name="issue_select_option">Adopt this position</string>
+    <string name="issue_select_option_pirate">Yarr!</string>
     <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
     <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
     <string name="issue_option_adopt">Adopt</string>
     <string name="issue_option_dismiss">Dismiss</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
+    <string name="issue_dismiss_issue_pirate">Arr, t\'Davey Jones\' Locker with ye all!</string>
     <string name="issue_legislation_passed">Legislation Passed</string>
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_position">Adopted Position</string>

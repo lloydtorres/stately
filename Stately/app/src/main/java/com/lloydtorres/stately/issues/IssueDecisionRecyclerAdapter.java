@@ -41,12 +41,15 @@ import java.util.Locale;
  */
 public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for the different types of cards
-    private final int INFO_CARD = 0;
-    private final int OPTION_CARD = 1;
-    private final int DISMISS_CARD = 2;
+    private static final int INFO_CARD = 0;
+    private static final int OPTION_CARD = 1;
+    private static final int DISMISS_CARD = 2;
+
+    private static final int ISSUE_PIRATE_NO = 201;
 
     private List<Object> cards;
     private Context context;
+    private boolean pirateMode;
 
     public IssueDecisionRecyclerAdapter(Context c, Issue issue)
     {
@@ -55,6 +58,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         cards.add(issue);
         cards.addAll(issue.options);
+
+        if (issue.id == ISSUE_PIRATE_NO) {
+            pirateMode = true;
+        }
     }
 
     @Override
@@ -177,11 +184,14 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                     ((IssueDecisionActivity) context).setAdoptPosition(option);
                 }
             });
+            if (pirateMode) {
+                selectContent.setText(context.getString(R.string.issue_select_option_pirate));
+            }
 
             if (mode == DISMISS_CARD)
             {
                 contentHolder.setVisibility(View.GONE);
-                selectContent.setText(context.getString(R.string.issue_dismiss_issue));
+                selectContent.setText(context.getString(pirateMode ? R.string.issue_dismiss_issue_pirate : R.string.issue_dismiss_issue));
                 switch (SettingsActivity.getTheme(context)) {
                     case SettingsActivity.THEME_VERT:
                         selectIcon.setImageResource(R.drawable.ic_dismiss_green);
