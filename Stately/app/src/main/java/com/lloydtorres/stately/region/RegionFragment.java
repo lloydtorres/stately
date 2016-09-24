@@ -71,10 +71,10 @@ public class RegionFragment extends Fragment {
     public static final String REGION_RMB_UNREAD_KEY = "rmbUnreadCountData";
 
     // Constants used to determine view pager index.
-    private final int OVERVIEW_TAB = 0;
-    private final int COMMUNITY_TAB = 1;
-    private final int CENSUS_TAB = 2;
-    private final int HAPPEN_TAB = 3;
+    private static final int OVERVIEW_TAB = 0;
+    private static final int COMMUNITY_TAB = 1;
+    private static final int CENSUS_TAB = 2;
+    private static final int HAPPEN_TAB = 3;
 
     private String mRegionName;
     private Region mRegion;

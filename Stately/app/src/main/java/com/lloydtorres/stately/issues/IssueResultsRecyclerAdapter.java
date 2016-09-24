@@ -48,11 +48,11 @@ import java.util.Locale;
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] WORLD_CENSUS_ITEMS;
 
-    private final int NEWS_CARD = 0;
-    private final int POSITION_CARD = 1;
-    private final int HEADLINE_CARD = 2;
-    private final int POSTCARD_CARD = 3;
-    private final int CENSUSDELTA_CARD = 4;
+    private static final int NEWS_CARD = 0;
+    private static final int POSITION_CARD = 1;
+    private static final int HEADLINE_CARD = 2;
+    private static final int POSTCARD_CARD = 3;
+    private static final int CENSUSDELTA_CARD = 4;
 
     private Context context;
     private List<Object> content;

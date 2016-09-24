@@ -197,7 +197,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         };
     }
 
-    private final Comparator<CensusDetailedRank> SORT_SCORE = new Comparator<CensusDetailedRank>() {
+    private static final Comparator<CensusDetailedRank> SORT_SCORE = new Comparator<CensusDetailedRank>() {
         @Override
         public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
             if (lhs.score < rhs.score)
@@ -215,14 +215,14 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     };
 
-    private final Comparator<CensusDetailedRank> SORT_WORLD_RANK = new Comparator<CensusDetailedRank>() {
+    private static final Comparator<CensusDetailedRank> SORT_WORLD_RANK = new Comparator<CensusDetailedRank>() {
         @Override
         public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
             return lhs.worldRank - rhs.worldRank;
         }
     };
 
-    private final Comparator<CensusDetailedRank> SORT_WORLD_PERCENT = new Comparator<CensusDetailedRank>() {
+    private static final Comparator<CensusDetailedRank> SORT_WORLD_PERCENT = new Comparator<CensusDetailedRank>() {
         @Override
         public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
             if (lhs.worldRankPercent < rhs.worldRankPercent)
@@ -240,14 +240,14 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     };
 
-    private final Comparator<CensusDetailedRank> SORT_REGION_RANK = new Comparator<CensusDetailedRank>() {
+    private static final Comparator<CensusDetailedRank> SORT_REGION_RANK = new Comparator<CensusDetailedRank>() {
         @Override
         public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
             return lhs.regionRank - rhs.regionRank;
         }
     };
 
-    private final Comparator<CensusDetailedRank> SORT_REGION_PERCENT = new Comparator<CensusDetailedRank>() {
+    private static final Comparator<CensusDetailedRank> SORT_REGION_PERCENT = new Comparator<CensusDetailedRank>() {
         @Override
         public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
             if (lhs.regionRankPercent < rhs.regionRankPercent)

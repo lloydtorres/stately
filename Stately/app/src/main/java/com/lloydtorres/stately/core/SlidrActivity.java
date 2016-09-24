@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.lloydtorres.stately.push.DragonHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;

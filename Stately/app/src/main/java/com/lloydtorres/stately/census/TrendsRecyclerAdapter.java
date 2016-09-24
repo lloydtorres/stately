@@ -49,10 +49,10 @@ import java.util.Locale;
  */
 public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for the different types of items
-    private final int TITLE_CARD = 0;
-    private final int GRAPH_CARD = 1;
-    private final int DIVIDER_VIEW = 2;
-    private final int RANKING_VIEW = 3;
+    private static final int TITLE_CARD = 0;
+    private static final int GRAPH_CARD = 1;
+    private static final int DIVIDER_VIEW = 2;
+    private static final int RANKING_VIEW = 3;
 
     private List<Object> trendItems;
     private Context context;

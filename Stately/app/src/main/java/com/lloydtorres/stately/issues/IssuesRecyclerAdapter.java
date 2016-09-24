@@ -38,8 +38,8 @@ import java.util.Locale;
  * An adapter for the IssuesFragment recycler.
  */
 public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final int ISSUE_CARD = 0;
-    private final int NEXT_CARD = 1;
+    private static final int ISSUE_CARD = 0;
+    private static final int NEXT_CARD = 1;
 
     private Context context;
     private List<Object> issues;

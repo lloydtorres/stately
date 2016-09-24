@@ -87,11 +87,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public static final int ACTIVITY_FEED_FRAGMENT = 6;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
-    private final int[] noSelect = {    R.id.nav_explore,
-                                        R.id.nav_switch,
-                                        R.id.nav_settings,
-                                        R.id.nav_logout
-                                    };
+    private static final int[] noSelect = {     R.id.nav_explore,
+                                                R.id.nav_switch,
+                                                R.id.nav_settings,
+                                                R.id.nav_logout
+                                            };
 
     private DrawerLayout drawer;
     private NavigationView navigationView;

@@ -55,12 +55,12 @@ public class NationFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNationData";
 
     // Constants used to determine view pager index.
-    private final int OVERVIEW_TAB = 0;
-    private final int PEOPLE_TAB = 1;
-    private final int GOV_TAB = 2;
-    private final int ECONOMY_TAB = 3;
-    private final int RANKINGS_TAB = 4;
-    private final int HAPPEN_TAB = 5;
+    private static final int OVERVIEW_TAB = 0;
+    private static final int PEOPLE_TAB = 1;
+    private static final int GOV_TAB = 2;
+    private static final int ECONOMY_TAB = 3;
+    private static final int RANKINGS_TAB = 4;
+    private static final int HAPPEN_TAB = 5;
 
     private Nation mNation;
 

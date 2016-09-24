@@ -45,14 +45,14 @@ import java.util.Locale;
  */
 public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for the different types of cards
-    private final int ACTIVE_CARD = 0;
-    private final int INACTIVE_CARD = 1;
-    private final int STATS_CARD = 2;
-    private final int HAPPENING_CARD = 3;
+    private static final int ACTIVE_CARD = 0;
+    private static final int INACTIVE_CARD = 1;
+    private static final int STATS_CARD = 2;
+    private static final int HAPPENING_CARD = 3;
 
     // positions of the council cards
-    private final int GENERAL_ASSEMBLY_INDEX = 0;
-    private final int SECURITY_COUNCIL_INDEX = 1;
+    private static final int GENERAL_ASSEMBLY_INDEX = 0;
+    private static final int SECURITY_COUNCIL_INDEX = 1;
 
     private List<Object> cards;
     private Context context;
