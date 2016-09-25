@@ -157,6 +157,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (nationData != null && target != null)
         {
             target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
+            target = target.replace("@@uc($nation->query(\"name\"))@@", nationData.name.toUpperCase(Locale.US));
             target = target.replace("@@REGION@@", nationData.region);
             target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
             target = target.replace("@@POPULATION@@", SparkleHelper.getPrettifiedNumber(nationData.popBase));
