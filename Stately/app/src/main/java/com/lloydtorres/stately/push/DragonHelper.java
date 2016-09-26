@@ -47,14 +47,8 @@ import java.util.regex.Pattern;
  * Helper for processing and handling NS notices and notifications.
  */
 public class DragonHelper {
-    // Tags and identifiers for different types of notifications
+    // Common prefix for notification tags
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
-    public static final String NOTIFS_ISSUE = "I";
-    public static final String NOTIFS_TG = "TG";
-    public static final String NOTIFS_RMB_MENTION = "RMB";
-    public static final String NOTIFS_RMB_QUOTE = "RMBQ";
-    public static final String NOTIFS_RMB_LIKE = "RMBL";
-    public static final String NOTIFS_ENDORSE = "END";
 
     // Keys for shared prefs stuff
     public static final String KEY_FIREBASE = "spike_firebase_token";
@@ -140,14 +134,14 @@ public class DragonHelper {
             if (lastActiveTime < n.timestamp && n.unread == Notice.NOTICE_UNREAD) {
                 switch (n.type) {
                     // Only care about the notices we can handle
-                    case NOTIFS_ISSUE:
+                    case Notice.ISSUE:
                         processIssueNotice(c, account, n);
                         break;
-                    case NOTIFS_TG:
-                    case NOTIFS_RMB_MENTION:
-                    case NOTIFS_RMB_QUOTE:
-                    case NOTIFS_RMB_LIKE:
-                    case NOTIFS_ENDORSE:
+                    case Notice.TG:
+                    case Notice.RMB_MENTION:
+                    case Notice.RMB_QUOTE:
+                    case Notice.RMB_LIKE:
+                    case Notice.ENDORSE:
                         processNotice(c, account, n);
                 }
             }
@@ -222,19 +216,19 @@ public class DragonHelper {
         if (!SettingsActivity.getIssuesNotificationSetting(c)) {
             return;
         }
-        if (NOTIFS_TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(c)) {
+        if (Notice.TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(c)) {
+        else if (Notice.RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(c)) {
+        else if (Notice.RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(c)) {
+        else if (Notice.RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(c)) {
             return;
         }
-        else if (NOTIFS_ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(c)) {
+        else if (Notice.ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(c)) {
             return;
         }
 
@@ -250,7 +244,7 @@ public class DragonHelper {
         int smallIcon = 0;
         Intent nextActivity = new Intent();
         switch (notice.type) {
-            case NOTIFS_TG:
+            case Notice.TG:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     smallIcon = R.drawable.ic_menu_telegrams;
                 } else {
@@ -262,9 +256,9 @@ public class DragonHelper {
                 int telegramId = Integer.valueOf(matcherTg.group(1));
                 nextActivity.putExtra(TelegramHistoryActivity.ID_DATA, telegramId);
                 break;
-            case NOTIFS_RMB_MENTION:
-            case NOTIFS_RMB_QUOTE:
-            case NOTIFS_RMB_LIKE:
+            case Notice.RMB_MENTION:
+            case Notice.RMB_QUOTE:
+            case Notice.RMB_LIKE:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     smallIcon = R.drawable.ic_region_white;
                 } else {
@@ -278,7 +272,7 @@ public class DragonHelper {
                 nextActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, rName);
                 nextActivity.putExtra(MessageBoardActivity.BOARD_TARGET_ID, postId);
                 break;
-            case NOTIFS_ENDORSE:
+            case Notice.ENDORSE:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     smallIcon = R.drawable.ic_endorse_yes;
                 } else {

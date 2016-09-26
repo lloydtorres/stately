@@ -29,6 +29,12 @@ import org.simpleframework.xml.Root;
 @Root(name="NOTICE", strict=false)
 public class Notice implements Parcelable {
     public static final int NOTICE_UNREAD = 1;
+    public static final String ISSUE = "I";
+    public static final String TG = "TG";
+    public static final String RMB_MENTION = "RMB";
+    public static final String RMB_QUOTE = "RMBQ";
+    public static final String RMB_LIKE = "RMBL";
+    public static final String ENDORSE = "END";
 
     @Element(name="NEW", required=false)
     public int unread;
