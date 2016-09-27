@@ -467,8 +467,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private ActivityFeedFragment getActivityFeed()
     {
         ActivityFeedFragment activityFeedFragment = new ActivityFeedFragment();
-        activityFeedFragment.setNationName(mNation.name);
-        activityFeedFragment.setRegionName(mNation.region);
         return activityFeedFragment;
     }
 
