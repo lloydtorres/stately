@@ -242,14 +242,12 @@ public class DragonHelper {
 
         // Handle notification icon and intent
         int smallIcon = 0;
+        int smallIconCompat = 0;
         Intent nextActivity = new Intent();
         switch (notice.type) {
             case Notice.TG:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    smallIcon = R.drawable.ic_menu_telegrams;
-                } else {
-                    smallIcon = R.drawable.ic_notifs_kitkat_telegram;
-                }
+                smallIcon = R.drawable.ic_menu_telegrams;
+                smallIconCompat = R.drawable.ic_notifs_kitkat_telegram;
                 nextActivity = new Intent(c, TelegramHistoryActivity.class);
                 Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
                 matcherTg.matches();
@@ -259,11 +257,8 @@ public class DragonHelper {
             case Notice.RMB_MENTION:
             case Notice.RMB_QUOTE:
             case Notice.RMB_LIKE:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    smallIcon = R.drawable.ic_region_white;
-                } else {
-                    smallIcon = R.drawable.ic_notifs_kitkat_region;
-                }
+                smallIcon = R.drawable.ic_region_white;
+                smallIconCompat = R.drawable.ic_notifs_kitkat_region;
                 nextActivity = new Intent(c, MessageBoardActivity.class);
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
                 rMatcher.matches();
@@ -273,11 +268,8 @@ public class DragonHelper {
                 nextActivity.putExtra(MessageBoardActivity.BOARD_TARGET_ID, postId);
                 break;
             case Notice.ENDORSE:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    smallIcon = R.drawable.ic_endorse_yes;
-                } else {
-                    smallIcon = R.drawable.ic_notifs_kitkat_endorse;
-                }
+                smallIcon = R.drawable.ic_endorse_yes;
+                smallIconCompat = R.drawable.ic_notifs_kitkat_endorse;
                 nextActivity = new Intent(c, ExploreActivity.class);
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
@@ -291,7 +283,7 @@ public class DragonHelper {
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(title)
-                .setSmallIcon(smallIcon)
+                .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)
                 .setContentIntent(PendingIntent.getActivity(c, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
 
         NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
