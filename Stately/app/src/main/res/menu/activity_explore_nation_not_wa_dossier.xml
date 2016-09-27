@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/nav_endorse"
-        android:icon="@drawable/ic_endorse_no"
-        android:title="@string/explore_endorse"
+        android:id="@+id/nav_explore"
+        android:icon="@drawable/ic_menu_explore"
+        android:title="@string/menu_explore"
         app:showAsAction="always" />
     <item
         android:id="@+id/nav_send_telegram"
         android:icon="@drawable/ic_menu_telegrams"
         android:title="@string/telegrams_send"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
-        android:id="@+id/nav_explore"
-        android:icon="@drawable/ic_menu_explore"
-        android:title="@string/menu_explore"
-        app:showAsAction="always" />
+        android:id="@+id/nav_dossier_rem"
+        android:icon="@drawable/ic_activityfeed"
+        android:title="@string/explore_menu_dossier_rem"
+        app:showAsAction="never" />
 </menu>

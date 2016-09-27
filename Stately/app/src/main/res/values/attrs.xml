@@ -15,4 +15,5 @@
     <attr name="themedDrawableTrend" format="reference" />
     <attr name="themedDrawableWa" format="reference" />
     <attr name="themedDrawableRegion" format="reference" />
+    <attr name="themedToolbarPopup" format="reference" />
 </resources>

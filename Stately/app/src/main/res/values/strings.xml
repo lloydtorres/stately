@@ -69,6 +69,10 @@
     <string name="explore_withdraw_endorse">Withdraw Endorsement</string>
     <string name="explore_endorsed_response">Endorsed %1$s.</string>
     <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
+    <string name="explore_menu_dossier_add">Add to Dossier</string>
+    <string name="explore_menu_dossier_rem">Remove from Dossier</string>
+    <string name="explore_dossier_added">Added %1$s to the Dossier.</string>
+    <string name="explore_dossier_removed">Removed %1$s from the Dossier.</string>
 
     <string name="explore_region_move">Move to %1$s?</string>
     <string name="explore_region_password">Password required to move</string>
