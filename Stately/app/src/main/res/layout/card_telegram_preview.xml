@@ -26,7 +26,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:ellipsize="end"
                 android:paddingRight="10dp"
                 android:textColor="?attr/themedColorPrimaryText"

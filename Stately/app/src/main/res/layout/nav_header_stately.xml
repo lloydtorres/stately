@@ -39,7 +39,7 @@
             android:paddingBottom="5dp"
             android:shadowColor="@android:color/black"
             android:shadowRadius="5"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="Mignon"/>

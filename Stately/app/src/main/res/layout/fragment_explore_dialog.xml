@@ -9,7 +9,7 @@
         android:id="@+id/explore_searchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:maxLines="1"
         android:hint="@string/explore_search_text"
         android:inputType="textCapWords|textFilter|textNoSuggestions"
         android:layout_gravity="center_horizontal"
