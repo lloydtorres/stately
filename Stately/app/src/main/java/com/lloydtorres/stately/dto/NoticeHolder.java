@@ -19,6 +19,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -31,7 +33,8 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class NoticeHolder implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=notices";
+    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=notices"
+                                        + "&v=" + SparkleHelper.API_VERSION;
 
     @ElementList(name="NOTICES")
     public List<Notice> notices;
