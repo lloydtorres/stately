@@ -499,9 +499,30 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
     }
 
+    private void handleEndorsement() {
+        if (isInProgress) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getLocalId(String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
+                dialog.dismiss();
+            }
+        };
+
+        dialogBuilder
+                .setTitle(String.format(Locale.US, isEndorsed ? getString(R.string.explore_withdraw_endorse_confirm) : getString(R.string.explore_endorse_confirm), name))
+                .setPositiveButton(isEndorsed ? getString(R.string.explore_withdraw_endorse_button) : getString(R.string.explore_endorse_button), dialogClickListener)
+                .setNegativeButton(getString(R.string.explore_negative), null)
+                .show();
+    }
+
     /**
-     * Actually does the post to submit an endorsement. This is a bit weird since the API
-     * call redirects to a different page, so the "success" case is actually in the error.
+     * Actually does the post to submit an endorsement.
      * @param localid Required localId value
      */
     private void postEndorsement(final String localid) {
@@ -509,32 +530,26 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // blank since the post gets redirected
+                        isInProgress = false;
+                        if (isEndorsed) {
+                            SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_withdraw_endorse_response), name));
+                        }
+                        else {
+                            SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_endorsed_response), name));
+                        }
+
+                        queryNation(id);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // actual success since post gets redirected
-                if (error instanceof ServerError) {
-                    isInProgress = false;
-                    if (isEndorsed) {
-                        SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_withdraw_endorse_response), name));
-                    }
-                    else {
-                        SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_endorsed_response), name));
-                    }
-
-                    queryNation(id);
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else {
-                    SparkleHelper.logError(error.toString());
-                    isInProgress = false;
-                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                    }
-                    else {
-                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                    }
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
@@ -693,7 +708,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 SparkleHelper.startTelegramCompose(this, name, TelegramComposeActivity.NO_REPLY_ID);
                 return true;
             case R.id.nav_endorse:
-                getLocalId(String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
+                handleEndorsement();
                 return true;
             case R.id.nav_move:
                 handleRegionMove();

@@ -17,7 +17,7 @@
         android:title="@string/explore_endorse"
         app:showAsAction="never" />
     <item
-        android:id="@+id/nav_dossier_add"
+        android:id="@+id/nav_dossier"
         android:icon="@drawable/ic_activityfeed"
         android:title="@string/explore_menu_dossier_add"
         app:showAsAction="never" />

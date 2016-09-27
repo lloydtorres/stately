@@ -67,8 +67,13 @@
 
     <string name="explore_endorse">Endorse</string>
     <string name="explore_withdraw_endorse">Withdraw Endorsement</string>
+    <string name="explore_endorse_confirm">Endorse %1$s?</string>
+    <string name="explore_withdraw_endorse_confirm">Withdraw endorsement for %1$s?</string>
     <string name="explore_endorsed_response">Endorsed %1$s.</string>
     <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
+    <string name="explore_endorse_button">Endorse</string>
+    <string name="explore_withdraw_endorse_button">Withdraw</string>
+
     <string name="explore_menu_dossier_add">Add to Dossier</string>
     <string name="explore_menu_dossier_rem">Remove from Dossier</string>
     <string name="explore_dossier_added">Added %1$s to the Dossier.</string>
