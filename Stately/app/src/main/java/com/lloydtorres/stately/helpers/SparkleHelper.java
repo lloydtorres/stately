@@ -246,7 +246,10 @@ public class SparkleHelper {
      */
     public static String getIdFromName(String n)
     {
-        return n.toLowerCase(Locale.US).replace(" ", "_");
+        if (n != null) {
+            return n.toLowerCase(Locale.US).replace(" ", "_");
+        }
+        return null;
     }
 
     /**
@@ -257,19 +260,22 @@ public class SparkleHelper {
      */
     public static String getNameFromId(String id)
     {
-        // IDs have no whitespace and are only separated by underscores.
-        String[] words = id.split("_");
-        // A list of properly-formatted words.
-        List<String> properWords = new ArrayList<String>();
+        if (id != null) {
+            // IDs have no whitespace and are only separated by underscores.
+            String[] words = id.split("_");
+            // A list of properly-formatted words.
+            List<String> properWords = new ArrayList<String>();
 
-        for (String w : words)
-        {
-            // Transform word from lower case to proper case.
-            properWords.add(toNormalCase(w));
+            for (String w : words)
+            {
+                // Transform word from lower case to proper case.
+                properWords.add(toNormalCase(w));
+            }
+
+            // Join all the proper words back together with spaces.
+            return joinStringList(properWords, " ");
         }
-
-        // Join all the proper words back together with spaces.
-        return joinStringList(properWords, " ");
+        return null;
     }
 
     /**

@@ -90,20 +90,22 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                 if (getActivity() == null || !isAdded()) {
                     return;
                 }
-                startQueryHappenings(false);
+                startQueryHappenings();
             }
         });
 
-        startQueryHappenings(true);
+        startQueryHappenings();
         return mView;
     }
 
     /**
      * Convenience method to show swipe refresh and start query.
-     * @param firstRun If this is the first time the function is being called
      */
-    public void startQueryHappenings(final boolean firstRun) {
+    public void startQueryHappenings() {
         events = new ArrayList<Event>();
+        dossierNations = new ArrayList<String>();
+        dossierRegions = new ArrayList<String>();
+
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -113,14 +115,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
 
                 mSwipeRefreshLayout.setRefreshing(true);
 
-                if (firstRun) {
-                    // Query dossier first when running for first time
-                    queryDossier();
-                }
-                else {
-                    // Just query regular happenings otherwise
-                    queryNationalHappenings();
-                }
+                queryDossier();
             }
         });
     }

@@ -98,7 +98,7 @@ public class SubscriptionsDialog extends DialogFragment {
                 editor.commit();
                 if (callback != null)
                 {
-                    callback.startQueryHappenings(false);
+                    callback.startQueryHappenings();
                 }
             }
         };

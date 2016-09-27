@@ -119,7 +119,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (getIntent() != null) {
             // If name passed in as intent
-            id = getIntent().getStringExtra(EXPLORE_ID);
+            id = SparkleHelper.getIdFromName(getIntent().getStringExtra(EXPLORE_ID));
             mode = getIntent().getIntExtra(EXPLORE_MODE, SparkleHelper.CLICKY_NATION_MODE);
             if (id == null) {
                 // If ID passed in through Uri
@@ -499,6 +499,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
     }
 
+    /**
+     * Shows a dialog with the appropriate text to confirm an endorsement/withdrawal request.
+     */
     private void handleEndorsement() {
         if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
@@ -563,6 +566,100 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         else {
             params.put("action", ENDORSE_REQUEST);
         }
+        stringRequest.setParams(params);
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Shows a dialog to confirm adding/removing a nation/region from the user's dossier.
+     */
+    private void handleDossier() {
+        if (isInProgress) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                postDossier();
+                dialog.dismiss();
+            }
+        };
+
+        dialogBuilder
+                .setTitle(String.format(Locale.US, isInDossier ? getString(R.string.explore_dossier_rem_confirm) : getString(R.string.explore_dossier_add_confirm), name))
+                .setPositiveButton(isInDossier ? getString(R.string.explore_dossier_rem_button) : getString(R.string.explore_dossier_add_button), dialogClickListener)
+                .setNegativeButton(getString(R.string.explore_negative), null)
+                .show();
+    }
+
+    /**
+     * Actually sends a POST to NS to add the nation/region to the current user's dossier.
+     */
+    private void postDossier() {
+        String postUrl = Dossier.POST_QUERY_GENERIC;
+        if (!isInDossier && mode == SparkleHelper.CLICKY_REGION_MODE) {
+            postUrl = String.format(Locale.US, Dossier.POST_QUERY_ADD_REGION, SparkleHelper.getIdFromName(id));
+        }
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, postUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        isInProgress = false;
+                        isInDossier = !isInDossier;
+                        if (isInDossier) {
+                            SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_dossier_added), name));
+                        }
+                        else {
+                            SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_dossier_removed), name));
+                        }
+                        invalidateOptionsMenu();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        Map<String,String> params = new HashMap<String, String>();
+        // If not currently in dossier and trying to add
+        if (!isInDossier) {
+            switch (mode) {
+                case SparkleHelper.CLICKY_NATION_MODE:
+                    params.put("nation", id);
+                    params.put("action", "add");
+                    break;
+                default:
+                    params.put("add_to_dossier", "1");
+                    break;
+            }
+        } else {
+            switch (mode) {
+                case SparkleHelper.CLICKY_NATION_MODE:
+                    params.put(String.format(Locale.US, Dossier.PARAM_REMOVE_TEMPLATE, Dossier.PARAM_REMOVE_NATION, id), "on");
+                    params.put("remove_from_dossier", "1");
+                    break;
+                default:
+                    params.put(String.format(Locale.US, Dossier.PARAM_REMOVE_TEMPLATE, Dossier.PARAM_REMOVE_REGION, id), "on");
+                    params.put("remove_from_region_dossier", "1");
+                    break;
+            }
+        }
+
         stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
@@ -709,6 +806,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 return true;
             case R.id.nav_endorse:
                 handleEndorsement();
+                return true;
+            case R.id.nav_dossier:
+                handleDossier();
                 return true;
             case R.id.nav_move:
                 handleRegionMove();
