@@ -576,7 +576,7 @@ public class ResolutionActivity extends SlidrActivity {
         String proposeTemplate = String.format(Locale.US, getString(R.string.wa_proposed), mResolution.proposedBy);
         SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
 
-        voteStart.setText(String.format(Locale.US, getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(this, mResolution.voteHistoryFor.size()+1)));
+        voteStart.setText(String.format(Locale.US, getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(this, mResolution.voteHistoryFor.size())));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
         votesAgainst.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesAgainst));
         voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));

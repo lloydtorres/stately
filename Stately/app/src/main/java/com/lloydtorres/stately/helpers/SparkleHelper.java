@@ -78,6 +78,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -150,6 +151,8 @@ public class SparkleHelper {
 
     // The number of hours a resolution is on the WA chamber floor
     public static final int WA_RESOLUTION_DURATION = 96;
+    // Reference time zone for WA calculations
+    public static final String TIMEZONE_TORONTO = "America/Toronto";
 
     // Constants used by activityLinkBuilder() to determine if target is nation or region
     public static final int CLICKY_NATION_MODE = 1;
@@ -1104,6 +1107,7 @@ public class SparkleHelper {
     public static String calculateResolutionEnd(Context c, int hoursElapsed)
     {
         Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(TimeZone.getTimeZone(TIMEZONE_TORONTO));
 
         // Round up to nearest hour
         if (cal.get(Calendar.MINUTE) >= 1)
