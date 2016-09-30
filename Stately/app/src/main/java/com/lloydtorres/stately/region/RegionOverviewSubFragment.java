@@ -75,10 +75,12 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
         quickFacts.power = mRegion.power;
         cards.add(quickFacts);
 
-        RegionFactbookCardData factbook = new RegionFactbookCardData();
-        factbook.factbook = mRegion.factbook;
-        cards.add(factbook);
-
+        if (mRegion.factbook != null && mRegion.factbook.length() > 0) {
+            RegionFactbookCardData factbook = new RegionFactbookCardData();
+            factbook.factbook = mRegion.factbook;
+            cards.add(factbook);
+        }
+        
         RegionTagsCardData tags = new RegionTagsCardData();
         tags.tags = mRegion.tags;
         cards.add(tags);

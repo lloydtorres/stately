@@ -1369,6 +1369,10 @@ public class SparkleHelper {
      */
     public static void setBbCodeFormatting(Context c, TextView t, String content, FragmentManager fm)
     {
+        if (content == null || content.length() < 0) {
+            return;
+        }
+
         String holder = content.trim();
         holder = holder.replace("\n", "<br>");
         holder = holder.replace("&amp;#39;", "'");
