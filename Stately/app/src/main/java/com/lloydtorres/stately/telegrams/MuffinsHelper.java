@@ -56,6 +56,7 @@ import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -273,6 +274,7 @@ public class MuffinsHelper {
     public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)\" rel=\"nofollow\">");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
@@ -300,6 +302,8 @@ public class MuffinsHelper {
         holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
 
         holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
+
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
 
         holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
 

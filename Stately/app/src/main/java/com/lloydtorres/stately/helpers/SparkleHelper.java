@@ -87,6 +87,7 @@ import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.report.ReportActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
@@ -128,6 +129,7 @@ public class SparkleHelper {
     public static final String[] PROTOCOLS = {"http", "https",
             ExploreActivity.EXPLORE_PROTOCOL,
             MessageBoardActivity.RMB_PROTOCOL,
+            ResolutionActivity.RESOLUTION_PROTOCOL,
             ReportActivity.REPORT_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "8";

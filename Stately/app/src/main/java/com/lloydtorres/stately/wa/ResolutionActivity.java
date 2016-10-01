@@ -55,14 +55,24 @@ import java.util.Map;
  * Also has refreshing!
  */
 public class ResolutionActivity extends RefreshviewActivity {
+    // Uri to invoke ResolutionActivity
+    public static final String RESOLUTION_PROTOCOL = "com.lloydtorres.stately.resolution";
+    public static final String RESOLUTION_TARGET = RESOLUTION_PROTOCOL + "://";
+
     // Keys for Intent data
     public static final String TARGET_COUNCIL_ID = "councilId";
     public static final String TARGET_RESOLUTION = "resolution";
     public static final String TARGET_VOTE_STATUS = "voteStatus";
+    public static final String TARGET_OVERRIDE_RES_ID = "overrideResId";
+    public static final String TARGET_IS_ACTIVE = "isActive";
+
+    private static final int NO_RESOLUTION = -1;
 
     private Resolution mResolution;
     private WaVoteStatus voteStatus;
     private int councilId;
+    private int overrideResId = NO_RESOLUTION;
+    private boolean isActive = true;
 
     private boolean isInProgress;
 
@@ -79,6 +89,13 @@ public class ResolutionActivity extends RefreshviewActivity {
             councilId = getIntent().getIntExtra(TARGET_COUNCIL_ID, 1);
             mResolution = getIntent().getParcelableExtra(TARGET_RESOLUTION);
             voteStatus = getIntent().getParcelableExtra(TARGET_VOTE_STATUS);
+
+            if (getIntent().getData() != null) {
+                // Handle invocations via URL
+                councilId = Integer.valueOf(getIntent().getData().getHost());
+                overrideResId = Integer.valueOf(getIntent().getData().getLastPathSegment()) + 1;
+                isActive = false;
+            }
         }
         if (savedInstanceState != null) {
             councilId = savedInstanceState.getInt(TARGET_COUNCIL_ID);
@@ -118,18 +135,20 @@ public class ResolutionActivity extends RefreshviewActivity {
     }
 
     private void setRecyclerAdapter() {
-        String voteStats = "";
-        switch(councilId) {
-            case Assembly.GENERAL_ASSEMBLY:
-                voteStats = voteStatus.gaVote;
-                break;
-            case Assembly.SECURITY_COUNCIL:
-                voteStats = voteStatus.scVote;
-                break;
+        String voteStats = null;
+        if (voteStatus != null) {
+            switch(councilId) {
+                case Assembly.GENERAL_ASSEMBLY:
+                    voteStats = voteStatus.gaVote;
+                    break;
+                case Assembly.SECURITY_COUNCIL:
+                    voteStats = voteStatus.scVote;
+                    break;
+            }
         }
 
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats, true);
+            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution, voteStats);
@@ -154,7 +173,10 @@ public class ResolutionActivity extends RefreshviewActivity {
      * @param chamberId Current WA chamber being checked
      */
     private void queryResolution(int chamberId) {
-        String targetURL = String.format(Locale.US, BaseAssembly.QUERY, chamberId);
+        String targetURL = String.format(Locale.US, Resolution.QUERY, chamberId);
+        if (overrideResId != NO_RESOLUTION) {
+            targetURL = String.format(Locale.US, Resolution.QUERY_INACTIVE, chamberId, overrideResId);
+        }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -164,7 +186,11 @@ public class ResolutionActivity extends RefreshviewActivity {
                         try {
                             BaseAssembly waResponse = serializer.read(BaseAssembly.class, response);
                             mResolution = waResponse.resolution;
-                            queryVoteStatus();
+                            if (isActive) {
+                                queryVoteStatus();
+                            }  else {
+                                setRecyclerAdapter();
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -207,31 +233,26 @@ public class ResolutionActivity extends RefreshviewActivity {
                         try {
                             voteStatus = serializer.read(WaVoteStatus.class, response);
                             PinkaHelper.setWaSessionData(ResolutionActivity.this, voteStatus.waState);
-                            setRecyclerAdapter();
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
-                            mSwipeRefreshLayout.setRefreshing(false);
                         }
+
+                        setRecyclerAdapter();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Continue even on error
                 SparkleHelper.logError(error.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
-                }
+                setRecyclerAdapter();
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            // Continue even on error
+            setRecyclerAdapter();
         }
     }
 
@@ -390,6 +411,8 @@ public class ResolutionActivity extends RefreshviewActivity {
         if (voteStatus != null) {
             savedInstanceState.putParcelable(TARGET_VOTE_STATUS, voteStatus);
         }
+        savedInstanceState.putInt(TARGET_OVERRIDE_RES_ID, overrideResId);
+        savedInstanceState.putBoolean(TARGET_IS_ACTIVE, isActive);
     }
 
     @Override
@@ -405,6 +428,8 @@ public class ResolutionActivity extends RefreshviewActivity {
             if (voteStatus == null) {
                 voteStatus = savedInstanceState.getParcelable(TARGET_VOTE_STATUS);
             }
+            overrideResId = savedInstanceState.getInt(TARGET_OVERRIDE_RES_ID);
+            isActive = savedInstanceState.getBoolean(TARGET_IS_ACTIVE);
         }
     }
 }

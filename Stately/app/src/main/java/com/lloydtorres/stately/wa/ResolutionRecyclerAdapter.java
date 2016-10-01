@@ -66,12 +66,12 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private String voteStatus;
     private boolean isActive;
 
-    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, boolean active) {
+    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs) {
         resolutionActivity = activity;
         context = resolutionActivity.getApplicationContext();
         resolution = res;
         voteStatus = vs;
-        isActive = active;
+        isActive = voteStatus != null;
     }
 
     @Override
@@ -81,19 +81,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         switch (viewType) {
             case CARD_HEADER:
-                View headerCard = inflater.inflate(R.layout.card_nation_overview, parent, false);
+                View headerCard = inflater.inflate(R.layout.card_wa_resolution_header, parent, false);
                 viewHolder = new ResolutionHeaderCard(headerCard);
                 break;
             case CARD_CONTENT:
-                View contentCard = inflater.inflate(R.layout.card_nation_freedom, parent, false);
+                View contentCard = inflater.inflate(R.layout.card_wa_resolution_content, parent, false);
                 viewHolder = new ResolutionContentCard(contentCard);
                 break;
             case CARD_BREAKDOWN:
-                View breakdownCard = inflater.inflate(R.layout.card_nation_generic, parent, false);
+                View breakdownCard = inflater.inflate(R.layout.card_wa_resolution_breakdown, parent, false);
                 viewHolder = new ResolutionBreakdownCard(breakdownCard);
                 break;
             case CARD_HISTORY:
-                View historyCard = inflater.inflate(R.layout.card_nation_chart, parent, false);
+                View historyCard = inflater.inflate(R.layout.card_wa_resolution_history, parent, false);
                 viewHolder = new ResolutionHistoryCard(historyCard);
                 break;
         }
@@ -166,7 +166,12 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             String proposeTemplate = String.format(Locale.US, context.getString(R.string.wa_proposed), resolution.proposedBy);
             SparkleHelper.activityLinkBuilder(context, proposedBy, proposeTemplate, resolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
 
-            voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
+            if (isActive) {
+                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
+            } else {
+                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_implemented), SparkleHelper.getReadableDateFromUTC(context, resolution.implemented)));
+            }
+
             votesFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
             votesAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
 
