@@ -34,6 +34,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -45,6 +46,7 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,13 +66,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private Context context;
     private Resolution resolution;
     private String voteStatus;
+    private int councilId;
     private boolean isActive;
 
-    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs) {
+    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, int cId) {
         resolutionActivity = activity;
         context = resolutionActivity.getApplicationContext();
         resolution = res;
         voteStatus = vs;
+        councilId = cId;
         isActive = voteStatus != null;
     }
 
@@ -141,6 +145,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private TextView target;
         private TextView proposedBy;
         private TextView voteStart;
+        private TextView repealed;
         private TextView votesFor;
         private TextView votesAgainst;
         private ImageView iconVoteFor;
@@ -152,6 +157,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             target = (TextView) itemView.findViewById(R.id.wa_nominee);
             proposedBy = (TextView) itemView.findViewById(R.id.wa_proposed_by);
             voteStart = (TextView) itemView.findViewById(R.id.wa_activetime);
+            repealed = (TextView) itemView.findViewById(R.id.wa_repealed);
             votesFor = (TextView) itemView.findViewById(R.id.wa_resolution_for);
             votesAgainst = (TextView) itemView.findViewById(R.id.wa_resolution_against);
             iconVoteFor = (ImageView) itemView.findViewById(R.id.content_icon_vote_for);
@@ -169,7 +175,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             if (isActive) {
                 voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
             } else {
-                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_implemented), SparkleHelper.getReadableDateFromUTC(context, resolution.implemented)));
+                int prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix : R.string.wa_sc_prefix;
+                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_implemented),
+                        context.getString(prefixId),
+                        resolution.id,
+                        SparkleHelper.sdf.format(new Date(resolution.implemented * 1000L))));
+
+                if (resolution.repealed > 0) {
+                    repealed.setVisibility(View.VISIBLE);
+                }
             }
 
             votesFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));

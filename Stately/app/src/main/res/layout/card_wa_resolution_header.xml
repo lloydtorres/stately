@@ -53,6 +53,16 @@
                 android:layout_height="wrap_content"
                 android:textColor="?attr/themedColorSecondaryText"
                 tools:text="@string/wa_voting_time" />
+            <TextView
+                android:id="@+id/wa_repealed"
+                android:fontFamily="sans-serif-light"
+                android:visibility="gone"
+                android:textStyle="italic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorChart1"
+                android:text="@string/wa_repealed"
+                tools:visibility="visible"/>
         </LinearLayout>
 
         <LinearLayout

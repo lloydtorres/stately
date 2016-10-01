@@ -149,7 +149,7 @@ public class ResolutionActivity extends RefreshviewActivity {
         }
 
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats);
+            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats, councilId);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution, voteStats);
