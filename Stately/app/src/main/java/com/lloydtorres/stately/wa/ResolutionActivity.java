@@ -89,6 +89,7 @@ public class ResolutionActivity extends RefreshviewActivity {
             councilId = getIntent().getIntExtra(TARGET_COUNCIL_ID, 1);
             mResolution = getIntent().getParcelableExtra(TARGET_RESOLUTION);
             voteStatus = getIntent().getParcelableExtra(TARGET_VOTE_STATUS);
+            overrideResId = getIntent().getIntExtra(TARGET_OVERRIDE_RES_ID, NO_RESOLUTION);
 
             if (getIntent().getData() != null) {
                 // Handle invocations via URL

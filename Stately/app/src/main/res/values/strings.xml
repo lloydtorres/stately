@@ -356,7 +356,7 @@
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>
-    <string name="wa_implemented">%1$s#%2$d — %3$s</string>
+    <string name="wa_implemented">%1$s #%2$d — %3$s</string>
     <string name="wa_ga_prefix">GA</string>
     <string name="wa_sc_prefix">SC</string>
     <string name="wa_for">For</string>
@@ -383,7 +383,8 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
-    <string name="wa_error">Resolution does not seem to exist.</string>
+    <string name="wa_error">Resolution not found.</string>
+    <string name="wa_last_resolution">Read this resolution</string>
 
     <!-- The World -->
     <string name="world_nations">nations</string>

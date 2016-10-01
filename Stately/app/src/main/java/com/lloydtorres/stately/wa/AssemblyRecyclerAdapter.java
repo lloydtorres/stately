@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-01-16.
@@ -58,8 +61,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context context;
     private WaVoteStatus voteStatus;
 
-    public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc, WaVoteStatus vs)
-    {
+    public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc, WaVoteStatus vs) {
         context = c;
         voteStatus = vs;
 
@@ -88,7 +90,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder = new ActiveCard(context, activeCard);
                 break;
             case INACTIVE_CARD:
-                View inactiveCard = inflater.inflate(R.layout.card_generic, parent, false);
+                View inactiveCard = inflater.inflate(R.layout.card_wa_inactive, parent, false);
                 viewHolder = new InactiveCard(inactiveCard);
                 break;
             case STATS_CARD:
@@ -134,17 +136,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int position) {
-        if (cards.get(position) instanceof Assembly)
-        {
+        if (cards.get(position) instanceof Assembly) {
             Assembly a = (Assembly) cards.get(position);
             return a.resolution.name != null ? ACTIVE_CARD : INACTIVE_CARD;
         }
-        else if (cards.get(position) instanceof DataIntPair)
-        {
+        else if (cards.get(position) instanceof DataIntPair) {
             return STATS_CARD;
         }
-        else if (cards.get(position) instanceof HappeningCard)
-        {
+        else if (cards.get(position) instanceof HappeningCard) {
             return HAPPENING_CARD;
         }
         return -1;
@@ -178,16 +177,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             v.setOnClickListener(this);
         }
 
-        public void init(Assembly a, int pos)
-        {
+        public void init(Assembly a, int pos) {
             String voteStats = "";
-            if (pos == GENERAL_ASSEMBLY_INDEX)
-            {
+            if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));
                 voteStats = voteStatus.gaVote;
             }
-            else if (pos == SECURITY_COUNCIL_INDEX)
-            {
+            else if (pos == SECURITY_COUNCIL_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_security_council));
                 voteStats = voteStatus.scVote;
             }
@@ -197,16 +193,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
 
-            if (SparkleHelper.isWaMember(context, voteStatus.waState))
-            {
+            if (SparkleHelper.isWaMember(context, voteStatus.waState)) {
                 // If voting FOR the resolution
-                if (WaVoteStatus.VOTE_FOR.equals(voteStats))
-                {
+                if (WaVoteStatus.VOTE_FOR.equals(voteStats)) {
                     iconVoteFor.setVisibility(View.VISIBLE);
                 }
                 // If voting AGAINST the resolution
-                else if (WaVoteStatus.VOTE_AGAINST.equals(voteStats))
-                {
+                else if (WaVoteStatus.VOTE_AGAINST.equals(voteStats)) {
                     iconVoteAgainst.setVisibility(View.VISIBLE);
                 }
             }
@@ -216,11 +209,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void onClick(View v) {
             int pos = getAdapterPosition();
 
-            if (pos != RecyclerView.NO_POSITION)
-            {
+            if (pos != RecyclerView.NO_POSITION) {
                 Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
-                switch (pos)
-                {
+                switch (pos) {
                     case GENERAL_ASSEMBLY_INDEX:
                         resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.GENERAL_ASSEMBLY);
                         resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(GENERAL_ASSEMBLY_INDEX)).resolution);
@@ -236,30 +227,54 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)");
+
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
 
         private TextView cardTitle;
         private TextView cardContent;
+        private View buttonDivider;
+        private LinearLayout buttonHolder;
 
         public InactiveCard(View v) {
             super(v);
-            cardTitle = (TextView) v.findViewById(R.id.card_generic_title);
-            cardContent = (TextView) v.findViewById(R.id.card_generic_content);
+            cardTitle = (TextView) v.findViewById(R.id.wa_inactive_title);
+            cardContent = (TextView) v.findViewById(R.id.wa_inactive_content);
+            buttonDivider = v.findViewById(R.id.view_divider);
+            buttonHolder = (LinearLayout) v.findViewById(R.id.wa_inactive_read_button);
         }
 
-        public void init(Assembly a, int pos)
-        {
-            if (pos == GENERAL_ASSEMBLY_INDEX)
-            {
+        public void init(Assembly a, int pos) {
+            if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(context.getResources().getString(R.string.wa_general_assembly));
             }
-            else if (pos == SECURITY_COUNCIL_INDEX)
-            {
+            else if (pos == SECURITY_COUNCIL_INDEX) {
                 cardTitle.setText(context.getResources().getString(R.string.wa_security_council));
             }
 
             cardContent.setText(SparkleHelper.getHtmlFormatting(a.lastResolution));
+            Matcher m = LASTRESOLUTION_LINK.matcher(a.lastResolution);
+            if (m.find()) {
+                buttonDivider.setVisibility(View.VISIBLE);
+                buttonHolder.setVisibility(View.VISIBLE);
+                final int councilId = Integer.valueOf(m.group(1));
+                final int resId = Integer.valueOf(m.group(2)) + 1;
+                buttonHolder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
+                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
+                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resId);
+                        context.startActivity(resolutionActivityIntent);
+                    }
+                });
+
+            } else {
+                buttonDivider.setVisibility(View.GONE);
+                buttonHolder.setVisibility(View.GONE);
+                buttonHolder.setOnClickListener(null);
+            }
         }
     }
 }
