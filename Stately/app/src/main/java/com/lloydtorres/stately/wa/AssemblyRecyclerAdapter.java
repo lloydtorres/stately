@@ -200,12 +200,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (SparkleHelper.isWaMember(context, voteStatus.waState))
             {
                 // If voting FOR the resolution
-                if (context.getString(R.string.wa_vote_state_for).equals(voteStats))
+                if (WaVoteStatus.VOTE_FOR.equals(voteStats))
                 {
                     iconVoteFor.setVisibility(View.VISIBLE);
                 }
                 // If voting AGAINST the resolution
-                else if (context.getString(R.string.wa_vote_state_against).equals(voteStats))
+                else if (WaVoteStatus.VOTE_AGAINST.equals(voteStats))
                 {
                     iconVoteAgainst.setVisibility(View.VISIBLE);
                 }

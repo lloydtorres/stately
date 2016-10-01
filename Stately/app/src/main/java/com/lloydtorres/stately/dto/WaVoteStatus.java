@@ -34,6 +34,11 @@ public class WaVoteStatus implements Parcelable {
                                         + "wa+gavote+scvote"
                                         + "&v=" + SparkleHelper.API_VERSION;
 
+    // Vote statuses
+    public static final String VOTE_FOR = "FOR";
+    public static final String VOTE_AGAINST = "AGAINST";
+    public static final String VOTE_UNDECIDED = "UNDECIDED";
+
     @Element(name="UNSTATUS")
     public String waState;
     @Element(name="GAVOTE", required=false)

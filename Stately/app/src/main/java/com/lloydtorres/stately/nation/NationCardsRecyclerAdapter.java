@@ -46,6 +46,7 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
@@ -303,13 +304,13 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             // If voting FOR the resolution
-            if (context.getString(R.string.wa_vote_state_for).equals(vote))
+            if (WaVoteStatus.VOTE_FOR.equals(vote))
             {
                 stateColour = SparkleHelper.waColours[0];
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If voting AGAINST the resolution
-            else if (context.getString(R.string.wa_vote_state_against).equals(vote))
+            else if (WaVoteStatus.VOTE_AGAINST.equals(vote))
             {
                 stateColour = SparkleHelper.waColours[1];
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));

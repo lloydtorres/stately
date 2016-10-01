@@ -132,10 +132,6 @@
     <string name="card_overview_wa_novote">%1$s: No vote on the resolution.</string>
     <string name="card_overview_wa_vote">%1$s: Voted %2$s the resolution.</string>
 
-    <string name="wa_vote_state_undecided">UNDECIDED</string>
-    <string name="wa_vote_state_for">FOR</string>
-    <string name="wa_vote_state_against">AGAINST</string>
-
     <!-- Nation other card -->
     <string name="card_overview_other_title">Other Information</string>
     <string name="card_overview_other_demonym">Demonym</string>
