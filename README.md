@@ -20,6 +20,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.6.3** - Enable move to SD card, bug fixes and improvements.
 * **1.6.2** - Bug fixes and improvements.
 * **1.6.1** - Bug fix for rare EditText crash.
 * **1.6.0** - API-based login, drawer unread count, telegram organization, reporting, swipe to close screens.
