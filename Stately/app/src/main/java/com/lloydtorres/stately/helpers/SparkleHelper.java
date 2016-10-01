@@ -208,8 +208,7 @@ public class SparkleHelper {
      * @param name The name to be checked.
      * @return Bool if valid or not.
      */
-    public static boolean isValidName(String name)
-    {
+    public static boolean isValidName(String name) {
         Matcher validator = VALID_NATION_NAME.matcher(name);
         return validator.matches();
     }
@@ -224,8 +223,7 @@ public class SparkleHelper {
      * @param n the name
      * @return the NS ID
      */
-    public static String getIdFromName(String n)
-    {
+    public static String getIdFromName(String n) {
         if (n != null) {
             return n.toLowerCase(Locale.US).replace(" ", "_");
         }
@@ -238,16 +236,14 @@ public class SparkleHelper {
      * @param id The ID to format.
      * @return String of the nicely-formatted name.
      */
-    public static String getNameFromId(String id)
-    {
+    public static String getNameFromId(String id) {
         if (id != null) {
             // IDs have no whitespace and are only separated by underscores.
             String[] words = id.split("_");
             // A list of properly-formatted words.
             List<String> properWords = new ArrayList<String>();
 
-            for (String w : words)
-            {
+            for (String w : words) {
                 // Transform word from lower case to proper case.
                 properWords.add(toNormalCase(w));
             }
@@ -264,8 +260,7 @@ public class SparkleHelper {
      * @param sec Unix timestamp.
      * @return A human-readable date string (e.g. moments ago, 1 week ago).
      */
-    public static String getReadableDateFromUTC(Context c, long sec)
-    {
+    public static String getReadableDateFromUTC(Context c, long sec) {
         long curTime = System.currentTimeMillis();
         long inputTime = sec * 1000L;
         long timeDiff = inputTime - curTime;
@@ -275,34 +270,29 @@ public class SparkleHelper {
         String pastIndicator = (timeDiff >= 0) ? c.getString(R.string.time_from_now) : c.getString(R.string.time_ago);
         String template = c.getString(R.string.time_generic_template);
 
-        if (timeDiffAbs < 60000L)
-        {
+        if (timeDiffAbs < 60000L) {
             // less than a minute
             template = String.format(Locale.US, c.getString(R.string.time_moments_template), c.getString(R.string.time_moments), pastIndicator);
         }
-        else if (timeDiffAbs < 3600000L)
-        {
+        else if (timeDiffAbs < 3600000L) {
             // less than an hour
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
             int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
             template = String.format(Locale.US, template, minutes, English.plural(c.getString(R.string.time_minute), minutes), pastIndicator);
         }
-        else if (timeDiffAbs < 86400000L)
-        {
+        else if (timeDiffAbs < 86400000L) {
             // less than a day
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
             int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
             template = String.format(Locale.US, template, hours, English.plural(c.getString(R.string.time_hour), hours), pastIndicator);
         }
-        else if (timeDiffAbs < 604800000L)
-        {
+        else if (timeDiffAbs < 604800000L) {
             // less than a week
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
             int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
             template = String.format(Locale.US, template, days, English.plural(c.getString(R.string.time_day), days), pastIndicator);
         }
-        else
-        {
+        else {
             template = sdf.format(new Date(inputTime));
         }
 
@@ -314,8 +304,7 @@ public class SparkleHelper {
      * @param sec UTC seconds
      * @return Formatted date with no year
      */
-    public static String getDateNoYearFromUTC(long sec)
-    {
+    public static String getDateNoYearFromUTC(long sec) {
         return sdfNoYear.format(new Date(sec * 1000L));
     }
 
@@ -324,18 +313,15 @@ public class SparkleHelper {
      * @param i number to format (can be int, double or long)
      * @return The properly-formatted number as a string.
      */
-    public static String getPrettifiedNumber(int i)
-    {
+    public static String getPrettifiedNumber(int i) {
         return NumberFormat.getInstance(Locale.US).format(i);
     }
 
-    public static String getPrettifiedNumber(double d)
-    {
+    public static String getPrettifiedNumber(double d) {
         return NumberFormat.getInstance(Locale.US).format(d);
     }
 
-    public static String getPrettifiedNumber(long l)
-    {
+    public static String getPrettifiedNumber(long l) {
         return NumberFormat.getInstance(Locale.US).format(l);
     }
 
@@ -347,14 +333,12 @@ public class SparkleHelper {
      * @param pop The population number.
      * @return A nicely-formatted population number with suffix.
      */
-    public static String getPopulationFormatted(Context c, double pop)
-    {
+    public static String getPopulationFormatted(Context c, double pop) {
         // The lowest population suffix is a million.
         String suffix = c.getString(R.string.million);
         double popHolder = pop;
 
-        if (popHolder >= 1000D)
-        {
+        if (popHolder >= 1000D) {
             suffix = c.getString(R.string.billion);
             popHolder /= 1000D;
         }
@@ -371,30 +355,24 @@ public class SparkleHelper {
      * @param d number to format
      * @return Properly-formatted number as a string
      */
-    public static String getPrettifiedSuffixedNumber(Context c, double d)
-    {
-        if (d < 1000000L)
-        {
+    public static String getPrettifiedSuffixedNumber(Context c, double d) {
+        if (d < 1000000L) {
             // If the money is less than 1 million, we don't need a suffix.
             return getPrettifiedNumber(d);
         }
-        else
-        {
+        else {
             // NS drops the least significant digits depending on the suffix needed.
             // e.g. A value like 10,000,000 is simply 10 million.
             String suffix = "";
-            if (d >= 1000000D && d < 1000000000D)
-            {
+            if (d >= 1000000D && d < 1000000000D) {
                 suffix = c.getString(R.string.million);
                 d /= 1000000D;
             }
-            else if (d >= 1000000000D && d < 1000000000000D)
-            {
+            else if (d >= 1000000000D && d < 1000000000000D) {
                 suffix = c.getString(R.string.billion);
                 d /= 1000000000D;
             }
-            else if (d >= 1000000000000D)
-            {
+            else if (d >= 1000000000000D) {
                 suffix = c.getString(R.string.trillion);
                 d /= 1000000000000D;
             }
@@ -408,19 +386,15 @@ public class SparkleHelper {
      * @param w
      * @return
      */
-    public static String toNormalCase(String w)
-    {
+    public static String toNormalCase(String w) {
         String prop = "";
-        if (w.length() == 0)
-        {
+        if (w.length() == 0) {
             prop = w;
         }
-        else if (w.length() == 1)
-        {
+        else if (w.length() == 1) {
             prop = w.substring(0, 1).toUpperCase(Locale.US);
         }
-        else
-        {
+        else {
             prop = w.substring(0, 1).toUpperCase(Locale.US) + w.substring(1);
         }
         return prop;
@@ -434,8 +408,7 @@ public class SparkleHelper {
      * @param currency The currency unit.
      * @return A nicely-formatted pluralized currency string in NS format.
      */
-    public static String getCurrencyPlural(String currency)
-    {
+    public static String getCurrencyPlural(String currency) {
         Matcher m = CURRENCY_PLURALIZE.matcher(currency);
         m.matches();
         String pluralize = m.group(1);
@@ -445,8 +418,7 @@ public class SparkleHelper {
         if (suffix != null) {
             return pluralize + suffix;
         }
-        else
-        {
+        else {
             return pluralize;
         }
     }
@@ -461,37 +433,30 @@ public class SparkleHelper {
      * @param currency The currency unit.
      * @return A nicely-formatted string in NS format.
      */
-    public static String getMoneyFormatted(Context c, long money, String currency)
-    {
-        if (money < 1000000L)
-        {
+    public static String getMoneyFormatted(Context c, long money, String currency) {
+        if (money < 1000000L) {
             // If the money is less than 1 million, we don't need a suffix.
             return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyPlural(currency));
         }
-        else
-        {
+        else {
             // NS drops the least significant digits depending on the suffix needed.
             // e.g. A value like 10,000,000 is simply 10 million.
             String suffix = "";
-            if (money >= 1000000L && money < 1000000000L)
-            {
+            if (money >= 1000000L && money < 1000000000L) {
                 suffix = c.getString(R.string.million);
                 money /= 1000000L;
             }
-            else if (money >= 1000000000L && money < 1000000000000L)
-            {
+            else if (money >= 1000000000L && money < 1000000000000L) {
                 suffix = c.getString(R.string.billion);
                 money /= 1000000000L;
             }
-            else if (money >= 1000000000000L)
-            {
+            else if (money >= 1000000000000L) {
                 suffix = c.getString(R.string.trillion);
                 money /= 1000000000000L;
             }
 
             return String.format(Locale.US, c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
         }
-
     }
 
     /**
@@ -501,8 +466,7 @@ public class SparkleHelper {
      * @param chartLabels x-labels
      * @return the PieChart, whose data must be set and invalidated
      */
-    public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels)
-    {
+    public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels) {
         Legend cLegend = p.getLegend();
         cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
         cLegend.setForm(Legend.LegendForm.CIRCLE);
@@ -538,13 +502,11 @@ public class SparkleHelper {
      * @param voteFor Number of votes for
      * @param voteAgainst Number of votes against
      */
-    public static boolean getWaVotingChart(Context c, PieChart p, float voteFor, float voteAgainst)
-    {
+    public static boolean getWaVotingChart(Context c, PieChart p, float voteFor, float voteAgainst) {
         // Calculate percentages (floating point math FTW!)
         float voteTotal = voteFor + voteAgainst;
 
-        if (voteTotal > 0)
-        {
+        if (voteTotal > 0) {
             float votePercentFor = (voteFor * 100f)/voteTotal;
             float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
 
@@ -571,7 +533,6 @@ public class SparkleHelper {
 
             return true;
         }
-
         return false;
     }
 
@@ -584,8 +545,7 @@ public class SparkleHelper {
      * @param legend True if show legend, false if hide legend
      * @return Formatted linechart
      */
-    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend)
-    {
+    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend) {
         Legend cLegend = chart.getLegend();
         cLegend.setEnabled(legend);
 
@@ -597,8 +557,7 @@ public class SparkleHelper {
         yAxisRight.setEnabled(false);
 
         YAxis yAxisLeft = chart.getAxisLeft();
-        if (valueFormatter)
-        {
+        if (valueFormatter) {
             yAxisLeft.setValueFormatter(new LargeValueFormatter());
         }
 
@@ -631,15 +590,13 @@ public class SparkleHelper {
      * @param delimiter Delimiter to separate each string.
      * @return Merged string.
      */
-    public static String joinStringList(Collection<String> list, String delimiter)
-    {
+    public static String joinStringList(Collection<String> list, String delimiter) {
         if (list == null || list.size() < 0) { return ""; }
 
         StringBuilder mergedString = new StringBuilder();
         int i = 0;
         for (String s : list) {
-            if (s != null)
-            {
+            if (s != null) {
                 mergedString.append(s);
 
                 if (i < list.size() - 1) {
@@ -661,8 +618,7 @@ public class SparkleHelper {
     public static String[] getCensusScale(String[] rawCensusData, int id) {
         int censusId = id;
         // if census ID is out of bounds, set it as unknown
-        if (censusId >= rawCensusData.length - 1)
-        {
+        if (censusId >= rawCensusData.length - 1) {
             censusId = rawCensusData.length - 1;
         }
         String[] censusType = rawCensusData[censusId].split("##");
@@ -680,14 +636,12 @@ public class SparkleHelper {
      * @param hoursElapsed Number of hours passed since voting started
      * @return Time remaining in human-readable form
      */
-    public static String calculateResolutionEnd(Context c, int hoursElapsed)
-    {
+    public static String calculateResolutionEnd(Context c, int hoursElapsed) {
         Calendar cal = new GregorianCalendar();
         cal.setTimeZone(TimeZone.getTimeZone(TIMEZONE_TORONTO));
 
         // Round up to nearest hour
-        if (cal.get(Calendar.MINUTE) >= 1)
-        {
+        if (cal.get(Calendar.MINUTE) >= 1) {
             cal.add(Calendar.HOUR, 1);
         }
         cal.set(Calendar.MINUTE, 0);
@@ -705,8 +659,7 @@ public class SparkleHelper {
      * @param stat WA state indicator
      * @return bool if stat indicates its a WA member
      */
-    public static boolean isWaMember(Context c, String stat)
-    {
+    public static boolean isWaMember(Context c, String stat) {
         return stat.equals(c.getString(R.string.nation_wa_member)) || stat.equals(c.getString(R.string.nation_wa_delegate));
     }
 
@@ -716,8 +669,7 @@ public class SparkleHelper {
      * @param n The nation ID
      * @param mode Mode if nation or region
      */
-    public static void startExploring(Context c, String n, int mode)
-    {
+    public static void startExploring(Context c, String n, int mode) {
         Intent exploreActivityLaunch = new Intent(c, ExploreActivity.class);
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_ID, n);
         exploreActivityLaunch.putExtra(ExploreActivity.EXPLORE_MODE, mode);
@@ -731,8 +683,7 @@ public class SparkleHelper {
      * @param mode Mode if nation or region
      * @param id Census ID
      */
-    public static void startTrends(Context c, String target, int mode, int id)
-    {
+    public static void startTrends(Context c, String target, int mode, int id) {
         Intent trendsActivityLaunch = new Intent(c, TrendsActivity.class);
         if (target != null) {
             trendsActivityLaunch.putExtra(TrendsActivity.TREND_DATA_TARGET, target);
@@ -748,8 +699,7 @@ public class SparkleHelper {
      * @param recipients A string of recipients, can be null or empty
      * @param replyId Reply ID, can be filled or TelegramComposeActivity.NO_REPLY_ID
      */
-    public static void startTelegramCompose(Context c, String recipients, int replyId)
-    {
+    public static void startTelegramCompose(Context c, String recipients, int replyId) {
         Intent telegramComposeActivityLaunch = new Intent(c, TelegramComposeActivity.class);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.RECIPIENTS_DATA, recipients);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.REPLY_ID_DATA, replyId);
@@ -760,8 +710,7 @@ public class SparkleHelper {
      * Launches a LoginActivity without autologging in.
      * @param c App context
      */
-    public static void startAddNation(Context c)
-    {
+    public static void startAddNation(Context c) {
         Intent loginActivityLaunch = new Intent(c, LoginActivity.class);
         loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
         c.startActivity(loginActivityLaunch);
@@ -800,8 +749,7 @@ public class SparkleHelper {
      * @param mode If target is a nation or a region.
      * @return Returns the new text content for further manipulation.
      */
-    public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode)
-    {
+    public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode) {
         final String urlFormat = "<a href=\"%s/%d\">%s</a>";
         String tempHolder = template;
         String targetActivity = ExploreActivity.EXPLORE_TARGET;
@@ -821,8 +769,7 @@ public class SparkleHelper {
      * @param c App context
      * @param t TextView
      */
-    public static void styleLinkifiedTextView(Context c, TextView t)
-    {
+    public static void styleLinkifiedTextView(Context c, TextView t) {
         // Get individual spans and replace them with clickable ones.
         Spannable s = new SpannableString(t.getText());
         URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
@@ -836,8 +783,7 @@ public class SparkleHelper {
 
         t.setText(s);
         // Need to set this to allow for clickable TextView links.
-        if (!(t instanceof HtmlTextView))
-        {
+        if (!(t instanceof HtmlTextView)) {
             t.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
@@ -849,44 +795,36 @@ public class SparkleHelper {
      * @param content Target content
      * @return
      */
-    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName)
-    {
+    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName) {
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
 
         Matcher m = regex.matcher(holder);
-        while (m.find())
-        {
+        while (m.find()) {
             String properFormat;
-            if (isName)
-            {
+            if (isName) {
                 // Nameify the ID found and put the (old, new) pair into the map
                 properFormat = getNameFromId(m.group(1));
             }
-            else
-            {
+            else {
                 properFormat = m.group(1);
             }
             replacePairs.put(m.group(), properFormat);
         }
-
         return replacePairs.entrySet();
     }
 
-    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content)
-    {
+    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content) {
         String holder = content;
         // (old, new) replacement pairs
         Map<String, String> replacePairs = new HashMap<String, String>();
 
         Matcher m = regex.matcher(holder);
-        while (m.find())
-        {
+        while (m.find()) {
             String properFormat = String.format(Locale.US, afterFormat, m.group(1), m.group(2));
             replacePairs.put(m.group(), properFormat);
         }
-
         return replacePairs.entrySet();
     }
 
@@ -899,8 +837,7 @@ public class SparkleHelper {
      * @param mode If nation or region
      * @return
      */
-    public static String linkifyHelper(Context c, TextView t, String content, Pattern regex, int mode)
-    {
+    public static String linkifyHelper(Context c, TextView t, String content, Pattern regex, int mode) {
         String holder = content;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, true);
 
@@ -936,8 +873,7 @@ public class SparkleHelper {
      * @param t TextView
      * @param content Target content
      */
-    public static void setHappeningsFormatting(Context c, TextView t, String content)
-    {
+    public static void setHappeningsFormatting(Context c, TextView t, String content) {
         String holder = "<base href=\"" + BASE_URI_NOSLASH + "\">" + content;
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
         holder = holder.replace("&amp;#39;", "'");
@@ -953,16 +889,14 @@ public class SparkleHelper {
         holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
         holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_REGION, ExploreActivity.EXPLORE_REGION);
 
-        if (holder.contains("EO:"))
-        {
+        if (holder.contains("EO:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
             holder = activityLinkBuilder(c, t, template, "EO:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
-        if (holder.contains("EC:"))
-        {
+        if (holder.contains("EC:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
@@ -979,8 +913,7 @@ public class SparkleHelper {
      * @param content Target content
      * @return Styled spanned object
      */
-    public static Spanned getHtmlFormatting(String content)
-    {
+    public static Spanned getHtmlFormatting(String content) {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
@@ -990,7 +923,6 @@ public class SparkleHelper {
     /**
      * Regex patterns
      */
-
     public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=([\\w-]*)(?:\\/|)$");
     public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)(?:\\/|)$");
     public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)\\?tgid=[0-9].*");
@@ -1019,8 +951,7 @@ public class SparkleHelper {
      * @param content Target content
      * @param fm FragmentManager to show spoiler dialogs in
      */
-    public static void setBbCodeFormatting(Context c, TextView t, String content, FragmentManager fm)
-    {
+    public static void setBbCodeFormatting(Context c, TextView t, String content, FragmentManager fm) {
         if (content == null || content.length() < 0) {
             return;
         }
@@ -1064,8 +995,7 @@ public class SparkleHelper {
 
         // Extract and replace spoilers
         List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
-        for (int i=0; i < spoilers.size(); i++)
-        {
+        for (int i=0; i < spoilers.size(); i++) {
             Spoiler s = spoilers.get(i);
             holder = holder.replace(s.raw, s.replacer);
         }
@@ -1090,15 +1020,13 @@ public class SparkleHelper {
      * @param target Target content
      * @return List of spoilers
      */
-    public static List<Spoiler> getSpoilerReplacePairs(Context c, String target)
-    {
+    public static List<Spoiler> getSpoilerReplacePairs(Context c, String target) {
         String holder = target;
         List<Spoiler> spoilers = new ArrayList<Spoiler>();
 
         // Handle spoilers without titles first
         Matcher m1 = BBCODE_SPOILER.matcher(holder);
-        while (m1.find())
-        {
+        while (m1.find()) {
             Spoiler s = new Spoiler();
             s.content = m1.group(1);
             s.raw = m1.group();
@@ -1108,8 +1036,7 @@ public class SparkleHelper {
 
         // Handle spoilers with titles next
         Matcher m2 = BBCODE_SPOILER_2.matcher(holder);
-        while (m2.find())
-        {
+        while (m2.find()) {
             Spoiler s = new Spoiler();
             // Gets rid of HTML in title
             s.title = Jsoup.parse(m2.group(1)).text();
@@ -1128,12 +1055,9 @@ public class SparkleHelper {
      * @param t Target TextView
      * @param holder Content
      */
-    public static void setStyledTextView(Context c, TextView t, String holder)
-    {
-        if (t instanceof HtmlTextView)
-        {
-            try
-            {
+    public static void setStyledTextView(Context c, TextView t, String holder) {
+        if (t instanceof HtmlTextView) {
+            try {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
@@ -1142,8 +1066,7 @@ public class SparkleHelper {
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
         }
-        else
-        {
+        else {
             t.setText(fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
@@ -1152,12 +1075,9 @@ public class SparkleHelper {
     /**
      * Overloaded to deal with spoilers.
      */
-    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, FragmentManager fm)
-    {
-        if (t instanceof HtmlTextView)
-        {
-            try
-            {
+    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, FragmentManager fm) {
+        if (t instanceof HtmlTextView) {
+            try {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
@@ -1166,8 +1086,7 @@ public class SparkleHelper {
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
         }
-        else
-        {
+        else {
             t.setText(fromHtml(holder));
         }
 
@@ -1177,19 +1096,16 @@ public class SparkleHelper {
         String rawSpan = span.toString();
         int startFromIndex = 0;
 
-        for (int i=0; i < spoilers.size(); i++)
-        {
+        for (int i=0; i < spoilers.size(); i++) {
             Spoiler s = spoilers.get(i);
             int start = rawSpan.indexOf(s.replacer, startFromIndex);
-            if (start != -1)
-            {
+            if (start != -1) {
                 int end = start + s.replacer.length();
                 startFromIndex = end;
                 SpoilerSpan clickyDialog = new SpoilerSpan(c, s, fm);
                 span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
-
         t.setText(span);
     }
 
@@ -1201,8 +1117,7 @@ public class SparkleHelper {
      * @param afterFormat String template
      * @return Returns content with all matched substrings replaced
      */
-    public static String regexReplace(String target, Pattern regexBefore, String afterFormat)
-    {
+    public static String regexReplace(String target, Pattern regexBefore, String afterFormat) {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
 
@@ -1223,8 +1138,7 @@ public class SparkleHelper {
      * @param afterFormat String template
      * @return
      */
-    public static String regexDoubleReplace(String target, Pattern regexBefore, String afterFormat)
-    {
+    public static String regexDoubleReplace(String target, Pattern regexBefore, String afterFormat) {
         String holder = target;
         Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
 
@@ -1245,13 +1159,11 @@ public class SparkleHelper {
      * @param content Original string
      * @return Formatted string
      */
-    public static String regexQuoteFormatHelper(Context c, TextView t, Pattern regex, String content)
-    {
+    public static String regexQuoteFormatHelper(Context c, TextView t, Pattern regex, String content) {
         String holder = content;
         Map<String, String> replacePairs = new HashMap<String, String>();
         Matcher m = regex.matcher(holder);
-        while (m.find())
-        {
+        while (m.find()) {
             String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
             replacePairs.put(m.group(), properFormat);
         }
@@ -1279,8 +1191,7 @@ public class SparkleHelper {
 
         Map<String, String> replaceBasic = new HashMap<String, String>();
         Matcher m0 = BBCODE_URL.matcher(holder);
-        while (m0.find())
-        {
+        while (m0.find()) {
             String template = "<a href=\"%s\">%s</a>";
             Uri link = Uri.parse(m0.group(1)).normalizeScheme();
             if (link.getScheme() == null) {
@@ -1297,16 +1208,14 @@ public class SparkleHelper {
         Map<String, String> replaceRaw = new HashMap<String, String>();
 
         Matcher m1 = RAW_HTTP_LINK.matcher(holder);
-        while (m1.find())
-        {
+        while (m1.find()) {
             Uri link = Uri.parse(m1.group(1)).normalizeScheme();
             String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             replaceRaw.put(m1.group(), replaceText);
         }
 
         Matcher m2 = RAW_WWW_LINK.matcher(holder);
-        while (m2.find())
-        {
+        while (m2.find()) {
             Uri link = Uri.parse("http://" + m2.group(1)).normalizeScheme();
             String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             replaceRaw.put(m2.group(), replaceText);
@@ -1330,8 +1239,7 @@ public class SparkleHelper {
      * @param content Original string
      * @return Formatted string
      */
-    public static String regexQuoteFormat(Context context, TextView t, String content)
-    {
+    public static String regexQuoteFormat(Context context, TextView t, String content) {
         String holder = content;
 
         // handle basic quotes
@@ -1352,8 +1260,7 @@ public class SparkleHelper {
      * @param regex Regex
      * @return
      */
-    public static String regexExtract(String target, Pattern regex)
-    {
+    public static String regexExtract(String target, Pattern regex) {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
 
@@ -1370,8 +1277,7 @@ public class SparkleHelper {
      * @param regex Regex
      * @return
      */
-    public static String regexRemove(String target, Pattern regex)
-    {
+    public static String regexRemove(String target, Pattern regex) {
         String holder = target;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
 
@@ -1392,8 +1298,7 @@ public class SparkleHelper {
      * @param view View
      * @param str Snackbar message
      */
-    public static void makeSnackbar(View view, String str)
-    {
+    public static void makeSnackbar(View view, String str) {
         Snackbar.make(view, str, Snackbar.LENGTH_LONG).show();
     }
 
@@ -1401,8 +1306,7 @@ public class SparkleHelper {
      * Logs a system error. Mostly used so that APP_TAG doesn't have to repeat.
      * @param message Message
      */
-    public static void logError(String message)
-    {
+    public static void logError(String message) {
         Log.e(APP_TAG, message);
     }
 }
