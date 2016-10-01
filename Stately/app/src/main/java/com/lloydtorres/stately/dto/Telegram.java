@@ -19,6 +19,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +29,13 @@ import java.util.List;
  * This contains data about a telegram.
  */
 public class Telegram implements Parcelable, Comparable<Telegram> {
-    public static final String GET_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none/folder=%s?start=%d";
-    public static final String SEND_TELEGRAM = "https://www.nationstates.net/page=telegrams/template-overall=none";
-    public static final String MARK_READ = "https://www.nationstates.net/page=ajax3/a=markread/tgid=%d/chk=%s";
-    public static final String MOVE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgmove/tgid=%d/dest=%s/chk=%s";
-    public static final String DELETE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgdelete/tgid=%d/chk=%s";
-    public static final String PERMDELETE_TELEGRAM = "https://www.nationstates.net/page=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
-    public static final String TELEGRAM_CONVERSATION = "https://www.nationstates.net/page=tg/template-overall=none/tgid=%d/conversation=1";
+    public static final String GET_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams/template-overall=none/folder=%s?start=%d";
+    public static final String SEND_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams/template-overall=none";
+    public static final String MARK_READ = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=markread/tgid=%d/chk=%s";
+    public static final String MOVE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgmove/tgid=%d/dest=%s/chk=%s";
+    public static final String DELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgdelete/tgid=%d/chk=%s";
+    public static final String PERMDELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
+    public static final String TELEGRAM_CONVERSATION = SparkleHelper.BASE_URI_NOSLASH + "/page=tg/template-overall=none/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
     public static final int TELEGRAM_RECRUITMENT = 1;

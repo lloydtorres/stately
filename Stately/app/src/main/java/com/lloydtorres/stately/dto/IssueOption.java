@@ -19,13 +19,15 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 /**
  * Created by Lloyd on 2016-01-28.
  * An object containing text for one of the options in an issue.
  */
 public class IssueOption implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/page=show_dilemma/dilemma=%d/template-overall=none";
-    public static final String POST_QUERY = "https://www.nationstates.net/page=enact_dilemma/dilemma=%d/template-overall=none";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
+    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=enact_dilemma/dilemma=%d/template-overall=none";
     public static final String SELECTED_HEADER = "selected";
     public static final String DISMISS_HEADER = "choice--1";
 

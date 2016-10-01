@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Root(name="WORLD", strict=false)
 public class World implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q="
                                         + "numnations+numregions+featuredregion+happenings"
                                         + "+census+censusid;scale=all;limit=5"
                                         + "&v=" + SparkleHelper.API_VERSION;

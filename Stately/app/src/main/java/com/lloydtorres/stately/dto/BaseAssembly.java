@@ -31,7 +31,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="WA", strict=false)
 public class BaseAssembly implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q=resolution+votetrack"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d&q=resolution+votetrack"
                                             + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="RESOLUTION")

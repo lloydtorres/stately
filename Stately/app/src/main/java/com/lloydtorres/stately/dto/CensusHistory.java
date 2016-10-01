@@ -31,7 +31,7 @@ import org.simpleframework.xml.Root;
 @Root(strict=false)
 public class CensusHistory implements Parcelable {
 
-    public static final String QUERY_BASE = "https://www.nationstates.net/cgi-bin/api.cgi?%sq="
+    public static final String QUERY_BASE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?%sq="
                                         + "name+census+censusranks"
                                         + ";scale=%d;mode=history"
                                         + ";from=%d&to=%d";

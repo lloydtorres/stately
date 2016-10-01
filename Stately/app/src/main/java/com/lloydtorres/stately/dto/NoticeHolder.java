@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class NoticeHolder implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=notices"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=notices"
                                         + "&v=" + SparkleHelper.API_VERSION;
 
     @ElementList(name="NOTICES")

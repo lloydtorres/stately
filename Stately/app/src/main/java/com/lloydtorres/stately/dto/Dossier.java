@@ -33,9 +33,9 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class Dossier implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=dossier+rdossier"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=dossier+rdossier"
                                         + "&v=" + SparkleHelper.API_VERSION;
-    public static final String POST_QUERY_GENERIC = "https://www.nationstates.net/page=dossier";
+    public static final String POST_QUERY_GENERIC = SparkleHelper.BASE_URI_NOSLASH + "/page=dossier";
     public static final String POST_QUERY_ADD_REGION = POST_QUERY_GENERIC + "/action=add/region=%s";
 
     public static final String PARAM_REMOVE_TEMPLATE = "remove_%s_%s";

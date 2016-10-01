@@ -39,7 +39,7 @@ import java.util.Locale;
 @Root(name="NATION", strict=false)
 public class Nation implements Parcelable {
 
-    public static final String BASE_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
+    public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
                                                 + "banner+flag+name+type+wa"
                                                 + "+category+region+influence+population+founded+lastactivity+motto"
                                                 + "+freedom"
@@ -57,11 +57,11 @@ public class Nation implements Parcelable {
 
     public static final String QUERY = BASE_QUERY + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
 
-    public static final String QUERY_HTML = "https://www.nationstates.net/nation=%s/template-overall=none";
+    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/nation=%s/template-overall=none";
 
     // String template used to get nation banners from NationStates
     // @param: banner_id
-    public static final String BANNER_TEMPLATE = "https://www.nationstates.net/images/banners/%s.jpg";
+    public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images/banners/%s.jpg";
 
     @Element(name="BANNER")
     public String bannerKey;

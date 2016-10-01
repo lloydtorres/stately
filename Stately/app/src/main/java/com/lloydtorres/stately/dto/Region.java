@@ -37,7 +37,7 @@ import java.util.List;
 @Root(name="REGION", strict=false)
 public class Region extends BaseRegion implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
                                         + "name+flag+numnations"
                                         + "+delegate+delegatevotes+founder+founded+power"
                                         + "+factbook+tags"
@@ -47,8 +47,8 @@ public class Region extends BaseRegion implements Parcelable {
                                         + "+census"
                                         + ";scale=all;mode=score+rank+prank"
                                         + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_HTML = "https://www.nationstates.net/region=%s/template-overall=none";
-    public static final String CHANGE_QUERY = "https://www.nationstates.net/page=change_region/template-overall=none";
+    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template-overall=none";
+    public static final String CHANGE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=change_region/template-overall=none";
 
     @Element(name="POWER")
     public String power;

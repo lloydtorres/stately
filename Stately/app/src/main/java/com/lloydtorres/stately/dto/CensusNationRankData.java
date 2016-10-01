@@ -30,7 +30,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(strict=false)
 public class CensusNationRankData implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?%sq="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?%sq="
             + "censusranks"
             + ";scale=%d"
             + "&start=%d"
