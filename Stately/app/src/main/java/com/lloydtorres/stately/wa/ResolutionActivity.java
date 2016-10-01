@@ -106,6 +106,7 @@ public class ResolutionActivity extends RefreshviewActivity {
         setToolbar();
 
         // Setup refresher to requery for resolution on swipe
+        mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -186,6 +187,14 @@ public class ResolutionActivity extends RefreshviewActivity {
                         try {
                             BaseAssembly waResponse = serializer.read(BaseAssembly.class, response);
                             mResolution = waResponse.resolution;
+
+                            // Resolution doesn't exist, stop now
+                            if (mResolution == null || mResolution.name == null) {
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.wa_error));
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                return;
+                            }
+
                             if (isActive) {
                                 queryVoteStatus();
                             }  else {

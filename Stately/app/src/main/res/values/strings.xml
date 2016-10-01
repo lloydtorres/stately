@@ -380,6 +380,7 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
+    <string name="wa_error">Resolution does not seem to exist.</string>
 
     <!-- The World -->
     <string name="world_nations">nations</string>

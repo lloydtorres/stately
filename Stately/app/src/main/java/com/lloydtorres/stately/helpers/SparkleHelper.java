@@ -77,6 +77,7 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -963,7 +964,6 @@ public class SparkleHelper {
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
     public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](.*?)\\[\\/proposal\\]");
-    public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
 
@@ -1010,9 +1010,10 @@ public class SparkleHelper {
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
         holder = regexReplace(holder, BBCODE_PRE, "<code>%s</code>");
         holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
-        holder = regexExtract(holder, BBCODE_RESOLUTION);
+        holder = regexResolutionFormat(holder);
+        holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
-        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + SparkleHelper.BASE_URI_NOSLASH + "/%s\">%s</a>");
+        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
         holder = regexQuoteFormat(c, t, holder);
 
@@ -1171,6 +1172,27 @@ public class SparkleHelper {
             holder = holder.replace(n.getKey(), replacer);
         }
 
+        return holder;
+    }
+
+    public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+)\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+\\](.*?)\\[\\/resolution\\]");
+    public static final String BBCODE_RESOLUTION_GA = "GA";
+
+    /**
+     * Processes the resolution tag by linkifying it to ResolutionActivity.
+     * @param content
+     * @return
+     */
+    public static String regexResolutionFormat(String content) {
+        String holder = content;
+        Matcher m = BBCODE_RESOLUTION_GA_SC.matcher(holder);
+        while (m.find()) {
+            int councilId = BBCODE_RESOLUTION_GA.equals(m.group(1)) ? Assembly.GENERAL_ASSEMBLY : Assembly.SECURITY_COUNCIL;
+            int resolutionId = Integer.valueOf(m.group(2)) - 1;
+            String properFormat = String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s</a>", councilId, resolutionId, m.group(3));
+            holder = holder.replace(m.group(), properFormat);
+        }
         return holder;
     }
 
