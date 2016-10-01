@@ -53,7 +53,9 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.report.ReportActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -90,6 +92,9 @@ public class MuffinsHelper {
     public static final String RECRUITMENT_TELEGRAM = "toplinetgcat-1";
     public static final String MODERATOR_TELEGRAM = "toplinetgcat-11";
     public static final String WELCOME_TELEGRAM = "tag: welcome";
+
+    // Private constructor
+    private MuffinsHelper() {}
 
     /**
      * Takes in a JSoup Elements object containing raw telegrams from NS HTML.
@@ -289,12 +294,12 @@ public class MuffinsHelper {
         holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_NATION_MODE + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "\">%s</a>");
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
 
-        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + SparkleHelper.REPORT_TARGET + "%s\">");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
 
         holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
 

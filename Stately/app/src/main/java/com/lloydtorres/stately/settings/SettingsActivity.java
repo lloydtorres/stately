@@ -28,9 +28,11 @@ import android.view.MenuItem;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.login.LoginActivity;
-import com.lloydtorres.stately.push.DragonHelper;
+import com.lloydtorres.stately.push.TrixHelper;
 
 /**
  * Created by Lloyd on 2016-01-27.
@@ -82,7 +84,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         storage = PreferenceManager.getDefaultSharedPreferences(this);
         storage.registerOnSharedPreferenceChangeListener(this);
 
-        dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
     }
 
     private void setToolbar(Toolbar toolbar)
@@ -94,7 +96,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     }
 
     private void setupNewTheme() {
-        UserLogin curUser = SparkleHelper.getActiveUser(this);
+        UserLogin curUser = PinkaHelper.getActiveUser(this);
         Intent loginActivityLaunch = new Intent(SettingsActivity.this, LoginActivity.class);
         loginActivityLaunch.putExtra(LoginActivity.USERDATA_KEY, curUser);
         loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
@@ -141,9 +143,9 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
                 break;
             case SETTING_NOTIFS:
             case SETTING_NOTIFS_CHECK:
-                DragonHelper.stopAlarmForAlphys(this);
+                TrixHelper.stopAlarmForAlphys(this);
                 if (getNotificationSetting(this)) {
-                    DragonHelper.setAlarmForAlphys(this);
+                    TrixHelper.setAlarmForAlphys(this);
                 }
                 break;
             case SETTING_THEME:

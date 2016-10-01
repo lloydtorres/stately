@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-02-02.
@@ -75,7 +75,7 @@ public class VoteDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.wa_vote_dialog_title)
                 .setView(dialogView)
                 .setPositiveButton(R.string.wa_vote_dialog_submit, dialogListener)

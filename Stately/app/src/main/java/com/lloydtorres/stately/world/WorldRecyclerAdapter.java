@@ -36,6 +36,8 @@ import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.World;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
@@ -201,7 +203,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 if (regionData != null) {
                     SparkleHelper.startExploring(context,
                             SparkleHelper.getIdFromName(regionData.name),
-                            SparkleHelper.CLICKY_REGION_MODE);
+                            ExploreActivity.EXPLORE_REGION);
                 }
             }
         };
@@ -359,7 +361,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void init(CensusDetailedRank census) {
             censusData = census;
 
-            censusCard.setCardBackgroundColor(SparkleHelper.getThemeCardColour(context));
+            censusCard.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
 
             String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
 
@@ -367,9 +369,9 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             unit.setText(censusType[1]);
             score.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
 
-            scale.setTextColor(SparkleHelper.getThemeLinkColour(context));
-            unit.setTextColor(SparkleHelper.getThemeLinkColour(context));
-            score.setTextColor(SparkleHelper.getThemeLinkColour(context));
+            scale.setTextColor(RaraHelper.getThemeLinkColour(context));
+            unit.setTextColor(RaraHelper.getThemeLinkColour(context));
+            score.setTextColor(RaraHelper.getThemeLinkColour(context));
         }
     }
 }

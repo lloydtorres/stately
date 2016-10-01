@@ -42,6 +42,9 @@ import com.lloydtorres.stately.dto.Dossier;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.HappeningFeed;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.helpers.happenings.EventRecyclerAdapter;
@@ -74,7 +77,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
-        dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         setHasOptionsMenu(true);
     }
 
@@ -124,7 +127,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      * Queries a nation's dossier.
      */
     private void queryDossier() {
-        String userId = SparkleHelper.getActiveUser(getContext()).nationId;
+        String userId = PinkaHelper.getActiveUser(getContext()).nationId;
         String targetURL = String.format(Locale.US, Dossier.QUERY, SparkleHelper.getIdFromName(userId));
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
@@ -185,7 +188,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
 
         // Include current nation?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_NATION, true)) {
-            UserLogin curNation = SparkleHelper.getActiveUser(getContext());
+            UserLogin curNation = PinkaHelper.getActiveUser(getContext());
             nationQuery.add(curNation.nationId);
         }
 
@@ -273,7 +276,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
 
         // Include current region?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true)) {
-            regionQuery.add(SparkleHelper.getIdFromName(SparkleHelper.getRegionSessionData(getContext())));
+            regionQuery.add(SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(getContext())));
         }
 
         // Include dossier regions?
@@ -437,7 +440,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
             NameListDialog nameListDialog = new NameListDialog();
             nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
             nameListDialog.setNames(dossierNations);
-            nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+            nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
         }
         else {
@@ -458,7 +461,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
             NameListDialog nameListDialog = new NameListDialog();
             nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
             nameListDialog.setNames(dossierRegions);
-            nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+            nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
         }
         else {

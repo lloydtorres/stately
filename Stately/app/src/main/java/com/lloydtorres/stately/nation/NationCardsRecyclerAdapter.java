@@ -46,6 +46,7 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
@@ -198,7 +199,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public void init(NationOverviewCardData data) {
             govType.setHtml(data.category);
-            SparkleHelper.activityLinkBuilder(context, region, data.region, data.region, data.region, SparkleHelper.CLICKY_REGION_MODE);
+            SparkleHelper.activityLinkBuilder(context, region, data.region, data.region, data.region, ExploreActivity.EXPLORE_REGION);
             influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
@@ -241,7 +242,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                             NameListDialog nameListDialog = new NameListDialog();
                             nameListDialog.setTitle(context.getString(R.string.card_overview_wa_endorsements));
                             nameListDialog.setNames(fEndorsements);
-                            nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+                            nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
                             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                         }
                     });

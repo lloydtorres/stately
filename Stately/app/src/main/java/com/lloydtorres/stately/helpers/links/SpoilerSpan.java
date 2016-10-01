@@ -24,7 +24,7 @@ import android.view.View;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Spoiler;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.dialogs.HtmlDialog;
 
 import java.util.Locale;
@@ -59,6 +59,6 @@ public class SpoilerSpan extends ClickableSpan {
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
         ds.setUnderlineText(false);
-        ds.setColor(SparkleHelper.getThemeLinkColour(context));
+        ds.setColor(RaraHelper.getThemeLinkColour(context));
     }
 }

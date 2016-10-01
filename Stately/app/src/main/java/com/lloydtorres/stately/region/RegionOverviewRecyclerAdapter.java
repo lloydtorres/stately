@@ -29,6 +29,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.atteo.evo.inflector.English;
@@ -123,7 +124,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
                     delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
                     English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
-            SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, SparkleHelper.CLICKY_NATION_MODE);
+            SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
         }
         else
         {
@@ -134,7 +135,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     public static void initFounder(Context c, TextView tv, String founder, String founded) {
         if (!"0".equals(founder)) {
             String founderProper = SparkleHelper.getNameFromId(founder);
-            SparkleHelper.activityLinkBuilder(c, tv, founder, founder, founderProper, SparkleHelper.CLICKY_NATION_MODE);
+            SparkleHelper.activityLinkBuilder(c, tv, founder, founder, founderProper, ExploreActivity.EXPLORE_NATION);
         }
         else {
             tv.setText(c.getString(R.string.region_filler_none));

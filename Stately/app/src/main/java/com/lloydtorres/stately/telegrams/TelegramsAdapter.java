@@ -34,6 +34,8 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.report.ReportActivity;
 
@@ -401,7 +403,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
             telegramHistoryButton.setVisibility(isHistory ? View.GONE : View.VISIBLE);
 
-            final String curNation = SparkleHelper.getActiveUser(context).nationId;
+            final String curNation = PinkaHelper.getActiveUser(context).nationId;
             String senderNationCheck = MuffinsHelper.getNationIdFromFormat(telegram.sender);
             if (senderNationCheck == null || (senderNationCheck != null && senderNationCheck.equals(curNation)))
             {
@@ -457,7 +459,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 regionVisitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        SparkleHelper.startExploring(context, SparkleHelper.getIdFromName(telegram.regionTarget), SparkleHelper.CLICKY_REGION_MODE);
+                        SparkleHelper.startExploring(context, SparkleHelper.getIdFromName(telegram.regionTarget), ExploreActivity.EXPLORE_REGION);
                     }
                 });
             }

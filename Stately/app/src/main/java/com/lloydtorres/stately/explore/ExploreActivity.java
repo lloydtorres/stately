@@ -49,6 +49,8 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -74,6 +76,15 @@ import java.util.regex.Pattern;
  * Requires a name to be passed in; does error checking as well.
  */
 public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
+
+    // Explore modes
+    public static final int EXPLORE_NATION = 1;
+    public static final int EXPLORE_REGION = 2;
+
+    // Uri to invoke the ExploreActivity
+    public static final String EXPLORE_PROTOCOL = "com.lloydtorres.stately.explore";
+    public static final String EXPLORE_TARGET = EXPLORE_PROTOCOL + "://";
+
     // Keys for intent data
     public static final String EXPLORE_ID = "id";
     public static final String EXPLORE_MODE = "mode";
@@ -85,7 +96,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     public static final String IS_PASSWORD = "isPassword";
     public static final String IS_IN_DOSSIER = "isInDossier";
 
-    public static final String ENDORSE_URL = "https://www.nationstates.net/cgi-bin/endorse.cgi";
+    public static final String ENDORSE_URL = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/endorse.cgi";
     private static final String ENDORSE_REQUEST = "endorse";
     private static final String UNENDORSE_REQUEST = "unendorse";
     private static final String PASSWORD_TAG = "Password";
@@ -120,7 +131,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         if (getIntent() != null) {
             // If name passed in as intent
             id = SparkleHelper.getIdFromName(getIntent().getStringExtra(EXPLORE_ID));
-            mode = getIntent().getIntExtra(EXPLORE_MODE, SparkleHelper.CLICKY_NATION_MODE);
+            mode = getIntent().getIntExtra(EXPLORE_MODE, EXPLORE_NATION);
             if (id == null) {
                 // If ID passed in through Uri
                 // Funny thing here is that in the link source, they have
@@ -162,34 +173,35 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        if (mode == SparkleHelper.CLICKY_NATION_MODE) {
-            if (isEndorsable) {
-                if (isEndorsed) {
-                    inflater.inflate(isInDossier ? R.menu.activity_explore_nation_endorsed_dossier : R.menu.activity_explore_nation_endorsed_nodossier, menu);
+        switch (mode) {
+            case EXPLORE_NATION:
+                if (isEndorsable) {
+                    if (isEndorsed) {
+                        inflater.inflate(isInDossier ? R.menu.activity_explore_nation_endorsed_dossier : R.menu.activity_explore_nation_endorsed_nodossier, menu);
+                    }
+                    else {
+                        inflater.inflate(isInDossier ? R.menu.activity_explore_nation_endorsable_dossier : R.menu.activity_explore_nation_endorsable_nodossier, menu);
+                    }
                 }
                 else {
-                    inflater.inflate(isInDossier ? R.menu.activity_explore_nation_endorsable_dossier : R.menu.activity_explore_nation_endorsable_nodossier, menu);
+                    if (!isMe) {
+                        inflater.inflate(isInDossier ? R.menu.activity_explore_nation_not_wa_dossier : R.menu.activity_explore_nation_not_wa_nodossier, menu);
+                    }
+                    else {
+                        inflater.inflate(R.menu.activity_explore_default, menu);
+                    }
                 }
-            }
-            else {
-                if (!isMe) {
-                    inflater.inflate(isInDossier ? R.menu.activity_explore_nation_not_wa_dossier : R.menu.activity_explore_nation_not_wa_nodossier, menu);
+                break;
+            case EXPLORE_REGION:
+                if (isMoveable) {
+                    inflater.inflate(isInDossier ? R.menu.activity_explore_region_move_dossier : R.menu.activity_explore_region_move_nodossier, menu);
                 }
                 else {
                     inflater.inflate(R.menu.activity_explore_default, menu);
                 }
-            }
-        }
-        else if (mode == SparkleHelper.CLICKY_REGION_MODE) {
-            if (isMoveable) {
-                inflater.inflate(isInDossier ? R.menu.activity_explore_region_move_dossier : R.menu.activity_explore_region_move_nodossier, menu);
-            }
-            else {
+                break;
+            default:
                 inflater.inflate(R.menu.activity_explore_default, menu);
-            }
-        }
-        else {
-            inflater.inflate(R.menu.activity_explore_default, menu);
         }
 
         return true;
@@ -233,10 +245,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
         else {
             switch (mode) {
-                case SparkleHelper.CLICKY_NATION_MODE:
+                case EXPLORE_NATION:
                     setExploreStatusError(getString(R.string.explore_error_404_nation));
                     break;
-                default:
+                case EXPLORE_REGION:
                     setExploreStatusError(getString(R.string.region_404));
                     break;
             }
@@ -249,7 +261,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * @param name Nation/region to check
      */
     private void queryAndCheckDossier(final String name) {
-        String userId = SparkleHelper.getActiveUser(this).nationId;
+        String userId = PinkaHelper.getActiveUser(this).nationId;
         String targetURL = String.format(Locale.US, Dossier.QUERY, SparkleHelper.getIdFromName(userId));
 
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
@@ -261,10 +273,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         try {
                             dossierResponse = serializer.read(Dossier.class, response);
                             String targetId = SparkleHelper.getIdFromName(name);
-                            if (mode == SparkleHelper.CLICKY_NATION_MODE && dossierResponse.nations != null) {
+                            if (mode == EXPLORE_NATION && dossierResponse.nations != null) {
                                 isInDossier = dossierResponse.nations.contains(targetId);
                             }
-                            if (mode == SparkleHelper.CLICKY_REGION_MODE && dossierResponse.regions != null) {
+                            if (mode == EXPLORE_REGION && dossierResponse.regions != null) {
                                 isInDossier = dossierResponse.regions.contains(targetId);
                             }
                         }
@@ -294,10 +306,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      */
     private void queryHelper(String name) {
         switch (mode) {
-            case SparkleHelper.CLICKY_NATION_MODE:
+            case EXPLORE_NATION:
                 queryNation(name);
                 break;
-            default:
+            case EXPLORE_REGION:
                 queryRegion(name);
                 break;
         }
@@ -323,10 +335,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             setName(nationResponse.name);
 
                             // determine endorseable state
-                            UserLogin u = SparkleHelper.getActiveUser(getApplicationContext());
+                            UserLogin u = PinkaHelper.getActiveUser(getApplicationContext());
                             String userId = u.nationId;
-                            String userRegionId = SparkleHelper.getRegionSessionData(getApplicationContext());
-                            boolean userWaMember = SparkleHelper.getWaSessionData(getApplicationContext());
+                            String userRegionId = PinkaHelper.getRegionSessionData(getApplicationContext());
+                            boolean userWaMember = PinkaHelper.getWaSessionData(getApplicationContext());
 
                             String exploreId = SparkleHelper.getIdFromName(nationResponse.name);
                             String exploreRegionId = SparkleHelper.getIdFromName(nationResponse.region);
@@ -391,7 +403,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             setName(regionResponse.name);
 
                             // determine moveable state
-                            String curRegion = SparkleHelper.getRegionSessionData(getApplicationContext());
+                            String curRegion = PinkaHelper.getRegionSessionData(getApplicationContext());
                             isMoveable = !curRegion.equals(SparkleHelper.getIdFromName(regionResponse.name));
                             isPassword = regionResponse.tags != null && regionResponse.tags.contains(PASSWORD_TAG);
                             invalidateOptionsMenu();
@@ -471,10 +483,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
                         String localid = input.attr("value");
                         switch (mode) {
-                            case SparkleHelper.CLICKY_NATION_MODE:
+                            case EXPLORE_NATION:
                                 postEndorsement(localid);
                                 break;
-                            default:
+                            case EXPLORE_REGION:
                                 postRegionMove(localid, password);
                                 break;
                         }
@@ -508,7 +520,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -583,7 +595,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -604,7 +616,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      */
     private void postDossier() {
         String postUrl = Dossier.POST_QUERY_GENERIC;
-        if (!isInDossier && mode == SparkleHelper.CLICKY_REGION_MODE) {
+        if (!isInDossier && mode == EXPLORE_REGION) {
             postUrl = String.format(Locale.US, Dossier.POST_QUERY_ADD_REGION, SparkleHelper.getIdFromName(id));
         }
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, postUrl,
@@ -639,21 +651,21 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         // If not currently in dossier and trying to add
         if (!isInDossier) {
             switch (mode) {
-                case SparkleHelper.CLICKY_NATION_MODE:
+                case EXPLORE_NATION:
                     params.put("nation", id);
                     params.put("action", "add");
                     break;
-                default:
+                case EXPLORE_REGION:
                     params.put("add_to_dossier", "1");
                     break;
             }
         } else {
             switch (mode) {
-                case SparkleHelper.CLICKY_NATION_MODE:
+                case EXPLORE_NATION:
                     params.put(String.format(Locale.US, Dossier.PARAM_REMOVE_TEMPLATE, Dossier.PARAM_REMOVE_NATION, id), "on");
                     params.put("remove_from_dossier", "1");
                     break;
-                default:
+                case EXPLORE_REGION:
                     params.put(String.format(Locale.US, Dossier.PARAM_REMOVE_TEMPLATE, Dossier.PARAM_REMOVE_REGION, id), "on");
                     params.put("remove_from_region_dossier", "1");
                     break;
@@ -677,7 +689,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
         AppCompatEditText passView = (AppCompatEditText) dialogView.findViewById(R.id.move_password);

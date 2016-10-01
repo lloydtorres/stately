@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.net.URLDecoder;
@@ -69,7 +70,7 @@ public class NSStringRequest extends StringRequest {
     @Override
     public Map<String, String> getHeaders() {
         Map<String,String> params = new HashMap<String, String>();
-        UserLogin u = userDataOverride == null ? SparkleHelper.getActiveUser(context) : userDataOverride;
+        UserLogin u = userDataOverride == null ? PinkaHelper.getActiveUser(context) : userDataOverride;
 
         // UserLogin will not be null when user is logged in
         if (u != null && u.nationId != null) {
@@ -113,20 +114,20 @@ public class NSStringRequest extends StringRequest {
 
         // Update PIN if new one available
         if (responseHeaders.containsKey("X-Pin") && !PIN_INVALID.equals(responseHeaders.get("X-Pin"))) {
-            SparkleHelper.setActivePin(context, responseHeaders.get("X-Pin"));
+            PinkaHelper.setActivePin(context, responseHeaders.get("X-Pin"));
         }
 
         // Update PIN from cookie if available AND X-Pin not provided
         if (responseHeaders.containsKey("Set-Cookie") && !responseHeaders.containsKey("X-Pin")) {
             Matcher m = COOKIE_PIN.matcher(responseHeaders.get("Set-Cookie"));
             if (m.matches() && !PIN_INVALID.equals(m.group(1))) {
-                SparkleHelper.setActivePin(context, m.group(1));
+                PinkaHelper.setActivePin(context, m.group(1));
             }
         }
 
         // Update autologin if new one available
         if (responseHeaders.containsKey("X-Autologin")) {
-            SparkleHelper.setActiveAutologin(context, responseHeaders.get("X-Autologin"));
+            PinkaHelper.setActiveAutologin(context, responseHeaders.get("X-Autologin"));
         }
 
         // Sync number of requests seen by server with internal count

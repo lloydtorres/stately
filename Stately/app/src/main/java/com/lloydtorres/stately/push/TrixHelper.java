@@ -16,6 +16,40 @@
 
 package com.lloydtorres.stately.push;
 
+/*
+                                       ___...----..
+                                 ..''``         x  `.
+                                /   *       x        `.
+                               |   \_\_\         .  X  \
+                               :  .'    '.  *   `X'     |
+                               l /       '.     ' `     .
+                                V         |   *     .   |
+                                          |        `X'  |.
+                                     _..--j   X    ' `  ` `''--...
+                                   <'__  *           x      *    .>
+                                      /`\'''----____      ___..''
+                                     (   \_  (   /.-`|'|`'| .'   |
+                                     (     \,'\ ((WW | \W)j |   / .
+          ..---'''''---              (      |  \_\_ /   ``-.:  :_/|
+        ,'             `'.           (      |          \__/  `---'
+       /   _              '.          \     '. -,______.-'
+      | .-'/                :__________`.    |    /
+      '`  -          .-''>-'             \   '.  (
+          |         /   /  . .            '.  '.  \
+          |         |  |  /|`X'        ':-._)  |   |
+         .'         |  | ( :'|`          `-___.'   |
+         |          |  |  \ `|>                    |
+         |          | / \  ``'   /             \__/
+         '.        .''   |      /-,_______\       \
+          |        |   _/      /     |    |\       \
+          |        |  /       /     |     | `--,    \
+         .'       :   |      |      |     |   /      )
+   .__..'    ,   :\__/|      |      |      | (       |
+    `-.___.-`;  /     |      |      |      |  \      |
+           .:_-'      |       \     |       \  `.___/
+                       \_______)     \_______)
+ */
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -32,6 +66,7 @@ import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Notice;
 import com.lloydtorres.stately.dto.NoticeHolder;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
@@ -46,13 +81,16 @@ import java.util.regex.Pattern;
  * Created by Lloyd on 2016-09-18.
  * Helper for processing and handling NS notices and notifications.
  */
-public class DragonHelper {
+public class TrixHelper {
     // Common prefix for notification tags
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
 
     // Keys for shared prefs stuff
     public static final String KEY_FIREBASE = "spike_firebase_token";
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
+
+    // Private constructor
+    private TrixHelper() {}
 
     /**
      * Updates the stored last active time, in Unix seconds.
@@ -156,7 +194,7 @@ public class DragonHelper {
      * @return See above
      */
     private static NotificationCompat.Builder getBaseBuilder(Context c, String account) {
-        int primaryColour = SparkleHelper.getThemePrimaryColour(c);
+        int primaryColour = RaraHelper.getThemePrimaryColour(c);
         return new NotificationCompat.Builder(c)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
@@ -274,7 +312,7 @@ public class DragonHelper {
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
                 nextActivity.putExtra(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
-                nextActivity.putExtra(ExploreActivity.EXPLORE_MODE, SparkleHelper.CLICKY_NATION_MODE);
+                nextActivity.putExtra(ExploreActivity.EXPLORE_MODE, ExploreActivity.EXPLORE_NATION);
                 break;
         }
         nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

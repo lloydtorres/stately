@@ -44,6 +44,8 @@ import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -139,7 +141,7 @@ public class TelegramsFragment extends Fragment {
 
         // Set up refresher to reload data on refresh
         mSwipeRefreshLayout = (SwipyRefreshLayout) mView.findViewById(R.id.message_board_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(getContext()));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(getContext()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -276,7 +278,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         // Build telegram objects from raw telegrams
-        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId);
+        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
         switch (direction)
         {
             case SCAN_FORWARD:
@@ -461,7 +463,7 @@ public class TelegramsFragment extends Fragment {
      * Wrappers to call on NS to archive a telegram.
      */
     public void showArchiveTelegramDialog(final int id) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
                 .setTitle(getString(R.string.telegrams_archive_confirm))
                 .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
@@ -506,7 +508,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         if (moveableFolders.size() <= 0) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
             dialogBuilder
                     .setTitle(getString(R.string.telegrams_move))
                     .setMessage(getString(R.string.telegrams_move_none))
@@ -598,7 +600,7 @@ public class TelegramsFragment extends Fragment {
     }
 
     public void showDeleteTelegramDialog(final int id) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
             .setTitle(getString(R.string.telegrams_delete_confirm))
             .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {

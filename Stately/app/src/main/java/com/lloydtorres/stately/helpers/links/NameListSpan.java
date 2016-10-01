@@ -22,7 +22,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 
 import java.util.ArrayList;
@@ -55,6 +55,6 @@ public class NameListSpan extends ClickableSpan {
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
         ds.setUnderlineText(false);
-        ds.setColor(SparkleHelper.getThemeLinkColour(context));
+        ds.setColor(RaraHelper.getThemeLinkColour(context));
     }
 }

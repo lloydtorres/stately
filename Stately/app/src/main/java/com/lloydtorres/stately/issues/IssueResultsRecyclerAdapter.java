@@ -33,6 +33,7 @@ import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
@@ -320,7 +321,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         @Override
         public void onClick(View v) {
-            String userId = SparkleHelper.getActiveUser(context).nationId;
+            String userId = PinkaHelper.getActiveUser(context).nationId;
             SparkleHelper.startTrends(context, userId, TrendsActivity.TREND_NATION, delta.censusId);
         }
     }

@@ -40,6 +40,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -90,7 +92,7 @@ public class TelegramComposeActivity extends SlidrActivity {
 
         mView = findViewById(R.id.telegram_compose_main);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.telegram_compose_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.telegram_compose_toolbar);
@@ -110,7 +112,7 @@ public class TelegramComposeActivity extends SlidrActivity {
         }
 
         senderField = (TextView) findViewById(R.id.telegram_compose_sender);
-        senderField.setText(SparkleHelper.getActiveUser(this).name);
+        senderField.setText(PinkaHelper.getActiveUser(this).name);
 
         content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
         content.setCustomSelectionActionModeCallback(new NullActionCallback());
@@ -303,7 +305,7 @@ public class TelegramComposeActivity extends SlidrActivity {
         params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
         if (replyId == NO_REPLY_ID) {
             params.put("recruitregion", "region");
-            params.put("recruitregionrealname", SparkleHelper.getRegionSessionData(getApplicationContext()));
+            params.put("recruitregionrealname", PinkaHelper.getRegionSessionData(getApplicationContext()));
             params.put("send", "1");
         }
         else {

@@ -45,6 +45,7 @@ import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.helpers.links.NameListSpan;
@@ -299,7 +300,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
                 NameListSpan span = new NameListSpan(context, fm,
                         String.format(Locale.US, context.getString(R.string.poll_votes_voter_dialog), index),
-                        properVoters, SparkleHelper.CLICKY_NATION_MODE);
+                        properVoters, ExploreActivity.EXPLORE_NATION);
                 template.setSpan(span, 0, template.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 content.setMovementMethod(LinkMovementMethod.getInstance());
             }
@@ -411,7 +412,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
             label.setText(SparkleHelper.getHtmlFormatting(position));
-            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), SparkleHelper.CLICKY_NATION_MODE);
+            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), ExploreActivity.EXPLORE_NATION);
             officersLayout.addView(delegateView);
         }
     }
@@ -440,7 +441,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     NameListDialog nameListDialog = new NameListDialog();
                     nameListDialog.setTitle(context.getString(R.string.card_region_embassies));
                     nameListDialog.setNames(embassies);
-                    nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+                    nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
                     nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                 }
             });

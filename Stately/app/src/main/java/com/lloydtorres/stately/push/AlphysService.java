@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.dto.NoticeHolder;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -53,9 +54,9 @@ public class AlphysService extends IntentService {
         }
 
         // If there's no active user, don't even bother.
-        final UserLogin active = SparkleHelper.getActiveUser(this);
+        final UserLogin active = PinkaHelper.getActiveUser(this);
         if (active == null) {
-            DragonHelper.setAlarmForAlphys(this);
+            TrixHelper.setAlarmForAlphys(this);
             return;
         }
 
@@ -68,8 +69,8 @@ public class AlphysService extends IntentService {
                         Persister serializer = new Persister();
                         try {
                             notices = serializer.read(NoticeHolder.class, response);
-                            DragonHelper.processNotices(AlphysService.this, active.name, notices);
-                            DragonHelper.updateLastActiveTime(AlphysService.this);
+                            TrixHelper.processNotices(AlphysService.this, active.name, notices);
+                            TrixHelper.updateLastActiveTime(AlphysService.this);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -83,6 +84,6 @@ public class AlphysService extends IntentService {
         });
 
         DashHelper.getInstance(this).addRequest(stringRequest);
-        DragonHelper.setAlarmForAlphys(this);
+        TrixHelper.setAlarmForAlphys(this);
     }
 }

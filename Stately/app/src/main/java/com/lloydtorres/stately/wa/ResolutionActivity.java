@@ -47,6 +47,9 @@ import com.lloydtorres.stately.dto.BaseAssembly;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -136,7 +139,7 @@ public class ResolutionActivity extends SlidrActivity {
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.wa_resolution_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -264,7 +267,7 @@ public class ResolutionActivity extends SlidrActivity {
      */
     private void queryVoteStatus(final BaseAssembly a)
     {
-        UserLogin u = SparkleHelper.getActiveUser(this);
+        UserLogin u = PinkaHelper.getActiveUser(this);
         String targetURL = String.format(Locale.US, WaVoteStatus.QUERY, u.nationId);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -325,7 +328,7 @@ public class ResolutionActivity extends SlidrActivity {
     private void setVoteStatus(WaVoteStatus vs)
     {
         voteStatus = vs;
-        SparkleHelper.setWaSessionData(this, voteStatus.waState);
+        PinkaHelper.setWaSessionData(this, voteStatus.waState);
 
         String voteStats = "";
         switch(councilId)
@@ -395,8 +398,8 @@ public class ResolutionActivity extends SlidrActivity {
                         voteButtonIcon.setImageResource(R.drawable.ic_wa_violet);
                         break;
                 }
-                voteButton.setBackgroundColor(SparkleHelper.getThemeCardColour(this));
-                voteButtonContent.setTextColor(SparkleHelper.getThemeButtonColour(this));
+                voteButton.setBackgroundColor(RaraHelper.getThemeCardColour(this));
+                voteButtonContent.setTextColor(RaraHelper.getThemeButtonColour(this));
                 voteButtonContent.setText(getString(R.string.wa_resolution_vote_default));
                 voteChoice = VoteDialog.VOTE_UNDECIDED;
             }
@@ -574,7 +577,7 @@ public class ResolutionActivity extends SlidrActivity {
 
         String proposer = SparkleHelper.getNameFromId(mResolution.proposedBy);
         String proposeTemplate = String.format(Locale.US, getString(R.string.wa_proposed), mResolution.proposedBy);
-        SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, SparkleHelper.CLICKY_NATION_MODE);
+        SparkleHelper.activityLinkBuilder(this, proposedBy, proposeTemplate, mResolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
 
         voteStart.setText(String.format(Locale.US, getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(this, mResolution.voteHistoryFor.size())));
         votesFor.setText(SparkleHelper.getPrettifiedNumber(mResolution.votesFor));
@@ -616,13 +619,13 @@ public class ResolutionActivity extends SlidrActivity {
                     // If target is a nation, linkify it.
                     String nationTarget = SparkleHelper.getNameFromId(pair[1]);
                     String oldTemplate = String.format(Locale.US, template, category, pair[1]);
-                    SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, SparkleHelper.CLICKY_NATION_MODE);
+                    SparkleHelper.activityLinkBuilder(this, t, oldTemplate, pair[1], nationTarget, ExploreActivity.EXPLORE_NATION);
                     break;
                 case "R":
                     // If target is a nation, linkify it.
                     String regionTarget = SparkleHelper.getNameFromId(pair[1]);
                     String oldRegionTemplate = String.format(Locale.US, template, category, pair[1]);
-                    SparkleHelper.activityLinkBuilder(this, t, oldRegionTemplate, pair[1], regionTarget, SparkleHelper.CLICKY_REGION_MODE);
+                    SparkleHelper.activityLinkBuilder(this, t, oldRegionTemplate, pair[1], regionTarget, ExploreActivity.EXPLORE_REGION);
                     break;
                 default:
                     t.setText(String.format(Locale.US, template, category, target));
@@ -657,7 +660,7 @@ public class ResolutionActivity extends SlidrActivity {
         setFor.setDrawValues(false);
         setFor.setDrawVerticalHighlightIndicator(true);
         setFor.setDrawHorizontalHighlightIndicator(false);
-        setFor.setHighLightColor(SparkleHelper.getThemeButtonColour(this));
+        setFor.setHighLightColor(RaraHelper.getThemeButtonColour(this));
         setFor.setHighlightLineWidth(lineWidth);
         setFor.setDrawCircles(false);
         setFor.setLineWidth(lineWidth);
@@ -668,7 +671,7 @@ public class ResolutionActivity extends SlidrActivity {
         setAgainst.setDrawValues(false);
         setAgainst.setDrawVerticalHighlightIndicator(true);
         setAgainst.setDrawHorizontalHighlightIndicator(false);
-        setAgainst.setHighLightColor(SparkleHelper.getThemeButtonColour(this));
+        setAgainst.setHighLightColor(RaraHelper.getThemeButtonColour(this));
         setAgainst.setHighlightLineWidth(lineWidth);
         setAgainst.setDrawCircles(false);
         setAgainst.setLineWidth(lineWidth);

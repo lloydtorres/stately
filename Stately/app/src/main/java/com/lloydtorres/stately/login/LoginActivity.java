@@ -41,10 +41,12 @@ import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
-import com.lloydtorres.stately.push.DragonHelper;
+import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
@@ -136,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         // If settings allows it and user login exists, try logging in first
         if (SettingsActivity.getAutologinSetting(this))
         {
-            UserLogin u = SparkleHelper.getActiveUser(this);
+            UserLogin u = PinkaHelper.getActiveUser(this);
             if (u != null)
             {
                 verifyAccount(u);
@@ -144,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            SparkleHelper.removeActiveUser(this);
+            PinkaHelper.removeActiveUser(this);
         }
     }
 
@@ -181,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
         final String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
-        final String oldActivePin = SparkleHelper.getActivePin(this);
+        final String oldActivePin = PinkaHelper.getActivePin(this);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     UserNation nationResponse = null;
@@ -192,16 +194,16 @@ public class LoginActivity extends AppCompatActivity {
                             nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
 
                             if (u != null) {
-                                SparkleHelper.setActiveAutologin(LoginActivity.this, u.autologin);
+                                PinkaHelper.setActiveAutologin(LoginActivity.this, u.autologin);
 
                                 // Only override pin if it hasn't been changed by the server
-                                String newActivePin = SparkleHelper.getActivePin(LoginActivity.this);
+                                String newActivePin = PinkaHelper.getActivePin(LoginActivity.this);
                                 if (newActivePin != null && oldActivePin != null && newActivePin.equals(oldActivePin)) {
-                                    SparkleHelper.setActivePin(LoginActivity.this, u.pin);
+                                    PinkaHelper.setActivePin(LoginActivity.this, u.pin);
                                 }
                             }
-                            SparkleHelper.setActiveUser(LoginActivity.this, nationResponse.name);
-                            SparkleHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
+                            PinkaHelper.setActiveUser(LoginActivity.this, nationResponse.name);
+                            PinkaHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                             nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
@@ -287,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.create_nation)
                 .setMessage(R.string.create_nation_redirect)
                 .setPositiveButton(R.string.create_continue, dialogListener)
@@ -298,7 +300,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)
                     .setMessage(R.string.create_finish)
                     .setPositiveButton(R.string.got_it, null)
@@ -310,10 +312,10 @@ public class LoginActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         // notification polling
-        DragonHelper.updateLastActiveTime(this);
-        DragonHelper.stopAlarmForAlphys(this);
+        TrixHelper.updateLastActiveTime(this);
+        TrixHelper.stopAlarmForAlphys(this);
         if (SettingsActivity.getNotificationSetting(this)) {
-            DragonHelper.setAlarmForAlphys(this);
+            TrixHelper.setAlarmForAlphys(this);
         }
     }
 

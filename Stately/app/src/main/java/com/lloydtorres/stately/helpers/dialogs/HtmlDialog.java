@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -65,11 +66,11 @@ public class HtmlDialog extends DialogFragment {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeLollipopDialog(getContext()));
         }
         else
         {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;

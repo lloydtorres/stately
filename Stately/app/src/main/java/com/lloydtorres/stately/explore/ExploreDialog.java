@@ -30,6 +30,7 @@ import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
@@ -66,7 +67,7 @@ public class ExploreDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_explore)
                 .setView(dialogView)
                 .setPositiveButton(R.string.explore_positive, dialogListener)
@@ -87,10 +88,10 @@ public class ExploreDialog extends DialogFragment {
         switch (exploreToggleState.getCheckedRadioButtonId())
         {
             case R.id.explore_radio_nation:
-                mode = SparkleHelper.CLICKY_NATION_MODE;
+                mode = ExploreActivity.EXPLORE_NATION;
                 break;
             default:
-                mode = SparkleHelper.CLICKY_REGION_MODE;
+                mode = ExploreActivity.EXPLORE_REGION;
                 break;
         }
 

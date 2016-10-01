@@ -49,6 +49,8 @@ import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.ActivityFeedFragment;
 import com.lloydtorres.stately.helpers.GenericFragment;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -56,7 +58,7 @@ import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.login.SwitchNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
-import com.lloydtorres.stately.push.DragonHelper;
+import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
@@ -153,7 +155,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         if (mNation == null)
         {
-            UserLogin u = SparkleHelper.getActiveUser(this);
+            UserLogin u = PinkaHelper.getActiveUser(this);
             updateNation(u.name, true);
         }
         else
@@ -279,7 +281,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public void onResume()
     {
         super.onResume();
-        DragonHelper.updateLastActiveTime(this);
+        TrixHelper.updateLastActiveTime(this);
 
         // Redownload nation data on resume
         // isLoaded will only be false on first run, true on all subsequent runs
@@ -332,7 +334,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.exit_confirm)
                 .setPositiveButton(R.string.exit, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
@@ -549,7 +551,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     dialog.dismiss();
                 }
             };
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder
                     .setTitle(getString(R.string.menu_switch))
                     .setMessage(getString(R.string.switch_single_warn))
@@ -583,14 +585,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SparkleHelper.removeActiveUser(getApplicationContext());
+                PinkaHelper.removeActiveUser(getApplicationContext());
                 Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
                 startActivity(nationActivityLaunch);
                 finish();
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.logout_confirm)
                 .setPositiveButton(R.string.menu_logout, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
@@ -691,7 +693,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             nationResponse = UserNation.parseNationFromXML(getApplicationContext(), serializer, response);
 
                             mNation = nationResponse;
-                            SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
+                            PinkaHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
 
                             if (firstLaunch)
                             {

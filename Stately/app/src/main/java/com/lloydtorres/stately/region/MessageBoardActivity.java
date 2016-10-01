@@ -45,6 +45,8 @@ import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionMessages;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -69,6 +71,10 @@ import java.util.Set;
  * An activity that displays the contents of the regional message board.
  */
 public class MessageBoardActivity extends SlidrActivity {
+    // Uri to invoke MessageBoardActivity
+    public static final String RMB_PROTOCOL = "com.lloydtorres.stately.rmb";
+    public static final String RMB_TARGET = RMB_PROTOCOL + "://";
+
     // Keys for Intent data
     public static final String BOARD_REGION_NAME = "regionName";
     public static final String BOARD_TARGET_ID = "targetId";
@@ -147,7 +153,7 @@ public class MessageBoardActivity extends SlidrActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
-        dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mLayoutManager = new LinearLayoutManager(this);
@@ -163,7 +169,7 @@ public class MessageBoardActivity extends SlidrActivity {
 
         // Setup refresher to requery for resolution on swipe
         mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -206,7 +212,7 @@ public class MessageBoardActivity extends SlidrActivity {
     private void queryPostingRights()
     {
         // If user is a member of this region, enable posting rights immediately without querying
-        if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
+        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
         {
             enablePostingRights();
             queryPostingRightsCallback();
@@ -463,7 +469,7 @@ public class MessageBoardActivity extends SlidrActivity {
         refreshRecycler(SCAN_FORWARD, 0, shouldJumpToTop);
 
         // Mark board as read if this is the user's region's RMB
-        if (SparkleHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
+        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
         {
             markBoardAsRead();
         }

@@ -41,6 +41,7 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -54,6 +55,10 @@ import java.util.Map;
  * Activity to report user content to the NS moderators.
  */
 public class ReportActivity extends SlidrActivity {
+    // Uri to invoke ReportActivity
+    public static final String REPORT_PROTOCOL = "com.lloydtorres.stately.report";
+    public static final String REPORT_TARGET = REPORT_PROTOCOL + "://";
+
     // Keys for intent data and saved preferences
     public static final String REPORT_ID = "reportId";
     public static final String REPORT_TYPE = "reportType";
@@ -67,7 +72,7 @@ public class ReportActivity extends SlidrActivity {
     public static final int REPORT_TYPE_TELEGRAM = 2;
 
     // Target URL for reports
-    public static final String REPORT_URL = "https://www.nationstates.net/page=help";
+    public static final String REPORT_URL = SparkleHelper.BASE_URI_NOSLASH + "/page=help";
 
     // Headers to send when submitting report
     private static final int HEADER_GHR_INAPPROPRIATE = 1;
@@ -126,7 +131,7 @@ public class ReportActivity extends SlidrActivity {
         setToolbar(toolbar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.report_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         dialogListener = new DialogInterface.OnClickListener() {
@@ -202,7 +207,7 @@ public class ReportActivity extends SlidrActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, SparkleHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.report_confirm)
                 .setPositiveButton(R.string.report_send_confirm, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)

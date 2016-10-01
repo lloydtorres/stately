@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -122,7 +123,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
             return;
         }
-        telegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(this).nationId);
+        telegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
         initTelegramsRecyclerAdapter();
     }
 

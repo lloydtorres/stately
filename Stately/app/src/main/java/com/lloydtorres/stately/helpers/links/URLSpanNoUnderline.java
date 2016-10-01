@@ -20,7 +20,7 @@ import android.content.Context;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
 
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-01-20.
@@ -39,6 +39,6 @@ public class URLSpanNoUnderline extends URLSpan {
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
         ds.setUnderlineText(false);
-        ds.setColor(SparkleHelper.getThemeLinkColour(context));
+        ds.setColor(RaraHelper.getThemeLinkColour(context));
     }
 }

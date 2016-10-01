@@ -16,72 +16,6 @@
 
 package com.lloydtorres.stately.helpers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.LargeValueFormatter;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.census.TrendsActivity;
-import com.lloydtorres.stately.dto.Spoiler;
-import com.lloydtorres.stately.dto.UserLogin;
-import com.lloydtorres.stately.explore.ExploreActivity;
-import com.lloydtorres.stately.helpers.links.SpoilerSpan;
-import com.lloydtorres.stately.helpers.links.URLSpanNoUnderline;
-import com.lloydtorres.stately.login.LoginActivity;
-import com.lloydtorres.stately.report.ReportActivity;
-import com.lloydtorres.stately.settings.SettingsActivity;
-import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
-import com.r0adkll.slidr.model.SlidrConfig;
-
-import org.atteo.evo.inflector.English;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-import org.kefirsf.bb.BBProcessorFactory;
-import org.kefirsf.bb.TextProcessor;
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /*
 
                                          __         _____   _
@@ -113,6 +47,70 @@ import java.util.regex.Pattern;
 
 
  */
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.dto.Spoiler;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.links.SpoilerSpan;
+import com.lloydtorres.stately.helpers.links.URLSpanNoUnderline;
+import com.lloydtorres.stately.login.LoginActivity;
+import com.lloydtorres.stately.region.MessageBoardActivity;
+import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+
+import org.atteo.evo.inflector.English;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+import org.kefirsf.bb.BBProcessorFactory;
+import org.kefirsf.bb.TextProcessor;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Lloyd on 2016-01-16.
  *
@@ -122,18 +120,13 @@ import java.util.regex.Pattern;
 
 public class SparkleHelper {
     // Tag used to mark system log print calls
-    public static final String APP_TAG = "com.lloydtorres.stately";
-    // Uri to invoke the ExploreActivity
-    public static final String EXPLORE_PROTOCOL = "com.lloydtorres.stately.explore";
-    public static final String EXPLORE_TARGET = EXPLORE_PROTOCOL + "://";
-    // Uri to invoke MessageBoardActivity
-    public static final String RMB_PROTOCOL = "com.lloydtorres.stately.rmb";
-    public static final String RMB_TARGET = RMB_PROTOCOL + "://";
-    // Uri to invoke ReportActivity
-    public static final String REPORT_PROTOCOL = "com.lloydtorres.stately.report";
-    public static final String REPORT_TARGET = REPORT_PROTOCOL + "://";
+    public static final String APP_TAG = "Stately";
+
     // Whitelisted protocols
-    public static final String[] PROTOCOLS = {"http", "https", EXPLORE_PROTOCOL, RMB_PROTOCOL, REPORT_PROTOCOL};
+    public static final String[] PROTOCOLS = {"http", "https",
+            ExploreActivity.EXPLORE_PROTOCOL,
+            MessageBoardActivity.RMB_PROTOCOL,
+            ReportActivity.REPORT_PROTOCOL};
     // Current NationStates API version
     public static final String API_VERSION = "8";
     // NationStates API
@@ -141,22 +134,6 @@ public class SparkleHelper {
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
     public static final String BASE_URI_NOSLASH = "https://www." + DOMAIN_URI;
     public static final String BASE_URI_REGEX = "https:\\/\\/www\\.nationstates\\.net\\/";
-
-    // Keys to user name and autologin and other session variables
-    public static final String VAR_NAME = "var_name";
-    public static final String VAR_AUTOLOGIN = "var_autologin";
-    public static final String VAR_PIN = "var_pin";
-    public static final String VAR_REGION = "var_region";
-    public static final String VAR_WA_MEMBER = "var_wa_member";
-
-    // The number of hours a resolution is on the WA chamber floor
-    public static final int WA_RESOLUTION_DURATION = 96;
-    // Reference time zone for WA calculations
-    public static final String TIMEZONE_TORONTO = "America/Toronto";
-
-    // Constants used by activityLinkBuilder() to determine if target is nation or region
-    public static final int CLICKY_NATION_MODE = 1;
-    public static final int CLICKY_REGION_MODE = 2;
 
     // An array of chart colours
     public static final int[] chartColours = {  R.color.colorChart0,
@@ -216,15 +193,15 @@ public class SparkleHelper {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
 
-    // Configuration for Slidr (for dem fancy sliding effects)
-    public static final SlidrConfig slidrConfig = new SlidrConfig.Builder().edge(true).build();
+    // Private constructor
+    private SparkleHelper() {}
 
     /**
      * VALIDATION
      * These are functions used to validate inputs.
      */
 
-    public static final Pattern VALID_NATION_NAME = Pattern.compile("^[A-za-z0-9-_ ]+$");
+    public static final Pattern VALID_NATION_NAME = Pattern.compile("^[A-Za-z0-9-_ ]+$");
 
     /**
      * Checks if the passed in name is a valid NationStates name (i.e. A-Z, a-z, 0-9, -, (space)).
@@ -643,340 +620,6 @@ public class SparkleHelper {
     }
 
     /**
-     * LOGINS & SESSION DATA
-     * These update, return and remove data about the current login and its session data.
-     */
-
-    /**
-     * Sets the currently logged-in user in shared prefs and saves them into the database.
-     * @param c App context
-     * @param name User name
-     */
-    public static void setActiveUser(Context c, String name)
-    {
-        // Assume that the autologin and PIN in shared prefs are correct
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        String autologin = storage.getString(VAR_AUTOLOGIN, null);
-        String pin = storage.getString(VAR_PIN, null);
-
-        // Save user into database
-        UserLogin u = new UserLogin(getIdFromName(name), name, autologin, pin);
-        u.save();
-
-        // Save user into shared preferences
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putString(VAR_NAME, name);
-        editor.commit();
-    }
-
-    /**
-     * Sets the current user's autologin token in shared prefs.
-     * @param c App context
-     * @param autologin User autologin cookie
-     */
-    public static void setActiveAutologin(Context c, String autologin)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putString(VAR_AUTOLOGIN, autologin);
-        editor.commit();
-    }
-
-    /**
-     * Sets the current user's PIN in shared prefs.
-     * @param c App context
-     * @param pin  User pin cookie
-     */
-    public static void setActivePin(Context c, String pin)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putString(VAR_PIN, pin);
-        editor.commit();
-    }
-
-    /**
-     * Sets data on region and WA membership for the current session.
-     * @param c App context
-     * @param regionName Current region ID
-     * @param waStatus WA membership status
-     */
-    public static void setSessionData(Context c, String regionName, String waStatus)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putString(VAR_REGION, regionName);
-        editor.putBoolean(VAR_WA_MEMBER, isWaMember(c, waStatus));
-        editor.commit();
-    }
-
-    /**
-     * Used for updating the session region name if it changes.
-     * @param c App context
-     * @param regionName Current region ID
-     */
-    public static void setRegionSessionData(Context c, String regionName)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putString(VAR_REGION, regionName);
-        editor.commit();
-    }
-
-    /**
-     * Used for updating the session WA membership if it changes.
-     * @param c
-     * @param stat
-     */
-    public static void setWaSessionData(Context c, String stat)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putBoolean(VAR_WA_MEMBER, isWaMember(c, stat));
-        editor.commit();
-    }
-
-    /**
-     * Retrieve information about the currently logged in user
-     * @param c App context
-     * @return A UserLogin object with their name and autologin
-     */
-    public static UserLogin getActiveUser(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        String name = storage.getString(VAR_NAME, null);
-        String autologin = storage.getString(VAR_AUTOLOGIN, null);
-        String pin = storage.getString(VAR_PIN, null);
-        if (name != null && autologin != null)
-        {
-            UserLogin u = new UserLogin(getIdFromName(name), name, autologin, pin);
-            return u;
-        }
-
-        return null;
-    }
-
-    /**
-     * Retrieve the current value for the active pin.
-     * @param c App context.
-     * @return The stored active pin.
-     */
-    public static String getActivePin(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getString(VAR_PIN, null);
-    }
-
-    /**
-     * Returns the current member region in the current session.
-     * @param c App context
-     * @return ID of region
-     */
-    public static String getRegionSessionData(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getString(VAR_REGION, null);
-    }
-
-    /**
-     * Returns current WA membership status in current session.
-     * @param c App context
-     * @return WA membership status
-     */
-    public static boolean getWaSessionData(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(VAR_WA_MEMBER, false);
-    }
-
-    /**
-     * Removes data about the logged in user from shared prefs.
-     * @param c App context
-     */
-    public static void removeActiveUser(Context c)
-    {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.remove(VAR_NAME);
-        editor.remove(VAR_AUTOLOGIN);
-        editor.remove(VAR_PIN);
-        editor.remove(VAR_REGION);
-        editor.remove(VAR_WA_MEMBER);
-        editor.commit();
-    }
-
-    /**
-     * THEMES
-     * Functions used to get theme-specific data (e.g. colours).
-     */
-
-    /**
-     * Gets the primary colour for the current theme.
-     * @param c Context
-     * @return ColorInt
-     */
-    public static int getThemePrimaryColour(Context c) {
-        int linkColor = R.color.colorPrimary;
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                linkColor = R.color.colorPrimary;
-                break;
-            case SettingsActivity.THEME_NOIR:
-                linkColor = R.color.colorPrimaryNoir;
-                break;
-            case SettingsActivity.THEME_BLEU:
-                linkColor = R.color.colorPrimaryBleu;
-                break;
-            case SettingsActivity.THEME_ROUGE:
-                linkColor = R.color.colorPrimaryRouge;
-                break;
-            case SettingsActivity.THEME_VIOLET:
-                linkColor = R.color.colorPrimaryViolet;
-                break;
-        }
-        return ContextCompat.getColor(c, linkColor);
-    }
-
-    /**
-     * Gets the card colour for the current theme.
-     * @param c Context
-     * @return ColorInt
-     */
-    public static int getThemeCardColour(Context c) {
-        int linkColor = R.color.white;
-        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
-            linkColor = R.color.colorPrimaryNoir;
-        }
-        return ContextCompat.getColor(c, linkColor);
-    }
-
-    /**
-     * Gets the colours to use for card buttons.
-     * @param c Context
-     * @return ColorInt
-     */
-    public static int getThemeButtonColour(Context c) {
-        int linkColor = R.color.colorPrimary;
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                linkColor = R.color.colorPrimary;
-                break;
-            case SettingsActivity.THEME_NOIR:
-                linkColor = R.color.colorPrimaryTextNoir;
-                break;
-            case SettingsActivity.THEME_BLEU:
-                linkColor = R.color.colorPrimaryBleu;
-                break;
-            case SettingsActivity.THEME_ROUGE:
-                linkColor = R.color.colorPrimaryRouge;
-                break;
-            case SettingsActivity.THEME_VIOLET:
-                linkColor = R.color.colorPrimaryViolet;
-                break;
-        }
-        return ContextCompat.getColor(c, linkColor);
-    }
-
-    /**
-     * Gets the colours to use for links.
-     * @param c Context
-     * @return ColorInt
-     */
-    public static int getThemeLinkColour(Context c) {
-        int linkColor = R.color.colorAccent;
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                linkColor = R.color.colorAccent;
-                break;
-            case SettingsActivity.THEME_NOIR:
-                linkColor = R.color.colorLinkTextNoir;
-                break;
-            case SettingsActivity.THEME_BLEU:
-                linkColor = R.color.colorAccentBleu;
-                break;
-            case SettingsActivity.THEME_ROUGE:
-                linkColor = R.color.colorAccentRouge;
-                break;
-            case SettingsActivity.THEME_VIOLET:
-                linkColor = R.color.colorAccentViolet;
-                break;
-        }
-        return ContextCompat.getColor(c, linkColor);
-    }
-
-    public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
-    public static final int[] refreshColoursNoir = { R.color.colorPrimaryNoir, R.color.colorPrimaryDarkNoir, R.color.colorAccentNoir };
-    public static final int[] refreshColoursBleu = { R.color.colorPrimaryBleu, R.color.colorPrimaryDarkBleu, R.color.colorAccentBleu };
-    public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
-    public static final int[] refreshColoursViolet = { R.color.colorPrimaryViolet, R.color.colorPrimaryDarkViolet, R.color.colorAccentViolet };
-
-    /**
-     * Gets swipe refresh colours for the current theme.
-     * @param c Context
-     * @return
-     */
-    public static int[] getThemeRefreshColours(Context c) {
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                return refreshColoursVert;
-            case SettingsActivity.THEME_NOIR:
-                return refreshColoursNoir;
-            case SettingsActivity.THEME_BLEU:
-                return refreshColoursBleu;
-            case SettingsActivity.THEME_ROUGE:
-                return refreshColoursRouge;
-            case SettingsActivity.THEME_VIOLET:
-                return refreshColoursViolet;
-            default:
-                return refreshColoursVert;
-        }
-    }
-
-    /**
-     * Gets the theme for the older MaterialDialogs for the current theme.
-     * @param c App context.
-     * @return Theme ID for the dialog.
-     */
-    public static int getThemeMaterialDialog(Context c) {
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                return R.style.MaterialDialog;
-            case SettingsActivity.THEME_NOIR:
-                return R.style.MaterialDialogNoir;
-            case SettingsActivity.THEME_BLEU:
-                return R.style.MaterialDialogBleu;
-            case SettingsActivity.THEME_ROUGE:
-                return R.style.MaterialDialogRouge;
-            case SettingsActivity.THEME_VIOLET:
-                return R.style.MaterialDialogViolet;
-            default:
-                return R.style.MaterialDialog;
-        }
-    }
-
-    /**
-     * Gets the theme for the newer Lollipop AlertDialogs for the current theme.
-     * @param c App context.
-     * @return Theme ID for the dialog.
-     */
-    public static int getThemeLollipopDialog(Context c) {
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                return R.style.AlertDialogCustom;
-            case SettingsActivity.THEME_NOIR:
-                return R.style.AlertDialogCustomNoir;
-            case SettingsActivity.THEME_BLEU:
-                return R.style.AlertDialogCustomBleu;
-            case SettingsActivity.THEME_ROUGE:
-                return R.style.AlertDialogCustomRouge;
-            case SettingsActivity.THEME_VIOLET:
-                return R.style.AlertDialogCustomViolet;
-            default:
-                return R.style.AlertDialogCustom;
-        }
-    }
-
-    /**
      * UTILITY
      * These are convenient tools to call from any class.
      */
@@ -1024,6 +667,47 @@ public class SparkleHelper {
         }
         String[] censusType = rawCensusData[censusId].split("##");
         return censusType;
+    }
+
+    // The number of hours a resolution is on the WA chamber floor
+    public static final int WA_RESOLUTION_DURATION = 96;
+    // Reference time zone for WA calculations
+    public static final String TIMEZONE_TORONTO = "America/Toronto";
+
+    /**
+     * Calculates the remaining time for a WA resolution in human-readable form.
+     * @param c App context
+     * @param hoursElapsed Number of hours passed since voting started
+     * @return Time remaining in human-readable form
+     */
+    public static String calculateResolutionEnd(Context c, int hoursElapsed)
+    {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(TimeZone.getTimeZone(TIMEZONE_TORONTO));
+
+        // Round up to nearest hour
+        if (cal.get(Calendar.MINUTE) >= 1)
+        {
+            cal.add(Calendar.HOUR, 1);
+        }
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        cal.add(Calendar.HOUR, WA_RESOLUTION_DURATION - hoursElapsed);
+
+        Date d = cal.getTime();
+        return getReadableDateFromUTC(c, d.getTime() / 1000L);
+    }
+
+    /**
+     * Checks if the given string indicates that the given stat is for a WA member.
+     * @param c App context
+     * @param stat WA state indicator
+     * @return bool if stat indicates its a WA member
+     */
+    public static boolean isWaMember(Context c, String stat)
+    {
+        return stat.equals(c.getString(R.string.nation_wa_member)) || stat.equals(c.getString(R.string.nation_wa_delegate));
     }
 
     /**
@@ -1099,42 +783,6 @@ public class SparkleHelper {
     }
 
     /**
-     * Calculates the remaining time for a WA resolution in human-readable form.
-     * @param c App context
-     * @param hoursElapsed Number of hours passed since voting started
-     * @return Time remaining in human-readable form
-     */
-    public static String calculateResolutionEnd(Context c, int hoursElapsed)
-    {
-        Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(TimeZone.getTimeZone(TIMEZONE_TORONTO));
-
-        // Round up to nearest hour
-        if (cal.get(Calendar.MINUTE) >= 1)
-        {
-            cal.add(Calendar.HOUR, 1);
-        }
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
-        cal.add(Calendar.HOUR, WA_RESOLUTION_DURATION - hoursElapsed);
-
-        Date d = cal.getTime();
-        return getReadableDateFromUTC(c, d.getTime() / 1000L);
-    }
-
-    /**
-     * Checks if the given string indicates that the given stat is for a WA member.
-     * @param c App context
-     * @param stat WA state indicator
-     * @return bool if stat indicates its a WA member
-     */
-    public static boolean isWaMember(Context c, String stat)
-    {
-        return stat.equals(c.getString(R.string.nation_wa_member)) || stat.equals(c.getString(R.string.nation_wa_delegate));
-    }
-
-    /**
      * LINK AND HTML PROCESSING
      * These are functions used to transform raw NationStates BBCode and formatting into clickable
      * links and formatted text. Separate from the other formatting functions due to their unique
@@ -1156,7 +804,7 @@ public class SparkleHelper {
     {
         final String urlFormat = "<a href=\"%s/%d\">%s</a>";
         String tempHolder = template;
-        String targetActivity = EXPLORE_TARGET;
+        String targetActivity = ExploreActivity.EXPLORE_TARGET;
 
         // Name needs to be formatted back to its NationStates ID first for the URL.
         targetActivity = targetActivity + getIdFromName(nTarget);
@@ -1296,21 +944,21 @@ public class SparkleHelper {
         holder = holder.replace("&amp;", "&");
 
         // Replace RMB links with targets to the RMB activity
-        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + RMB_TARGET + "%s/%s\">");
+        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
 
         // Replace internal links with valid links
         holder = regexReplace(holder, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
 
         // Linkify nations (@@NATION@@)
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_REGION, CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_REGION, ExploreActivity.EXPLORE_REGION);
 
         if (holder.contains("EO:"))
         {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
-            holder = activityLinkBuilder(c, t, template, "EO:"+newTarget+".", getNameFromId(newTarget), CLICKY_REGION_MODE);
+            holder = activityLinkBuilder(c, t, template, "EO:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         if (holder.contains("EC:"))
@@ -1318,11 +966,11 @@ public class SparkleHelper {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
-            holder = activityLinkBuilder(c, t, template, "EC:"+newTarget+".", getNameFromId(newTarget), CLICKY_REGION_MODE);
+            holder = activityLinkBuilder(c, t, template, "EC:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        t.setText(SparkleHelper.fromHtml(holder));
+        t.setText(fromHtml(holder));
         styleLinkifiedTextView(c, t);
     }
 
@@ -1336,7 +984,7 @@ public class SparkleHelper {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-        return SparkleHelper.fromHtml(holder);
+        return fromHtml(holder);
     }
 
     /**
@@ -1384,11 +1032,11 @@ public class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Replace raw NS nation and region links with Stately versions
-        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, CLICKY_REGION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, CLICKY_REGION_MODE);
-        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_NATION_MODE + "]");
-        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + EXPLORE_TARGET + "%s/" + CLICKY_REGION_MODE + "]");
+        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
+        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
+        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
 
         // Basic BBcode processing
         holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
@@ -1410,7 +1058,7 @@ public class SparkleHelper {
         holder = regexExtract(holder, BBCODE_PROPOSAL);
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
-        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"https://www.nationstates.net/%s\">%s</a>");
+        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + SparkleHelper.BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
         holder = regexQuoteFormat(c, t, holder);
 
@@ -1423,11 +1071,11 @@ public class SparkleHelper {
         }
 
         // Linkify nations and regions
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, CLICKY_NATION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, CLICKY_REGION_MODE);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, CLICKY_REGION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder, spoilers, fm);
@@ -1496,7 +1144,7 @@ public class SparkleHelper {
         }
         else
         {
-            t.setText(SparkleHelper.fromHtml(holder));
+            t.setText(fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
     }
@@ -1520,7 +1168,7 @@ public class SparkleHelper {
         }
         else
         {
-            t.setText(SparkleHelper.fromHtml(holder));
+            t.setText(fromHtml(holder));
         }
 
         // Deal with spoilers here
@@ -1612,7 +1260,7 @@ public class SparkleHelper {
             String replacer = n.getValue();
             holder = holder.replace(n.getKey(), replacer);
         }
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, CLICKY_NATION_MODE);
+        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
         return holder;
     }
 

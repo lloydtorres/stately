@@ -25,7 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-09-16.
@@ -54,7 +54,7 @@ public abstract class RefreshviewActivity extends SlidrActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);

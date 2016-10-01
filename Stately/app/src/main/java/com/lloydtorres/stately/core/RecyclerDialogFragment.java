@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-09-16.
@@ -45,10 +45,10 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeLollipopDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeLollipopDialog(getContext()));
         }
         else {
-            dialog = new AppCompatDialog(getActivity(), SparkleHelper.getThemeMaterialDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;

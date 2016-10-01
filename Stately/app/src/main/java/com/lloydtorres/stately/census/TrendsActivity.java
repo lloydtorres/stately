@@ -37,6 +37,7 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
@@ -108,7 +109,7 @@ public class TrendsActivity extends SlidrActivity {
         view = findViewById(R.id.trends_main);
 
         mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(this));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override

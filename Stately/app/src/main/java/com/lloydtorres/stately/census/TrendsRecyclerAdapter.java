@@ -37,6 +37,8 @@ import com.lloydtorres.stately.dto.CensusHistoryPoint;
 import com.lloydtorres.stately.dto.CensusHistoryScale;
 import com.lloydtorres.stately.dto.CensusNationRank;
 import com.lloydtorres.stately.dto.CensusNationRankList;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -253,7 +255,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             lineHistoryData.setDrawValues(false);
             lineHistoryData.setDrawVerticalHighlightIndicator(true);
             lineHistoryData.setDrawHorizontalHighlightIndicator(false);
-            lineHistoryData.setHighLightColor(SparkleHelper.getThemeButtonColour(context));
+            lineHistoryData.setHighLightColor(RaraHelper.getThemeButtonColour(context));
             lineHistoryData.setHighlightLineWidth(lineWidth);
             lineHistoryData.setDrawCircles(false);
             lineHistoryData.setLineWidth(lineWidth);
@@ -360,7 +362,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View view) {
-            SparkleHelper.startExploring(context, rankData.name, SparkleHelper.CLICKY_NATION_MODE);
+            SparkleHelper.startExploring(context, rankData.name, ExploreActivity.EXPLORE_NATION);
         }
     }
 }

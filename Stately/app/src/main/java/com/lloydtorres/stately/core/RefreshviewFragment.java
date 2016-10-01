@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-09-11.
@@ -64,7 +64,7 @@ public abstract class RefreshviewFragment extends Fragment {
 
         // Set up refresher to reload data on refresh
         mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.getThemeRefreshColours(getContext()));
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(getContext()));
 
         // Setup recyclerview
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);

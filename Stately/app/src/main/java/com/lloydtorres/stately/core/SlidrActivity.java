@@ -20,9 +20,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
 import com.r0adkll.slidr.model.SlidrInterface;
 
 /**
@@ -30,6 +30,9 @@ import com.r0adkll.slidr.model.SlidrInterface;
  * Base activity for all activities using the 'AppTheme.SlidrActivity' theme.
  */
 public abstract class SlidrActivity extends AppCompatActivity {
+
+    // Configuration for Slidr (for dem fancy sliding effects)
+    public static final SlidrConfig slidrConfig = new SlidrConfig.Builder().edge(true).build();
 
     protected SlidrInterface slidrInterface;
 
@@ -53,7 +56,7 @@ public abstract class SlidrActivity extends AppCompatActivity {
                 break;
         }
 
-        slidrInterface = Slidr.attach(this, SparkleHelper.slidrConfig);
+        slidrInterface = Slidr.attach(this, slidrConfig);
 
         super.onCreate(savedInstanceState);
     }

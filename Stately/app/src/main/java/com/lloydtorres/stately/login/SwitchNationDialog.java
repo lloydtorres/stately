@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -63,11 +64,11 @@ public class SwitchNationDialog extends DialogFragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            setStyle(DialogFragment.STYLE_NORMAL, SparkleHelper.getThemeLollipopDialog(getContext()));
+            setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeLollipopDialog(getContext()));
         }
         else
         {
-            setStyle(DialogFragment.STYLE_NORMAL, SparkleHelper.getThemeMaterialDialog(getContext()));
+            setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeMaterialDialog(getContext()));
         }
     }
 
@@ -92,7 +93,7 @@ public class SwitchNationDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), SparkleHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_switch)
                 .setView(view)
                 .setPositiveButton(R.string.add_nation, dialogListener);
