@@ -479,8 +479,7 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
     }
 
     /**
-     * Actually does the post to submit an endorsement. This is a bit weird since the API
-     * call redirects to a different page, so the "success" case is actually in the error.
+     * Actually does the post to submit an endorsement.
      * @param localid Required localId value
      */
     private void postEndorsement(final String localid)
@@ -489,37 +488,27 @@ public class ExploreActivity extends AppCompatActivity implements IToolbarActivi
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // blank since the post gets redirected
+                        isInProgress = false;
+                        if (isEndorsed) {
+                            SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_withdraw_endorse_response), name));
+                        }
+                        else {
+                            SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_endorsed_response), name));
+                        }
+
+                        queryNation(id);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // actual success since post gets redirected
-                if (error instanceof ServerError)
-                {
-                    isInProgress = false;
-                    if (isEndorsed)
-                    {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_withdraw_endorse_response), name));
-                    }
-                    else
-                    {
-                        SparkleHelper.makeSnackbar(view, String.format(getString(R.string.explore_endorsed_response), name));
-                    }
-
-                    queryNation(id);
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
                 else
                 {
-                    SparkleHelper.logError(error.toString());
-                    isInProgress = false;
-                    if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                    }
-                    else
-                    {
-                        SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
-                    }
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
