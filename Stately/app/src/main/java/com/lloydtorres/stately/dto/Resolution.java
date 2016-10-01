@@ -38,6 +38,7 @@ public class Resolution implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d&q="
                                         + "resolution+votetrack"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final String PATH_PROPOSAL = SparkleHelper.BASE_URI_NOSLASH + "/page=UN_view_proposal/id=%s";
 
     @Element(name="CATEGORY", required=false)
     public String category;

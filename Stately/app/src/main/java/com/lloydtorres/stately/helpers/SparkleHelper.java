@@ -77,6 +77,7 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.links.SpoilerSpan;
@@ -939,7 +940,7 @@ public class SparkleHelper {
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
     public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
-    public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=.*?\\](.*?)\\[\\/proposal\\]");
+    public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](.*?)\\[\\/proposal\\]");
     public static final Pattern BBCODE_RESOLUTION = Pattern.compile("(?i)(?s)\\[resolution=.*?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
@@ -986,7 +987,7 @@ public class SparkleHelper {
         holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
         holder = regexReplace(holder, BBCODE_PRE, "<code>%s</code>");
-        holder = regexExtract(holder, BBCODE_PROPOSAL);
+        holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
         holder = regexExtract(holder, BBCODE_RESOLUTION);
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + SparkleHelper.BASE_URI_NOSLASH + "/%s\">%s</a>");
