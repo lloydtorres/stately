@@ -96,6 +96,7 @@ import org.kefirsf.bb.TextProcessor;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,6 +203,21 @@ public class SparkleHelper {
      * These are functions used to validate inputs.
      */
 
+    /**
+     * Normalizes a given String to ASCII characters.
+     * Source: http://stackoverflow.com/a/15191508
+     * @param target
+     * @return
+     */
+    public static String normalizeToAscii(String target) {
+        StringBuilder sb = new StringBuilder(target.length());
+        target = Normalizer.normalize(target, Normalizer.Form.NFD);
+        for (char c : target.toCharArray()) {
+            if (c <= '\u007F') sb.append(c);
+        }
+        return sb.toString();
+    }
+
     public static final Pattern VALID_NATION_NAME = Pattern.compile("^[A-Za-z0-9-_ ]+$");
 
     /**
@@ -209,8 +225,10 @@ public class SparkleHelper {
      * @param name The name to be checked.
      * @return Bool if valid or not.
      */
-    public static boolean isValidName(String name) {
-        Matcher validator = VALID_NATION_NAME.matcher(name);
+    public static boolean isValidName(String name)
+    {
+        String normalizedName = normalizeToAscii(name);
+        Matcher validator = VALID_NATION_NAME.matcher(normalizedName);
         return validator.matches();
     }
 
@@ -224,9 +242,11 @@ public class SparkleHelper {
      * @param n the name
      * @return the NS ID
      */
-    public static String getIdFromName(String n) {
+    public static String getIdFromName(String n)
+    {
         if (n != null) {
-            return n.toLowerCase(Locale.US).replace(" ", "_");
+            String normalizedName = normalizeToAscii(n);
+            return normalizedName.toLowerCase(Locale.US).replace(" ", "_");
         }
         return null;
     }
