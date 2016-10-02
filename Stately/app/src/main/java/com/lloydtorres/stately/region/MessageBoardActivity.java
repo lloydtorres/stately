@@ -127,8 +127,7 @@ public class MessageBoardActivity extends SlidrActivity {
         view = findViewById(R.id.message_board_coordinator);
         isInProgress = false;
 
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             messages = new RegionMessages();
             messages.posts = new ArrayList<Post>();
             uniqueEnforcer = new HashSet<Integer>();
@@ -141,8 +140,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 latestId = getIntent().getIntExtra(BOARD_TARGET_ID, NO_LATEST);
             }
         }
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
             regionName = savedInstanceState.getString(BOARD_REGION_NAME);
             pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, RMB_LOAD_COUNT);
@@ -196,8 +194,7 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Hack to make swipe refresh show up.
      */
-    private void startSwipeRefresh()
-    {
+    private void startSwipeRefresh() {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -209,11 +206,9 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Enables message respond box if user has posting rights, then calls on function to load messages.
      */
-    private void queryPostingRights()
-    {
+    private void queryPostingRights() {
         // If user is a member of this region, enable posting rights immediately without querying
-        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
-        {
+        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName))) {
             enablePostingRights();
             queryPostingRightsCallback();
             likable = true;
@@ -244,8 +239,7 @@ public class MessageBoardActivity extends SlidrActivity {
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -254,8 +248,7 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * When this is called, it enables a bunch of views that lets the user post in the RMB.
      */
-    private void enablePostingRights()
-    {
+    private void enablePostingRights() {
         messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
         messageResponder.setVisibility(View.VISIBLE);
         messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
@@ -272,17 +265,14 @@ public class MessageBoardActivity extends SlidrActivity {
      * If there are no messages stored, start query. If there's messages available
      * (meaning they were restored from an old session), just show those messages.
      */
-    private void queryPostingRightsCallback()
-    {
+    private void queryPostingRightsCallback() {
         // If there are no messages, load them from NS
-        if (messages.posts.size() <= 0)
-        {
+        if (messages.posts.size() <= 0) {
             startSwipeRefresh();
             startQueryMessages(SCAN_FORWARD, true);
         }
         // Otherwise, they already here so just show it normally
-        else
-        {
+        else {
             refreshRecycler(SCAN_FORWARD, 0, false);
         }
     }
@@ -290,8 +280,7 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Performs a GET request on the NS region page, which should mark the RMB as read and clear the unread count.
      */
-    private void markBoardAsRead()
-    {
+    private void markBoardAsRead() {
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -310,8 +299,7 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Load swipe refresher and start loading messages.
      */
-    private void startQueryMessages(int direction, boolean firstRun)
-    {
+    private void startQueryMessages(int direction, boolean firstRun) {
         startSwipeRefresh();
         queryMessages(0, direction, firstRun);
     }
@@ -320,8 +308,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * Get RMB messages from NationStates
      * @param offset the number of messages to skip
      */
-    private void queryMessages(final int offset, final int direction, final boolean initialRun)
-    {
+    private void queryMessages(final int offset, final int direction, final boolean initialRun) {
         String targetURL;
         if (direction == SCAN_FORWARD && latestId != NO_LATEST) {
             targetURL = String.format(Locale.US, RegionMessages.QUERY_ID, SparkleHelper.getIdFromName(regionName), latestId, RMB_LOAD_COUNT);
@@ -338,8 +325,7 @@ public class MessageBoardActivity extends SlidrActivity {
                         Persister serializer = new Persister();
                         try {
                             messageResponse = serializer.read(RegionMessages.class, response);
-                            switch (direction)
-                            {
+                            switch (direction) {
                                 case SCAN_BACKWARD:
                                     processMessageResponseBackward(messageResponse);
                                     break;
@@ -362,15 +348,13 @@ public class MessageBoardActivity extends SlidrActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -380,11 +364,9 @@ public class MessageBoardActivity extends SlidrActivity {
      * Used to scan for previous messages.
      * @param m Message response
      */
-    private void processMessageResponseBackward(RegionMessages m)
-    {
+    private void processMessageResponseBackward(RegionMessages m) {
         // If there's nothing in the current messages, then there's probably nothing in the past
-        if (messages.posts.size() <= 0 || m.posts.size() <= 0)
-        {
+        if (messages.posts.size() <= 0 || m.posts.size() <= 0) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
             return;
@@ -396,10 +378,8 @@ public class MessageBoardActivity extends SlidrActivity {
         long earliestCurrentDate = messages.posts.get(0).timestamp;
         int timeCounter = 0;
         // Only add posts that are older than the current oldest post
-        for (Post p : m.posts)
-        {
-            if (p.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(p.id))
-            {
+        for (Post p : m.posts) {
+            if (p.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(p.id)) {
                 timeCounter++;
                 messages.posts.add(p);
                 uniqueEnforcer.add(p.id);
@@ -408,22 +388,19 @@ public class MessageBoardActivity extends SlidrActivity {
 
         // If at least 25% of messages were from the past, we're good
         int quarterMessages = (int)(m.posts.size() * 0.25);
-        if (timeCounter >= quarterMessages)
-        {
+        if (timeCounter >= quarterMessages) {
             pastOffset += timeCounter;
             refreshRecycler(SCAN_BACKWARD, m.posts.size(), false);
         }
         // If less than a quarter were from the past, adjust the offset and try again
-        else if (timeCounter < quarterMessages && timeCounter >= 1)
-        {
+        else if (timeCounter < quarterMessages && timeCounter >= 1) {
             // Since we already added the 25% of posts that are guaranteed to be old, we can
             // shift the offset by the size of the sample received and get the next batch
             pastOffset += m.posts.size();
             queryMessages(pastOffset, SCAN_FORWARD, false);
         }
         // If all messages are not from the past, stop and complain
-        else
-        {
+        else {
             SparkleHelper.makeSnackbar(view, getString(R.string.rmb_backtrack_error));
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -435,24 +412,19 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param m The response
      * @param initialRun if this is the first time the process is being run
      */
-    private void processMessageResponseForward(RegionMessages m, boolean initialRun)
-    {
+    private void processMessageResponseForward(RegionMessages m, boolean initialRun) {
         // Only add unique posts to our list
         int uniqueMessages = 0;
-        for (Post p : m.posts)
-        {
-            if (!uniqueEnforcer.contains(p.id))
-            {
+        for (Post p : m.posts) {
+            if (!uniqueEnforcer.contains(p.id)) {
                 messages.posts.add(p);
                 uniqueEnforcer.add(p.id);
                 uniqueMessages++;
             }
         }
         pastOffset += uniqueMessages;
-        if (uniqueMessages <= 0)
-        {
-            if (!initialRun)
-            {
+        if (uniqueMessages <= 0) {
+            if (!initialRun) {
                 SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
             }
             mSwipeRefreshLayout.setRefreshing(false);
@@ -463,14 +435,15 @@ public class MessageBoardActivity extends SlidrActivity {
         boolean shouldJumpToTop = initialRun && latestId != NO_LATEST;
         // Figure out the new latest value.
         Collections.sort(messages.posts);
-        latestId = messages.posts.get(messages.posts.size()-1).id;
+        if (messages.posts.size()-1 >= 0) {
+            latestId = messages.posts.get(messages.posts.size()-1).id;
+        }
 
         // We've reached the point where we already have the messages, so put everything back together
         refreshRecycler(SCAN_FORWARD, 0, shouldJumpToTop);
 
         // Mark board as read if this is the user's region's RMB
-        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName)))
-        {
+        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName))) {
             markBoardAsRead();
         }
     }
@@ -479,19 +452,16 @@ public class MessageBoardActivity extends SlidrActivity {
      * Used for setting a reply message for the post.
      * @param p
      */
-    public void setReplyMessage(Post p)
-    {
+    public void setReplyMessage(Post p) {
         replyTarget = p;
-        if (replyTarget != null)
-        {
+        if (replyTarget != null) {
             messageReplyContainer.setVisibility(View.VISIBLE);
             messageReplyContent.setText(String.format(Locale.US, getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
             messageContainer.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
         }
-        else if (mRecyclerAdapter != null)
-        {
+        else if (mRecyclerAdapter != null) {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
             messageReplyContainer.setVisibility(View.GONE);
         }
@@ -502,8 +472,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param p Post
      * @param i Post index
      */
-    public void setReplyMessage(Post p, int i)
-    {
+    public void setReplyMessage(Post p, int i) {
         setReplyMessage(p);
         mLayoutManager.scrollToPosition(i);
     }
@@ -512,16 +481,13 @@ public class MessageBoardActivity extends SlidrActivity {
      * It's called postMessage(), but this actually gets the chk value first before calling
      * the function that actually posts the message.
      */
-    private void postMessage()
-    {
+    private void postMessage() {
         // Make sure there's actually a message to post first
-        if (messageContainer.getText().length() <= 0)
-        {
+        if (messageContainer.getText().length() <= 0) {
             return;
         }
 
-        if (isInProgress)
-        {
+        if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
             return;
         }
@@ -538,8 +504,7 @@ public class MessageBoardActivity extends SlidrActivity {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element input = d.select("input[name=chk]").first();
 
-                        if (input == null)
-                        {
+                        if (input == null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
                             return;
@@ -557,15 +522,13 @@ public class MessageBoardActivity extends SlidrActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
@@ -576,8 +539,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * The actual function that POSTs the message.
      * @param chk
      */
-    private void postActualMessage(final String chk)
-    {
+    private void postActualMessage(final String chk) {
         String targetURL = String.format(Locale.US, RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
@@ -601,8 +563,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
@@ -611,8 +572,7 @@ public class MessageBoardActivity extends SlidrActivity {
         Map<String,String> params = new HashMap<String, String>();
         params.put("chk", chk);
         String newMessage = messageContainer.getText().toString();
-        if (replyTarget != null)
-        {
+        if (replyTarget != null) {
             String quoteMessage = replyTarget.message;
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
@@ -624,8 +584,7 @@ public class MessageBoardActivity extends SlidrActivity {
         params.put("lodge_message", "1");
         stringRequest.setParams(params);
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             messagePostButton.setOnClickListener(postMessageListener);
@@ -636,8 +595,7 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Called if user tries to like their own post.
      */
-    public void selfLikeStatus()
-    {
+    public void selfLikeStatus() {
         SparkleHelper.makeSnackbar(view, getString(R.string.rmb_self_like));
     }
 
@@ -647,10 +605,8 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param id ID of the post to un/like
      * @param sendLike True if like should be sent, false if unlike
      */
-    public void setLikeStatus(final int pos, final int id, final boolean sendLike)
-    {
-        if (!likable)
-        {
+    public void setLikeStatus(final int pos, final int id, final boolean sendLike) {
+        if (!likable) {
             SparkleHelper.makeSnackbar(view, getString(R.string.rmb_cant_like));
             return;
         }
@@ -681,8 +637,7 @@ public class MessageBoardActivity extends SlidrActivity {
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             // Undo action on error
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, !sendLike);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
@@ -694,8 +649,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param pos Position of the deleted post
      * @param id
      */
-    public void confirmDelete(final int pos, final int id)
-    {
+    public void confirmDelete(final int pos, final int id) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -716,8 +670,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param pos Position of the deleted post
      * @param id Post ID
      */
-    private void postMessageDelete(final int pos, final int id)
-    {
+    private void postMessageDelete(final int pos, final int id) {
         String targetURL = String.format(Locale.US, RegionMessages.DELETE_QUERY, SparkleHelper.getIdFromName(regionName), id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -725,12 +678,10 @@ public class MessageBoardActivity extends SlidrActivity {
                     @Override
                     public void onResponse(String response) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        if (!response.contains(CONFIRM_DELETE))
-                        {
+                        if (!response.contains(CONFIRM_DELETE)) {
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                         }
-                        else
-                        {
+                        else {
                             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setAsDeleted(pos);
                         }
                     }
@@ -742,15 +693,13 @@ public class MessageBoardActivity extends SlidrActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -759,16 +708,13 @@ public class MessageBoardActivity extends SlidrActivity {
     /**
      * Refreshes the contents of the recycler
      */
-    private void refreshRecycler(int direction, int newItems, boolean jumpToTop)
-    {
+    private void refreshRecycler(int direction, int newItems, boolean jumpToTop) {
         Collections.sort(messages.posts);
-        if (mRecyclerAdapter == null)
-        {
+        if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable, getSupportFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
-        else
-        {
+        else {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setMessages(messages.posts);
         }
         mSwipeRefreshLayout.setRefreshing(false);
@@ -776,8 +722,7 @@ public class MessageBoardActivity extends SlidrActivity {
         if (jumpToTop) {
             mLayoutManager.scrollToPosition(0);
         } else {
-            switch (direction)
-            {
+            switch (direction) {
                 case SCAN_FORWARD:
                     mLayoutManager.scrollToPosition(messages.posts.size()-1);
                     break;
@@ -793,11 +738,9 @@ public class MessageBoardActivity extends SlidrActivity {
      * This function rebuilds the set used to track unique messages after a restart.
      * Because set isn't parcelable :(
      */
-    private void rebuildUniqueEnforcer()
-    {
+    private void rebuildUniqueEnforcer() {
         uniqueEnforcer = new HashSet<Integer>();
-        for (Post p : messages.posts)
-        {
+        for (Post p : messages.posts) {
             uniqueEnforcer.add(p.id);
         }
     }
@@ -814,36 +757,29 @@ public class MessageBoardActivity extends SlidrActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(BOARD_PAST_OFFSET, pastOffset);
-        if (messages != null)
-        {
+        if (messages != null) {
             savedInstanceState.putParcelable(BOARD_MESSAGES, messages);
         }
-        if (regionName != null)
-        {
+        if (regionName != null) {
             savedInstanceState.putString(BOARD_REGION_NAME, regionName);
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             pastOffset = savedInstanceState.getInt(BOARD_PAST_OFFSET, RMB_LOAD_COUNT);
-            if (messages == null)
-            {
+            if (messages == null) {
                 messages = savedInstanceState.getParcelable(BOARD_MESSAGES);
                 rebuildUniqueEnforcer();
             }
-            if (regionName == null)
-            {
+            if (regionName == null) {
                 regionName = savedInstanceState.getString(BOARD_REGION_NAME);
             }
         }
