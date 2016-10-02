@@ -298,7 +298,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     properVoters.add(SparkleHelper.getNameFromId(v));
                 }
                 NameListSpan span = new NameListSpan(context, fm,
-                        String.format(Locale.US, context.getString(R.string.poll_votes_voter_dialog), index),
+                        String.format(Locale.US, context.getString(R.string.poll_votes_voter_dialog), option),
                         properVoters, ExploreActivity.EXPLORE_NATION);
                 template.setSpan(span, 0, template.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 content.setMovementMethod(LinkMovementMethod.getInstance());

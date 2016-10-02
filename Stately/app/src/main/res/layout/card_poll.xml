@@ -32,16 +32,6 @@
             android:layout_height="wrap_content"
             android:textColor="?attr/themedColorPrimaryText"
             tools:text="A tree falls in a forest and no one is around to hear it. Does a hipster have a vinyl recording of it?" />
-        <org.sufficientlysecure.htmltextview.HtmlTextView
-            android:id="@+id/card_region_poll_content"
-            android:paddingTop="8dp"
-            android:textSize="15sp"
-            android:textStyle="italic"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorPrimaryText"
-            tools:text="No, really, do they?" />
         <TextView
             android:id="@+id/card_region_poll_author"
             android:paddingTop="8dp"
@@ -67,6 +57,16 @@
             android:layout_height="wrap_content"
             android:textColor="?attr/themedColorSecondaryText"
             tools:text="@string/poll_close" />
+        <org.sufficientlysecure.htmltextview.HtmlTextView
+            android:id="@+id/card_region_poll_content"
+            android:paddingTop="8dp"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:fontFamily="sans-serif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themedColorPrimaryText"
+            tools:text="No, really, do they?" />
         <LinearLayout
             android:id="@+id/card_region_poll_options"
             android:layout_width="match_parent"
