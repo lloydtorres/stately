@@ -17,13 +17,8 @@
 package com.lloydtorres.stately.helpers.dialogs;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RecyclerDialogFragment;
 
 import java.util.ArrayList;
@@ -70,20 +65,9 @@ public class NameListDialog extends RecyclerDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        getDialog().setTitle(title);
-
-        return view;
-    }
-
-    @Override
     protected void initRecycler(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        super.initRecycler(view);
+        setDialogTitle(title);
         Collections.sort(names);
         mRecyclerAdapter = new NameListRecyclerAdapter(getContext(), this, names, target);
         mRecyclerView.setAdapter(mRecyclerAdapter);

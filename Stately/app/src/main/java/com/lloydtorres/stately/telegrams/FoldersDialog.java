@@ -17,11 +17,7 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RecyclerDialogFragment;
@@ -79,20 +75,10 @@ public class FoldersDialog extends RecyclerDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        getDialog().setTitle(getString(!isMove ? R.string.telegrams_folders : R.string.telegrams_move));
-
-        return view;
-    }
-
-    @Override
     protected void initRecycler(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        super.initRecycler(view);
+        setDialogTitle(getString(!isMove ? R.string.telegrams_folders : R.string.telegrams_move));
+
         if (!isMove) {
             mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders, selected);
         }

@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -63,7 +64,16 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
         return mView;
     }
 
-    protected abstract void initRecycler(View view);
+    protected void initRecycler(View view) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
+
+    protected void setDialogTitle(String title) {
+        getDialog().setTitle(title);
+    }
 
     @Override
     public void onResume() {

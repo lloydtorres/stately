@@ -17,11 +17,7 @@
 package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RecyclerDialogFragment;
@@ -42,8 +38,7 @@ public class DatasetDialog extends RecyclerDialogFragment {
     public void setDatasets(String[] rawDataset, int selected) {
         datasets = new ArrayList<Dataset>();
 
-        for (int i=0; i<rawDataset.length-1; i++)
-        {
+        for (int i=0; i<rawDataset.length-1; i++) {
             Dataset d = new Dataset();
             d.name = rawDataset[i].split("##")[0];
             d.id = i;
@@ -51,8 +46,7 @@ public class DatasetDialog extends RecyclerDialogFragment {
             datasets.add(d);
         }
 
-        if (selected < rawDataset.length-1)
-        {
+        if (selected < rawDataset.length-1) {
             datasets.get(selected).selected = true;
         }
     }
@@ -67,20 +61,10 @@ public class DatasetDialog extends RecyclerDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        getDialog().setTitle(getString(R.string.trends_datasets));
-
-        return view;
-    }
-
-    @Override
     protected void initRecycler(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        super.initRecycler(view);
+        setDialogTitle(getString(R.string.trends_datasets));
+
         mRecyclerAdapter = new DatasetRecyclerAdapter(getActivity(), this, datasets);
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
@@ -94,8 +78,7 @@ public class DatasetDialog extends RecyclerDialogFragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        if (datasets != null)
-        {
+        if (datasets != null) {
             savedInstanceState.putParcelableArrayList(DATASETS_KEY, datasets);
         }
     }
