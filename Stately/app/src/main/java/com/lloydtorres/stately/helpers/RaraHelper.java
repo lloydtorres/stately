@@ -57,7 +57,7 @@ import com.lloydtorres.stately.settings.SettingsActivity;
  * A collection of helper functions used to get theme-related data across Stately.
  */
 
-public class RaraHelper {
+public final class RaraHelper {
     // Private constructor
     private RaraHelper() {}
 

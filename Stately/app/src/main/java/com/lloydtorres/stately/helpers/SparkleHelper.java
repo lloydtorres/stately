@@ -122,7 +122,7 @@ import java.util.regex.Pattern;
  * many different classes. These include things such as formatters and linkers.
  */
 
-public class SparkleHelper {
+public final class SparkleHelper {
     // Tag used to mark system log print calls
     public static final String APP_TAG = "Stately";
 

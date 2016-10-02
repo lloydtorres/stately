@@ -59,7 +59,7 @@ import com.lloydtorres.stately.dto.UserLogin;
  * A collection of functions used for handling the current user session.
  */
 
-public class PinkaHelper {
+public final class PinkaHelper {
     // Keys to user name and autologin and other session variables
     public static final String USERSESSION_NAME = "var_name";
     public static final String USERSESSION_AUTOLOGIN = "var_autologin";

@@ -73,7 +73,7 @@ import java.util.regex.Pattern;
  * MuffinsHelper is a collection of helper functions for processing telegrams.
  * Note that the "generics" in this function expect content from a NS telegrams page.
  */
-public class MuffinsHelper {
+public final class MuffinsHelper {
     public static final String TG_UNREAD = "tg_new";
 
     public static final String SEND_ARROW = "→";

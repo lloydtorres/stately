@@ -81,7 +81,7 @@ import java.util.regex.Pattern;
  * Created by Lloyd on 2016-09-18.
  * Helper for processing and handling NS notices and notifications.
  */
-public class TrixHelper {
+public final class TrixHelper {
     // Common prefix for notification tags
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
 
