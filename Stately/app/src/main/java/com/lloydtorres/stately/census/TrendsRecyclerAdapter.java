@@ -251,7 +251,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // Formatting
             LineDataSet lineHistoryData = new LineDataSet(historyEntries, "");
             lineHistoryData.setAxisDependency(YAxis.AxisDependency.LEFT);
-            lineHistoryData.setColors(SparkleHelper.waColourFor, context);
+            lineHistoryData.setColors(RaraHelper.waColourFor, context);
             lineHistoryData.setDrawValues(false);
             lineHistoryData.setDrawVerticalHighlightIndicator(true);
             lineHistoryData.setDrawHorizontalHighlightIndicator(false);
@@ -272,7 +272,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = SparkleHelper.getFormattedLineChart(context, chart, this, isLargeValue, 6, false);
+            chart = RaraHelper.getFormattedLineChart(context, chart, this, isLargeValue, 6, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }

@@ -49,17 +49,79 @@ package com.lloydtorres.stately.helpers;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lloyd on 2016-09-30.
- * A collection of helper functions used to get theme-related data across Stately.
+ * A collection of helper functions used to get theme and styling data across Stately.
  */
 
 public final class RaraHelper {
     // Private constructor
     private RaraHelper() {}
+
+    // An array of chart colours
+    public static final int[] chartColours = {  R.color.colorChart0,
+            R.color.colorChart1,
+            R.color.colorChart2,
+            R.color.colorChart3,
+            R.color.colorChart4,
+            R.color.colorChart5,
+            R.color.colorChart6,
+            R.color.colorChart7,
+            R.color.colorChart8,
+            R.color.colorChart9,
+            R.color.colorChart10,
+            R.color.colorChart11,
+            R.color.colorChart12,
+            R.color.colorChart13,
+            R.color.colorChart14,
+            R.color.colorChart15,
+            R.color.colorChart16,
+            R.color.colorChart17,
+            R.color.colorChart18,
+            R.color.colorChart19,
+            R.color.colorChart20,
+            R.color.colorChart21,
+            R.color.colorChart22
+    };
+
+    // An array of colours used for the freedom scale
+    public static final int[] freedomColours = {  R.color.colorFreedom0,
+            R.color.colorFreedom1,
+            R.color.colorFreedom2,
+            R.color.colorFreedom3,
+            R.color.colorFreedom4,
+            R.color.colorFreedom5,
+            R.color.colorFreedom6,
+            R.color.colorFreedom7,
+            R.color.colorFreedom8,
+            R.color.colorFreedom9,
+            R.color.colorFreedom10,
+            R.color.colorFreedom11,
+            R.color.colorFreedom12,
+            R.color.colorFreedom13,
+            R.color.colorFreedom14
+    };
+
+    /**
+     * THEMES
+     * These are functions used for getting theme-specific colours.
+     */
 
     /**
      * Gets the primary colour for the current theme.
@@ -225,5 +287,139 @@ public final class RaraHelper {
             default:
                 return R.style.AlertDialogCustom;
         }
+    }
+
+    /**
+     * CHARTS
+     * These are functions used to style various charts
+     */
+
+    /**
+     * Formats a pie chart in a standardized way
+     * @param c Context
+     * @param p Pie chart
+     * @param chartLabels x-labels
+     * @return the PieChart, whose data must be set and invalidated
+     */
+    public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels) {
+        Legend cLegend = p.getLegend();
+        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        cLegend.setForm(Legend.LegendForm.CIRCLE);
+        cLegend.setTextSize(15);
+        cLegend.setWordWrapEnabled(true);
+
+        p.setDrawSliceText(false);
+        p.setDescription("");
+        p.setHoleRadius(60f);
+        p.setTransparentCircleRadius(65f);
+        p.setCenterTextSize(20);
+
+        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
+            int colorPrimaryNoir = ContextCompat.getColor(c, R.color.colorPrimaryNoir);
+            int colorPrimaryTextNoir = ContextCompat.getColor(c, R.color.colorPrimaryTextNoir);
+
+            p.setHoleColor(colorPrimaryNoir);
+            p.setTransparentCircleColor(colorPrimaryNoir);
+            p.setCenterTextColor(colorPrimaryTextNoir);
+            cLegend.setTextColor(colorPrimaryTextNoir);
+        }
+
+        p.setRotationEnabled(false);
+
+        p.setOnChartValueSelectedListener(new PieChartListener(c, p, chartLabels));
+        return p;
+    }
+
+    // An array of colours used for WA votes
+    public static final int[] waColours = { R.color.colorChart0,
+            R.color.colorChart1,
+            R.color.colorChart12
+    };
+
+    // Convenience variable to colour WA for and against votes
+    public static final int[] waColourFor = { R.color.colorChart0 };
+    public static final int[] waColourAgainst = { R.color.colorChart1 };
+
+    /**
+     * Formats a pie chart displaying current voting breakdown for a WA resolution.
+     * @param c Context
+     * @param p Pie chart
+     * @param voteFor Number of votes for
+     * @param voteAgainst Number of votes against
+     */
+    public static boolean getWaVotingChart(Context c, PieChart p, float voteFor, float voteAgainst) {
+        // Calculate percentages (floating point math FTW!)
+        float voteTotal = voteFor + voteAgainst;
+
+        if (voteTotal > 0) {
+            float votePercentFor = (voteFor * 100f)/voteTotal;
+            float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
+
+            List<String> chartLabels = new ArrayList<String>();
+            List<Entry> chartEntries = new ArrayList<Entry>();
+
+            // Set data
+            int i = 0;
+            chartLabels.add(c.getString(R.string.wa_for));
+            chartEntries.add(new Entry(votePercentFor, i++));
+            chartLabels.add(c.getString(R.string.wa_against));
+            chartEntries.add(new Entry(votePercentAgainst, i++));
+
+            // Set colour and disable chart labels
+            PieDataSet dataSet = new PieDataSet(chartEntries, "");
+            dataSet.setDrawValues(false);
+            dataSet.setColors(waColours, c);
+            PieData dataFull = new PieData(chartLabels, dataSet);
+
+            // formatting
+            p = getFormattedPieChart(c, p, chartLabels);
+            p.setData(dataFull);
+            p.invalidate();
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Formats a line chart in a standardized manner
+     * @param chart LineChart to format
+     * @param listener Listener to attach to chart
+     * @param valueFormatter True if large value formatter should be used
+     * @param skip Number of values to skip
+     * @param legend True if show legend, false if hide legend
+     * @return Formatted linechart
+     */
+    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend) {
+        Legend cLegend = chart.getLegend();
+        cLegend.setEnabled(legend);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setLabelsToSkip(skip);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis yAxisRight = chart.getAxisRight();
+        yAxisRight.setEnabled(false);
+
+        YAxis yAxisLeft = chart.getAxisLeft();
+        if (valueFormatter) {
+            yAxisLeft.setValueFormatter(new LargeValueFormatter());
+        }
+
+        if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
+            int textColorNoir = ContextCompat.getColor(c, R.color.colorPrimaryTextNoir);
+            cLegend.setTextColor(textColorNoir);
+            xAxis.setTextColor(textColorNoir);
+            yAxisLeft.setTextColor(textColorNoir);
+        }
+
+        chart.setDoubleTapToZoomEnabled(false);
+        chart.setDescription("");
+        chart.setDragEnabled(true);
+        chart.setScaleYEnabled(false);
+        chart.setDrawGridBackground(false);
+        chart.setOnChartValueSelectedListener(listener);
+
+        return chart;
     }
 }

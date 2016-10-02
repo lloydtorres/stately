@@ -48,6 +48,7 @@ import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
@@ -306,19 +307,19 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             // If voting FOR the resolution
             if (WaVoteStatus.VOTE_FOR.equals(vote))
             {
-                stateColour = SparkleHelper.waColours[0];
+                stateColour = RaraHelper.waColours[0];
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If voting AGAINST the resolution
             else if (WaVoteStatus.VOTE_AGAINST.equals(vote))
             {
-                stateColour = SparkleHelper.waColours[1];
+                stateColour = RaraHelper.waColours[1];
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If no vote yet
             else
             {
-                stateColour = SparkleHelper.waColours[2];
+                stateColour = RaraHelper.waColours[2];
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_novote), assemblyName));
             }
 
@@ -364,21 +365,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             int civilRightsScore = data.civScore;
             civilRightsPts.setText(String.valueOf(civilRightsScore));
             int civColInd = civilRightsScore / 7;
-            civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[civColInd]));
+            civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[civColInd]));
             civilRightsCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
             economyDesc.setText(data.econDesc);
             int economyScore = data.econScore;
             economyPts.setText(String.valueOf(economyScore));
             int econColInd = economyScore / 7;
-            economyCard.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[econColInd]));
+            economyCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[econColInd]));
             economyCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_ECONOMY));
 
             politicalDesc.setText(data.poliDesc);
             int politicalFreedomScore = data.poliScore;
             politicalPts.setText(String.valueOf(politicalFreedomScore));
             int polColInd = politicalFreedomScore / 7;
-            politicalCard.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[polColInd]));
+            politicalCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[polColInd]));
             politicalCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
         }
     }
@@ -504,8 +505,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                         chartEntries.add(n);
                     }
 
-                    for (int i=0; i<SparkleHelper.chartColours.length; i++) {
-                        chartColours.add(ContextCompat.getColor(context, SparkleHelper.chartColours[i]));
+                    for (int i=0; i<RaraHelper.chartColours.length; i++) {
+                        chartColours.add(ContextCompat.getColor(context, RaraHelper.chartColours[i]));
                     }
                     break;
                 case NationChartCardData.MODE_GOV:
@@ -629,7 +630,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             dataSet.setColors(chartColours);
             PieData dataFull = new PieData(chartLabels, dataSet);
 
-            chart = SparkleHelper.getFormattedPieChart(context, chart, chartLabels);
+            chart = RaraHelper.getFormattedPieChart(context, chart, chartLabels);
             chart.setData(dataFull);
             chart.invalidate();
         }

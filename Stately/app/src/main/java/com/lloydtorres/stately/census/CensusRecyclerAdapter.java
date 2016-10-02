@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
@@ -330,10 +331,10 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             {
                 censusColorIndex = (int) (data.regionRankPercent / 7);
             }
-            censusColorIndex = (SparkleHelper.freedomColours.length - 1) - censusColorIndex;
+            censusColorIndex = (RaraHelper.freedomColours.length - 1) - censusColorIndex;
             // Sanity checks
-            censusColorIndex = Math.min(Math.max(censusColorIndex, 0), (SparkleHelper.freedomColours.length - 1));
-            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, SparkleHelper.freedomColours[censusColorIndex]));
+            censusColorIndex = Math.min(Math.max(censusColorIndex, 0), (RaraHelper.freedomColours.length - 1));
+            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[censusColorIndex]));
 
             String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
             title.setText(censusType[0]);

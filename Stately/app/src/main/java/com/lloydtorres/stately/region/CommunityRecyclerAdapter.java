@@ -46,6 +46,7 @@ import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.helpers.links.NameListSpan;
@@ -268,10 +269,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 PieDataSet dataSet = new PieDataSet(chartEntries, "");
                 dataSet.setDrawValues(false);
-                dataSet.setColors(SparkleHelper.chartColours, context);
+                dataSet.setColors(RaraHelper.chartColours, context);
                 PieData dataFull = new PieData(chartLabels, dataSet);
 
-                breakdown = SparkleHelper.getFormattedPieChart(context, breakdown, chartLabels);
+                breakdown = RaraHelper.getFormattedPieChart(context, breakdown, chartLabels);
                 breakdown.setData(dataFull);
                 breakdown.invalidate();
             }
@@ -362,7 +363,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             linkContent.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_link), chamberName));
 
             filler.setText(String.format(Locale.US, context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
-            if (!SparkleHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst))
+            if (!RaraHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst))
             {
                 chart.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);

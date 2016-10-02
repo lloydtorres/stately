@@ -321,7 +321,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         public void init() {
-            if (!SparkleHelper.getWaVotingChart(context, votingBreakdown, resolution.votesFor, resolution.votesAgainst)) {
+            if (!RaraHelper.getWaVotingChart(context, votingBreakdown, resolution.votesFor, resolution.votesAgainst)) {
                 votingBreakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
@@ -370,7 +370,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             // lots of formatting for the FOR and AGAINST lines
             LineDataSet setFor = new LineDataSet(entryFor, context.getString(R.string.wa_for));
             setFor.setAxisDependency(YAxis.AxisDependency.LEFT);
-            setFor.setColors(SparkleHelper.waColourFor, context);
+            setFor.setColors(RaraHelper.waColourFor, context);
             setFor.setDrawValues(false);
             setFor.setDrawVerticalHighlightIndicator(true);
             setFor.setDrawHorizontalHighlightIndicator(false);
@@ -381,7 +381,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             LineDataSet setAgainst = new LineDataSet(entryAgainst, context.getString(R.string.wa_against));
             setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
-            setAgainst.setColors(SparkleHelper.waColourAgainst, context);
+            setAgainst.setColors(RaraHelper.waColourAgainst, context);
             setAgainst.setDrawValues(false);
             setAgainst.setDrawVerticalHighlightIndicator(true);
             setAgainst.setDrawHorizontalHighlightIndicator(false);
@@ -408,7 +408,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             LineData data = new LineData(xLabels, dataSets);
 
             // formatting
-            votingHistory = SparkleHelper.getFormattedLineChart(context, votingHistory,
+            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory,
                     new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst),
                     true, 23, false);
 
