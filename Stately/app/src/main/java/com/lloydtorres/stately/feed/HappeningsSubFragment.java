@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lloydtorres.stately.helpers.happenings;
+package com.lloydtorres.stately.feed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

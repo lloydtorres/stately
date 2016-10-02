@@ -33,7 +33,7 @@ import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
-import com.lloydtorres.stately.helpers.happenings.HappeningCard;
+import com.lloydtorres.stately.feed.HappeningCard;
 
 import java.util.ArrayList;
 import java.util.Collections;
