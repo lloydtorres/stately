@@ -95,7 +95,7 @@ public class SubscriptionsDialog extends DialogFragment {
                 editor.putBoolean(CURRENT_REGION, curRegion.isChecked());
                 editor.putBoolean(DOSSIER_REGIONS, dossierRegions.isChecked());
                 editor.putBoolean(WORLD_ASSEMBLY, assembly.isChecked());
-                editor.commit();
+                editor.apply();
                 if (callback != null)
                 {
                     callback.startQueryHappenings();

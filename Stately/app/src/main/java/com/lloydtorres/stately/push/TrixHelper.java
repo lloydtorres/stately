@@ -100,7 +100,7 @@ public final class TrixHelper {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
-        editor.commit();
+        editor.apply();
     }
 
     /**

@@ -224,6 +224,6 @@ public final class PinkaHelper {
         editor.remove(USERSESSION_PIN);
         editor.remove(USERSESSION_REGION);
         editor.remove(USERSESSION_WA_MEMBER);
-        editor.commit();
+        editor.apply();
     }
 }
