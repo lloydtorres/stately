@@ -364,21 +364,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             civilRightsDesc.setText(data.civDesc);
             int civilRightsScore = data.civScore;
             civilRightsPts.setText(String.valueOf(civilRightsScore));
-            int civColInd = civilRightsScore / 7;
+            int civColInd = Math.min(Math.max(civilRightsScore / 7, 0), RaraHelper.freedomColours.length - 1);
             civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[civColInd]));
             civilRightsCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
             economyDesc.setText(data.econDesc);
             int economyScore = data.econScore;
             economyPts.setText(String.valueOf(economyScore));
-            int econColInd = economyScore / 7;
+            int econColInd = Math.min(Math.max(economyScore / 7, 0), RaraHelper.freedomColours.length - 1);
             economyCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[econColInd]));
             economyCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_ECONOMY));
 
             politicalDesc.setText(data.poliDesc);
             int politicalFreedomScore = data.poliScore;
             politicalPts.setText(String.valueOf(politicalFreedomScore));
-            int polColInd = politicalFreedomScore / 7;
+            int polColInd = Math.min(Math.max(politicalFreedomScore / 7, 0), RaraHelper.freedomColours.length - 1);
             politicalCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[polColInd]));
             politicalCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
         }
