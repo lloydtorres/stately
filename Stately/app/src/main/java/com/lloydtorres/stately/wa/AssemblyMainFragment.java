@@ -68,15 +68,13 @@ public class AssemblyMainFragment extends RefreshviewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
 
         toolbar.setTitle(getString(R.string.menu_wa));
 
         // Restore state
-        if (savedInstanceState != null && voteStatus == null)
-        {
+        if (savedInstanceState != null && voteStatus == null) {
             voteStatus = savedInstanceState.getParcelable(VOTE_STATUS_KEY);
         }
 
@@ -101,8 +99,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
 
     // Wrapper function for the heavy-lifting query function
     // Starts PART 1 of the query process
-    private void queryWorldAssembly(View view)
-    {
+    private void queryWorldAssembly(View view) {
         queryWorldAssemblyHeavy(view, Assembly.GENERAL_ASSEMBLY);
     }
 
@@ -119,8 +116,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
      * @param view
      * @param chamberId
      */
-    private void queryWorldAssemblyHeavy(final View view, final int chamberId)
-    {
+    private void queryWorldAssemblyHeavy(final View view, final int chamberId) {
         String targetURL = String.format(Locale.US, Assembly.QUERY, chamberId);
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
@@ -128,23 +124,20 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                     Assembly waResponse = null;
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
                         Persister serializer = new Persister();
                         try {
                             waResponse = serializer.read(Assembly.class, response);
 
-                            if (chamberId == Assembly.GENERAL_ASSEMBLY)
-                            {
+                            if (chamberId == Assembly.GENERAL_ASSEMBLY) {
                                 // Once a response is obtained for the General Assembly,
                                 // start querying for the Security Council
                                 setGeneralAssembly(waResponse);
                                 queryWorldAssemblyHeavy(view, Assembly.SECURITY_COUNCIL);
                             }
-                            else if (chamberId == Assembly.SECURITY_COUNCIL)
-                            {
+                            else if (chamberId == Assembly.SECURITY_COUNCIL) {
                                 // Once a response is obtained for the Security Council,
                                 // setup the actual view
                                 setSecurityCouncil(waResponse);
@@ -160,8 +153,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
@@ -169,34 +161,34 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
 
-    private void refreshRecycler()
-    {
-        mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil, voteStatus);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+    private void refreshRecycler() {
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil, voteStatus);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else {
+            ((AssemblyRecyclerAdapter) mRecyclerAdapter).setData(genAssembly, secCouncil, voteStatus);
+        }
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        if (voteStatus != null)
-        {
+        if (voteStatus != null) {
             savedInstanceState.putParcelable(VOTE_STATUS_KEY, voteStatus);
         }
     }

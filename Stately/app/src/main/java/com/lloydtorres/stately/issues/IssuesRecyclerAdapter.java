@@ -45,11 +45,10 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<Object> issues;
     private Nation mNation;
 
-    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n)
-    {
+    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n) {
         context = c;
-        issues = i;
         mNation = n;
+        setIssueCards(i);
     }
 
     @Override
@@ -57,8 +56,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType)
-        {
+        switch (viewType) {
             case ISSUE_CARD:
                 View issueCard = inflater.inflate(R.layout.card_issue_main, parent, false);
                 viewHolder = new IssueCard(context, issueCard);
@@ -92,17 +90,21 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (issues.get(position) instanceof Issue)
-        {
+        if (issues.get(position) instanceof Issue) {
             return ISSUE_CARD;
         }
-        else if (issues.get(position) instanceof String)
-        {
+        else if (issues.get(position) instanceof String) {
             return NEXT_CARD;
         }
         return -1;
     }
 
+    public void setIssueCards(List<Object> cards) {
+        issues = cards;
+        notifyDataSetChanged();
+    }
+
+    // Card viewholders
     public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context context;
@@ -119,8 +121,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             v.setOnClickListener(this);
         }
 
-        public void init(Issue i)
-        {
+        public void init(Issue i) {
             issue = i;
 
             title.setText(issue.title);
@@ -134,8 +135,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View v) {
-            if (issue != null)
-            {
+            if (issue != null) {
                 Intent decisionActivityLaunch = new Intent(context, IssueDecisionActivity.class);
                 decisionActivityLaunch.putExtra(IssueDecisionActivity.ISSUE_DATA, issue);
                 decisionActivityLaunch.putExtra(IssueDecisionActivity.NATION_DATA, mNation);
@@ -148,15 +148,13 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         private TextView nextUpdate;
 
-        public NextCard(View v)
-        {
+        public NextCard(View v) {
             super(v);
             v.findViewById(R.id.card_generic_title).setVisibility(View.GONE);
             nextUpdate = (TextView) v.findViewById(R.id.card_generic_content);
         }
 
-        public void init(String m)
-        {
+        public void init(String m) {
             nextUpdate.setText(m);
             nextUpdate.setTypeface(nextUpdate.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

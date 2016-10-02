@@ -47,7 +47,10 @@ package com.lloydtorres.stately.helpers;
  */
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -421,5 +424,41 @@ public final class RaraHelper {
         chart.setOnChartValueSelectedListener(listener);
 
         return chart;
+    }
+
+    /**
+     * UTILITIES
+     * These are helper functions for dealing with different styling issues.
+     */
+
+    /**
+     * Returns a StaggeredGridLayoutManager that has 1 column on portrait and 2 columns on landscape.
+     * @param c Context
+     * @return See above
+     */
+    public static StaggeredGridLayoutManager getStaggeredLayoutManager(Context c) {
+        // One column on portrait, two columns on landscape
+        int noColumns = c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                ? 1 : 2;
+        return new StaggeredGridLayoutManager(noColumns, StaggeredGridLayoutManager.VERTICAL);
+    }
+
+    /**
+     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across multiple columns).
+     * @param itemView ViewHolder itemView
+     */
+    public static void setViewHolderFullSpan(View itemView) {
+        setViewHolderFullSpan(itemView, true);
+    }
+
+    /**
+     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across multiple columns).
+     * @param itemView ViewHolder itemView
+     * @param isFullSpan Full span or not
+     */
+    public static void setViewHolderFullSpan(View itemView, boolean isFullSpan) {
+        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+        layoutParams.setFullSpan(isFullSpan);
+        itemView.setLayoutParams(layoutParams);
     }
 }

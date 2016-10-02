@@ -18,13 +18,13 @@ package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-09-12.
@@ -48,7 +48,7 @@ public abstract class RecyclerSubFragment extends Fragment {
         // Setup recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         return view;

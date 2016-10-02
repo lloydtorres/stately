@@ -165,6 +165,9 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         public void init() {
+            // Forces card to span across columns
+            RaraHelper.setViewHolderFullSpan(itemView);
+
             title.setText(resolution.name);
             setTargetView(target, resolution.category, resolution.target);
 
@@ -245,6 +248,11 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         public void init() {
+            if (!isActive) {
+                // Forces card to span across columns if this is the only other card besides the header
+                RaraHelper.setViewHolderFullSpan(itemView);
+            }
+
             SparkleHelper.setBbCodeFormatting(context, content, resolution.content, resolutionActivity.getSupportFragmentManager());
 
             if (isActive && PinkaHelper.getWaSessionData(context)) {

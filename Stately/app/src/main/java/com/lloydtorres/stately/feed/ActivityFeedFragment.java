@@ -399,8 +399,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      */
     private void finishHappeningQuery() {
         Collections.sort(events);
-        mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else {
+            ((EventRecyclerAdapter) mRecyclerAdapter).setEvents(events);
+        }
+
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

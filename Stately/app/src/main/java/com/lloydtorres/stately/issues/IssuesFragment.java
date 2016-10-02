@@ -64,8 +64,7 @@ public class IssuesFragment extends RefreshviewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
 
         toolbar.setTitle(getString(R.string.menu_issues));
@@ -81,8 +80,7 @@ public class IssuesFragment extends RefreshviewFragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         // Refresh on resume
         startQueryIssues();
@@ -91,8 +89,7 @@ public class IssuesFragment extends RefreshviewFragment {
     /**
      * Call to start querying and activate SwipeFreshLayout
      */
-    private void startQueryIssues()
-    {
+    private void startQueryIssues() {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -107,16 +104,14 @@ public class IssuesFragment extends RefreshviewFragment {
      * Scrape the issues from the actual NationStates site
      * @param view
      */
-    private void queryIssues(final View view)
-    {
+    private void queryIssues(final View view) {
         String targetURL = Issue.QUERY;
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
@@ -125,8 +120,7 @@ public class IssuesFragment extends RefreshviewFragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
@@ -134,15 +128,13 @@ public class IssuesFragment extends RefreshviewFragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -152,14 +144,12 @@ public class IssuesFragment extends RefreshviewFragment {
      * Process the HTML contents of the issues into actual Issue objects
      * @param d
      */
-    private void processIssues(View v, Document d)
-    {
+    private void processIssues(View v, Document d) {
         issues = new ArrayList<Object>();
 
         Element issuesContainer = d.select("ul.dilemmalist").first();
 
-        if (issuesContainer == null)
-        {
+        if (issuesContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
@@ -168,8 +158,7 @@ public class IssuesFragment extends RefreshviewFragment {
 
         Elements issuesRaw = issuesContainer.children();
 
-        for (Element i : issuesRaw)
-        {
+        for (Element i : issuesRaw) {
             Issue issueCore = new Issue();
 
             Elements issueContents = i.children();
@@ -196,19 +185,16 @@ public class IssuesFragment extends RefreshviewFragment {
         }
 
         Element nextIssueUpdate = d.select("p.dilemmanextupdate").first();
-        if (nextIssueUpdate != null)
-        {
+        if (nextIssueUpdate != null) {
             String nextUpdate = nextIssueUpdate.text();
             issues.add(nextUpdate);
         }
 
-        if (issuesRaw.size() <= 0)
-        {
+        if (issuesRaw.size() <= 0) {
             String nextUpdate = getString(R.string.no_issues);
 
             Matcher m = NEXT_ISSUE_REGEX.matcher(d.html());
-            if (m.find())
-            {
+            if (m.find()) {
                 long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
                 nextUpdate = String.format(Locale.US, getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
             }
@@ -216,8 +202,13 @@ public class IssuesFragment extends RefreshviewFragment {
             issues.add(nextUpdate);
         }
 
-        mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
+        else {
+            ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues);
+        }
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

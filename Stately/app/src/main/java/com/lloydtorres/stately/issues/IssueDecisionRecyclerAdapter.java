@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
@@ -51,8 +52,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private Context context;
     private boolean pirateMode;
 
-    public IssueDecisionRecyclerAdapter(Context c, Issue issue)
-    {
+    public IssueDecisionRecyclerAdapter(Context c, Issue issue) {
         context = c;
         cards = new ArrayList<Object>();
 
@@ -103,15 +103,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemViewType(int position) {
-        if (cards.get(position) instanceof Issue)
-        {
+        if (cards.get(position) instanceof Issue) {
             return INFO_CARD;
         }
-        else if (cards.get(position) instanceof IssueOption)
-        {
+        else if (cards.get(position) instanceof IssueOption) {
             IssueOption option = (IssueOption) cards.get(position);
-            if (option.index == -1)
-            {
+            if (option.index == -1) {
                 return DISMISS_CARD;
             }
             return OPTION_CARD;
@@ -128,8 +125,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private TextView issueNo;
         private TextView content;
 
-        public IssueInfoCard(Context c, View v)
-        {
+        public IssueInfoCard(Context c, View v) {
             super(v);
             context = c;
             title = (TextView) v.findViewById(R.id.card_issue_info_title);
@@ -137,8 +133,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             content = (TextView) v.findViewById(R.id.card_issue_option_content);
         }
 
-        public void init(Issue issue)
-        {
+        public void init(Issue issue) {
+            // Forces card to span across columns
+            RaraHelper.setViewHolderFullSpan(itemView);
+
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
             if (issue.chain != null) {
                 issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
@@ -161,8 +159,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private TextView selectContent;
         private View divider;
 
-        public IssueOptionCard(Context c, View v)
-        {
+        public IssueOptionCard(Context c, View v) {
             super(v);
 
             context = c;
@@ -174,9 +171,31 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             divider = v.findViewById(R.id.view_divider);
         }
 
-        public void init(IssueOption op, int mode)
-        {
+        public void init(IssueOption op, int mode) {
             option = op;
+
+            // Resets some values to default
+            RaraHelper.setViewHolderFullSpan(itemView, false);
+            contentHolder.setVisibility(View.VISIBLE);
+            switch (SettingsActivity.getTheme(context)) {
+                case SettingsActivity.THEME_VERT:
+                    selectIcon.setImageResource(R.drawable.ic_check_green);
+                    break;
+                case SettingsActivity.THEME_NOIR:
+                    selectIcon.setImageResource(R.drawable.ic_check_white);
+                    break;
+                case SettingsActivity.THEME_BLEU:
+                    selectIcon.setImageResource(R.drawable.ic_check_blue);
+                    break;
+                case SettingsActivity.THEME_ROUGE:
+                    selectIcon.setImageResource(R.drawable.ic_check_red);
+                    break;
+                case SettingsActivity.THEME_VIOLET:
+                    selectIcon.setImageResource(R.drawable.ic_check_violet);
+                    break;
+            }
+            divider.setVisibility(View.VISIBLE);
+
             content.setText(SparkleHelper.getHtmlFormatting(option.content).toString());
             selectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,8 +207,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 selectContent.setText(context.getString(R.string.issue_select_option_pirate));
             }
 
-            if (mode == DISMISS_CARD)
-            {
+            if (mode == DISMISS_CARD) {
+                // Forces card to span across columns
+                RaraHelper.setViewHolderFullSpan(itemView);
+
                 contentHolder.setVisibility(View.GONE);
                 selectContent.setText(context.getString(pirateMode ? R.string.issue_dismiss_issue_pirate : R.string.issue_dismiss_issue));
                 switch (SettingsActivity.getTheme(context)) {

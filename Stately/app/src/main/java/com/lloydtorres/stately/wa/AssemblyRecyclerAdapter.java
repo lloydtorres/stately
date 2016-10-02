@@ -31,9 +31,10 @@ import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.WaVoteStatus;
+import com.lloydtorres.stately.feed.HappeningCard;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
-import com.lloydtorres.stately.feed.HappeningCard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,20 +64,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc, WaVoteStatus vs) {
         context = c;
-        voteStatus = vs;
-
-        // Setup objects based on RecyclerView content
-        cards = new ArrayList<Object>();
-        cards.add(ga);
-        cards.add(sc);
-
-        DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
-        cards.add(s);
-
-        List<Event> happen = sc.events;
-        Collections.sort(happen);
-
-        cards.addAll(happen);
+        setData(ga, sc, vs);
     }
 
     @Override
@@ -149,6 +137,24 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         return -1;
     }
 
+    public void setData(Assembly ga, Assembly sc, WaVoteStatus vs) {
+        voteStatus = vs;
+
+        // Setup objects based on RecyclerView content
+        cards = new ArrayList<Object>();
+        cards.add(ga);
+        cards.add(sc);
+
+        DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
+        cards.add(s);
+
+        List<Event> happen = sc.events;
+        Collections.sort(happen);
+
+        cards.addAll(happen);
+        notifyDataSetChanged();
+    }
+
     // Card viewholders
 
     // Card for active resolutions
@@ -178,6 +184,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public void init(Assembly a, int pos) {
+            // Forces card to span across columns
+            RaraHelper.setViewHolderFullSpan(itemView);
+
             String voteStats = "";
             if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));

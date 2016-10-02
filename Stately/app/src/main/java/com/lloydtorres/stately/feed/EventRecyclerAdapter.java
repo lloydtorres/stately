@@ -37,17 +37,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private Context context;
     private List<Event> events;
 
-    public EventRecyclerAdapter(Context c, List<Event> ev)
-    {
+    public EventRecyclerAdapter(Context c, List<Event> ev) {
         context = c;
-        events = ev;
-
-        if (events.size() <= 0)
-        {
-            Event ne = new Event();
-            ne.timestamp = EMPTY_INDICATOR;
-            events.add(ne);
-        }
+        setEvents(ev);
     }
 
     @Override
@@ -67,5 +59,15 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         return events.size();
+    }
+
+    public void setEvents(List<Event> evs) {
+        events = evs;
+        if (events.size() <= 0) {
+            Event ne = new Event();
+            ne.timestamp = EMPTY_INDICATOR;
+            events.add(ne);
+        }
+        notifyDataSetChanged();
     }
 }

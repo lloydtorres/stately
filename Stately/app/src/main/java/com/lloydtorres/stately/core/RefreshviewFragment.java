@@ -19,7 +19,6 @@ package com.lloydtorres.stately.core;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -69,7 +68,7 @@ public abstract class RefreshviewFragment extends Fragment {
         // Setup recyclerview
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         return mView;
