@@ -77,8 +77,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private List<Parcelable> cards;
     private String regionName;
 
-    public CommunityRecyclerAdapter(Context c, FragmentManager f, List<Parcelable> crds, String n)
-    {
+    public CommunityRecyclerAdapter(Context c, FragmentManager f, List<Parcelable> crds, String n) {
         context = c;
         fm = f;
         cards = crds;
@@ -148,16 +147,13 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (cards.get(position) instanceof RMBButtonHolder)
-        {
+        if (cards.get(position) instanceof RMBButtonHolder) {
             return BUTTON_CARD;
         }
-        else if (cards.get(position) instanceof Poll)
-        {
+        else if (cards.get(position) instanceof Poll) {
             return POLL_CARD;
         }
-        else if (cards.get(position) instanceof WaVote)
-        {
+        else if (cards.get(position) instanceof WaVote) {
             return WA_CARD;
         }
         else if (cards.get(position) instanceof OfficerHolder) {
@@ -185,8 +181,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             v.setOnClickListener(this);
         }
 
-        public void init(RMBButtonHolder bh)
-        {
+        public void init(RMBButtonHolder bh) {
             buttonData = bh;
             if (bh.unreadCount != null && bh.unreadCount.length() > 0) {
                 unreadCounter.setVisibility(View.VISIBLE);
@@ -215,6 +210,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private Context context;
         private TextView question;
         private HtmlTextView content;
+        private TextView author;
+        private TextView open;
+        private TextView close;
         private LinearLayout options;
         private PieChart breakdown;
         private TextView nullVote;
@@ -224,22 +222,27 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             context = c;
             question = (TextView) v.findViewById(R.id.card_region_poll_question);
             content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
+            author = (TextView) v.findViewById(R.id.card_region_poll_author);
+            open = (TextView) v.findViewById(R.id.card_region_poll_open);
+            close = (TextView) v.findViewById(R.id.card_region_poll_close);
             options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
             breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
             nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
         }
 
-        public void init(Poll p)
-        {
-            SparkleHelper.setHappeningsFormatting(context, question,
-                    String.format(Locale.US, context.getString(R.string.card_region_poll_title_author), p.title, p.author));
+        public void init(Poll p) {
+            question.setText(SparkleHelper.getHtmlFormatting(p.title));
+            SparkleHelper.setHappeningsFormatting(context, author,
+                    String.format(Locale.US, context.getString(R.string.poll_author), p.author));
+            open.setText(String.format(Locale.US, context.getString(R.string.poll_open),
+                    SparkleHelper.getReadableDateFromUTC(context, p.startTime)));
+            close.setText(String.format(Locale.US, context.getString(R.string.poll_close),
+                    SparkleHelper.getReadableDateFromUTC(context, p.stopTime)));
 
-            if (p.text != null && p.text.length() > 0)
-            {
+            if (p.text != null && p.text.length() > 0) {
                 SparkleHelper.setBbCodeFormatting(context, content, p.text, fm);
             }
-            else
-            {
+            else {
                 content.setVisibility(View.GONE);
             }
 
@@ -249,21 +252,18 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             options.removeAllViews();
             int voteTotal = 0;
             List<String> chartLabels = new ArrayList<String>();
-            for (int i=0; i<results.size(); i++)
-            {
+            for (int i=0; i<results.size(); i++) {
                 inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters);
                 voteTotal += results.get(i).votes;
                 chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
 
-            if (voteTotal > 0)
-            {
+            if (voteTotal > 0) {
                 breakdown.setVisibility(View.VISIBLE);
                 nullVote.setVisibility(View.GONE);
 
                 List<Entry> chartEntries = new ArrayList<Entry>();
-                for (int i=0; i<results.size(); i++)
-                {
+                for (int i=0; i<results.size(); i++) {
                     chartEntries.add(new Entry((results.get(i).votes * 100f)/voteTotal, i));
                 }
 
@@ -276,15 +276,13 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 breakdown.setData(dataFull);
                 breakdown.invalidate();
             }
-            else
-            {
+            else {
                 breakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
         }
 
-        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters)
-        {
+        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
@@ -323,8 +321,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView linkContent;
         private TextView nullVote;
 
-        public RegionWaCard(Context c, View v)
-        {
+        public RegionWaCard(Context c, View v) {
             super(v);
             context = c;
             title = (TextView) v.findViewById(R.id.region_wa_title);
@@ -335,8 +332,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             nullVote = (TextView) v.findViewById(R.id.region_wa_null_vote);
         }
 
-        public void init(WaVote w)
-        {
+        public void init(WaVote w) {
             // Setup resolution link
             Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
             resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
@@ -349,8 +345,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             });
 
             String chamberName = "";
-            switch(w.chamber)
-            {
+            switch(w.chamber) {
                 case Assembly.GENERAL_ASSEMBLY:
                     chamberName = context.getString(R.string.wa_general_assembly);
                     break;
@@ -363,8 +358,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             linkContent.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_link), chamberName));
 
             filler.setText(String.format(Locale.US, context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
-            if (!RaraHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst))
-            {
+            if (!RaraHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst)) {
                 chart.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
@@ -397,18 +391,15 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             else {
                 officersLayout.setVisibility(View.VISIBLE);
-                for (int i=0; i<officers.size(); i++)
-                {
-                    if (officers.get(i).office != null && officers.get(i).name != null)
-                    {
+                for (int i=0; i<officers.size(); i++) {
+                    if (officers.get(i).office != null && officers.get(i).name != null) {
                         inflateOfficerEntry(officersLayout, officers.get(i).office, officers.get(i).name);
                     }
                 }
             }
         }
 
-        private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation)
-        {
+        private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation) {
             View delegateView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
@@ -448,5 +439,4 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             });
         }
     }
-
 }

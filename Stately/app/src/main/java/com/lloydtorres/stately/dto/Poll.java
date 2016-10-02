@@ -19,6 +19,7 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -33,6 +34,9 @@ import java.util.List;
 @Root(name="POLL", strict=false)
 public class Poll implements Parcelable {
 
+    @Attribute
+    public int id;
+
     @Element(name="TITLE")
     public String title;
     @Element(name="TEXT", required=false)
@@ -46,10 +50,13 @@ public class Poll implements Parcelable {
 
     @ElementList(name="OPTIONS")
     public List<PollOption> options;
+    public boolean isVotingEnabled;
+    public int votedOption;
 
     public Poll() { super(); }
 
     protected Poll(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         text = in.readString();
         startTime = in.readLong();
@@ -61,6 +68,8 @@ public class Poll implements Parcelable {
         } else {
             options = null;
         }
+        isVotingEnabled = in.readByte() != 0x00;
+        votedOption = in.readInt();
     }
 
     @Override
@@ -70,6 +79,7 @@ public class Poll implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(text);
         dest.writeLong(startTime);
@@ -81,6 +91,8 @@ public class Poll implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(options);
         }
+        dest.writeByte((byte) (isVotingEnabled ? 0x01 : 0x00));
+        dest.writeInt(votedOption);
     }
 
     @SuppressWarnings("unused")
@@ -95,5 +107,4 @@ public class Poll implements Parcelable {
             return new Poll[size];
         }
     };
-
 }

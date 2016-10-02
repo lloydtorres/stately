@@ -42,6 +42,31 @@
             android:layout_height="wrap_content"
             android:textColor="?attr/themedColorPrimaryText"
             tools:text="No, really, do they?" />
+        <TextView
+            android:id="@+id/card_region_poll_author"
+            android:paddingTop="8dp"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themedColorSecondaryText"
+            tools:text="@string/poll_author" />
+        <TextView
+            android:id="@+id/card_region_poll_open"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themedColorSecondaryText"
+            tools:text="@string/poll_open" />
+        <TextView
+            android:id="@+id/card_region_poll_close"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themedColorSecondaryText"
+            tools:text="@string/poll_close" />
         <LinearLayout
             android:id="@+id/card_region_poll_options"
             android:layout_width="match_parent"

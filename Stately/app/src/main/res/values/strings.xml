@@ -228,15 +228,17 @@
     <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
-    <string name="card_region_poll_title_author">%1$s — @@%2$s@@</string>
+    <string name="poll_author">Submitted by @@%1$s@@</string>
+    <string name="poll_open">Opened %1$s</string>
+    <string name="poll_close">Closes %1$s</string>
     <string name="region_option_index">Option %1$d</string>
-    <string name="card_region_wa_vote">%1$s Resolution</string>
-    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d for to %2$d against.</string>
-    <string name="card_region_wa_link">Open the %1$s resolution</string>
     <string name="poll_votes_template_start">%1$s (</string>
     <string name="poll_votes_template_votes">%1$d %2$s</string>
     <string name="poll_votes_template_end">)</string>
-    <string name="poll_votes_voter_dialog">Voted for Option %1$d</string>
+    <string name="poll_votes_voter_dialog">Voted for "%1$s"</string>
+    <string name="card_region_wa_vote">%1$s Resolution</string>
+    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d for to %2$d against.</string>
+    <string name="card_region_wa_link">Open the %1$s resolution</string>
     <string name="votes_null">No votes have been recorded yet!</string>
 
     <!-- Region message board -->
