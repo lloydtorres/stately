@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 import java.util.List;
 import java.util.Locale;
@@ -155,6 +156,8 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         public void init(String m) {
+            RaraHelper.setViewHolderFullSpan(itemView);
+
             nextUpdate.setText(m);
             nextUpdate.setTypeface(nextUpdate.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
