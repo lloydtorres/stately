@@ -34,6 +34,11 @@ import java.util.List;
 @Root(name="POLL", strict=false)
 public class Poll implements Parcelable {
 
+    public static final String RESPONSE_VOTE = "Your vote has been lodged";
+    public static final String RESPONSE_WITHDRAW = "Your vote has been withdrawn";
+
+    public static final int NO_VOTE = -1;
+
     @Attribute
     public int id;
 

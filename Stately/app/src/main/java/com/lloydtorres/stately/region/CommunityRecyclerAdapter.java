@@ -18,6 +18,7 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
@@ -72,16 +73,18 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int OFFICER_CARD = 3;
     public static final int EMBASSY_CARD = 4;
 
+    private RegionCommunitySubFragment fragment;
     private Context context;
     private FragmentManager fm;
     private List<Parcelable> cards;
     private String regionName;
 
-    public CommunityRecyclerAdapter(Context c, FragmentManager f, List<Parcelable> crds, String n) {
-        context = c;
-        fm = f;
+    public CommunityRecyclerAdapter(RegionCommunitySubFragment frag, List<Parcelable> crds, String n) {
+        fragment = frag;
+        context = fragment.getContext();
+        fm = fragment.getFragmentManager();
         cards = crds;
-        regionName= n;
+        regionName = n;
     }
 
     @Override
@@ -165,6 +168,20 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return -1;
     }
 
+    /**
+     * Updates the poll card in the adapter list if it exists.
+     * @param p New poll data.
+     */
+    public void updatePoll(Poll p) {
+        for (int i=0; i<cards.size(); i++) {
+            if (cards.get(i) instanceof Poll) {
+                cards.set(i, p);
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     // Card viewholders
 
     // Card for the RMB button
@@ -216,6 +233,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private LinearLayout options;
         private PieChart breakdown;
         private TextView nullVote;
+        private View divider;
+        private LinearLayout voteButton;
+        private TextView voteButtonContent;
 
         public PollCard(Context c, View v) {
             super(v);
@@ -228,9 +248,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
             breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
             nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
+            divider = v.findViewById(R.id.view_divider);
+            voteButton = (LinearLayout) v.findViewById(R.id.card_region_poll_vote_button);
+            voteButtonContent = (TextView) v.findViewById(R.id.card_region_poll_vote_button_content);
         }
 
-        public void init(Poll p) {
+        public void init(final Poll p) {
             question.setText(SparkleHelper.getHtmlFormatting(p.title));
             SparkleHelper.setHappeningsFormatting(context, author,
                     String.format(Locale.US, context.getString(R.string.poll_author), p.author));
@@ -253,7 +276,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             int voteTotal = 0;
             List<String> chartLabels = new ArrayList<String>();
             for (int i=0; i<results.size(); i++) {
-                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters);
+                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
                 voteTotal += results.get(i).votes;
                 chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
@@ -280,9 +303,25 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 breakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
+
+            if (p.isVotingEnabled) {
+                divider.setVisibility(View.VISIBLE);
+                voteButton.setVisibility(View.VISIBLE);
+                voteButtonContent.setText(context.getString(p.votedOption == Poll.NO_VOTE ? R.string.poll_vote_button_submit : R.string.poll_vote_button_change));
+                voteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fragment.showPollVoteDialog(p);
+                    }
+                });
+            } else {
+                divider.setVisibility(View.GONE);
+                voteButton.setVisibility(View.GONE);
+                voteButton.setOnClickListener(null);
+            }
         }
 
-        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters) {
+        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters, boolean votedOption) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
@@ -305,6 +344,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             content.append(template);
             content.append(context.getString(R.string.poll_votes_template_end));
+
+            if (votedOption) {
+                content.setTypeface(null, Typeface.BOLD);
+            }
 
             optionLayout.addView(optionView);
         }

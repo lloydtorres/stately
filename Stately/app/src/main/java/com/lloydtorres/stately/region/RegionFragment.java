@@ -100,14 +100,8 @@ public class RegionFragment extends Fragment {
     private ProgressBar progressBar;
     private Activity mActivity;
 
-    public void setRegionName(String n)
-    {
-        mRegionName = n;
-    }
-    public void setRegion(Region r)
-    {
-        mRegion = r;
-    }
+    public void setRegionName(String n) { mRegionName = n; }
+    public void setRegion(Region r) { mRegion = r; }
     public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
 
     @Override
@@ -118,14 +112,12 @@ public class RegionFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.region_progress_bar);
@@ -133,20 +125,17 @@ public class RegionFragment extends Fragment {
         initToolbar(view);
 
         // Restore state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             mRegionName = savedInstanceState.getString(REGION_NAME_KEY);
             mRegion = savedInstanceState.getParcelable(REGION_DATA_KEY);
             rmbUnreadCountText = savedInstanceState.getString(REGION_RMB_UNREAD_KEY);
         }
 
-        if (mRegion != null)
-        {
+        if (mRegion != null) {
             mRegionName = mRegion.name;
             getAllRegionViews(view);
         }
-        else
-        {
+        else {
             updateRegion(view);
         }
 
@@ -157,13 +146,11 @@ public class RegionFragment extends Fragment {
      * Initialize the toolbar and pass it back to the containing activity.
      * @param view
      */
-    private void initToolbar(View view)
-    {
+    private void initToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
-        if (mActivity != null && mActivity instanceof IToolbarActivity)
-        {
+        if (mActivity != null && mActivity instanceof IToolbarActivity) {
             ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
@@ -194,17 +181,13 @@ public class RegionFragment extends Fragment {
         });
     }
 
-    public Toolbar getToolbar()
-    {
-        return toolbar;
-    }
+    public Toolbar getToolbar() { return toolbar; }
 
     /**
      * Initialize the tabs layout and view pager
      * @param view
      */
-    private void initTabs(View view)
-    {
+    private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
         tabsPager = (ViewPager) view.findViewById(R.id.region_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
@@ -218,8 +201,7 @@ public class RegionFragment extends Fragment {
      * Get the views for the region elements at the top of the fragment
      * @param view
      */
-    private void getAllRegionViews(View view)
-    {
+    private void getAllRegionViews(View view) {
         regionName = (TextView) view.findViewById(R.id.region_name);
         regionPop = (TextView) view.findViewById(R.id.region_pop);
         regionFlag = (ImageView) view.findViewById(R.id.region_flag);
@@ -231,10 +213,8 @@ public class RegionFragment extends Fragment {
      * Load the entire fragment's contents
      * @param view
      */
-    private void initRegionData(View view)
-    {
-        if (mRegion.flagURL != null)
-        {
+    private void initRegionData(View view) {
+        if (mRegion.flagURL != null) {
             regionFlag.setVisibility(View.VISIBLE);
             DashHelper.getInstance(getContext()).loadImage(mRegion.flagURL, regionFlag, true);
         }
@@ -248,6 +228,7 @@ public class RegionFragment extends Fragment {
         regionCommunitySubFragment = new RegionCommunitySubFragment();
         regionCommunitySubFragment.setRegion(mRegion);
         regionCommunitySubFragment.setRMBUnreadCountText(rmbUnreadCountText);
+        regionCommunitySubFragment.setMainFragmentView(view);
 
         censusSubFragment = new CensusSubFragment();
         ArrayList<CensusDetailedRank> censusHolder = new ArrayList<CensusDetailedRank>();
@@ -265,8 +246,7 @@ public class RegionFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(REGION_NAME_KEY, mRegionName);
@@ -275,15 +255,13 @@ public class RegionFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         // Decouple activity on destroy
         super.onDestroy();
         mActivity = null;
     }
 
-    private void updateRegion(final View view)
-    {
+    private void updateRegion(final View view) {
         progressBar.setVisibility(View.VISIBLE);
 
         String targetURL = String.format(Locale.US, Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
@@ -293,8 +271,7 @@ public class RegionFragment extends Fragment {
                     Region regionResponse = null;
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
 
@@ -315,8 +292,7 @@ public class RegionFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
@@ -324,19 +300,16 @@ public class RegionFragment extends Fragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else if (error instanceof ServerError)
-                {
+                else if (error instanceof ServerError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.region_404));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
             progressBar.setVisibility(View.GONE);
         }
@@ -363,8 +336,7 @@ public class RegionFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position)
-            {
+            switch(position) {
                 case OVERVIEW_TAB:
                     return regionOverviewSubFragment;
                 case COMMUNITY_TAB:
