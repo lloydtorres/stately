@@ -992,6 +992,7 @@ public final class SparkleHelper {
 
     public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+)\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)\\](.*?)\\[\\/url\\]");
     public static final String BBCODE_RESOLUTION_GA = "GA";
 
     /**
@@ -1001,14 +1002,35 @@ public final class SparkleHelper {
      */
     public static String regexResolutionFormat(String content) {
         String holder = content;
+
         Matcher m = BBCODE_RESOLUTION_GA_SC.matcher(holder);
         while (m.find()) {
             int councilId = BBCODE_RESOLUTION_GA.equals(m.group(1)) ? Assembly.GENERAL_ASSEMBLY : Assembly.SECURITY_COUNCIL;
             int resolutionId = Integer.valueOf(m.group(2)) - 1;
-            String properFormat = String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s</a>", councilId, resolutionId, m.group(3));
+            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
             holder = holder.replace(m.group(), properFormat);
         }
+
+        Matcher m2 = BBCODE_URL_RESOLUTION.matcher(holder);
+        while (m2.find()) {
+            int councilId = Integer.valueOf(m2.group(1));
+            int resolutionId = Integer.valueOf(m2.group(2));
+            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m2.group(3));
+            holder = holder.replace(m2.group(), properFormat);
+        }
+
         return holder;
+    }
+
+    /**
+     * Helper function for building links to ResolutionActivity
+     * @param councilId
+     * @param resolutionId
+     * @param content
+     * @return
+     */
+    public static String regexResolutionFormatHelper(int councilId, int resolutionId, String content) {
+        return String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s</a>", councilId, resolutionId, content);
     }
 
     /**
