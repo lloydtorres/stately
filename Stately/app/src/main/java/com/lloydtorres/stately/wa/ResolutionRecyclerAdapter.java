@@ -274,10 +274,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         public void init() {
-            if (!isActive) {
-                // Forces card to span across columns if this is the only other card besides the header
-                RaraHelper.setViewHolderFullSpan(itemView);
-            }
+            // Forces card to span across columns
+            RaraHelper.setViewHolderFullSpan(itemView);
 
             SparkleHelper.setBbCodeFormatting(context, content, resolution.content, resolutionActivity.getSupportFragmentManager());
 
@@ -380,6 +378,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public void init() {
             setVotingHistory(resolution.voteHistoryFor, resolution.voteHistoryAgainst);
+            voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
+            voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
             histIconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
             histIconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
         }
