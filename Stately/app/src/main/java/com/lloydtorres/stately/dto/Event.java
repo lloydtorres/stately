@@ -19,6 +19,7 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -29,6 +30,9 @@ import org.simpleframework.xml.Root;
 @Root(name="EVENT", strict=false)
 public class Event implements Parcelable, Comparable<Event> {
 
+    @Attribute(required=false)
+    public long id;
+
     @Element(name="TIMESTAMP")
     public long timestamp;
     @Element(name="TEXT")
@@ -37,6 +41,7 @@ public class Event implements Parcelable, Comparable<Event> {
     public Event() { super(); }
 
     protected Event(Parcel in) {
+        id = in.readLong();
         timestamp = in.readLong();
         content = in.readString();
     }
@@ -48,6 +53,7 @@ public class Event implements Parcelable, Comparable<Event> {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeLong(timestamp);
         dest.writeString(content);
     }
@@ -67,16 +73,13 @@ public class Event implements Parcelable, Comparable<Event> {
 
     @Override
     public int compareTo(Event another) {
-        if (this.timestamp > another.timestamp)
-        {
+        if (this.timestamp > another.timestamp) {
             return -1;
         }
-        else if (this.timestamp < another.timestamp)
-        {
+        else if (this.timestamp < another.timestamp) {
             return 1;
         }
-        else
-        {
+        else {
             return 0;
         }
     }

@@ -54,7 +54,8 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -66,7 +67,7 @@ import java.util.Set;
 public class ActivityFeedFragment extends RefreshviewFragment {
 
     private SharedPreferences storage; // shared preferences
-    private List<Event> events = new ArrayList<Event>();
+    private HashMap<Long, Event> events = new HashMap<Long, Event>();
     private ArrayList<String> dossierNations = new ArrayList<String>();
     private ArrayList<String> dossierRegions = new ArrayList<String>();
 
@@ -104,7 +105,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      * Convenience method to show swipe refresh and start query.
      */
     public void startQueryHappenings() {
-        events = new ArrayList<Event>();
+        events = new HashMap<Long, Event>();
         dossierNations = new ArrayList<String>();
         dossierRegions = new ArrayList<String>();
 
@@ -183,7 +184,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
     private void queryNationalHappenings() {
         // Build list of nations to query
         // Used for enforcing unique nations
-        Set<String> nationQuery = new LinkedHashSet<String>();
+        Set<String> nationQuery = new HashSet<String>();
 
         // Include current nation?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_NATION, true)) {
@@ -223,7 +224,9 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                             Persister serializer = new Persister();
                             try {
                                 happeningResponse = serializer.read(HappeningFeed.class, response);
-                                events.addAll(happeningResponse.happenings);
+                                for (Event e : happeningResponse.happenings) {
+                                    events.put(e.id, e);
+                                }
                             }
                             catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
@@ -271,7 +274,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
     private void queryRegionalHappenings() {
         // Build list of regions to query
         // Used for enforcing unique regions
-        Set<String> regionQuery = new LinkedHashSet<String>();
+        Set<String> regionQuery = new HashSet<String>();
 
         // Include current region?
         if (storage.getBoolean(SubscriptionsDialog.CURRENT_REGION, true)) {
@@ -300,7 +303,9 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                             Persister serializer = new Persister();
                             try {
                                 happeningResponse = serializer.read(HappeningFeed.class, response);
-                                events.addAll(happeningResponse.happenings);
+                                for (Event e : happeningResponse.happenings) {
+                                    events.put(e.id, e);
+                                }
                             }
                             catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
@@ -359,7 +364,9 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                             Persister serializer = new Persister();
                             try {
                                 happeningResponse = serializer.read(HappeningFeed.class, response);
-                                events.addAll(happeningResponse.happenings);
+                                for (Event e : happeningResponse.happenings) {
+                                    events.put(e.id, e);
+                                }
                             }
                             catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
@@ -398,13 +405,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      * Sets up the list of happenings and finishes the queries.
      */
     private void finishHappeningQuery() {
-        Collections.sort(events);
+        List<Event> eventList = new ArrayList<Event>(events.values());
+        Collections.sort(eventList);
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
+            mRecyclerAdapter = new EventRecyclerAdapter(getContext(), eventList);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {
-            ((EventRecyclerAdapter) mRecyclerAdapter).setEvents(events);
+            ((EventRecyclerAdapter) mRecyclerAdapter).setEvents(eventList);
         }
 
         mSwipeRefreshLayout.setRefreshing(false);
