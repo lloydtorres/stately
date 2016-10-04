@@ -70,8 +70,10 @@ public class Resolution implements Parcelable {
     public int id;
     @Element(name="IMPLEMENTED", required=false)
     public long implemented;
-    @Element(name="REPEALED", required=false)
+    @Element(name="REPEALED_BY", required=false)
     public int repealed;
+    @Element(name="REPEALS_COUNCILD", required=false)
+    public int repealTarget;
 
     public Resolution() {
         super();
@@ -101,6 +103,7 @@ public class Resolution implements Parcelable {
         id = in.readInt();
         implemented = in.readLong();
         repealed = in.readInt();
+        repealTarget = in.readInt();
     }
 
     @Override
@@ -133,6 +136,7 @@ public class Resolution implements Parcelable {
         dest.writeInt(id);
         dest.writeLong(implemented);
         dest.writeInt(repealed);
+        dest.writeInt(repealTarget);
     }
 
     @SuppressWarnings("unused")

@@ -121,7 +121,7 @@ public final class SparkleHelper {
             ResolutionActivity.RESOLUTION_PROTOCOL,
             ReportActivity.REPORT_PROTOCOL};
     // Current NationStates API version
-    public static final String API_VERSION = "8";
+    public static final String API_VERSION = "9";
     // NationStates API
     public static final String DOMAIN_URI = "nationstates.net";
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
@@ -131,6 +131,9 @@ public final class SparkleHelper {
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
+
+    // Reference time zone for update-related calculations
+    public static final TimeZone TIMEZONE_TORONTO = TimeZone.getTimeZone("America/Toronto");
 
     // Private constructor
     private SparkleHelper() {}
@@ -466,8 +469,6 @@ public final class SparkleHelper {
 
     // The number of hours a resolution is on the WA chamber floor
     public static final int WA_RESOLUTION_DURATION = 96;
-    // Reference time zone for WA calculations
-    public static final String TIMEZONE_TORONTO = "America/Toronto";
 
     /**
      * Calculates the remaining time for a WA resolution in human-readable form.
@@ -477,7 +478,7 @@ public final class SparkleHelper {
      */
     public static String calculateResolutionEnd(Context c, int hoursElapsed) {
         Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(TimeZone.getTimeZone(TIMEZONE_TORONTO));
+        cal.setTimeZone(TIMEZONE_TORONTO);
 
         // Round up to nearest hour
         if (cal.get(Calendar.MINUTE) >= 1) {

@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.wa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -67,14 +68,16 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private Resolution resolution;
     private String voteStatus;
     private int councilId;
+    private int prefixId;
     private boolean isActive;
 
     public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, int cId) {
         resolutionActivity = activity;
-        context = resolutionActivity.getApplicationContext();
+        context = resolutionActivity;
         resolution = res;
         voteStatus = vs;
         councilId = cId;
+        prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix : R.string.wa_sc_prefix;
         isActive = voteStatus != null;
     }
 
@@ -169,7 +172,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             RaraHelper.setViewHolderFullSpan(itemView);
 
             title.setText(resolution.name);
-            setTargetView(target, resolution.category, resolution.target);
+            setTargetView(target, resolution.category, resolution.target, resolution.repealTarget);
 
             String proposer = SparkleHelper.getNameFromId(resolution.proposedBy);
             String proposeTemplate = String.format(Locale.US, context.getString(R.string.wa_proposed), resolution.proposedBy);
@@ -178,7 +181,6 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             if (isActive) {
                 voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
             } else {
-                int prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix : R.string.wa_sc_prefix;
                 voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_implemented),
                         context.getString(prefixId),
                         resolution.id,
@@ -186,6 +188,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
                 if (resolution.repealed > 0) {
                     repealed.setVisibility(View.VISIBLE);
+                    repealed.setText(String.format(Locale.US,
+                            context.getString(R.string.wa_repealed),
+                            context.getString(prefixId),
+                            resolution.repealed));
+                    repealed.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
+                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
+                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolution.repealed);
+                            context.startActivity(resolutionActivityIntent);
+                        }
+                    });
                 }
             }
 
@@ -202,12 +217,23 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
          * @param category
          * @param target
          */
-        private void setTargetView(TextView t, String category, String target) {
+        private void setTargetView(TextView t, String category, String target, int repealTarget) {
             String template = context.getString(R.string.wa_nominee_template);
             String[] pair = target.split(":");
 
             if (pair.length <= 1) {
-                t.setText(category);
+                if (repealTarget > 0) {
+                    StringBuilder linkBuilder = new StringBuilder("<a href=\"");
+                    linkBuilder.append(ResolutionActivity.RESOLUTION_TARGET);
+                    linkBuilder.append("%d/%d\">%s #%d</a>");
+                    String link = String.format(Locale.US, linkBuilder.toString(),
+                            councilId, repealTarget - 1,
+                            context.getString(prefixId),
+                            repealTarget);
+                    SparkleHelper.setStyledTextView(context, t, context.getString(R.string.wa_repeal_target, link));
+                } else {
+                    t.setText(category);
+                }
             }
             else {
                 switch(pair[0]) {
