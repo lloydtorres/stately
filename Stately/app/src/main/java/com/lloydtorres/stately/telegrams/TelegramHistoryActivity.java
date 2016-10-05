@@ -57,6 +57,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setLinearLayoutManager();
 
         // Either get data from intent or restore state
         if (getIntent() != null) {
@@ -100,15 +101,13 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
@@ -116,8 +115,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
 
     private void processRawTelegrams(Document d) {
         Element telegramsContainer = d.select("div.widebox").first();
-        if (telegramsContainer == null)
-        {
+        if (telegramsContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
@@ -128,20 +126,23 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
     }
 
     private void initTelegramsRecyclerAdapter() {
-        if (telegrams.size() > 0)
-        {
+        if (telegrams.size() > 0) {
             Collections.sort(telegrams);
             Collections.reverse(telegrams);
-            mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
+
+            if (mRecyclerAdapter == null) {
+                mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
+                mRecyclerView.setAdapter(mRecyclerAdapter);
+            } else {
+                ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
+            }
+
             int scrollIndex = ((TelegramsAdapter) mRecyclerAdapter).getIndexOfId(mainTelegramId);
-            if (scrollIndex != -1)
-            {
+            if (scrollIndex != -1) {
                 mLayoutManager.scrollToPosition(scrollIndex);
             }
         }
-        else
-        {
+        else {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_empty_convo));
         }
         mSwipeRefreshLayout.setRefreshing(false);
@@ -158,27 +159,22 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(ID_DATA, mainTelegramId);
-        if (telegrams != null)
-        {
+        if (telegrams != null) {
             savedInstanceState.putParcelableArrayList(TELEGRAMS_DATA, telegrams);
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             mainTelegramId = savedInstanceState.getInt(ID_DATA, INVALID_TELEGRAM);
-            if (telegrams == null)
-            {
+            if (telegrams == null) {
                 telegrams = savedInstanceState.getParcelableArrayList(TELEGRAMS_DATA);
             }
         }

@@ -18,6 +18,7 @@ package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -58,6 +59,11 @@ public abstract class RefreshviewActivity extends SlidrActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
+
+    protected void setLinearLayoutManager() {
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
