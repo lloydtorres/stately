@@ -325,7 +325,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             censusUnit.setText(censusType[1]);
             censusScore.setText(String.format(Locale.US,
                     context.getString(R.string.world_census_score),
-                    SparkleHelper.getPrettifiedNumber(featuredCensus.score)));
+                    SparkleHelper.getPrettifiedShortSuffixedNumber(context, featuredCensus.score)));
 
             String bgUrl = Nation.getBannerURL(censusType[2]);
             DashHelper.getInstance(context).loadImage(bgUrl, censusBg, false);
@@ -370,7 +370,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             scale.setText(censusType[0]);
             unit.setText(censusType[1]);
-            score.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
+            score.setText(SparkleHelper.getPrettifiedShortSuffixedNumber(context, censusData.score));
 
             scale.setTextColor(RaraHelper.getThemeLinkColour(context));
             unit.setTextColor(RaraHelper.getThemeLinkColour(context));

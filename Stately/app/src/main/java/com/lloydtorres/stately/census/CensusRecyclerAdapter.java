@@ -323,7 +323,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             switch (sortOrder) {
                 case SORT_MODE_SCORE:
                     superScript.setVisibility(View.GONE);
-                    value.setText(SparkleHelper.getPrettifiedNumber(censusData.score));
+                    value.setText(SparkleHelper.getPrettifiedShortSuffixedNumber(context, censusData.score));
                     break;
                 case SORT_MODE_WORLD_RANK:
                     if (censusData.worldRank <= 0) {

@@ -188,10 +188,15 @@
     <string name="black_market">Black Market</string>
 
     <!-- Large number suffixes -->
+    <string name="thousand_short">k</string>
     <string name="million">million</string>
+    <string name="million_short">m</string>
     <string name="billion">billion</string>
+    <string name="billion_short">b</string>
     <string name="trillion">trillion</string>
+    <string name="trillion_short">t</string>
     <string name="val_currency">%1$s %2$s</string>
+    <string name="val_short">%1$s%2$s</string>
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 

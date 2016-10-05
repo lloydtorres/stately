@@ -317,7 +317,7 @@ public final class SparkleHelper {
      * @return Properly-formatted number as a string
      */
     public static String getPrettifiedSuffixedNumber(Context c, double d) {
-        if (d < 1000000L) {
+        if (d < 1000000D) {
             // If the money is less than 1 million, we don't need a suffix.
             return getPrettifiedNumber(d);
         }
@@ -339,6 +339,39 @@ public final class SparkleHelper {
             }
 
             return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
+        }
+    }
+
+    /**
+     * Same as above, but starts at 1000 and uses short suffixes.
+     * @param c App context
+     * @param d Number to format
+     * @return Prettified number with short suffix
+     */
+    public static String getPrettifiedShortSuffixedNumber(Context c, double d) {
+        if (d < 1000D) {
+            // We only care about cases greater than 1000
+            return getPrettifiedNumber(d);
+        } else {
+            String suffix = "";
+            if (d >= 1000D && d < 1000000D) {
+                suffix = c.getString(R.string.thousand_short);
+                d /= 1000D;
+            }
+            else if (d >= 1000000D && d < 1000000000D) {
+                suffix = c.getString(R.string.million_short);
+                d /= 1000000D;
+            }
+            else if (d >= 1000000000D && d < 1000000000000D) {
+                suffix = c.getString(R.string.billion_short);
+                d /= 1000000000D;
+            }
+            else if (d >= 1000000000000D) {
+                suffix = c.getString(R.string.trillion_short);
+                d /= 1000000000000D;
+            }
+
+            return String.format(Locale.US, c.getString(R.string.val_short), getPrettifiedNumber(d), suffix);
         }
     }
 
