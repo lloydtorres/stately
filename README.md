@@ -9,17 +9,20 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 * Browse your nation's data: stats, people, government, economy, rankings and happenings.
 * Respond to issues encountered by your nation.
-* Discover trends in national and regional census statistics.
+* Discover trends in national, regional and world census statistics.
 * Login and switch between different nations.
 * Read, organize, write and reply to telegrams.
 * Browse through regional factbooks and communities.
 * Read, quote, post and do more in RMBs.
 * Observe and vote on current World Assembly resolutions.
-* Compile all your happenings together with the Activity Feed.
 * Explore, endorse nations and move to different regions in NationStates.
+* Compile all your happenings together with the Activity Feed.
+* Get notified and stay up to date on new issues, telegrams and other events.
+* Make it your own: choose between five different themes and more.
 
 ### Revision History
 
+* **1.7.0** - Notifications, themes, World, census rankings, open old resolutions, improved telegrams, region polls, dossier, landscape.
 * **1.6.3** - Enable move to SD card, bug fixes and improvements.
 * **1.6.2** - Bug fixes and improvements.
 * **1.6.1** - Bug fix for rare EditText crash.
