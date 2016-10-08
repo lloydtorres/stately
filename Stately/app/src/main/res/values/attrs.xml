@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="themedColorHeaderText" format="reference|color" />
+    <attr name="themedColorPrimaryText" format="reference|color" />
+    <attr name="themedColorSecondaryText" format="reference|color" />
+    <attr name="themedColorLinkText" format="reference|color" />
+    <attr name="themedColorButton" format="reference|color" />
+    <attr name="themedColorTab" format="reference" />
+    <attr name="themedColorNavDrawer" format="reference" />
+    <attr name="themedColorCard" format="reference|color" />
+    <attr name="themedColorBackground" format="reference|color" />
+    <attr name="themedDrawablePost" format="reference" />
+    <attr name="themedDrawableCheck" format="reference" />
+    <attr name="themedDrawableDismiss" format="reference" />
+    <attr name="themedDrawableTrend" format="reference" />
+    <attr name="themedDrawableWa" format="reference" />
+    <attr name="themedDrawableRegion" format="reference" />
+    <attr name="themedToolbarPopup" format="reference" />
+</resources>

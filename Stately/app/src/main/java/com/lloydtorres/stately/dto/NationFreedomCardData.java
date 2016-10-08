@@ -16,11 +16,14 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Lloyd on 2016-07-24.
  * A holder for freedom score data in the nation overview tab.
  */
-public class NationFreedomCardData {
+public class NationFreedomCardData implements Parcelable {
     public String nationTarget;
     public String civDesc;
     public int civScore;
@@ -30,4 +33,44 @@ public class NationFreedomCardData {
     public int poliScore;
 
     public NationFreedomCardData() { super(); }
+
+    protected NationFreedomCardData(Parcel in) {
+        nationTarget = in.readString();
+        civDesc = in.readString();
+        civScore = in.readInt();
+        econDesc = in.readString();
+        econScore = in.readInt();
+        poliDesc = in.readString();
+        poliScore = in.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nationTarget);
+        dest.writeString(civDesc);
+        dest.writeInt(civScore);
+        dest.writeString(econDesc);
+        dest.writeInt(econScore);
+        dest.writeString(poliDesc);
+        dest.writeInt(poliScore);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationFreedomCardData> CREATOR = new Parcelable.Creator<NationFreedomCardData>() {
+        @Override
+        public NationFreedomCardData createFromParcel(Parcel in) {
+            return new NationFreedomCardData(in);
+        }
+
+        @Override
+        public NationFreedomCardData[] newArray(int size) {
+            return new NationFreedomCardData[size];
+        }
+    };
+
 }

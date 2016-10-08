@@ -34,7 +34,8 @@ import java.util.ArrayList;
  */
 public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TelegramsFragment fragmentInstance;
-    private TelegramReadActivity activityInstance;
+    private boolean isMove;
+    private int targetMoveId;
     private FoldersDialog selfDialog;
     private ArrayList<TelegramFolder> folders;
     private int selected;
@@ -42,14 +43,17 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
     {
         fragmentInstance = fr;
+        isMove = false;
         selfDialog = d;
         folders = f;
         selected = s;
     }
 
-    public FoldersRecyclerAdapter(TelegramReadActivity tra, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
+    public FoldersRecyclerAdapter(TelegramsFragment fr, int targetId, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
     {
-        activityInstance = tra;
+        fragmentInstance = fr;
+        isMove = true;
+        targetMoveId = targetId;
         selfDialog = d;
         folders = f;
         selected = s;
@@ -105,12 +109,12 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             int pos = getAdapterPosition();
             if (pos != RecyclerView.NO_POSITION)
             {
-                if (fragmentInstance != null) {
+                if (!isMove) {
                     fragmentInstance.setSelectedFolder(pos);
                 }
                 else
                 {
-                    activityInstance.startMoveTelegram(folders.get(pos).value);
+                    fragmentInstance.startMoveTelegram(targetMoveId, folders.get(pos).value);
                 }
             }
             selfDialog.dismiss();

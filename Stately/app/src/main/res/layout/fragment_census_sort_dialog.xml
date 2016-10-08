@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -14,36 +15,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:checkedButton="@+id/census_sort_score">
-            <RadioButton android:id="@+id/census_sort_score"
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_score"
-                android:textSize="15sp"/>
-            <RadioButton android:id="@+id/census_sort_world_rank"
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_world_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_world_rank"
-                android:textSize="15sp"/>
-            <RadioButton android:id="@+id/census_sort_world_percent"
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_world_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_world_percent"
-                android:textSize="15sp"/>
-            <RadioButton android:id="@+id/census_sort_region_rank"
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_region_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_region_rank"
-                android:textSize="15sp"/>
-            <RadioButton android:id="@+id/census_sort_region_percent"
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_region_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_region_percent"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
         </RadioGroup>
 
         <RadioGroup
@@ -53,18 +59,20 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical"
             android:checkedButton="@+id/census_sort_ascending">
-            <RadioButton android:id="@+id/census_sort_ascending"
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_ascending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_ascending"
-                android:textSize="15sp"/>
-            <RadioButton android:id="@+id/census_sort_descending"
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
+            <android.support.v7.widget.AppCompatRadioButton android:id="@+id/census_sort_descending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="@string/census_sort_descending"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                app:buttonTint="?attr/themedColorTab"/>
         </RadioGroup>
 
     </LinearLayout>

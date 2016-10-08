@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -8,12 +9,14 @@
         android:id="@+id/explore_searchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
+        android:maxLines="1"
         android:hint="@string/explore_search_text"
         android:inputType="textCapWords|textFilter|textNoSuggestions"
         android:layout_gravity="center_horizontal"
         android:textSize="15sp"
-        android:nextFocusForward="@+id/explore_radio_group"/>
+        android:nextFocusForward="@+id/explore_radio_group"
+        android:textColor="?attr/themedColorPrimaryText"
+        android:theme="@style/ExploreField"/>
 
     <RadioGroup
         android:id="@+id/explore_radio_group"
@@ -22,17 +25,19 @@
         android:layout_marginTop="15dp"
         android:orientation="vertical"
         android:checkedButton="@+id/explore_radio_nation">
-        <RadioButton android:id="@+id/explore_radio_nation"
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/explore_radio_nation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/explore_nation"
-            android:textSize="15sp"/>
-        <RadioButton android:id="@+id/explore_radio_region"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/explore_radio_region"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="@string/explore_region"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
     </RadioGroup>
 
 </LinearLayout>

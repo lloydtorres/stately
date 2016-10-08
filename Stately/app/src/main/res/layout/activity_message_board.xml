@@ -23,7 +23,7 @@
     android:layout_centerHorizontal="true"
     android:layout_alignParentBottom="true"
     android:layout_gravity="center|bottom"
-    android:background="@android:color/white">
+    android:background="?attr/themedColorCard">
     <include layout="@layout/view_divider" />
     <RelativeLayout
         android:id="@+id/responder_reply_container"
@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textSize="12sp"
+            android:textColor="?attr/themedColorSecondaryText"
             android:layout_toRightOf="@+id/responder_reply_icon"
             android:text="@string/rmb_reply"/>
     </RelativeLayout>
@@ -60,7 +61,8 @@
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:textSize="15sp"
-            android:background="@android:color/white"
+            android:background="?attr/themedColorCard"
+            android:textColor="?attr/themedColorPrimaryText"
             android:maxLines="3"
             android:inputType="textMultiLine|textCapSentences"
             android:hint="@string/rmb_message_hint"
@@ -75,7 +77,7 @@
             android:layout_gravity="end"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            app:srcCompat="@drawable/ic_post"/>
+            app:srcCompat="?attr/themedDrawablePost"/>
     </RelativeLayout>
 </LinearLayout>
 

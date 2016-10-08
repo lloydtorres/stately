@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:background="#EEE"
+    android:background="?attr/themedColorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#EEE">
+        android:background="?attr/themedColorBackground">
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             card_view:contentPadding="16dp" >
             <LinearLayout
                 android:orientation="vertical"
@@ -65,7 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="?attr/themedColorSecondaryText"
                         android:layout_toRightOf="@id/icon_report_checklist"
                         android:layout_centerVertical="true"
                         android:text="@string/report_checklist" />
@@ -76,7 +76,7 @@
             android:id="@+id/report_category_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             android:layout_marginBottom="12dp"
             card_view:contentPadding="16dp">
             <LinearLayout
@@ -88,7 +88,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="?attr/themedColorHeaderText"
                     android:text="@string/report_want" />
                 <RadioGroup
                     android:id="@+id/report_category"
@@ -96,31 +96,34 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:checkedButton="@+id/report_inappropriate">
-                    <RadioButton android:id="@+id/report_inappropriate"
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_inappropriate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_inappropriate"
-                        android:textSize="15sp"/>
-                    <RadioButton android:id="@+id/report_spam"
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_spam"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_spam"
-                        android:textSize="15sp"/>
-                    <RadioButton android:id="@+id/report_other"
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
+                    <android.support.v7.widget.AppCompatRadioButton android:id="@+id/report_other"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/report_other"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp"
+                        app:buttonTint="?attr/themedColorTab"/>
                 </RadioGroup>
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            card_view:cardBackgroundColor="@android:color/white"
+            card_view:cardBackgroundColor="?attr/themedColorCard"
             card_view:contentPadding="16dp">
             <LinearLayout
                 android:focusable="true"

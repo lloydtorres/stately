@@ -34,17 +34,17 @@
         <activity
             android:name=".login.WebRegisterActivity"
             android:label="@string/create_nation"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
             android:name=".core.StatelyActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.CoreActivity" />
         <activity
             android:name=".explore.ExploreActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -54,32 +54,32 @@
         <activity
             android:name=".census.TrendsActivity"
             android:label="@string/trends_title_generic"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
             android:name=".issues.IssueDecisionActivity"
             android:label="@string/menu_issues"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
             android:name=".issues.IssueResultsActivity"
             android:label="@string/issue_legislation_passed"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
-            android:name=".telegrams.TelegramReadActivity"
-            android:label="@string/menu_telegrams"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:name=".telegrams.TelegramHistoryActivity"
+            android:label="@string/telegram_history_title"
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
             android:name=".telegrams.TelegramComposeActivity"
             android:label="@string/menu_telegrams"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
         <activity
             android:name=".region.MessageBoardActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -89,12 +89,17 @@
         <activity
             android:name=".wa.ResolutionActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="com.lloydtorres.stately.resolution" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".report.ReportActivity"
             android:label="@string/report_title"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -104,8 +109,13 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/menu_settings"
-            android:theme="@style/AppTheme.WithStatusBar">
+            android:theme="@style/AppTheme.SlidrActivity">
         </activity>
+        <receiver android:name=".push.AlphysReceiver"
+            android:label="@string/stately_alphys_r" />
+        <service
+            android:name=".push.AlphysService"
+            android:label="@string/stately_alphys"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="651c62b07195273645b7c74e9b21a68bf3d124cd" />

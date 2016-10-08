@@ -33,11 +33,11 @@ import java.util.List;
  */
 @Root(strict=false)
 public class HappeningFeed implements Parcelable {
-    public static final String QUERY_NATION = "https://www.nationstates.net/cgi-bin/api.cgi?q=happenings;view=nations.%s"
+    public static final String QUERY_NATION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q=happenings;view=nation.%s"
                                                 + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_REGION = "https://www.nationstates.net/cgi-bin/api.cgi?q=happenings;view=regions.%s"
+    public static final String QUERY_REGION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q=happenings;view=region.%s"
                                                 + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_WA = "https://www.nationstates.net/cgi-bin/api.cgi?wa=1&q=happenings"
+    public static final String QUERY_WA = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=1&q=happenings"
                                             + "&v=" + SparkleHelper.API_VERSION;
 
     @ElementList(name="HAPPENINGS")

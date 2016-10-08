@@ -44,6 +44,8 @@ public class CensusDetailedRank implements Parcelable {
     @Element(name="PRRANK", required=false)
     public float regionRankPercent;
 
+    public boolean isFeatured;
+
     public CensusDetailedRank() { super(); }
 
     protected CensusDetailedRank(Parcel in) {
@@ -53,6 +55,7 @@ public class CensusDetailedRank implements Parcelable {
         worldRankPercent = in.readFloat();
         regionRank = in.readInt();
         regionRankPercent = in.readFloat();
+        isFeatured = in.readByte() != 0x00;
     }
 
     @Override
@@ -68,6 +71,7 @@ public class CensusDetailedRank implements Parcelable {
         dest.writeFloat(worldRankPercent);
         dest.writeInt(regionRank);
         dest.writeFloat(regionRankPercent);
+        dest.writeByte((byte) (isFeatured ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

@@ -18,9 +18,15 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +39,18 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.Embassy;
+import com.lloydtorres.stately.dto.EmbassyHolder;
 import com.lloydtorres.stately.dto.Officer;
+import com.lloydtorres.stately.dto.OfficerHolder;
 import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
-import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
-import com.lloydtorres.stately.helpers.NameListDialog;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
+import com.lloydtorres.stately.helpers.links.NameListSpan;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;
@@ -49,6 +59,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -62,95 +73,18 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int OFFICER_CARD = 3;
     public static final int EMBASSY_CARD = 4;
 
-    private List<Object> cards;
+    private RegionCommunitySubFragment fragment;
     private Context context;
-    private Region mRegion;
     private FragmentManager fm;
+    private List<Parcelable> cards;
+    private String regionName;
 
-    private class RMBButtonHolder {
-        public String regionName;
-        public String unreadCount;
-
-        public RMBButtonHolder(String name, String unread) {
-            regionName = name;
-            unreadCount = unread;
-        }
-    }
-
-    // Because instanceof doesn't accept generics...
-    private class OfficerHolder {
-        public List<Officer> officers;
-
-        public OfficerHolder(List<Officer> off) {
-            officers = off;
-        }
-    }
-
-    private class EmbassyHolder {
-        public ArrayList<String> embassies;
-
-        public EmbassyHolder(ArrayList<String> emb) {
-            embassies = emb;
-        }
-    }
-
-    public CommunityRecyclerAdapter(Context c, FragmentManager f, Region r, String rmbUnreadText)
-    {
-        cards = new ArrayList<Object>();
-
-        context = c;
-        mRegion = r;
-        fm = f;
-
-        // This adds a button to the RMB
-        RMBButtonHolder button = new RMBButtonHolder(mRegion.name, rmbUnreadText);
-        cards.add(button);
-
-        if (mRegion.poll != null)
-        {
-            cards.add(mRegion.poll);
-        }
-
-        if (mRegion.gaVote != null && (mRegion.gaVote.voteFor + mRegion.gaVote.voteAgainst) > 0)
-        {
-            mRegion.gaVote.chamber = Assembly.GENERAL_ASSEMBLY;
-            cards.add(mRegion.gaVote);
-        }
-
-        if (mRegion.scVote != null && (mRegion.scVote.voteFor + mRegion.scVote.voteAgainst) > 0)
-        {
-            mRegion.scVote.chamber = Assembly.SECURITY_COUNCIL;
-            cards.add(mRegion.scVote);
-        }
-
-        List<Officer> officers = new ArrayList<Officer>(mRegion.officers);
-        if (!"0".equals(mRegion.delegate))
-        {
-            officers.add(new Officer(mRegion.delegate, c.getString(R.string.card_region_wa_delegate), Officer.DELEGATE_ORDER));
-        }
-        if (!"0".equals(mRegion.founder))
-        {
-            officers.add(new Officer(mRegion.founder, c.getString(R.string.card_region_founder), Officer.FOUNDER_ORDER));
-        }
-        Collections.sort(officers);
-        cards.add(new OfficerHolder(officers));
-
-        ArrayList<String> embassyList = new ArrayList<String>();
-        if (mRegion.embassies != null && mRegion.embassies.size() > 0)
-        {
-            // Only add active embassies
-            for (Embassy e : mRegion.embassies)
-            {
-                if (e.type == null)
-                {
-                    embassyList.add(e.name);
-                }
-            }
-        }
-        Collections.sort(embassyList);
-        if (embassyList.size() > 0) {
-            cards.add(new EmbassyHolder(embassyList));
-        }
+    public CommunityRecyclerAdapter(RegionCommunitySubFragment frag, List<Parcelable> crds, String n) {
+        fragment = frag;
+        context = fragment.getContext();
+        fm = fragment.getFragmentManager();
+        cards = crds;
+        regionName = n;
     }
 
     @Override
@@ -216,16 +150,13 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemViewType(int position) {
-        if (cards.get(position) instanceof RMBButtonHolder)
-        {
+        if (cards.get(position) instanceof RMBButtonHolder) {
             return BUTTON_CARD;
         }
-        else if (cards.get(position) instanceof Poll)
-        {
+        else if (cards.get(position) instanceof Poll) {
             return POLL_CARD;
         }
-        else if (cards.get(position) instanceof WaVote)
-        {
+        else if (cards.get(position) instanceof WaVote) {
             return WA_CARD;
         }
         else if (cards.get(position) instanceof OfficerHolder) {
@@ -235,6 +166,20 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             return EMBASSY_CARD;
         }
         return -1;
+    }
+
+    /**
+     * Updates the poll card in the adapter list if it exists.
+     * @param p New poll data.
+     */
+    public void updatePoll(Poll p) {
+        for (int i=0; i<cards.size(); i++) {
+            if (cards.get(i) instanceof Poll) {
+                cards.set(i, p);
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     // Card viewholders
@@ -253,8 +198,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             v.setOnClickListener(this);
         }
 
-        public void init(RMBButtonHolder bh)
-        {
+        public void init(RMBButtonHolder bh) {
             buttonData = bh;
             if (bh.unreadCount != null && bh.unreadCount.length() > 0) {
                 unreadCounter.setVisibility(View.VISIBLE);
@@ -283,30 +227,45 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private Context context;
         private TextView question;
         private HtmlTextView content;
+        private TextView author;
+        private TextView open;
+        private TextView close;
         private LinearLayout options;
         private PieChart breakdown;
         private TextView nullVote;
+        private View divider;
+        private LinearLayout voteButton;
+        private TextView voteButtonContent;
 
         public PollCard(Context c, View v) {
             super(v);
             context = c;
             question = (TextView) v.findViewById(R.id.card_region_poll_question);
             content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
+            author = (TextView) v.findViewById(R.id.card_region_poll_author);
+            open = (TextView) v.findViewById(R.id.card_region_poll_open);
+            close = (TextView) v.findViewById(R.id.card_region_poll_close);
             options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
             breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
             nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
+            divider = v.findViewById(R.id.view_divider);
+            voteButton = (LinearLayout) v.findViewById(R.id.card_region_poll_vote_button);
+            voteButtonContent = (TextView) v.findViewById(R.id.card_region_poll_vote_button_content);
         }
 
-        public void init(Poll p)
-        {
-            question.setText(SparkleHelper.fromHtml(p.title));
+        public void init(final Poll p) {
+            question.setText(SparkleHelper.getHtmlFormatting(p.title));
+            SparkleHelper.setHappeningsFormatting(context, author,
+                    String.format(Locale.US, context.getString(R.string.poll_author), p.author));
+            open.setText(String.format(Locale.US, context.getString(R.string.poll_open),
+                    SparkleHelper.getReadableDateFromUTC(context, p.startTime)));
+            close.setText(String.format(Locale.US, context.getString(R.string.poll_close),
+                    SparkleHelper.getReadableDateFromUTC(context, p.stopTime)));
 
-            if (p.text != null && p.text.length() > 0)
-            {
+            if (p.text != null && p.text.length() > 0) {
                 SparkleHelper.setBbCodeFormatting(context, content, p.text, fm);
             }
-            else
-            {
+            else {
                 content.setVisibility(View.GONE);
             }
 
@@ -316,48 +275,80 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             options.removeAllViews();
             int voteTotal = 0;
             List<String> chartLabels = new ArrayList<String>();
-            for (int i=0; i<results.size(); i++)
-            {
-                inflateOption(options, i+1, results.get(i).text, results.get(i).votes);
+            for (int i=0; i<results.size(); i++) {
+                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
                 voteTotal += results.get(i).votes;
-                chartLabels.add(String.format(context.getString(R.string.region_option_index), i+1));
+                chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
 
-            if (voteTotal > 0)
-            {
+            if (voteTotal > 0) {
                 breakdown.setVisibility(View.VISIBLE);
                 nullVote.setVisibility(View.GONE);
 
                 List<Entry> chartEntries = new ArrayList<Entry>();
-                for (int i=0; i<results.size(); i++)
-                {
+                for (int i=0; i<results.size(); i++) {
                     chartEntries.add(new Entry((results.get(i).votes * 100f)/voteTotal, i));
                 }
 
                 PieDataSet dataSet = new PieDataSet(chartEntries, "");
                 dataSet.setDrawValues(false);
-                dataSet.setColors(SparkleHelper.chartColours, context);
+                dataSet.setColors(RaraHelper.chartColours, context);
                 PieData dataFull = new PieData(chartLabels, dataSet);
 
-                breakdown = SparkleHelper.getFormattedPieChart(context, breakdown, chartLabels);
+                breakdown = RaraHelper.getFormattedPieChart(context, breakdown, chartLabels);
                 breakdown.setData(dataFull);
                 breakdown.invalidate();
             }
-            else
-            {
+            else {
                 breakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
+
+            if (p.isVotingEnabled) {
+                divider.setVisibility(View.VISIBLE);
+                voteButton.setVisibility(View.VISIBLE);
+                voteButtonContent.setText(context.getString(p.votedOption == Poll.NO_VOTE ? R.string.poll_vote_button_submit : R.string.poll_vote_button_change));
+                voteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fragment.showPollVoteDialog(p);
+                    }
+                });
+            } else {
+                divider.setVisibility(View.GONE);
+                voteButton.setVisibility(View.GONE);
+                voteButton.setOnClickListener(null);
+            }
         }
 
-        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes)
-        {
+        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters, boolean votedOption) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
-            label.setText(String.format(context.getString(R.string.region_option_index), index));
-            content.setText(String.format(context.getString(R.string.poll_votes_template), SparkleHelper.getHtmlFormatting(option), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
+            content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template_start), SparkleHelper.getHtmlFormatting(option)));
+
+            Spannable template = new SpannableString(String.format(Locale.US, context.getString(R.string.poll_votes_template_votes), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            if (votes > 0) {
+                String[] rawVoters = voters.split(":");
+                final ArrayList<String> properVoters = new ArrayList<String>();
+                for (String v : rawVoters) {
+                    properVoters.add(SparkleHelper.getNameFromId(v));
+                }
+                NameListSpan span = new NameListSpan(context, fm,
+                        String.format(Locale.US, context.getString(R.string.poll_votes_voter_dialog), option),
+                        properVoters, ExploreActivity.EXPLORE_NATION);
+                template.setSpan(span, 0, template.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                content.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+            content.append(template);
+            content.append(context.getString(R.string.poll_votes_template_end));
+
+            if (votedOption) {
+                content.setTypeface(null, Typeface.BOLD);
+            }
+
             optionLayout.addView(optionView);
         }
     }
@@ -373,8 +364,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView linkContent;
         private TextView nullVote;
 
-        public RegionWaCard(Context c, View v)
-        {
+        public RegionWaCard(Context c, View v) {
             super(v);
             context = c;
             title = (TextView) v.findViewById(R.id.region_wa_title);
@@ -385,8 +375,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             nullVote = (TextView) v.findViewById(R.id.region_wa_null_vote);
         }
 
-        public void init(WaVote w)
-        {
+        public void init(WaVote w) {
             // Setup resolution link
             Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
             resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
@@ -399,8 +388,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             });
 
             String chamberName = "";
-            switch(w.chamber)
-            {
+            switch(w.chamber) {
                 case Assembly.GENERAL_ASSEMBLY:
                     chamberName = context.getString(R.string.wa_general_assembly);
                     break;
@@ -409,12 +397,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     break;
             }
 
-            title.setText(String.format(context.getString(R.string.card_region_wa_vote), chamberName));
-            linkContent.setText(String.format(context.getString(R.string.card_region_wa_link), chamberName));
+            title.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_vote), chamberName));
+            linkContent.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_link), chamberName));
 
-            filler.setText(String.format(context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
-            if (!SparkleHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst))
-            {
+            filler.setText(String.format(Locale.US, context.getString(R.string.region_wa_filler), w.voteFor, w.voteAgainst));
+            if (!RaraHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst)) {
                 chart.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
@@ -441,29 +428,26 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             officersLayout.removeAllViews();
             if (officers.size() <= 0) {
-                noOfficers.setText(String.format(context.getString(R.string.region_filler_no_officers), mRegion.name));
+                noOfficers.setText(String.format(Locale.US, context.getString(R.string.region_filler_no_officers), regionName));
                 noOfficers.setVisibility(View.VISIBLE);
                 officersLayout.setVisibility(View.GONE);
             }
             else {
                 officersLayout.setVisibility(View.VISIBLE);
-                for (int i=0; i<officers.size(); i++)
-                {
-                    if (officers.get(i).office != null && officers.get(i).name != null)
-                    {
+                for (int i=0; i<officers.size(); i++) {
+                    if (officers.get(i).office != null && officers.get(i).name != null) {
                         inflateOfficerEntry(officersLayout, officers.get(i).office, officers.get(i).name);
                     }
                 }
             }
         }
 
-        private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation)
-        {
+        private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation) {
             View delegateView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
             label.setText(SparkleHelper.getHtmlFormatting(position));
-            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), SparkleHelper.CLICKY_NATION_MODE);
+            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), ExploreActivity.EXPLORE_NATION);
             officersLayout.addView(delegateView);
         }
     }
@@ -492,11 +476,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     NameListDialog nameListDialog = new NameListDialog();
                     nameListDialog.setTitle(context.getString(R.string.card_region_embassies));
                     nameListDialog.setNames(embassies);
-                    nameListDialog.setTarget(SparkleHelper.CLICKY_REGION_MODE);
+                    nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
                     nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                 }
             });
         }
     }
-
 }

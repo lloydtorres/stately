@@ -19,6 +19,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import java.util.List;
  * An object containing all information about one issue encountered in NationStates.
  */
 public class Issue implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/page=dilemmas/template-overall=none";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=dilemmas/template-overall=none";
 
     public int id;
     public String chain;

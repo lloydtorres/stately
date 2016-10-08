@@ -18,7 +18,6 @@ package com.lloydtorres.stately.login;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +26,13 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 
 /**
  * Created by Lloyd on 2016-08-06.
  * An activity containing a WebView for creating new nations.
  */
-public class WebRegisterActivity extends AppCompatActivity {
+public class WebRegisterActivity extends SlidrActivity {
 
     public static final String REGISTER_URL = "https://m.nationstates.net/page=create_nation";
     public static final int REGISTER_RESULT = 54321;

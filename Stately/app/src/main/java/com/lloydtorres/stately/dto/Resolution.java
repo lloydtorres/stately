@@ -35,22 +35,27 @@ import java.util.List;
 @Root(name="WA", strict=false)
 public class Resolution implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?wa=%d&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d&q="
                                         + "resolution+votetrack"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_INACTIVE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d"
+                                        + "&id=%d&q=resolution"
+                                        + "&v=" + SparkleHelper.API_VERSION;
+    public static final String PATH_PROPOSAL = SparkleHelper.BASE_URI_NOSLASH + "/page=UN_view_proposal/id=%s";
 
-    @Element(name="CATEGORY", required=false)
-    public String category;
-    @Element(name="CREATED", required=false)
-    public long created;
-    @Element(name="DESC", required=false)
-    public String content;
     @Element(name="NAME", required=false)
     public String name;
+    @Element(name="CREATED", required=false)
+    public long created;
+    @Element(name="CATEGORY", required=false)
+    public String category;
     @Element(name="OPTION", required=false)
     public String target;
     @Element(name="PROPOSED_BY", required=false)
     public String proposedBy;
+    @Element(name="DESC", required=false)
+    public String content;
+
     @Element(name="TOTAL_VOTES_AGAINST", required=false)
     public int votesAgainst;
     @Element(name="TOTAL_VOTES_FOR", required=false)
@@ -61,17 +66,26 @@ public class Resolution implements Parcelable {
     @ElementList(name="VOTE_TRACK_FOR", required=false)
     public List<Integer> voteHistoryFor;
 
+    @Element(name="COUNCILID", required=false)
+    public int id;
+    @Element(name="IMPLEMENTED", required=false)
+    public long implemented;
+    @Element(name="REPEALED_BY", required=false)
+    public int repealed;
+    @Element(name="REPEALS_COUNCILD", required=false)
+    public int repealTarget;
+
     public Resolution() {
         super();
     }
 
     protected Resolution(Parcel in) {
-        category = in.readString();
-        created = in.readLong();
-        content = in.readString();
         name = in.readString();
+        created = in.readLong();
+        category = in.readString();
         target = in.readString();
         proposedBy = in.readString();
+        content = in.readString();
         votesAgainst = in.readInt();
         votesFor = in.readInt();
         if (in.readByte() == 0x01) {
@@ -86,6 +100,10 @@ public class Resolution implements Parcelable {
         } else {
             voteHistoryFor = null;
         }
+        id = in.readInt();
+        implemented = in.readLong();
+        repealed = in.readInt();
+        repealTarget = in.readInt();
     }
 
     @Override
@@ -95,12 +113,12 @@ public class Resolution implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(category);
-        dest.writeLong(created);
-        dest.writeString(content);
         dest.writeString(name);
+        dest.writeLong(created);
+        dest.writeString(category);
         dest.writeString(target);
         dest.writeString(proposedBy);
+        dest.writeString(content);
         dest.writeInt(votesAgainst);
         dest.writeInt(votesFor);
         if (voteHistoryAgainst == null) {
@@ -115,6 +133,10 @@ public class Resolution implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(voteHistoryFor);
         }
+        dest.writeInt(id);
+        dest.writeLong(implemented);
+        dest.writeInt(repealed);
+        dest.writeInt(repealTarget);
     }
 
     @SuppressWarnings("unused")

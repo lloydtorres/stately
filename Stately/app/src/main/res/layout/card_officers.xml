@@ -8,7 +8,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="20dp" >
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/themedColorHeaderText"
             android:text="@string/card_region_officers" />
         <TextView
             android:visibility="gone"
@@ -32,7 +32,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             android:textStyle="italic"
             android:text="@string/region_filler_no_officers" />
         <LinearLayout

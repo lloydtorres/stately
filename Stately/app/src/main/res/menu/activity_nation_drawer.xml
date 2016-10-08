@@ -29,6 +29,11 @@
             android:title="@string/menu_wa"
             app:actionLayout="@layout/view_drawercounter"/>
         <item
+            android:id="@+id/nav_world"
+            android:icon="@drawable/ic_menu_world"
+            android:title="@string/menu_world"
+            />
+        <item
             android:id="@+id/nav_activityfeed"
             android:icon="@drawable/ic_activityfeed"
             android:title="@string/menu_activityfeed" />

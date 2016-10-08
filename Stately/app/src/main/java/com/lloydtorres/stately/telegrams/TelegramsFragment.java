@@ -18,10 +18,11 @@ package com.lloydtorres.stately.telegrams;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,11 +41,14 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.IToolbarActivity;
+import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.dto.TelegramFolder;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -58,6 +62,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 /**
  * Created by Lloyd on 2016-03-08.
@@ -87,7 +92,7 @@ public class TelegramsFragment extends Fragment {
     private int selectedFolder;
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
-    public String chkValue;
+    private String chkValue;
 
     @Override
     public void onAttach(Context context) {
@@ -136,7 +141,7 @@ public class TelegramsFragment extends Fragment {
 
         // Set up refresher to reload data on refresh
         mSwipeRefreshLayout = (SwipyRefreshLayout) mView.findViewById(R.id.message_board_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(getContext()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -273,7 +278,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         // Build telegram objects from raw telegrams
-        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, SparkleHelper.getActiveUser(getContext()).nationId);
+        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
         switch (direction)
         {
             case SCAN_FORWARD:
@@ -368,14 +373,14 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null)
         {
-            mRecyclerAdapter = new TelegramsAdapter(this, telegrams, folders, selectedFolder, chkValue);
+            mRecyclerAdapter = new TelegramsAdapter(telegrams, this, folders.get(selectedFolder).name);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else
         {
             oldSize = mRecyclerAdapter.getItemCount();
             ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
-            ((TelegramsAdapter) mRecyclerAdapter).setFolders(folders, selectedFolder);
+            ((TelegramsAdapter) mRecyclerAdapter).setFolder(folders.get(selectedFolder).name);
         }
         mSwipeRefreshLayout.setRefreshing(false);
 
@@ -416,6 +421,270 @@ public class TelegramsFragment extends Fragment {
     }
 
     /**
+     * Sends a GET request to NS to mark a certain telegram as read.
+     * @param id Telegram ID.
+     */
+    public void markAsRead(int id) {
+        if (chkValue == null) {
+            return;
+        }
+
+        String targetURL = String.format(Locale.US, Telegram.MARK_READ, id, chkValue);
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() != null && isAdded()) {
+                            if (getActivity() instanceof StatelyActivity) {
+                                ((StatelyActivity) getActivity()).decrementTelegramUnread();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+            }
+        });
+
+        DashHelper.getInstance(getContext()).addRequest(stringRequest);
+    }
+
+    /**
+     * Remove a given telegram ID from the recycler list.
+     * @param id
+     */
+    private void invalidateTelegram(int id) {
+        ((TelegramsAdapter) mRecyclerAdapter).invalidateTelegram(id);
+        pastOffset = Math.max(0, pastOffset-1);
+    }
+
+    /**
+     * Wrappers to call on NS to archive a telegram.
+     */
+    public void showArchiveTelegramDialog(final int id) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        dialogBuilder
+                .setTitle(getString(R.string.telegrams_archive_confirm))
+                .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        archiveTelegram(id);
+                        dialog.dismiss();
+                    }})
+                .setNegativeButton(getString(R.string.explore_negative), null)
+                .show();
+    }
+
+    private void archiveTelegram(final int id) {
+        boolean isFolderFound = false;
+
+        for (TelegramFolder f : folders) {
+            Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(f.name);
+            if (m.matches()) {
+                startMoveTelegram(id, f.value);
+                isFolderFound = true;
+                break;
+            }
+        }
+
+        if (!isFolderFound) {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_action_error));
+        }
+    }
+
+    public void showMoveTelegramDialog(final int id) {
+        ArrayList<TelegramFolder> moveableFolders = new ArrayList<TelegramFolder>();
+        for (int i=0; i<folders.size(); i++) {
+            String name = folders.get(i).name;
+            Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name);
+            if (i == selectedFolder ||
+                    TelegramFolder.TELEGRAM_FOLDER_SENT.equals(name) ||
+                    TelegramFolder.TELEGRAM_FOLDER_DELETED.equals(name) ||
+                    m.matches()) {
+                continue;
+            }
+            moveableFolders.add(folders.get(i));
+        }
+
+        if (moveableFolders.size() <= 0) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+            dialogBuilder
+                    .setTitle(getString(R.string.telegrams_move))
+                    .setMessage(getString(R.string.telegrams_move_none))
+                    .setPositiveButton(getString(R.string.got_it), null)
+                    .show();
+        }
+        else {
+            FoldersDialog foldersDialog = new FoldersDialog();
+            foldersDialog.setFolders(moveableFolders);
+            foldersDialog.setFragment(this);
+            foldersDialog.setMoveMode(true);
+            foldersDialog.setMoveTelegramId(id);
+            foldersDialog.setSelected(FoldersDialog.NO_SELECTION);
+            foldersDialog.show(getFragmentManager(), FoldersDialog.DIALOG_TAG);
+        }
+    }
+
+    /**
+     * Wrapper for call to move a telegram to some folder.
+     * This lets the app show fancy loading animation in the meantime.
+     * @param id
+     * @param targetFolder
+     */
+    public void startMoveTelegram(final int id, final String targetFolder) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                moveTelegram(id, targetFolder);
+            }
+        });
+    }
+
+    /**
+     * The actual call to move a telegram to some folder.
+     * @param id
+     * @param targetFolder
+     */
+    private void moveTelegram(final int id, final String targetFolder) {
+        if (chkValue == null) {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_action_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        String finalTarget = targetFolder;
+        // Telegrams to be sent to inbox just use a blank parameter
+        if (TelegramFolder.TELEGRAM_FOLDER_INBOX_VAL.equals(targetFolder)) {
+            finalTarget = "";
+        }
+        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, id, finalTarget, chkValue);
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        invalidateTelegram(id);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    public void showDeleteTelegramDialog(final int id) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        dialogBuilder
+            .setTitle(getString(R.string.telegrams_delete_confirm))
+            .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startDeleteTelegram(id);
+                    dialog.dismiss();
+                }
+            })
+            .setNegativeButton(getString(R.string.explore_negative), null)
+            .show();
+    }
+
+    /**
+     * Wrapper for call to delete a telegram
+     * This lets the app show fancy loading animation in the meantime.
+     * @param id
+     */
+    private void startDeleteTelegram(final int id) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                deleteTelegram(id);
+            }
+        });
+    }
+
+    /**
+     * The actual call to move a telegram to some folder.
+     * @param id
+     */
+    private void deleteTelegram(final int id) {
+        if (chkValue == null) {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_action_error));
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        String templateURL = Telegram.DELETE_TELEGRAM;
+        if (TelegramFolder.TELEGRAM_FOLDER_DELETED.equals(folders.get(selectedFolder).name)) {
+            templateURL = Telegram.PERMDELETE_TELEGRAM;
+        }
+        String targetURL = String.format(Locale.US, templateURL, id, chkValue);
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded())
+                        {
+                            return;
+                        }
+
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        invalidateTelegram(id);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (getActivity() == null || !isAdded())
+                {
+                    return;
+                }
+                
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
+        {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
      * This function rebuilds the set used to track unique messages after a restart.
      * Because set isn't parcelable :(
      */
@@ -425,17 +694,6 @@ public class TelegramsFragment extends Fragment {
         for (Telegram t : telegrams)
         {
             uniqueEnforcer.add(t.id);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TelegramReadActivity.TELEGRAM_READ_RESULTS && resultCode == Activity.RESULT_OK && data != null) {
-            int deleteId = data.getIntExtra(TelegramReadActivity.TELEGRAM_READ_RESULTS_ID, TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL);
-            if (deleteId != TelegramReadActivity.TELEGRAM_READ_RESULTS_NULL) {
-                ((TelegramsAdapter) mRecyclerAdapter).invalidateTelegram(deleteId);
-                pastOffset = Math.max(0, pastOffset-1);
-            }
         }
     }
 

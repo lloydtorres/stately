@@ -16,11 +16,14 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Lloyd on 2016-07-24.
  * A holder for data in the main nation overview card.
  */
-public class NationOverviewCardData {
+public class NationOverviewCardData implements Parcelable {
     public String category;
     public String region;
     public String inflDesc;
@@ -36,4 +39,53 @@ public class NationOverviewCardData {
     public String scVote;
 
     public NationOverviewCardData() { super(); }
+
+    protected NationOverviewCardData(Parcel in) {
+        category = in.readString();
+        region = in.readString();
+        inflDesc = in.readString();
+        inflScore = in.readFloat();
+        population = in.readInt();
+        motto = in.readString();
+        established = in.readString();
+        lastSeen = in.readString();
+        waState = in.readString();
+        endorsements = in.readString();
+        gaVote = in.readString();
+        scVote = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(category);
+        dest.writeString(region);
+        dest.writeString(inflDesc);
+        dest.writeFloat(inflScore);
+        dest.writeInt(population);
+        dest.writeString(motto);
+        dest.writeString(established);
+        dest.writeString(lastSeen);
+        dest.writeString(waState);
+        dest.writeString(endorsements);
+        dest.writeString(gaVote);
+        dest.writeString(scVote);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationOverviewCardData> CREATOR = new Parcelable.Creator<NationOverviewCardData>() {
+        @Override
+        public NationOverviewCardData createFromParcel(Parcel in) {
+            return new NationOverviewCardData(in);
+        }
+
+        @Override
+        public NationOverviewCardData[] newArray(int size) {
+            return new NationOverviewCardData[size];
+        }
+    };
 }

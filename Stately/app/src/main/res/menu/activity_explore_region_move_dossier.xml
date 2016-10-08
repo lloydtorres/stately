@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_explore"
+        android:icon="@drawable/ic_menu_explore"
+        android:title="@string/menu_explore"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_move"
+        android:icon="@drawable/ic_move"
+        android:title="@string/explore_move_confirm"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/nav_dossier"
+        android:icon="@drawable/ic_activityfeed"
+        android:title="@string/explore_menu_dossier_rem"
+        app:showAsAction="never" />
+</menu>

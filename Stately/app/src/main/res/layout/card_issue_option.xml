@@ -10,18 +10,18 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     tools:ignore="MissingPrefix">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/card_issue_option_content_holder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
             <TextView
@@ -30,7 +30,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 tools:text="Lorem ipsum" />
         </LinearLayout>
         <include layout="@layout/view_divider" />
@@ -39,7 +39,7 @@
             android:id="@+id/card_issue_option_select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="?attr/themedColorCard"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -52,7 +52,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginLeft="-9dp"
                 android:padding="4dp"
-                app:srcCompat="@drawable/ic_check_green"/>
+                app:srcCompat="?attr/themedDrawableCheck"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -62,7 +62,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="?attr/themedColorButton"
                     android:text="@string/issue_select_option"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"

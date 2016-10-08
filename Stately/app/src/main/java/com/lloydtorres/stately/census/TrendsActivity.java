@@ -16,19 +16,15 @@
 
 package com.lloydtorres.stately.census;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -36,26 +32,21 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
-import com.lloydtorres.stately.dto.CensusHistoryPoint;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
+import com.lloydtorres.stately.dto.CensusNationRankData;
+import com.lloydtorres.stately.dto.CensusNationRankList;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.simpleframework.xml.core.Persister;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -63,15 +54,17 @@ import java.util.Locale;
  * This activity downloads and graphs the history of a given dataset.
  * Users can also switch between different datasets.
  */
-public class TrendsActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class TrendsActivity extends SlidrActivity {
     // Keys for intent/saved instance data
-    public static final String TREND_TARGET = "trendTarget";
-    public static final String TREND_ID = "trendId";
-    public static final String TREND_MODE = "trendMode";
-    public static final String TREND_DATASET = "trendDataset";
+    public static final String TREND_DATA_TARGET = "trendTarget";
+    public static final String TREND_DATA_ID = "trendId";
+    public static final String TREND_DATA_START = "trendStart";
+    public static final String TREND_DATA_MODE = "trendMode";
+    public static final String TREND_DATA_DATASET = "trendDataset";
 
     public static final int TREND_NATION = 0;
     public static final int TREND_REGION = 1;
+    public static final int TREND_WORLD = 2;
 
     public static final int CENSUS_CIVIL_RIGHTS = 0;
     public static final int CENSUS_ECONOMY = 1;
@@ -83,70 +76,59 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     public static final int CENSUS_ECONOMIC_OUTPUT = 76;
     public static final int CENSUS_CRIME = 77;
 
-    private String[] WORLD_CENSUS_ITEMS;
-
     private String target;
     private int id;
     private int mode;
+    private int start = 1;
     private CensusHistory dataset;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private String[] WORLD_CENSUS_ITEMS;
 
     private View view;
-    private TextView title;
-    private TextView unit;
-    private TextView date;
-    private TextView value;
-    private TextView max;
-    private RelativeLayout maxHolder;
-    private TextView min;
-    private RelativeLayout minHolder;
-    private TextView avg;
-    private RelativeLayout avgHolder;
-    private LineChart chart;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trends);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
 
         if (getIntent() != null) {
-            target = getIntent().getStringExtra(TREND_TARGET);
-            id = getIntent().getIntExtra(TREND_ID, 0);
-            mode = getIntent().getIntExtra(TREND_MODE, TREND_NATION);
+            target = getIntent().getStringExtra(TREND_DATA_TARGET);
+            id = getIntent().getIntExtra(TREND_DATA_ID, 0);
+            mode = getIntent().getIntExtra(TREND_DATA_MODE, TREND_NATION);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
         setToolbar(toolbar);
 
         view = findViewById(R.id.trends_main);
-        title = (TextView) findViewById(R.id.trends_title);
-        unit = (TextView) findViewById(R.id.trends_unit);
-        date = (TextView) findViewById(R.id.trends_date);
-        value = (TextView) findViewById(R.id.trends_value);
-        max = (TextView) findViewById(R.id.trends_max);
-        maxHolder = (RelativeLayout) findViewById(R.id.trends_max_holder);
-        min = (TextView) findViewById(R.id.trends_min);
-        minHolder = (RelativeLayout) findViewById(R.id.trends_min_holder);
-        avg = (TextView) findViewById(R.id.trends_avg);
-        avgHolder = (RelativeLayout) findViewById(R.id.trends_avg_holder);
-        chart = (LineChart) findViewById(R.id.trends_chart);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.trends_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction.equals(SwipyRefreshLayoutDirection.BOTTOM)) {
+                    queryNextRankData();
+                }
+            }
+        });
 
-        setTrendHeaderSubheader();
+        mRecyclerView = (RecyclerView) findViewById(R.id.trends_recycler);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        if (dataset == null)
-        {
+        if (dataset == null) {
             startQueryDataset();
         }
-        else
-        {
+        else {
             processDataset(dataset);
         }
     }
@@ -170,23 +152,13 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         getSupportActionBar().setTitle(t);
     }
 
-    private void setTrendHeaderSubheader() {
-        // Set header title and subtitle
-        int censusId = id;
-        if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-        {
-            censusId = WORLD_CENSUS_ITEMS.length - 1;
-        }
-        String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
-        title.setText(censusType[0]);
-        unit.setText(censusType[1]);
-    }
-
     /**
      * Convenience class to show refresh animation on dataset query.
      */
     private void startQueryDataset()
     {
+        mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -212,17 +184,26 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     private void queryDataset()
     {
-        if (chart == null)
-        {
-            return;
-        }
+        start = 1;
 
-        chart.highlightValues(null);
-        String queryMode = mode == TREND_NATION ? CensusHistory.NATION_HISTORY : CensusHistory.REGION_HISTORY;
+        String targetURL = "";
+        String queryTarget = "";
         long curTime = System.currentTimeMillis() / 1000L;
         long sixtyDaysAgo = curTime - CensusHistory.SIXTY_DAYS_IN_SECONDS;
 
-        String targetURL = String.format(Locale.US, CensusHistory.QUERY, queryMode, SparkleHelper.getIdFromName(target), id, sixtyDaysAgo, curTime);
+        switch (mode) {
+            case TREND_NATION:
+                queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id, sixtyDaysAgo, curTime);
+                break;
+            case TREND_REGION:
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
+                break;
+            case TREND_WORLD:
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
+        }
+
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     CensusHistory censusResponse = null;
@@ -233,31 +214,34 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
                             censusResponse = serializer.read(CensusHistory.class, response);
 
                             // Set titles
-                            String newTitle = String.format(getString(R.string.trends_title), censusResponse.name);
-                            setToolbarTitle(newTitle);
+                            String newTitle;
+                            if (mode != TREND_WORLD && censusResponse.name != null) {
+                                newTitle = censusResponse.name;
+                            }
+                            else {
+                                newTitle = getString(R.string.trends_title_world);
+                            }
+                            setToolbarTitle(String.format(Locale.US, getString(R.string.trends_title), newTitle));
 
-                            setTrendHeaderSubheader();
-
-                            if (censusResponse.scale.points != null)
-                            {
+                            if (censusResponse.scale.points != null) {
                                 processDataset(censusResponse);
                             }
-                            else
-                            {
-                                setNoDataFound(true);
+                            else {
+                                SparkleHelper.makeSnackbar(view, getString(R.string.trends_empty));
+                                stopRefreshing();
                             }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
-                            mSwipeRefreshLayout.setRefreshing(false);
+                            stopRefreshing();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
+                stopRefreshing();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -270,7 +254,7 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
-            mSwipeRefreshLayout.setRefreshing(false);
+            stopRefreshing();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -281,131 +265,101 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
      */
     private void processDataset(CensusHistory data)
     {
-        if (chart == null)
-        {
-            return;
-        }
-
-        // Set passed in dataset as new global dataset
         dataset = data;
-        setNoDataFound(false);
+        updateStartCounter(dataset.ranks);
 
-        // Set selected indicator text to latest data
-        resetDataSelected();
+        String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, id);
 
-        // Calculate max, min, average
-        List<CensusHistoryPoint> datapoints = dataset.scale.points;
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], dataset);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+        stopRefreshing();
+    }
 
-        float maxVal = Float.MIN_VALUE;
-        float minVal = Float.MAX_VALUE;
-        float total = 0;
-        for (int i=0; i < datapoints.size(); i++)
-        {
-            float value = datapoints.get(i).score;
-            if (value > maxVal)
-            {
-                maxVal = value;
+    /**
+     * Updates the counter that tracks where to start querying for nation ranks.
+     * @param rankList
+     */
+    private void updateStartCounter(CensusNationRankList rankList) {
+        if (rankList != null && rankList.ranks.size() > 0) {
+            start += rankList.ranks.size();
+        }
+    }
+
+    /**
+     * Query the next set of nation census rankings.
+     */
+    private void queryNextRankData() {
+        String queryTarget = "";
+        String targetURL = "";
+
+        switch (mode) {
+            case TREND_REGION:
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                break;
+            case TREND_WORLD:
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                break;
+        }
+
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    CensusNationRankData rankDataResponse = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            rankDataResponse = serializer.read(CensusNationRankData.class, response);
+                            if (rankDataResponse.ranks != null && rankDataResponse.ranks.ranks.size() > 0) {
+                                dataset.ranks.ranks.addAll(rankDataResponse.ranks.ranks);
+                                Collections.sort(dataset.ranks.ranks);
+
+                                int oldItemCount = mRecyclerAdapter.getItemCount()-1;
+                                ((TrendsRecyclerAdapter) mRecyclerAdapter).addNewCensusNationRanks(rankDataResponse.ranks);
+                                ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(oldItemCount, 40);
+                                updateStartCounter(rankDataResponse.ranks);
+                            }
+                            else {
+                                SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
+                            }
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                        }
+                        stopRefreshing();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                stopRefreshing();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else
+                {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
             }
-            if (value < minVal)
-            {
-                minVal = value;
-            }
-            total += value;
-        }
-        float avgVal = total / datapoints.size();
+        });
 
-        max.setText(SparkleHelper.getPrettifiedNumber(maxVal));
-        min.setText(SparkleHelper.getPrettifiedNumber(minVal));
-        avg.setText(SparkleHelper.getPrettifiedNumber(avgVal));
-
-        // Set up chart
-        final float lineWidth = 2.5f;
-        List<Entry> historyEntries = new ArrayList<Entry>();
-        for (int i=0; i < datapoints.size(); i++)
+        if (!DashHelper.getInstance(this).addRequest(stringRequest))
         {
-            historyEntries.add(new Entry(datapoints.get(i).score, i));
+            stopRefreshing();
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
+    }
 
-        // Formatting
-        LineDataSet lineHistoryData = new LineDataSet(historyEntries, "");
-        lineHistoryData.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineHistoryData.setColors(SparkleHelper.waColourFor, this);
-        lineHistoryData.setDrawValues(false);
-        lineHistoryData.setDrawVerticalHighlightIndicator(true);
-        lineHistoryData.setDrawHorizontalHighlightIndicator(false);
-        lineHistoryData.setHighLightColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        lineHistoryData.setHighlightLineWidth(lineWidth);
-        lineHistoryData.setDrawCircles(false);
-        lineHistoryData.setLineWidth(lineWidth);
-
-        // Match data with x-axis labels
-        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(lineHistoryData);
-        List<String> xLabels = new ArrayList<String>();
-        for (int i=0; i < datapoints.size(); i++)
-        {
-            xLabels.add(String.format(SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
-        }
-        LineData dataFinal = new LineData(xLabels, dataSets);
-
-        // formatting
-        boolean isLargeValue = maxVal >= 1000f;
-        chart = SparkleHelper.getFormattedLineChart(chart, this, isLargeValue, 6, false);
-        chart.setData(dataFinal);
-        chart.invalidate();
-
+    /**
+     * Call to setup the swipe refresher to stop refreshing.
+     */
+    private void stopRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    /**
-     * This resets the displayed data label to the most current one.
-     */
-    private void resetDataSelected()
-    {
-        List<CensusHistoryPoint> datapoints = dataset.scale.points;
-        CensusHistoryPoint latest = datapoints.get(datapoints.size() - 1);
-        setDataSelected(latest);
-    }
-
-    /**
-     * Sets the displayed data label based on the passed-in data point.
-     * @param point
-     */
-    private void setDataSelected(CensusHistoryPoint point)
-    {
-        date.setText(SparkleHelper.getDateNoYearFromUTC(point.timestamp));
-        value.setText(SparkleHelper.getPrettifiedNumber(point.score));
-    }
-
-    /**
-     * Styles the view if the data returned from NS was empty.
-     */
-    private void setNoDataFound(boolean isDataNotFound)
-    {
-        date.setTypeface(date.getTypeface(), isDataNotFound ? Typeface.ITALIC : Typeface.NORMAL);
-
-        int visibilityState = isDataNotFound ? View.GONE : View.VISIBLE;
-        value.setVisibility(visibilityState);
-        maxHolder.setVisibility(visibilityState);
-        minHolder.setVisibility(visibilityState);
-        avgHolder.setVisibility(visibilityState);
-        chart.setVisibility(visibilityState);
-
-        if (isDataNotFound) {
-            date.setText(getString(R.string.trends_empty));
-            mSwipeRefreshLayout.setRefreshing(false);
+        if (mode != TREND_NATION) {
+            mSwipeRefreshLayout.setEnabled(true);
+            mSwipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTTOM);
         }
-    }
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        CensusHistoryPoint selectedPoint = dataset.scale.points.get(e.getXIndex());
-        setDataSelected(selectedPoint);
-    }
-
-    @Override
-    public void onNothingSelected() {
-        resetDataSelected();
     }
 
     @Override
@@ -436,15 +390,16 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(TREND_ID, id);
-        savedInstanceState.putInt(TREND_MODE, mode);
+        savedInstanceState.putInt(TREND_DATA_ID, id);
+        savedInstanceState.putInt(TREND_DATA_MODE, mode);
+        savedInstanceState.putInt(TREND_DATA_START, start);
         if (target != null)
         {
-            savedInstanceState.putString(TREND_TARGET, target);
+            savedInstanceState.putString(TREND_DATA_TARGET, target);
         }
         if (dataset != null)
         {
-            savedInstanceState.putParcelable(TREND_DATASET, dataset);
+            savedInstanceState.putParcelable(TREND_DATA_DATASET, dataset);
         }
     }
 
@@ -453,26 +408,17 @@ public class TrendsActivity extends AppCompatActivity implements OnChartValueSel
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            id = savedInstanceState.getInt(TREND_ID);
-            mode = savedInstanceState.getInt(TREND_MODE);
+            id = savedInstanceState.getInt(TREND_DATA_ID);
+            mode = savedInstanceState.getInt(TREND_DATA_MODE);
+            start = savedInstanceState.getInt(TREND_DATA_START);
             if (target == null)
             {
-                target = savedInstanceState.getString(TREND_TARGET);
+                target = savedInstanceState.getString(TREND_DATA_TARGET);
             }
             if (dataset == null)
             {
-                dataset = savedInstanceState.getParcelable(TREND_DATASET);
+                dataset = savedInstanceState.getParcelable(TREND_DATA_DATASET);
             }
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        if (chart != null)
-        {
-            chart = null;
-        }
-        super.onDestroy();
     }
 }

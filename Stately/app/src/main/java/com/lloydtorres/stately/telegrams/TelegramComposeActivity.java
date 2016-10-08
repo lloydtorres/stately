@@ -19,7 +19,6 @@ package com.lloydtorres.stately.telegrams;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -38,12 +37,14 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Telegram;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -59,7 +60,7 @@ import java.util.Map;
  * Created by Lloyd on 2016-03-12.
  * This activity lets users compose or reply to telegrams.
  */
-public class TelegramComposeActivity extends AppCompatActivity {
+public class TelegramComposeActivity extends SlidrActivity {
     // Keys for intent data
     public static final String REPLY_ID_DATA = "replyIdData";
     public static final String RECIPIENTS_DATA = "recipientsData";
@@ -81,7 +82,6 @@ public class TelegramComposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telegram_compose);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
         isInProgress = false;
 
         // Either get data from intent or restore state
@@ -92,7 +92,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
 
         mView = findViewById(R.id.telegram_compose_main);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.telegram_compose_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.telegram_compose_toolbar);
@@ -112,7 +112,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         }
 
         senderField = (TextView) findViewById(R.id.telegram_compose_sender);
-        senderField.setText(SparkleHelper.getActiveUser(this).name);
+        senderField.setText(PinkaHelper.getActiveUser(this).name);
 
         content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
         content.setCustomSelectionActionModeCallback(new NullActionCallback());
@@ -305,7 +305,7 @@ public class TelegramComposeActivity extends AppCompatActivity {
         params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
         if (replyId == NO_REPLY_ID) {
             params.put("recruitregion", "region");
-            params.put("recruitregionrealname", SparkleHelper.getRegionSessionData(getApplicationContext()));
+            params.put("recruitregionrealname", PinkaHelper.getRegionSessionData(getApplicationContext()));
             params.put("send", "1");
         }
         else {

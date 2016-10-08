@@ -18,9 +18,7 @@ package com.lloydtorres.stately.core;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,18 +48,22 @@ import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.ActivityFeedFragment;
-import com.lloydtorres.stately.helpers.DashHelper;
 import com.lloydtorres.stately.helpers.GenericFragment;
-import com.lloydtorres.stately.helpers.NSStringRequest;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.login.SwitchNationDialog;
 import com.lloydtorres.stately.nation.NationFragment;
+import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
+import com.lloydtorres.stately.world.WorldFragment;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -83,14 +85,15 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public static final int TELEGRAMS_FRAGMENT = 2;
     public static final int REGION_FRAGMENT = 3;
     public static final int WA_FRAGMENT = 4;
-    public static final int ACTIVITY_FEED_FRAGMENT = 5;
+    public static final int WORLD_FRAGMENT = 5;
+    public static final int ACTIVITY_FEED_FRAGMENT = 6;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
-    private final int[] noSelect = {    R.id.nav_explore,
-                                        R.id.nav_switch,
-                                        R.id.nav_settings,
-                                        R.id.nav_logout
-                                    };
+    private static final int[] noSelect = {     R.id.nav_explore,
+                                                R.id.nav_switch,
+                                                R.id.nav_settings,
+                                                R.id.nav_logout
+                                            };
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -108,14 +111,27 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private TextView rmbCountView;
     private TextView waCountView;
 
-    private SharedPreferences storage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        switch(SettingsActivity.getTheme(this)) {
+            case SettingsActivity.THEME_VERT:
+                setTheme(R.style.AppTheme_CoreActivity);
+                break;
+            case SettingsActivity.THEME_NOIR:
+                setTheme(R.style.AppThemeNoir_CoreActivity);
+                break;
+            case SettingsActivity.THEME_BLEU:
+                setTheme(R.style.AppThemeBleu_CoreActivity);
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                setTheme(R.style.AppThemeRouge_CoreActivity);
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                setTheme(R.style.AppThemeViolet_CoreActivity);
+                break;
+        }
         setContentView(R.layout.activity_stately);
-
-        storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get nation object from intent or restore state
         if (getIntent() != null)
@@ -139,7 +155,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         if (mNation == null)
         {
-            UserLogin u = SparkleHelper.getActiveUser(this);
+            UserLogin u = PinkaHelper.getActiveUser(this);
             updateNation(u.name, true);
         }
         else
@@ -206,6 +222,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 f = getWaFragment();
                 currentPosition = R.id.nav_wa;
                 break;
+            case WORLD_FRAGMENT:
+                f = getWorldFragment();
+                currentPosition = R.id.nav_world;
+                break;
             default:
                 f = getNationFragment();
                 currentPosition = R.id.nav_nation;
@@ -261,6 +281,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     public void onResume()
     {
         super.onResume();
+        TrixHelper.updateLastActiveTime(this);
+
         // Redownload nation data on resume
         // isLoaded will only be false on first run, true on all subsequent runs
         // This prevents nation data from being redundantly loaded twice.
@@ -289,7 +311,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         }
         else
         {
-            if (storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true)) {
+            if (SettingsActivity.getConfirmExitSetting(this)) {
                 confirmExit();
             }
             else {
@@ -312,7 +334,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.exit_confirm)
                 .setPositiveButton(R.string.exit, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
@@ -358,6 +380,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     // Chose World Assembly
                     fChoose = getWaFragment();
                     navInit = WA_FRAGMENT;
+                    break;
+                case R.id.nav_world:
+                    fChoose = getWorldFragment();
+                    navInit = WORLD_FRAGMENT;
                     break;
                 default:
                     // Backup
@@ -443,8 +469,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private ActivityFeedFragment getActivityFeed()
     {
         ActivityFeedFragment activityFeedFragment = new ActivityFeedFragment();
-        activityFeedFragment.setNationName(mNation.name);
-        activityFeedFragment.setRegionName(mNation.region);
         return activityFeedFragment;
     }
 
@@ -475,6 +499,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         waFragment.setVoteStatus(voteStatus);
 
         return waFragment;
+    }
+
+    /**
+     * Returns a new World fragment.
+     * @return
+     */
+    private WorldFragment getWorldFragment() {
+        return new WorldFragment();
     }
 
     /**
@@ -519,7 +551,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     dialog.dismiss();
                 }
             };
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder
                     .setTitle(getString(R.string.menu_switch))
                     .setMessage(getString(R.string.switch_single_warn))
@@ -553,14 +585,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SparkleHelper.removeActiveUser(getApplicationContext());
+                PinkaHelper.removeActiveUser(getApplicationContext());
                 Intent nationActivityLaunch = new Intent(StatelyActivity.this, LoginActivity.class);
                 startActivity(nationActivityLaunch);
                 finish();
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.logout_confirm)
                 .setPositiveButton(R.string.menu_logout, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
@@ -632,6 +664,16 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     }
 
     /**
+     * Call used to decrement the telegram unread count by 1 when a telegram is read.
+     */
+    public void decrementTelegramUnread() {
+        if (mNation != null && mNation.unread != null) {
+            mNation.unread.telegrams = Math.max(0, mNation.unread.telegrams - 1);
+            setUnreadCount(telegramCountView, mNation.unread.telegrams);
+        }
+    }
+
+    /**
      * Query NationStates for nation data
      * @param name Target nation name
      * @param firstLaunch Indicates if activity is being launched for the first time
@@ -639,7 +681,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     private void updateNation(String name, final boolean firstLaunch)
     {
         final View fView = findViewById(R.id.drawer_layout);
-        String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(name));
+        String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(name));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -651,7 +693,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             nationResponse = UserNation.parseNationFromXML(getApplicationContext(), serializer, response);
 
                             mNation = nationResponse;
-                            SparkleHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
+                            PinkaHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
 
                             if (firstLaunch)
                             {

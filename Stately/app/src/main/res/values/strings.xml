@@ -3,9 +3,14 @@
     <string name="app_version">Stately 1.6.3</string>
     <string name="app_header">Stately/1.6.3 (User %1$s; Droid)</string>
     <string name="app_header_nouser">Stately/1.6.3 (No User; Droid)</string>
+    <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
+    <string name="stately_alphys">Stately Notification Polling Service</string>
+    <string name="stately_notifs_sub_template">%1$s — Stately for NationStates</string>
 
     <!-- Login -->
-    <string name="for_nationstates">for NationStates</string>
+    <string name="login_subtitle_conservative">Making NationStates Great Again</string>
+    <string name="login_subtitle_liberal">A NationStates To Believe In</string>
+    <string name="login_subtitle_neutral">for NationStates</string>
     <string name="username_hint">Nation Name</string>
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
@@ -15,7 +20,6 @@
     <string name="create_finish">Type in your nation name and password to get started.</string>
     <string name="log_in_load">Logging In…</string>
 
-    <string name="login_error_autologin">Try logging in again.</string>
     <string name="login_error_404">Invalid nation name or password.</string>
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
@@ -31,9 +35,10 @@
     <string name="menu_nation">Nation</string>
     <string name="menu_issues">Issues</string>
     <string name="menu_telegrams">Telegrams</string>
-    <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_region">Region</string>
     <string name="menu_wa">World Assembly</string>
+    <string name="menu_world">The World</string>
+    <string name="menu_activityfeed">Activity Feed</string>
     <string name="menu_explore">Explore</string>
     <string name="menu_switch">Switch</string>
     <string name="menu_settings">Settings</string>
@@ -62,8 +67,21 @@
 
     <string name="explore_endorse">Endorse</string>
     <string name="explore_withdraw_endorse">Withdraw Endorsement</string>
+    <string name="explore_endorse_confirm">Endorse %1$s?</string>
+    <string name="explore_withdraw_endorse_confirm">Withdraw endorsement for %1$s?</string>
     <string name="explore_endorsed_response">Endorsed %1$s.</string>
     <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
+    <string name="explore_endorse_button">Endorse</string>
+    <string name="explore_withdraw_endorse_button">Withdraw</string>
+
+    <string name="explore_menu_dossier_add">Add to Dossier</string>
+    <string name="explore_menu_dossier_rem">Remove from Dossier</string>
+    <string name="explore_dossier_added">Added %1$s to the Dossier.</string>
+    <string name="explore_dossier_removed">Removed %1$s from the Dossier.</string>
+    <string name="explore_dossier_add_confirm">Add %1$s to the Dossier?</string>
+    <string name="explore_dossier_rem_confirm">Remove %1$s from the Dossier?</string>
+    <string name="explore_dossier_add_button">Add</string>
+    <string name="explore_dossier_rem_button">Remove</string>
 
     <string name="explore_region_move">Move to %1$s?</string>
     <string name="explore_region_password">Password required to move</string>
@@ -83,6 +101,7 @@
     <string name="exit">Exit</string>
 
     <!-- Nation main card -->
+    <string name="nation_government_custom">&lt;font color=&quot;#727272&quot;&gt;&lt;strike&gt;%1$s&lt;/strike&gt;&lt;/font&gt;&lt;br&gt;%2$s</string>
     <string name="nation_wa_member">WA Member</string>
     <string name="nation_wa_delegate">WA Delegate</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
@@ -112,10 +131,6 @@
     <string name="card_overview_wa_endorsements">Endorsements</string>
     <string name="card_overview_wa_novote">%1$s: No vote on the resolution.</string>
     <string name="card_overview_wa_vote">%1$s: Voted %2$s the resolution.</string>
-
-    <string name="wa_vote_state_undecided">UNDECIDED</string>
-    <string name="wa_vote_state_for">FOR</string>
-    <string name="wa_vote_state_against">AGAINST</string>
 
     <!-- Nation other card -->
     <string name="card_overview_other_title">Other Information</string>
@@ -173,10 +188,15 @@
     <string name="black_market">Black Market</string>
 
     <!-- Large number suffixes -->
+    <string name="thousand_short">k</string>
     <string name="million">million</string>
+    <string name="million_short">m</string>
     <string name="billion">billion</string>
+    <string name="billion_short">b</string>
     <string name="trillion">trillion</string>
+    <string name="trillion_short">t</string>
     <string name="val_currency">%1$s %2$s</string>
+    <string name="val_short">%1$s%2$s</string>
     <string name="percent">%1$.1f%%</string>
     <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
@@ -213,11 +233,20 @@
     <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>
+    <string name="poll_author">Submitted by @@%1$s@@</string>
+    <string name="poll_open">Opened %1$s</string>
+    <string name="poll_close">Closes %1$s</string>
     <string name="region_option_index">Option %1$d</string>
+    <string name="poll_votes_template_start">%1$s (</string>
+    <string name="poll_votes_template_votes">%1$d %2$s</string>
+    <string name="poll_votes_template_end">)</string>
+    <string name="poll_votes_voter_dialog">Voted for %1$s</string>
+    <string name="poll_vote_button_submit">Vote on regional poll</string>
+    <string name="poll_vote_button_change">Change vote</string>
+    <string name="poll_vote_withdraw">Withdraw vote</string>
     <string name="card_region_wa_vote">%1$s Resolution</string>
     <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$d for to %2$d against.</string>
     <string name="card_region_wa_link">Open the %1$s resolution</string>
-    <string name="poll_votes_template">%1$s (%2$d %3$s)</string>
     <string name="votes_null">No votes have been recorded yet!</string>
 
     <!-- Region message board -->
@@ -269,11 +298,15 @@
     <!-- Trends -->
     <string name="trends_title_generic">Trends</string>
     <string name="trends_title">Trends: %1$s</string>
+    <string name="trends_title_world">World</string>
     <string name="trends_datasets">Datasets</string>
     <string name="trends_max">Maximum</string>
     <string name="trends_min">Minimum</string>
     <string name="trends_avg">Average</string>
     <string name="trends_empty">No data found.</string>
+    <string name="trends_regional">Regional Rankings</string>
+    <string name="trends_world">World Rankings</string>
+    <string name="trends_score_template">Score: %1$s</string>
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>
@@ -283,11 +316,13 @@
     <string name="issue_activity_title">%1$s: Issue #%2$d</string>
     <string name="issue_unavailable">This issue is not available to %1$s.</string>
     <string name="issue_select_option">Adopt this position</string>
+    <string name="issue_select_option_pirate">Yarr!</string>
     <string name="issue_option_confirm_adopt">Adopt the position in Option %1$d?</string>
     <string name="issue_option_confirm_dismiss">Dismiss this issue?</string>
     <string name="issue_option_adopt">Adopt</string>
     <string name="issue_option_dismiss">Dismiss</string>
     <string name="issue_dismiss_issue">Dismiss this issue</string>
+    <string name="issue_dismiss_issue_pirate">Arr, t\'Davey Jones\' Locker with ye all!</string>
     <string name="issue_legislation_passed">Legislation Passed</string>
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_position">Adopted Position</string>
@@ -296,7 +331,6 @@
     <string name="issue_religion_none">a major religion</string>
 
     <!-- Telegrams -->
-    <string name="telegram_title">Telegram: %1$s</string>
     <string name="telegrams_folders">Folders</string>
     <string name="telegrams_compose">Compose Telegram</string>
     <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
@@ -312,6 +346,7 @@
     <string name="telegrams_move">Move</string>
     <string name="telegrams_delete">Delete</string>
     <string name="telegrams_report">Report</string>
+    <string name="telegrams_close">Close</string>
     <string name="telegrams_archive_confirm">Archive telegram?</string>
     <string name="telegrams_delete_confirm">Delete telegram?</string>
     <string name="telegrams_move_none">No other folders are available.</string>
@@ -325,17 +360,23 @@
     <string name="telegrams_empty_content">Telegram seems empty.</string>
     <string name="telegrams_invalid_recipient">Something seems wrong with the recipients.</string>
     <string name="telegrams_fail">Couldn\'t send telegram. Try again in a bit.</string>
+    <string name="telegram_history_title">Telegram History</string>
 
     <!-- World Assembly -->
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>
+    <string name="wa_implemented">%1$s #%2$d — %3$s</string>
+    <string name="wa_ga_prefix">GA</string>
+    <string name="wa_sc_prefix">SC</string>
     <string name="wa_for">For</string>
     <string name="wa_against">Against</string>
     <string name="wa_members">members</string>
     <string name="wa_delegates">delegates</string>
     <string name="wa_proposed">Proposed by %1$s</string>
-    <string name="wa_nominee_template">%1$s \u2014 %2$s</string>
+    <string name="wa_nominee_template">%1$s — %2$s</string>
+    <string name="wa_repeal_target">Repeal — %1$s</string>
+    <string name="wa_repealed">Repealed by %1$s #%2$d</string>
     <string name="wa_resolution">Resolution</string>
     <string name="wa_resolution_vote_default">Vote on this resolution</string>
     <string name="wa_resolution_vote_for">Voted for this resolution.</string>
@@ -353,6 +394,15 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
+    <string name="wa_error">Resolution not found.</string>
+    <string name="wa_last_resolution">Read this resolution</string>
+
+    <!-- The World -->
+    <string name="world_nations">nations</string>
+    <string name="world_regions">regions</string>
+    <string name="world_featured">Featured Region</string>
+    <string name="world_census">Featured Census</string>
+    <string name="world_census_score">World Score: %1$s</string>
 
     <!-- Report -->
     <string name="report_title">Report</string>
@@ -378,41 +428,28 @@
     <string name="report_header_response">Response</string>
 
     <!-- Settings -->
-    <string name="setting_title_behavior">App Behavior</string>
+    <string name="setting_title_behavior">General</string>
     <string name="setting_autologin">Log in automatically</string>
     <string name="setting_issueconfirm">Confirm issue decisions</string>
     <string name="setting_crashreport">Send crash reports</string>
     <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
+    <string name="setting_title_notifs">Notifications</string>
+    <string name="setting_notifs">Get notifications</string>
+    <string name="setting_notifs_desc">For the currently logged in nation only. Notices must be enabled in NationStates.</string>
+    <string name="setting_notifs_check">Check for new notifications</string>
+    <string name="setting_notifs_issues">Issues</string>
+    <string name="setting_notifs_tgs">Telegrams</string>
+    <string name="setting_notifs_rmb_mention">RMB mentions</string>
+    <string name="setting_notifs_rmb_quote">RMB quotes</string>
+    <string name="setting_notifs_rmb_like">RMB likes</string>
+    <string name="setting_notifs_endorse">Endorsements</string>
+    <string name="setting_title_style">Styling</string>
+    <string name="setting_theme">Theme</string>
+    <string name="setting_category">Government Category</string>
     <string name="setting_title_about">About</string>
     <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributors: Jannes Höke</string>
 
-    <!-- WA category descriptors -->
-    <string name="wa_anarchy">The %1$s live in a state of perpetual fear, as a complete breakdown of social order has led to the rise of order through biker gangs.</string>
-    <string name="wa_authoritarian_democracy">The %1$s are prohibited from doing almost everything except voting, which they do timidly and conservatively.</string>
-    <string name="wa_benevolent_dictatorship">The %1$s enjoy great individual freedoms in everything except elections, which, where they exist at all, are populist shams for a dictatorship government that has no intention of ever giving up power.</string>
-    <string name="wa_capitalist_paradise">The %1$s are either ruled by a small, efficient government or a conglomerate of multinational corporations; it\'s difficult to tell which.</string>
-    <string name="wa_capitalizt">The %1$s enjoy some of the most opulent lifestyles in the region, unless they are unemployed or working class, in which case they are variously starving to death or crippled by easily preventable diseases.</string>
-    <string name="wa_civil_rights_lovefest">The %1$s hold their civil and political rights very dear, although the wealthy and those in business tend to be viewed with suspicion.</string>
-    <string name="wa_compulsory_consumerist_state">The %1$s are rabid consumers, partly through choice and partly because the government tells them to and dissenters tend to vanish from their homes at night.</string>
-    <string name="wa_conservative_democracy">The %1$s are known throughout the region for their efficiency and work ethic, as well as their general suspicion of leisure.</string>
-    <string name="wa_corporate_bordello">The %1$s are effectively ruled by a group of massive corporations, who run for political office and provide their well-off citizens with world-class goods and services. Their poorer citizens, however, are mostly starving to death while being urged to go out and get real jobs. The populace has reasonably extensive civil rights, although these are mostly aimed at allowing them to buy whatever they like.</string>
-    <string name="wa_corporate_police_state">The %1$s are ruled with an iron fist by the corrupt, dictatorship government, which oppresses anyone who isn\'t on the board of a Fortune 500 company. Large corporations tend to be above the law, and use their financial clout to gain ever-increasing government benefits at the expense of the poor and unemployed.</string>
-    <string name="wa_corrupt_dictatorship">The %1$s are ruled with an iron fist by the dictatorship government, which ensures that no one outside the party gets too rich. In their personal lives, however, citizens are relatively unoppressed; it remains to be seen whether this is because the government genuinely cares about its people, or if it hasn\'t gotten around to stamping out civil rights yet.</string>
-    <string name="wa_democratic_socialists">The %1$s are fiercely patriotic and enjoy great social equality; they tend to view other, more capitalist countries as somewhat immoral and corrupt.</string>
-    <string name="wa_father_knows_best_state">The %1$s are ruled by a mostly-benevolent dictator, who grants the populace the freedom to live their own lives but watches carefully for anyone to slip up.</string>
-    <string name="wa_free_market_paradise">The %1$s enjoy frequent elections, which are uniformly corrupted by big-spending corporations buying politicians who best suit their interests.</string>
-    <string name="wa_inoffensive_centrist_democracy">The %1$s have some civil rights, but not too many, enjoy the freedom to spend their money however they like, to a point, and take part in free and open elections, although not too often.</string>
-    <string name="wa_iron_fist_consumerists">The %1$s are kept under strict control by the oppressive government, which measures its success by the nation\'s GDP and refers to individual citizens as \"human resources.\"</string>
-    <string name="wa_iron_fist_socialists">The %1$s are ruled with an iron fist by the socialist government, which grants its people the freedom to do whatever they like so long as it doesn\'t involve getting richer than anybody else or challenging the government.</string>
-    <string name="wa_left_leaning_college_state">The %1$s enjoy extensive civil freedoms, particularly in social issues, while business tends to be more regulated.</string>
-    <string name="wa_left_wing_utopia">The %1$s are free to do what they want with their own bodies, and vote for whoever they like in elections; if they go into business, however, they are regulated to within an inch of their lives.</string>
-    <string name="wa_liberal_democratic_socialists">The %1$s love a good election, and the government gives them plenty of them. Universities tend to be full of students debating the merits of various civil and political rights, while businesses are tightly regulated and the wealthy viewed with suspicion.</string>
-    <string name="wa_libertarian_police_state">The %1$s are proud of their wide-ranging civil freedoms, and those who aren\'t tend to be dragged off the streets by men in dark suits and hustled into cars with tinted windows.</string>
-    <string name="wa_moralistic_democracy">The %1$s are highly moralistic and fiercely conservative, in the sense that they tend to believe most things should be outlawed. People who have good jobs and work quietly at them are lauded; others are viewed with suspicion.</string>
-    <string name="wa_new_york_times_democracy">The %1$s enjoy a sensible mix of personal and economic freedoms, while the political process is open and the people\'s right to vote held sacrosanct.</string>
-    <string name="wa_psychotic_dictatorship">The %1$s are ruled without fear or favor by a psychotic dictator, who outlaws just about everything and refers to the populace as \"my little playthings.\"</string>
-    <string name="wa_right_wing_utopia">The %1$s are free to succeed or fail in life on their own merits; the successful tend to enjoy an opulent (but moralistic) lifestyle, while the failures can be seen crowding out most jails.</string>
-    <string name="wa_scandinavian_liberal_paradise">The %1$s enjoy extensive civil rights and enjoy a level of social equality free from the usual accompanying government corruption.</string>
-    <string name="wa_tyranny_by_majority">The %1$s enjoy great social freedoms and frequent elections, where the majority of the populace regularly votes to increase its benefits at the expense of various hapless minorities.</string>
+    <!-- Notifications -->
+    <string name="notifs_new_issue">A new issue was encountered</string>
 </resources>

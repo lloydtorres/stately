@@ -2,7 +2,7 @@
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_banner"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -39,7 +39,7 @@
             android:paddingBottom="5dp"
             android:shadowColor="@android:color/black"
             android:shadowRadius="5"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="Mignon"/>

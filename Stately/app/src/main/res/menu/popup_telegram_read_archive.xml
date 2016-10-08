@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/telegrams_move"
+        android:title="@string/telegrams_move"/>
+    <item
+        android:id="@+id/telegrams_delete"
+        android:title="@string/telegrams_delete" />
+    <item
+        android:id="@+id/telegrams_report"
+        android:title="@string/telegrams_report"/>
+    <item
+        android:id="@+id/telegrams_close"
+        android:title="@string/telegrams_close"/>
+</menu>

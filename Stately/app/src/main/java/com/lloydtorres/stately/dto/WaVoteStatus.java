@@ -30,9 +30,14 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="NATION", strict=false)
 public class WaVoteStatus implements Parcelable {
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
                                         + "wa+gavote+scvote"
                                         + "&v=" + SparkleHelper.API_VERSION;
+
+    // Vote statuses
+    public static final String VOTE_FOR = "FOR";
+    public static final String VOTE_AGAINST = "AGAINST";
+    public static final String VOTE_UNDECIDED = "UNDECIDED";
 
     @Element(name="UNSTATUS")
     public String waState;

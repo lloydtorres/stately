@@ -53,7 +53,10 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.dto.Telegram;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -70,7 +73,7 @@ import java.util.regex.Pattern;
  * MuffinsHelper is a collection of helper functions for processing telegrams.
  * Note that the "generics" in this function expect content from a NS telegrams page.
  */
-public class MuffinsHelper {
+public final class MuffinsHelper {
     public static final String TG_UNREAD = "tg_new";
 
     public static final String SEND_ARROW = "→";
@@ -90,6 +93,9 @@ public class MuffinsHelper {
     public static final String RECRUITMENT_TELEGRAM = "toplinetgcat-1";
     public static final String MODERATOR_TELEGRAM = "toplinetgcat-11";
     public static final String WELCOME_TELEGRAM = "tag: welcome";
+
+    // Private constructor
+    private MuffinsHelper() {}
 
     /**
      * Takes in a JSoup Elements object containing raw telegrams from NS HTML.
@@ -268,6 +274,7 @@ public class MuffinsHelper {
     public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)\" rel=\"nofollow\">");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
@@ -289,12 +296,14 @@ public class MuffinsHelper {
         holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_NATION_MODE + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "\">%s</a>");
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + SparkleHelper.EXPLORE_TARGET + "%s/" + SparkleHelper.CLICKY_REGION_MODE + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
 
-        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + SparkleHelper.REPORT_TARGET + "%s\">");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
+
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
 
         holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
 

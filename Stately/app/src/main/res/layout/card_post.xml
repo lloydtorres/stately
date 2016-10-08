@@ -11,7 +11,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     card_view:contentPadding="20dp"
     tools:ignore="MissingPrefix">
 
@@ -25,7 +25,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/themedColorLinkText"
             tools:text="Greater Tern" />
         <TextView
             android:id="@+id/card_post_time"
@@ -34,7 +34,7 @@
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="?attr/themedColorSecondaryText"
             tools:text="7 minutes ago" />
         <org.sufficientlysecure.htmltextview.HtmlTextView
             android:id="@+id/card_post_content"
@@ -43,7 +43,7 @@
             android:fontFamily="sans-serif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?attr/themedColorPrimaryText"
             tools:text="Ha ha that's so funny!" />
         <RelativeLayout
             android:id="@+id/card_post_actions_holder"
@@ -73,7 +73,7 @@
                 android:paddingRight="2dp"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/card_post_like"
                 android:layout_toEndOf="@+id/card_post_like"

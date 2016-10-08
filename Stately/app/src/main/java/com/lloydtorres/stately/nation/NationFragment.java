@@ -38,9 +38,11 @@ import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.feed.HappeningsSubFragment;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import java.util.ArrayList;
 
@@ -53,12 +55,12 @@ public class NationFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNationData";
 
     // Constants used to determine view pager index.
-    private final int OVERVIEW_TAB = 0;
-    private final int PEOPLE_TAB = 1;
-    private final int GOV_TAB = 2;
-    private final int ECONOMY_TAB = 3;
-    private final int RANKINGS_TAB = 4;
-    private final int HAPPEN_TAB = 5;
+    private static final int OVERVIEW_TAB = 0;
+    private static final int PEOPLE_TAB = 1;
+    private static final int GOV_TAB = 2;
+    private static final int ECONOMY_TAB = 3;
+    private static final int RANKINGS_TAB = 4;
+    private static final int HAPPEN_TAB = 5;
 
     private Nation mNation;
 
@@ -68,7 +70,7 @@ public class NationFragment extends Fragment {
     private GovernmentSubFragment governmentSubFragment;
     private EconomySubFragment economySubFragment;
     private CensusSubFragment censusSubFragment;
-    private HappeningSubFragment happeningSubFragment;
+    private HappeningsSubFragment happeningsSubFragment;
 
     // variables used for nation views
     private TextView nationName;
@@ -228,8 +230,9 @@ public class NationFragment extends Fragment {
         censusSubFragment.setCensusData(censusHolder);
         censusSubFragment.setMode(CensusSortDialog.CENSUS_MODE_NATION);
 
-        happeningSubFragment = new HappeningSubFragment();
-        happeningSubFragment.setNation(mNation);
+        happeningsSubFragment = new HappeningsSubFragment();
+        ArrayList<Event> nationHappenings = new ArrayList<Event>(mNation.events);
+        happeningsSubFragment.setHappenings(nationHappenings);
 
         initTabs(view);
     }
@@ -287,7 +290,7 @@ public class NationFragment extends Fragment {
                 case RANKINGS_TAB:
                     return censusSubFragment;
                 case HAPPEN_TAB:
-                    return happeningSubFragment;
+                    return happeningsSubFragment;
                 default:
                     return new Fragment();
             }

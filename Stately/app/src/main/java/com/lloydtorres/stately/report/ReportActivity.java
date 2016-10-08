@@ -20,7 +20,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -40,11 +39,12 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
+import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
-import com.r0adkll.slidr.Slidr;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -54,7 +54,11 @@ import java.util.Map;
  * Created by Lloyd on 2016-07-28.
  * Activity to report user content to the NS moderators.
  */
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends SlidrActivity {
+    // Uri to invoke ReportActivity
+    public static final String REPORT_PROTOCOL = "com.lloydtorres.stately.report";
+    public static final String REPORT_TARGET = REPORT_PROTOCOL + "://";
+
     // Keys for intent data and saved preferences
     public static final String REPORT_ID = "reportId";
     public static final String REPORT_TYPE = "reportType";
@@ -68,7 +72,7 @@ public class ReportActivity extends AppCompatActivity {
     public static final int REPORT_TYPE_TELEGRAM = 2;
 
     // Target URL for reports
-    public static final String REPORT_URL = "https://www.nationstates.net/page=help";
+    public static final String REPORT_URL = SparkleHelper.BASE_URI_NOSLASH + "/page=help";
 
     // Headers to send when submitting report
     private static final int HEADER_GHR_INAPPROPRIATE = 1;
@@ -100,7 +104,6 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        Slidr.attach(this, SparkleHelper.slidrConfig);
 
         // Either get data from intent or restore state
         if (getIntent() != null)
@@ -128,7 +131,7 @@ public class ReportActivity extends AppCompatActivity {
         setToolbar(toolbar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.report_refresher);
-        mSwipeRefreshLayout.setColorSchemeResources(SparkleHelper.refreshColours);
+        mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
         dialogListener = new DialogInterface.OnClickListener() {
@@ -157,7 +160,7 @@ public class ReportActivity extends AppCompatActivity {
 
         // If replying to mod mail, use this message instead
         if (type == REPORT_TYPE_TASK) {
-            reportTarget.setText(String.format(getString(R.string.report_mod_reply), targetId));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_mod_reply), targetId));
             reportCategoryHolder.setVisibility(View.GONE);
         } else {
             String reportType = "";
@@ -172,7 +175,7 @@ public class ReportActivity extends AppCompatActivity {
                     targetHolder.setVisibility(View.GONE);
                     break;
             }
-            reportTarget.setText(String.format(getString(R.string.report_target), reportType, targetId, targetName));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_target), reportType, targetId, targetName));
         }
 
         if (categoryHolder != CATEGORY_NONE) {
@@ -204,7 +207,7 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.report_confirm)
                 .setPositiveButton(R.string.report_send_confirm, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)

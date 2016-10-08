@@ -10,7 +10,7 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="?attr/themedColorCard"
     tools:ignore="MissingPrefix">
 
     <LinearLayout
@@ -29,7 +29,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/themedColorHeaderText"
                 tools:text="@string/wa_security_council" />
             <TextView
                 android:id="@+id/card_wa_title"
@@ -38,7 +38,7 @@
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/themedColorPrimaryText"
                 tools:text="Commend Greater Tern" />
             <TextView
                 android:id="@+id/card_wa_activetime"
@@ -48,7 +48,7 @@
                 android:textStyle="italic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondaryText"
+                android:textColor="?attr/themedColorSecondaryText"
                 tools:text="@string/wa_voting_time" />
         </LinearLayout>
 

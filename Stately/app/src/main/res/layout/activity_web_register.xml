@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#EEE"
+        android:background="?attr/themedColorBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <ProgressBar
             android:id="@+id/register_progress_bar"

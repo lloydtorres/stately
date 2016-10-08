@@ -34,14 +34,14 @@ import java.util.List;
 @Root(name="REGION", strict=false)
 public class RegionMessages implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q=messages;offset=%d;limit=%d"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q=messages;offset=%d;limit=%d"
                                             + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_ID = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q=messages;fromid=%d;limit=%d;"
+    public static final String QUERY_ID = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q=messages;fromid=%d;limit=%d;"
                                             + "&v=" + SparkleHelper.API_VERSION;
-    public static final String LIKE_QUERY = "https://www.nationstates.net/page=ajax3/a=%s/postid=%d";
-    public static final String RAW_QUERY = "https://www.nationstates.net/page=display_region_rmb/region=%s/template-overall=none";
-    public static final String POST_QUERY = "https://www.nationstates.net/page=lodgermbpost/region=%s/template-overall=none";
-    public static final String DELETE_QUERY = "https://www.nationstates.net/page=ajax/a=rmbdelete/region=%s/postid=%d";
+    public static final String LIKE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=%s/postid=%d";
+    public static final String RAW_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=display_region_rmb/region=%s/template-overall=none";
+    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=lodgermbpost/region=%s/template-overall=none";
+    public static final String DELETE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbdelete/region=%s/postid=%d";
 
     @ElementList(name="MESSAGES", required=false)
     public List<Post> posts;

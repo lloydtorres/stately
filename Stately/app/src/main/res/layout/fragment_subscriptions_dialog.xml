@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -8,42 +9,48 @@
         android:layout_height="match_parent"
         android:padding="20dp">
 
-        <CheckBox android:id="@+id/subscriptions_curnation"
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_curnation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_curnation"/>
-        <CheckBox android:id="@+id/subscriptions_switch"
+            android:text="@string/subscriptions_curnation"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_switch"/>
-        <CheckBox android:id="@+id/subscriptions_dossier_n"
+            android:text="@string/subscriptions_switch"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_dossier_n"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_dossier_n"/>
-        <CheckBox android:id="@+id/subscriptions_region"
+            android:text="@string/subscriptions_dossier_n"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_region"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_region"/>
-        <CheckBox android:id="@+id/subscriptions_dossier_r"
+            android:text="@string/subscriptions_region"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_dossier_r"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_dossier_r"/>
-        <CheckBox android:id="@+id/subscriptions_wa"
+            android:text="@string/subscriptions_dossier_r"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatCheckBox android:id="@+id/subscriptions_wa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:textSize="15sp"
-            android:text="@string/subscriptions_wa"/>
+            android:text="@string/subscriptions_wa"
+            app:buttonTint="?attr/themedColorTab"/>
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

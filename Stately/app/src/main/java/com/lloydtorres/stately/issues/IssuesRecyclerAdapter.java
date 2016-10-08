@@ -29,26 +29,27 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-28.
  * An adapter for the IssuesFragment recycler.
  */
 public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final int ISSUE_CARD = 0;
-    private final int NEXT_CARD = 1;
+    private static final int ISSUE_CARD = 0;
+    private static final int NEXT_CARD = 1;
 
     private Context context;
     private List<Object> issues;
     private Nation mNation;
 
-    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n)
-    {
+    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n) {
         context = c;
-        issues = i;
         mNation = n;
+        setIssueCards(i);
     }
 
     @Override
@@ -56,8 +57,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType)
-        {
+        switch (viewType) {
             case ISSUE_CARD:
                 View issueCard = inflater.inflate(R.layout.card_issue_main, parent, false);
                 viewHolder = new IssueCard(context, issueCard);
@@ -91,17 +91,21 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (issues.get(position) instanceof Issue)
-        {
+        if (issues.get(position) instanceof Issue) {
             return ISSUE_CARD;
         }
-        else if (issues.get(position) instanceof String)
-        {
+        else if (issues.get(position) instanceof String) {
             return NEXT_CARD;
         }
         return -1;
     }
 
+    public void setIssueCards(List<Object> cards) {
+        issues = cards;
+        notifyDataSetChanged();
+    }
+
+    // Card viewholders
     public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context context;
@@ -118,23 +122,21 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             v.setOnClickListener(this);
         }
 
-        public void init(Issue i)
-        {
+        public void init(Issue i) {
             issue = i;
 
             title.setText(issue.title);
             if (issue.chain != null) {
-                id.setText(String.format(context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+                id.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
             }
             else {
-                id.setText(String.format(context.getString(R.string.issue_number), issue.id));
+                id.setText(String.format(Locale.US, context.getString(R.string.issue_number), issue.id));
             }
         }
 
         @Override
         public void onClick(View v) {
-            if (issue != null)
-            {
+            if (issue != null) {
                 Intent decisionActivityLaunch = new Intent(context, IssueDecisionActivity.class);
                 decisionActivityLaunch.putExtra(IssueDecisionActivity.ISSUE_DATA, issue);
                 decisionActivityLaunch.putExtra(IssueDecisionActivity.NATION_DATA, mNation);
@@ -147,15 +149,15 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         private TextView nextUpdate;
 
-        public NextCard(View v)
-        {
+        public NextCard(View v) {
             super(v);
             v.findViewById(R.id.card_generic_title).setVisibility(View.GONE);
             nextUpdate = (TextView) v.findViewById(R.id.card_generic_content);
         }
 
-        public void init(String m)
-        {
+        public void init(String m) {
+            RaraHelper.setViewHolderFullSpan(itemView);
+
             nextUpdate.setText(m);
             nextUpdate.setTypeface(nextUpdate.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

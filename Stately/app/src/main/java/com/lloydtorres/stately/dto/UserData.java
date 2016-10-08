@@ -31,7 +31,7 @@ import org.simpleframework.xml.Root;
 @Root(name="NATION", strict=false)
 public class UserData implements Parcelable {
 
-    public static final String UNREAD_QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?nation=%s&q=unread"
+    public static final String UNREAD_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=unread"
                                             + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="UNREAD", required=false)

@@ -17,36 +17,29 @@
 package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.Region;
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.dto.RegionFactbookCardData;
+import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
+import com.lloydtorres.stately.dto.RegionTagsCardData;
 
-import org.atteo.evo.inflector.English;
-import org.sufficientlysecure.htmltextview.HtmlTextView;
+import java.util.ArrayList;
 
 /**
  * Created by Lloyd on 2016-01-22.
  * A sub-fragment of the Region fragment displaying an overview about a region.
  * Takes in a Region object.
  */
-public class RegionOverviewSubFragment extends Fragment {
-    public static final String REGION_KEY = "mRegion";
+public class RegionOverviewSubFragment extends RecyclerSubFragment {
+    public static final String CARDS_DATA = "cards";
 
     private Region mRegion;
-
-    private TextView delegate;
-    private TextView founder;
-    private TextView power;
-    private CardView factbookCard;
-    private HtmlTextView factbook;
-    private TextView tags;
+    private ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
     public void setRegion(Region r)
     {
@@ -54,79 +47,56 @@ public class RegionOverviewSubFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_region_sub_overview, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // Restore state
-        if (savedInstanceState != null && mRegion == null)
-        {
-            mRegion = savedInstanceState.getParcelable(REGION_KEY);
+        // Restore save state
+        if (savedInstanceState != null) {
+            if (cards == null) {
+                cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
+            }
         }
 
-        if (mRegion != null)
-        {
-            delegate = (TextView) view.findViewById(R.id.region_delegate);
-            if (!"0".equals(mRegion.delegate))
-            {
-                String delegateProper = SparkleHelper.getNameFromId(mRegion.delegate);
-                String delegateTemplate = String.format(getString(R.string.region_delegate_votes), mRegion.delegate, mRegion.delegateVotes, English.plural(getString(R.string.region_filler_vote), mRegion.delegateVotes));
-                SparkleHelper.activityLinkBuilder(getContext(), delegate, delegateTemplate, mRegion.delegate, delegateProper, SparkleHelper.CLICKY_NATION_MODE);
-            }
-            else
-            {
-                delegate.setText(getString(R.string.region_filler_none));
-            }
-
-            founder = (TextView) view.findViewById(R.id.region_founder);
-            if (!"0".equals(mRegion.founder))
-            {
-                String founderProper = SparkleHelper.getNameFromId(mRegion.founder);
-                SparkleHelper.activityLinkBuilder(getContext(), founder, mRegion.founder, mRegion.founder, founderProper, SparkleHelper.CLICKY_NATION_MODE);
-            }
-            else
-            {
-                founder.setText(getString(R.string.region_filler_none));
-            }
-
-            if (!"0".equals(mRegion.founded))
-            {
-                founder.append(" " + String.format(getString(R.string.region_founded_append), mRegion.founded));
-            }
-
-            power = (TextView) view.findViewById(R.id.region_power);
-            power.setText(mRegion.power);
-
-            factbook = (HtmlTextView) view.findViewById(R.id.region_factbook);
-            if (mRegion.factbook != null)
-            {
-                SparkleHelper.setBbCodeFormatting(getContext(), factbook, mRegion.factbook, getFragmentManager());
-            }
-            else
-            {
-                factbookCard = (CardView) view.findViewById(R.id.region_factbook_card);
-                factbookCard.setVisibility(View.GONE);
-            }
-
-            tags = (TextView) view.findViewById(R.id.region_tags);
-            String tagCombine = SparkleHelper.joinStringList(mRegion.tags, ", ");
-            tags.setText(tagCombine);
+        if ((cards == null || cards.size() <= 0) && mRegion != null) {
+            initData();
         }
+
+        initRecyclerAdapter();
 
         return view;
+    }
+
+    private void initData() {
+        RegionQuickFactsCardData quickFacts = new RegionQuickFactsCardData();
+        quickFacts.waDelegate = mRegion.delegate;
+        quickFacts.delegateVotes = mRegion.delegateVotes;
+        quickFacts.founder = mRegion.founder;
+        quickFacts.founded = mRegion.founded;
+        quickFacts.power = mRegion.power;
+        cards.add(quickFacts);
+
+        if (mRegion.factbook != null && mRegion.factbook.length() > 0) {
+            RegionFactbookCardData factbook = new RegionFactbookCardData();
+            factbook.factbook = mRegion.factbook;
+            cards.add(factbook);
+        }
+        
+        RegionTagsCardData tags = new RegionTagsCardData();
+        tags.tags = mRegion.tags;
+        cards.add(tags);
+    }
+
+    private void initRecyclerAdapter() {
+        mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), getFragmentManager(), cards);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Save state
         super.onSaveInstanceState(outState);
-        if (mRegion != null)
-        {
-            outState.putParcelable(REGION_KEY, mRegion);
+        if (cards != null) {
+            outState.putParcelableArrayList(CARDS_DATA, cards);
         }
     }
 }

@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-02-08.
@@ -94,15 +95,15 @@ public class SubscriptionsDialog extends DialogFragment {
                 editor.putBoolean(CURRENT_REGION, curRegion.isChecked());
                 editor.putBoolean(DOSSIER_REGIONS, dossierRegions.isChecked());
                 editor.putBoolean(WORLD_ASSEMBLY, assembly.isChecked());
-                editor.commit();
+                editor.apply();
                 if (callback != null)
                 {
-                    callback.startQueryHappenings(false);
+                    callback.startQueryHappenings();
                 }
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.activityfeed_subscriptions)
                 .setView(dialogView)
                 .setPositiveButton(R.string.update, dialogListener)

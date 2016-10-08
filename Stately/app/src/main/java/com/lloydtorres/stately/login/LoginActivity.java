@@ -19,15 +19,14 @@ package com.lloydtorres.stately.login;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -41,13 +40,18 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
-import com.lloydtorres.stately.helpers.DashHelper;
-import com.lloydtorres.stately.helpers.NSStringRequest;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.simpleframework.xml.core.Persister;
+
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-13.
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String NOAUTOLOGIN_KEY = "noAutologin";
 
     private View view;
+    private TextView subtitle;
     private AppCompatEditText username;
     private AppCompatEditText password;
     private TextInputLayout userHolder;
@@ -66,17 +71,31 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private Button createNation;
     private boolean isLoggingIn;
-    private SharedPreferences storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        switch(SettingsActivity.getTheme(this)) {
+            case SettingsActivity.THEME_VERT:
+                setTheme(R.style.AppTheme);
+                break;
+            case SettingsActivity.THEME_NOIR:
+                setTheme(R.style.AppThemeNoir);
+                break;
+            case SettingsActivity.THEME_BLEU:
+                setTheme(R.style.AppThemeBleu);
+                break;
+            case SettingsActivity.THEME_ROUGE:
+                setTheme(R.style.AppThemeRouge);
+                break;
+            case SettingsActivity.THEME_VIOLET:
+                setTheme(R.style.AppThemeViolet);
+                break;
+        }
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
-
-        storage = PreferenceManager.getDefaultSharedPreferences(this);
 
         view = findViewById(R.id.activity_login_main);
+        subtitle = (TextView) findViewById(R.id.login_subtitle);
         username = (AppCompatEditText) findViewById(R.id.field_username);
         username.setCustomSelectionActionModeCallback(new NullActionCallback());
         password = (AppCompatEditText) findViewById(R.id.field_password);
@@ -85,6 +104,18 @@ public class LoginActivity extends AppCompatActivity {
         passHolder = (TextInputLayout) findViewById(R.id.holder_password);
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
+
+        switch (SettingsActivity.getGovernmentSetting(this)) {
+            case SettingsActivity.GOV_CONSERVATIVE:
+                subtitle.setText(getString(R.string.login_subtitle_conservative));
+                break;
+            case SettingsActivity.GOV_LIBERAL:
+                subtitle.setText(getString(R.string.login_subtitle_liberal));
+                break;
+            default:
+                subtitle.setText(getString(R.string.login_subtitle_neutral));
+                break;
+        }
 
         // If activity was launched by an intent, handle that first
         if (getIntent() != null)
@@ -105,9 +136,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // If settings allows it and user login exists, try logging in first
-        if (storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true))
+        if (SettingsActivity.getAutologinSetting(this))
         {
-            UserLogin u = SparkleHelper.getActiveUser(this);
+            UserLogin u = PinkaHelper.getActiveUser(this);
             if (u != null)
             {
                 verifyAccount(u);
@@ -115,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            SparkleHelper.removeActiveUser(this);
+            PinkaHelper.removeActiveUser(this);
         }
     }
 
@@ -151,8 +182,8 @@ public class LoginActivity extends AppCompatActivity {
      * @return No frills NSStringRequest
      */
     private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
-        final String targetURL = String.format(UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
-        final String oldActivePin = SparkleHelper.getActivePin(this);
+        final String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        final String oldActivePin = PinkaHelper.getActivePin(this);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     UserNation nationResponse = null;
@@ -163,16 +194,16 @@ public class LoginActivity extends AppCompatActivity {
                             nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
 
                             if (u != null) {
-                                SparkleHelper.setActiveAutologin(LoginActivity.this, u.autologin);
+                                PinkaHelper.setActiveAutologin(LoginActivity.this, u.autologin);
 
                                 // Only override pin if it hasn't been changed by the server
-                                String newActivePin = SparkleHelper.getActivePin(LoginActivity.this);
+                                String newActivePin = PinkaHelper.getActivePin(LoginActivity.this);
                                 if (newActivePin != null && oldActivePin != null && newActivePin.equals(oldActivePin)) {
-                                    SparkleHelper.setActivePin(LoginActivity.this, u.pin);
+                                    PinkaHelper.setActivePin(LoginActivity.this, u.pin);
                                 }
                             }
-                            SparkleHelper.setActiveUser(LoginActivity.this, nationResponse.name);
-                            SparkleHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
+                            PinkaHelper.setActiveUser(LoginActivity.this, nationResponse.name);
+                            PinkaHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
                             Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
                             nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
@@ -258,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.create_nation)
                 .setMessage(R.string.create_nation_redirect)
                 .setPositiveButton(R.string.create_continue, dialogListener)
@@ -269,11 +300,22 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.MaterialDialog);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)
                     .setMessage(R.string.create_finish)
                     .setPositiveButton(R.string.got_it, null)
                     .show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // notification polling
+        TrixHelper.updateLastActiveTime(this);
+        TrixHelper.stopAlarmForAlphys(this);
+        if (SettingsActivity.getNotificationSetting(this)) {
+            TrixHelper.setAlarmForAlphys(this);
         }
     }
 

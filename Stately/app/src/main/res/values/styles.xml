@@ -1,28 +1,202 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Stately Vert -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDark</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccent</item>
+        <item name="themedColorButton">@color/colorPrimary</item>
+        <item name="themedColorTab">@color/tab_color</item>
+        <item name="themedColorNavDrawer">@color/nav_color</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_green</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_green</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_green</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_green</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_green</item>
+        <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
-    <style name="AppTheme.WithStatusBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.CoreActivity">
+    </style>
+
+    <style name="AppTheme.SlidrActivity">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
+    <style name="MaterialDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Mercantile Noir -->
+    <style name="AppThemeNoir" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimaryNoir</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkNoir</item>
+        <item name="colorAccent">@color/colorAccentNoir</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorSecondaryText</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryTextNoir</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorLinkTextNoir</item>
+        <item name="themedColorButton">@color/colorPrimaryTextNoir</item>
+        <item name="themedColorTab">@color/tab_color_noir</item>
+        <item name="themedColorNavDrawer">@color/tab_color_noir</item>
+        <item name="themedColorCard">@color/colorPrimaryNoir</item>
+        <item name="themedColorBackground">@color/colorBackgroundNoir</item>
+        <item name="themedDrawablePost">@drawable/ic_post_white</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_white</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_white</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_up</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_white</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_white</item>
+        <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Dark</item>
+    </style>
+
+    <style name="AppThemeNoir.CoreActivity">
+    </style>
+
+    <style name="AppThemeNoir.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogNoir" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimaryTextNoir</item>
+        <item name="colorAccent">@color/colorPrimaryTextNoir</item>
+    </style>
+
+    <!-- Royalist Bleu -->
+    <style name="AppThemeBleu" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBleu</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBleu</item>
+        <item name="colorAccent">@color/colorAccentBleu</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDarkBleu</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccentBleu</item>
+        <item name="themedColorButton">@color/colorPrimaryBleu</item>
+        <item name="themedColorTab">@color/tab_color_bleu</item>
+        <item name="themedColorNavDrawer">@color/nav_color_bleu</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post_blue</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_blue</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_blue</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_blue</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_blue</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_blue</item>
+        <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppThemeBleu.CoreActivity">
+    </style>
+
+    <style name="AppThemeBleu.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogBleu" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDarkBleu</item>
+    </style>
+
+    <!-- Commie Red -->
+    <style name="AppThemeRouge" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryRouge</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkRouge</item>
+        <item name="colorAccent">@color/colorAccentRouge</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDarkRouge</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccentRouge</item>
+        <item name="themedColorButton">@color/colorPrimaryRouge</item>
+        <item name="themedColorTab">@color/tab_color_rouge</item>
+        <item name="themedColorNavDrawer">@color/nav_color_rouge</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post_red</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_red</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_red</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_red</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_red</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_red</item>
+        <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppThemeRouge.CoreActivity">
+    </style>
+
+    <style name="AppThemeRouge.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogRouge" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDarkRouge</item>
+    </style>
+
+    <!-- Viral Violet -->
+    <style name="AppThemeViolet" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryViolet</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkViolet</item>
+        <item name="colorAccent">@color/colorAccentViolet</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="themedColorHeaderText">@color/colorPrimaryDarkViolet</item>
+        <item name="themedColorPrimaryText">@color/colorPrimaryText</item>
+        <item name="themedColorSecondaryText">@color/colorSecondaryText</item>
+        <item name="themedColorLinkText">@color/colorAccentViolet</item>
+        <item name="themedColorButton">@color/colorPrimaryViolet</item>
+        <item name="themedColorTab">@color/tab_color_violet</item>
+        <item name="themedColorNavDrawer">@color/nav_color_violet</item>
+        <item name="themedColorCard">@android:color/white</item>
+        <item name="themedColorBackground">@color/colorBackgroundLight</item>
+        <item name="themedDrawablePost">@drawable/ic_post_violet</item>
+        <item name="themedDrawableCheck">@drawable/ic_check_violet</item>
+        <item name="themedDrawableDismiss">@drawable/ic_dismiss_violet</item>
+        <item name="themedDrawableTrend">@drawable/ic_trend_violet</item>
+        <item name="themedDrawableWa">@drawable/ic_wa_violet</item>
+        <item name="themedDrawableRegion">@drawable/ic_region_violet</item>
+        <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppThemeViolet.CoreActivity">
+    </style>
+
+    <style name="AppThemeViolet.SlidrActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="MaterialDialogViolet" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDarkViolet</item>
+    </style>
+
+    <!-- Theme Independent Styles -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MaterialProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal"/>
 
     <style name="TextLoginField" parent="Widget.Design.TextInputLayout">
         <!-- Hint color and label color in FALSE state -->
@@ -34,10 +208,11 @@
         <item name="colorControlActivated">@android:color/white</item>
     </style>
 
-    <style name="MaterialDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+    <style name="ExploreField" parent="Widget.Design.TextInputLayout">
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">?attr/themedColorPrimaryText</item>
+        <item name="colorControlNormal">?attr/themedColorPrimaryText</item>
+        <item name="colorControlActivated">?attr/themedColorPrimaryText</item>
     </style>
-
-    <style name="MaterialProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal"/>
 
 </resources>

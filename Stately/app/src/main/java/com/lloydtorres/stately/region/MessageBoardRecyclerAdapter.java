@@ -32,14 +32,19 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
-import com.lloydtorres.stately.helpers.NameListDialog;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.report.ReportActivity;
+import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -142,7 +147,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         Post targetPost = messages.get(pos);
-        String userId = SparkleHelper.getActiveUser(context).nationId;
+        String userId = PinkaHelper.getActiveUser(context).nationId;
         if (like)
         {
             // Either set the user as the only liker, or append their id to the string
@@ -204,7 +209,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0)
         {
             // If current user is in the like list, highlight the like buttons
-            if (context != null && message.likedBy.contains(SparkleHelper.getActiveUser(context).nationId))
+            if (context != null && message.likedBy.contains(PinkaHelper.getActiveUser(context).nationId))
             {
                 postCard.like();
             }
@@ -245,7 +250,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION)
                 {
-                    String userId = SparkleHelper.getActiveUser(context).nationId;
+                    String userId = PinkaHelper.getActiveUser(context).nationId;
                     // Users can't like their own posts
                     if (!SparkleHelper.getIdFromName(post.name).equals(userId))
                     {
@@ -321,12 +326,12 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             post = p;
             if (post.id != EMPTY_INDICATOR)
             {
-                SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), SparkleHelper.CLICKY_NATION_MODE);
+                SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), ExploreActivity.EXPLORE_NATION);
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
                 String postContent = post.message;
                 if (post.status == Post.POST_SUPPRESSED && post.suppressor != null)
                 {
-                    postContent = String.format(context.getString(R.string.rmb_suppressed), post.suppressor, postContent);
+                    postContent = String.format(Locale.US, context.getString(R.string.rmb_suppressed), post.suppressor, postContent);
                 }
                 if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED)
                 {
@@ -344,7 +349,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         // All posts can be replied to
                         replyButton.setOnClickListener(replyClickListener);
                         // Only user's own posts can be deleted
-                        if (context != null && SparkleHelper.getActiveUser(context).nationId.equals(post.name))
+                        if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name))
                         {
                             deleteButton.setVisibility(View.VISIBLE);
                             deleteButton.setOnClickListener(deleteClickListener);
@@ -396,7 +401,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                                 NameListDialog nameListDialog = new NameListDialog();
                                 nameListDialog.setTitle(context.getString(R.string.rmb_likes));
                                 nameListDialog.setNames(fLikes);
-                                nameListDialog.setTarget(SparkleHelper.CLICKY_NATION_MODE);
+                                nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
                                 nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                             }
                         });
@@ -429,13 +434,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void select()
         {
-            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+            if (SettingsActivity.getTheme(context) != SettingsActivity.THEME_NOIR) {
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+            }
+            else {
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentNoir));
+            }
             replyButton.setImageResource(R.drawable.ic_clear);
         }
 
         public void deselect()
         {
-            cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+            cardContainer.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
             replyButton.setImageResource(R.drawable.ic_reply);
         }
 

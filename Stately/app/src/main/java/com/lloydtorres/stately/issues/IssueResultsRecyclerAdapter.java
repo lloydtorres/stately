@@ -33,12 +33,14 @@ import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
-import com.lloydtorres.stately.helpers.DashHelper;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import org.atteo.evo.inflector.English;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-02-29.
@@ -47,11 +49,11 @@ import java.util.List;
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] WORLD_CENSUS_ITEMS;
 
-    private final int NEWS_CARD = 0;
-    private final int POSITION_CARD = 1;
-    private final int HEADLINE_CARD = 2;
-    private final int POSTCARD_CARD = 3;
-    private final int CENSUSDELTA_CARD = 4;
+    private static final int NEWS_CARD = 0;
+    private static final int POSITION_CARD = 1;
+    private static final int HEADLINE_CARD = 2;
+    private static final int POSTCARD_CARD = 3;
+    private static final int CENSUSDELTA_CARD = 4;
 
     private Context context;
     private List<Object> content;
@@ -156,6 +158,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (nationData != null && target != null)
         {
             target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
+            target = target.replace("@@uc($nation->query(\"name\"))@@", nationData.name.toUpperCase(Locale.US));
             target = target.replace("@@REGION@@", nationData.region);
             target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
             target = target.replace("@@POPULATION@@", SparkleHelper.getPrettifiedNumber(nationData.popBase));
@@ -172,7 +176,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
             target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
 
-            String valCapital = String.format(c.getString(R.string.issue_capital_none), nationData.name);
+            String valCapital = String.format(Locale.US, c.getString(R.string.issue_capital_none), nationData.name);
             if (nationData.capital != null)
             {
                 valCapital = nationData.capital;
@@ -308,13 +312,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             delta = d;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
-            int censusId = delta.censusId;
-            // if census ID is out of bounds, set it as unknown
-            if (censusId >= WORLD_CENSUS_ITEMS.length - 1)
-            {
-                censusId = WORLD_CENSUS_ITEMS.length - 1;
-            }
-            String[] censusType = WORLD_CENSUS_ITEMS[censusId].split("##");
+            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, delta.censusId);
             title.setText(censusType[0]);
             unit.setText(censusType[1]);
             trend.setImageResource(delta.isPositive ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
@@ -323,7 +321,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         @Override
         public void onClick(View v) {
-            String userId = SparkleHelper.getActiveUser(context).nationId;
+            String userId = PinkaHelper.getActiveUser(context).nationId;
             SparkleHelper.startTrends(context, userId, TrendsActivity.TREND_NATION, delta.censusId);
         }
     }

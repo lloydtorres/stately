@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.explore;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.NullActionCallback;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
@@ -41,8 +43,13 @@ public class ExploreDialog extends DialogFragment {
 
     private AppCompatEditText exploreSearch;
     private RadioGroup exploreToggleState;
+    private Activity activityCloseOnFinish;
 
     public ExploreDialog() { }
+
+    public void setActivityCloseOnFinish(Activity closeOnFinish) {
+        activityCloseOnFinish = closeOnFinish;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)  {
@@ -60,7 +67,7 @@ public class ExploreDialog extends DialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MaterialDialog);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_explore)
                 .setView(dialogView)
                 .setPositiveButton(R.string.explore_positive, dialogListener)
@@ -81,14 +88,18 @@ public class ExploreDialog extends DialogFragment {
         switch (exploreToggleState.getCheckedRadioButtonId())
         {
             case R.id.explore_radio_nation:
-                mode = SparkleHelper.CLICKY_NATION_MODE;
+                mode = ExploreActivity.EXPLORE_NATION;
                 break;
             default:
-                mode = SparkleHelper.CLICKY_REGION_MODE;
+                mode = ExploreActivity.EXPLORE_REGION;
                 break;
         }
 
         String name = exploreSearch.getText().toString();
         SparkleHelper.startExploring(getContext(), name, mode);
+
+        if (activityCloseOnFinish != null) {
+            activityCloseOnFinish.finish();
+        }
     }
 }

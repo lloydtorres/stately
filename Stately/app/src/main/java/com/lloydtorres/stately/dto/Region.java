@@ -16,7 +16,6 @@
 
 package com.lloydtorres.stately.dto;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -36,9 +35,9 @@ import java.util.List;
  * Excludes messages, which is stored in a separate DTO.
  */
 @Root(name="REGION", strict=false)
-public class Region implements Parcelable {
+public class Region extends BaseRegion implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?region=%s&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
                                         + "name+flag+numnations"
                                         + "+delegate+delegatevotes+founder+founded+power"
                                         + "+factbook+tags"
@@ -48,31 +47,11 @@ public class Region implements Parcelable {
                                         + "+census"
                                         + ";scale=all;mode=score+rank+prank"
                                         + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_HTML = "https://www.nationstates.net/region=%s/template-overall=none";
-    public static final String CHANGE_QUERY = "https://www.nationstates.net/page=change_region/template-overall=none";
+    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template-overall=none";
+    public static final String CHANGE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=change_region/template-overall=none";
 
-    @Element(name="NAME")
-    public String name;
-    @Element(name="FLAG", required=false)
-    public String flagURL;
-    @Element(name="NUMNATIONS")
-    public int numNations;
-
-    @Element(name="DELEGATE")
-    public String delegate;
-    @Element(name="DELEGATEVOTES")
-    public int delegateVotes;
-    @Element(name="FOUNDER")
-    public String founder;
-    @Element(name="FOUNDED")
-    public String founded;
     @Element(name="POWER")
     public String power;
-
-    @Element(name="FACTBOOK", required=false)
-    public String factbook;
-    @ElementList(name="TAGS")
-    public List<String> tags;
 
     @Element(name="POLL", required=false)
     public Poll poll;
@@ -97,21 +76,8 @@ public class Region implements Parcelable {
     public Region() { super(); }
 
     protected Region(Parcel in) {
-        name = in.readString();
-        flagURL = in.readString();
-        numNations = in.readInt();
-        delegate = in.readString();
-        delegateVotes = in.readInt();
-        founder = in.readString();
-        founded = in.readString();
+        super(in);
         power = in.readString();
-        factbook = in.readString();
-        if (in.readByte() == 0x01) {
-            tags = new ArrayList<String>();
-            in.readList(tags, String.class.getClassLoader());
-        } else {
-            tags = null;
-        }
         poll = (Poll) in.readValue(Poll.class.getClassLoader());
         gaVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
         scVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
@@ -154,21 +120,8 @@ public class Region implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(flagURL);
-        dest.writeInt(numNations);
-        dest.writeString(delegate);
-        dest.writeInt(delegateVotes);
-        dest.writeString(founder);
-        dest.writeString(founded);
+        super.writeToParcel(dest, flags);
         dest.writeString(power);
-        dest.writeString(factbook);
-        if (tags == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(tags);
-        }
         dest.writeValue(poll);
         dest.writeValue(gaVote);
         dest.writeValue(scVote);
@@ -217,15 +170,8 @@ public class Region implements Parcelable {
         }
     };
 
-    public static Region parseRegionXML(Context c, Persister serializer, String response) throws Exception {
+    public static Region parseRegionXML(Persister serializer, String response) throws Exception {
         Region regionResponse = serializer.read(Region.class, response);
-
-        // Switch flag URL to https
-        if (regionResponse.flagURL != null)
-        {
-            regionResponse.flagURL = regionResponse.flagURL.replace("http://","https://");
-        }
-
-        return regionResponse;
+        return ((Region) fieldReplacer(regionResponse));
     }
 }

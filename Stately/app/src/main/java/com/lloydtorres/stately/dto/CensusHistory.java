@@ -28,28 +28,32 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-04-10.
  * Model for a given census scale's history;
  */
-@Root(name="NATION", strict=false)
+@Root(strict=false)
 public class CensusHistory implements Parcelable {
 
-    public static final String QUERY = "https://www.nationstates.net/cgi-bin/api.cgi?%s=%s&q="
-                                        + "name+census"
+    public static final String QUERY_BASE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?%sq="
+                                        + "name+census+censusranks"
                                         + ";scale=%d;mode=history"
-                                        + ";from=%d&to=%d"
-                                        + "&v=" + SparkleHelper.API_VERSION;
+                                        + ";from=%d&to=%d";
+    public static final String QUERY_NATION = QUERY_BASE + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_RANKED = QUERY_BASE + "&start=%d" + "&v=" + SparkleHelper.API_VERSION;
     public static final long SIXTY_DAYS_IN_SECONDS = 5184000;
-    public static final String NATION_HISTORY = "nation";
-    public static final String REGION_HISTORY = "region";
+    public static final String NATION_HISTORY = "nation=%s&";
+    public static final String REGION_HISTORY = "region=%s&";
 
-    @Element(name="NAME")
+    @Element(name="NAME", required=false)
     public String name;
     @Element(name="CENSUS", required=false)
     public CensusHistoryScale scale;
+    @Element(name="CENSUSRANKS", required=false)
+    public CensusNationRankList ranks;
 
     public CensusHistory() { super(); }
 
     protected CensusHistory(Parcel in) {
         name = in.readString();
         scale = (CensusHistoryScale) in.readValue(CensusHistoryScale.class.getClassLoader());
+        ranks = (CensusNationRankList) in.readValue(CensusNationRankList.class.getClassLoader());
     }
 
     @Override
@@ -61,6 +65,7 @@ public class CensusHistory implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeValue(scale);
+        dest.writeValue(ranks);
     }
 
     @SuppressWarnings("unused")
