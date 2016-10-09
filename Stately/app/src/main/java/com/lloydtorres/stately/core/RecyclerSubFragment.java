@@ -47,7 +47,6 @@ public abstract class RecyclerSubFragment extends Fragment {
 
         // Setup recycler view
         mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
-        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
