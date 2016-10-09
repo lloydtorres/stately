@@ -122,6 +122,10 @@ public class WorldFragment extends RefreshviewFragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         SparkleHelper.logError(error.toString());
+                        if (getActivity() == null || !isAdded()) {
+                            return;
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
@@ -131,8 +135,7 @@ public class WorldFragment extends RefreshviewFragment {
                         }
                     }
                 });
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -167,6 +170,10 @@ public class WorldFragment extends RefreshviewFragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         SparkleHelper.logError(error.toString());
+                        if (getActivity() == null || !isAdded()) {
+                            return;
+                        }
+
                         if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                         }
@@ -177,8 +184,7 @@ public class WorldFragment extends RefreshviewFragment {
                         initRecyclerAdapter();
                     }
                 });
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
             // If this fails, just process the data we already have.
             initRecyclerAdapter();

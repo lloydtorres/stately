@@ -173,6 +173,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element voteButton = d.select("button[name=poll_submit]").first();
                         if (voteButton != null) {
@@ -227,6 +231,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element input = d.select("input[name=chk]").first();
 
@@ -242,6 +250,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                if (getActivity() == null || !isAdded()) {
+                    return;
+                }
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
@@ -269,6 +280,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (getActivity() == null || !isAdded()) {
+                            return;
+                        }
+
                         if (response.contains(Poll.RESPONSE_VOTE) || response.contains(Poll.RESPONSE_WITHDRAW)) {
                             // Add user to voted list then update poll data
                             String userId = PinkaHelper.getActiveUser(getContext()).nationId;
@@ -305,6 +320,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                if (getActivity() == null || !isAdded()) {
+                    return;
+                }
+
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
