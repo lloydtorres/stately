@@ -176,11 +176,11 @@ public class AssemblyMainFragment extends RefreshviewFragment {
     private void refreshRecycler() {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new AssemblyRecyclerAdapter(getContext(), genAssembly, secCouncil, voteStatus);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {
             ((AssemblyRecyclerAdapter) mRecyclerAdapter).setData(genAssembly, secCouncil, voteStatus);
         }
+        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

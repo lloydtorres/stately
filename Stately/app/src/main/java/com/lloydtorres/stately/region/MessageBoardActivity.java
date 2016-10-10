@@ -710,11 +710,11 @@ public class MessageBoardActivity extends SlidrActivity {
         Collections.sort(messages.posts);
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable, getSupportFragmentManager());
-            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setMessages(messages.posts);
         }
+        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
 
         if (jumpToTop) {

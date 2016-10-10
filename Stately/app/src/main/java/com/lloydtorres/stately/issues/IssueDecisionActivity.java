@@ -220,10 +220,10 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     private void setRecyclerAdapter(Issue issue) {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((IssueDecisionRecyclerAdapter) mRecyclerAdapter).setIssue(issue);
         }
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     /**

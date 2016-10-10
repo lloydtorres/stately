@@ -89,10 +89,10 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), getFragmentManager(), cards);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((RegionOverviewRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     @Override

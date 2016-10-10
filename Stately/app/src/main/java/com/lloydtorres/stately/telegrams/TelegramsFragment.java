@@ -102,15 +102,13 @@ public class TelegramsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.content_message_board, container, false);
         telegrams = new ArrayList<Telegram>();
         folders = new ArrayList<TelegramFolder>();
@@ -122,8 +120,7 @@ public class TelegramsFragment extends Fragment {
         uniqueEnforcer = new HashSet<Integer>();
 
         // Restore state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             pastOffset = savedInstanceState.getInt(KEY_PAST_OFFSET, 0);
             telegrams = savedInstanceState.getParcelableArrayList(KEY_TELEGRAMS);
             folders = savedInstanceState.getParcelableArrayList(KEY_FOLDERS);
@@ -134,8 +131,7 @@ public class TelegramsFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.message_board_toolbar);
         toolbar.setTitle(getString(R.string.menu_telegrams));
 
-        if (mActivity != null && mActivity instanceof IToolbarActivity)
-        {
+        if (mActivity != null && mActivity instanceof IToolbarActivity) {
             ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
@@ -145,12 +141,10 @@ public class TelegramsFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction.equals(SwipyRefreshLayoutDirection.TOP))
-                {
+                if (direction.equals(SwipyRefreshLayoutDirection.TOP)) {
                     queryTelegrams(0, SCAN_FORWARD, false);
                 }
-                else
-                {
+                else {
                     queryTelegrams(pastOffset, SCAN_BACKWARD, false);
                 }
             }
@@ -171,8 +165,7 @@ public class TelegramsFragment extends Fragment {
      * Call to start querying and activate SwipeFreshLayout
      * @param direction Direction to scan in
      */
-    public void startQueryTelegrams(final int direction)
-    {
+    public void startQueryTelegrams(final int direction) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -185,16 +178,13 @@ public class TelegramsFragment extends Fragment {
     /**
      * Scrape and parse telegrams from NS site.
      */
-    private void queryTelegrams(final int offset, final int direction, final boolean firstRun)
-    {
+    private void queryTelegrams(final int offset, final int direction, final boolean firstRun) {
         TelegramFolder activeFolder = null;
 
-        if (selectedFolder < folders.size())
-        {
+        if (selectedFolder < folders.size()) {
             activeFolder = folders.get(selectedFolder);
         }
-        else
-        {
+        else {
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
             return;
         }
@@ -205,8 +195,7 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
@@ -219,8 +208,7 @@ public class TelegramsFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
@@ -228,15 +216,13 @@ public class TelegramsFragment extends Fragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
@@ -248,13 +234,11 @@ public class TelegramsFragment extends Fragment {
      * @param direction Direction the user is loading telegrams
      * @param firstRun if first time running this process
      */
-    private void processRawTelegrams(Document d, int direction, boolean firstRun)
-    {
+    private void processRawTelegrams(Document d, int direction, boolean firstRun) {
         Element telegramsContainer = d.select("div#tglist").first();
         Element foldersContainer = d.select("select#tgfolder").first();
 
-        if (telegramsContainer == null || foldersContainer == null)
-        {
+        if (telegramsContainer == null || foldersContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
@@ -264,12 +248,10 @@ public class TelegramsFragment extends Fragment {
         // Build list of folders
         folders = new ArrayList<TelegramFolder>();
         Elements rawFolders = foldersContainer.select("option[value]");
-        for (Element rf : rawFolders)
-        {
+        for (Element rf : rawFolders) {
             TelegramFolder telFolder = new TelegramFolder();
             String rfValue = rf.attr("value");
-            if (!rfValue.equals("_new"))
-            {
+            if (!rfValue.equals("_new")) {
                 String rfName = rf.text();
                 telFolder.name = rfName;
                 telFolder.value = rfValue;
@@ -279,8 +261,7 @@ public class TelegramsFragment extends Fragment {
 
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
-        switch (direction)
-        {
+        switch (direction) {
             case SCAN_FORWARD:
                 processTelegramsForward(scannedTelegrams, firstRun);
                 break;
@@ -297,14 +278,11 @@ public class TelegramsFragment extends Fragment {
      * @param scannedTelegrams Telegrams scanned from NS
      * @param firstRun if running this process for first time
      */
-    private void processTelegramsForward(ArrayList<Telegram> scannedTelegrams, boolean firstRun)
-    {
+    private void processTelegramsForward(ArrayList<Telegram> scannedTelegrams, boolean firstRun) {
         int uniqueMessages = 0;
 
-        for (Telegram t : scannedTelegrams)
-        {
-            if (!uniqueEnforcer.contains(t.id))
-            {
+        for (Telegram t : scannedTelegrams) {
+            if (!uniqueEnforcer.contains(t.id)) {
                 telegrams.add(t);
                 uniqueEnforcer.add(t.id);
                 uniqueMessages++;
@@ -313,8 +291,7 @@ public class TelegramsFragment extends Fragment {
 
         pastOffset += uniqueMessages;
 
-        if (uniqueMessages <= 0 && !firstRun)
-        {
+        if (uniqueMessages <= 0 && !firstRun) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
         }
 
@@ -326,11 +303,9 @@ public class TelegramsFragment extends Fragment {
      * Processes the scanned telegrams if scanning backwards (i.e. past telegrams).
      * @param scannedTelegrams Telegrams scanned from NS
      */
-    private void processTelegramsBackward(ArrayList<Telegram> scannedTelegrams)
-    {
+    private void processTelegramsBackward(ArrayList<Telegram> scannedTelegrams) {
         // If there's nothing in the current telegrams, then there's probably nothing in the past
-        if (telegrams.size() <= 0 || scannedTelegrams.size() <= 0)
-        {
+        if (telegrams.size() <= 0 || scannedTelegrams.size() <= 0) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
             return;
@@ -341,10 +316,8 @@ public class TelegramsFragment extends Fragment {
         // Count the number of obtained telegrams that are earlier than the current earliest
         long earliestCurrentDate = telegrams.get(telegrams.size()-1).timestamp;
         int timeCounter = 0;
-        for (Telegram t : scannedTelegrams)
-        {
-            if (t.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(t.id))
-            {
+        for (Telegram t : scannedTelegrams) {
+            if (t.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(t.id)) {
                 telegrams.add(t);
                 uniqueEnforcer.add(t.id);
                 timeCounter++;
@@ -353,13 +326,11 @@ public class TelegramsFragment extends Fragment {
         }
 
         // if no telegrams are from the past, complain
-        if (timeCounter < 1)
-        {
+        if (timeCounter < 1) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_backtrack_error));
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        else
-        {
+        else {
             refreshRecycler(SCAN_BACKWARD);
         }
     }
@@ -367,25 +338,22 @@ public class TelegramsFragment extends Fragment {
     /**
      * Refreshes the contents of the recycler adapter.
      */
-    private void refreshRecycler(int direction)
-    {
+    private void refreshRecycler(int direction) {
         int oldSize = 0;
         Collections.sort(telegrams);
-        if (mRecyclerAdapter == null)
-        {
+        if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new TelegramsAdapter(telegrams, this, folders.get(selectedFolder).name);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
+
         }
-        else
-        {
+        else {
             oldSize = mRecyclerAdapter.getItemCount();
             ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
             ((TelegramsAdapter) mRecyclerAdapter).setFolder(folders.get(selectedFolder).name);
         }
+        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
 
-        switch (direction)
-        {
+        switch (direction) {
             case SCAN_FORWARD:
                 mLayoutManager.scrollToPosition(0);
                 break;
@@ -399,8 +367,7 @@ public class TelegramsFragment extends Fragment {
      * Displays a dialog showing a list of folders.
      * @param fm
      */
-    private void showFoldersDialog(FragmentManager fm)
-    {
+    private void showFoldersDialog(FragmentManager fm) {
         FoldersDialog foldersDialog = new FoldersDialog();
         foldersDialog.setFragment(this);
         foldersDialog.setFolders(folders);
@@ -408,10 +375,8 @@ public class TelegramsFragment extends Fragment {
         foldersDialog.show(fm, FoldersDialog.DIALOG_TAG);
     }
 
-    public void setSelectedFolder(int selected)
-    {
-        if (selected < folders.size())
-        {
+    public void setSelectedFolder(int selected) {
+        if (selected < folders.size()) {
             selectedFolder = selected;
             telegrams = new ArrayList<Telegram>();
             uniqueEnforcer = new HashSet<Integer>();
@@ -564,8 +529,7 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
 
@@ -575,8 +539,7 @@ public class TelegramsFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 SparkleHelper.logError(error.toString());
@@ -585,15 +548,13 @@ public class TelegramsFragment extends Fragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
@@ -649,8 +610,7 @@ public class TelegramsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (getActivity() == null || !isAdded())
-                        {
+                        if (getActivity() == null || !isAdded()) {
                             return;
                         }
 
@@ -660,8 +620,7 @@ public class TelegramsFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (getActivity() == null || !isAdded())
-                {
+                if (getActivity() == null || !isAdded()) {
                     return;
                 }
                 
@@ -670,15 +629,13 @@ public class TelegramsFragment extends Fragment {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
@@ -688,28 +645,23 @@ public class TelegramsFragment extends Fragment {
      * This function rebuilds the set used to track unique messages after a restart.
      * Because set isn't parcelable :(
      */
-    private void rebuildUniqueEnforcer()
-    {
+    private void rebuildUniqueEnforcer() {
         uniqueEnforcer = new HashSet<Integer>();
-        for (Telegram t : telegrams)
-        {
+        for (Telegram t : telegrams) {
             uniqueEnforcer.add(t.id);
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(KEY_PAST_OFFSET, pastOffset);
         savedInstanceState.putInt(KEY_ACTIVE, selectedFolder);
-        if (telegrams != null)
-        {
+        if (telegrams != null) {
             savedInstanceState.putParcelableArrayList(KEY_TELEGRAMS, telegrams);
         }
-        if (folders != null)
-        {
+        if (folders != null) {
             savedInstanceState.putParcelableArrayList(KEY_FOLDERS, folders);
         }
     }
@@ -735,8 +687,7 @@ public class TelegramsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         // Detach activity on destroy
         super.onDestroy();
         mActivity = null;

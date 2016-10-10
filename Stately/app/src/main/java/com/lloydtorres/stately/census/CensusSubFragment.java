@@ -60,10 +60,10 @@ public class CensusSubFragment extends RecyclerSubFragment {
         if (censusData != null) {
             if (mRecyclerAdapter == null) {
                 mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
-                mRecyclerView.setAdapter(mRecyclerAdapter);
             } else {
                 ((CensusRecyclerAdapter) mRecyclerAdapter).setCensusData(censusData);
             }
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         return view;

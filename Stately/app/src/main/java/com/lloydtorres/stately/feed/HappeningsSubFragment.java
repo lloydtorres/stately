@@ -50,11 +50,10 @@ public class HappeningsSubFragment extends RecyclerSubFragment {
             Collections.sort(events);
             if (mRecyclerAdapter == null) {
                 mRecyclerAdapter = new EventRecyclerAdapter(getContext(), events);
-                mRecyclerView.setAdapter(mRecyclerAdapter);
             } else {
                 ((EventRecyclerAdapter) mRecyclerAdapter).setEvents(events);
             }
-
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
 
         return view;
