@@ -221,15 +221,12 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             float maxVal = Float.MIN_VALUE;
             float minVal = Float.MAX_VALUE;
             float total = 0;
-            for (int i=0; i < datapoints.size(); i++)
-            {
+            for (int i=0; i < datapoints.size(); i++) {
                 float value = datapoints.get(i).score;
-                if (value > maxVal)
-                {
+                if (value > maxVal) {
                     maxVal = value;
                 }
-                if (value < minVal)
-                {
+                if (value < minVal) {
                     minVal = value;
                 }
                 total += value;
@@ -243,8 +240,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // Set up chart
             final float lineWidth = 2.5f;
             List<Entry> historyEntries = new ArrayList<Entry>();
-            for (int i=0; i < datapoints.size(); i++)
-            {
+            for (int i=0; i < datapoints.size(); i++) {
                 historyEntries.add(new Entry(datapoints.get(i).score, i));
             }
 
@@ -264,8 +260,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(lineHistoryData);
             List<String> xLabels = new ArrayList<String>();
-            for (int i=0; i < datapoints.size(); i++)
-            {
+            for (int i=0; i < datapoints.size(); i++) {
                 xLabels.add(String.format(Locale.US, SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
             }
             LineData dataFinal = new LineData(xLabels, dataSets);
@@ -280,10 +275,9 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         /**
          * This resets the displayed data label to the most current one.
          */
-        private void resetDataSelected()
-        {
+        private void resetDataSelected() {
             List<CensusHistoryPoint> datapoints = dataset.points;
-            CensusHistoryPoint latest = datapoints.get(datapoints.size() - 1);
+            CensusHistoryPoint latest = datapoints.get(Math.max(0, datapoints.size() - 1));
             setDataSelected(latest);
         }
 
@@ -291,8 +285,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
          * Sets the displayed data label based on the passed-in data point.
          * @param point
          */
-        private void setDataSelected(CensusHistoryPoint point)
-        {
+        private void setDataSelected(CensusHistoryPoint point) {
             date.setText(SparkleHelper.getDateNoYearFromUTC(point.timestamp));
             value.setText(SparkleHelper.getPrettifiedNumber(point.score));
         }
