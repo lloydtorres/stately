@@ -157,8 +157,12 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     }
 
     private void initRecyclerAdapter() {
-        mRecyclerAdapter = new CommunityRecyclerAdapter(this, cards, regionName);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new CommunityRecyclerAdapter(this, cards, regionName);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        } else {
+            ((CommunityRecyclerAdapter) mRecyclerAdapter).setCards(cards);
+        }
     }
 
     /**

@@ -83,8 +83,14 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         fragment = frag;
         context = fragment.getContext();
         fm = fragment.getFragmentManager();
-        cards = crds;
         regionName = n;
+
+        setCards(crds);
+    }
+
+    public void setCards(List<Parcelable> crds) {
+        cards = crds;
+        notifyDataSetChanged();
     }
 
     @Override

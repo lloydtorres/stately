@@ -78,10 +78,16 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f) {
         context = c;
-        cards = cds;
         fm = f;
 
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+
+        setCards(cds);
+    }
+
+    public void setCards(List<Parcelable> cds) {
+        cards = cds;
+        notifyDataSetChanged();
     }
 
     @Override

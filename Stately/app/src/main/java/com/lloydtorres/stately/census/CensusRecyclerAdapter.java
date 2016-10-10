@@ -68,14 +68,19 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         fragment = c;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
 
-        Collections.sort(cen, getSort());
-        censusData = cen;
-
         target = t;
         mode = m;
 
         float dpScale = context.getResources().getDisplayMetrics().density;
         TWO_DP_IN_PIXELS = (int) (2*dpScale + 0.5f);
+
+        setCensusData(cen);
+    }
+
+    public void setCensusData(ArrayList<CensusDetailedRank> cen) {
+        Collections.sort(cen, getSort());
+        censusData = cen;
+        notifyDataSetChanged();
     }
 
     private String getSortLabel() {

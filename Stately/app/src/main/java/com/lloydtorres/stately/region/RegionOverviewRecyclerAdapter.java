@@ -55,7 +55,12 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     public RegionOverviewRecyclerAdapter(Context c, FragmentManager fm, List<Parcelable> crds) {
         context = c;
         fragmentManager = fm;
+        setCards(crds);
+    }
+
+    public void setCards(List<Parcelable> crds) {
         cards = crds;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -126,8 +131,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                     English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
             SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
         }
-        else
-        {
+        else {
             tv.setText(c.getString(R.string.region_filler_none));
         }
     }

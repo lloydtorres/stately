@@ -98,8 +98,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     /**
      * Call to start querying and activate SwipeFreshLayout
      */
-    private void startQueryIssueInfo()
-    {
+    private void startQueryIssueInfo() {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -113,8 +112,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     /**
      * Query information on the current issue from the actual NationStates site
      */
-    private void queryIssueInfo()
-    {
+    private void queryIssueInfo() {
         String targetURL = String.format(Locale.US, IssueOption.QUERY, issue.id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -131,16 +129,13 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
@@ -151,11 +146,9 @@ public class IssueDecisionActivity extends RefreshviewActivity {
      * @param v Activity view
      * @param d Document received from NationStates
      */
-    private void processIssueInfo(View v, Document d)
-    {
+    private void processIssueInfo(View v, Document d) {
         // First check if the issue is still available
-        if (d.text().contains(NOT_AVAILABLE))
-        {
+        if (d.text().contains(NOT_AVAILABLE)) {
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(v, String.format(Locale.US, getString(R.string.issue_unavailable), mNation.name));
             return;
@@ -163,8 +156,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
         Element issueInfoContainer = d.select("div#dilemma").first();
 
-        if (issueInfoContainer == null)
-        {
+        if (issueInfoContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
@@ -175,11 +167,9 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
         String issueText = issueInfoRaw.select("p").first().text();
         // If this is an issue chain, grab the second paragraph instead
-        if (d.select("div.dilemmachain").first() != null)
-        {
+        if (d.select("div.dilemmachain").first() != null) {
             issueText = issueInfoRaw.select("p").get(1).text();
-            if (d.text().contains(STORY_SO_FAR))
-            {
+            if (d.text().contains(STORY_SO_FAR)) {
                 issueText = issueText + "<br><br>" + issueInfoRaw.select("p").get(2).text();
             }
         }
@@ -188,29 +178,23 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         issue.options = new ArrayList<IssueOption>();
 
         Element optionHolderMain = issueInfoRaw.select("ol.diloptions").first();
-        if (optionHolderMain != null)
-        {
+        if (optionHolderMain != null) {
             Elements optionsHolder = optionHolderMain.select("li");
 
             int i = 0;
-            for (Element option : optionsHolder)
-            {
+            for (Element option : optionsHolder) {
                 IssueOption issueOption = new IssueOption();
                 issueOption.index = i++;
 
                 Element button = option.select("button").first();
-                if (button != null)
-                {
+                if (button != null) {
                     issueOption.header = button.attr("name");
-                }
-                else
-                {
+                } else {
                     issueOption.header = IssueOption.SELECTED_HEADER;
                 }
 
                 Element optionContentHolder = option.select("p").first();
-                if (optionContentHolder == null)
-                {
+                if (optionContentHolder == null) {
                     // safety check
                     mSwipeRefreshLayout.setRefreshing(false);
                     SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
@@ -233,20 +217,21 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         mSwipeRefreshLayout.setEnabled(false);
     }
 
-    private void setRecyclerAdapter(Issue issue)
-    {
-        mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+    private void setRecyclerAdapter(Issue issue) {
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        } else {
+            ((IssueDecisionRecyclerAdapter) mRecyclerAdapter).setIssue(issue);
+        }
     }
 
     /**
      * Helper to confirm the position selected by the user.
      * @param option The option selected.
      */
-    public void setAdoptPosition(final IssueOption option)
-    {
-        if (isInProgress)
-        {
+    public void setAdoptPosition(final IssueOption option) {
+        if (isInProgress) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.multiple_request_error));
             return;
         }
@@ -260,13 +245,11 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             }
         };
 
-        if (SettingsActivity.getConfirmIssueDecisionSetting(this))
-        {
+        if (SettingsActivity.getConfirmIssueDecisionSetting(this)) {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
 
-            switch (option.index)
-            {
+            switch (option.index) {
                 case DISMISSED:
                     dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
@@ -279,14 +262,12 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
             dialogBuilder.show();
         }
-        else
-        {
+        else {
             startPostAdoptPosition(option);
         }
     }
 
-    private void startPostAdoptPosition(final IssueOption option)
-    {
+    private void startPostAdoptPosition(final IssueOption option) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -300,8 +281,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
      * Send the position selected by the user back to the server.
      * @param option The option selected.
      */
-    public void postAdoptPosition(final IssueOption option)
-    {
+    public void postAdoptPosition(final IssueOption option) {
         isInProgress = true;
         String targetURL = String.format(Locale.US, IssueOption.POST_QUERY, issue.id);
 
@@ -310,10 +290,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
-                        if (!IssueOption.DISMISS_HEADER.equals(option.header))
-                        {
-                            if (response.contains(LEGISLATION_PASSED))
-                            {
+                        if (!IssueOption.DISMISS_HEADER.equals(option.header)) {
+                            if (response.contains(LEGISLATION_PASSED)) {
                                 Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
                                 issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
                                 issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
@@ -321,13 +299,11 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                                 startActivity(issueResultsActivity);
                                 finish();
                             }
-                            else
-                            {
+                            else {
                                 SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                             }
                         }
-                        else
-                        {
+                        else {
                             finish();
                         }
                     }
@@ -340,8 +316,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -351,8 +326,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         params.put(option.header, "1");
         stringRequest.setParams(params);
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
@@ -360,47 +334,37 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
-        if (issue.options == null)
-        {
+        if (issue.options == null) {
             startQueryIssueInfo();
         }
-        else
-        {
+        else {
             setRecyclerAdapter(issue);
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        if (issue != null)
-        {
+        if (issue != null) {
             savedInstanceState.putParcelable(ISSUE_DATA, issue);
         }
-        if (mNation != null)
-        {
+        if (mNation != null) {
             savedInstanceState.putParcelable(NATION_DATA, mNation);
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
-            if (issue == null)
-            {
+        if (savedInstanceState != null) {
+            if (issue == null) {
                 issue = savedInstanceState.getParcelable(ISSUE_DATA);
             }
-            if (mNation == null)
-            {
+            if (mNation == null) {
                 mNation = savedInstanceState.getParcelable(NATION_DATA);
             }
         }

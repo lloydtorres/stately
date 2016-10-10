@@ -54,14 +54,19 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     public IssueDecisionRecyclerAdapter(Context c, Issue issue) {
         context = c;
-        cards = new ArrayList<Object>();
+        setIssue(issue);
+    }
 
+    public void setIssue(Issue issue) {
+        cards = new ArrayList<Object>();
         cards.add(issue);
         cards.addAll(issue.options);
 
         if (issue.id == ISSUE_PIRATE_NO) {
             pirateMode = true;
         }
+
+        notifyDataSetChanged();
     }
 
     @Override

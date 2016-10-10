@@ -42,32 +42,28 @@ public class CensusSubFragment extends RecyclerSubFragment {
 
     public void setTarget(String t) { target = t; }
 
-    public void setCensusData(ArrayList<CensusDetailedRank> c)
-    {
-        censusData = c;
-    }
+    public void setCensusData(ArrayList<CensusDetailedRank> c) { censusData = c; }
 
-    public void setMode(int mode)
-    {
-        censusMode = mode;
-    }
+    public void setMode(int mode) { censusMode = mode; }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore save state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             censusMode = savedInstanceState.getInt(MODE_KEY);
             censusData = savedInstanceState.getParcelableArrayList(CENSUS_DATA_KEY);
             target = savedInstanceState.getString(TARGET_KEY);
         }
 
-        if (censusData != null)
-        {
-            mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
-            mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (censusData != null) {
+            if (mRecyclerAdapter == null) {
+                mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
+                mRecyclerView.setAdapter(mRecyclerAdapter);
+            } else {
+                ((CensusRecyclerAdapter) mRecyclerAdapter).setCensusData(censusData);
+            }
         }
 
         return view;
@@ -78,12 +74,10 @@ public class CensusSubFragment extends RecyclerSubFragment {
         // Save state
         super.onSaveInstanceState(outState);
         outState.putInt(MODE_KEY, censusMode);
-        if (censusData != null)
-        {
+        if (censusData != null) {
             outState.putParcelableArrayList(CENSUS_DATA_KEY, censusData);
         }
-        if (target != null)
-        {
+        if (target != null) {
             outState.putString(TARGET_KEY, target);
         }
     }

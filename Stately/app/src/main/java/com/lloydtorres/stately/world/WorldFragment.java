@@ -195,8 +195,12 @@ public class WorldFragment extends RefreshviewFragment {
      * Initializes the recycler adapter with the available data.
      */
     private void initRecyclerAdapter() {
-        mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getFragmentManager(), worldData, featuredRegion);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getFragmentManager(), worldData, featuredRegion);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        } else {
+            ((WorldRecyclerAdapter) mRecyclerAdapter).setContent(worldData, featuredRegion);
+        }
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

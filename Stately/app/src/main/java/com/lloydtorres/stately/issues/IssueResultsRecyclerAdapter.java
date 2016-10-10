@@ -59,12 +59,16 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private List<Object> content;
     private Nation mNation;
 
-    public IssueResultsRecyclerAdapter(Context c, List<Object> con, Nation n)
-    {
+    public IssueResultsRecyclerAdapter(Context c, List<Object> con, Nation n) {
         context = c;
+        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        setContent(con, n);
+    }
+
+    public void setContent(List<Object> con, Nation n) {
         content = con;
         mNation = n;
-        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -73,8 +77,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View genericCard = inflater.inflate(R.layout.card_generic, parent, false);
 
-        switch (viewType)
-        {
+        switch (viewType) {
             case NEWS_CARD:
                 viewHolder = new NewsCard(context, genericCard);
                 break;
@@ -130,33 +133,26 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if (content.get(position) instanceof String)
-        {
+        if (content.get(position) instanceof String) {
             return NEWS_CARD;
         }
-        else if (content.get(position) instanceof IssueOption)
-        {
+        else if (content.get(position) instanceof IssueOption) {
             return POSITION_CARD;
         }
-        else if (content.get(position) instanceof IssueResultHeadline)
-        {
+        else if (content.get(position) instanceof IssueResultHeadline) {
             return HEADLINE_CARD;
         }
-        else if (content.get(position) instanceof IssuePostcard)
-        {
+        else if (content.get(position) instanceof IssuePostcard) {
             return POSTCARD_CARD;
         }
-        else if (content.get(position) instanceof CensusDelta)
-        {
+        else if (content.get(position) instanceof CensusDelta) {
             return CENSUSDELTA_CARD;
         }
         return -1;
     }
 
-    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target)
-    {
-        if (nationData != null && target != null)
-        {
+    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target) {
+        if (nationData != null && target != null) {
             target = target.replace("@@NAME@@", nationData.name);
             target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
             target = target.replace("@@uc($nation->query(\"name\"))@@", nationData.name.toUpperCase(Locale.US));
@@ -177,24 +173,21 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
 
             String valCapital = String.format(Locale.US, c.getString(R.string.issue_capital_none), nationData.name);
-            if (nationData.capital != null)
-            {
+            if (nationData.capital != null) {
                 valCapital = nationData.capital;
             }
             target = target.replace("@@CAPITAL@@", valCapital);
             target = target.replace("@@$nation->query_capital()@@", valCapital);
 
             String valLeader = c.getString(R.string.issue_leader_none);
-            if (nationData.leader != null)
-            {
+            if (nationData.leader != null) {
                 valLeader = nationData.leader;
             }
             target = target.replace("@@LEADER@@", valLeader);
             target = target.replace("@@$nation->query_leader()@@", valLeader);
 
             String valReligion = c.getString(R.string.issue_religion_none);
-            if (nationData.religion != null)
-            {
+            if (nationData.religion != null) {
                 valReligion = nationData.religion;
             }
             target = target.replace("@@FAITH@@", valReligion);
@@ -216,8 +209,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             content = (TextView) v.findViewById(R.id.card_generic_content);
         }
 
-        public void init(String n)
-        {
+        public void init(String n) {
             title.setText(context.getString(R.string.issue_breaking));
             setIssueResultsFormatting(context, content, mNation, n);
         }
@@ -235,8 +227,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             content = (TextView) v.findViewById(R.id.card_generic_content);
         }
 
-        public void init(IssueOption op)
-        {
+        public void init(IssueOption op) {
             title.setText(context.getString(R.string.issue_position));
             content.setText(SparkleHelper.getHtmlFormatting(op.content).toString());
         }
@@ -254,8 +245,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             img = (ImageView) v.findViewById(R.id.card_issue_headline_img);
         }
 
-        public void init(IssueResultHeadline headline)
-        {
+        public void init(IssueResultHeadline headline) {
             headline.headline = headline.headline.trim();
             setIssueResultsFormatting(context, title, mNation, headline.headline);
             DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
@@ -276,8 +266,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             img = (ImageView) v.findViewById(R.id.card_postcard_img);
         }
 
-        public void init(IssuePostcard card)
-        {
+        public void init(IssuePostcard card) {
             nationName.setText(mNation.name);
             setIssueResultsFormatting(context, postContent, mNation, card.title.trim());
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
@@ -294,8 +283,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private ImageView trend;
         private TextView value;
 
-        public CensusDeltaCard(Context c, View v)
-        {
+        public CensusDeltaCard(Context c, View v) {
             super(v);
             context = c;
             cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
@@ -307,8 +295,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             v.setOnClickListener(this);
         }
 
-        public void init(CensusDelta d)
-        {
+        public void init(CensusDelta d) {
             delta = d;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
 

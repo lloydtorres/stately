@@ -92,10 +92,8 @@ public class IssueResultsActivity extends RefreshviewActivity {
      * Sets up the activity's contents based on the response data.
      * @param response HTML response for resolving an issue
      */
-    private void processResultsData(String response)
-    {
-        if (response == null)
-        {
+    private void processResultsData(String response) {
+        if (response == null) {
             View view = findViewById(R.id.refreshview_main);
             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
             return;
@@ -105,11 +103,9 @@ public class IssueResultsActivity extends RefreshviewActivity {
 
         // Get talking point and reclassification
         Element resultsContainer = d.select("div.dilemma").first();
-        if (resultsContainer != null)
-        {
+        if (resultsContainer != null) {
             news = resultsContainer.select("p").first().text();
-            if (resultsContainer.text().contains(RECLASSIFICATION))
-            {
+            if (resultsContainer.text().contains(RECLASSIFICATION)) {
                 news = news + "<br><br>" + resultsContainer.select("p").get(1).text();
             }
         }
@@ -117,8 +113,7 @@ public class IssueResultsActivity extends RefreshviewActivity {
         // Get headlines
         headlines = new ArrayList<IssueResultHeadline>();
         Elements newspapers = d.select("div.dilemmapaper");
-        for (Element n : newspapers)
-        {
+        for (Element n : newspapers) {
             Elements newspaperContent = n.getAllElements();
             IssueResultHeadline headline = new IssueResultHeadline();
 
@@ -133,11 +128,9 @@ public class IssueResultsActivity extends RefreshviewActivity {
         // Get postcards if available
         postcards = new ArrayList<IssuePostcard>();
         Element postcardContainer = d.select("div.bannerpostcards").first();
-        if (postcardContainer != null)
-        {
+        if (postcardContainer != null) {
             Elements postcardHolders = postcardContainer.select("a.bannerpostcard");
-            for (Element p : postcardHolders)
-            {
+            for (Element p : postcardHolders) {
                 IssuePostcard postcard = new IssuePostcard();
 
                 Element img = p.select("img").first();
@@ -152,11 +145,9 @@ public class IssueResultsActivity extends RefreshviewActivity {
         // Get census deltas
         censusDeltas = new ArrayList<CensusDelta>();
         Element censusDeltaContainer = d.select("div.wceffects").first();
-        if (censusDeltaContainer != null)
-        {
+        if (censusDeltaContainer != null) {
             Elements deltasHolder = censusDeltaContainer.select("a.wc-change");
-            for (Element de : deltasHolder)
-            {
+            for (Element de : deltasHolder) {
                 CensusDelta censusDelta = new CensusDelta();
                 int idHolder = Integer.valueOf(de.attr("href").replaceAll(CensusDelta.REGEX_ID, ""));
                 Element deltaHolder = de.select("span.wc2").first();
@@ -175,88 +166,73 @@ public class IssueResultsActivity extends RefreshviewActivity {
     /**
      * Helper class for initializing the recycler adapter.
      */
-    private void setRecyclerAdapter()
-    {
+    private void setRecyclerAdapter() {
         List<Object> resultsContent = new ArrayList<Object>();
-        if (news != null)
-        {
+        if (news != null) {
             resultsContent.add(news);
         }
         resultsContent.add(option);
         resultsContent.addAll(headlines);
-        if (postcards != null)
-        {
+        if (postcards != null) {
             resultsContent.addAll(postcards);
         }
-        if (censusDeltas != null)
-        {
+        if (censusDeltas != null) {
             resultsContent.addAll(censusDeltas);
         }
 
-        mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent, mNation);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent, mNation);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        } else {
+            ((IssueResultsRecyclerAdapter) mRecyclerAdapter).setContent(resultsContent, mNation);
+        }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        if (news != null)
-        {
+        if (news != null) {
             savedInstanceState.putString(NEWS_DATA, news);
         }
-        if (option != null)
-        {
+        if (option != null) {
             savedInstanceState.putParcelable(OPTION_DATA, option);
         }
-        if (headlines != null)
-        {
+        if (headlines != null) {
             savedInstanceState.putParcelableArrayList(HEADLINES_DATA, headlines);
         }
-        if (postcards != null)
-        {
+        if (postcards != null) {
             savedInstanceState.putParcelableArrayList(POSTCARD_DATA, postcards);
         }
-        if (censusDeltas != null)
-        {
+        if (censusDeltas != null) {
             savedInstanceState.putParcelableArrayList(CENSUSDELTA_DATA, censusDeltas);
         }
-        if (mNation != null)
-        {
+        if (mNation != null) {
             savedInstanceState.putParcelable(NATION_DATA, mNation);
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
-            if (news != null)
-            {
+        if (savedInstanceState != null) {
+            if (news != null) {
                 news = savedInstanceState.getString(NEWS_DATA);
             }
-            if (option != null)
-            {
+            if (option != null) {
                 option = savedInstanceState.getParcelable(OPTION_DATA);
             }
-            if (headlines != null)
-            {
+            if (headlines != null) {
                 headlines = savedInstanceState.getParcelableArrayList(HEADLINES_DATA);
             }
-            if (postcards != null)
-            {
+            if (postcards != null) {
                 postcards = savedInstanceState.getParcelableArrayList(POSTCARD_DATA);
             }
-            if (censusDeltas != null)
-            {
+            if (censusDeltas != null) {
                 censusDeltas = savedInstanceState.getParcelableArrayList(CENSUSDELTA_DATA);
             }
-            if (mNation != null)
-            {
+            if (mNation != null) {
                 mNation = savedInstanceState.getParcelable(NATION_DATA);
             }
         }

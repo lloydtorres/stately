@@ -68,8 +68,12 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     protected abstract void initData();
 
     protected void initRecyclerAdapter() {
-        mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (mRecyclerAdapter == null) {
+            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        } else {
+            ((NationCardsRecyclerAdapter) mRecyclerAdapter).setCards(cards);
+        }
     }
 
     @Override

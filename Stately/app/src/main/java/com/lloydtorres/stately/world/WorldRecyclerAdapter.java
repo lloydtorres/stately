@@ -71,8 +71,11 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         context = c;
         fragmentManager = fm;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
-        cards = new ArrayList<Object>();
+        setContent(w, fr);
+    }
 
+    public void setContent(World w, BaseRegion fr) {
+        cards = new ArrayList<Object>();
         // Add the number of nations and regions
         cards.add(new DataIntPair(w.numNations, w.numRegions));
         // Add featured region if available
@@ -91,6 +94,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         // Add the rest of the census data
         cards.addAll(w.census);
+        notifyDataSetChanged();
     }
 
     @Override
