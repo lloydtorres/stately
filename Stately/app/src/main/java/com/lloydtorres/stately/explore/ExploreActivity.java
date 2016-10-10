@@ -20,7 +20,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -116,8 +116,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private boolean isInDossier;
     private boolean isInProgress;
 
-    private NationFragment nFragment;
-    private RegionFragment rFragment;
+    private Fragment mFragment;
+
     private View view;
 
     @Override
@@ -437,21 +437,24 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
     private void initFragment(Nation mNation) {
         // Initializes and inflates the nation fragment
-        nFragment = new NationFragment();
-        nFragment.setNation(mNation);
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.explore_coordinator, nFragment)
-                .commit();
+        if (mFragment == null || !(mFragment instanceof NationFragment)) {
+            mFragment = new NationFragment();
+            ((NationFragment) mFragment).setNation(mNation);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.explore_coordinator, mFragment)
+                    .commit();
+        }
+        else {
+            ((NationFragment) mFragment).updateEndorsementData(mNation);
+        }
     }
 
     private void initFragment(Region mRegion) {
         // Initializes and inflates the region fragment
-        rFragment = new RegionFragment();
-        rFragment.setRegion(mRegion);
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.explore_coordinator, rFragment)
+        mFragment = new RegionFragment();
+        ((RegionFragment) mFragment).setRegion(mRegion);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.explore_coordinator, mFragment)
                 .commit();
     }
 
@@ -786,14 +789,13 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * Opens the explore dialog.
      */
     private void openExploreDialog(boolean closeOnFinish) {
-        FragmentManager fm = getSupportFragmentManager();
         ExploreDialog exploreDialog = new ExploreDialog();
 
         if (closeOnFinish) {
             exploreDialog.setActivityCloseOnFinish(this);
         }
 
-        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
+        exploreDialog.show(getSupportFragmentManager(), ExploreDialog.DIALOG_TAG);
     }
 
     /**

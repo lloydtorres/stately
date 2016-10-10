@@ -86,9 +86,19 @@ public class NationFragment extends Fragment {
     private Toolbar toolbar;
     private Activity mActivity;
 
-    public void setNation(Nation n)
-    {
+    public void setNation(Nation n) {
         mNation = n;
+    }
+
+    public void updateEndorsementData(Nation n) {
+        mNation = n;
+        if (overviewSubFragment == null) {
+            overviewSubFragment = new OverviewSubFragment();
+            overviewSubFragment.setNation(mNation);
+        } else {
+            overviewSubFragment.setNation(mNation);
+            overviewSubFragment.forceRefreshData();
+        }
     }
 
     @Override
@@ -99,25 +109,21 @@ public class NationFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nation, container, false);
 
         // Restore state
-        if (savedInstanceState != null && mNation == null)
-        {
+        if (savedInstanceState != null && mNation == null) {
             mNation = savedInstanceState.getParcelable(NATION_DATA_KEY);
         }
 
         initToolbar(view);
-        if (mNation != null)
-        {
+        if (mNation != null) {
             getAllNationViews(view);
         }
 
@@ -128,13 +134,11 @@ public class NationFragment extends Fragment {
      * Initialize the toolbar and pass it back to the containing activity.
      * @param view
      */
-    private void initToolbar(View view)
-    {
+    private void initToolbar(View view) {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
         toolbar.setTitle("");
 
-        if (mActivity instanceof IToolbarActivity)
-        {
+        if (mActivity instanceof IToolbarActivity) {
             ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
@@ -175,8 +179,7 @@ public class NationFragment extends Fragment {
      * Initialize the tabs layout and view pager
      * @param view
      */
-    private void initTabs(View view)
-    {
+    private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
         tabsPager = (ViewPager) view.findViewById(R.id.nation_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
@@ -190,8 +193,7 @@ public class NationFragment extends Fragment {
      * Get the views for the nation elements within the collapsing toolbar
      * @param view
      */
-    private void getAllNationViews(View view)
-    {
+    private void getAllNationViews(View view) {
         nationName = (TextView) view.findViewById(R.id.nation_name);
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
@@ -238,19 +240,16 @@ public class NationFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
-        if (mNation != null)
-        {
+        if (mNation != null) {
             savedInstanceState.putParcelable(NATION_DATA_KEY, mNation);
         }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         // Decouple activity on destroy
         super.onDestroy();
         mActivity = null;
@@ -277,8 +276,7 @@ public class NationFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position)
-            {
+            switch(position) {
                 case OVERVIEW_TAB:
                     return overviewSubFragment;
                 case PEOPLE_TAB:

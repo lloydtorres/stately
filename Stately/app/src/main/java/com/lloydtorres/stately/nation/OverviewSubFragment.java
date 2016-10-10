@@ -109,12 +109,10 @@ public class OverviewSubFragment extends NationSubFragment {
         if (mNation.leader != null) {
             ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_leader), mNation.leader));
         }
-        if (mNation.capital != null)
-        {
+        if (mNation.capital != null) {
             ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_capital), mNation.capital));
         }
-        if (mNation.govtPriority != null)
-        {
+        if (mNation.govtPriority != null) {
             ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_priority), mNation.govtPriority));
         }
         ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_tax), String.format(Locale.US, getString(R.string.percent), mNation.tax)));
@@ -136,26 +134,21 @@ public class OverviewSubFragment extends NationSubFragment {
         ngcOther.title = getString(R.string.card_overview_other_title);
         // Determine if the adjective is different from the noun (different flavour text)
         String demonymText;
-        if (mNation.demAdjective.equals(mNation.demNoun))
-        {
+        if (mNation.demAdjective.equals(mNation.demNoun)) {
             demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural);
         }
-        else
-        {
+        else {
             demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective);
         }
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_demonym), demonymText));
-        if (mNation.religion != null)
-        {
+        if (mNation.religion != null) {
             ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_religion), mNation.religion));
         }
         String animalText;
-        if (mNation.animalTrait != null)
-        {
+        if (mNation.animalTrait != null) {
             animalText = String.format(Locale.US, getString(R.string.card_overview_other_animal_template), mNation.animal, mNation.animalTrait);
         }
-        else
-        {
+        else {
             animalText = mNation.animal;
         }
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal), animalText));
@@ -164,12 +157,10 @@ public class OverviewSubFragment extends NationSubFragment {
         String todayCensusTitle = String.format(Locale.US, getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
         CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
         StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US, getString(R.string.card_overview_other_census_content), SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
-        if (detailedRank.regionRank > 0)
-        {
+        if (detailedRank.regionRank > 0) {
             todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
         }
-        if (detailedRank.worldRank > 0)
-        {
+        if (detailedRank.worldRank > 0) {
             todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
         }
         ngcOther.items.add(new DataPair(todayCensusTitle, todayCensusContent.toString()));

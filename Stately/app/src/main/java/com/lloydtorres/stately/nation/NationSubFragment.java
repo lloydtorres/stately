@@ -65,22 +65,23 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         return view;
     }
 
+    public void forceRefreshData() {
+        cards = new ArrayList<Parcelable>();
+        initData();
+        initRecyclerAdapter();
+    }
+
     protected abstract void initData();
 
     protected void initRecyclerAdapter() {
-        if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
-            mRecyclerView.setAdapter(mRecyclerAdapter);
-        } else {
-            ((NationCardsRecyclerAdapter) mRecyclerAdapter).setCards(cards);
-        }
+        mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (cards != null)
-        {
+        if (cards != null) {
             outState.putParcelableArrayList(CARDS_DATA, cards);
         }
     }
