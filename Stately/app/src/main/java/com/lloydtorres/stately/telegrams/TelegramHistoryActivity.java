@@ -132,10 +132,10 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
 
             if (mRecyclerAdapter == null) {
                 mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
+                mRecyclerView.setAdapter(mRecyclerAdapter);
             } else {
                 ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
             }
-            mRecyclerView.setAdapter(mRecyclerAdapter);
 
             int scrollIndex = ((TelegramsAdapter) mRecyclerAdapter).getIndexOfId(mainTelegramId);
             if (scrollIndex != -1) {

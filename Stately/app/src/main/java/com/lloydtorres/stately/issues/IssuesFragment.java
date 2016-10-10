@@ -204,11 +204,11 @@ public class IssuesFragment extends RefreshviewFragment {
 
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {
             ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues);
         }
-        mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

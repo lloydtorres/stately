@@ -182,10 +182,10 @@ public class IssueResultsActivity extends RefreshviewActivity {
 
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssueResultsRecyclerAdapter(this, resultsContent, mNation);
+            mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((IssueResultsRecyclerAdapter) mRecyclerAdapter).setContent(resultsContent, mNation);
         }
-        mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 
     @Override
