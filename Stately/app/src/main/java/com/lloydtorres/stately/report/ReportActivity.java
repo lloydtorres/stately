@@ -40,7 +40,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
@@ -153,7 +152,6 @@ public class ReportActivity extends SlidrActivity {
         reportCategoryHolder = (CardView) findViewById(R.id.report_category_holder);
         reportCategorySelect = (RadioGroup) findViewById(R.id.report_category);
         reportContent = (AppCompatEditText) findViewById(R.id.report_content);
-        reportContent.setCustomSelectionActionModeCallback(new NullActionCallback());
 
         targetHolder.setVisibility(View.VISIBLE);
         reportCategoryHolder.setVisibility(View.VISIBLE);

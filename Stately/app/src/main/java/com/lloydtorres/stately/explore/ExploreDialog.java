@@ -29,7 +29,6 @@ import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -57,7 +56,6 @@ public class ExploreDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
 
         exploreSearch = (AppCompatEditText) dialogView.findViewById(R.id.explore_searchbar);
-        exploreSearch.setCustomSelectionActionModeCallback(new NullActionCallback());
         exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {

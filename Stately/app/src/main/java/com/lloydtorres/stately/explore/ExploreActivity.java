@@ -48,7 +48,6 @@ import com.lloydtorres.stately.dto.Dossier;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserLogin;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -693,7 +692,6 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
         AppCompatEditText passView = (AppCompatEditText) dialogView.findViewById(R.id.move_password);
-        passView.setCustomSelectionActionModeCallback(new NullActionCallback());
         final AppCompatEditText fPassView = passView;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override

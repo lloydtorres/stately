@@ -40,7 +40,6 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -97,9 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         view = findViewById(R.id.activity_login_main);
         subtitle = (TextView) findViewById(R.id.login_subtitle);
         username = (AppCompatEditText) findViewById(R.id.field_username);
-        username.setCustomSelectionActionModeCallback(new NullActionCallback());
         password = (AppCompatEditText) findViewById(R.id.field_password);
-        password.setCustomSelectionActionModeCallback(new NullActionCallback());
         userHolder = (TextInputLayout) findViewById(R.id.holder_user);
         passHolder = (TextInputLayout) findViewById(R.id.holder_password);
         login = (Button) findViewById(R.id.login_button);

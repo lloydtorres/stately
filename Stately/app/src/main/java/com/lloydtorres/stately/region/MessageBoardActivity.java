@@ -44,7 +44,6 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionMessages;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -252,7 +251,6 @@ public class MessageBoardActivity extends SlidrActivity {
         messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
         messageResponder.setVisibility(View.VISIBLE);
         messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
-        messageContainer.setCustomSelectionActionModeCallback(new NullActionCallback());
         messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
         messagePostButton.setOnClickListener(postMessageListener);
         messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);

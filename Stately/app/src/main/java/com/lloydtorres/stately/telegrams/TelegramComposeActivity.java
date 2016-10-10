@@ -39,7 +39,6 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.Telegram;
-import com.lloydtorres.stately.helpers.NullActionCallback;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -99,7 +98,6 @@ public class TelegramComposeActivity extends SlidrActivity {
         setToolbar(toolbar);
 
         recipientsField = (AppCompatEditText) findViewById(R.id.telegram_compose_recipients);
-        recipientsField.setCustomSelectionActionModeCallback(new NullActionCallback());
         if (recipients != null && recipients.length() > 0)
         {
             recipientsField.setText(recipients);
@@ -115,7 +113,6 @@ public class TelegramComposeActivity extends SlidrActivity {
         senderField.setText(PinkaHelper.getActiveUser(this).name);
 
         content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
-        content.setCustomSelectionActionModeCallback(new NullActionCallback());
         content.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
