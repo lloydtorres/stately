@@ -40,13 +40,16 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.push.TrixHelper;
+import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -58,8 +61,17 @@ import java.util.Locale;
  * Takes in user logins and verifies them against NationStates.
  */
 public class LoginActivity extends AppCompatActivity {
+    // Intent keys
     public static final String USERDATA_KEY = "userdata";
     public static final String NOAUTOLOGIN_KEY = "noAutologin";
+    public static final String ROUTE_BUNDLE_KEY = "routeBundleKey";
+    public static final String ROUTE_PATH_KEY = "routePathKey";
+
+    // Routes for intents from notifications
+    public static final int ROUTE_ISSUES = 0;
+    public static final int ROUTE_TG = 1;
+    public static final int ROUTE_RMB = 2;
+    public static final int ROUTE_EXPLORE = 3;
 
     private View view;
     private TextView subtitle;
@@ -70,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button login;
     private Button createNation;
     private boolean isLoggingIn;
+
+    private Bundle routeBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +129,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // If activity was launched by an intent, handle that first
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             UserLogin userdata = getIntent().getParcelableExtra(USERDATA_KEY);
             boolean noAutologin = getIntent().getBooleanExtra(NOAUTOLOGIN_KEY, false);
+            routeBundle = getIntent().getBundleExtra(ROUTE_BUNDLE_KEY);
 
-            if (userdata != null)
-            {
+            if (userdata != null || routeBundle != null) {
                 verifyAccount(userdata);
                 return;
             }
@@ -133,16 +146,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // If settings allows it and user login exists, try logging in first
-        if (SettingsActivity.getAutologinSetting(this))
-        {
+        if (SettingsActivity.getAutologinSetting(this)) {
             UserLogin u = PinkaHelper.getActiveUser(this);
-            if (u != null)
-            {
+            if (u != null) {
                 verifyAccount(u);
             }
-        }
-        else
-        {
+        } else {
             PinkaHelper.removeActiveUser(this);
         }
     }
@@ -152,19 +161,14 @@ public class LoginActivity extends AppCompatActivity {
      * Verifies if the input is valid. If yes, verify password next.
      * @param view
      */
-    public void verifyUsername(View view)
-    {
-        if (!getLoginState())
-        {
+    public void verifyUsername(View view) {
+        if (!getLoginState()) {
             setLoginState(true);
             String name = username.getText().toString();
-            if (SparkleHelper.isValidName(name) && name.length() > 0)
-            {
+            if (SparkleHelper.isValidName(name) && name.length() > 0) {
                 String pass = password.getText().toString();
                 verifyAccount(name, pass);
-            }
-            else
-            {
+            } else {
                 setLoginState(false);
                 SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
             }
@@ -202,10 +206,39 @@ public class LoginActivity extends AppCompatActivity {
                             PinkaHelper.setActiveUser(LoginActivity.this, nationResponse.name);
                             PinkaHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
-                            Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
-                            nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
-                            nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(nationActivityLaunch);
+                            if (routeBundle == null) {
+                                Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
+                                nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
+                                nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(nationActivityLaunch);
+                            } else {
+                                Intent nextActivity = new Intent();
+                                int routePath = routeBundle.getInt(ROUTE_PATH_KEY, ROUTE_ISSUES);
+                                switch (routePath) {
+                                    case ROUTE_ISSUES:
+                                        nextActivity = new Intent(LoginActivity.this, StatelyActivity.class);
+                                        break;
+                                    case ROUTE_TG:
+                                        nextActivity = new Intent(LoginActivity.this, TelegramHistoryActivity.class);
+                                        break;
+                                    case ROUTE_RMB:
+                                        nextActivity = new Intent(LoginActivity.this, MessageBoardActivity.class);
+                                        break;
+                                    case ROUTE_EXPLORE:
+                                        nextActivity = new Intent(LoginActivity.this, ExploreActivity.class);
+                                        break;
+                                }
+                                for (String bundleKey : routeBundle.keySet()) {
+                                    Object value = routeBundle.get(bundleKey);
+                                    if (value instanceof String) {
+                                        nextActivity.putExtra(bundleKey, (String) routeBundle.get(bundleKey));
+                                    } else if (value instanceof Integer) {
+                                        nextActivity.putExtra(bundleKey, (Integer) routeBundle.get(bundleKey));
+                                    }
+                                }
+                                nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(nextActivity);
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -221,12 +254,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else if (error instanceof ServerError || error instanceof AuthFailureError)
-                {
+                else if (error instanceof ServerError || error instanceof AuthFailureError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
@@ -265,8 +296,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param stringRequest
      */
     private void executeRequest(NSStringRequest stringRequest) {
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
             setLoginState(false);
         }
@@ -329,17 +359,13 @@ public class LoginActivity extends AppCompatActivity {
      * Set the login state.
      * @param stat The current login state. True if logging in, false otherwise.
      */
-    private void setLoginState(boolean stat)
-    {
-        if (stat)
-        {
+    private void setLoginState(boolean stat) {
+        if (stat) {
             userHolder.setVisibility(View.GONE);
             passHolder.setVisibility(View.GONE);
             login.setText(getString(R.string.log_in_load));
             createNation.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             userHolder.setVisibility(View.VISIBLE);
             passHolder.setVisibility(View.VISIBLE);
             login.setText(getString(R.string.log_in));

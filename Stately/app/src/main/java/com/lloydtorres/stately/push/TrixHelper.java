@@ -58,6 +58,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -65,13 +66,17 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Notice;
 import com.lloydtorres.stately.dto.NoticeHolder;
+import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -217,16 +222,14 @@ public final class TrixHelper {
             return;
         }
 
-        Intent statelyActivity = new Intent(c, StatelyActivity.class);
-        statelyActivity.putExtra(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
-        statelyActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        // Apparently this is necessary: http://stackoverflow.com/a/3168653
-        statelyActivity.setAction(Long.toString(System.currentTimeMillis()));
+        Bundle issueBundle = new Bundle();
+        issueBundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_ISSUES);
+        issueBundle.putInt(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(c.getString(R.string.notifs_new_issue))
                 .setOnlyAlertOnce(true)
-                .setContentIntent(PendingIntent.getActivity(c, 0, statelyActivity, PendingIntent.FLAG_ONE_SHOT));
+                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.drawable.ic_menu_issues);
@@ -281,50 +284,86 @@ public final class TrixHelper {
         // Handle notification icon and intent
         int smallIcon = 0;
         int smallIconCompat = 0;
-        Intent nextActivity = new Intent();
+        Bundle bundle = new Bundle();
         switch (notice.type) {
             case Notice.TG:
                 smallIcon = R.drawable.ic_menu_telegrams;
                 smallIconCompat = R.drawable.ic_notifs_kitkat_telegram;
-                nextActivity = new Intent(c, TelegramHistoryActivity.class);
                 Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
                 matcherTg.matches();
                 int telegramId = Integer.valueOf(matcherTg.group(1));
-                nextActivity.putExtra(TelegramHistoryActivity.ID_DATA, telegramId);
+
+                bundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_TG);
+                bundle.putInt(TelegramHistoryActivity.ID_DATA, telegramId);
                 break;
             case Notice.RMB_MENTION:
             case Notice.RMB_QUOTE:
             case Notice.RMB_LIKE:
                 smallIcon = R.drawable.ic_region_white;
                 smallIconCompat = R.drawable.ic_notifs_kitkat_region;
-                nextActivity = new Intent(c, MessageBoardActivity.class);
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
                 rMatcher.matches();
                 String rName = SparkleHelper.getNameFromId(rMatcher.group(1));
                 int postId = Integer.valueOf(rMatcher.group(2));
-                nextActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, rName);
-                nextActivity.putExtra(MessageBoardActivity.BOARD_TARGET_ID, postId);
+
+                bundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_RMB);
+                bundle.putString(MessageBoardActivity.BOARD_REGION_NAME, rName);
+                bundle.putInt(MessageBoardActivity.BOARD_TARGET_ID, postId);
                 break;
             case Notice.ENDORSE:
                 smallIcon = R.drawable.ic_endorse_yes;
                 smallIconCompat = R.drawable.ic_notifs_kitkat_endorse;
-                nextActivity = new Intent(c, ExploreActivity.class);
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
-                nextActivity.putExtra(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
-                nextActivity.putExtra(ExploreActivity.EXPLORE_MODE, ExploreActivity.EXPLORE_NATION);
+
+                bundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_EXPLORE);
+                bundle.putString(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
+                bundle.putInt(ExploreActivity.EXPLORE_MODE, ExploreActivity.EXPLORE_NATION);
                 break;
         }
-        nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        // Apparently this is necessary: http://stackoverflow.com/a/3168653
-        nextActivity.setAction(Long.toString(System.currentTimeMillis()));
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentTitle(title)
                 .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)
-                .setContentIntent(PendingIntent.getActivity(c, 0, nextActivity, PendingIntent.FLAG_ONE_SHOT));
+                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, bundle), PendingIntent.FLAG_ONE_SHOT));
 
         NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(TAG_PREFIX+tagSuffix, (int) notice.timestamp, builder.build());
+    }
+
+    /**
+     * Retrieves the user login data for the specified nation ID. Returns the current active user
+     * if not found.
+     * @param c App context
+     * @param id Nation ID
+     * @return User login data
+     */
+    private static UserLogin getUserLoginFromId(Context c, String id) {
+        List<UserLogin> logins = UserLogin.listAll(UserLogin.class);
+        for (UserLogin u : logins) {
+            if (id.equals(u.nationId)) {
+                return u;
+            }
+        }
+
+        return PinkaHelper.getActiveUser(c);
+    }
+
+    /**
+     * Builds a login activity intent with routing, depending on what's on the bundle.
+     * @param c App content
+     * @param account Target nation name
+     * @param bundle Extra data
+     * @return Complete login activity intent
+     */
+    private static Intent getLoginActivityIntent(Context c, String account, Bundle bundle) {
+        Intent loginActivityIntent = new Intent(c, LoginActivity.class);
+        loginActivityIntent.putExtra(LoginActivity.USERDATA_KEY, getUserLoginFromId(c, SparkleHelper.getIdFromName(account)));
+        loginActivityIntent.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
+        loginActivityIntent.putExtra(LoginActivity.ROUTE_BUNDLE_KEY, bundle);
+        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // Apparently this is necessary: http://stackoverflow.com/a/3168653
+        loginActivityIntent.setAction(Long.toString(System.currentTimeMillis()));
+        return loginActivityIntent;
     }
 }
