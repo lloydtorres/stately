@@ -68,18 +68,28 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     public void forceRefreshData() {
         cards = new ArrayList<Parcelable>();
         initData();
-        initRecyclerAdapter();
+        initRecyclerAdapter(true);
     }
 
     protected abstract void initData();
 
     protected void initRecyclerAdapter() {
+        initRecyclerAdapter(false);
+    }
+
+    private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            if (isOnlySetAdapterOnNull) {
+                mRecyclerView.setAdapter(mRecyclerAdapter);
+            }
         } else {
             ((NationCardsRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+
+        if (!isOnlySetAdapterOnNull) {
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
     }
 
     @Override
