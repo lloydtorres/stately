@@ -116,16 +116,33 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
 
-        switch (SettingsActivity.getGovernmentSetting(this)) {
-            case SettingsActivity.GOV_CONSERVATIVE:
-                subtitle.setText(getString(R.string.login_subtitle_conservative));
-                break;
-            case SettingsActivity.GOV_LIBERAL:
-                subtitle.setText(getString(R.string.login_subtitle_liberal));
-                break;
-            default:
-                subtitle.setText(getString(R.string.login_subtitle_neutral));
-                break;
+        if (RaraHelper.getSpecialDayStatus() == RaraHelper.DAY_NORMAL) {
+            switch (SettingsActivity.getGovernmentSetting(this)) {
+                case SettingsActivity.GOV_CONSERVATIVE:
+                    subtitle.setText(getString(R.string.login_subtitle_conservative));
+                    break;
+                case SettingsActivity.GOV_LIBERAL:
+                    subtitle.setText(getString(R.string.login_subtitle_liberal));
+                    break;
+                default:
+                    subtitle.setText(getString(R.string.login_subtitle_neutral));
+                    break;
+            }
+        } else {
+            switch (RaraHelper.getSpecialDayStatus()) {
+                case RaraHelper.DAY_STATELY_BIRTHDAY:
+                    subtitle.setText(getString(R.string.login_subtitle_stately_bday));
+                    break;
+                case RaraHelper.DAY_CANADA_DAY:
+                    subtitle.setText(getString(R.string.login_subtitle_canada_day));
+                    break;
+                case RaraHelper.DAY_HALLOWEEN:
+                    subtitle.setText(getString(R.string.login_subtitle_halloween));
+                    break;
+                case RaraHelper.DAY_NS_BIRTHDAY:
+                    subtitle.setText(getString(R.string.login_subtitle_ns_bday));
+                    break;
+            }
         }
 
         // If activity was launched by an intent, handle that first

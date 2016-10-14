@@ -66,6 +66,8 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -460,5 +462,43 @@ public final class RaraHelper {
         StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
         layoutParams.setFullSpan(isFullSpan);
         itemView.setLayoutParams(layoutParams);
+    }
+
+    public static final int DAY_NORMAL = -1;
+    public static final int DAY_STATELY_BIRTHDAY = 130;
+    public static final int DAY_CANADA_DAY = 701;
+    public static final int DAY_HALLOWEEN = 1031;
+    public static final int DAY_NS_BIRTHDAY = 1113;
+
+    /**
+     * Determines if the current day in the EST/EDT timezone is a special day.
+     * @return The special day mode
+     */
+    public static int getSpecialDayStatus() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        if (month == Calendar.JANUARY
+                && day == 30) {
+            return DAY_STATELY_BIRTHDAY;
+        }
+        else if (month == Calendar.JULY
+                && day == 1) {
+            return DAY_CANADA_DAY;
+        }
+        else if (month == Calendar.OCTOBER
+                && day == 31) {
+            return DAY_HALLOWEEN;
+        }
+        else if (month == Calendar.NOVEMBER
+                && day == 13) {
+            return DAY_NS_BIRTHDAY;
+        }
+        else {
+            return DAY_NORMAL;
+        }
     }
 }
