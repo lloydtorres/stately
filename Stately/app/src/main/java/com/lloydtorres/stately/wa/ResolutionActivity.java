@@ -95,7 +95,6 @@ public class ResolutionActivity extends RefreshviewActivity {
                 // Handle invocations via URL
                 councilId = Integer.valueOf(getIntent().getData().getHost());
                 overrideResId = Integer.valueOf(getIntent().getData().getLastPathSegment()) + 1;
-                isActive = false;
             }
         }
         if (savedInstanceState != null) {
@@ -103,6 +102,8 @@ public class ResolutionActivity extends RefreshviewActivity {
             mResolution = savedInstanceState.getParcelable(TARGET_RESOLUTION);
             voteStatus = savedInstanceState.getParcelable(TARGET_VOTE_STATUS);
         }
+
+        isActive =  overrideResId == NO_RESOLUTION;
 
         setToolbar();
 
