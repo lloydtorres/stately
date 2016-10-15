@@ -44,7 +44,7 @@ public class Region extends BaseRegion implements Parcelable {
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
                                         + "+happenings+history"
-                                        + "+census"
+                                        + "+zombie+census"
                                         + ";scale=all;mode=score+rank+prank"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template-overall=none";
@@ -72,6 +72,9 @@ public class Region extends BaseRegion implements Parcelable {
     public List<Event> happenings;
     @ElementList(name="HISTORY")
     public List<Event> history;
+
+    @Element(name="ZOMBIE")
+    public Zombie zombieData;
 
     public Region() { super(); }
 
@@ -111,6 +114,7 @@ public class Region extends BaseRegion implements Parcelable {
         } else {
             history = null;
         }
+        zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
     }
 
     @Override
@@ -155,6 +159,7 @@ public class Region extends BaseRegion implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(history);
         }
+        dest.writeValue(zombieData);
     }
 
     @SuppressWarnings("unused")

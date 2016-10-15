@@ -47,6 +47,7 @@ import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Dossier;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.UserExploreData;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -240,7 +241,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private void verifyInput(String name) {
         if (SparkleHelper.isValidName(name) && name.length() > 0) {
             name = SparkleHelper.getIdFromName(name);
-            queryAndCheckDossier(name);
+            queryAndCheckUserExploreData(name);
         }
         else {
             switch (mode) {
@@ -256,27 +257,28 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
     /**
      * Checks if the nation/region being explored is in the current user's dossier.
+     * Also checks the current user's zombie stats as appropriate.
      * Calls on the appropriate query function afterwards.
      * @param name Nation/region to check
      */
-    private void queryAndCheckDossier(final String name) {
+    private void queryAndCheckUserExploreData(final String name) {
         String userId = PinkaHelper.getActiveUser(this).nationId;
-        String targetURL = String.format(Locale.US, Dossier.QUERY, SparkleHelper.getIdFromName(userId));
+        String targetURL = String.format(Locale.US, UserExploreData.QUERY, SparkleHelper.getIdFromName(userId));
 
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Dossier dossierResponse;
+                        UserExploreData userDataResponse;
                         Persister serializer = new Persister();
                         try {
-                            dossierResponse = serializer.read(Dossier.class, response);
+                            userDataResponse = serializer.read(UserExploreData.class, response);
                             String targetId = SparkleHelper.getIdFromName(name);
-                            if (mode == EXPLORE_NATION && dossierResponse.nations != null) {
-                                isInDossier = dossierResponse.nations.contains(targetId);
+                            if (mode == EXPLORE_NATION && userDataResponse.nations != null) {
+                                isInDossier = userDataResponse.nations.contains(targetId);
                             }
-                            if (mode == EXPLORE_REGION && dossierResponse.regions != null) {
-                                isInDossier = dossierResponse.regions.contains(targetId);
+                            if (mode == EXPLORE_REGION && userDataResponse.regions != null) {
+                                isInDossier = userDataResponse.regions.contains(targetId);
                             }
                         }
                         catch (Exception e) {
