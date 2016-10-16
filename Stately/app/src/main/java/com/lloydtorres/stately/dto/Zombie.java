@@ -92,40 +92,23 @@ public class Zombie implements Parcelable {
      * @param target Name of target nation
      */
     public String getActionDescription(Context context, String target) {
+        // Normal actions
+        int actionTextId = R.string.zombie_noaction;
         if (action == null) {
-            return String.format(Locale.US,
-                    context.getString(survivors > 0 ? R.string.zombie_noaction : R.string.zombie_noaction_fail),
-                    target);
+            actionTextId = survivors > 0 ? R.string.zombie_noaction : R.string.zombie_noaction_fail;
         } else if (action.equals(ZACTION_MILITARY)) {
-            int actionTextId = survivors > 0 ? R.string.zombie_military : R.string.zombie_military_fail;
-            if (zombies <= 0) {
-                actionTextId = R.string.zombie_military_done;
-            }
-            return String.format(Locale.US,
-                    context.getString(actionTextId),
-                    target);
+            actionTextId = survivors > 0 ? R.string.zombie_military : R.string.zombie_military_fail;
         } else if (action.equals(ZACTION_CURE)) {
-            int actionTextId = survivors > 0 ? R.string.zombie_cure : R.string.zombie_cure_fail;
-            if (zombies <= 0) {
-                actionTextId = R.string.zombie_cure_done;
-            }
-            return String.format(Locale.US,
-                    context.getString(actionTextId),
-                    target);
+            actionTextId = survivors > 0 ? R.string.zombie_cure : R.string.zombie_cure_fail;
         } else if (action.equals(ZACTION_ZOMBIE)) {
-            return String.format(Locale.US,
-                    context.getString(survivors > 0 ? R.string.zombie_join : R.string.zombie_join_done),
-                    target);
+            actionTextId = survivors > 0 ? R.string.zombie_join : R.string.zombie_join_done;
         }
-        return null;
-    }
 
-    /**
-     * Returns true if cure missiles are available to the given user.
-     * @return See above
-     */
-    public boolean isCureMissilesAvailable() {
-        // @TODO: Confirm
-        return ZACTION_CURE.equals(action) && zombies <= 0;
+        // If everyone's dead
+        if (survivors <=0 && zombies <= 0) {
+            actionTextId = R.string.zombie_quiet;
+        }
+
+        return String.format(Locale.US, context.getString(actionTextId), target);
     }
 }

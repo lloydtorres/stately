@@ -48,7 +48,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     // Different card modes, changes visibility of buttons
     public static final int MODE_NATION_ZCONTROL = 0;
     public static final int MODE_NATION_DEFAULT = 1;
-    public static final int MODE_NATION_CURE = 2;
+    public static final int MODE_NATION_SUPERWEAPON = 2;
     public static final int MODE_REGION_ZCONTROL = 3;
     public static final int MODE_REGION_DEFAULT = 4;
 
@@ -87,7 +87,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {
         init(act, zombieData, mode, target);
 
-        if (mode == MODE_NATION_CURE) {
+        if (mode == MODE_NATION_SUPERWEAPON) {
             missileButton.setVisibility(View.VISIBLE);
             missileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,7 +108,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
             title.setText(context.getString(R.string.zombie_report_title));
         }
 
-        if (mode == MODE_NATION_DEFAULT || mode == MODE_NATION_CURE) {
+        if (mode == MODE_NATION_DEFAULT || mode == MODE_NATION_SUPERWEAPON) {
             action.setVisibility(View.VISIBLE);
             action.setText(zombieData.getActionDescription(context, target));
         } else {

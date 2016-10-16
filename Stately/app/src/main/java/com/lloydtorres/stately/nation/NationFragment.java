@@ -43,6 +43,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.feed.HappeningsSubFragment;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 
@@ -90,7 +91,7 @@ public class NationFragment extends Fragment {
         mNation = n;
     }
 
-    public void updateEndorsementData(Nation n) {
+    public void updateOverviewData(Nation n) {
         mNation = n;
         if (overviewSubFragment == null) {
             overviewSubFragment = new OverviewSubFragment();
@@ -210,7 +211,13 @@ public class NationFragment extends Fragment {
         nationPrename.setText(SparkleHelper.getHtmlFormatting(mNation.prename).toString());
 
         DashHelper dashie = DashHelper.getInstance(getContext());
-        dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+
+        if (NightmareHelper.getIsZDayActive(getContext())) {
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
+        } else {
+            dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+        }
+
         dashie.loadImage(mNation.flagURL, nationFlag, true);
 
         overviewSubFragment = new OverviewSubFragment();

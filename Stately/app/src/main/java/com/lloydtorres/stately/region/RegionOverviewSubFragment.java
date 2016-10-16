@@ -27,7 +27,7 @@ import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
-import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 
@@ -74,7 +74,7 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     }
 
     private void initData() {
-        if (PinkaHelper.getIsZDayActive(getContext()) && mRegion.zombieData != null) {
+        if (NightmareHelper.getIsZDayActive(getContext()) && mRegion.zombieData != null) {
             cards.add(mRegion.zombieData);
         }
 

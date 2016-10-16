@@ -120,7 +120,7 @@
                 android:layout_marginRight="7dp"
                 android:layout_marginLeft="-7dp"
                 android:padding="4dp"
-                app:srcCompat="@drawable/ic_missile_strike"/>
+                app:srcCompat="@drawable/ic_superweapon"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

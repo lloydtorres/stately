@@ -447,7 +447,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     .commit();
         }
         else {
-            ((NationFragment) mFragment).updateEndorsementData(mNation);
+            ((NationFragment) mFragment).updateOverviewData(mNation);
         }
     }
 

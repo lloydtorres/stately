@@ -78,13 +78,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private List<Parcelable> cards;
     private String nationName;
+    private boolean isSameRegion;
+    private ExploreActivity exploreActivity;
     private Context context;
     private FragmentManager fm;
 
-    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, String n, FragmentManager f) {
+    public NationCardsRecyclerAdapter(List<Parcelable> cds, FragmentManager f, String n, boolean sameRegion, ExploreActivity act) {
+        this(act, cds, f, n, sameRegion);
+        exploreActivity = act;
+    }
+
+    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f, String n, boolean sameRegion) {
         context = c;
         fm = f;
         nationName = n;
+        isSameRegion = sameRegion;
 
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
 
@@ -147,15 +155,15 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 ncc.init((NationChartCardData) cards.get(position));
                 break;
             case CARD_ZOMBIE:
-                // @TODO: Call on appropriate init function, if cure is available
+                // @TODO: Call on appropriate init function, if cure is available and in same region
                 ZombieChartCard zcc = (ZombieChartCard) holder;
                 Zombie zombieData = (Zombie) cards.get(position);
                 String curUserId = PinkaHelper.getActiveUser(context).nationId;
                 int mode = ZombieChartCard.MODE_NATION_DEFAULT;
-                if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) &&
+                /**if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) &&
                         zombieData.isCureMissilesAvailable()) {
-                    mode = ZombieChartCard.MODE_NATION_CURE;
-                }
+                    mode = ZombieChartCard.MODE_NATION_SUPERWEAPON;
+                }**/
                 zcc.init(context, zombieData, mode, nationName);
         }
     }

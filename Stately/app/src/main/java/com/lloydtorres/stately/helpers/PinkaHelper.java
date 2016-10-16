@@ -66,7 +66,6 @@ public final class PinkaHelper {
     public static final String USERSESSION_PIN = "var_pin";
     public static final String USERSESSION_REGION = "var_region";
     public static final String USERSESSION_WA_MEMBER = "var_wa_member";
-    public static final String USERSESSION_IS_ZDAY = "var_is_zday";
 
     // Private constructor
     private PinkaHelper() {}
@@ -215,29 +214,5 @@ public final class PinkaHelper {
         editor.remove(USERSESSION_REGION);
         editor.remove(USERSESSION_WA_MEMBER);
         editor.apply();
-    }
-
-    /**
-     * Sets if Z-Day mode should be active during the user's current session.
-     * @param c App context
-     * @param isZDayActive Set if Z-Day mode should be active
-     */
-    public static void setIsZDayActive(Context c, boolean isZDayActive) {
-        // @TODO: Set this somewhere
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        SharedPreferences.Editor editor = storage.edit();
-        editor.putBoolean(USERSESSION_IS_ZDAY, isZDayActive);
-        editor.apply();
-    }
-
-    /**
-     * Gets if Z-Day mode is active during the user's current session.
-     * @param c App context
-     * @return If Z-Day is active
-     */
-    public static boolean getIsZDayActive(Context c) {
-        // @TODO: Uncomment actual implementation
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return true; //return storage.getBoolean(USERSESSION_IS_ZDAY, false);
     }
 }

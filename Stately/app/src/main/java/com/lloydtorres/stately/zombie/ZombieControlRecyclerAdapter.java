@@ -28,11 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
-import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
@@ -131,48 +129,38 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         public static final int PULSE_DURATION_ACTION = 4000;
         public static final int PULSE_DURATION_NOACTION = PULSE_DURATION_ACTION * 3;
 
-        public static final String HEADER_MILITARY = "m8";
-        public static final String HEADER_CURE = "n3";
-        public static final String HEADER_ZOMBIE = "x5";
-
         private ImageView headerBackground;
         private ImageView flag;
         private PulsatorLayout pulsator;
         private TextView action;
+        private LinearLayout superweaponContent;
         private LinearLayout button;
-        private ImageView buttonIcon;
         private TextView buttonText;
+        private LinearLayout exploreButton;
 
         public ZombieActionCard(View itemView) {
             super(itemView);
             headerBackground = (ImageView) itemView.findViewById(R.id.card_zombie_action_header_background);
             flag = (ImageView) itemView.findViewById(R.id.card_zombie_action_header_flag);
             pulsator = (PulsatorLayout) itemView.findViewById(R.id.card_zombie_action_header_pulse);
+
             action = (TextView) itemView.findViewById(R.id.card_zombie_action_content);
+            superweaponContent = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_superweapon_holder);
+
             button = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_button);
-            buttonIcon = (ImageView) itemView.findViewById(R.id.card_zombie_action_button_icon);
             buttonText = (TextView) itemView.findViewById(R.id.card_zombie_action_button_text);
+            exploreButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
         }
 
         public void init(final ZombieControlData data) {
-            // Setup header
-            String zombieHeader = HEADER_ZOMBIE;
-            if (data.zombieData.action != null) {
-                switch (data.zombieData.action) {
-                    case Zombie.ZACTION_CURE:
-                        zombieHeader = HEADER_CURE;
-                        break;
-                    case Zombie.ZACTION_MILITARY:
-                        zombieHeader = HEADER_MILITARY;
-                        break;
-                }
-            }
+            LayoutInflater inflater = LayoutInflater.from(context);
 
             DashHelper dashie = DashHelper.getInstance(context);
-            dashie.loadImage(Nation.getBannerURL(zombieHeader), headerBackground, false);
+            dashie.loadImage(NightmareHelper.getZombieBanner(data.zombieData.action), headerBackground, false);
             dashie.loadImage(data.flagURL, flag, true);
 
-            if (data.zombieData.action == null || data.zombieData.survivors <= 0) {
+            if (data.zombieData.action == null || (data.zombieData.survivors <= 0 && data.zombieData.zombies > 0
+                    && !Zombie.ZACTION_ZOMBIE.equals(data.zombieData.action))) {
                 pulsator.setDuration(PULSE_DURATION_NOACTION);
                 pulsator.setColor(ContextCompat.getColor(context, R.color.colorChart1));
             } else {
@@ -189,32 +177,58 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                         break;
                 }
             }
-            pulsator.start();
+            // Only start if there are survivors/zombies left
+            if (data.zombieData.survivors > 0 || data.zombieData.zombies > 0) {
+                pulsator.start();
+            }
 
             action.setText(data.zombieData.getActionDescription(context, data.name));
 
+            // @TODO: Add superweapon descriptions depending on what's available
+            superweaponContent.removeAllViews();
+            String superweaponDesc = context.getString(R.string.zombie_superweapon_desc) + context.getString(R.string.zombie_superweapon_none);
+            inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), superweaponDesc);
+
             // Setup button
-            buttonIcon.setImageResource(R.drawable.ic_zombie_control);
             if (data.zombieData.action == null) {
                 buttonText.setText(context.getString(R.string.zombie_button_noaction));
-            } else if (data.zombieData.isCureMissilesAvailable()) {
-                buttonIcon.setImageResource(R.drawable.ic_menu_explore);
-                buttonText.setText(context.getString(R.string.zombie_button_cure));
             } else {
                 buttonText.setText(context.getString(R.string.zombie_button_change));
             }
-
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (data.zombieData.isCureMissilesAvailable()) {
-                        ExploreDialog exploreDialog = new ExploreDialog();
-                        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
-                    } else {
-                        // @TODO: Callback
-                    }
+                    // @TODO Callback
                 }
             });
+
+            // @TODO: Setup explore button if cure is available
+
+            //
+            /**
+             exploreButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ExploreDialog exploreDialog = new ExploreDialog();
+                    exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
+                }
+            });**/
+        }
+
+        /**
+         * Inflates an entry for the superweapons section.
+         * @param inflater
+         * @param targetLayout
+         * @param title
+         * @param content
+         */
+        private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content) {
+            View entryView = inflater.inflate(R.layout.view_cardentry, null);
+            TextView titleView = (TextView) entryView.findViewById(R.id.cardentry_label);
+            TextView contentView = (TextView) entryView.findViewById(R.id.cardentry_content);
+            titleView.setText(title);
+            contentView.setText(content);
+            targetLayout.addView(entryView);
         }
     }
 }
