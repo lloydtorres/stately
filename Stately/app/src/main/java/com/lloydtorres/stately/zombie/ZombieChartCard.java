@@ -1,0 +1,184 @@
+/**
+ * Copyright 2016 Lloyd Torres
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.lloydtorres.stately.zombie;
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.Zombie;
+import com.lloydtorres.stately.helpers.RaraHelper;
+import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.region.MessageBoardActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Created by Lloyd on 2016-10-15.
+ * A recycler view card showing stats about a zombie infection, along with some
+ * buttons if enabled.
+ */
+
+public class ZombieChartCard extends RecyclerView.ViewHolder {
+    // Different card modes, changes visibility of buttons
+    public static final int MODE_NATION_ZCONTROL = 0;
+    public static final int MODE_NATION_DEFAULT = 1;
+    public static final int MODE_NATION_CURE = 2;
+    public static final int MODE_REGION_ZCONTROL = 3;
+    public static final int MODE_REGION_DEFAULT = 4;
+
+    private TextView title;
+    private TextView action;
+    private PieChart chart;
+
+    private View divider;
+
+    private LinearLayout genericButton;
+    private ImageView genericButtonIcon;
+    private TextView genericButtonText;
+
+    private LinearLayout missileButton;
+
+    public ZombieChartCard(View itemView) {
+        super(itemView);
+
+        title = (TextView) itemView.findViewById(R.id.card_zombie_chart_title);
+        action = (TextView) itemView.findViewById(R.id.card_zombie_chart_action);
+        chart = (PieChart) itemView.findViewById(R.id.card_zombie_chart);
+
+        divider = itemView.findViewById(R.id.view_divider);
+
+        genericButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_generic);
+        genericButtonIcon = (ImageView) itemView.findViewById(R.id.card_zombie_chart_button_generic_icon);
+        genericButtonText = (TextView) itemView.findViewById(R.id.card_zombie_chart_button_generic_text);
+
+        missileButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_missile);
+    }
+
+    public void init(final Context context, final Zombie zombieData, final int mode, final String target) {
+        // Set title
+        if (mode == MODE_NATION_ZCONTROL || mode == MODE_REGION_ZCONTROL) {
+            title.setText(String.format(Locale.US,
+                    context.getString(R.string.zombie_report_template),
+                    target));
+        } else {
+            title.setText(context.getString(R.string.zombie_report_title));
+        }
+
+        if (mode == MODE_NATION_DEFAULT || mode == MODE_NATION_CURE) {
+            action.setVisibility(View.VISIBLE);
+            action.setText(zombieData.getActionDescription(context, target));
+        } else {
+            action.setVisibility(View.GONE);
+        }
+
+        // Init the chart
+        initZombieChart(context, zombieData);
+
+        // Changes which buttons are visible
+        // Set everything to the default first
+        divider.setVisibility(View.VISIBLE);
+        genericButtonIcon.setImageResource(R.drawable.ic_zombie_control);
+        genericButtonText.setText(context.getString(R.string.zombie_control));
+        genericButton.setVisibility(View.VISIBLE);
+        genericButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // @TODO: Start zombie control activity
+            }
+        });
+
+        missileButton.setVisibility(View.GONE);
+        missileButton.setOnClickListener(null);
+
+        switch (mode) {
+            case MODE_NATION_ZCONTROL:
+                divider.setVisibility(View.GONE);
+                genericButton.setVisibility(View.GONE);
+                genericButton.setOnClickListener(null);
+                break;
+            case MODE_NATION_CURE:
+                missileButton.setVisibility(View.VISIBLE);
+                missileButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // @TODO: Callback
+                    }
+                });
+                break;
+            case MODE_REGION_ZCONTROL:
+                genericButtonIcon.setImageResource(R.drawable.ic_region_white);
+                genericButtonText.setText(context.getString(R.string.card_region_rmb));
+                genericButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
+                        messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, SparkleHelper.getIdFromName(target));
+                        context.startActivity(messageBoardActivity);
+                    }
+                });
+                break;
+        }
+    }
+
+    // An array of colours used for WA votes
+    private static final int[] zombieChartColours = { R.color.colorChart3,
+            R.color.colorChart1,
+            R.color.colorChart20
+    };
+
+    private void initZombieChart(Context c, Zombie zombieData) {
+        float popTotal = zombieData.survivors + zombieData.zombies + zombieData.dead;
+
+        List<String> chartLabels = new ArrayList<String>();
+        List<Entry> chartEntries = new ArrayList<Entry>();
+
+        // Set data
+        int i = 0;
+        chartLabels.add(c.getString(R.string.zombie_survivors));
+        float popSurvivors = (zombieData.survivors * 100f)/popTotal;
+        chartEntries.add(new Entry(popSurvivors, i++));
+        chartLabels.add(c.getString(R.string.zombie_infected));
+        float popZombies = (zombieData.zombies * 100f)/popTotal;
+        chartEntries.add(new Entry(popZombies, i++));
+        chartLabels.add(c.getString(R.string.zombie_dead));
+        float popDead = (zombieData.dead * 100f)/popTotal;
+        chartEntries.add(new Entry(popDead, i++));
+
+        // Set colour and disable chart labels
+        PieDataSet dataSet = new PieDataSet(chartEntries, "");
+        dataSet.setDrawValues(false);
+        dataSet.setColors(zombieChartColours, c);
+        PieData dataFull = new PieData(chartLabels, dataSet);
+
+        // formatting
+        chart = RaraHelper.getFormattedPieChart(c, chart, chartLabels);
+        chart.setData(dataFull);
+        chart.invalidate();
+    }
+}

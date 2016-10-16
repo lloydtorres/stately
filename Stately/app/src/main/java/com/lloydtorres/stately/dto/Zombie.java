@@ -16,11 +16,16 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.R;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-10-15.
@@ -77,4 +82,50 @@ public class Zombie implements Parcelable {
             return new Zombie[size];
         }
     };
+
+    /**
+     * Returns some descriptive text about the current action
+     * There's three main cases: military action, cure and join horde
+     * For each case, there's different text on whether or not there's survivors left
+     * And for the first two, if there are no zombies left
+     * @param context App context
+     * @param target Name of target nation
+     */
+    public String getActionDescription(Context context, String target) {
+        if (action == null) {
+            return String.format(Locale.US,
+                    context.getString(survivors > 0 ? R.string.zombie_noaction : R.string.zombie_noaction_fail),
+                    target);
+        } else if (action.equals(ZACTION_MILITARY)) {
+            int actionTextId = survivors > 0 ? R.string.zombie_military : R.string.zombie_military_fail;
+            if (zombies <= 0) {
+                actionTextId = R.string.zombie_military_done;
+            }
+            return String.format(Locale.US,
+                    context.getString(actionTextId),
+                    target);
+        } else if (action.equals(ZACTION_CURE)) {
+            int actionTextId = survivors > 0 ? R.string.zombie_cure : R.string.zombie_cure_fail;
+            if (zombies <= 0) {
+                actionTextId = R.string.zombie_cure_done;
+            }
+            return String.format(Locale.US,
+                    context.getString(actionTextId),
+                    target);
+        } else if (action.equals(ZACTION_ZOMBIE)) {
+            return String.format(Locale.US,
+                    context.getString(survivors > 0 ? R.string.zombie_join : R.string.zombie_join_done),
+                    target);
+        }
+        return null;
+    }
+
+    /**
+     * Returns true if cure missiles are available to the given user.
+     * @return See above
+     */
+    public boolean isCureMissilesAvailable() {
+        // @TODO: Confirm
+        return ZACTION_CURE.equals(action) && zombies <= 0;
+    }
 }

@@ -431,6 +431,28 @@
     <string name="report_header_reason">Reason for report</string>
     <string name="report_header_response">Response</string>
 
+    <!-- Zombie -->
+    <string name="zombie_control">Zombie Control</string>
+    <string name="zombie_survivors">Survivors</string>
+    <string name="zombie_infected">Infected</string>
+    <string name="zombie_dead">Dead</string>
+    <string name="zombie_noaction">%1$s has not taken action on the impending zombie apocalypse.</string>
+    <string name="zombie_noaction_fail">%1$s did not take action on the zombie apocalypse and has fallen.</string>
+    <string name="zombie_military">%1$s has ordered its military to take out as many zombies as possible.</string>
+    <string name="zombie_military_fail">%1$s attempted to take out as many zombies as possible but failed.</string>
+    <string name="zombie_military_done">%1$s has secured its borders from the zombie horde.</string>
+    <string name="zombie_cure">%1$s is developing a cure for the infected.</string>
+    <string name="zombie_cure_fail">%1$s tried to develop a cure for the infected but was unsuccessful.</string>
+    <string name="zombie_cure_done">%1$s has developed a cure for the infected.</string>
+    <string name="zombie_join">%1$s has joined the zombie horde.</string>
+    <string name="zombie_join_done">BRAAINS&#8230;? BRAAAAINS!!!</string>
+    <string name="zombie_button_noaction">Take action</string>
+    <string name="zombie_button_change">Change course</string>
+    <string name="zombie_button_cure">Explore and cure zombies</string>
+    <string name="zombie_button_missile">Strike with cure missile</string>
+    <string name="zombie_report_title">Zombie Report</string>
+    <string name="zombie_report_template">Zombie Report: %1$s</string>
+
     <!-- Settings -->
     <string name="setting_title_behavior">General</string>
     <string name="setting_autologin">Log in automatically</string>
