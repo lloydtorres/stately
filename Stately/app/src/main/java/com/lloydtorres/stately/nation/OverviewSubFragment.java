@@ -25,6 +25,7 @@ import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
@@ -58,6 +59,10 @@ public class OverviewSubFragment extends NationSubFragment {
 
     @Override
     protected void initData() {
+        if (PinkaHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
+            cards.add(mNation.zombieData);
+        }
+
         NationOverviewCardData nocData = new NationOverviewCardData();
 
         // Set up custom government category depending on user preferences

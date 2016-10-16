@@ -452,6 +452,7 @@
     <string name="zombie_button_missile">Strike with cure missile</string>
     <string name="zombie_report_title">Zombie Report</string>
     <string name="zombie_report_template">Zombie Report: %1$s</string>
+    <string name="zombie_chart_null">No data has been collected yet.</string>
 
     <!-- Settings -->
     <string name="setting_title_behavior">General</string>

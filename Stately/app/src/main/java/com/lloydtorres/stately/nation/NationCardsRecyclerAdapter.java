@@ -47,11 +47,14 @@ import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.dto.WaVoteStatus;
+import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
+import com.lloydtorres.stately.zombie.ZombieChartCard;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -69,16 +72,19 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public static final int CARD_FREEDOMS = 1;
     public static final int CARD_GENERIC = 2;
     public static final int CARD_CHART = 3;
+    public static final int CARD_ZOMBIE = 4;
 
     private String[] WORLD_CENSUS_ITEMS;
 
     private List<Parcelable> cards;
+    private String nationName;
     private Context context;
     private FragmentManager fm;
 
-    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f) {
+    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, String n, FragmentManager f) {
         context = c;
         fm = f;
+        nationName = n;
 
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
 
@@ -112,6 +118,10 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 View chartCard = inflater.inflate(R.layout.card_nation_chart, parent, false);
                 viewHolder = new NationChartCard(chartCard);
                 break;
+            case CARD_ZOMBIE:
+                View zombieCard = inflater.inflate(R.layout.card_zombie_chart, parent, false);
+                viewHolder = new ZombieChartCard(zombieCard);
+                break;
         }
 
         return viewHolder;
@@ -136,6 +146,17 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 NationChartCard ncc = (NationChartCard) holder;
                 ncc.init((NationChartCardData) cards.get(position));
                 break;
+            case CARD_ZOMBIE:
+                // @TODO: Call on appropriate init function, if cure is available
+                ZombieChartCard zcc = (ZombieChartCard) holder;
+                Zombie zombieData = (Zombie) cards.get(position);
+                String curUserId = PinkaHelper.getActiveUser(context).nationId;
+                int mode = ZombieChartCard.MODE_NATION_DEFAULT;
+                if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) &&
+                        zombieData.isCureMissilesAvailable()) {
+                    mode = ZombieChartCard.MODE_NATION_CURE;
+                }
+                zcc.init(context, zombieData, mode, nationName);
         }
     }
 
@@ -157,6 +178,9 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         else if (cards.get(position) instanceof NationChartCardData) {
             return CARD_CHART;
+        }
+        else if (cards.get(position) instanceof Zombie) {
+            return CARD_ZOMBIE;
         }
         return -1;
     }

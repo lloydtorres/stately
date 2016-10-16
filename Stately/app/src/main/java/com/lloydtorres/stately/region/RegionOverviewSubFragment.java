@@ -27,6 +27,7 @@ import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 
 import java.util.ArrayList;
 
@@ -36,9 +37,11 @@ import java.util.ArrayList;
  * Takes in a Region object.
  */
 public class RegionOverviewSubFragment extends RecyclerSubFragment {
+    public static final String REGION_NAME_DATA = "regionName";
     public static final String CARDS_DATA = "cards";
 
     private Region mRegion;
+    private String regionName;
     private ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
     public void setRegion(Region r)
@@ -55,9 +58,13 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
             if (cards == null) {
                 cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
             }
+            if (regionName == null) {
+                regionName = savedInstanceState.getString(REGION_NAME_DATA);
+            }
         }
 
         if ((cards == null || cards.size() <= 0) && mRegion != null) {
+            regionName = mRegion.name;
             initData();
         }
 
@@ -67,6 +74,10 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     }
 
     private void initData() {
+        if (PinkaHelper.getIsZDayActive(getContext()) && mRegion.zombieData != null) {
+            cards.add(mRegion.zombieData);
+        }
+
         RegionQuickFactsCardData quickFacts = new RegionQuickFactsCardData();
         quickFacts.waDelegate = mRegion.delegate;
         quickFacts.delegateVotes = mRegion.delegateVotes;
@@ -88,7 +99,7 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
 
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), getFragmentManager(), cards);
+            mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), regionName, getFragmentManager(), cards);
         } else {
             ((RegionOverviewRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }
@@ -101,6 +112,9 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
         super.onSaveInstanceState(outState);
         if (cards != null) {
             outState.putParcelableArrayList(CARDS_DATA, cards);
+        }
+        if (regionName != null) {
+            outState.putString(REGION_NAME_DATA, regionName);
         }
     }
 }

@@ -30,8 +30,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Zombie;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.RaraHelper;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 
 import java.util.ArrayList;
@@ -54,6 +54,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
 
     private TextView title;
     private TextView action;
+
+    private TextView nullData;
     private PieChart chart;
 
     private View divider;
@@ -69,6 +71,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
 
         title = (TextView) itemView.findViewById(R.id.card_zombie_chart_title);
         action = (TextView) itemView.findViewById(R.id.card_zombie_chart_action);
+
+        nullData = (TextView) itemView.findViewById(R.id.card_zombie_chart_null);
         chart = (PieChart) itemView.findViewById(R.id.card_zombie_chart);
 
         divider = itemView.findViewById(R.id.view_divider);
@@ -78,6 +82,20 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         genericButtonText = (TextView) itemView.findViewById(R.id.card_zombie_chart_button_generic_text);
 
         missileButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_missile);
+    }
+
+    public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {
+        init(act, zombieData, mode, target);
+
+        if (mode == MODE_NATION_CURE) {
+            missileButton.setVisibility(View.VISIBLE);
+            missileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // @TODO: Callback
+                }
+            });
+        }
     }
 
     public void init(final Context context, final Zombie zombieData, final int mode, final String target) {
@@ -109,7 +127,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         genericButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // @TODO: Start zombie control activity
+                Intent zombieControlLaunch = new Intent(context, ZombieControlActivity.class);
+                context.startActivity(zombieControlLaunch);
             }
         });
 
@@ -122,15 +141,6 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
                 genericButton.setVisibility(View.GONE);
                 genericButton.setOnClickListener(null);
                 break;
-            case MODE_NATION_CURE:
-                missileButton.setVisibility(View.VISIBLE);
-                missileButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // @TODO: Callback
-                    }
-                });
-                break;
             case MODE_REGION_ZCONTROL:
                 genericButtonIcon.setImageResource(R.drawable.ic_region_white);
                 genericButtonText.setText(context.getString(R.string.card_region_rmb));
@@ -138,7 +148,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
                     @Override
                     public void onClick(View v) {
                         Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
-                        messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, SparkleHelper.getIdFromName(target));
+                        messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, target);
                         context.startActivity(messageBoardActivity);
                     }
                 });
@@ -155,30 +165,38 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     private void initZombieChart(Context c, Zombie zombieData) {
         float popTotal = zombieData.survivors + zombieData.zombies + zombieData.dead;
 
-        List<String> chartLabels = new ArrayList<String>();
-        List<Entry> chartEntries = new ArrayList<Entry>();
+        if (popTotal > 0) {
+            nullData.setVisibility(View.GONE);
+            chart.setVisibility(View.VISIBLE);
 
-        // Set data
-        int i = 0;
-        chartLabels.add(c.getString(R.string.zombie_survivors));
-        float popSurvivors = (zombieData.survivors * 100f)/popTotal;
-        chartEntries.add(new Entry(popSurvivors, i++));
-        chartLabels.add(c.getString(R.string.zombie_infected));
-        float popZombies = (zombieData.zombies * 100f)/popTotal;
-        chartEntries.add(new Entry(popZombies, i++));
-        chartLabels.add(c.getString(R.string.zombie_dead));
-        float popDead = (zombieData.dead * 100f)/popTotal;
-        chartEntries.add(new Entry(popDead, i++));
+            List<String> chartLabels = new ArrayList<String>();
+            List<Entry> chartEntries = new ArrayList<Entry>();
 
-        // Set colour and disable chart labels
-        PieDataSet dataSet = new PieDataSet(chartEntries, "");
-        dataSet.setDrawValues(false);
-        dataSet.setColors(zombieChartColours, c);
-        PieData dataFull = new PieData(chartLabels, dataSet);
+            // Set data
+            int i = 0;
+            chartLabels.add(c.getString(R.string.zombie_survivors));
+            float popSurvivors = (zombieData.survivors * 100f)/popTotal;
+            chartEntries.add(new Entry(popSurvivors, i++));
+            chartLabels.add(c.getString(R.string.zombie_infected));
+            float popZombies = (zombieData.zombies * 100f)/popTotal;
+            chartEntries.add(new Entry(popZombies, i++));
+            chartLabels.add(c.getString(R.string.zombie_dead));
+            float popDead = (zombieData.dead * 100f)/popTotal;
+            chartEntries.add(new Entry(popDead, i++));
 
-        // formatting
-        chart = RaraHelper.getFormattedPieChart(c, chart, chartLabels);
-        chart.setData(dataFull);
-        chart.invalidate();
+            // Set colour and disable chart labels
+            PieDataSet dataSet = new PieDataSet(chartEntries, "");
+            dataSet.setDrawValues(false);
+            dataSet.setColors(zombieChartColours, c);
+            PieData dataFull = new PieData(chartLabels, dataSet);
+
+            // formatting
+            chart = RaraHelper.getFormattedPieChart(c, chart, chartLabels);
+            chart.setData(dataFull);
+            chart.invalidate();
+        } else {
+            nullData.setVisibility(View.VISIBLE);
+            chart.setVisibility(View.GONE);
+        }
     }
 }

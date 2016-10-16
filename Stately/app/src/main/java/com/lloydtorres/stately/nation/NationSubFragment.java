@@ -32,9 +32,11 @@ import java.util.ArrayList;
  * Nation-specific sub-fragments.
  */
 public abstract class NationSubFragment extends RecyclerSubFragment {
+    public static final String NATION_NAME_DATA = "nationName";
     public static final String CARDS_DATA = "cards";
 
     protected Nation mNation;
+    protected String nationName;
     protected ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
     public void setNation(Nation n)
@@ -52,11 +54,17 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore state
-        if (savedInstanceState != null && cards == null) {
-            cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
+        if (savedInstanceState != null) {
+            if (cards == null) {
+                cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
+            }
+            if (nationName == null) {
+                nationName = savedInstanceState.getString(NATION_NAME_DATA);
+            }
         }
 
         if ((cards == null || cards.size() <= 0) && mNation != null) {
+            nationName = mNation.name;
             initData();
         }
 
@@ -79,7 +87,7 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
 
     private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, nationName, getFragmentManager());
             if (isOnlySetAdapterOnNull) {
                 mRecyclerView.setAdapter(mRecyclerAdapter);
             }
@@ -97,6 +105,9 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         super.onSaveInstanceState(outState);
         if (cards != null) {
             outState.putParcelableArrayList(CARDS_DATA, cards);
+        }
+        if (nationName != null) {
+            outState.putString(NATION_NAME_DATA, nationName);
         }
     }
 }

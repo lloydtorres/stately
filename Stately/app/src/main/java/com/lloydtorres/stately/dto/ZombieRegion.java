@@ -22,11 +22,13 @@ import android.os.Parcelable;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-10-16.
  * Holder for a region's zombie data.
  */
+@Root(name="REGION", strict=false)
 public class ZombieRegion implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
                                         + "name+zombie"

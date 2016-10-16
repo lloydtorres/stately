@@ -51,13 +51,15 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     private static final int NUMBER_OF_CARDS = 4;
 
+    private ZombieControlActivity activity;
     private Context context;
     private FragmentManager fm;
     private ZombieControlData userData;
     private ZombieRegion regionData;
 
-    public ZombieControlRecyclerAdapter(Context c, FragmentManager f, ZombieControlData zcd, ZombieRegion zr) {
-        context = c;
+    public ZombieControlRecyclerAdapter(ZombieControlActivity act, FragmentManager f, ZombieControlData zcd, ZombieRegion zr) {
+        activity = act;
+        context = activity;
         fm = f;
         setContent(zcd, zr);
     }
@@ -155,20 +157,21 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         public void init(final ZombieControlData data) {
             // Setup header
             String zombieHeader = HEADER_ZOMBIE;
-            switch (data.zombieData.action) {
-                case Zombie.ZACTION_CURE:
-                    zombieHeader = HEADER_CURE;
-                    break;
-                case Zombie.ZACTION_MILITARY:
-                    zombieHeader = HEADER_MILITARY;
-                    break;
+            if (data.zombieData.action != null) {
+                switch (data.zombieData.action) {
+                    case Zombie.ZACTION_CURE:
+                        zombieHeader = HEADER_CURE;
+                        break;
+                    case Zombie.ZACTION_MILITARY:
+                        zombieHeader = HEADER_MILITARY;
+                        break;
+                }
             }
 
             DashHelper dashie = DashHelper.getInstance(context);
             dashie.loadImage(Nation.getBannerURL(zombieHeader), headerBackground, false);
             dashie.loadImage(data.flagURL, flag, true);
 
-            // @TODO: Pulsator logic
             if (data.zombieData.action == null || data.zombieData.survivors <= 0) {
                 pulsator.setDuration(PULSE_DURATION_NOACTION);
                 pulsator.setColor(ContextCompat.getColor(context, R.color.colorChart1));
@@ -186,6 +189,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                         break;
                 }
             }
+            pulsator.start();
 
             action.setText(data.zombieData.getActionDescription(context, data.name));
 

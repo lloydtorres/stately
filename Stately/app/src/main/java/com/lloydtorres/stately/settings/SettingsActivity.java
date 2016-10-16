@@ -244,6 +244,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
      */
 
     public static int getTheme(Context c) {
+        // Force noir theme on Z-Day
+        if (PinkaHelper.getIsZDayActive(c)) {
+            return THEME_NOIR;
+        }
+
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         int theme = THEME_VERT;
         try {

@@ -29,8 +29,10 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
+import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.zombie.ZombieChartCard;
 
 import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -47,12 +49,15 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     private static final int REGION_QUICK_FACTS = 0;
     private static final int REGION_FACTBOOK = 1;
     private static final int REGION_TAGS = 2;
+    private static final int REGION_ZOMBIE = 3;
 
     private List<Parcelable> cards;
+    private String regionName;
     private Context context;
     private FragmentManager fragmentManager;
 
-    public RegionOverviewRecyclerAdapter(Context c, FragmentManager fm, List<Parcelable> crds) {
+    public RegionOverviewRecyclerAdapter(Context c, String r, FragmentManager fm, List<Parcelable> crds) {
+        regionName = r;
         context = c;
         fragmentManager = fm;
         setCards(crds);
@@ -81,6 +86,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 View tagsCard = inflater.inflate(R.layout.card_region_generic, parent, false);
                 viewHolder = new RegionTagsCard(tagsCard);
                 break;
+            case REGION_ZOMBIE:
+                View zombieCard = inflater.inflate(R.layout.card_zombie_chart, parent, false);
+                viewHolder = new ZombieChartCard(zombieCard);
+                break;
         }
 
         return viewHolder;
@@ -101,6 +110,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 RegionTagsCard tagsCard = (RegionTagsCard) holder;
                 tagsCard.init((RegionTagsCardData) cards.get(position));
                 break;
+            case REGION_ZOMBIE:
+                ZombieChartCard zombieChartCard = (ZombieChartCard) holder;
+                zombieChartCard.init(context, (Zombie) cards.get(position), ZombieChartCard.MODE_REGION_DEFAULT, regionName);
+                break;
         }
     }
 
@@ -119,6 +132,9 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
         }
         else if (cards.get(position) instanceof RegionTagsCardData) {
             return REGION_TAGS;
+        }
+        else if (cards.get(position) instanceof Zombie) {
+            return REGION_ZOMBIE;
         }
         return -1;
     }
