@@ -33,10 +33,10 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.BaseRegion;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.DataIntPair;
-import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.feed.BreakingNewsCard;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
@@ -143,7 +143,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case WORLD_BREAKING_NEWS:
                 BreakingNewsCard breakingNewsCard = (BreakingNewsCard) holder;
-                breakingNewsCard.init((World) cards.get(position));
+                breakingNewsCard.init(context, ((World) cards.get(position)).happenings);
                 break;
             case WORLD_FEATURED_CENSUS:
                 FeaturedCensusCard featuredCensusCard = (FeaturedCensusCard) holder;
@@ -262,39 +262,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             visitButton.setOnClickListener(regionOnClick);
             visitText.setText(String.format(Locale.US, context.getString(R.string.telegrams_region_explore), regionData.name));
-        }
-    }
-
-    // Breaking news
-    public class BreakingNewsCard extends RecyclerView.ViewHolder {
-
-        private List<Event> newsItems;
-
-        private LinearLayout newsHolder;
-        private LayoutInflater inflater;
-
-        public BreakingNewsCard(View itemView) {
-            super(itemView);
-            newsHolder = (LinearLayout) itemView.findViewById(R.id.card_world_breaking_news_holder);
-        }
-
-        public void init(World w) {
-            newsItems = w.happenings;
-
-            inflater = LayoutInflater.from(context);
-            newsHolder.removeAllViews();
-            int index = 0;
-            for (Event e : newsItems) {
-                View newsItemView = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
-                HtmlTextView newsContent = (HtmlTextView) newsItemView.findViewById(R.id.card_world_breaking_news_content);
-                SparkleHelper.setHappeningsFormatting(context, newsContent, e.content);
-
-                if (++index >= newsItems.size()) {
-                    newsItemView.findViewById(R.id.view_divider).setVisibility(View.GONE);
-                }
-
-                newsHolder.addView(newsItemView);
-            }
         }
     }
 
