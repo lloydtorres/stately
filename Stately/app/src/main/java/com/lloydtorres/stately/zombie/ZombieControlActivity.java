@@ -27,16 +27,23 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
+import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.wa.VoteDialog;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-10-16.
@@ -179,6 +186,129 @@ public class ZombieControlActivity extends RefreshviewActivity {
             ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData);
         }
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Either shows the zombie decision dialog or a message saying that no actions are available.
+     */
+    public void showDecisionDialog() {
+        ZombieDecisionDialog zombieDialog = new ZombieDecisionDialog();
+        zombieDialog.setZombieData(userData.zombieData);
+        zombieDialog.show(getSupportFragmentManager(), VoteDialog.DIALOG_TAG);
+    }
+
+    /**
+     * Starts the process for submitting the user's Z-Day action.
+     * @param action
+     */
+    public void startSubmitAction(final String action) {
+        if (isInProgress) {
+            SparkleHelper.makeSnackbar(mView, getString(R.string.multiple_request_error));
+            return;
+        }
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                isInProgress = true;
+                getLocalId(action);
+            }
+        });
+    }
+
+    /**
+     * Gets the local ID to use for submitting the action.
+     * @param action
+     */
+    private void getLocalId(final String action) {
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element input = d.select("input[name=localid]").first();
+
+                        if (input == null) {
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            isInProgress = false;
+                            return;
+                        }
+
+                        String localid = input.attr("value");
+                        postZombieDecision(localid, action);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Actually submits the decision to NS, then requeries the Z-Day endpoints.
+     * @param localid Local ID for verification
+     * @param action User action
+     */
+    private void postZombieDecision(final String localid, final String action) {
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        switch (action) {
+                            case Zombie.ZACTION_MILITARY:
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_military_done));
+                                break;
+                            case Zombie.ZACTION_CURE:
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_cure_done));
+                                break;
+                            case Zombie.ZACTION_ZOMBIE:
+                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_join_done));
+                                break;
+                        }
+                        queryUserZombieData();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("localid", localid);
+        params.put(String.format(Locale.US, Zombie.ZACTION_PARAM_BASE, action), "1");
+        stringRequest.setParams(params);
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
     }
 
     @Override

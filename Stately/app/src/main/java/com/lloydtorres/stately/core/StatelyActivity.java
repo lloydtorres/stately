@@ -64,6 +64,7 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
 import com.lloydtorres.stately.world.WorldFragment;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -134,15 +135,12 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_stately);
 
         // Get nation object from intent or restore state
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             mNation = getIntent().getParcelableExtra(NATION_DATA);
             navInit = getIntent().getIntExtra(NAV_INIT, NATION_FRAGMENT);
         }
-        if (savedInstanceState != null)
-        {
-            if (mNation == null)
-            {
+        if (savedInstanceState != null) {
+            if (mNation == null) {
                 mNation = savedInstanceState.getParcelable(NATION_DATA);
             }
             navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
@@ -153,13 +151,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         getSupportActionBar().hide();
         getSupportActionBar().setTitle("");
 
-        if (mNation == null)
-        {
+        if (mNation == null) {
             UserLogin u = PinkaHelper.getActiveUser(this);
             updateNation(u.name, true);
-        }
-        else
-        {
+        } else {
             initNavigationView(navInit);
             if (mNation.unread != null) {
                 processUnreadCounts(mNation.unread);
@@ -187,8 +182,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Set the nation fragment as the current view.
      * @param start Index of the view to start with
      */
-    private void initNavigationView(int start)
-    {
+    private void initNavigationView(int start) {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(start).setChecked(true);
@@ -200,8 +194,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         waCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_wa).getActionView();
 
         Fragment f;
-        switch (start)
-        {
+        switch (start) {
             case ISSUES_FRAGMENT:
                 f = getIssuesFragment();
                 currentPosition = R.id.nav_issues;
@@ -240,8 +233,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Initialize the banner in the navigation drawer with data from Nation.
      */
-    private void initNavBanner()
-    {
+    private void initNavBanner() {
         View view = navigationView.getHeaderView(0);
         nationBanner = (ImageView) view.findViewById(R.id.nav_banner_back);
         nationFlag = (ImageView) view.findViewById(R.id.nav_flag);
@@ -250,7 +242,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         nationNameView.setText(mNation.name);
 
         DashHelper dashie = DashHelper.getInstance(this);
-        dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+
+        if (NightmareHelper.getIsZDayActive(this)) {
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
+        } else {
+            dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+        }
+
         dashie.loadImage(mNation.flagURL, nationFlag, true);
     }
 
@@ -259,39 +257,32 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(NAV_INIT, navInit);
-        if (mNation != null)
-        {
+        if (mNation != null) {
             savedInstanceState.putParcelable(NATION_DATA, mNation);
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
-        if (savedInstanceState != null && mNation == null)
-        {
+        if (savedInstanceState != null && mNation == null) {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         TrixHelper.updateLastActiveTime(this);
 
         // Redownload nation data on resume
         // isLoaded will only be false on first run, true on all subsequent runs
         // This prevents nation data from being redundantly loaded twice.
-        if (isLoaded)
-        {
+        if (isLoaded) {
             updateNation(mNation.name, false);
-        }
-        else
-        {
+        } else {
             isLoaded = true;
         }
     }
@@ -302,19 +293,16 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         // Close drawer if open, call super function otherwise
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (currentPosition != R.id.nav_nation) {
             initNavigationView(NATION_FRAGMENT);
         }
-        else
-        {
+        else {
             if (SettingsActivity.getConfirmExitSetting(this)) {
                 confirmExit();
-            }
-            else {
+            } else {
                 super.onBackPressed();
             }
         }
@@ -325,8 +313,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void confirmExit()
-    {
+    public void confirmExit() {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -347,13 +334,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
         FragmentManager fm = getSupportFragmentManager();
 
         // Main selections
-        if (id != currentPosition && !isNoSelect(id))
-        {
+        if (id != currentPosition && !isNoSelect(id)) {
             currentPosition = id;
             Fragment fChoose;
 
-            switch (id)
-            {
+            switch (id) {
                 case R.id.nav_nation:
                     // Choose Nation
                     fChoose = getNationFragment();
@@ -403,10 +388,8 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             return true;
         }
         // Other selections
-        else if (isNoSelect(id))
-        {
-            switch (id)
-            {
+        else if (isNoSelect(id)) {
+            switch (id) {
                 case R.id.nav_explore:
                     // Open explore dialog
                     explore();
@@ -427,8 +410,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -437,16 +419,14 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Get a new nation fragment
      * @return A new nation fragment
      */
-    private NationFragment getNationFragment()
-    {
+    private NationFragment getNationFragment() {
         NationFragment nationFragment = new NationFragment();
         nationFragment.setNation(mNation);
 
         return nationFragment;
     }
 
-    private IssuesFragment getIssuesFragment()
-    {
+    private IssuesFragment getIssuesFragment() {
         IssuesFragment issuesFragment = new IssuesFragment();
         issuesFragment.setNationData(mNation);
         return issuesFragment;
@@ -456,8 +436,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Get a new telegrams fragment
      * @return Telegrams fragment
      */
-    private TelegramsFragment getTelegramsFragment()
-    {
+    private TelegramsFragment getTelegramsFragment() {
         TelegramsFragment telegramsFragment = new TelegramsFragment();
         return telegramsFragment;
     }
@@ -466,8 +445,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Get a new activity feed fragment
      * @return New activity feed fragment
      */
-    private ActivityFeedFragment getActivityFeed()
-    {
+    private ActivityFeedFragment getActivityFeed() {
         ActivityFeedFragment activityFeedFragment = new ActivityFeedFragment();
         return activityFeedFragment;
     }
@@ -476,8 +454,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Get a new region fragment
      * @return A new region fragment
      */
-    private RegionFragment getRegionFragment()
-    {
+    private RegionFragment getRegionFragment() {
         RegionFragment regionFragment = new RegionFragment();
         regionFragment.setRegionName(mNation.region);
         regionFragment.setRMBUnreadCountText(rmbCountView.getText().toString());
@@ -489,8 +466,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Get a new WA fragment
      * @return A new WA fragment
      */
-    private AssemblyMainFragment getWaFragment()
-    {
+    private AssemblyMainFragment getWaFragment() {
         AssemblyMainFragment waFragment = new AssemblyMainFragment();
         WaVoteStatus voteStatus = new WaVoteStatus();
         voteStatus.waState = mNation.waState;
@@ -512,12 +488,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Determine if a nav key is part of the unselectable IDs
      */
-    private boolean isNoSelect(int key)
-    {
-        for (int i=0; i<noSelect.length; i++)
-        {
-            if (noSelect[i] == key)
-            {
+    private boolean isNoSelect(int key) {
+        for (int i=0; i<noSelect.length; i++) {
+            if (noSelect[i] == key) {
                 return true;
             }
         }
@@ -527,8 +500,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Start exploration dialog
      */
-    private void explore()
-    {
+    private void explore() {
         FragmentManager fm = getSupportFragmentManager();
         ExploreDialog exploreDialog = new ExploreDialog();
         exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
@@ -537,13 +509,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Start switch nation dialog.
      */
-    private void switchNation()
-    {
+    private void switchNation() {
         List<UserLogin> logins = UserLogin.listAll(UserLogin.class);
         // If no other nations besides current one, show warning dialog
         // with link to login activity
-        if (logins.size() <= 1)
-        {
+        if (logins.size() <= 1) {
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -559,8 +529,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     .setNegativeButton(getString(R.string.explore_negative), null).show();
         }
         // If other nations exist, show switch dialog
-        else
-        {
+        else {
             FragmentManager fm = getSupportFragmentManager();
             SwitchNationDialog switchDialog = new SwitchNationDialog();
             switchDialog.setLogins(new ArrayList<UserLogin>(logins));
@@ -571,8 +540,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Start settings activity.
      */
-    private void startSettings()
-    {
+    private void startSettings() {
         Intent settingsActivityLaunch = new Intent(StatelyActivity.this, SettingsActivity.class);
         startActivity(settingsActivityLaunch);
     }
@@ -580,8 +548,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     /**
      * Start logout process
      */
-    private void logout()
-    {
+    private void logout() {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -678,8 +645,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * @param name Target nation name
      * @param firstLaunch Indicates if activity is being launched for the first time
      */
-    private void updateNation(String name, final boolean firstLaunch)
-    {
+    private void updateNation(String name, final boolean firstLaunch) {
         final View fView = findViewById(R.id.drawer_layout);
         String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(name));
 
@@ -695,12 +661,9 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                             mNation = nationResponse;
                             PinkaHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
 
-                            if (firstLaunch)
-                            {
+                            if (firstLaunch) {
                                 initNavigationView(navInit);
-                            }
-                            else
-                            {
+                            } else {
                                 initNavBanner();
                                 if (mNation.unread != null) {
                                     processUnreadCounts(mNation.unread);
@@ -718,16 +681,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 SparkleHelper.logError(error.toString());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
         }
     }

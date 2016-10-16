@@ -132,8 +132,11 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private ImageView headerBackground;
         private ImageView flag;
         private PulsatorLayout pulsator;
+
         private TextView action;
         private LinearLayout superweaponContent;
+
+        private View divider;
         private LinearLayout button;
         private TextView buttonText;
         private LinearLayout exploreButton;
@@ -147,6 +150,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             action = (TextView) itemView.findViewById(R.id.card_zombie_action_content);
             superweaponContent = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_superweapon_holder);
 
+            divider = itemView.findViewById(R.id.view_divider);
             button = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_button);
             buttonText = (TextView) itemView.findViewById(R.id.card_zombie_action_button_text);
             exploreButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
@@ -186,25 +190,34 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             // @TODO: Add superweapon descriptions depending on what's available
             superweaponContent.removeAllViews();
-            String superweaponDesc = context.getString(R.string.zombie_superweapon_desc) + context.getString(R.string.zombie_superweapon_none);
-            inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), superweaponDesc);
+            inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), context.getString(R.string.zombie_superweapon_desc));
+
+            boolean isActionButtonVisible = true;
+            boolean isExploreButtonVisible = false;
 
             // Setup button
-            if (data.zombieData.action == null) {
-                buttonText.setText(context.getString(R.string.zombie_button_noaction));
-            } else {
-                buttonText.setText(context.getString(R.string.zombie_button_change));
-            }
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // @TODO Callback
+            // Only show if there are still survivors or zombies
+            if (data.zombieData.survivors > 0 || data.zombieData.zombies > 0) {
+                button.setVisibility(View.VISIBLE);
+                if (data.zombieData.action == null) {
+                    buttonText.setText(context.getString(R.string.zombie_button_noaction));
+                } else {
+                    buttonText.setText(context.getString(R.string.zombie_button_change));
                 }
-            });
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        activity.showDecisionDialog();
+                    }
+                });
+            } else {
+                button.setVisibility(View.GONE);
+                button.setOnClickListener(null);
+                isActionButtonVisible = false;
+            }
 
             // @TODO: Setup explore button if cure is available
 
-            //
             /**
              exploreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,6 +226,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                     exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
                 }
             });**/
+
+            divider.setVisibility((isActionButtonVisible || isExploreButtonVisible) ? View.VISIBLE : View.GONE);
         }
 
         /**

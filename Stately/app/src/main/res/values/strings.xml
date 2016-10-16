@@ -445,9 +445,8 @@
     <string name="zombie_join">%1$s has joined the zombie horde.</string>
     <string name="zombie_join_done">%1$s is on the lookout for braains&#8230;? BRAAAAINS!!!</string>
     <string name="zombie_quiet">For %1$s, all is quiet on the front.</string>
-    <string name="zombie_superweapon">Superweapons</string>
+    <string name="zombie_superweapon">About Superweapons</string>
     <string name="zombie_superweapon_desc">Superweapons may be deployed against other nations in your region. Superweapons have a 20 second cooldown. Being hit by another nation\'s superweapon triggers a 3 minute cooldown.</string>
-    <string name="zombie_superweapon_none">\n\nNo superweapons are available at your disposal.</string>
     <string name="zombie_superweapon_tze_title">Tactical Zombie Elimination Squad (TZES)</string>
     <string name="zombie_superweapon_tze_content">Deploying TZESs to other nations will exterminate their undead, rendering them actually dead.</string>
     <string name="zombie_superweapon_cure_title">Cure Missile</string>
@@ -458,6 +457,13 @@
     <string name="zombie_button_change">Change course</string>
     <string name="zombie_button_weapon">Explore and deploy superweapon</string>
     <string name="zombie_button_missile">Deploy superweapon</string>
+    <string name="zombie_action_military">Exterminate zombies</string>
+    <string name="zombie_action_cure">Develop a cure</string>
+    <string name="zombie_action_horde">Join the horde</string>
+    <string name="zombie_action_do_button">Make It So</string>
+    <string name="zombie_action_military_done">Military ordered to exterminate zombie infestation.</string>
+    <string name="zombie_action_cure_done">Research started on developing a cure.</string>
+    <string name="zombie_action_join_done">BRAAAAINS!!!</string>
     <string name="zombie_report_title">Zombie Report</string>
     <string name="zombie_report_template">Zombie Report: %1$s</string>
     <string name="zombie_chart_null">No data has been collected yet.</string>

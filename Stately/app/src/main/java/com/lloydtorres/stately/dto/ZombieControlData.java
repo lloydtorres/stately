@@ -37,6 +37,7 @@ public class ZombieControlData implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
                                         + "name+flag+zombie+happenings"
                                         + "&v=" + SparkleHelper.API_VERSION;
+    public static final String ZOMBIE_CONTROL = SparkleHelper.BASE_URI_NOSLASH + "/page=zombie_control";
 
     @Element(name="NAME")
     public String name;

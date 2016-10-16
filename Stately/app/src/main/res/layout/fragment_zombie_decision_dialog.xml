@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/zombie_decision_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:checkedButton="@+id/census_sort_score"
+        android:padding="20dp">
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/zombie_action_military"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/zombie_action_military"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/zombie_action_cure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/zombie_action_cure"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/zombie_action_horde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="@string/zombie_action_horde"
+            android:textSize="15sp"
+            app:buttonTint="?attr/themedColorTab"/>
+    </RadioGroup>
+</android.support.v4.widget.NestedScrollView>
