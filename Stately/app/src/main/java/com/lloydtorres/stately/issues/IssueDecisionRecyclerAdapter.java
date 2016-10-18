@@ -113,7 +113,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         }
         else if (cards.get(position) instanceof IssueOption) {
             IssueOption option = (IssueOption) cards.get(position);
-            if (option.index == -1) {
+            if (option.id == IssueOption.DISMISS_ISSUE_ID) {
                 return DISMISS_CARD;
             }
             return OPTION_CARD;
@@ -200,19 +200,17 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                     break;
             }
             divider.setVisibility(View.VISIBLE);
-
-            content.setText(SparkleHelper.getHtmlFormatting(option.content).toString());
             selectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((IssueDecisionActivity) context).setAdoptPosition(option);
                 }
             });
-            if (pirateMode) {
-                selectContent.setText(context.getString(R.string.issue_select_option_pirate));
-            }
 
-            if (mode == DISMISS_CARD) {
+            if (mode != DISMISS_CARD) {
+                content.setText(SparkleHelper.getHtmlFormatting(option.content).toString());
+                selectContent.setText(context.getString(pirateMode ? R.string.issue_select_option_pirate : R.string.issue_select_option));
+            } else {
                 // Forces card to span across columns
                 RaraHelper.setViewHolderFullSpan(itemView);
 

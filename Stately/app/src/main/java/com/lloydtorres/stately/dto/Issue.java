@@ -19,7 +19,10 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +31,24 @@ import java.util.List;
  * Created by Lloyd on 2016-01-28.
  * An object containing all information about one issue encountered in NationStates.
  */
+@Root(name="ISSUE", strict=false)
 public class Issue implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=dilemmas/template-overall=none";
-
+    @Attribute(required=false)
     public int id;
-    public String chain;
+    @Element(name="TITLE", required=false)
     public String title;
+    public String chain;
+    @Element(name="TEXT", required=false)
     public String content;
+    @ElementList(name="OPTION", required=false, inline=true)
     public List<IssueOption> options;
 
     public Issue() { super(); }
 
     protected Issue(Parcel in) {
         id = in.readInt();
-        chain = in.readString();
         title = in.readString();
+        chain = in.readString();
         content = in.readString();
         if (in.readByte() == 0x01) {
             options = new ArrayList<IssueOption>();
@@ -60,8 +66,8 @@ public class Issue implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(chain);
         dest.writeString(title);
+        dest.writeString(chain);
         dest.writeString(content);
         if (options == null) {
             dest.writeByte((byte) (0x00));
