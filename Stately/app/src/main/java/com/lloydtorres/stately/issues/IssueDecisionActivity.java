@@ -207,6 +207,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
                         if (option.id != IssueOption.DISMISS_ISSUE_ID) {
                             if (response.contains(LEGISLATION_PASSED)) {
                                 Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
