@@ -61,6 +61,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'org.sufficientlysecure:html-textview:2.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.1'
-    compile "org.kefirsf:kefirbb:1.4"
+    compile "org.kefirsf:kefirbb:1.5"
     compile 'com.r0adkll:slidableactivity:2.0.5'
 }
