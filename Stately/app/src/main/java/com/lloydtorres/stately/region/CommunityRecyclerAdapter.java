@@ -34,9 +34,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.EmbassyHolder;
@@ -280,32 +280,29 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             options.removeAllViews();
             int voteTotal = 0;
-            List<String> chartLabels = new ArrayList<String>();
             for (int i=0; i<results.size(); i++) {
-                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
                 voteTotal += results.get(i).votes;
-                chartLabels.add(String.format(Locale.US, context.getString(R.string.region_option_index), i+1));
             }
 
             if (voteTotal > 0) {
                 breakdown.setVisibility(View.VISIBLE);
                 nullVote.setVisibility(View.GONE);
 
-                List<Entry> chartEntries = new ArrayList<Entry>();
+                List<PieEntry> chartEntries = new ArrayList<PieEntry>();
                 for (int i=0; i<results.size(); i++) {
-                    chartEntries.add(new Entry((results.get(i).votes * 100f)/voteTotal, i));
+                    inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
+                    chartEntries.add(new PieEntry((results.get(i).votes * 100f)/voteTotal, String.format(Locale.US, context.getString(R.string.region_option_index), i+1)));
                 }
 
                 PieDataSet dataSet = new PieDataSet(chartEntries, "");
                 dataSet.setDrawValues(false);
                 dataSet.setColors(RaraHelper.chartColours, context);
-                PieData dataFull = new PieData(chartLabels, dataSet);
+                PieData dataFull = new PieData(dataSet);
 
-                breakdown = RaraHelper.getFormattedPieChart(context, breakdown, chartLabels);
+                breakdown = RaraHelper.getFormattedPieChart(context, breakdown);
                 breakdown.setData(dataFull);
                 breakdown.invalidate();
-            }
-            else {
+            } else {
                 breakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
