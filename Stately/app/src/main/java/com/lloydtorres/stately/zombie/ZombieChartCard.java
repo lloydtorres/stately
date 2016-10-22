@@ -25,9 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -169,29 +169,32 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
             nullData.setVisibility(View.GONE);
             chart.setVisibility(View.VISIBLE);
 
-            List<String> chartLabels = new ArrayList<String>();
-            List<Entry> chartEntries = new ArrayList<Entry>();
+            List<PieEntry> chartEntries = new ArrayList<PieEntry>();
 
             // Set data
-            int i = 0;
-            chartLabels.add(c.getString(R.string.zombie_survivors));
-            float popSurvivors = (zombieData.survivors * 100f)/popTotal;
-            chartEntries.add(new Entry(popSurvivors, i++));
-            chartLabels.add(c.getString(R.string.zombie_infected));
-            float popZombies = (zombieData.zombies * 100f)/popTotal;
-            chartEntries.add(new Entry(popZombies, i++));
-            chartLabels.add(c.getString(R.string.zombie_dead));
-            float popDead = (zombieData.dead * 100f)/popTotal;
-            chartEntries.add(new Entry(popDead, i++));
+            if (zombieData.survivors > 0) {
+                float popSurvivors = (zombieData.survivors * 100f)/popTotal;
+                chartEntries.add(new PieEntry(popSurvivors, c.getString(R.string.zombie_survivors)));
+            }
+
+            if (zombieData.zombies > 0) {
+                float popZombies = (zombieData.zombies * 100f)/popTotal;
+                chartEntries.add(new PieEntry(popZombies, c.getString(R.string.zombie_infected)));
+            }
+
+            if (zombieData.dead > 0) {
+                float popDead = (zombieData.dead * 100f)/popTotal;
+                chartEntries.add(new PieEntry(popDead, c.getString(R.string.zombie_dead)));
+            }
 
             // Set colour and disable chart labels
             PieDataSet dataSet = new PieDataSet(chartEntries, "");
             dataSet.setDrawValues(false);
             dataSet.setColors(zombieChartColours, c);
-            PieData dataFull = new PieData(chartLabels, dataSet);
+            PieData dataFull = new PieData(dataSet);
 
             // formatting
-            chart = RaraHelper.getFormattedPieChart(c, chart, chartLabels);
+            chart = RaraHelper.getFormattedPieChart(c, chart);
             chart.setData(dataFull);
             chart.invalidate();
         } else {
