@@ -47,6 +47,8 @@ import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.WaVote;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
+import com.lloydtorres.stately.helpers.IChartRecyclerViewHolder;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
@@ -65,7 +67,7 @@ import java.util.Locale;
  * Created by Lloyd on 2016-01-24.
  * This is the RecyclerView adapter for the Region community subfragment.
  */
-public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CommunityRecyclerAdapter extends ChartRecyclerViewAdapter {
     // constants for the different types of cards
     public static final int BUTTON_CARD = 0;
     public static final int POLL_CARD = 1;
@@ -228,7 +230,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     // Card for the region poll
-    public class PollCard extends RecyclerView.ViewHolder {
+    public class PollCard extends RecyclerView.ViewHolder implements IChartRecyclerViewHolder {
 
         private Context context;
         private TextView question;
@@ -354,10 +356,15 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
             optionLayout.addView(optionView);
         }
+
+        @Override
+        public void recycle() {
+            breakdown = (PieChart) RaraHelper.clearAndInvalidateChart(breakdown);
+        }
     }
 
     // Card for the WA poll
-    public class RegionWaCard extends RecyclerView.ViewHolder {
+    public class RegionWaCard extends RecyclerView.ViewHolder implements IChartRecyclerViewHolder {
 
         private Context context;
         private TextView title;
@@ -408,6 +415,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 chart.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
             }
+        }
+
+        @Override
+        public void recycle() {
+            chart = (PieChart) RaraHelper.clearAndInvalidateChart(chart);
         }
     }
 
