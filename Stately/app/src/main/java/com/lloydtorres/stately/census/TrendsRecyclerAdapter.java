@@ -38,8 +38,6 @@ import com.lloydtorres.stately.dto.CensusHistoryScale;
 import com.lloydtorres.stately.dto.CensusNationRank;
 import com.lloydtorres.stately.dto.CensusNationRankList;
 import com.lloydtorres.stately.explore.ExploreActivity;
-import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
-import com.lloydtorres.stately.helpers.IChartRecyclerViewHolder;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -51,7 +49,7 @@ import java.util.Locale;
  * Created by Lloyd on 2016-09-08.
  * Recycler adapter for TrendsActivity: contains census title/scale, graph and rankings.
  */
-public class TrendsRecyclerAdapter extends ChartRecyclerViewAdapter {
+public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for the different types of items
     private static final int TITLE_CARD = 0;
     private static final int GRAPH_CARD = 1;
@@ -193,7 +191,7 @@ public class TrendsRecyclerAdapter extends ChartRecyclerViewAdapter {
     }
 
     // Graph card
-    private class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener, IChartRecyclerViewHolder {
+    private class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
         private CensusHistoryScale dataset;
         private TextView date;
         private TextView value;
@@ -301,11 +299,6 @@ public class TrendsRecyclerAdapter extends ChartRecyclerViewAdapter {
         @Override
         public void onNothingSelected() {
             resetDataSelected();
-        }
-
-        @Override
-        public void recycle() {
-            chart = (LineChart) RaraHelper.clearAndInvalidateChart(chart);
         }
     }
 

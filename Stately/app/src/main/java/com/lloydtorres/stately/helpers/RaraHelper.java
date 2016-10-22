@@ -52,7 +52,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -436,24 +435,6 @@ public final class RaraHelper {
         chart.setDrawGridBackground(false);
         chart.setOnChartValueSelectedListener(listener);
 
-        return chart;
-    }
-
-    /**
-     * Clears, invalidates and nulls out the chart provided to it. Used for cleanup.
-     * @param chart The chart to clean up.
-     * @return
-     */
-    public static Chart clearAndInvalidateChart(Chart chart) {
-        if (chart != null) {
-            chart.clearAllViewportJobs();
-            chart.clearValues();
-            chart.clearAnimation();
-            chart.clearFocus();
-            chart.clear();
-            chart.invalidate();
-            chart = null;
-        }
         return chart;
     }
 
