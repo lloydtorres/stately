@@ -31,7 +31,6 @@ import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
-import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
 
@@ -45,7 +44,7 @@ import java.util.Locale;
  * Created by Lloyd on 2016-09-14.
  * Recycler adapter for Region > Overview section.
  */
-public class RegionOverviewRecyclerAdapter extends ChartRecyclerViewAdapter {
+public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // consts for card types
     private static final int REGION_QUICK_FACTS = 0;
     private static final int REGION_FACTBOOK = 1;

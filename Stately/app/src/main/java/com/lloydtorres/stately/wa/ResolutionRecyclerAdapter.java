@@ -41,8 +41,6 @@ import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
-import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
-import com.lloydtorres.stately.helpers.IChartRecyclerViewHolder;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -60,7 +58,7 @@ import java.util.Locale;
  * RecyclerView adapter for the ResolutionActivity. Shows a given WA resolution as cards.
  */
 
-public class ResolutionRecyclerAdapter extends ChartRecyclerViewAdapter {
+public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // Types of cards
     public static final int CARD_HEADER = 0;
     public static final int CARD_CONTENT = 1;
@@ -346,7 +344,7 @@ public class ResolutionRecyclerAdapter extends ChartRecyclerViewAdapter {
         }
     }
 
-    public class ResolutionBreakdownCard extends ResolutionCard implements IChartRecyclerViewHolder {
+    public class ResolutionBreakdownCard extends ResolutionCard {
         private PieChart votingBreakdown;
         private TextView nullVote;
 
@@ -362,14 +360,9 @@ public class ResolutionRecyclerAdapter extends ChartRecyclerViewAdapter {
                 nullVote.setVisibility(View.VISIBLE);
             }
         }
-
-        @Override
-        public void recycle() {
-            votingBreakdown = (PieChart) RaraHelper.clearAndInvalidateChart(votingBreakdown);
-        }
     }
 
-    public class ResolutionHistoryCard extends ResolutionCard implements OnChartValueSelectedListener, IChartRecyclerViewHolder {
+    public class ResolutionHistoryCard extends ResolutionCard implements OnChartValueSelectedListener {
         private List<Integer> votesFor;
         private List<Integer> votesAgainst;
 
@@ -472,11 +465,6 @@ public class ResolutionRecyclerAdapter extends ChartRecyclerViewAdapter {
         public void onNothingSelected() {
             voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(votesFor.get(votesFor.size()-1)));
             voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(votesAgainst.get(votesAgainst.size()-1)));
-        }
-
-        @Override
-        public void recycle() {
-            votingHistory = (LineChart) RaraHelper.clearAndInvalidateChart(votingHistory);
         }
     }
 }

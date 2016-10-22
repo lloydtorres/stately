@@ -32,7 +32,6 @@ import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
-import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
@@ -41,7 +40,7 @@ import pl.bclogic.pulsator4droid.library.PulsatorLayout;
  * Created by Lloyd on 2016-10-15.
  * RecyclerView adapter for zombie control.
  */
-public class ZombieControlRecyclerAdapter extends ChartRecyclerViewAdapter {
+public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // constants for different cards
     public static final int CARD_ACTION = 0;
     public static final int CARD_CHART_NATION = 1;

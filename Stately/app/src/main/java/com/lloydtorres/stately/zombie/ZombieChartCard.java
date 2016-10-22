@@ -31,7 +31,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
-import com.lloydtorres.stately.helpers.IChartRecyclerViewHolder;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 
@@ -45,7 +44,7 @@ import java.util.Locale;
  * buttons if enabled.
  */
 
-public class ZombieChartCard extends RecyclerView.ViewHolder implements IChartRecyclerViewHolder {
+public class ZombieChartCard extends RecyclerView.ViewHolder {
     // Different card modes, changes visibility of buttons
     public static final int MODE_NATION_ZCONTROL = 0;
     public static final int MODE_NATION_DEFAULT = 1;
@@ -202,10 +201,5 @@ public class ZombieChartCard extends RecyclerView.ViewHolder implements IChartRe
             nullData.setVisibility(View.VISIBLE);
             chart.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void recycle() {
-        chart = (PieChart) RaraHelper.clearAndInvalidateChart(chart);
     }
 }
