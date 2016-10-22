@@ -157,7 +157,6 @@
     <!-- Nation people subfragment -->
     <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
     <string name="card_people_mortality_title">Mortality</string>
-    <string name="animal_attack_original">Animal Attack</string>
     <string name="animal_attack_madlibs">%1$s Attack</string>
 
     <!-- Nation government subfragment -->

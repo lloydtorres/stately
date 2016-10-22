@@ -20,11 +20,11 @@ import android.content.Context;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -36,28 +36,23 @@ import java.util.Locale;
 public class PieChartListener implements OnChartValueSelectedListener {
     private Context mContext;
     private PieChart pieChart;
-    private List<String> chartLabels;
 
-    public PieChartListener(Context c, PieChart p, List<String> l)
-    {
+    public PieChartListener(Context c, PieChart p) {
         mContext = c;
         pieChart = p;
-        chartLabels = l;
     }
 
     @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        // Show item label and percentage on click.
-        if (pieChart != null)
-        {
-            pieChart.setCenterText(String.format(Locale.US, mContext.getString(R.string.chart_inner_text), chartLabels.get(e.getXIndex()), e.getVal()));
+    public void onValueSelected(Entry e, Highlight h) {
+        if (pieChart != null) {
+            PieEntry entry = (PieEntry) e;
+            pieChart.setCenterText(String.format(Locale.US, mContext.getString(R.string.chart_inner_text), entry.getLabel(), entry.getValue()));
         }
     }
 
     @Override
     public void onNothingSelected() {
-        if (pieChart != null)
-        {
+        if (pieChart != null) {
             pieChart.setCenterText("");
         }
     }
