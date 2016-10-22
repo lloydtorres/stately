@@ -52,7 +52,7 @@
                 android:layout_marginTop="20dp"
                 android:id="@+id/card_zombie_chart"
                 android:layout_width="match_parent"
-                android:layout_height="300dp" />
+                android:layout_height="350dp" />
         </LinearLayout>
         <include layout="@layout/view_divider" />
         <LinearLayout
