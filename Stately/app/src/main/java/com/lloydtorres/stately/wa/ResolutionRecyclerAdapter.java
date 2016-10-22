@@ -33,7 +33,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Resolution;
@@ -360,7 +362,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public class ResolutionHistoryCard extends ResolutionCard {
+    public class ResolutionHistoryCard extends ResolutionCard implements OnChartValueSelectedListener {
+        private List<Integer> votesFor;
+        private List<Integer> votesAgainst;
+
         private LineChart votingHistory;
         private TextView voteHistoryFor;
         private TextView voteHistoryAgainst;
@@ -386,10 +391,13 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         /**
          * Initialize the line graph to show voting history
-         * @param votesFor
-         * @param votesAgainst
+         * @param vF
+         * @param vA
          */
-        private void setVotingHistory(List<Integer> votesFor, List<Integer> votesAgainst) {
+        private void setVotingHistory(List<Integer> vF, List<Integer> vA) {
+            votesFor = vF;
+            votesAgainst = vA;
+
             final float lineWidth = 2.5f;
 
             List<Entry> entryFor = new ArrayList<Entry>();
@@ -397,8 +405,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             // Build data
             for (int i=0; i < votesFor.size(); i++) {
-                entryFor.add(new Entry(votesFor.get(i), i));
-                entryAgainst.add(new Entry(votesAgainst.get(i), i));
+                entryFor.add(new Entry(i, votesFor.get(i)));
+                entryAgainst.add(new Entry(i, votesAgainst.get(i)));
             }
 
             // lots of formatting for the FOR and AGAINST lines
@@ -429,25 +437,34 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             dataSets.add(setFor);
             dataSets.add(setAgainst);
 
+            LineData data = new LineData(dataSets);
             List<String> xLabels = new ArrayList<String>();
             for (int i=0; i < votesFor.size(); i++) {
                 // Only add labels for each day
                 if (i%24 == 0) {
                     xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_d), (i/24)+1));
-                }
-                else {
+                } else {
                     xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_h), i));
                 }
             }
-            LineData data = new LineData(xLabels, dataSets);
 
             // formatting
-            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory,
-                    new VotingHistoryChartListener(voteHistoryFor, voteHistoryAgainst, votesFor, votesAgainst),
-                    true, 23, false);
+            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory, this, xLabels, true, 24, false);
 
             votingHistory.setData(data);
             votingHistory.invalidate();
+        }
+
+        @Override
+        public void onValueSelected(Entry e, Highlight h) {
+            voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(votesFor.get((int) e.getX())));
+            voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(votesAgainst.get((int) e.getX())));
+        }
+
+        @Override
+        public void onNothingSelected() {
+            voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(votesFor.get(votesFor.size()-1)));
+            voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(votesAgainst.get(votesAgainst.size()-1)));
         }
     }
 }

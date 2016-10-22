@@ -241,7 +241,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             final float lineWidth = 2.5f;
             List<Entry> historyEntries = new ArrayList<Entry>();
             for (int i=0; i < datapoints.size(); i++) {
-                historyEntries.add(new Entry(datapoints.get(i).score, i));
+                historyEntries.add(new Entry(i, datapoints.get(i).score));
             }
 
             // Formatting
@@ -259,15 +259,15 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // Match data with x-axis labels
             List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(lineHistoryData);
+            LineData dataFinal = new LineData(dataSets);
             List<String> xLabels = new ArrayList<String>();
             for (int i=0; i < datapoints.size(); i++) {
                 xLabels.add(String.format(Locale.US, SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
             }
-            LineData dataFinal = new LineData(xLabels, dataSets);
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = RaraHelper.getFormattedLineChart(context, chart, this, isLargeValue, 6, false);
+            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 7, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }
@@ -291,8 +291,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         @Override
-        public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-            CensusHistoryPoint selectedPoint = dataset.points.get(e.getXIndex());
+        public void onValueSelected(Entry e, Highlight h) {
+            CensusHistoryPoint selectedPoint = dataset.points.get((int) e.getX());
             setDataSelected(selectedPoint);
         }
 

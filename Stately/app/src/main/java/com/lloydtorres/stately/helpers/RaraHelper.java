@@ -54,12 +54,13 @@ import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
@@ -76,6 +77,14 @@ import java.util.List;
  */
 
 public final class RaraHelper {
+
+    // Empty chart description
+    public static final Description EMPTY_CHART_DESCRIPTION = new Description();
+
+    static {
+        EMPTY_CHART_DESCRIPTION.setText("");
+    }
+
     // Private constructor
     private RaraHelper() {}
 
@@ -303,18 +312,20 @@ public final class RaraHelper {
      * Formats a pie chart in a standardized way
      * @param c Context
      * @param p Pie chart
-     * @param chartLabels x-labels
      * @return the PieChart, whose data must be set and invalidated
      */
-    public static PieChart getFormattedPieChart(Context c, PieChart p, List<String> chartLabels) {
+    public static PieChart getFormattedPieChart(Context c, PieChart p) {
         Legend cLegend = p.getLegend();
-        cLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        cLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        cLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        cLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        cLegend.setDrawInside(false);
         cLegend.setForm(Legend.LegendForm.CIRCLE);
         cLegend.setTextSize(15);
         cLegend.setWordWrapEnabled(true);
 
-        p.setDrawSliceText(false);
-        p.setDescription("");
+        p.setDrawEntryLabels(false);
+        p.setDescription(EMPTY_CHART_DESCRIPTION);
         p.setHoleRadius(60f);
         p.setTransparentCircleRadius(65f);
         p.setCenterTextSize(20);
@@ -331,7 +342,7 @@ public final class RaraHelper {
 
         p.setRotationEnabled(false);
 
-        p.setOnChartValueSelectedListener(new PieChartListener(c, p, chartLabels));
+        p.setOnChartValueSelectedListener(new PieChartListener(c, p));
         return p;
     }
 
@@ -360,24 +371,20 @@ public final class RaraHelper {
             float votePercentFor = (voteFor * 100f)/voteTotal;
             float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
 
-            List<String> chartLabels = new ArrayList<String>();
-            List<Entry> chartEntries = new ArrayList<Entry>();
+            List<PieEntry> chartEntries = new ArrayList<PieEntry>();
 
             // Set data
-            int i = 0;
-            chartLabels.add(c.getString(R.string.wa_for));
-            chartEntries.add(new Entry(votePercentFor, i++));
-            chartLabels.add(c.getString(R.string.wa_against));
-            chartEntries.add(new Entry(votePercentAgainst, i++));
+            chartEntries.add(new PieEntry(votePercentFor, c.getString(R.string.wa_for)));
+            chartEntries.add(new PieEntry(votePercentAgainst, c.getString(R.string.wa_against)));
 
             // Set colour and disable chart labels
             PieDataSet dataSet = new PieDataSet(chartEntries, "");
             dataSet.setDrawValues(false);
             dataSet.setColors(waColours, c);
-            PieData dataFull = new PieData(chartLabels, dataSet);
+            PieData dataFull = new PieData(dataSet);
 
             // formatting
-            p = getFormattedPieChart(c, p, chartLabels);
+            p = getFormattedPieChart(c, p);
             p.setData(dataFull);
             p.invalidate();
 
@@ -388,20 +395,23 @@ public final class RaraHelper {
 
     /**
      * Formats a line chart in a standardized manner
+     * @param c App context
      * @param chart LineChart to format
      * @param listener Listener to attach to chart
+     * @param xLabels Labels to use for the x-axis
      * @param valueFormatter True if large value formatter should be used
      * @param skip Number of values to skip
      * @param legend True if show legend, false if hide legend
      * @return Formatted linechart
      */
-    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, boolean valueFormatter, int skip, boolean legend) {
+    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, List<String> xLabels, boolean valueFormatter, int skip, boolean legend) {
         Legend cLegend = chart.getLegend();
         cLegend.setEnabled(legend);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setLabelsToSkip(skip);
+        xAxis.setGranularity(skip);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new XAxisLabelFormatter(xLabels));
 
         YAxis yAxisRight = chart.getAxisRight();
         yAxisRight.setEnabled(false);
@@ -419,7 +429,7 @@ public final class RaraHelper {
         }
 
         chart.setDoubleTapToZoomEnabled(false);
-        chart.setDescription("");
+        chart.setDescription(EMPTY_CHART_DESCRIPTION);
         chart.setDragEnabled(true);
         chart.setScaleYEnabled(false);
         chart.setDrawGridBackground(false);
