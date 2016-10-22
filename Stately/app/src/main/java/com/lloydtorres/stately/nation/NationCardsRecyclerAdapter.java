@@ -49,6 +49,8 @@ import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.ChartRecyclerViewAdapter;
+import com.lloydtorres.stately.helpers.IChartRecyclerViewHolder;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -66,7 +68,7 @@ import java.util.Locale;
  * Created by Lloyd on 2016-07-24.
  * A RecyclerView adapter for the four main nation tabs.
  */
-public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NationCardsRecyclerAdapter extends ChartRecyclerViewAdapter {
     // different types of cards
     public static final int CARD_OVERVIEW = 0;
     public static final int CARD_FREEDOMS = 1;
@@ -471,7 +473,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public static final String ANIMAL_ATTACK = "Animal Attack";
 
-    public class NationChartCard extends RecyclerView.ViewHolder {
+    public class NationChartCard extends RecyclerView.ViewHolder implements IChartRecyclerViewHolder {
 
         private TextView title;
         private LinearLayout details;
@@ -615,6 +617,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             chart = RaraHelper.getFormattedPieChart(context, chart);
             chart.setData(dataFull);
             chart.invalidate();
+        }
+
+        @Override
+        public void recycle() {
+            chart = (PieChart) RaraHelper.clearAndInvalidateChart(chart);
         }
     }
 }
