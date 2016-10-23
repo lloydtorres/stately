@@ -578,7 +578,7 @@ public class MessageBoardActivity extends SlidrActivity {
             quoteMessage = String.format(Locale.US, getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
             newMessage = quoteMessage + newMessage;
         }
-        params.put("message", Html.escapeHtml(newMessage));
+        params.put("message", SparkleHelper.escapeHtml(newMessage));
         params.put("lodge_message", "1");
         stringRequest.setParams(params);
 

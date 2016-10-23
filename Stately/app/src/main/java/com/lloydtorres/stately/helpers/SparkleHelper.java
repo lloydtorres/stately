@@ -735,6 +735,17 @@ public final class SparkleHelper {
         }
     }
 
+    /**
+     * Properly escapes HTML to be POSTed to NS servers.
+     * @param src Original string.
+     * @return Escaped string.
+     */
+    public static String escapeHtml(String src) {
+        src = Html.escapeHtml(src);
+        src = src.replace("&#10;", "\n");
+        return src;
+    }
+
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
     public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+\" rel=\"nofollow\">");
