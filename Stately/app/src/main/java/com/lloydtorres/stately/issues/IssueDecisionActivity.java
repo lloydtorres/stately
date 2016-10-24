@@ -172,7 +172,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index + 1))
+                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index))
                             .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
                     break;
             }
