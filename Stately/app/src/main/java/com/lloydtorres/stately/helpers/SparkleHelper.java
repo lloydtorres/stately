@@ -404,17 +404,18 @@ public final class SparkleHelper {
      */
     public static String getCurrencyPlural(String currency) {
         Matcher m = CURRENCY_PLURALIZE.matcher(currency);
-        m.matches();
-        String pluralize = m.group(1);
-        String suffix = m.group(2);
-        pluralize = English.plural(pluralize);
+        if (m.matches()) {
+            String pluralize = m.group(1);
+            String suffix = m.group(2);
+            pluralize = English.plural(pluralize);
 
-        if (suffix != null) {
-            return pluralize + suffix;
+            if (suffix != null) {
+                return pluralize + suffix;
+            } else {
+                return pluralize;
+            }
         }
-        else {
-            return pluralize;
-        }
+        return English.plural(currency);
     }
 
     /**
