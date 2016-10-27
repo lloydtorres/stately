@@ -21,6 +21,7 @@ import android.os.Parcelable;
 
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -33,12 +34,14 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class IssueFullHolder implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues+nextissuetime"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
 
     @ElementList(name="ISSUES", required=false)
     public List<Issue> issues;
+    @Element(name="NEXTISSUETIME", required=false)
+    public long nextIssueTime;
 
     public IssueFullHolder() { super(); }
 
@@ -49,6 +52,7 @@ public class IssueFullHolder implements Parcelable {
         } else {
             issues = null;
         }
+        nextIssueTime = in.readLong();
     }
 
     @Override
@@ -64,6 +68,7 @@ public class IssueFullHolder implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(issues);
         }
+        dest.writeLong(nextIssueTime);
     }
 
     @SuppressWarnings("unused")

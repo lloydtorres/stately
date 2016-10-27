@@ -51,7 +51,6 @@ import java.util.regex.Pattern;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends RefreshviewFragment {
-    private static final Pattern NEXT_ISSUE_REGEX = Pattern.compile("\\$\\('#nextdilemmacountdown'\\)\\.countdown\\(\\{timestamp:new Date\\(([0-9]*?)\\)\\}\\);");
     private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+)\\] (.+)$");
 
     private List<Object> issues;
@@ -181,24 +180,15 @@ public class IssuesFragment extends RefreshviewFragment {
             }
         }
 
-        /* @TODO: Add time to next issue when [v] makes it available. Or just query it?
-        if (issuesRaw.size() <= 0) {
-            String nextUpdate = getString(R.string.no_issues);
-
-            Matcher m = NEXT_ISSUE_REGEX.matcher(d.html());
-            if (m.find()) {
-                long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
-                nextUpdate = String.format(Locale.US, getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
-            }
-
-            issues.add(nextUpdate);
-        }*/
+        long currentTime = System.currentTimeMillis() / 1000L;
+        if (currentTime < holder.nextIssueTime) {
+            issues.add(holder.nextIssueTime);
+        }
 
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
             mRecyclerView.setAdapter(mRecyclerAdapter);
-        }
-        else {
+        } else {
             ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues);
         }
         mSwipeRefreshLayout.setRefreshing(false);
