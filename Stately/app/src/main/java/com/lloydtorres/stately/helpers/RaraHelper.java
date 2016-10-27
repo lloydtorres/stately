@@ -65,6 +65,7 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -484,7 +485,11 @@ public final class RaraHelper {
      * Determines if the current day in the EST/EDT timezone is a special day.
      * @return The special day mode
      */
-    public static int getSpecialDayStatus() {
+    public static int getSpecialDayStatus(Context c) {
+        if (NightmareHelper.getIsZDayActive(c)) {
+            return DAY_HALLOWEEN;
+        }
+
         Calendar cal = new GregorianCalendar();
         cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
 

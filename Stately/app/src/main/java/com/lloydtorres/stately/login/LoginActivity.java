@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
 
-        if (RaraHelper.getSpecialDayStatus() == RaraHelper.DAY_NORMAL) {
+        if (RaraHelper.getSpecialDayStatus(this) == RaraHelper.DAY_NORMAL) {
             switch (SettingsActivity.getGovernmentSetting(this)) {
                 case SettingsActivity.GOV_CONSERVATIVE:
                     subtitle.setText(getString(R.string.login_subtitle_conservative));
@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            switch (RaraHelper.getSpecialDayStatus()) {
+            switch (RaraHelper.getSpecialDayStatus(this)) {
                 case RaraHelper.DAY_STATELY_BIRTHDAY:
                     subtitle.setText(getString(R.string.login_subtitle_stately_bday));
                     break;
