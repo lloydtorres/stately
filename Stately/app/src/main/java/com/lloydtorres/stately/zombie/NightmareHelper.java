@@ -67,6 +67,8 @@ public final class NightmareHelper {
     // Empty constructor
     private NightmareHelper() {}
 
+    public static final String ZDAY_REFERENCE = "https://embed.nationstates.net/page=world";
+    public static final String ZDAY_REFERENCE_DIV = "div#zchart-container";
     public static final String USERSESSION_IS_ZDAY = "var_is_zday";
 
     /**
@@ -75,7 +77,6 @@ public final class NightmareHelper {
      * @param isZDayActive Set if Z-Day mode should be active
      */
     public static void setIsZDayActive(Context c, boolean isZDayActive) {
-        // @TODO: Set this somewhere
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putBoolean(USERSESSION_IS_ZDAY, isZDayActive);

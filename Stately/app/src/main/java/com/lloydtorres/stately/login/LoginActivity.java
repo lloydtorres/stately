@@ -50,9 +50,14 @@ import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -81,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout passHolder;
     private Button login;
     private Button createNation;
-    private boolean isLoggingIn;
+    private boolean isLocked;
 
     private Bundle routeBundle;
 
@@ -166,10 +171,11 @@ public class LoginActivity extends AppCompatActivity {
         if (SettingsActivity.getAutologinSetting(this)) {
             UserLogin u = PinkaHelper.getActiveUser(this);
             if (u != null) {
-                verifyAccount(u);
+                checkZDayActive(u);
             }
         } else {
             PinkaHelper.removeActiveUser(this);
+            checkZDayActive(null);
         }
     }
 
@@ -179,14 +185,14 @@ public class LoginActivity extends AppCompatActivity {
      * @param view
      */
     public void verifyUsername(View view) {
-        if (!getLoginState()) {
-            setLoginState(true);
+        if (!getLockedState()) {
+            setLockedState(true);
             String name = username.getText().toString();
             if (SparkleHelper.isValidName(name) && name.length() > 0) {
                 String pass = password.getText().toString();
                 verifyAccount(name, pass);
             } else {
-                setLoginState(false);
+                setLockedState(false);
                 SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
             }
         }
@@ -260,14 +266,14 @@ public class LoginActivity extends AppCompatActivity {
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
-                            setLoginState(false);
+                            setLockedState(false);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
-                setLoginState(false);
+                setLockedState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -302,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param u
      */
     private void verifyAccount(UserLogin u) {
-        setLoginState(true);
+        setLockedState(true);
         NSStringRequest stringRequest = buildUserAuthRequest(u.nationId, u);
         stringRequest.setUserData(u);
         executeRequest(stringRequest);
@@ -313,9 +319,13 @@ public class LoginActivity extends AppCompatActivity {
      * @param stringRequest
      */
     private void executeRequest(NSStringRequest stringRequest) {
+        executeRequest(stringRequest, getString(R.string.log_in_load));
+    }
+
+    private void executeRequest(NSStringRequest stringRequest, String lockedMessage) {
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
-            setLoginState(false);
+            setLockedState(false, lockedMessage);
         }
     }
 
@@ -341,6 +351,50 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * First checks if Z-Day is active in NS and sets the appropriate variables. If a UserLogin
+     * was passed in, it continues with autlogin.
+     * @param userLogin
+     */
+    public void checkZDayActive(final UserLogin userLogin) {
+        // Skip check if it's not around Halloween
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        if (!((month == Calendar.OCTOBER && day >= 30 && day <= 31) ||
+                (month == Calendar.NOVEMBER && day <= 1))) {
+            continueToVerifyAccount(userLogin);
+            return;
+        }
+
+        setLockedState(true, getString(R.string.calibration_load));
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, NightmareHelper.ZDAY_REFERENCE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        boolean isZDayActive = d.select(NightmareHelper.ZDAY_REFERENCE_DIV).first() != null;
+                        NightmareHelper.setIsZDayActive(LoginActivity.this, isZDayActive);
+                        continueToVerifyAccount(userLogin);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                continueToVerifyAccount(userLogin);
+            }
+        });
+        executeRequest(stringRequest, getString(R.string.calibration_load));
+    }
+
+    private void continueToVerifyAccount(UserLogin u) {
+        if (u != null) {
+            verifyAccount(u);
+        } else {
+            setLockedState(false);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
@@ -364,23 +418,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the login state (i.e. if the login process is currently being done).
-     * @return The login state (true or not).
+     * Get the locked state (e.g. if the login process is currently being done).
+     * @return The locked state (true or not).
      */
-    private boolean getLoginState()
-    {
-        return isLoggingIn;
+    private boolean getLockedState() {
+        return isLocked;
     }
 
     /**
-     * Set the login state.
-     * @param stat The current login state. True if logging in, false otherwise.
+     * Set the locked state.
+     * @param stat The current locked state. True if performing some network call, false otherwise.
      */
-    private void setLoginState(boolean stat) {
+    private void setLockedState(boolean stat) {
+        setLockedState(stat, getString(R.string.log_in_load));
+    }
+
+    private void setLockedState(boolean stat, String message) {
         if (stat) {
             userHolder.setVisibility(View.GONE);
             passHolder.setVisibility(View.GONE);
-            login.setText(getString(R.string.log_in_load));
+            login.setText(message);
             createNation.setVisibility(View.GONE);
         } else {
             userHolder.setVisibility(View.VISIBLE);
@@ -388,6 +445,6 @@ public class LoginActivity extends AppCompatActivity {
             login.setText(getString(R.string.log_in));
             createNation.setVisibility(View.VISIBLE);
         }
-        isLoggingIn = stat;
+        isLocked = stat;
     }
 }

@@ -116,12 +116,14 @@ public class ZombieControlActivity extends RefreshviewActivity {
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
+                        isInProgress = false;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
+                isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
                 } else {
@@ -132,6 +134,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
+            isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
