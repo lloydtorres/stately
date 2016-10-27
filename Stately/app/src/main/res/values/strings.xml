@@ -432,6 +432,7 @@
 
     <!-- Zombie -->
     <string name="zombie_control">Zombie Control</string>
+    <string name="zombie_control_survival">Survival Rate: %1$s%%</string>
     <string name="zombie_survivors">Survivors</string>
     <string name="zombie_infected">Infected</string>
     <string name="zombie_dead">Dead</string>

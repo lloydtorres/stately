@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Root(name="NATION", strict=false)
 public class IssueFullHolder implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues+nextissuetime"
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues+nextissuetime+zombie"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
 
@@ -42,6 +42,8 @@ public class IssueFullHolder implements Parcelable {
     public List<Issue> issues;
     @Element(name="NEXTISSUETIME", required=false)
     public long nextIssueTime;
+    @Element(name="ZOMBIE", required=false)
+    public Zombie zombieData;
 
     public IssueFullHolder() { super(); }
 
@@ -53,6 +55,7 @@ public class IssueFullHolder implements Parcelable {
             issues = null;
         }
         nextIssueTime = in.readLong();
+        zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
     }
 
     @Override
@@ -69,6 +72,7 @@ public class IssueFullHolder implements Parcelable {
             dest.writeList(issues);
         }
         dest.writeLong(nextIssueTime);
+        dest.writeValue(zombieData);
     }
 
     @SuppressWarnings("unused")

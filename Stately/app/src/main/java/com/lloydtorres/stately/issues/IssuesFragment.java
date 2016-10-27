@@ -37,6 +37,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -153,6 +154,11 @@ public class IssuesFragment extends RefreshviewFragment {
      */
     private void processIssues(View v, IssueFullHolder holder) {
         issues = new ArrayList<Object>();
+
+        // Add zombie card if Z-Day is active
+        if (NightmareHelper.getIsZDayActive(getContext())) {
+            issues.add(holder.zombieData);
+        }
 
         if (holder.issues != null) {
             for (Issue i : holder.issues) {
