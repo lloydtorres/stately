@@ -21,26 +21,32 @@ import android.os.Parcelable;
 
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
+
 /**
  * Created by Lloyd on 2016-01-28.
  * An object containing text for one of the options in an issue.
  */
+@Root(name="OPTION", strict=false)
 public class IssueOption implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
     public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=enact_dilemma/dilemma=%d/template-overall=none";
-    public static final String SELECTED_HEADER = "selected";
-    public static final String DISMISS_HEADER = "choice--1";
+    public static final String POST_HEADER_TEMPLATE = "choice-%d";
+    public static final int DISMISS_ISSUE_ID = -1;
 
+    @Attribute(required=false)
+    public int id;
     public int index;
+    @Text(required=false)
     public String content;
-    public String header;
 
     public IssueOption() { super(); }
 
     protected IssueOption(Parcel in) {
+        id = in.readInt();
         index = in.readInt();
         content = in.readString();
-        header = in.readString();
     }
 
     @Override
@@ -50,9 +56,9 @@ public class IssueOption implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeInt(index);
         dest.writeString(content);
-        dest.writeString(header);
     }
 
     @SuppressWarnings("unused")

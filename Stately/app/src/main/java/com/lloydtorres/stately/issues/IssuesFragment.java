@@ -31,15 +31,14 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.IssueFullHolder;
+import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,6 @@ import java.util.regex.Pattern;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends RefreshviewFragment {
-    private static final Pattern NEXT_ISSUE_REGEX = Pattern.compile("\\$\\('#nextdilemmacountdown'\\)\\.countdown\\(\\{timestamp:new Date\\(([0-9]*?)\\)\\}\\);");
     private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+)\\] (.+)$");
 
     private List<Object> issues;
@@ -105,7 +103,7 @@ public class IssuesFragment extends RefreshviewFragment {
      * @param view
      */
     private void queryIssues(final View view) {
-        String targetURL = Issue.QUERY;
+        String targetURL = String.format(Locale.US, IssueFullHolder.QUERY, SparkleHelper.getIdFromName(mNation.name));
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -114,8 +112,16 @@ public class IssuesFragment extends RefreshviewFragment {
                         if (getActivity() == null || !isAdded()) {
                             return;
                         }
-                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processIssues(view, d);
+                        Persister serializer = new Persister();
+                        try {
+                            IssueFullHolder issueResponse = serializer.read(IssueFullHolder.class, response);
+                            processIssues(view, issueResponse);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -142,71 +148,47 @@ public class IssuesFragment extends RefreshviewFragment {
 
     /**
      * Process the HTML contents of the issues into actual Issue objects
-     * @param d
+     * @param v Root view
+     * @param holder Issue response from NS
      */
-    private void processIssues(View v, Document d) {
+    private void processIssues(View v, IssueFullHolder holder) {
         issues = new ArrayList<Object>();
 
-        Element issuesContainer = d.select("ul.dilemmalist").first();
+        if (holder.issues != null) {
+            for (Issue i : holder.issues) {
+                // Get data on issue chains
+                Matcher chainMatcher = CHAIN_ISSUE_REGEX.matcher(i.title);
+                if (chainMatcher.find()) {
+                    i.chain = chainMatcher.group(1);
+                    i.title = chainMatcher.group(2);
+                }
 
-        if (issuesContainer == null) {
-            // safety check
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
-            return;
+                // Add dismiss option
+                if (i.options == null) {
+                    i.options = new ArrayList<IssueOption>();
+                }
+
+                IssueOption dismiss = new IssueOption();
+                dismiss.id = IssueOption.DISMISS_ISSUE_ID;
+                i.options.add(dismiss);
+
+                for (int ind=0; ind < i.options.size(); ind++) {
+                    i.options.get(ind).index = ind + 1;
+                }
+
+                issues.add(i);
+            }
         }
 
-        Elements issuesRaw = issuesContainer.children();
-
-        for (Element i : issuesRaw) {
-            Issue issueCore = new Issue();
-
-            Elements issueContents = i.children();
-
-            // Get issue ID and name
-            Element issueMain = issueContents.select("a").first();
-
-            if (issueMain == null) {
-                continue;
-            }
-
-            String issueLink = issueMain.attr("href");
-            issueCore.id = Integer.valueOf(issueLink.replace("page=show_dilemma/dilemma=", ""));
-            Matcher chainMatcher = CHAIN_ISSUE_REGEX.matcher(issueMain.text());
-            if (chainMatcher.find()) {
-                issueCore.chain = chainMatcher.group(1);
-                issueCore.title = chainMatcher.group(2);
-            }
-            else {
-                issueCore.title = issueMain.text();
-            }
-
-            issues.add(issueCore);
-        }
-
-        Element nextIssueUpdate = d.select("p.dilemmanextupdate").first();
-        if (nextIssueUpdate != null) {
-            String nextUpdate = nextIssueUpdate.text();
-            issues.add(nextUpdate);
-        }
-
-        if (issuesRaw.size() <= 0) {
-            String nextUpdate = getString(R.string.no_issues);
-
-            Matcher m = NEXT_ISSUE_REGEX.matcher(d.html());
-            if (m.find()) {
-                long nextUpdateTime = Long.valueOf(m.group(1)) / 1000L;
-                nextUpdate = String.format(Locale.US, getString(R.string.next_issue), SparkleHelper.getReadableDateFromUTC(getContext(), nextUpdateTime));
-            }
-
-            issues.add(nextUpdate);
+        long currentTime = System.currentTimeMillis() / 1000L;
+        if (currentTime < holder.nextIssueTime) {
+            issues.add(holder.nextIssueTime);
         }
 
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
             mRecyclerView.setAdapter(mRecyclerAdapter);
-        }
-        else {
+        } else {
             ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues);
         }
         mSwipeRefreshLayout.setRefreshing(false);

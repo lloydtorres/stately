@@ -24,7 +24,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -578,7 +577,7 @@ public class MessageBoardActivity extends SlidrActivity {
             quoteMessage = String.format(Locale.US, getString(R.string.rmb_reply_format), replyTarget.name, replyTarget.id, quoteMessage);
             newMessage = quoteMessage + newMessage;
         }
-        params.put("message", Html.escapeHtml(newMessage));
+        params.put("message", SparkleHelper.escapeHtml(newMessage));
         params.put("lodge_message", "1");
         stringRequest.setParams(params);
 

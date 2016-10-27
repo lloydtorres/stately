@@ -58,7 +58,7 @@ dependencies {
     compile 'com.github.orangegangsters:swipy:1.2.3@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
     compile 'org.atteo:evo-inflector:1.2'
-    compile 'org.jsoup:jsoup:1.9.2'
+    compile 'org.jsoup:jsoup:1.10.1'
     compile 'org.sufficientlysecure:html-textview:2.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.1'
     compile "org.kefirsf:kefirbb:1.5"

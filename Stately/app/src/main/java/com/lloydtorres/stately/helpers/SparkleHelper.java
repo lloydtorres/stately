@@ -404,17 +404,18 @@ public final class SparkleHelper {
      */
     public static String getCurrencyPlural(String currency) {
         Matcher m = CURRENCY_PLURALIZE.matcher(currency);
-        m.matches();
-        String pluralize = m.group(1);
-        String suffix = m.group(2);
-        pluralize = English.plural(pluralize);
+        if (m.matches()) {
+            String pluralize = m.group(1);
+            String suffix = m.group(2);
+            pluralize = English.plural(pluralize);
 
-        if (suffix != null) {
-            return pluralize + suffix;
+            if (suffix != null) {
+                return pluralize + suffix;
+            } else {
+                return pluralize;
+            }
         }
-        else {
-            return pluralize;
-        }
+        return English.plural(currency);
     }
 
     /**
@@ -733,6 +734,17 @@ public final class SparkleHelper {
         else {
             return Html.fromHtml(src);
         }
+    }
+
+    /**
+     * Properly escapes HTML to be POSTed to NS servers.
+     * @param src Original string.
+     * @return Escaped string.
+     */
+    public static String escapeHtml(String src) {
+        src = Html.escapeHtml(src);
+        src = src.replace("&#10;", "\n");
+        return src;
     }
 
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");

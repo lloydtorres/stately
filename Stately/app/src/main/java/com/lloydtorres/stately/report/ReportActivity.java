@@ -23,7 +23,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -287,7 +286,7 @@ public class ReportActivity extends SlidrActivity {
 
         Map<String,String> params = new HashMap<String, String>();
         params.put("problem", Integer.toString(problemHeader));
-        params.put("comment", Html.escapeHtml(commentHeader));
+        params.put("comment", SparkleHelper.escapeHtml(commentHeader));
         params.put("submit", "1");
         stringRequest.setParams(params);
 
