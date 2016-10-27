@@ -155,16 +155,15 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 ncc.init((NationChartCardData) cards.get(position));
                 break;
             case CARD_ZOMBIE:
-                // @TODO: Call on appropriate init function, if cure is available and in same region
                 ZombieChartCard zcc = (ZombieChartCard) holder;
                 Zombie zombieData = (Zombie) cards.get(position);
                 String curUserId = PinkaHelper.getActiveUser(context).nationId;
-                int mode = ZombieChartCard.MODE_NATION_DEFAULT;
-                /**if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) &&
-                        zombieData.isCureMissilesAvailable()) {
-                    mode = ZombieChartCard.MODE_NATION_SUPERWEAPON;
-                }**/
-                zcc.init(context, zombieData, mode, nationName);
+                // Only show superweapon button if in same region and not self
+                if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) && isSameRegion) {
+                    zcc.initExplore(exploreActivity, zombieData, ZombieChartCard.MODE_NATION_SUPERWEAPON, nationName);
+                } else {
+                    zcc.init(context, zombieData, ZombieChartCard.MODE_NATION_DEFAULT, nationName);
+                }
         }
     }
 

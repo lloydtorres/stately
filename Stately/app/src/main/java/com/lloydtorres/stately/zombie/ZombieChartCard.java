@@ -52,6 +52,9 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     public static final int MODE_REGION_ZCONTROL = 3;
     public static final int MODE_REGION_DEFAULT = 4;
 
+    private Context context;
+    private ExploreActivity exploreActivity;
+
     private TextView title;
     private TextView action;
 
@@ -85,6 +88,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     }
 
     public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {
+        exploreActivity = act;
         init(act, zombieData, mode, target);
 
         if (mode == MODE_NATION_SUPERWEAPON) {
@@ -92,13 +96,17 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
             missileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // @TODO: Callback
+                    if (exploreActivity != null) {
+                        exploreActivity.showSuperweaponDialog();
+                    }
                 }
             });
         }
     }
 
-    public void init(final Context context, final Zombie zombieData, final int mode, final String target) {
+    public void init(final Context c, final Zombie zombieData, final int mode, final String target) {
+        context = c;
+
         // Set title
         if (mode == MODE_NATION_ZCONTROL || mode == MODE_REGION_ZCONTROL) {
             title.setText(String.format(Locale.US,

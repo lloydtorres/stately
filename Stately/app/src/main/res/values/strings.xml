@@ -463,11 +463,15 @@
     <string name="zombie_action_horde">Join the horde</string>
     <string name="zombie_action_do_button">Make It So</string>
     <string name="zombie_action_military_done">Military ordered to exterminate zombie infestation.</string>
-    <string name="zombie_action_cure_done">Research started on developing a cure.</string>
+    <string name="zombie_action_cure_done">Research started on a cure for the zombie infection.</string>
     <string name="zombie_action_join_done">BRAAAAINS!!!</string>
     <string name="zombie_report_title">Zombie Report</string>
     <string name="zombie_report_template">Zombie Report: %1$s</string>
     <string name="zombie_chart_null">No data has been collected yet.</string>
+    <string name="superweapon_tzes">Deploy TZESs</string>
+    <string name="superweapon_cure">Launch cure missile</string>
+    <string name="superweapon_horde">Send zombie horde</string>
+    <string name="superweapon_none">No superweapons are available for deployment.</string>
 
     <!-- Settings -->
     <string name="setting_title_behavior">General</string>

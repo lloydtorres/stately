@@ -26,52 +26,34 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.Zombie;
+import com.lloydtorres.stately.dto.ZSuperweaponStatus;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
- * Created by Lloyd on 2016-10-16.
- * Dialog used to choose between different options for Z-Day.
+ * Created by Lloyd on 2016-10-26.
+ * Dialog shown when choosing between different superweapons to deploy during Z-Day.
  */
-public class ZombieDecisionDialog extends DialogFragment {
-    public static final String DIALOG_TAG = "fragment_zombie_decision_dialog";
+public class SuperweaponDialog extends DialogFragment {
+    public static final String DIALOG_TAG = "fragment_superweapon_dialog";
 
-    private Zombie zombieData;
     private RadioGroup actionState;
+    private ZSuperweaponStatus status;
 
-    public ZombieDecisionDialog() { }
-
-    public void setZombieData(Zombie z) { zombieData = z; }
+    public void setSuperweaponStatus(ZSuperweaponStatus s) {
+        status = s;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)  {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.fragment_zombie_decision_dialog, null);
+        View dialogView = inflater.inflate(R.layout.fragment_superweapon_dialog, null);
 
-        actionState = (RadioGroup) dialogView.findViewById(R.id.zombie_decision_group);
+        actionState = (RadioGroup) dialogView.findViewById(R.id.superweapon_group);
 
-        // Hide unavailable options
-        if (zombieData.survivors <= 0) {
-            actionState.findViewById(R.id.zombie_action_military).setVisibility(View.GONE);
-            actionState.findViewById(R.id.zombie_action_cure).setVisibility(View.GONE);
-        }
-        if (zombieData.zombies <= 0) {
-            actionState.findViewById(R.id.zombie_action_horde).setVisibility(View.GONE);
-        }
-
-        if (zombieData.action != null) {
-            switch(zombieData.action) {
-                case Zombie.ZACTION_MILITARY:
-                    actionState.check(R.id.zombie_action_military);
-                    break;
-                case Zombie.ZACTION_CURE:
-                    actionState.check(R.id.zombie_action_cure);
-                    break;
-                case Zombie.ZACTION_ZOMBIE:
-                    actionState.check(R.id.zombie_action_horde);
-                    break;
-            }
-        }
+        // Show available options
+        actionState.findViewById(R.id.superweapon_tzes).setVisibility(status.isTZES ? View.VISIBLE : View.GONE);
+        actionState.findViewById(R.id.superweapon_cure).setVisibility(status.isCure ? View.VISIBLE : View.GONE);
+        actionState.findViewById(R.id.superweapon_horde).setVisibility(status.isHorde ? View.VISIBLE : View.GONE);
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
@@ -81,7 +63,7 @@ public class ZombieDecisionDialog extends DialogFragment {
         };
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
-        dialogBuilder.setTitle(R.string.zombie_control)
+        dialogBuilder.setTitle(R.string.zombie_button_missile)
                 .setView(dialogView)
                 .setPositiveButton(R.string.zombie_action_do_button, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null);
@@ -95,19 +77,19 @@ public class ZombieDecisionDialog extends DialogFragment {
     private void submitAction() {
         String choice = null;
         switch (actionState.getCheckedRadioButtonId()) {
-            case R.id.zombie_action_military:
-                choice = Zombie.ZACTION_MILITARY;
+            case R.id.superweapon_tzes:
+                choice = ZSuperweaponStatus.ZSUPER_TZES;
                 break;
-            case R.id.zombie_action_cure:
-                choice = Zombie.ZACTION_CURE;
+            case R.id.superweapon_cure:
+                choice = ZSuperweaponStatus.ZSUPER_CURE;
                 break;
-            case R.id.zombie_action_horde:
-                choice = Zombie.ZACTION_ZOMBIE;
+            case R.id.superweapon_horde:
+                choice = ZSuperweaponStatus.ZSUPER_HORDE;
                 break;
         }
 
-        if (choice != null && !choice.equals(zombieData.action)) {
-            ((ZombieControlActivity) getActivity()).startSubmitAction(choice);
+        if (choice != null) {
+            // @TODO: Connect to ExploreActivity
         }
     }
 }

@@ -49,6 +49,7 @@ import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.UserExploreData;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.dto.ZSuperweaponStatus;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -57,6 +58,8 @@ import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+import com.lloydtorres.stately.zombie.NightmareHelper;
+import com.lloydtorres.stately.zombie.SuperweaponDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -95,6 +98,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     public static final String IS_MOVEABLE = "isMoveable";
     public static final String IS_PASSWORD = "isPassword";
     public static final String IS_IN_DOSSIER = "isInDossier";
+    public static final String SUPERWEAPON_STATUS = "superweaponStatus";
 
     public static final String ENDORSE_URL = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/endorse.cgi";
     private static final String ENDORSE_REQUEST = "endorse";
@@ -116,6 +120,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private boolean isPassword;
     private boolean isInDossier;
     private boolean isInProgress;
+    private ZSuperweaponStatus superweaponStatus;
 
     private Fragment mFragment;
 
@@ -157,6 +162,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             isMoveable = savedInstanceState.getBoolean(IS_MOVEABLE, false);
             isPassword = savedInstanceState.getBoolean(IS_PASSWORD, false);
             isInDossier = savedInstanceState.getBoolean(IS_IN_DOSSIER, false);
+            superweaponStatus = savedInstanceState.getParcelable(SUPERWEAPON_STATUS);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
@@ -357,7 +363,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             }
                             invalidateOptionsMenu();
 
-                            initFragment(nationResponse);
+                            if (NightmareHelper.getIsZDayActive(ExploreActivity.this)) {
+                                checkZDaySuperweapons(nationResponse);
+                            } else {
+                                initFragment(nationResponse);
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -808,6 +818,63 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         openExploreDialog(true);
     }
 
+    private static final String SUPERWEAPON_BUTTON_TEMPLATE = "button[name=%s]";
+
+    /**
+     * Checks superweapon availability for the given nation, then continues on to initialize the nation fragment.
+     * Used for Z-Day.
+     * @param nationResponse
+     */
+    private void checkZDaySuperweapons(final Nation nationResponse) {
+        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(nationResponse.name));
+        NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        superweaponStatus = new ZSuperweaponStatus();
+                        superweaponStatus.isTZES = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_TZES)).first() != null;
+                        superweaponStatus.isCure = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_CURE)).first() != null;
+                        superweaponStatus.isHorde = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_HORDE)).first() != null;
+                        initFragment(nationResponse);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Keep going even if there's an error
+                SparkleHelper.logError(error.toString());
+                initFragment(nationResponse);
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            // Keep going even if there's an error
+            initFragment(nationResponse);
+        }
+    }
+
+    /**
+     * Call to show the superweapon dialog.
+     */
+    public void showSuperweaponDialog() {
+        // Only show dialog if at least one superweapon is available
+        if (superweaponStatus != null &&
+                (superweaponStatus.isTZES || superweaponStatus.isCure || superweaponStatus.isHorde)) {
+            SuperweaponDialog superweaponDialog = new SuperweaponDialog();
+            superweaponDialog.setSuperweaponStatus(superweaponStatus);
+            superweaponDialog.show(getSupportFragmentManager(), SuperweaponDialog.DIALOG_TAG);
+        } else {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            dialogBuilder.setTitle(R.string.zombie_button_missile)
+                    .setMessage(R.string.superweapon_none)
+                    .setPositiveButton(R.string.got_it, null);
+            dialogBuilder.show();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -848,5 +915,6 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         savedInstanceState.putBoolean(IS_MOVEABLE, isMoveable);
         savedInstanceState.putBoolean(IS_PASSWORD, isPassword);
         savedInstanceState.putBoolean(IS_IN_DOSSIER, isInDossier);
+        savedInstanceState.putParcelable(SUPERWEAPON_STATUS, superweaponStatus);
     }
 }
