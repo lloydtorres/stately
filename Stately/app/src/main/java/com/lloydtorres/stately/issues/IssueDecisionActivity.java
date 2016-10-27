@@ -19,9 +19,7 @@ package com.lloydtorres.stately.issues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -32,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.IssueFullHolder;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -40,12 +39,6 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -58,9 +51,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
     public static final String NATION_DATA = "nationData";
-    public static final int DISMISSED = -1;
+
     private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
-    private static final String STORY_SO_FAR = "The Story So Far";
     private static final String NOT_AVAILABLE = "Issue Not Available";
 
     private Issue issue;
@@ -86,137 +78,62 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         }
 
         getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, issue.id));
+        mSwipeRefreshLayout.setEnabled(false);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                queryIssueInfo();
-            }
-        });
+        startConfirmIssueAvailable();
     }
 
     /**
-     * Call to start querying and activate SwipeFreshLayout
+     * Helper call to start check if issue is still available.
      */
-    private void startQueryIssueInfo() {
+    private void startConfirmIssueAvailable() {
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                queryIssueInfo();
+                confirmIssueAvailable();
             }
         });
     }
 
     /**
-     * Query information on the current issue from the actual NationStates site
+     * Actually confirms that the issue is still available.
      */
-    private void queryIssueInfo() {
-        String targetURL = String.format(Locale.US, IssueOption.QUERY, issue.id);
+    private void confirmIssueAvailable() {
+        String targetURL = String.format(Locale.US, IssueFullHolder.CONFIRM_QUERY, issue.id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        processIssueInfo(mView, d);
+                        if (response.contains(NOT_AVAILABLE)) {
+                            SparkleHelper.makeSnackbar(mView, String.format(Locale.US, getString(R.string.issue_unavailable), mNation.name));
+                        } else {
+                            setRecyclerAdapter(issue);
+                        }
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Show the issue anyway on error
                 SparkleHelper.logError(error.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                } else {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
-                }
+                setRecyclerAdapter(issue);
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            // Show the issue anyway if API limit reached
             mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+            setRecyclerAdapter(issue);
         }
     }
 
     /**
-     * Process the received page into the Issue and its IssueOptions
-     * @param v Activity view
-     * @param d Document received from NationStates
+     * Either initializes the recycler adapter or resets the data.
+     * @param issue
      */
-    private void processIssueInfo(View v, Document d) {
-        // First check if the issue is still available
-        if (d.text().contains(NOT_AVAILABLE)) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(v, String.format(Locale.US, getString(R.string.issue_unavailable), mNation.name));
-            return;
-        }
-
-        Element issueInfoContainer = d.select("div#dilemma").first();
-
-        if (issueInfoContainer == null) {
-            // safety check
-            mSwipeRefreshLayout.setRefreshing(false);
-            SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
-            return;
-        }
-
-        Elements issueInfoRaw = issueInfoContainer.children();
-
-        String issueText = issueInfoRaw.select("p").first().text();
-        // If this is an issue chain, grab the second paragraph instead
-        if (d.select("div.dilemmachain").first() != null) {
-            issueText = issueInfoRaw.select("p").get(1).text();
-            if (d.text().contains(STORY_SO_FAR)) {
-                issueText = issueText + "<br><br>" + issueInfoRaw.select("p").get(2).text();
-            }
-        }
-        issue.content = issueText;
-
-        issue.options = new ArrayList<IssueOption>();
-
-        Element optionHolderMain = issueInfoRaw.select("ol.diloptions").first();
-        if (optionHolderMain != null) {
-            Elements optionsHolder = optionHolderMain.select("li");
-
-            int i = 0;
-            for (Element option : optionsHolder) {
-                IssueOption issueOption = new IssueOption();
-                issueOption.index = i++;
-
-                Element button = option.select("button").first();
-                if (button != null) {
-                    issueOption.header = button.attr("name");
-                } else {
-                    issueOption.header = IssueOption.SELECTED_HEADER;
-                }
-
-                Element optionContentHolder = option.select("p").first();
-                if (optionContentHolder == null) {
-                    // safety check
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    SparkleHelper.makeSnackbar(v, getString(R.string.login_error_parsing));
-                    return;
-                }
-
-                issueOption.content = optionContentHolder.text();
-                issue.options.add(issueOption);
-            }
-        }
-
-        IssueOption dismissOption = new IssueOption();
-        dismissOption.index = -1;
-        dismissOption.header = IssueOption.DISMISS_HEADER;
-        dismissOption.content = "";
-        issue.options.add(dismissOption);
-
-        setRecyclerAdapter(issue);
-        mSwipeRefreshLayout.setRefreshing(false);
-        mSwipeRefreshLayout.setEnabled(false);
-    }
-
     private void setRecyclerAdapter(Issue issue) {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new IssueDecisionRecyclerAdapter(this, issue);
@@ -249,13 +166,13 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
 
-            switch (option.index) {
-                case DISMISSED:
+            switch (option.id) {
+                case IssueOption.DISMISS_ISSUE_ID:
                     dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
                             .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index + 1))
+                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index))
                             .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
                     break;
             }
@@ -290,7 +207,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
-                        if (!IssueOption.DISMISS_HEADER.equals(option.header)) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (option.id != IssueOption.DISMISS_ISSUE_ID) {
                             if (response.contains(LEGISLATION_PASSED)) {
                                 Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
                                 issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
@@ -323,24 +241,13 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         });
 
         Map<String,String> params = new HashMap<String, String>();
-        params.put(option.header, "1");
+        params.put(String.format(Locale.US, IssueOption.POST_HEADER_TEMPLATE, option.id), "1");
         stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (issue.options == null) {
-            startQueryIssueInfo();
-        }
-        else {
-            setRecyclerAdapter(issue);
         }
     }
 

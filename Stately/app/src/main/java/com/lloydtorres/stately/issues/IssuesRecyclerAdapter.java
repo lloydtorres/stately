@@ -30,6 +30,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.RaraHelper;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.List;
 import java.util.Locale;
@@ -79,7 +80,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 break;
             default:
                 NextCard nextCard = (NextCard) holder;
-                nextCard.init((String) issues.get(position));
+                nextCard.init((Long) issues.get(position));
                 break;
         }
     }
@@ -94,7 +95,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (issues.get(position) instanceof Issue) {
             return ISSUE_CARD;
         }
-        else if (issues.get(position) instanceof String) {
+        else if (issues.get(position) instanceof Long) {
             return NEXT_CARD;
         }
         return -1;
@@ -155,10 +156,12 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             nextUpdate = (TextView) v.findViewById(R.id.card_generic_content);
         }
 
-        public void init(String m) {
+        // Heh
+        public void init(long time) {
             RaraHelper.setViewHolderFullSpan(itemView);
 
-            nextUpdate.setText(m);
+            nextUpdate.setText(String.format(Locale.US, context.getString(R.string.next_issue),
+                    SparkleHelper.getReadableDateFromUTC(context, time)));
             nextUpdate.setTypeface(nextUpdate.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
