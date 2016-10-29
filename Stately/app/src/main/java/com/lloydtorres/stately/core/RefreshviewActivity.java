@@ -27,22 +27,14 @@ import android.view.View;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Lloyd on 2016-09-16.
  * Skeleton for activities that use the Refreshview layout.
  */
 public abstract class RefreshviewActivity extends SlidrActivity {
-    @BindView(R.id.refreshview_toolbar)
-    protected Toolbar toolbar;
-    @BindView(R.id.refreshview_refresher)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.refreshview_main)
     protected View mView;
 
-    @BindView(R.id.refreshview_recycler)
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView.Adapter mRecyclerAdapter;
@@ -51,16 +43,20 @@ public abstract class RefreshviewActivity extends SlidrActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_refreshview);
-        ButterKnife.bind(this);
 
+        mView = findViewById(R.id.refreshview_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

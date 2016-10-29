@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,10 +63,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -107,23 +104,16 @@ public class MessageBoardActivity extends SlidrActivity {
     private Post replyTarget = null;
     private boolean isInProgress;
 
-    @BindView(R.id.message_board_refresher)
-    SwipyRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.message_board_responder)
-    LinearLayout messageResponder;
-    @BindView(R.id.responder_content)
-    AppCompatEditText messageContainer;
-    @BindView(R.id.responder_reply_container)
-    RelativeLayout messageReplyContainer;
-    @BindView(R.id.responder_reply_content)
-    TextView messageReplyContent;
-    @BindView(R.id.message_board_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.message_board_coordinator)
-    View view;
+    private SwipyRefreshLayout mSwipeRefreshLayout;
+    private LinearLayout messageResponder;
+    private AppCompatEditText messageContainer;
+    private ImageView messagePostButton;
+    private ImageView.OnClickListener postMessageListener;
+    private RelativeLayout messageReplyContainer;
+    private TextView messageReplyContent;
+    private View view;
 
-    @BindView(R.id.message_board_recycler)
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
@@ -131,8 +121,8 @@ public class MessageBoardActivity extends SlidrActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_board);
-        ButterKnife.bind(this);
 
+        view = findViewById(R.id.message_board_coordinator);
         isInProgress = false;
 
         if (getIntent() != null) {
@@ -156,15 +146,25 @@ public class MessageBoardActivity extends SlidrActivity {
             rebuildUniqueEnforcer();
         }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
         dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        postMessageListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postMessage();
+            }
+        };
+
         // Setup refresher to requery for resolution on swipe
+        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
@@ -247,7 +247,13 @@ public class MessageBoardActivity extends SlidrActivity {
      * When this is called, it enables a bunch of views that lets the user post in the RMB.
      */
     private void enablePostingRights() {
+        messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
         messageResponder.setVisibility(View.VISIBLE);
+        messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
+        messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
+        messagePostButton.setOnClickListener(postMessageListener);
+        messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+        messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
         postable = true;
     }
 
@@ -472,8 +478,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * It's called postMessage(), but this actually gets the chk value first before calling
      * the function that actually posts the message.
      */
-    @OnClick(R.id.responder_post_button)
-    public void postMessage() {
+    private void postMessage() {
         // Make sure there's actually a message to post first
         if (messageContainer.getText().length() <= 0) {
             return;
@@ -486,6 +491,7 @@ public class MessageBoardActivity extends SlidrActivity {
         isInProgress = true;
 
         startSwipeRefresh();
+        messagePostButton.setOnClickListener(null);
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -540,6 +546,7 @@ public class MessageBoardActivity extends SlidrActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         isInProgress = false;
                         messageContainer.setText("");
+                        messagePostButton.setOnClickListener(postMessageListener);
                         setReplyMessage(null);
                         startQueryMessages(SCAN_FORWARD, false);
                     }
@@ -549,6 +556,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 isInProgress = false;
+                messagePostButton.setOnClickListener(postMessageListener);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -576,6 +584,7 @@ public class MessageBoardActivity extends SlidrActivity {
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
+            messagePostButton.setOnClickListener(postMessageListener);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }

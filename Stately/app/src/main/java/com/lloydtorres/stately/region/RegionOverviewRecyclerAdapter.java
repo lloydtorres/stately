@@ -40,9 +40,6 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Lloyd on 2016-09-14.
  * Recycler adapter for Region > Overview section.
@@ -173,16 +170,15 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     public class RegionQuickFactsCard extends RecyclerView.ViewHolder {
         private RegionQuickFactsCardData data;
 
-        @BindView(R.id.region_delegate)
-        TextView delegate;
-        @BindView(R.id.region_founder)
-        TextView founder;
-        @BindView(R.id.region_power)
-        TextView power;
+        private TextView delegate;
+        private TextView founder;
+        private TextView power;
 
         public RegionQuickFactsCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            delegate = (TextView) itemView.findViewById(R.id.region_delegate);
+            founder = (TextView) itemView.findViewById(R.id.region_founder);
+            power = (TextView) itemView.findViewById(R.id.region_power);
         }
 
         public void init(RegionQuickFactsCardData d) {
@@ -194,14 +190,13 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     }
 
     public abstract class RegionGenericCard extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_region_factbook_title)
         protected TextView cardTitle;
-        @BindView(R.id.region_factbook)
         protected HtmlTextView cardContent;
 
         public RegionGenericCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            cardTitle = (TextView) itemView.findViewById(R.id.card_region_factbook_title) ;
+            cardContent = (HtmlTextView) itemView.findViewById(R.id.region_factbook);
         }
     }
 

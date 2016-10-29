@@ -30,10 +30,6 @@ import com.lloydtorres.stately.dto.Dataset;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by Lloyd on 2016-04-10.
  * A recycler adapter for the dataset dialog.
@@ -45,7 +41,8 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private DatasetDialog selfDialog;
     private ArrayList<Dataset> datasets;
 
-    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, ArrayList<Dataset> ds) {
+    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, ArrayList<Dataset> ds)
+    {
         activity = a;
         selfDialog = d;
         datasets = ds;
@@ -82,24 +79,27 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return INVALID_POSITION;
     }
 
-    public class DatasetEntry extends RecyclerView.ViewHolder {
-        @BindView(R.id.basic_nation_name)
-        TextView datasetName;
+    public class DatasetEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView datasetName;
         private Dataset dataset;
 
-        public DatasetEntry(View v) {
+        public DatasetEntry(View v)
+        {
             super(v);
-            ButterKnife.bind(this, v);
+            datasetName = (TextView) v.findViewById(R.id.basic_nation_name);
+            v.setOnClickListener(this);
         }
 
-        public void init(Dataset d) {
+        public void init(Dataset d)
+        {
             dataset = d;
             datasetName.setText(dataset.name);
         }
 
-        @OnClick(R.id.basic_name_holder)
-        public void onClick() {
-            if (activity instanceof TrendsActivity) {
+        @Override
+        public void onClick(View v) {
+            if (activity instanceof TrendsActivity)
+            {
                 ((TrendsActivity) activity).queryNewDataset(dataset.id);
             }
             selfDialog.dismiss();
@@ -110,7 +110,8 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             datasetName.setTypeface(datasetName.getTypeface(), Typeface.BOLD);
         }
 
-        public void unselect() {
+        public void unselect()
+        {
             datasetName.setTypeface(datasetName.getTypeface(), Typeface.NORMAL);
         }
     }

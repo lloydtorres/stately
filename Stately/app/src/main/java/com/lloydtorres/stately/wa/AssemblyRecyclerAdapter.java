@@ -43,10 +43,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by Lloyd on 2016-01-16.
  * RecyclerView used to show different types of cards in the World Assembly fragment.
@@ -79,7 +75,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         switch (viewType) {
             case ACTIVE_CARD:
                 View activeCard = inflater.inflate(R.layout.card_wa_active, parent, false);
-                viewHolder = new ActiveCard(activeCard);
+                viewHolder = new ActiveCard(context, activeCard);
                 break;
             case INACTIVE_CARD:
                 View inactiveCard = inflater.inflate(R.layout.card_wa_inactive, parent, false);
@@ -162,25 +158,29 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card viewholders
 
     // Card for active resolutions
-    public class ActiveCard extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_wa_council)
-        TextView cardTitle;
-        @BindView(R.id.card_wa_title)
-        TextView cardHeader;
-        @BindView(R.id.card_wa_activetime)
-        TextView cardActiveTime;
-        @BindView(R.id.card_wa_for)
-        TextView cardFor;
-        @BindView(R.id.card_wa_against)
-        TextView cardAgainst;
-        @BindView(R.id.main_icon_vote_for)
-        ImageView iconVoteFor;
-        @BindView(R.id.main_icon_vote_against)
-        ImageView iconVoteAgainst;
+    public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ActiveCard(View v) {
+        private Context context;
+        private TextView cardTitle;
+        private TextView cardHeader;
+        private TextView cardActiveTime;
+        private TextView cardFor;
+        private TextView cardAgainst;
+        private ImageView iconVoteFor;
+        private ImageView iconVoteAgainst;
+
+        public ActiveCard(Context c, View v) {
             super(v);
-            ButterKnife.bind(this, v);
+            context = c;
+            cardTitle = (TextView) v.findViewById(R.id.card_wa_council);
+            cardHeader = (TextView) v.findViewById(R.id.card_wa_title);
+            cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);
+            cardFor = (TextView) v.findViewById(R.id.card_wa_for);
+            cardAgainst = (TextView) v.findViewById(R.id.card_wa_against);
+            iconVoteFor = (ImageView) v.findViewById(R.id.main_icon_vote_for);
+            iconVoteAgainst = (ImageView) v.findViewById(R.id.main_icon_vote_against);
+
+            v.setOnClickListener(this);
         }
 
         public void init(Assembly a, int pos) {
@@ -214,8 +214,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
         }
 
-        @OnClick(R.id.card_wa_active_main)
-        public void onClick() {
+        @Override
+        public void onClick(View v) {
             int pos = getAdapterPosition();
 
             if (pos != RecyclerView.NO_POSITION) {
@@ -241,21 +241,17 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.wa_inactive_title)
-        TextView cardTitle;
-        @BindView(R.id.wa_inactive_content)
-        TextView cardContent;
-        @BindView(R.id.view_divider)
-        View buttonDivider;
-        @BindView(R.id.wa_inactive_read_button)
-        LinearLayout buttonHolder;
-
-        private int councilId;
-        private int resId;
+        private TextView cardTitle;
+        private TextView cardContent;
+        private View buttonDivider;
+        private LinearLayout buttonHolder;
 
         public InactiveCard(View v) {
             super(v);
-            ButterKnife.bind(this, v);
+            cardTitle = (TextView) v.findViewById(R.id.wa_inactive_title);
+            cardContent = (TextView) v.findViewById(R.id.wa_inactive_content);
+            buttonDivider = v.findViewById(R.id.view_divider);
+            buttonHolder = (LinearLayout) v.findViewById(R.id.wa_inactive_read_button);
         }
 
         public void init(Assembly a, int pos) {
@@ -271,21 +267,23 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (m.find()) {
                 buttonDivider.setVisibility(View.VISIBLE);
                 buttonHolder.setVisibility(View.VISIBLE);
-                councilId = Integer.valueOf(m.group(1));
-                resId = Integer.valueOf(m.group(2)) + 1;
+                final int councilId = Integer.valueOf(m.group(1));
+                final int resId = Integer.valueOf(m.group(2)) + 1;
+                buttonHolder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
+                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
+                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resId);
+                        context.startActivity(resolutionActivityIntent);
+                    }
+                });
 
             } else {
                 buttonDivider.setVisibility(View.GONE);
                 buttonHolder.setVisibility(View.GONE);
+                buttonHolder.setOnClickListener(null);
             }
-        }
-
-        @OnClick(R.id.wa_inactive_read_button)
-        public void openPastResolution() {
-            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resId);
-            context.startActivity(resolutionActivityIntent);
         }
     }
 }

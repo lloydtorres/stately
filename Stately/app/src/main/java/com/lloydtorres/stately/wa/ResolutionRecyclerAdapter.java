@@ -53,10 +53,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by Lloyd on 2016-10-01.
  * RecyclerView adapter for the ResolutionActivity. Shows a given WA resolution as cards.
@@ -150,28 +146,27 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ResolutionHeaderCard extends ResolutionCard {
-        @BindView(R.id.wa_resolution_title)
-        TextView title;
-        @BindView(R.id.wa_nominee)
-        TextView target;
-        @BindView(R.id.wa_proposed_by)
-        TextView proposedBy;
-        @BindView(R.id.wa_activetime)
-        TextView voteStart;
-        @BindView(R.id.wa_repealed)
-        TextView repealed;
-        @BindView(R.id.wa_resolution_for)
-        TextView votesFor;
-        @BindView(R.id.wa_resolution_against)
-        TextView votesAgainst;
-        @BindView(R.id.content_icon_vote_for)
-        ImageView iconVoteFor;
-        @BindView(R.id.content_icon_vote_against)
-        ImageView iconVoteAgainst;
+        private TextView title;
+        private TextView target;
+        private TextView proposedBy;
+        private TextView voteStart;
+        private TextView repealed;
+        private TextView votesFor;
+        private TextView votesAgainst;
+        private ImageView iconVoteFor;
+        private ImageView iconVoteAgainst;
 
         public ResolutionHeaderCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            title = (TextView) itemView.findViewById(R.id.wa_resolution_title);
+            target = (TextView) itemView.findViewById(R.id.wa_nominee);
+            proposedBy = (TextView) itemView.findViewById(R.id.wa_proposed_by);
+            voteStart = (TextView) itemView.findViewById(R.id.wa_activetime);
+            repealed = (TextView) itemView.findViewById(R.id.wa_repealed);
+            votesFor = (TextView) itemView.findViewById(R.id.wa_resolution_for);
+            votesAgainst = (TextView) itemView.findViewById(R.id.wa_resolution_against);
+            iconVoteFor = (ImageView) itemView.findViewById(R.id.content_icon_vote_for);
+            iconVoteAgainst = (ImageView) itemView.findViewById(R.id.content_icon_vote_against);
         }
 
         public void init() {
@@ -199,6 +194,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                             context.getString(R.string.wa_repealed),
                             context.getString(prefixId),
                             resolution.repealed));
+                    repealed.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
+                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
+                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolution.repealed);
+                            context.startActivity(resolutionActivityIntent);
+                        }
+                    });
                 }
             }
 
@@ -207,14 +211,6 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             iconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
             iconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
-        }
-
-        @OnClick(R.id.wa_repealed)
-        public void onClickRepealed() {
-            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolution.repealed);
-            context.startActivity(resolutionActivityIntent);
         }
 
         /**
@@ -264,22 +260,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ResolutionContentCard extends ResolutionCard {
-        private int voteChoice;
-
-        @BindView(R.id.wa_resolution_content)
-        HtmlTextView content;
-        @BindView(R.id.wa_resolution_button_icon)
-        ImageView voteButtonIcon;
-        @BindView(R.id.view_divider)
-        View voteButtonDivider;
-        @BindView(R.id.wa_resolution_vote)
-        LinearLayout voteButton;
-        @BindView(R.id.wa_resolution_vote_content)
-        TextView voteButtonContent;
+        private HtmlTextView content;
+        private ImageView voteButtonIcon;
+        private View voteButtonDivider;
+        private LinearLayout voteButton;
+        private TextView voteButtonContent;
 
         public ResolutionContentCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            content = (HtmlTextView) itemView.findViewById(R.id.wa_resolution_content);
+            voteButtonIcon = (ImageView) itemView.findViewById(R.id.wa_resolution_button_icon);
+            voteButtonDivider = itemView.findViewById(R.id.view_divider);
+            voteButton = (LinearLayout) itemView.findViewById(R.id.wa_resolution_vote);
+            voteButtonContent = (TextView) itemView.findViewById(R.id.wa_resolution_vote_content);
         }
 
         public void init() {
@@ -291,6 +284,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             if (isActive && PinkaHelper.getWaSessionData(context)) {
                 voteButton.setVisibility(View.VISIBLE);
                 voteButtonDivider.setVisibility(View.VISIBLE);
+                final int voteChoice;
 
                 // If voting FOR the resolution
                 if (WaVoteStatus.VOTE_FOR.equals(voteStatus)) {
@@ -334,28 +328,30 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     voteButtonContent.setText(context.getString(R.string.wa_resolution_vote_default));
                     voteChoice = VoteDialog.VOTE_UNDECIDED;
                 }
+
+                voteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        resolutionActivity.showVoteDialog(voteChoice);
+                    }
+                });
             }
             else {
                 voteButtonDivider.setVisibility(View.GONE);
                 voteButton.setVisibility(View.GONE);
+                voteButton.setOnClickListener(null);
             }
-        }
-
-        @OnClick(R.id.wa_resolution_vote)
-        public void onClickVoteButton() {
-            resolutionActivity.showVoteDialog(voteChoice);
         }
     }
 
     public class ResolutionBreakdownCard extends ResolutionCard {
-        @BindView(R.id.wa_voting_breakdown)
-        PieChart votingBreakdown;
-        @BindView(R.id.resolution_null_vote)
-        TextView nullVote;
+        private PieChart votingBreakdown;
+        private TextView nullVote;
 
         public ResolutionBreakdownCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            votingBreakdown = (PieChart) itemView.findViewById(R.id.wa_voting_breakdown);
+            nullVote = (TextView) itemView.findViewById(R.id.resolution_null_vote);
         }
 
         public void init() {
@@ -370,20 +366,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private List<Integer> votesFor;
         private List<Integer> votesAgainst;
 
-        @BindView(R.id.wa_voting_history)
-        LineChart votingHistory;
-        @BindView(R.id.wa_vote_history_for)
-        TextView voteHistoryFor;
-        @BindView(R.id.wa_vote_history_against)
-        TextView voteHistoryAgainst;
-        @BindView(R.id.history_icon_vote_for)
-        ImageView histIconVoteFor;
-        @BindView(R.id.history_icon_vote_against)
-        ImageView histIconVoteAgainst;
+        private LineChart votingHistory;
+        private TextView voteHistoryFor;
+        private TextView voteHistoryAgainst;
+        private ImageView histIconVoteFor;
+        private ImageView histIconVoteAgainst;
 
         public ResolutionHistoryCard(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            votingHistory = (LineChart) itemView.findViewById(R.id.wa_voting_history);
+            voteHistoryFor = (TextView) itemView.findViewById(R.id.wa_vote_history_for);
+            voteHistoryAgainst = (TextView) itemView.findViewById(R.id.wa_vote_history_against);
+            histIconVoteFor = (ImageView) itemView.findViewById(R.id.history_icon_vote_for);
+            histIconVoteAgainst = (ImageView) itemView.findViewById(R.id.history_icon_vote_against);
         }
 
         public void init() {

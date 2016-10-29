@@ -16,6 +16,8 @@
 
 package com.lloydtorres.stately.nation;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -45,10 +47,6 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Lloyd on 2016-01-13.
  * The main nation fragment called either by StatelyActivity or ExploreNationActivity.
@@ -76,30 +74,18 @@ public class NationFragment extends Fragment {
     private HappeningsSubFragment happeningsSubFragment;
 
     // variables used for nation views
-    @BindView(R.id.nation_name)
-    TextView nationName;
-    @BindView(R.id.nation_prename)
-    TextView nationPrename;
-    @BindView(R.id.nation_banner)
-    ImageView nationBanner;
-    @BindView(R.id.nation_flag)
-    ImageView nationFlag;
+    private TextView nationName;
+    private TextView nationPrename;
+    private ImageView nationBanner;
+    private ImageView nationFlag;
 
     // variables used for tabs
-    @BindView(R.id.nation_tabs)
-    PagerSlidingTabStrip tabs;
-    @BindView(R.id.nation_pager)
-    ViewPager tabsPager;
+    private PagerSlidingTabStrip tabs;
+    private ViewPager tabsPager;
     private LayoutAdapter tabsAdapter;
 
-    @BindView(R.id.toolbar_nation)
-    Toolbar toolbar;
-    @BindView(R.id.collapsing_container)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.nation_appbar)
-    AppBarLayout appBarLayout;
-
-    private Unbinder unbinder;
+    private Toolbar toolbar;
+    private Activity mActivity;
 
     public void setNation(Nation n) {
         mNation = n;
@@ -117,6 +103,13 @@ public class NationFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        // Get activity for manipulation
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -124,7 +117,6 @@ public class NationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nation, container, false);
-        unbinder = ButterKnife.bind(this, view);
 
         // Restore state
         if (savedInstanceState != null && mNation == null) {
@@ -133,7 +125,7 @@ public class NationFragment extends Fragment {
 
         initToolbar(view);
         if (mNation != null) {
-            initNationData(view);
+            getAllNationViews(view);
         }
 
         return view;
@@ -144,15 +136,18 @@ public class NationFragment extends Fragment {
      * @param view
      */
     private void initToolbar(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
         toolbar.setTitle("");
 
-        if (getActivity() instanceof IToolbarActivity) {
-            ((IToolbarActivity) getActivity()).setToolbar(toolbar);
+        if (mActivity instanceof IToolbarActivity) {
+            ((IToolbarActivity) mActivity).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container);
         collapsingToolbarLayout.setTitle("");
 
+        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.nation_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -187,10 +182,24 @@ public class NationFragment extends Fragment {
      */
     private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
+        tabsPager = (ViewPager) view.findViewById(R.id.nation_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
         tabsPager.setAdapter(tabsAdapter);
         // Bind the tabs to the ViewPager
+        tabs = (PagerSlidingTabStrip) view.findViewById(R.id.nation_tabs);
         tabs.setViewPager(tabsPager);
+    }
+
+    /**
+     * Get the views for the nation elements within the collapsing toolbar
+     * @param view
+     */
+    private void getAllNationViews(View view) {
+        nationName = (TextView) view.findViewById(R.id.nation_name);
+        nationPrename = (TextView) view.findViewById(R.id.nation_prename);
+        nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
+        nationFlag = (ImageView) view.findViewById(R.id.nation_flag);
+        initNationData(view);
     }
 
     /**
@@ -247,9 +256,10 @@ public class NationFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void onDestroy() {
+        // Decouple activity on destroy
+        super.onDestroy();
+        mActivity = null;
     }
 
     // For formatting the tab slider
