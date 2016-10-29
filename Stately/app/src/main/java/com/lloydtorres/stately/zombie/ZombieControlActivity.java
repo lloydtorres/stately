@@ -27,6 +27,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
+import com.lloydtorres.stately.dto.ZSuperweaponProgress;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
@@ -39,6 +40,7 @@ import com.lloydtorres.stately.wa.VoteDialog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.HashMap;
@@ -52,9 +54,11 @@ import java.util.Map;
 public class ZombieControlActivity extends RefreshviewActivity {
     public static final String ZOMBIE_USER_DATA = "zombieUserData";
     public static final String ZOMBIE_REGION_DATA = "zombieRegionData";
+    public static final String Z_SUPERWEAPON_PROGRESS = "zSuperweaponProgress";
 
     private ZombieControlData userData;
     private ZombieRegion regionData;
+    private ZSuperweaponProgress superweaponProgress;
     private boolean isInProgress;
 
     @Override
@@ -66,6 +70,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
         if (savedInstanceState != null) {
             userData = savedInstanceState.getParcelable(ZOMBIE_USER_DATA);
             regionData = savedInstanceState.getParcelable(ZOMBIE_REGION_DATA);
+            superweaponProgress = savedInstanceState.getParcelable(Z_SUPERWEAPON_PROGRESS);
         }
 
         getSupportActionBar().setTitle(getString(R.string.zombie_control));
@@ -151,7 +156,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         Persister serializer = new Persister();
                         try {
                             regionData = serializer.read(ZombieRegion.class, response);
-                            initRecycler();
+                            queryZSuperweaponProgress();
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -179,14 +184,91 @@ public class ZombieControlActivity extends RefreshviewActivity {
     }
 
     /**
+     * Queries the user's superweapon progress.
+     */
+    private void queryZSuperweaponProgress() {
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        processZSuperweaponProgress(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Processes the zombie control page to check the user's superweapon progress.
+     * @param response
+     */
+    private void processZSuperweaponProgress(String response) {
+        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+        Element superweaponContainer = d.select("div#zsuperweapon").first();
+        if (superweaponContainer != null) {
+            superweaponProgress = new ZSuperweaponProgress();
+
+            Elements superweaponItems = superweaponContainer.select(".zsuperweapon_item");
+            for (Element e : superweaponItems) {
+                String superweaponType = e.select(".zsuperweapon_name").first().text();
+                String level;
+                String progress = e.select(".zsuperweapon_complete").first().text();
+
+                switch (superweaponType) {
+                    case ZSuperweaponProgress.TYPE_TZES:
+                        level = e.select(".zsuperweapon_level").first().text();
+                        if (ZSuperweaponProgress.ONE_HUNDRED_PERCENT.equals(progress)) {
+                            superweaponProgress.tzesCurrentLevel = level;
+                        } else {
+                            superweaponProgress.tzesNextLevel = level;
+                            superweaponProgress.tzesNextProgress = progress;
+                        }
+                        break;
+                    case ZSuperweaponProgress.TYPE_CURE:
+                        level = e.select(".zsuperweapon_level").first().text();
+                        if (ZSuperweaponProgress.ONE_HUNDRED_PERCENT.equals(progress)) {
+                            superweaponProgress.cureCurrentLevel = level;
+                        } else {
+                            superweaponProgress.cureNextLevel = level;
+                            superweaponProgress.cureNextProgress = progress;
+                        }
+                        break;
+                    case ZSuperweaponProgress.TYPE_HORDE:
+                        if (ZSuperweaponProgress.ONE_HUNDRED_PERCENT.equals(progress)) {
+                            superweaponProgress.hordeProgress = progress;
+                        }
+                        break;
+                }
+            }
+        }
+
+        mSwipeRefreshLayout.setRefreshing(false);
+        initRecycler();
+    }
+
+    /**
      * Initializes the recyclerview.
      */
     private void initRecycler() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager(), userData, regionData);
+            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager(), userData, regionData, superweaponProgress);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
-            ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData);
+            ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData, superweaponProgress);
         }
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -324,6 +406,9 @@ public class ZombieControlActivity extends RefreshviewActivity {
         if (regionData != null) {
             savedInstanceState.putParcelable(ZOMBIE_REGION_DATA, regionData);
         }
+        if (superweaponProgress != null) {
+            savedInstanceState.putParcelable(Z_SUPERWEAPON_PROGRESS, superweaponProgress);
+        }
     }
 
     @Override
@@ -336,6 +421,9 @@ public class ZombieControlActivity extends RefreshviewActivity {
             }
             if (regionData == null) {
                 regionData = savedInstanceState.getParcelable(ZOMBIE_REGION_DATA);
+            }
+            if (superweaponProgress == null) {
+                superweaponProgress = savedInstanceState.getParcelable(Z_SUPERWEAPON_PROGRESS);
             }
         }
     }

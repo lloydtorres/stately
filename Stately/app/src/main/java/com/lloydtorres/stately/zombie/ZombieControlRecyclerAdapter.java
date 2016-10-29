@@ -28,11 +28,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.ZSuperweaponProgress;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
+import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
+
+import java.util.Locale;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
@@ -54,17 +58,20 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private FragmentManager fm;
     private ZombieControlData userData;
     private ZombieRegion regionData;
+    private ZSuperweaponProgress progress;
 
-    public ZombieControlRecyclerAdapter(ZombieControlActivity act, FragmentManager f, ZombieControlData zcd, ZombieRegion zr) {
+    public ZombieControlRecyclerAdapter(ZombieControlActivity act, FragmentManager f,
+                                        ZombieControlData zcd, ZombieRegion zr, ZSuperweaponProgress p) {
         activity = act;
         context = activity;
         fm = f;
-        setContent(zcd, zr);
+        setContent(zcd, zr, p);
     }
 
-    public void setContent(ZombieControlData zcd, ZombieRegion zr) {
+    public void setContent(ZombieControlData zcd, ZombieRegion zr, ZSuperweaponProgress p) {
         userData = zcd;
         regionData = zr;
+        progress = p;
         notifyDataSetChanged();
     }
 
@@ -97,7 +104,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         switch (holder.getItemViewType()) {
             case CARD_ACTION:
                 ZombieActionCard actionCard = (ZombieActionCard) holder;
-                actionCard.init(userData);
+                actionCard.init(userData, progress);
                 break;
             case CARD_CHART_NATION:
             case CARD_CHART_REGION:
@@ -156,7 +163,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             exploreButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
         }
 
-        public void init(final ZombieControlData data) {
+        public void init(final ZombieControlData data, final ZSuperweaponProgress progress) {
             LayoutInflater inflater = LayoutInflater.from(context);
 
             DashHelper dashie = DashHelper.getInstance(context);
@@ -188,12 +195,54 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             action.setText(data.zombieData.getActionDescription(context, data.name));
 
-            // @TODO: Add superweapon descriptions depending on what's available
             superweaponContent.removeAllViews();
-            inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), context.getString(R.string.zombie_superweapon_desc));
+
+            if (progress != null) {
+                if (progress.isAnySuperweaponVisible()) {
+                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), context.getString(R.string.zombie_superweapon_desc));
+                }
+
+                // Check for TZES availability
+                if (progress.isTzesVisible()) {
+                    StringBuilder sb = new StringBuilder();
+                    if (progress.isTzesReady()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_current), progress.tzesCurrentLevel));
+                    }
+                    if (progress.isTzesNextVisible()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.tzesNextLevel, progress.tzesNextProgress));
+                    }
+                    sb.append(context.getString(R.string.zombie_superweapon_tze_content));
+                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_tze_title), sb.toString());
+                }
+
+                // Check for cure availability
+                if (progress.isCureVisible()) {
+                    StringBuilder sb = new StringBuilder();
+                    if (progress.isCureReady()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_current), progress.cureCurrentLevel));
+                    }
+                    if (progress.isCureNextVisible()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.cureNextLevel, progress.cureNextProgress));
+                    }
+                    sb.append(context.getString(R.string.zombie_superweapon_cure_content));
+                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_cure_title), sb.toString());
+                }
+
+                // Check for horde availability
+                if (progress.isHordeVisible()) {
+                    StringBuilder sb = new StringBuilder();
+                    if (progress.isHordeReady()) {
+                        sb.append(context.getString(R.string.zombie_superweapon_horde_current));
+                    } else if (progress.isHordeNextVisible()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_horde_next), progress.hordeProgress));
+                    }
+                    sb.append(context.getString(R.string.zombie_superweapon_horde_content));
+                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_horde_title), sb.toString());
+                }
+            }
 
             boolean isActionButtonVisible = true;
-            boolean isExploreButtonVisible = false;
+            boolean isExploreButtonVisible = progress != null && progress.isAnySuperweaponReady();
 
             // Setup button
             // Only show if there are still survivors or zombies
@@ -216,16 +265,19 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 isActionButtonVisible = false;
             }
 
-            // @TODO: Setup explore button if cure is available
-
-            /**
-             exploreButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ExploreDialog exploreDialog = new ExploreDialog();
-                    exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
-                }
-            });**/
+            if (progress != null && progress.isAnySuperweaponReady()) {
+                exploreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ExploreDialog exploreDialog = new ExploreDialog();
+                        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
+                    }
+                });
+                exploreButton.setVisibility(View.VISIBLE);
+            } else {
+                exploreButton.setOnClickListener(null);
+                exploreButton.setVisibility(View.GONE);
+            }
 
             divider.setVisibility((isActionButtonVisible || isExploreButtonVisible) ? View.VISIBLE : View.GONE);
         }

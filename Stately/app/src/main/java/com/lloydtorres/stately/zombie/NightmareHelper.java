@@ -89,9 +89,8 @@ public final class NightmareHelper {
      * @return If Z-Day is active
      */
     public static boolean getIsZDayActive(Context c) {
-        // @TODO: Uncomment actual implementation
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return true; //return storage.getBoolean(USERSESSION_IS_ZDAY, false);
+        return storage.getBoolean(USERSESSION_IS_ZDAY, false);
     }
 
     public static final String HEADER_MILITARY = "m8";
