@@ -31,6 +31,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 /**
  * Created by Lloyd on 2016-09-11.
  * Skeleton for fragments that use the Refreshview layout.
+ * IMPORTANT NOTE: Can't use Butter Knife here due to weird lifecycle issues.
  */
 public abstract class RefreshviewFragment extends Fragment {
 
