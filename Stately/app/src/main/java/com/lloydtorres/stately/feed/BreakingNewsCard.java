@@ -30,17 +30,22 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Lloyd on 2016-10-15.
  * Recycler view card for combining a bunch of happenings together.
  */
 public class BreakingNewsCard extends RecyclerView.ViewHolder {
-    private LinearLayout newsHolder;
+    @BindView(R.id.card_world_breaking_news_holder)
+    LinearLayout newsHolder;
+
     private LayoutInflater inflater;
 
     public BreakingNewsCard(View itemView) {
         super(itemView);
-        newsHolder = (LinearLayout) itemView.findViewById(R.id.card_world_breaking_news_holder);
+        ButterKnife.bind(this, itemView);
     }
 
     public void init(Context context, List<Event> newsItems) {

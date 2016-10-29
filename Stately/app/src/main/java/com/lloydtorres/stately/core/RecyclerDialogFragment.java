@@ -34,6 +34,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Lloyd on 2016-09-16.
@@ -45,6 +46,8 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView.Adapter mRecyclerAdapter;
+
+    private Unbinder unbinder;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
-        ButterKnife.bind(this, mView);
+        unbinder = ButterKnife.bind(this, mView);
 
         initRecycler(mView);
 
@@ -93,5 +96,11 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
                 mRecyclerView.setLayoutParams(lp);
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

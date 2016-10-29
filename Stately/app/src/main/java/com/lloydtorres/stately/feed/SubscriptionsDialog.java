@@ -30,6 +30,10 @@ import android.widget.CheckBox;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by Lloyd on 2016-02-08.
  * This shows a dialog allowing users to modify their activity feed subscriptions.
@@ -46,23 +50,29 @@ public class SubscriptionsDialog extends DialogFragment {
     private SharedPreferences storage; // shared preferences
     private ActivityFeedFragment callback;
 
-    private CheckBox curNation;
-    private CheckBox switchNations;
-    private CheckBox dossierNations;
-    private CheckBox curRegion;
-    private CheckBox dossierRegions;
-    private CheckBox assembly;
+    @BindView(R.id.subscriptions_curnation)
+    CheckBox curNation;
+    @BindView(R.id.subscriptions_switch)
+    CheckBox switchNations;
+    @BindView(R.id.subscriptions_dossier_n)
+    CheckBox dossierNations;
+    @BindView(R.id.subscriptions_region)
+    CheckBox curRegion;
+    @BindView(R.id.subscriptions_dossier_r)
+    CheckBox dossierRegions;
+    @BindView(R.id.subscriptions_wa)
+    CheckBox assembly;
+
+    private Unbinder unbinder;
 
     public SubscriptionsDialog() { }
 
-    public void setCallback(ActivityFeedFragment c)
-    {
+    public void setCallback(ActivityFeedFragment c) {
         callback = c;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
@@ -71,18 +81,13 @@ public class SubscriptionsDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState)  {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_subscriptions_dialog, null);
+        unbinder = ButterKnife.bind(this, dialogView);
 
-        curNation = (CheckBox) dialogView.findViewById(R.id.subscriptions_curnation);
         curNation.setChecked(storage.getBoolean(CURRENT_NATION, true));
-        switchNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_switch);
         switchNations.setChecked(storage.getBoolean(SWITCH_NATIONS, true));
-        dossierNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_n);
         dossierNations.setChecked(storage.getBoolean(DOSSIER_NATIONS, true));
-        curRegion = (CheckBox) dialogView.findViewById(R.id.subscriptions_region);
         curRegion.setChecked(storage.getBoolean(CURRENT_REGION, true));
-        dossierRegions = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_r);
         dossierRegions.setChecked(storage.getBoolean(DOSSIER_REGIONS, true));
-        assembly = (CheckBox) dialogView.findViewById(R.id.subscriptions_wa);
         assembly.setChecked(storage.getBoolean(WORLD_ASSEMBLY, true));
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
@@ -110,5 +115,11 @@ public class SubscriptionsDialog extends DialogFragment {
                 .setNegativeButton(R.string.explore_negative, null);
 
         return dialogBuilder.create();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
