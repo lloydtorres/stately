@@ -22,6 +22,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.7.2** - Z-Day support, issues API, bug fixes and other improvements.
 * **1.7.1** - Restore text selection, bug fixes and other improvements.
 * **1.7.0** - Notifications, themes, World, census rankings, open old resolutions, improved telegrams, region polls, dossier.
 * **1.6.3** - Enable move to SD card, bug fixes and improvements.
