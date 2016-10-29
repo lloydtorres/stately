@@ -16,8 +16,6 @@
 
 package com.lloydtorres.stately.region;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -98,18 +96,10 @@ public class RegionFragment extends Fragment {
 
     private Toolbar toolbar;
     private ProgressBar progressBar;
-    private Activity mActivity;
 
     public void setRegionName(String n) { mRegionName = n; }
     public void setRegion(Region r) { mRegion = r; }
     public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
-
-    @Override
-    public void onAttach(Context context) {
-        // Get activity for manipulation
-        super.onAttach(context);
-        mActivity = (Activity) context;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,8 +140,8 @@ public class RegionFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
-        if (mActivity != null && mActivity instanceof IToolbarActivity) {
-            ((IToolbarActivity) mActivity).setToolbar(toolbar);
+        if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
+            ((IToolbarActivity) getActivity()).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
@@ -252,13 +242,6 @@ public class RegionFragment extends Fragment {
         savedInstanceState.putString(REGION_NAME_KEY, mRegionName);
         savedInstanceState.putParcelable(REGION_DATA_KEY, mRegion);
         savedInstanceState.putString(REGION_RMB_UNREAD_KEY, rmbUnreadCountText);
-    }
-
-    @Override
-    public void onDestroy() {
-        // Decouple activity on destroy
-        super.onDestroy();
-        mActivity = null;
     }
 
     private void updateRegion(final View view) {

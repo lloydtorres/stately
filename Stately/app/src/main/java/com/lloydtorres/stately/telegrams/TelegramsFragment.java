@@ -16,8 +16,6 @@
 
 package com.lloydtorres.stately.telegrams;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -78,7 +76,6 @@ public class TelegramsFragment extends Fragment {
     private static final int SCAN_BACKWARD = 0;
     private static final int SCAN_FORWARD = 1;
 
-    private Activity mActivity;
     private View mView;
     private Toolbar toolbar;
     private SwipyRefreshLayout mSwipeRefreshLayout;
@@ -93,13 +90,6 @@ public class TelegramsFragment extends Fragment {
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
     private String chkValue;
-
-    @Override
-    public void onAttach(Context context) {
-        // Get activity for manipulation
-        super.onAttach(context);
-        mActivity = (Activity) context;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,8 +121,8 @@ public class TelegramsFragment extends Fragment {
         toolbar = (Toolbar) mView.findViewById(R.id.message_board_toolbar);
         toolbar.setTitle(getString(R.string.menu_telegrams));
 
-        if (mActivity != null && mActivity instanceof IToolbarActivity) {
-            ((IToolbarActivity) mActivity).setToolbar(toolbar);
+        if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
+            ((IToolbarActivity) getActivity()).setToolbar(toolbar);
         }
 
         // Set up refresher to reload data on refresh
@@ -684,12 +674,5 @@ public class TelegramsFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDestroy() {
-        // Detach activity on destroy
-        super.onDestroy();
-        mActivity = null;
     }
 }

@@ -16,8 +16,6 @@
 
 package com.lloydtorres.stately.nation;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -85,7 +83,6 @@ public class NationFragment extends Fragment {
     private LayoutAdapter tabsAdapter;
 
     private Toolbar toolbar;
-    private Activity mActivity;
 
     public void setNation(Nation n) {
         mNation = n;
@@ -100,13 +97,6 @@ public class NationFragment extends Fragment {
             overviewSubFragment.setNation(mNation);
             overviewSubFragment.forceRefreshData();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        // Get activity for manipulation
-        super.onAttach(context);
-        mActivity = (Activity) context;
     }
 
     @Override
@@ -139,8 +129,8 @@ public class NationFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
         toolbar.setTitle("");
 
-        if (mActivity instanceof IToolbarActivity) {
-            ((IToolbarActivity) mActivity).setToolbar(toolbar);
+        if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
+            ((IToolbarActivity) getActivity()).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
@@ -253,13 +243,6 @@ public class NationFragment extends Fragment {
         if (mNation != null) {
             savedInstanceState.putParcelable(NATION_DATA_KEY, mNation);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        // Decouple activity on destroy
-        super.onDestroy();
-        mActivity = null;
     }
 
     // For formatting the tab slider

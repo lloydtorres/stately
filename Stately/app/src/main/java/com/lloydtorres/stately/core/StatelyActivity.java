@@ -48,7 +48,6 @@ import com.lloydtorres.stately.dto.UserNation;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.ActivityFeedFragment;
-import com.lloydtorres.stately.helpers.GenericFragment;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -331,7 +330,6 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        FragmentManager fm = getSupportFragmentManager();
 
         // Main selections
         if (id != currentPosition && !isNoSelect(id)) {
@@ -372,12 +370,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                     break;
                 default:
                     // Backup
-                    fChoose = new GenericFragment();
+                    fChoose = getNationFragment();
+                    navInit = NATION_FRAGMENT;
                     break;
             }
 
             // Switch fragments
-            fm.beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.coordinator_app_bar, fChoose)
                     .commit();
             drawer.closeDrawer(GravityCompat.START);
