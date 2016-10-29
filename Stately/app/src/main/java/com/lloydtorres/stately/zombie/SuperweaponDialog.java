@@ -27,6 +27,7 @@ import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.ZSuperweaponStatus;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
@@ -65,7 +66,7 @@ public class SuperweaponDialog extends DialogFragment {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.zombie_button_missile)
                 .setView(dialogView)
-                .setPositiveButton(R.string.zombie_action_do_button, dialogListener)
+                .setPositiveButton(R.string.superweapon_deploy, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null);
 
         return dialogBuilder.create();
@@ -88,8 +89,8 @@ public class SuperweaponDialog extends DialogFragment {
                 break;
         }
 
-        if (choice != null) {
-            // @TODO: Connect to ExploreActivity
+        if (choice != null && getActivity() != null && getActivity() instanceof ExploreActivity) {
+            ((ExploreActivity) getActivity()).deployZSuperweapon(choice);
         }
     }
 }

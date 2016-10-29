@@ -875,6 +875,96 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
     }
 
+    /**
+     * Sends a POST to NS with the user's selected superweapon. Reacts appropriately based on response.
+     * Used for Z-Day.
+     * @param superweapon Header for the selected superweapon
+     */
+    public void deployZSuperweapon(final String superweapon) {
+        if (isInProgress) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
+        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, id);
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        processZSuperweaponResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        Map<String,String> params = new HashMap<String, String>();
+        params.put(superweapon, "1");
+        stringRequest.setParams(params);
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    private static final String ZSW_TZES_RESPONSE = "ZOMBIE HUNTERS ARE GO";
+    private static final String ZSW_CURE_RESPONSE = "CURE MISSILE FIRED";
+    private static final String ZSW_HORDE_RESPONSE = "HORDE UNLEASHED";
+
+    private static final String ZSW_MISFIRE = "Superweapon not ready! Misfire!";
+    private static final String ZSW_HIT = "Cooldown was reset";
+
+    private static final String ZSW_NO_ZOMBIES = "is free of infection";
+    private static final String ZSW_NO_SURVIVORS = "is free of survivors";
+
+    /**
+     * Processes the response from NS after a superweapon was fired.
+     * @param response HTML response from NS
+     */
+    private void processZSuperweaponResponse(final String response) {
+        if (response != null) {
+            if (response.contains(ZSW_TZES_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_tzes_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_CURE_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_cure_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_HORDE_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_horde_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_MISFIRE)) {
+                SparkleHelper.makeSnackbar(view, getString(R.string.superweapon_misfire));
+            } else if (response.contains(ZSW_HIT)) {
+                SparkleHelper.makeSnackbar(view, getString(R.string.superweapon_hit));
+            } else if (response.contains(ZSW_NO_ZOMBIES)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_no_zombies), name));
+            } else if (response.contains(ZSW_NO_SURVIVORS)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_no_survivors), name));
+            } else {
+                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                queryNation(name);
+            }
+        } else {
+            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+        }
+        isInProgress = false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
