@@ -27,6 +27,7 @@ import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -58,6 +59,10 @@ public class OverviewSubFragment extends NationSubFragment {
 
     @Override
     protected void initData() {
+        if (NightmareHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
+            cards.add(mNation.zombieData);
+        }
+
         NationOverviewCardData nocData = new NationOverviewCardData();
 
         // Set up custom government category depending on user preferences

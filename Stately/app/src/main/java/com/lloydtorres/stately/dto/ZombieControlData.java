@@ -29,33 +29,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Lloyd on 2016-10-17.
- * This model contains data from the API issues query.
+ * Created by Lloyd on 2016-10-15.
+ * Model contains user data used for zombie control.
  */
 @Root(name="NATION", strict=false)
-public class IssueFullHolder implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues+nextissuetime+zombie"
+public class ZombieControlData implements Parcelable {
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
+                                        + "name+flag+zombie+happenings"
                                         + "&v=" + SparkleHelper.API_VERSION;
-    public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
+    public static final String ZOMBIE_CONTROL = SparkleHelper.BASE_URI_NOSLASH + "/page=zombie_control";
 
-    @ElementList(name="ISSUES", required=false)
-    public List<Issue> issues;
-    @Element(name="NEXTISSUETIME", required=false)
-    public long nextIssueTime;
-    @Element(name="ZOMBIE", required=false)
+    @Element(name="NAME")
+    public String name;
+    @Element(name="FLAG")
+    public String flagURL;
+    @Element(name="ZOMBIE")
     public Zombie zombieData;
+    @ElementList(name="HAPPENINGS")
+    public List<Event> events;
 
-    public IssueFullHolder() { super(); }
+    public ZombieControlData() { super(); }
 
-    protected IssueFullHolder(Parcel in) {
-        if (in.readByte() == 0x01) {
-            issues = new ArrayList<Issue>();
-            in.readList(issues, Issue.class.getClassLoader());
-        } else {
-            issues = null;
-        }
-        nextIssueTime = in.readLong();
+    protected ZombieControlData(Parcel in) {
+        name = in.readString();
+        flagURL = in.readString();
         zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            events = new ArrayList<Event>();
+            in.readList(events, Event.class.getClassLoader());
+        } else {
+            events = null;
+        }
     }
 
     @Override
@@ -65,26 +69,27 @@ public class IssueFullHolder implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (issues == null) {
+        dest.writeString(name);
+        dest.writeString(flagURL);
+        dest.writeValue(zombieData);
+        if (events == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(issues);
+            dest.writeList(events);
         }
-        dest.writeLong(nextIssueTime);
-        dest.writeValue(zombieData);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueFullHolder> CREATOR = new Parcelable.Creator<IssueFullHolder>() {
+    public static final Parcelable.Creator<ZombieControlData> CREATOR = new Parcelable.Creator<ZombieControlData>() {
         @Override
-        public IssueFullHolder createFromParcel(Parcel in) {
-            return new IssueFullHolder(in);
+        public ZombieControlData createFromParcel(Parcel in) {
+            return new ZombieControlData(in);
         }
 
         @Override
-        public IssueFullHolder[] newArray(int size) {
-            return new IssueFullHolder[size];
+        public ZombieControlData[] newArray(int size) {
+            return new ZombieControlData[size];
         }
     };
 }

@@ -61,6 +61,7 @@ Stately uses the following open-source libraries:
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
 * [Picasso](https://github.com/square/picasso)
+* [Pulsator4Droid](https://github.com/booncol/Pulsator4Droid)
 * [Simple XML](http://simple.sourceforge.net/)
 * [Slidr](https://github.com/r0adkll/Slidr)
 * [Sugar ORM](https://github.com/satyan/sugar)

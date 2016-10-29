@@ -24,6 +24,9 @@ import android.view.ViewGroup;
 
 import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 
@@ -32,9 +35,13 @@ import java.util.ArrayList;
  * Nation-specific sub-fragments.
  */
 public abstract class NationSubFragment extends RecyclerSubFragment {
+    public static final String NATION_NAME_DATA = "nationName";
+    public static final String IS_SAME_REGION_DATA = "isSameRegion";
     public static final String CARDS_DATA = "cards";
 
     protected Nation mNation;
+    protected String nationName;
+    protected boolean isSameRegion;
     protected ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
     public void setNation(Nation n)
@@ -52,11 +59,20 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore state
-        if (savedInstanceState != null && cards == null) {
-            cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
+        if (savedInstanceState != null) {
+            if (cards == null) {
+                cards = savedInstanceState.getParcelableArrayList(CARDS_DATA);
+            }
+            if (nationName == null) {
+                nationName = savedInstanceState.getString(NATION_NAME_DATA);
+            }
+            isSameRegion = savedInstanceState.getBoolean(IS_SAME_REGION_DATA);
         }
 
         if ((cards == null || cards.size() <= 0) && mNation != null) {
+            nationName = mNation.name;
+            String curRegionName = PinkaHelper.getRegionSessionData(getContext());
+            isSameRegion = (SparkleHelper.getIdFromName(curRegionName).equals(SparkleHelper.getIdFromName(mNation.region)));
             initData();
         }
 
@@ -79,7 +95,11 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
 
     private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager());
+            if (getParentFragment() != null && getParentFragment().getActivity() instanceof ExploreActivity) {
+                mRecyclerAdapter = new NationCardsRecyclerAdapter(cards, getFragmentManager(), nationName, isSameRegion, (ExploreActivity) getParentFragment().getActivity());
+            } else {
+                mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager(), nationName, isSameRegion);
+            }
             if (isOnlySetAdapterOnNull) {
                 mRecyclerView.setAdapter(mRecyclerAdapter);
             }
@@ -98,5 +118,9 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         if (cards != null) {
             outState.putParcelableArrayList(CARDS_DATA, cards);
         }
+        if (nationName != null) {
+            outState.putString(NATION_NAME_DATA, nationName);
+        }
+        outState.putBoolean(IS_SAME_REGION_DATA, isSameRegion);
     }
 }

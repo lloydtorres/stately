@@ -51,7 +51,7 @@ public class Nation implements Parcelable {
                                                 + "+notable+sensibilities+crime+deaths"
                                                 + "+govtdesc+govt"
                                                 + "+industrydesc+poorest+richest+sectors"
-                                                + "+happenings";
+                                                + "+happenings+zombie";
 
     public static final String CENSUS_MODIFIER = ";scale=all;mode=score+rank+rrank+prank+prrank";
 
@@ -161,10 +161,10 @@ public class Nation implements Parcelable {
     @ElementList(name="HAPPENINGS")
     public List<Event> events;
 
-    public Nation()
-    {
-        super();
-    }
+    @Element(name="ZOMBIE")
+    public Zombie zombieData;
+
+    public Nation() { super(); }
 
     protected Nation(Parcel in) {
         bannerKey = in.readString();
@@ -225,6 +225,7 @@ public class Nation implements Parcelable {
         } else {
             events = null;
         }
+        zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
     }
 
     @Override
@@ -292,6 +293,7 @@ public class Nation implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(events);
         }
+        dest.writeValue(zombieData);
     }
 
     @SuppressWarnings("unused")
@@ -306,6 +308,7 @@ public class Nation implements Parcelable {
             return new Nation[size];
         }
     };
+
 
     /**
      * Return the URL of a nation banner.

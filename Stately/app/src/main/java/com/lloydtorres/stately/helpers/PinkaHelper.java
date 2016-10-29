@@ -75,8 +75,7 @@ public final class PinkaHelper {
      * @param c App context
      * @param name User name
      */
-    public static void setActiveUser(Context c, String name)
-    {
+    public static void setActiveUser(Context c, String name) {
         // Assume that the autologin and PIN in shared prefs are correct
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         String autologin = storage.getString(USERSESSION_AUTOLOGIN, null);
@@ -97,8 +96,7 @@ public final class PinkaHelper {
      * @param c App context
      * @param autologin User autologin cookie
      */
-    public static void setActiveAutologin(Context c, String autologin)
-    {
+    public static void setActiveAutologin(Context c, String autologin) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(USERSESSION_AUTOLOGIN, autologin);
@@ -110,8 +108,7 @@ public final class PinkaHelper {
      * @param c App context
      * @param pin  User pin cookie
      */
-    public static void setActivePin(Context c, String pin)
-    {
+    public static void setActivePin(Context c, String pin) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(USERSESSION_PIN, pin);
@@ -124,8 +121,7 @@ public final class PinkaHelper {
      * @param regionName Current region ID
      * @param waStatus WA membership status
      */
-    public static void setSessionData(Context c, String regionName, String waStatus)
-    {
+    public static void setSessionData(Context c, String regionName, String waStatus) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(USERSESSION_REGION, regionName);
@@ -138,8 +134,7 @@ public final class PinkaHelper {
      * @param c App context
      * @param regionName Current region ID
      */
-    public static void setRegionSessionData(Context c, String regionName)
-    {
+    public static void setRegionSessionData(Context c, String regionName) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(USERSESSION_REGION, regionName);
@@ -151,8 +146,7 @@ public final class PinkaHelper {
      * @param c
      * @param stat
      */
-    public static void setWaSessionData(Context c, String stat)
-    {
+    public static void setWaSessionData(Context c, String stat) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putBoolean(USERSESSION_WA_MEMBER, SparkleHelper.isWaMember(c, stat));
@@ -164,8 +158,7 @@ public final class PinkaHelper {
      * @param c App context
      * @return A UserLogin object with their name and autologin
      */
-    public static UserLogin getActiveUser(Context c)
-    {
+    public static UserLogin getActiveUser(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         String name = storage.getString(USERSESSION_NAME, null);
         String autologin = storage.getString(USERSESSION_AUTOLOGIN, null);
@@ -183,8 +176,7 @@ public final class PinkaHelper {
      * @param c App context.
      * @return The stored active pin.
      */
-    public static String getActivePin(Context c)
-    {
+    public static String getActivePin(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getString(USERSESSION_PIN, null);
     }
@@ -194,8 +186,7 @@ public final class PinkaHelper {
      * @param c App context
      * @return ID of region
      */
-    public static String getRegionSessionData(Context c)
-    {
+    public static String getRegionSessionData(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getString(USERSESSION_REGION, null);
     }
@@ -205,8 +196,7 @@ public final class PinkaHelper {
      * @param c App context
      * @return WA membership status
      */
-    public static boolean getWaSessionData(Context c)
-    {
+    public static boolean getWaSessionData(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(USERSESSION_WA_MEMBER, false);
     }
@@ -215,8 +205,7 @@ public final class PinkaHelper {
      * Removes data about the logged in user from shared prefs.
      * @param c App context
      */
-    public static void removeActiveUser(Context c)
-    {
+    public static void removeActiveUser(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.remove(USERSESSION_NAME);

@@ -33,6 +33,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.push.TrixHelper;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 /**
  * Created by Lloyd on 2016-01-27.
@@ -244,6 +245,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
      */
 
     public static int getTheme(Context c) {
+        // Force noir theme on Z-Day
+        if (NightmareHelper.getIsZDayActive(c)) {
+            return THEME_NOIR;
+        }
+
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         int theme = THEME_VERT;
         try {

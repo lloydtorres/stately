@@ -107,6 +107,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".zombie.ZombieControlActivity"
+            android:label="@string/zombie_control"
+            android:theme="@style/AppTheme.SlidrActivity">
+        </activity>
+        <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/menu_settings"
             android:theme="@style/AppTheme.SlidrActivity">

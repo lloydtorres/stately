@@ -47,7 +47,9 @@ import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Dossier;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.UserExploreData;
 import com.lloydtorres.stately.dto.UserLogin;
+import com.lloydtorres.stately.dto.ZSuperweaponStatus;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -56,6 +58,8 @@ import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.nation.NationFragment;
 import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
+import com.lloydtorres.stately.zombie.NightmareHelper;
+import com.lloydtorres.stately.zombie.SuperweaponDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -94,6 +98,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     public static final String IS_MOVEABLE = "isMoveable";
     public static final String IS_PASSWORD = "isPassword";
     public static final String IS_IN_DOSSIER = "isInDossier";
+    public static final String SUPERWEAPON_STATUS = "superweaponStatus";
 
     public static final String ENDORSE_URL = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/endorse.cgi";
     private static final String ENDORSE_REQUEST = "endorse";
@@ -115,6 +120,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private boolean isPassword;
     private boolean isInDossier;
     private boolean isInProgress;
+    private ZSuperweaponStatus superweaponStatus;
 
     private Fragment mFragment;
 
@@ -156,6 +162,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             isMoveable = savedInstanceState.getBoolean(IS_MOVEABLE, false);
             isPassword = savedInstanceState.getBoolean(IS_PASSWORD, false);
             isInDossier = savedInstanceState.getBoolean(IS_IN_DOSSIER, false);
+            superweaponStatus = savedInstanceState.getParcelable(SUPERWEAPON_STATUS);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
@@ -240,7 +247,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private void verifyInput(String name) {
         if (SparkleHelper.isValidName(name) && name.length() > 0) {
             name = SparkleHelper.getIdFromName(name);
-            queryAndCheckDossier(name);
+            queryAndCheckUserExploreData(name);
         }
         else {
             switch (mode) {
@@ -256,27 +263,28 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
     /**
      * Checks if the nation/region being explored is in the current user's dossier.
+     * Also checks the current user's zombie stats as appropriate.
      * Calls on the appropriate query function afterwards.
      * @param name Nation/region to check
      */
-    private void queryAndCheckDossier(final String name) {
+    private void queryAndCheckUserExploreData(final String name) {
         String userId = PinkaHelper.getActiveUser(this).nationId;
-        String targetURL = String.format(Locale.US, Dossier.QUERY, SparkleHelper.getIdFromName(userId));
+        String targetURL = String.format(Locale.US, UserExploreData.QUERY, SparkleHelper.getIdFromName(userId));
 
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Dossier dossierResponse;
+                        UserExploreData userDataResponse;
                         Persister serializer = new Persister();
                         try {
-                            dossierResponse = serializer.read(Dossier.class, response);
+                            userDataResponse = serializer.read(UserExploreData.class, response);
                             String targetId = SparkleHelper.getIdFromName(name);
-                            if (mode == EXPLORE_NATION && dossierResponse.nations != null) {
-                                isInDossier = dossierResponse.nations.contains(targetId);
+                            if (mode == EXPLORE_NATION && userDataResponse.nations != null) {
+                                isInDossier = userDataResponse.nations.contains(targetId);
                             }
-                            if (mode == EXPLORE_REGION && dossierResponse.regions != null) {
-                                isInDossier = dossierResponse.regions.contains(targetId);
+                            if (mode == EXPLORE_REGION && userDataResponse.regions != null) {
+                                isInDossier = userDataResponse.regions.contains(targetId);
                             }
                         }
                         catch (Exception e) {
@@ -355,7 +363,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             }
                             invalidateOptionsMenu();
 
-                            initFragment(nationResponse);
+                            if (NightmareHelper.getIsZDayActive(ExploreActivity.this)) {
+                                checkZDaySuperweapons(nationResponse);
+                            } else {
+                                initFragment(nationResponse);
+                            }
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -445,7 +457,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     .commit();
         }
         else {
-            ((NationFragment) mFragment).updateEndorsementData(mNation);
+            ((NationFragment) mFragment).updateOverviewData(mNation);
         }
     }
 
@@ -806,6 +818,153 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         openExploreDialog(true);
     }
 
+    private static final String SUPERWEAPON_BUTTON_TEMPLATE = "button[name=%s]";
+
+    /**
+     * Checks superweapon availability for the given nation, then continues on to initialize the nation fragment.
+     * Used for Z-Day.
+     * @param nationResponse
+     */
+    private void checkZDaySuperweapons(final Nation nationResponse) {
+        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(nationResponse.name));
+        NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        superweaponStatus = new ZSuperweaponStatus();
+                        superweaponStatus.isTZES = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_TZES)).first() != null;
+                        superweaponStatus.isCure = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_CURE)).first() != null;
+                        superweaponStatus.isHorde = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
+                                ZSuperweaponStatus.ZSUPER_HORDE)).first() != null;
+                        initFragment(nationResponse);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Keep going even if there's an error
+                SparkleHelper.logError(error.toString());
+                initFragment(nationResponse);
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            // Keep going even if there's an error
+            initFragment(nationResponse);
+        }
+    }
+
+    /**
+     * Call to show the superweapon dialog.
+     */
+    public void showSuperweaponDialog() {
+        // Only show dialog if at least one superweapon is available
+        if (superweaponStatus != null &&
+                (superweaponStatus.isTZES || superweaponStatus.isCure || superweaponStatus.isHorde)) {
+            SuperweaponDialog superweaponDialog = new SuperweaponDialog();
+            superweaponDialog.setSuperweaponStatus(superweaponStatus);
+            superweaponDialog.show(getSupportFragmentManager(), SuperweaponDialog.DIALOG_TAG);
+        } else {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            dialogBuilder.setTitle(R.string.zombie_button_missile)
+                    .setMessage(R.string.superweapon_none)
+                    .setPositiveButton(R.string.got_it, null);
+            dialogBuilder.show();
+        }
+    }
+
+    /**
+     * Sends a POST to NS with the user's selected superweapon. Reacts appropriately based on response.
+     * Used for Z-Day.
+     * @param superweapon Header for the selected superweapon
+     */
+    public void deployZSuperweapon(final String superweapon) {
+        if (isInProgress) {
+            SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+        isInProgress = true;
+
+        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, id);
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        processZSuperweaponResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        Map<String,String> params = new HashMap<String, String>();
+        params.put(superweapon, "1");
+        stringRequest.setParams(params);
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    private static final String ZSW_TZES_RESPONSE = "ZOMBIE HUNTERS ARE GO";
+    private static final String ZSW_CURE_RESPONSE = "CURE MISSILE FIRED";
+    private static final String ZSW_HORDE_RESPONSE = "HORDE UNLEASHED";
+
+    private static final String ZSW_MISFIRE = "Superweapon not ready! Misfire!";
+    private static final String ZSW_HIT = "Cooldown was reset";
+
+    private static final String ZSW_NO_ZOMBIES = "is free of infection";
+    private static final String ZSW_NO_SURVIVORS = "is free of survivors";
+
+    /**
+     * Processes the response from NS after a superweapon was fired.
+     * @param response HTML response from NS
+     */
+    private void processZSuperweaponResponse(final String response) {
+        if (response != null) {
+            if (response.contains(ZSW_TZES_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_tzes_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_CURE_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_cure_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_HORDE_RESPONSE)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_horde_response), name));
+                queryNation(name);
+            } else if (response.contains(ZSW_MISFIRE)) {
+                SparkleHelper.makeSnackbar(view, getString(R.string.superweapon_misfire));
+            } else if (response.contains(ZSW_HIT)) {
+                SparkleHelper.makeSnackbar(view, getString(R.string.superweapon_hit));
+            } else if (response.contains(ZSW_NO_ZOMBIES)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_no_zombies), name));
+            } else if (response.contains(ZSW_NO_SURVIVORS)) {
+                SparkleHelper.makeSnackbar(view,
+                        String.format(Locale.US, getString(R.string.superweapon_no_survivors), name));
+            } else {
+                SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                queryNation(name);
+            }
+        } else {
+            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+        }
+        isInProgress = false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -846,5 +1005,6 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         savedInstanceState.putBoolean(IS_MOVEABLE, isMoveable);
         savedInstanceState.putBoolean(IS_PASSWORD, isPassword);
         savedInstanceState.putBoolean(IS_IN_DOSSIER, isInDossier);
+        savedInstanceState.putParcelable(SUPERWEAPON_STATUS, superweaponStatus);
     }
 }

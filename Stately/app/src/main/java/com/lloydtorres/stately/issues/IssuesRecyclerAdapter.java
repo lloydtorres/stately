@@ -23,14 +23,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.zombie.NightmareHelper;
+import com.lloydtorres.stately.zombie.ZombieControlActivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +47,7 @@ import java.util.Locale;
 public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ISSUE_CARD = 0;
     private static final int NEXT_CARD = 1;
+    private static final int ZOMBIE_CARD = 2;
 
     private Context context;
     private List<Object> issues;
@@ -61,7 +67,11 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         switch (viewType) {
             case ISSUE_CARD:
                 View issueCard = inflater.inflate(R.layout.card_issue_main, parent, false);
-                viewHolder = new IssueCard(context, issueCard);
+                viewHolder = new IssueCard(issueCard);
+                break;
+            case ZOMBIE_CARD:
+                View zombieCard = inflater.inflate(R.layout.card_issue_zombie_control, parent, false);
+                viewHolder = new ZombieIssueCard(zombieCard);
                 break;
             default:
                 View nextCard = inflater.inflate(R.layout.card_generic, parent, false);
@@ -77,6 +87,10 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case ISSUE_CARD:
                 IssueCard issueCard = (IssueCard) holder;
                 issueCard.init((Issue) issues.get(position));
+                break;
+            case ZOMBIE_CARD:
+                ZombieIssueCard zombieCard = (ZombieIssueCard) holder;
+                zombieCard.init((Zombie) issues.get(position));
                 break;
             default:
                 NextCard nextCard = (NextCard) holder;
@@ -95,6 +109,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (issues.get(position) instanceof Issue) {
             return ISSUE_CARD;
         }
+        else if (issues.get(position) instanceof Zombie) {
+            return ZOMBIE_CARD;
+        }
         else if (issues.get(position) instanceof Long) {
             return NEXT_CARD;
         }
@@ -108,29 +125,23 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     // Card viewholders
     public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private Context context;
         private TextView title;
         private TextView id;
         private Issue issue;
 
-        public IssueCard(Context c, View v) {
+        public IssueCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.card_issue_main_title);
             id = (TextView) v.findViewById(R.id.card_issue_main_number);
-
             v.setOnClickListener(this);
         }
 
         public void init(Issue i) {
             issue = i;
-
             title.setText(issue.title);
             if (issue.chain != null) {
                 id.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
-            }
-            else {
+            } else {
                 id.setText(String.format(Locale.US, context.getString(R.string.issue_number), issue.id));
             }
         }
@@ -169,6 +180,34 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             );
             params.setMargins(0, 0, 0, 0);
             nextUpdate.setLayoutParams(params);
+        }
+    }
+
+    public class ZombieIssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private ImageView background;
+        private TextView survivalRate;
+
+        public ZombieIssueCard(View v) {
+            super(v);
+            background = (ImageView) v.findViewById(R.id.card_issue_zombie_control_background);
+            survivalRate = (TextView) v.findViewById(R.id.card_issue_zombie_control_survival_rate);
+            v.setOnClickListener(this);
+        }
+
+        public void init(Zombie zombieData) {
+            DashHelper dashie = DashHelper.getInstance(context);
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), background, false);
+            float total = zombieData.survivors + zombieData.dead + zombieData.zombies;
+            float survivalRatePercent = (zombieData.survivors / total) * 100f;
+            survivalRate.setText(String.format(Locale.US, context.getString(R.string.zombie_control_survival),
+                    SparkleHelper.getPrettifiedNumber(survivalRatePercent)));
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent zombieControlLaunch = new Intent(context, ZombieControlActivity.class);
+            context.startActivity(zombieControlLaunch);
         }
     }
 }
