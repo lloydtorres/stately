@@ -118,15 +118,15 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         switch (viewType) {
             case FULL_CARD:
                 View fullCard = inflater.inflate(R.layout.card_telegram, parent, false);
-                viewHolder = new TelegramCard(context, fullCard);
+                viewHolder = new TelegramCard(fullCard);
                 break;
             case PREVIEW_CARD:
                 View previewCard = inflater.inflate(R.layout.card_telegram_preview, parent, false);
-                viewHolder = new TelegramPreviewCard(context, previewCard);
+                viewHolder = new TelegramPreviewCard(previewCard);
                 break;
             default:
                 View emptyCard = inflater.inflate(R.layout.card_happening, parent, false);
-                viewHolder = new NoTelegramsCard(context, emptyCard);
+                viewHolder = new NoTelegramsCard(emptyCard);
                 break;
         }
 
@@ -240,8 +240,6 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class TelegramCard extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
-
-        private Context context;
         private Telegram telegram;
 
         private TextView sender;
@@ -263,9 +261,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private LinearLayout regionVisitButton;
         private TextView regionVisitButtonContent;
 
-        public TelegramCard(Context c, View v) {
+        public TelegramCard( View v) {
             super(v);
-            context = c;
             sender = (TextView) v.findViewById(R.id.card_telegram_from);
             recipients = (TextView) v.findViewById(R.id.card_telegram_to);
             timestamp = (TextView) v.findViewById(R.id.card_telegram_time);
@@ -448,8 +445,6 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class TelegramPreviewCard extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private Context context;
         private Telegram telegram;
         private TextView header;
         private TextView timestamp;
@@ -458,9 +453,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView alertText;
         private HtmlTextView preview;
 
-        public TelegramPreviewCard(Context c, View v) {
+        public TelegramPreviewCard(View v) {
             super(v);
-            context = c;
             header = (TextView) v.findViewById(R.id.card_telegram_preview_from);
             timestamp = (TextView) v.findViewById(R.id.card_telegram_preview_time);
             alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_preview_alert_holder);
@@ -508,12 +502,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class NoTelegramsCard extends RecyclerView.ViewHolder {
-        public NoTelegramsCard(Context c, View v) {
+        public NoTelegramsCard(View v) {
             super(v);
             TextView cardTime = (TextView) v.findViewById(R.id.card_happening_time);
             TextView cardContent = (TextView) v.findViewById(R.id.card_happening_content);
             cardTime.setVisibility(View.GONE);
-            cardContent.setText(c.getString(R.string.rmb_no_content));
+            cardContent.setText(context.getString(R.string.rmb_no_content));
             cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,

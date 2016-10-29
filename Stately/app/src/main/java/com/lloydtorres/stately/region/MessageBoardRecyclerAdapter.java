@@ -187,7 +187,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View postCard = inflater.inflate(R.layout.card_post, parent, false);
-        RecyclerView.ViewHolder viewHolder = new PostCard(context, postCard);
+        RecyclerView.ViewHolder viewHolder = new PostCard(postCard);
         return viewHolder;
     }
 
@@ -230,8 +230,6 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class PostCard extends RecyclerView.ViewHolder {
-
-        private Context context;
         private Post post;
         private CardView cardContainer;
         private TextView cardAuthor;
@@ -306,9 +304,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        public PostCard(Context c, View v) {
+        public PostCard(View v) {
             super(v);
-            context = c;
             cardContainer = (CardView) v.findViewById(R.id.card_post_container);
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);

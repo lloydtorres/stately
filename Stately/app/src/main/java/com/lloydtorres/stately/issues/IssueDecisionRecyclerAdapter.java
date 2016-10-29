@@ -77,11 +77,11 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case INFO_CARD:
                 View infoCard = inflater.inflate(R.layout.card_issue_info, parent, false);
-                viewHolder = new IssueInfoCard(context, infoCard);
+                viewHolder = new IssueInfoCard(infoCard);
                 break;
             default:
                 View optionCard = inflater.inflate(R.layout.card_issue_option, parent, false);
-                viewHolder = new IssueOptionCard(context, optionCard);
+                viewHolder = new IssueOptionCard(optionCard);
                 break;
         }
         return viewHolder;
@@ -125,14 +125,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     // Card for info on issue
     public class IssueInfoCard extends RecyclerView.ViewHolder {
-        private Context context;
         private TextView title;
         private TextView issueNo;
         private TextView content;
 
-        public IssueInfoCard(Context c, View v) {
+        public IssueInfoCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.card_issue_info_title);
             issueNo = (TextView) v.findViewById(R.id.card_issue_info_number);
             content = (TextView) v.findViewById(R.id.card_issue_option_content);
@@ -155,7 +153,6 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     // Card for options
     public class IssueOptionCard extends RecyclerView.ViewHolder {
-        private Context context;
         private IssueOption option;
         private TextView content;
         private LinearLayout contentHolder;
@@ -164,10 +161,8 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private TextView selectContent;
         private View divider;
 
-        public IssueOptionCard(Context c, View v) {
+        public IssueOptionCard(View v) {
             super(v);
-
-            context = c;
             content = (TextView) v.findViewById(R.id.card_issue_option_content);
             contentHolder = (LinearLayout) v.findViewById(R.id.card_issue_option_content_holder);
             selectButton = (LinearLayout) v.findViewById(R.id.card_issue_option_select);

@@ -75,7 +75,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         switch (viewType) {
             case ACTIVE_CARD:
                 View activeCard = inflater.inflate(R.layout.card_wa_active, parent, false);
-                viewHolder = new ActiveCard(context, activeCard);
+                viewHolder = new ActiveCard(activeCard);
                 break;
             case INACTIVE_CARD:
                 View inactiveCard = inflater.inflate(R.layout.card_wa_inactive, parent, false);
@@ -160,7 +160,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card for active resolutions
     public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Context context;
         private TextView cardTitle;
         private TextView cardHeader;
         private TextView cardActiveTime;
@@ -169,9 +168,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         private ImageView iconVoteFor;
         private ImageView iconVoteAgainst;
 
-        public ActiveCard(Context c, View v) {
+        public ActiveCard(View v) {
             super(v);
-            context = c;
             cardTitle = (TextView) v.findViewById(R.id.card_wa_council);
             cardHeader = (TextView) v.findViewById(R.id.card_wa_title);
             cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);

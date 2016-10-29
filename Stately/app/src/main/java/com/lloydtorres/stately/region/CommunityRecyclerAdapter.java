@@ -101,23 +101,23 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         switch (viewType) {
             case BUTTON_CARD:
                 View rmbCard = inflater.inflate(R.layout.card_button, parent, false);
-                viewHolder = new MessageBoardCard(context, rmbCard);
+                viewHolder = new MessageBoardCard(rmbCard);
                 break;
             case POLL_CARD:
                 View pollCard = inflater.inflate(R.layout.card_poll, parent, false);
-                viewHolder = new PollCard(context, pollCard);
+                viewHolder = new PollCard(pollCard);
                 break;
             case WA_CARD:
                 View waCard = inflater.inflate(R.layout.card_region_wa, parent, false);
-                viewHolder = new RegionWaCard(context, waCard);
+                viewHolder = new RegionWaCard(waCard);
                 break;
             case OFFICER_CARD:
                 View officerCard = inflater.inflate(R.layout.card_officers, parent, false);
-                viewHolder = new OfficerCard(context, officerCard);
+                viewHolder = new OfficerCard(officerCard);
                 break;
             case EMBASSY_CARD:
                 View embassyCard = inflater.inflate(R.layout.card_embassies, parent, false);
-                viewHolder = new EmbassyCard(context, embassyCard);
+                viewHolder = new EmbassyCard(embassyCard);
                 break;
         }
         return viewHolder;
@@ -193,13 +193,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     // Card for the RMB button
     public class MessageBoardCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Context context;
         private TextView unreadCounter;
         private RMBButtonHolder buttonData;
 
-        public MessageBoardCard(Context c, View v) {
+        public MessageBoardCard(View v) {
             super(v);
-            context = c;
             unreadCounter = (TextView) v.findViewById(R.id.card_button_num);
             v.setOnClickListener(this);
         }
@@ -230,7 +228,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     // Card for the region poll
     public class PollCard extends RecyclerView.ViewHolder {
 
-        private Context context;
         private TextView question;
         private HtmlTextView content;
         private TextView author;
@@ -243,9 +240,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private LinearLayout voteButton;
         private TextView voteButtonContent;
 
-        public PollCard(Context c, View v) {
+        public PollCard(View v) {
             super(v);
-            context = c;
             question = (TextView) v.findViewById(R.id.card_region_poll_question);
             content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
             author = (TextView) v.findViewById(R.id.card_region_poll_author);
@@ -358,8 +354,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     // Card for the WA poll
     public class RegionWaCard extends RecyclerView.ViewHolder {
-
-        private Context context;
         private TextView title;
         private TextView filler;
         private PieChart chart;
@@ -367,9 +361,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView linkContent;
         private TextView nullVote;
 
-        public RegionWaCard(Context c, View v) {
+        public RegionWaCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.region_wa_title);
             filler = (TextView) v.findViewById(R.id.region_wa_vote_filler);
             chart = (PieChart) v.findViewById(R.id.region_wa_breakdown);
@@ -413,14 +406,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class OfficerCard extends RecyclerView.ViewHolder {
 
-        private Context context;
         private LayoutInflater inflater;
         private LinearLayout officersLayout;
         private TextView noOfficers;
 
-        public OfficerCard(Context c, View itemView) {
+        public OfficerCard(View itemView) {
             super(itemView);
-            context = c;
             inflater = LayoutInflater.from(context);
             officersLayout = (LinearLayout) itemView.findViewById(R.id.card_region_officers_layout);
             noOfficers = (TextView) itemView.findViewById(R.id.governance_none);
@@ -457,13 +448,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class EmbassyCard extends RecyclerView.ViewHolder {
 
-        private Context context;
         private CardView embassyCard;
         private TextView embassyNum;
 
-        public EmbassyCard(Context c, View itemView) {
+        public EmbassyCard(View itemView) {
             super(itemView);
-            context = c;
             embassyCard = (CardView) itemView.findViewById(R.id.card_region_embassies);
             embassyNum = (TextView) itemView.findViewById(R.id.card_region_embassies_num);
         }

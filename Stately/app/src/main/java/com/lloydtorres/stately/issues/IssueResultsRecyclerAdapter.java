@@ -79,22 +79,22 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         switch (viewType) {
             case NEWS_CARD:
-                viewHolder = new NewsCard(context, genericCard);
+                viewHolder = new NewsCard(genericCard);
                 break;
             case POSITION_CARD:
-                viewHolder = new PositionCard(context, genericCard);
+                viewHolder = new PositionCard(genericCard);
                 break;
             case POSTCARD_CARD:
                 View postcardCard = inflater.inflate(R.layout.card_postcard, parent, false);
-                viewHolder = new PostcardCard(context, postcardCard);
+                viewHolder = new PostcardCard(postcardCard);
                 break;
             case CENSUSDELTA_CARD:
                 View censusDeltaCard = inflater.inflate(R.layout.card_census_delta, parent, false);
-                viewHolder = new CensusDeltaCard(context, censusDeltaCard);
+                viewHolder = new CensusDeltaCard(censusDeltaCard);
                 break;
             default:
                 View headlineCard = inflater.inflate(R.layout.card_headline, parent, false);
-                viewHolder = new HeadlineCard(context, headlineCard);
+                viewHolder = new HeadlineCard(headlineCard);
                 break;
         }
         return viewHolder;
@@ -198,13 +198,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class NewsCard extends RecyclerView.ViewHolder {
-        private Context context;
         private TextView title;
         private TextView content;
 
-        public NewsCard(Context c, View v) {
+        public NewsCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.card_generic_title);
             content = (TextView) v.findViewById(R.id.card_generic_content);
         }
@@ -216,13 +214,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class PositionCard extends RecyclerView.ViewHolder {
-        private Context context;
         private TextView title;
         private TextView content;
 
-        public PositionCard(Context c, View v) {
+        public PositionCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.card_generic_title);
             content = (TextView) v.findViewById(R.id.card_generic_content);
         }
@@ -234,13 +230,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class HeadlineCard extends RecyclerView.ViewHolder {
-        private Context context;
         private TextView title;
         private ImageView img;
 
-        public HeadlineCard(Context c, View v) {
+        public HeadlineCard(View v) {
             super(v);
-            context = c;
             title = (TextView) v.findViewById(R.id.card_issue_headline);
             img = (ImageView) v.findViewById(R.id.card_issue_headline_img);
         }
@@ -253,14 +247,12 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class PostcardCard extends RecyclerView.ViewHolder {
-        private Context context;
         private TextView nationName;
         private TextView postContent;
         private ImageView img;
 
-        public PostcardCard(Context c, View v) {
+        public PostcardCard(View v) {
             super(v);
-            context = c;
             nationName = (TextView) v.findViewById(R.id.card_postcard_nation) ;
             postContent = (TextView) v.findViewById(R.id.card_postcard_title);
             img = (ImageView) v.findViewById(R.id.card_postcard_img);
@@ -276,16 +268,14 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public class CensusDeltaCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CensusDelta delta;
 
-        private Context context;
         private CardView cardHolder;
         private TextView title;
         private TextView unit;
         private ImageView trend;
         private TextView value;
 
-        public CensusDeltaCard(Context c, View v) {
+        public CensusDeltaCard(View v) {
             super(v);
-            context = c;
             cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
             title = (TextView) v.findViewById(R.id.card_delta_name);
             unit = (TextView) v.findViewById(R.id.card_delta_unit);
