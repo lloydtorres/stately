@@ -16,8 +16,6 @@
 
 package com.lloydtorres.stately.region;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -59,6 +57,10 @@ import org.simpleframework.xml.core.Persister;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by Lloyd on 2016-01-21.
  * The region fragment called either by StatelyActivity or ExploreRegionActivity.
@@ -87,29 +89,35 @@ public class RegionFragment extends Fragment {
     private HappeningsSubFragment regionHappeningsSubFragment;
 
     // variables used for mRegion views
-    private TextView regionName;
-    private TextView regionPop;
-    private ImageView regionFlag;
+
+    @BindView(R.id.region_name)
+    TextView regionName;
+    @BindView(R.id.region_pop)
+    TextView regionPop;
+    @BindView(R.id.region_flag)
+    ImageView regionFlag;
 
     // variables used for tabs
-    private PagerSlidingTabStrip tabs;
-    private ViewPager tabsPager;
+    @BindView(R.id.region_tabs)
+    PagerSlidingTabStrip tabs;
+    @BindView(R.id.region_pager)
+    ViewPager tabsPager;
     private LayoutAdapter tabsAdapter;
 
-    private Toolbar toolbar;
-    private ProgressBar progressBar;
-    private Activity mActivity;
+    @BindView(R.id.toolbar_region)
+    Toolbar toolbar;
+    @BindView(R.id.region_progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.collapsing_container_region)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.region_appbar)
+    AppBarLayout appBarLayout;
+
+    private Unbinder unbinder;
 
     public void setRegionName(String n) { mRegionName = n; }
     public void setRegion(Region r) { mRegion = r; }
     public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
-
-    @Override
-    public void onAttach(Context context) {
-        // Get activity for manipulation
-        super.onAttach(context);
-        mActivity = (Activity) context;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,8 +127,7 @@ public class RegionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.region_progress_bar);
+        unbinder = ButterKnife.bind(this, view);
 
         initToolbar(view);
 
@@ -133,7 +140,7 @@ public class RegionFragment extends Fragment {
 
         if (mRegion != null) {
             mRegionName = mRegion.name;
-            getAllRegionViews(view);
+            initRegionData(view);
         }
         else {
             updateRegion(view);
@@ -147,18 +154,15 @@ public class RegionFragment extends Fragment {
      * @param view
      */
     private void initToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
-        if (mActivity != null && mActivity instanceof IToolbarActivity) {
-            ((IToolbarActivity) mActivity).setToolbar(toolbar);
+        if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
+            ((IToolbarActivity) getActivity()).setToolbar(toolbar);
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container_region);
         collapsingToolbarLayout.setTitle("");
 
-        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.region_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -189,24 +193,10 @@ public class RegionFragment extends Fragment {
      */
     private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
-        tabsPager = (ViewPager) view.findViewById(R.id.region_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
         tabsPager.setAdapter(tabsAdapter);
         // Bind the tabs to the ViewPager
-        tabs = (PagerSlidingTabStrip) view.findViewById(R.id.region_tabs);
         tabs.setViewPager(tabsPager);
-    }
-
-    /**
-     * Get the views for the region elements at the top of the fragment
-     * @param view
-     */
-    private void getAllRegionViews(View view) {
-        regionName = (TextView) view.findViewById(R.id.region_name);
-        regionPop = (TextView) view.findViewById(R.id.region_pop);
-        regionFlag = (ImageView) view.findViewById(R.id.region_flag);
-
-        initRegionData(view);
     }
 
     /**
@@ -254,13 +244,6 @@ public class RegionFragment extends Fragment {
         savedInstanceState.putString(REGION_RMB_UNREAD_KEY, rmbUnreadCountText);
     }
 
-    @Override
-    public void onDestroy() {
-        // Decouple activity on destroy
-        super.onDestroy();
-        mActivity = null;
-    }
-
     private void updateRegion(final View view) {
         progressBar.setVisibility(View.VISIBLE);
 
@@ -280,7 +263,7 @@ public class RegionFragment extends Fragment {
                             regionResponse = Region.parseRegionXML(serializer, response);
 
                             mRegion = regionResponse;
-                            getAllRegionViews(view);
+                            initRegionData(view);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -313,6 +296,12 @@ public class RegionFragment extends Fragment {
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     // For formatting the tab slider

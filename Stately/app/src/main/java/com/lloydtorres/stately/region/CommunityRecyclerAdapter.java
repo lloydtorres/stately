@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -60,6 +59,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -191,17 +194,18 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     // Card viewholders
 
     // Card for the RMB button
-    public class MessageBoardCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MessageBoardCard extends RecyclerView.ViewHolder {
 
         private Context context;
-        private TextView unreadCounter;
         private RMBButtonHolder buttonData;
+
+        @BindView(R.id.card_button_num)
+        TextView unreadCounter;
 
         public MessageBoardCard(Context c, View v) {
             super(v);
+            ButterKnife.bind(this, v);
             context = c;
-            unreadCounter = (TextView) v.findViewById(R.id.card_button_num);
-            v.setOnClickListener(this);
         }
 
         public void init(RMBButtonHolder bh) {
@@ -215,8 +219,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
 
-        @Override
-        public void onClick(View v) {
+        @OnClick(R.id.card_button_main)
+        public void onClick() {
             unreadCounter.setVisibility(View.INVISIBLE);
             buttonData.unreadCount = null;
             notifyItemChanged(getAdapterPosition());
@@ -231,32 +235,33 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public class PollCard extends RecyclerView.ViewHolder {
 
         private Context context;
-        private TextView question;
-        private HtmlTextView content;
-        private TextView author;
-        private TextView open;
-        private TextView close;
-        private LinearLayout options;
-        private PieChart breakdown;
-        private TextView nullVote;
-        private View divider;
-        private LinearLayout voteButton;
-        private TextView voteButtonContent;
+        @BindView(R.id.card_region_poll_question)
+        TextView question;
+        @BindView(R.id.card_region_poll_content)
+        HtmlTextView content;
+        @BindView(R.id.card_region_poll_author)
+        TextView author;
+        @BindView(R.id.card_region_poll_open)
+        TextView open;
+        @BindView(R.id.card_region_poll_close)
+        TextView close;
+        @BindView(R.id.card_region_poll_options)
+        LinearLayout options;
+        @BindView(R.id.card_region_poll_chart)
+        PieChart breakdown;
+        @BindView(R.id.region_poll_null_vote)
+        TextView nullVote;
+        @BindView(R.id.view_divider)
+        View divider;
+        @BindView(R.id.card_region_poll_vote_button)
+        LinearLayout voteButton;
+        @BindView(R.id.card_region_poll_vote_button_content)
+        TextView voteButtonContent;
 
         public PollCard(Context c, View v) {
             super(v);
+            ButterKnife.bind(this, v);
             context = c;
-            question = (TextView) v.findViewById(R.id.card_region_poll_question);
-            content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
-            author = (TextView) v.findViewById(R.id.card_region_poll_author);
-            open = (TextView) v.findViewById(R.id.card_region_poll_open);
-            close = (TextView) v.findViewById(R.id.card_region_poll_close);
-            options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
-            breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
-            nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
-            divider = v.findViewById(R.id.view_divider);
-            voteButton = (LinearLayout) v.findViewById(R.id.card_region_poll_vote_button);
-            voteButtonContent = (TextView) v.findViewById(R.id.card_region_poll_vote_button_content);
         }
 
         public void init(final Poll p) {
@@ -360,35 +365,29 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public class RegionWaCard extends RecyclerView.ViewHolder {
 
         private Context context;
-        private TextView title;
-        private TextView filler;
-        private PieChart chart;
-        private LinearLayout resolutionLink;
-        private TextView linkContent;
-        private TextView nullVote;
+        @BindView(R.id.region_wa_title)
+        TextView title;
+        @BindView(R.id.region_wa_vote_filler)
+        TextView filler;
+        @BindView(R.id.region_wa_breakdown)
+        PieChart chart;
+        @BindView(R.id.region_wa_link)
+        LinearLayout resolutionLink;
+        @BindView(R.id.region_wa_link_text)
+        TextView linkContent;
+        @BindView(R.id.region_wa_null_vote)
+        TextView nullVote;
+
+        private WaVote w;
 
         public RegionWaCard(Context c, View v) {
             super(v);
+            ButterKnife.bind(this, v);
             context = c;
-            title = (TextView) v.findViewById(R.id.region_wa_title);
-            filler = (TextView) v.findViewById(R.id.region_wa_vote_filler);
-            chart = (PieChart) v.findViewById(R.id.region_wa_breakdown);
-            resolutionLink = (LinearLayout) v.findViewById(R.id.region_wa_link);
-            linkContent = (TextView) v.findViewById(R.id.region_wa_link_text);
-            nullVote = (TextView) v.findViewById(R.id.region_wa_null_vote);
         }
 
-        public void init(WaVote w) {
-            // Setup resolution link
-            Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
-            resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
-            final Intent fResolution = resolutionActivityLaunch;
-            resolutionLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    context.startActivity(fResolution);
-                }
-            });
+        public void init(WaVote waVote) {
+            w = waVote;
 
             String chamberName = "";
             switch(w.chamber) {
@@ -409,21 +408,30 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 nullVote.setVisibility(View.VISIBLE);
             }
         }
+
+        @OnClick(R.id.region_wa_link)
+        public void openResolution() {
+            Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
+            resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
+            context.startActivity(resolutionActivityLaunch);
+        }
     }
 
     public class OfficerCard extends RecyclerView.ViewHolder {
 
         private Context context;
         private LayoutInflater inflater;
-        private LinearLayout officersLayout;
-        private TextView noOfficers;
+
+        @BindView(R.id.card_region_officers_layout)
+        LinearLayout officersLayout;
+        @BindView(R.id.governance_none)
+        TextView noOfficers;
 
         public OfficerCard(Context c, View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             context = c;
             inflater = LayoutInflater.from(context);
-            officersLayout = (LinearLayout) itemView.findViewById(R.id.card_region_officers_layout);
-            noOfficers = (TextView) itemView.findViewById(R.id.governance_none);
         }
 
         public void init(OfficerHolder offhold) {
@@ -458,31 +466,31 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public class EmbassyCard extends RecyclerView.ViewHolder {
 
         private Context context;
-        private CardView embassyCard;
-        private TextView embassyNum;
+        private ArrayList<String> embassyList;
+
+        @BindView(R.id.card_region_embassies_num)
+        TextView embassyNum;
 
         public EmbassyCard(Context c, View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             context = c;
-            embassyCard = (CardView) itemView.findViewById(R.id.card_region_embassies);
-            embassyNum = (TextView) itemView.findViewById(R.id.card_region_embassies_num);
         }
 
         public void init(EmbassyHolder embhold) {
-            ArrayList<String> embassyList = embhold.embassies;
-
+            embassyList = embhold.embassies;
             embassyNum.setText(String.valueOf(embassyList.size()));
-            final ArrayList<String> embassies = embassyList;
-            embassyCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    NameListDialog nameListDialog = new NameListDialog();
-                    nameListDialog.setTitle(context.getString(R.string.card_region_embassies));
-                    nameListDialog.setNames(embassies);
-                    nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
-                    nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
-                }
-            });
+        }
+
+        @OnClick(R.id.card_region_embassies)
+        public void openEmbassyList() {
+            if (embassyList != null) {
+                NameListDialog nameListDialog = new NameListDialog();
+                nameListDialog.setTitle(context.getString(R.string.card_region_embassies));
+                nameListDialog.setNames(embassyList);
+                nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
+                nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+            }
         }
     }
 }
