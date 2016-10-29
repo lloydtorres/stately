@@ -62,6 +62,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Lloyd on 2016-07-24.
  * A RecyclerView adapter for the four main nation tabs.
@@ -196,44 +200,46 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationOverviewCard extends RecyclerView.ViewHolder {
 
-        private HtmlTextView govType;
-        private TextView region;
-        private TextView influence;
-        private TextView population;
-        private TextView motto;
-        private TextView time;
+        private ArrayList<String> properEndorsements;
+
+        @BindView(R.id.nation_gov_type)
+        HtmlTextView govType;
+        @BindView(R.id.nation_region)
+        TextView region;
+        @BindView(R.id.nation_influence)
+        TextView influence;
+        @BindView(R.id.nation_population)
+        TextView population;
+        @BindView(R.id.nation_motto)
+        TextView motto;
+        @BindView(R.id.nation_time)
+        TextView time;
 
         // WA section
-        private RelativeLayout waMember;
-        private LinearLayout waSection;
-        private TextView isWaMember;
-        private View divider;
-        private RelativeLayout endorsementsHolder;
-        private TextView endorsementsCount;
-        private RelativeLayout gaVoteHolder;
-        private TextView gaVote;
-        private RelativeLayout scVoteHolder;
-        private TextView scVote;
+        @BindView(R.id.nation_wa_member)
+        RelativeLayout waMember;
+        @BindView(R.id.card_overview_section_wa)
+        LinearLayout waSection;
+        @BindView(R.id.nation_wa_status)
+        TextView isWaMember;
+        @BindView(R.id.view_divider)
+        View divider;
+        @BindView(R.id.nation_wa_endorsements)
+        RelativeLayout endorsementsHolder;
+        @BindView(R.id.nation_wa_num_endorsements)
+        TextView endorsementsCount;
+        @BindView(R.id.nation_wa_ga_vote)
+        RelativeLayout gaVoteHolder;
+        @BindView(R.id.card_overview_wa_vote_ga)
+        TextView gaVote;
+        @BindView(R.id.nation_wa_sc_vote)
+        RelativeLayout scVoteHolder;
+        @BindView(R.id.card_overview_wa_vote_sc)
+        TextView scVote;
 
         public NationOverviewCard(View view) {
             super(view);
-            govType = (HtmlTextView) view.findViewById(R.id.nation_gov_type);
-            region = (TextView) view.findViewById(R.id.nation_region);
-            influence = (TextView) view.findViewById(R.id.nation_influence);
-            population = (TextView) view.findViewById(R.id.nation_population);
-            motto = (TextView) view.findViewById(R.id.nation_motto);
-            time = (TextView) view.findViewById(R.id.nation_time);
-
-            waMember = (RelativeLayout) view.findViewById(R.id.nation_wa_member);
-            waSection = (LinearLayout) view.findViewById(R.id.card_overview_section_wa);
-            isWaMember = (TextView) view.findViewById(R.id.nation_wa_status);
-            divider = view.findViewById(R.id.view_divider);
-            endorsementsHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_endorsements);
-            endorsementsCount = (TextView) view.findViewById(R.id.nation_wa_num_endorsements);
-            gaVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_ga_vote);
-            gaVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_ga);
-            scVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_sc_vote);
-            scVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_sc);
+            ButterKnife.bind(this, view);
         }
 
         public void init(NationOverviewCardData data) {
@@ -259,26 +265,13 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     // Build endorsements list
                     String[] endorsements = data.endorsements.split(",");
-                    ArrayList<String> properEndorsements = new ArrayList<String>();
+                    properEndorsements = new ArrayList<String>();
 
                     for (String e : endorsements) {
                         properEndorsements.add(SparkleHelper.getNameFromId(e));
                     }
 
                     endorsementsCount.setText(SparkleHelper.getPrettifiedNumber(properEndorsements.size()));
-
-                    final ArrayList<String> fEndorsements = properEndorsements;
-
-                    endorsementsHolder.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            NameListDialog nameListDialog = new NameListDialog();
-                            nameListDialog.setTitle(context.getString(R.string.card_overview_wa_endorsements));
-                            nameListDialog.setNames(fEndorsements);
-                            nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
-                            nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
-                        }
-                    });
                 } else {
                     // disable divider
                     divider.setVisibility(View.GONE);
@@ -295,6 +288,17 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     scVoteHolder.setVisibility(View.VISIBLE);
                     setAssemblyVoteState(scVoteHolder, scVote, data.scVote, Assembly.SECURITY_COUNCIL);
                 }
+            }
+        }
+
+        @OnClick(R.id.nation_wa_endorsements)
+        public void showEndorsements() {
+            if (properEndorsements != null) {
+                NameListDialog nameListDialog = new NameListDialog();
+                nameListDialog.setTitle(context.getString(R.string.card_overview_wa_endorsements));
+                nameListDialog.setNames(properEndorsements);
+                nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
+                nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
             }
         }
 
@@ -357,29 +361,30 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationFreedomCard extends RecyclerView.ViewHolder {
 
-        private CardView civilRightsCard;
-        private TextView civilRightsDesc;
-        private TextView civilRightsPts;
+        @BindView(R.id.card_overview_civrights)
+        CardView civilRightsCard;
+        @BindView(R.id.overview_civrights)
+        TextView civilRightsDesc;
+        @BindView(R.id.overview_civrights_pts)
+        TextView civilRightsPts;
 
-        private CardView economyCard;
-        private TextView economyDesc;
-        private TextView economyPts;
+        @BindView(R.id.card_overview_economy)
+        CardView economyCard;
+        @BindView(R.id.overview_economy)
+        TextView economyDesc;
+        @BindView(R.id.overview_economy_pts)
+        TextView economyPts;
 
-        private CardView politicalCard;
-        private TextView politicalDesc;
-        private TextView politicalPts;
+        @BindView(R.id.card_overview_polifree)
+        CardView politicalCard;
+        @BindView(R.id.overview_polifree)
+        TextView politicalDesc;
+        @BindView(R.id.overview_polifree_pts)
+        TextView politicalPts;
 
         public NationFreedomCard(View view) {
             super(view);
-            civilRightsCard = (CardView) view.findViewById(R.id.card_overview_civrights);
-            civilRightsDesc = (TextView) view.findViewById(R.id.overview_civrights);
-            civilRightsPts = (TextView) view.findViewById(R.id.overview_civrights_pts);
-            economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
-            economyDesc = (TextView) view.findViewById(R.id.overview_economy);
-            economyPts = (TextView) view.findViewById(R.id.overview_economy_pts);
-            politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
-            politicalDesc = (TextView) view.findViewById(R.id.overview_polifree);
-            politicalPts = (TextView) view.findViewById(R.id.overview_polifree_pts);
+            ButterKnife.bind(this, view);
         }
 
         public void init(NationFreedomCardData data) {
@@ -417,20 +422,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationGenericCard extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private TextView content;
-        private LinearLayout detailsHolder;
-        private LinearLayout trendButton;
-        private TextView trendContent;
+        @BindView(R.id.card_nation_generic_title)
+        TextView title;
+        @BindView(R.id.card_nation_generic_content)
+        TextView content;
+        @BindView(R.id.card_nation_generic_details_holder)
+        LinearLayout detailsHolder;
+        @BindView(R.id.card_nation_generic_trend_button)
+        LinearLayout trendButton;
+        @BindView(R.id.card_nation_generic_trend_content)
+        TextView trendContent;
         private LayoutInflater inflater;
 
         public NationGenericCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.card_nation_generic_title);
-            content = (TextView) itemView.findViewById(R.id.card_nation_generic_content);
-            detailsHolder = (LinearLayout) itemView.findViewById(R.id.card_nation_generic_details_holder);
-            trendButton = (LinearLayout) itemView.findViewById(R.id.card_nation_generic_trend_button);
-            trendContent = (TextView) itemView.findViewById(R.id.card_nation_generic_trend_content);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(NationGenericCardData data) {
@@ -472,16 +478,17 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationChartCard extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private LinearLayout details;
-        private PieChart chart;
+        @BindView(R.id.card_nation_chart_title)
+        TextView title;
+        @BindView(R.id.card_nation_chart_details_holder)
+        LinearLayout details;
+        @BindView(R.id.card_nation_chart_chart)
+        PieChart chart;
         private LayoutInflater inflater;
 
         public NationChartCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.card_nation_chart_title);
-            details = (LinearLayout) itemView.findViewById(R.id.card_nation_chart_details_holder);
-            chart = (PieChart) itemView.findViewById(R.id.card_nation_chart_chart);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(NationChartCardData data) {

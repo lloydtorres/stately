@@ -26,15 +26,22 @@ import android.view.ViewGroup;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by Lloyd on 2016-09-12.
  * Skeleton for sub-fragments that use the recycler layout.
  */
 public abstract class RecyclerSubFragment extends Fragment {
 
+    @BindView(R.id.happenings_recycler)
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView.Adapter mRecyclerAdapter;
+
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,12 +51,18 @@ public abstract class RecyclerSubFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
         // Setup recycler view
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

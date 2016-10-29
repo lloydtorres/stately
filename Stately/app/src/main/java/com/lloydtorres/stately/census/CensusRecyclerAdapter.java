@@ -36,6 +36,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Lloyd on 2016-04-09.
  * This recycler is used to display census ranking data in an order specified by the user,
@@ -258,25 +262,24 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      * View holders.
      */
 
-    public class SortButtonCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SortButtonCard extends RecyclerView.ViewHolder {
 
-        private TextView buttonText;
+        @BindView(R.id.card_button_text)
+        TextView buttonText;
 
         public SortButtonCard(View v) {
             super(v);
-            buttonText = (TextView) v.findViewById(R.id.card_button_text);
-            v.setOnClickListener(this);
+            ButterKnife.bind(this, v);
         }
 
         public void init() {
             // Forces card to span across columns
             RaraHelper.setViewHolderFullSpan(itemView);
-
             buttonText.setText(getSortLabel());
         }
 
-        @Override
-        public void onClick(View v) {
+        @OnClick(R.id.card_button_main)
+        public void onClick() {
             FragmentManager fm = fragment.getFragmentManager();
             CensusSortDialog censusSortDialog = new CensusSortDialog();
             censusSortDialog.setMode(mode);
@@ -287,23 +290,23 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public class CensusCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CensusCard extends RecyclerView.ViewHolder {
         private CensusDetailedRank censusData;
 
-        private CardView cardHolder;
-        private TextView title;
-        private TextView unit;
-        private TextView superScript;
-        private TextView value;
+        @BindView(R.id.card_census_delta_main)
+        CardView cardHolder;
+        @BindView(R.id.card_delta_name)
+        TextView title;
+        @BindView(R.id.card_delta_unit)
+        TextView unit;
+        @BindView(R.id.card_delta_superscript)
+        TextView superScript;
+        @BindView(R.id.card_delta_value)
+        TextView value;
 
         public CensusCard(View v) {
             super(v);
-            cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
-            title = (TextView) v.findViewById(R.id.card_delta_name);
-            unit = (TextView) v.findViewById(R.id.card_delta_unit);
-            superScript = (TextView) v.findViewById(R.id.card_delta_superscript);
-            value = (TextView) v.findViewById(R.id.card_delta_value);
-            v.setOnClickListener(this);
+            ButterKnife.bind(this, v);
         }
 
         public void init(CensusDetailedRank data) {
@@ -385,8 +388,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         }
 
-        @Override
-        public void onClick(View v) {
+        @OnClick(R.id.card_census_delta_main)
+        public void onClick() {
             int newMode = mode == CensusSortDialog.CENSUS_MODE_NATION ? TrendsActivity.TREND_NATION : TrendsActivity.TREND_REGION;
             SparkleHelper.startTrends(context, target, newMode, censusData.id);
         }

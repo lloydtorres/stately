@@ -9,6 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 25
@@ -64,4 +65,6 @@ dependencies {
     compile "org.kefirsf:kefirbb:1.5"
     compile 'com.r0adkll:slidableactivity:2.0.5'
     compile 'pl.bclogic:pulsator4droid:1.0.3'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
