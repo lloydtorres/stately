@@ -27,6 +27,10 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Lloyd on 2016-10-02.
  * RecyclerAdapter for PollVoteDialog. Shows a list of poll options and links each one to a call
@@ -39,13 +43,13 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private final PollOption withdrawOption;
 
-    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p) {
+    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p, String withdrawText) {
         fragment = frag;
         dialog = diag;
         pollData = p;
 
         withdrawOption = new PollOption();
-        withdrawOption.text = frag.getString(R.string.poll_vote_withdraw);
+        withdrawOption.text = withdrawText;
         withdrawOption.id = Poll.NO_VOTE;
     }
 
@@ -76,14 +80,14 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         return itemCount;
     }
 
-    public class PollOptionEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PollOptionEntry extends RecyclerView.ViewHolder {
         private PollOption pollOption;
-        private TextView pollOptionContent;
+        @BindView(R.id.basic_nation_name)
+        TextView pollOptionContent;
 
         public PollOptionEntry(View v) {
             super(v);
-            pollOptionContent = (TextView) v.findViewById(R.id.basic_nation_name);
-            v.setOnClickListener(this);
+            ButterKnife.bind(this, v);
         }
 
         public void init(PollOption op) {
@@ -92,7 +96,7 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             pollOptionContent.setTypeface(null, pollOption.id == pollData.votedOption ? Typeface.BOLD : Typeface.NORMAL);
         }
 
-        @Override
+        @OnClick(R.id.basic_name_holder)
         public void onClick(View v) {
             Poll newPollData = pollData;
             newPollData.votedOption = pollOption.id;
