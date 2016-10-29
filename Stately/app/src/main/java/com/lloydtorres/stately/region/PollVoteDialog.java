@@ -53,7 +53,7 @@ public class PollVoteDialog extends RecyclerDialogFragment {
     protected void initRecycler(View view) {
         super.initRecycler(view);
         setDialogTitle(getString(R.string.card_region_poll));
-        mRecyclerAdapter = new PollVoteRecyclerAdapter(fragment, this, pollData);
+        mRecyclerAdapter = new PollVoteRecyclerAdapter(fragment, this, pollData, getString(R.string.poll_vote_withdraw));
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

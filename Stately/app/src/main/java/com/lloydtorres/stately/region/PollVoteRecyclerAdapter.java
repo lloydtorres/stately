@@ -39,13 +39,13 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private final PollOption withdrawOption;
 
-    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p) {
+    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p, String withdrawText) {
         fragment = frag;
         dialog = diag;
         pollData = p;
 
         withdrawOption = new PollOption();
-        withdrawOption.text = frag.getString(R.string.poll_vote_withdraw);
+        withdrawOption.text = withdrawText;
         withdrawOption.id = Poll.NO_VOTE;
     }
 
