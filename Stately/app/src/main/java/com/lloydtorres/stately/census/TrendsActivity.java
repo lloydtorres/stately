@@ -49,6 +49,9 @@ import org.simpleframework.xml.core.Persister;
 import java.util.Collections;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Lloyd on 2016-04-10.
  * This activity downloads and graphs the history of a given dataset.
@@ -84,9 +87,14 @@ public class TrendsActivity extends SlidrActivity {
 
     private String[] WORLD_CENSUS_ITEMS;
 
-    private View view;
-    private SwipyRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.trends_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.trends_main)
+    View view;
+    @BindView(R.id.trends_refresher)
+    SwipyRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.trends_recycler)
+    RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mRecyclerAdapter;
 
@@ -94,6 +102,7 @@ public class TrendsActivity extends SlidrActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trends);
+        ButterKnife.bind(this);
 
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
 
@@ -103,12 +112,8 @@ public class TrendsActivity extends SlidrActivity {
             mode = getIntent().getIntExtra(TREND_DATA_MODE, TREND_NATION);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
         setToolbar(toolbar);
 
-        view = findViewById(R.id.trends_main);
-
-        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
@@ -120,7 +125,6 @@ public class TrendsActivity extends SlidrActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.trends_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

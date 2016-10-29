@@ -32,12 +32,16 @@ import android.widget.LinearLayout;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Lloyd on 2016-09-16.
  * Skeleton for dialogs using the refreshview layout.
  */
 public abstract class RecyclerDialogFragment extends DialogFragment {
     // RecyclerView variables
+    @BindView(R.id.recycler_padded)
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected RecyclerView.Adapter mRecyclerAdapter;
@@ -58,6 +62,7 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
+        ButterKnife.bind(this, mView);
 
         initRecycler(mView);
 
@@ -65,7 +70,6 @@ public abstract class RecyclerDialogFragment extends DialogFragment {
     }
 
     protected void initRecycler(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

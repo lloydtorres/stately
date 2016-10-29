@@ -31,8 +31,7 @@ public class TrendsOnClickListener implements View.OnClickListener {
     private String nationId;
     private int id;
 
-    public TrendsOnClickListener(Context c, String n, int i)
-    {
+    public TrendsOnClickListener(Context c, String n, int i) {
         context = c;
         nationId = n;
         id = i;

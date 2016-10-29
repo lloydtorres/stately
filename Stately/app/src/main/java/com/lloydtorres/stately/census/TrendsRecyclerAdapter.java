@@ -45,6 +45,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Lloyd on 2016-09-08.
  * Recycler adapter for TrendsActivity: contains census title/scale, graph and rankings.
@@ -174,14 +178,15 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // Card viewholders
 
     // Title card
-    private class TitleCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView unit;
+    public class TitleCard extends RecyclerView.ViewHolder {
+        @BindView(R.id.trends_title)
+        TextView title;
+        @BindView(R.id.trends_unit)
+        TextView unit;
 
         public TitleCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.trends_title);
-            unit = (TextView) itemView.findViewById(R.id.trends_unit);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(TrendsHeader header) {
@@ -191,23 +196,25 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     // Graph card
-    private class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
+    public class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
         private CensusHistoryScale dataset;
-        private TextView date;
-        private TextView value;
-        private TextView max;
-        private TextView min;
-        private TextView avg;
-        private LineChart chart;
+
+        @BindView(R.id.trends_date)
+        TextView date;
+        @BindView(R.id.trends_value)
+        TextView value;
+        @BindView(R.id.trends_max)
+        TextView max;
+        @BindView(R.id.trends_min)
+        TextView min;
+        @BindView(R.id.trends_avg)
+        TextView avg;
+        @BindView(R.id.trends_chart)
+        LineChart chart;
 
         public GraphCard(View itemView) {
             super(itemView);
-            date = (TextView) itemView.findViewById(R.id.trends_date);
-            value = (TextView) itemView.findViewById(R.id.trends_value);
-            max = (TextView) itemView.findViewById(R.id.trends_max);
-            min = (TextView) itemView.findViewById(R.id.trends_min);
-            avg = (TextView) itemView.findViewById(R.id.trends_avg);
-            chart = (LineChart) itemView.findViewById(R.id.trends_chart);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(CensusHistoryScale scale) {
@@ -303,15 +310,16 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     // Title at the beginning of rank list
-    private class RankTitleViewHolder extends RecyclerView.ViewHolder {
+    public class RankTitleViewHolder extends RecyclerView.ViewHolder {
         private TrendsRankTitle titleData;
-        private TextView type;
-        private TextView census;
+        @BindView(R.id.trends_ranking_type)
+        TextView type;
+        @BindView(R.id.trends_ranking_census)
+        TextView census;
 
         public RankTitleViewHolder(View itemView) {
             super(itemView);
-            type = (TextView) itemView.findViewById(R.id.trends_ranking_type);
-            census = (TextView) itemView.findViewById(R.id.trends_ranking_census);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(TrendsRankTitle title) {
@@ -331,18 +339,19 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     // Rank entry
-    private class NationRankViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class NationRankViewHolder extends RecyclerView.ViewHolder {
         private CensusNationRank rankData;
-        private TextView nation;
-        private TextView score;
-        private TextView rank;
+
+        @BindView(R.id.trends_ranking_nation)
+        TextView nation;
+        @BindView(R.id.trends_ranking_score)
+        TextView score;
+        @BindView(R.id.trends_ranking_rank)
+        TextView rank;
 
         public NationRankViewHolder(View itemView) {
             super(itemView);
-            nation = (TextView) itemView.findViewById(R.id.trends_ranking_nation);
-            score = (TextView) itemView.findViewById(R.id.trends_ranking_score);
-            rank = (TextView) itemView.findViewById(R.id.trends_ranking_rank);
-            itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         public void init(CensusNationRank r) {
@@ -353,8 +362,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             rank.setText(SparkleHelper.getPrettifiedNumber(rankData.rank));
         }
 
-        @Override
-        public void onClick(View view) {
+        @OnClick(R.id.trends_ranking_main)
+        public void onClick() {
             SparkleHelper.startExploring(context, rankData.name, ExploreActivity.EXPLORE_NATION);
         }
     }
