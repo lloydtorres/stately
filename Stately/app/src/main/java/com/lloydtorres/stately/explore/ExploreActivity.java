@@ -448,6 +448,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     }
 
     private void initFragment(Nation mNation) {
+        if (isFinishing()) {
+            return;
+        }
+
         // Initializes and inflates the nation fragment
         if (mFragment == null || !(mFragment instanceof NationFragment)) {
             mFragment = new NationFragment();
@@ -463,11 +467,13 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
     private void initFragment(Region mRegion) {
         // Initializes and inflates the region fragment
-        mFragment = new RegionFragment();
-        ((RegionFragment) mFragment).setRegion(mRegion);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.explore_coordinator, mFragment)
-                .commitAllowingStateLoss();
+        if (!isFinishing()) {
+            mFragment = new RegionFragment();
+            ((RegionFragment) mFragment).setRegion(mRegion);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.explore_coordinator, mFragment)
+                    .commitAllowingStateLoss();
+        }
     }
 
     /**

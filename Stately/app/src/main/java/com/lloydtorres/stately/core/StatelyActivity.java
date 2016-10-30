@@ -224,9 +224,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
                 break;
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.coordinator_app_bar, f)
-                .commitAllowingStateLoss();
+        if (!isFinishing()) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.coordinator_app_bar, f)
+                    .commitAllowingStateLoss();
+        }
     }
 
     /**
@@ -376,9 +378,11 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
 
             // Switch fragments
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.coordinator_app_bar, fChoose)
-                    .commitAllowingStateLoss();
+            if (!isFinishing()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.coordinator_app_bar, fChoose)
+                        .commitAllowingStateLoss();
+            }
             drawer.closeDrawer(GravityCompat.START);
 
             // Update the unread counts whenever a new main fragment is selected.

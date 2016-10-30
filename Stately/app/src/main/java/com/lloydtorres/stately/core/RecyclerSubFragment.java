@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by Lloyd on 2016-09-12.
  * Skeleton for sub-fragments that use the recycler layout.
@@ -55,5 +57,21 @@ public abstract class RecyclerSubFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         return view;
+    }
+
+    // Workaround for illegal state exception, as shown in http://stackoverflow.com/a/15656428
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
