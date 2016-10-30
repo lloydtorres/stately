@@ -352,7 +352,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * @param action User action
      */
     private void postZombieDecision(final String localid, final String action) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
