@@ -87,7 +87,11 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         initRecyclerAdapter(true);
     }
 
-    protected abstract void initData();
+    protected void initData() {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+    }
 
     protected void initRecyclerAdapter() {
         initRecyclerAdapter(false);

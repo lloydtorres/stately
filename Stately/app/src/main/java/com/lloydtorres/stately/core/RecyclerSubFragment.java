@@ -43,6 +43,10 @@ public abstract class RecyclerSubFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getActivity() == null || !isAdded()) {
+            return null;
+        }
+
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         // Setup recycler view
