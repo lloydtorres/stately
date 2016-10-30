@@ -275,6 +275,10 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Either shows the zombie decision dialog or a message saying that no actions are available.
      */
     public void showDecisionDialog() {
+        if (isFinishing()) {
+            return;
+        }
+
         ZombieDecisionDialog zombieDialog = new ZombieDecisionDialog();
         zombieDialog.setZombieData(userData.zombieData);
         zombieDialog.show(getSupportFragmentManager(), VoteDialog.DIALOG_TAG);

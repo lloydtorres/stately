@@ -335,6 +335,10 @@ public class LoginActivity extends AppCompatActivity {
      * @param v
      */
     public void startCreateNation(View v) {
+        if (isFinishing()) {
+            return;
+        }
+
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -399,6 +403,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isFinishing()) {
+            return;
+        }
+
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)

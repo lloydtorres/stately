@@ -212,6 +212,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
      * @param pollData Data for the target poll.
      */
     public void showPollVoteDialog(Poll pollData) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         PollVoteDialog voteDialog = new PollVoteDialog();
         voteDialog.setData(this, pollData);
         voteDialog.show(getFragmentManager(), PollVoteDialog.DIALOG_TAG);

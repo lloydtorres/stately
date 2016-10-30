@@ -272,6 +272,10 @@ public class ResolutionActivity extends RefreshviewActivity {
      * @param vote Current choice in voting
      */
     public void showVoteDialog(int vote) {
+        if (isFinishing()) {
+            return;
+        }
+
         FragmentManager fm = getSupportFragmentManager();
         VoteDialog voteDialog = new VoteDialog();
         voteDialog.setChoice(vote);

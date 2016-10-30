@@ -540,6 +540,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             return;
         }
 
+        if (isFinishing()) {
+            return;
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -612,6 +616,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private void handleDossier() {
         if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
+        if (isFinishing()) {
             return;
         }
 
@@ -706,6 +714,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     public void handleRegionMove() {
         if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
+            return;
+        }
+
+        if (isFinishing()) {
             return;
         }
 
@@ -807,6 +819,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * Opens the explore dialog.
      */
     private void openExploreDialog(boolean closeOnFinish) {
+        if (isFinishing()) {
+            return;
+        }
+
         ExploreDialog exploreDialog = new ExploreDialog();
 
         if (closeOnFinish) {
@@ -866,6 +882,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * Call to show the superweapon dialog.
      */
     public void showSuperweaponDialog() {
+        if (isFinishing()) {
+            return;
+        }
+
         // Only show dialog if at least one superweapon is available
         if (superweaponStatus != null &&
                 (superweaponStatus.isTZES || superweaponStatus.isCure || superweaponStatus.isHorde)) {

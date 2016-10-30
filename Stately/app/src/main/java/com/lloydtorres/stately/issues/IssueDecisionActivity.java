@@ -177,7 +177,9 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     break;
             }
 
-            dialogBuilder.show();
+            if (!isFinishing()) {
+                dialogBuilder.show();
+            }
         }
         else {
             startPostAdoptPosition(option);

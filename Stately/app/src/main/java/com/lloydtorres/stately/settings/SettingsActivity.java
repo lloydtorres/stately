@@ -140,6 +140,9 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
             case SETTING_CRASHREPORT:
+                if (isFinishing()) {
+                    return;
+                }
                 dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
                 break;
             case SETTING_NOTIFS:

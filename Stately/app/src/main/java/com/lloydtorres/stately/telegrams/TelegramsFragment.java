@@ -358,6 +358,10 @@ public class TelegramsFragment extends Fragment {
      * @param fm
      */
     private void showFoldersDialog(FragmentManager fm) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         FoldersDialog foldersDialog = new FoldersDialog();
         foldersDialog.setFragment(this);
         foldersDialog.setFolders(folders);
@@ -418,6 +422,10 @@ public class TelegramsFragment extends Fragment {
      * Wrappers to call on NS to archive a telegram.
      */
     public void showArchiveTelegramDialog(final int id) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
                 .setTitle(getString(R.string.telegrams_archive_confirm))
@@ -449,6 +457,10 @@ public class TelegramsFragment extends Fragment {
     }
 
     public void showMoveTelegramDialog(final int id) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         ArrayList<TelegramFolder> moveableFolders = new ArrayList<TelegramFolder>();
         for (int i=0; i<folders.size(); i++) {
             String name = folders.get(i).name;
@@ -551,6 +563,10 @@ public class TelegramsFragment extends Fragment {
     }
 
     public void showDeleteTelegramDialog(final int id) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
             .setTitle(getString(R.string.telegrams_delete_confirm))

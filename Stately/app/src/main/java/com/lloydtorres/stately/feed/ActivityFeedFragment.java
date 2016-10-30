@@ -435,9 +435,11 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                 showRegionDossier(fm);
                 return true;
             case R.id.nav_subscriptions:
-                SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
-                subscriptionsDialog.setCallback(this);
-                subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
+                if (getActivity() != null && isAdded()) {
+                    SubscriptionsDialog subscriptionsDialog = new SubscriptionsDialog();
+                    subscriptionsDialog.setCallback(this);
+                    subscriptionsDialog.show(fm, SubscriptionsDialog.DIALOG_TAG);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -448,6 +450,10 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      * @param fm Fragment Manager
      */
     private void showNationDossier(FragmentManager fm) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         if (dossierNations.size() > 0) {
             Collections.sort(dossierNations);
             NameListDialog nameListDialog = new NameListDialog();
@@ -469,6 +475,10 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      * @param fm Fragment Manager
      */
     private void showRegionDossier(FragmentManager fm) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
+
         if (dossierRegions.size() > 0) {
             Collections.sort(dossierRegions);
             NameListDialog nameListDialog = new NameListDialog();

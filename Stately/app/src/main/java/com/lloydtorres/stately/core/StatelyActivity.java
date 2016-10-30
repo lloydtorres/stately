@@ -322,11 +322,13 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
-        dialogBuilder.setTitle(R.string.exit_confirm)
-                .setPositiveButton(R.string.exit, dialogListener)
-                .setNegativeButton(R.string.explore_negative, null)
-                .show();
+        if (!isFinishing()) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            dialogBuilder.setTitle(R.string.exit_confirm)
+                    .setPositiveButton(R.string.exit, dialogListener)
+                    .setNegativeButton(R.string.explore_negative, null)
+                    .show();
+        }
     }
 
     @Override
@@ -504,6 +506,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Start exploration dialog
      */
     private void explore() {
+        if (isFinishing()) {
+            return;
+        }
+
         FragmentManager fm = getSupportFragmentManager();
         ExploreDialog exploreDialog = new ExploreDialog();
         exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
@@ -513,6 +519,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Start switch nation dialog.
      */
     private void switchNation() {
+        if (isFinishing()) {
+            return;
+        }
+
         List<UserLogin> logins = UserLogin.listAll(UserLogin.class);
         // If no other nations besides current one, show warning dialog
         // with link to login activity
@@ -552,6 +562,10 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
      * Start logout process
      */
     private void logout() {
+        if (isFinishing()) {
+            return;
+        }
+
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

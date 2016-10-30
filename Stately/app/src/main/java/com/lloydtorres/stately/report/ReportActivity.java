@@ -198,6 +198,10 @@ public class ReportActivity extends SlidrActivity {
      * Wrapper for sending the report to NS servers.
      */
     private void startSendReport() {
+        if (isFinishing()) {
+            return;
+        }
+
         String reportText = reportContent.getText().toString();
         if (reportText.length() <= 0) {
             SparkleHelper.makeSnackbar(view, getString(R.string.report_blank));

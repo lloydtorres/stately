@@ -377,10 +377,12 @@ public class TrendsActivity extends SlidrActivity {
                 finish();
                 return true;
             case R.id.nav_dataset:
-                FragmentManager fm = getSupportFragmentManager();
-                DatasetDialog dialog = new DatasetDialog();
-                dialog.setDatasets(WORLD_CENSUS_ITEMS, id);
-                dialog.show(fm, DatasetDialog.DIALOG_TAG);
+                if (!isFinishing()) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    DatasetDialog dialog = new DatasetDialog();
+                    dialog.setDatasets(WORLD_CENSUS_ITEMS, id);
+                    dialog.show(fm, DatasetDialog.DIALOG_TAG);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

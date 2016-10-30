@@ -215,8 +215,10 @@ public class WorldFragment extends RefreshviewFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_explore:
-                ExploreDialog exploreDialog = new ExploreDialog();
-                exploreDialog.show(getFragmentManager(), ExploreDialog.DIALOG_TAG);
+                if (getActivity() != null && isAdded()) {
+                    ExploreDialog exploreDialog = new ExploreDialog();
+                    exploreDialog.show(getFragmentManager(), ExploreDialog.DIALOG_TAG);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

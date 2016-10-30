@@ -647,6 +647,10 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param id
      */
     public void confirmDelete(final int pos, final int id) {
+        if (isFinishing()) {
+            return;
+        }
+
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
