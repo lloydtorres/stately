@@ -887,7 +887,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
         isInProgress = true;
 
-        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, id);
+        String targetURL = String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
