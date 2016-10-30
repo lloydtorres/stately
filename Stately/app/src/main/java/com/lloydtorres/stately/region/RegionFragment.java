@@ -21,7 +21,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -299,7 +299,7 @@ public class RegionFragment extends Fragment {
     }
 
     // For formatting the tab slider
-    public class LayoutAdapter extends FragmentPagerAdapter {
+    public class LayoutAdapter extends FragmentStatePagerAdapter {
 
         private final String[] TITLES = getResources().getStringArray(R.array.region_tabs);
 
