@@ -362,8 +362,8 @@ public class LoginActivity extends AppCompatActivity {
         cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (!((month == Calendar.OCTOBER && day >= 30 && day <= 31) ||
-                (month == Calendar.NOVEMBER && day <= 1))) {
+        if (!((month == Calendar.OCTOBER && day >= 29 && day <= 31) ||
+                (month == Calendar.NOVEMBER && day <= 2))) {
             NightmareHelper.setIsZDayActive(this, false);
             continueToVerifyAccount(userLogin);
             return;
