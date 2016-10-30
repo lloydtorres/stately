@@ -89,6 +89,10 @@ public final class NightmareHelper {
      * @return If Z-Day is active
      */
     public static boolean getIsZDayActive(Context c) {
+        if (c == null) {
+            return false;
+        }
+
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(USERSESSION_IS_ZDAY, false);
     }

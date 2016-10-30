@@ -245,6 +245,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
      */
 
     public static int getTheme(Context c) {
+        // Safety check
+        if (c == null) {
+            return THEME_VERT;
+        }
+
         // Force noir theme on Z-Day
         if (NightmareHelper.getIsZDayActive(c)) {
             return THEME_NOIR;
@@ -262,8 +267,12 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     }
 
     public static int getGovernmentSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         int mode = GOV_NEUTRAL;
+        if (c == null) {
+            return mode;
+        }
+
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         try {
             mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT, String.valueOf(GOV_NEUTRAL)));
         }
