@@ -248,9 +248,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         }
                         break;
                     case ZSuperweaponProgress.TYPE_HORDE:
-                        if (ZSuperweaponProgress.ONE_HUNDRED_PERCENT.equals(progress)) {
-                            superweaponProgress.hordeProgress = progress;
-                        }
+                        superweaponProgress.hordeProgress = progress;
                         break;
                 }
             }
