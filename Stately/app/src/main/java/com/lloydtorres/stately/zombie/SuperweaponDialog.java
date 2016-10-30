@@ -52,9 +52,11 @@ public class SuperweaponDialog extends DialogFragment {
         actionState = (RadioGroup) dialogView.findViewById(R.id.superweapon_group);
 
         // Show available options
-        actionState.findViewById(R.id.superweapon_tzes).setVisibility(status.isTZES ? View.VISIBLE : View.GONE);
-        actionState.findViewById(R.id.superweapon_cure).setVisibility(status.isCure ? View.VISIBLE : View.GONE);
-        actionState.findViewById(R.id.superweapon_horde).setVisibility(status.isHorde ? View.VISIBLE : View.GONE);
+        if (status != null) {
+            actionState.findViewById(R.id.superweapon_tzes).setVisibility(status.isTZES ? View.VISIBLE : View.GONE);
+            actionState.findViewById(R.id.superweapon_cure).setVisibility(status.isCure ? View.VISIBLE : View.GONE);
+            actionState.findViewById(R.id.superweapon_horde).setVisibility(status.isHorde ? View.VISIBLE : View.GONE);
+        }
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
