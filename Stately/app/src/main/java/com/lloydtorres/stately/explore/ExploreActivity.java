@@ -454,7 +454,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             ((NationFragment) mFragment).setNation(mNation);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.explore_coordinator, mFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
         else {
             ((NationFragment) mFragment).updateOverviewData(mNation);
@@ -467,7 +467,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         ((RegionFragment) mFragment).setRegion(mRegion);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.explore_coordinator, mFragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     /**
