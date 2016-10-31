@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Stately</string>
-    <string name="app_version">Stately 1.7.3</string>
-    <string name="app_header">Stately/1.7.3 (User %1$s; Droid)</string>
-    <string name="app_header_nouser">Stately/1.7.3 (No User; Droid)</string>
+    <string name="app_version">Stately 1.7.4</string>
+    <string name="app_header">Stately/1.7.4 (User %1$s; Droid)</string>
+    <string name="app_header_nouser">Stately/1.7.4 (No User; Droid)</string>
     <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
     <string name="stately_alphys">Stately Notification Polling Service</string>
     <string name="stately_notifs_sub_template">%1$s — Stately for NationStates</string>
