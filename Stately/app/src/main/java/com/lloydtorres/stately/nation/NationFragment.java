@@ -202,7 +202,7 @@ public class NationFragment extends Fragment {
 
         DashHelper dashie = DashHelper.getInstance(getContext());
 
-        if (NightmareHelper.getIsZDayActive(getContext())) {
+        if (NightmareHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
         } else {
             dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);

@@ -275,7 +275,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Either shows the zombie decision dialog or a message saying that no actions are available.
      */
     public void showDecisionDialog() {
-        if (isFinishing()) {
+        if (isFinishing() || userData.zombieData == null) {
             return;
         }
 

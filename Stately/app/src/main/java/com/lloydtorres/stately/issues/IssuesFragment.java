@@ -156,7 +156,7 @@ public class IssuesFragment extends RefreshviewFragment {
         issues = new ArrayList<Object>();
 
         // Add zombie card if Z-Day is active
-        if (NightmareHelper.getIsZDayActive(getContext())) {
+        if (NightmareHelper.getIsZDayActive(getContext()) && holder.zombieData != null) {
             issues.add(holder.zombieData);
         }
 

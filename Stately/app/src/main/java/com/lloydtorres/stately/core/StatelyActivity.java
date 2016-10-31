@@ -244,7 +244,7 @@ public class StatelyActivity extends AppCompatActivity implements NavigationView
 
         DashHelper dashie = DashHelper.getInstance(this);
 
-        if (NightmareHelper.getIsZDayActive(this)) {
+        if (NightmareHelper.getIsZDayActive(this) && mNation.zombieData != null) {
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
         } else {
             dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
