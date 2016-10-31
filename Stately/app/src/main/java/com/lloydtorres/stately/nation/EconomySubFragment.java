@@ -34,6 +34,8 @@ public class EconomySubFragment extends NationSubFragment {
 
     @Override
     protected void initData() {
+        super.initData();
+
         NationGenericCardData ngcSummary = new NationGenericCardData();
         ngcSummary.title = getString(R.string.card_main_title_summary);
         String descContent = mNation.industryDesc;

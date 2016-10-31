@@ -49,6 +49,8 @@ public class PeopleSubFragment extends NationSubFragment {
 
     @Override
     protected void initData() {
+        super.initData();
+
         NationGenericCardData ngcSummary = new NationGenericCardData();
         ngcSummary.title = getString(R.string.card_main_title_summary);
         StringBuilder summaryContent = new StringBuilder(String.format(Locale.US, getString(R.string.card_people_summarydesc_flavour),

@@ -59,6 +59,8 @@ public class OverviewSubFragment extends NationSubFragment {
 
     @Override
     protected void initData() {
+        super.initData();
+
         if (NightmareHelper.getIsZDayActive(getContext())
                 && mNation.zombieData != null) {
             cards.add(mNation.zombieData);
