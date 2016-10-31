@@ -15,6 +15,7 @@
             android:layout_marginTop="7dp"
             android:text="@string/zombie_action_military"
             android:textSize="15sp"
+            android:visibility="gone"
             app:buttonTint="?attr/themedColorTab"/>
         <android.support.v7.widget.AppCompatRadioButton android:id="@+id/zombie_action_cure"
             android:layout_width="wrap_content"
@@ -22,6 +23,7 @@
             android:layout_marginTop="7dp"
             android:text="@string/zombie_action_cure"
             android:textSize="15sp"
+            android:visibility="gone"
             app:buttonTint="?attr/themedColorTab"/>
         <android.support.v7.widget.AppCompatRadioButton android:id="@+id/zombie_action_horde"
             android:layout_width="wrap_content"
@@ -29,6 +31,7 @@
             android:layout_marginTop="7dp"
             android:text="@string/zombie_action_horde"
             android:textSize="15sp"
+            android:visibility="gone"
             app:buttonTint="?attr/themedColorTab"/>
     </RadioGroup>
 </android.support.v4.widget.NestedScrollView>

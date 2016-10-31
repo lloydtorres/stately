@@ -50,16 +50,18 @@ public class ZombieDecisionDialog extends DialogFragment {
 
         actionState = (RadioGroup) dialogView.findViewById(R.id.zombie_decision_group);
 
-        // Hide unavailable options
-        if (zombieData.survivors <= 0) {
-            actionState.findViewById(R.id.zombie_action_military).setVisibility(View.GONE);
-            actionState.findViewById(R.id.zombie_action_cure).setVisibility(View.GONE);
-        }
-        if (zombieData.zombies <= 0) {
-            actionState.findViewById(R.id.zombie_action_horde).setVisibility(View.GONE);
+        // Show available options
+        if (zombieData != null) {
+            if (zombieData.survivors > 0) {
+                actionState.findViewById(R.id.zombie_action_military).setVisibility(View.VISIBLE);
+                actionState.findViewById(R.id.zombie_action_cure).setVisibility(View.VISIBLE);
+            }
+            if (zombieData.zombies > 0) {
+                actionState.findViewById(R.id.zombie_action_horde).setVisibility(View.VISIBLE);
+            }
         }
 
-        if (zombieData.action != null) {
+        if (zombieData != null && zombieData.action != null) {
             switch(zombieData.action) {
                 case Zombie.ZACTION_MILITARY:
                     actionState.check(R.id.zombie_action_military);
@@ -106,7 +108,7 @@ public class ZombieDecisionDialog extends DialogFragment {
                 break;
         }
 
-        if (choice != null && !choice.equals(zombieData.action)) {
+        if (zombieData != null && choice != null && !choice.equals(zombieData.action)) {
             ((ZombieControlActivity) getActivity()).startSubmitAction(choice);
         }
     }
