@@ -82,18 +82,15 @@ public class DashHelper {
      * Private constructor.
      * @param c App context
      */
-    private DashHelper(Context c)
-    {
+    private DashHelper(Context c) {
         mContext = c;
         mRequestQueue = getRequestQueue();
         lastReset = System.currentTimeMillis();
         numCalls = 0;
     }
 
-    public static synchronized DashHelper getInstance(Context c)
-    {
-        if (mDashie == null)
-        {
+    public static synchronized DashHelper getInstance(Context c) {
+        if (mDashie == null) {
             mDashie = new DashHelper(c);
         }
         return mDashie;
@@ -103,10 +100,8 @@ public class DashHelper {
      * Creates a new RequestQueue if it doesn't already exist, then returns it.
      * @return The Volley RequestQueue
      */
-    public RequestQueue getRequestQueue()
-    {
-        if (mRequestQueue == null)
-        {
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
         }
         return mRequestQueue;
@@ -116,10 +111,8 @@ public class DashHelper {
      * Adds a request to the Volley queue.
      * @param req The Volley request.
      */
-    public synchronized <T> boolean addRequest(Request<T> req)
-    {
-        if (isNotLockout())
-        {
+    public synchronized <T> boolean addRequest(Request<T> req) {
+        if (isNotLockout()) {
             req.setRetryPolicy(RETRY_POLICY);
             getRequestQueue().add(req);
             return true;
@@ -139,37 +132,32 @@ public class DashHelper {
      * Determines if adding a request will violate rate limits.
      * @return True if request can be granted, false otherwise
      */
-    private boolean isNotLockout()
-    {
+    private boolean isNotLockout() {
         // Reset the call counter if more than 30 seconds have passed
         long curTime = System.currentTimeMillis();
-        if ((curTime - lastReset) >= HALF_MINUTE_MS)
-        {
+        if ((curTime - lastReset) >= HALF_MINUTE_MS) {
             numCalls = 0;
             lastReset = curTime;
         }
 
-        if (numCalls < RATE_LIMIT)
-        {
+        if (numCalls < RATE_LIMIT) {
             numCalls++;
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public void loadImage(String url, ImageView target, boolean adjustBounds)
-    {
+    public void loadImage(String url, ImageView target, boolean adjustBounds) {
         // Only adjust if set and version is <=4.2
-        if (adjustBounds && Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1)
-        {
+        if (adjustBounds && Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             Picasso.with(mContext).load(url).placeholder(R.drawable.gray).transform(new JellyBeanTransform(mContext, target)).into(target);
-        }
-        else
-        {
+        } else {
             Picasso.with(mContext).load(url).placeholder(R.drawable.gray).into(target);
         }
+    }
+
+    public void loadImageWithoutPlaceHolder(int drawable, ImageView target) {
+        Picasso.with(mContext).load(drawable).into(target);
     }
 }

@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final int ROUTE_EXPLORE = 3;
 
     private View view;
+    private ImageView headerImage;
     private TextView subtitle;
     private AppCompatEditText username;
     private AppCompatEditText password;
@@ -113,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         view = findViewById(R.id.activity_login_main);
+        headerImage = (ImageView) findViewById(R.id.login_header);
         subtitle = (TextView) findViewById(R.id.login_subtitle);
         username = (AppCompatEditText) findViewById(R.id.field_username);
         password = (AppCompatEditText) findViewById(R.id.field_password);
@@ -120,6 +123,8 @@ public class LoginActivity extends AppCompatActivity {
         passHolder = (TextInputLayout) findViewById(R.id.holder_password);
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
+
+        DashHelper.getInstance(this).loadImageWithoutPlaceHolder(R.drawable.stately, headerImage);
 
         if (RaraHelper.getSpecialDayStatus(this) == RaraHelper.DAY_NORMAL) {
             switch (SettingsActivity.getGovernmentSetting(this)) {
