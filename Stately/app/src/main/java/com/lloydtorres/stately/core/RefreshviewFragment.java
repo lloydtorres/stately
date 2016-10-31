@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +31,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * Created by Lloyd on 2016-09-11.
  * Skeleton for fragments that use the Refreshview layout.
  */
-public abstract class RefreshviewFragment extends Fragment {
+public abstract class RefreshviewFragment extends DetachFragment {
 
     protected View mView;
     protected Toolbar toolbar;

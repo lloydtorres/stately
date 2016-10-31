@@ -34,6 +34,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
+import com.lloydtorres.stately.core.DetachFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
  * The main nation fragment called either by StatelyActivity or ExploreNationActivity.
  * Displays information about a target nation, takes in a nation object.
  */
-public class NationFragment extends Fragment {
+public class NationFragment extends DetachFragment {
     public static final String NATION_DATA_KEY = "mNationData";
 
     // Constants used to determine view pager index.

@@ -18,7 +18,6 @@ package com.lloydtorres.stately.telegrams;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Telegram;
@@ -66,7 +66,7 @@ import java.util.regex.Matcher;
  * Created by Lloyd on 2016-03-08.
  * This is the Telegrams section of the main Stately activity.
  */
-public class TelegramsFragment extends Fragment {
+public class TelegramsFragment extends DetachFragment {
     public static final String KEY_PAST_OFFSET = "keyPastOffset";
     public static final String KEY_TELEGRAMS = "keyTelegrams";
     public static final String KEY_FOLDERS = "keyFolders";

@@ -42,6 +42,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
+import com.lloydtorres.stately.core.DetachFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
@@ -63,7 +64,7 @@ import java.util.Locale;
  * Displays information about a target region, takes in a region name or object.
  * Can do the search and refresh by itself.
  */
-public class RegionFragment extends Fragment {
+public class RegionFragment extends DetachFragment {
     public static final String REGION_NAME_KEY = "mRegionName";
     public static final String REGION_DATA_KEY = "mRegionData";
     public static final String REGION_RMB_UNREAD_KEY = "rmbUnreadCountData";
