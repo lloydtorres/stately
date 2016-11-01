@@ -175,9 +175,7 @@ public class LoginActivity extends AppCompatActivity {
         // If settings allows it and user login exists, try logging in first
         if (SettingsActivity.getAutologinSetting(this)) {
             UserLogin u = PinkaHelper.getActiveUser(this);
-            if (u != null) {
-                checkZDayActive(u);
-            }
+            checkZDayActive(u);
         } else {
             PinkaHelper.removeActiveUser(this);
             checkZDayActive(null);
