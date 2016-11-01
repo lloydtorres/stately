@@ -61,7 +61,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
@@ -419,7 +418,7 @@ public final class RaraHelper {
 
         YAxis yAxisLeft = chart.getAxisLeft();
         if (valueFormatter) {
-            yAxisLeft.setValueFormatter(new LargeValueFormatter());
+            yAxisLeft.setValueFormatter(new LargeNumberAxisFormatter(c));
         }
 
         if (SettingsActivity.getTheme(c) == SettingsActivity.THEME_NOIR) {
