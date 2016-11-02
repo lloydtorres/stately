@@ -19,13 +19,13 @@ package com.lloydtorres.stately.zombie;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
@@ -33,7 +33,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * Created by Lloyd on 2016-10-16.
  * Dialog used to choose between different options for Z-Day.
  */
-public class ZombieDecisionDialog extends DialogFragment {
+public class ZombieDecisionDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_zombie_decision_dialog";
 
     private Zombie zombieData;

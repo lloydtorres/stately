@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -42,7 +43,7 @@ import java.util.Collections;
  * Created by Lloyd on 2016-02-03.
  * This dialog is shown for switching active nations.
  */
-public class SwitchNationDialog extends DialogFragment {
+public class SwitchNationDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_switch_dialog";
     public static final String LOGINS_KEY = "logins";
 

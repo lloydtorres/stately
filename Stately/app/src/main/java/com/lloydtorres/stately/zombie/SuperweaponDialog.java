@@ -19,13 +19,13 @@ package com.lloydtorres.stately.zombie;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.dto.ZSuperweaponStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -34,7 +34,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * Created by Lloyd on 2016-10-26.
  * Dialog shown when choosing between different superweapons to deploy during Z-Day.
  */
-public class SuperweaponDialog extends DialogFragment {
+public class SuperweaponDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_superweapon_dialog";
 
     private RadioGroup actionState;

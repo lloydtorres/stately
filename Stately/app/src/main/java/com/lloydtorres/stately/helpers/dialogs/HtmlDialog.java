@@ -19,7 +19,6 @@ package com.lloydtorres.stately.helpers.dialogs;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatDialog;
 import android.view.LayoutInflater;
@@ -27,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -36,7 +36,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
  * Created by Lloyd on 2016-04-13.
  * A dialog that can display HTML content.
  */
-public class HtmlDialog extends DialogFragment {
+public class HtmlDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_dialog_html";
     public static final String KEY_RAW = "dialog_html_raw";
     public static final String KEY_TITLE = "dialog_html_title";

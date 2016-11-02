@@ -19,20 +19,20 @@ package com.lloydtorres.stately.wa;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-02-02.
  * This dialog displays voting options for a WA resolution.
  */
-public class VoteDialog extends DialogFragment {
+public class VoteDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_vote_dialog";
     public static final int VOTE_FOR = 0;
     public static final int VOTE_AGAINST = 1;

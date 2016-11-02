@@ -19,20 +19,20 @@ package com.lloydtorres.stately.census;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-04-09.
  * A dialog that lets a user switch between different sorting modes.
  */
-public class CensusSortDialog extends DialogFragment {
+public class CensusSortDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_census_sort_dialog";
     public static final int CENSUS_MODE_NATION = 0;
     public static final int CENSUS_MODE_REGION = 1;

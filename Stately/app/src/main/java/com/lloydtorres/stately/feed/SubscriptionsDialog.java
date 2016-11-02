@@ -21,20 +21,20 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-02-08.
  * This shows a dialog allowing users to modify their activity feed subscriptions.
  */
-public class SubscriptionsDialog extends DialogFragment {
+public class SubscriptionsDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_subscriptions_dialog";
     public static final String CURRENT_NATION = "subs_curnation";
     public static final String SWITCH_NATIONS = "subs_switch";

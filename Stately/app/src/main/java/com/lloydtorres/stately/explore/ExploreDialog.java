@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
@@ -29,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.DetachDialogFragment;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
@@ -37,7 +37,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  * A dialog that takes in a nation or region name, lets the user select the type, then launches
  * the appropriate explore activity.
  */
-public class ExploreDialog extends DialogFragment {
+public class ExploreDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_explore_dialog";
 
     private AppCompatEditText exploreSearch;

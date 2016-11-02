@@ -19,7 +19,6 @@ package com.lloydtorres.stately.core;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +35,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * Created by Lloyd on 2016-09-16.
  * Skeleton for dialogs using the refreshview layout.
  */
-public abstract class RecyclerDialogFragment extends DialogFragment {
+public abstract class RecyclerDialogFragment extends DetachDialogFragment {
     // RecyclerView variables
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;

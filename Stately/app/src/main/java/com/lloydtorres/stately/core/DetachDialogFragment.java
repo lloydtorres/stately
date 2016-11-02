@@ -16,15 +16,17 @@
 
 package com.lloydtorres.stately.core;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
 import java.lang.reflect.Field;
 
 /**
- * Created by Lloyd on 2016-10-31.
+ * Created by Lloyd on 2016-11-01.
  * Workaround for illegal state exception in fragments, as shown in http://stackoverflow.com/a/15656428
+ * Same as DetachFragment, but this is for DialogFragments specifically.
  */
-public abstract class DetachFragment extends Fragment {
+public abstract class DetachDialogFragment extends DialogFragment {
     @Override
     public void onDetach() {
         super.onDetach();
@@ -33,7 +35,9 @@ public abstract class DetachFragment extends Fragment {
             childFragmentManager.setAccessible(true);
             childFragmentManager.set(this, null);
         } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }
