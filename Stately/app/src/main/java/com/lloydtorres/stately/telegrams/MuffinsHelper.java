@@ -104,13 +104,11 @@ public final class MuffinsHelper {
      * @param selfName Name of current logged in nation
      * @return See above
      */
-    public static ArrayList<Telegram> processRawTelegrams(Element rawTelegramsContainer, String selfName)
-    {
+    public static ArrayList<Telegram> processRawTelegrams(Element rawTelegramsContainer, String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("div.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
-        for (Element rt : rawTelegrams)
-        {
+        for (Element rt : rawTelegrams) {
             Telegram tel = new Telegram();
 
             // Get telegram ID
@@ -124,18 +122,14 @@ public final class MuffinsHelper {
             // Get type of telegram
             tel.type = Telegram.TELEGRAM_GENERIC;
             Element typeRaw = rt.select("div.tgtopline").first();
-            if (typeRaw != null)
-            {
-                if (typeRaw.hasClass(REGION_TELEGRAM))
-                {
+            if (typeRaw != null) {
+                if (typeRaw.hasClass(REGION_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_REGION;
                 }
-                else if (typeRaw.hasClass(RECRUITMENT_TELEGRAM))
-                {
+                else if (typeRaw.hasClass(RECRUITMENT_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_RECRUITMENT;
                 }
-                else if (typeRaw.hasClass(MODERATOR_TELEGRAM))
-                {
+                else if (typeRaw.hasClass(MODERATOR_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_MODERATOR;
                 }
             }
@@ -146,24 +140,19 @@ public final class MuffinsHelper {
             // Get to/from fields
             Element headerRaw = rt.select("div.tg_headers").first();
             String headerRawHtml = headerRaw.html();
-            if (headerRawHtml.contains(SEND_ARROW))
-            {
+            if (headerRawHtml.contains(SEND_ARROW)) {
                 Matcher senderMatcher = SENDER_REGEX.matcher(headerRawHtml);
-                if (senderMatcher.find())
-                {
+                if (senderMatcher.find()) {
                     Document senderHeaderRaw = Jsoup.parse(senderMatcher.group(1), SparkleHelper.BASE_URI);
                     processSenderHeader(senderHeaderRaw, tel, selfName);
                 }
 
                 Matcher recipientsMatcher = RECIPIENT_REGEX.matcher(headerRawHtml);
-                if (recipientsMatcher.find())
-                {
+                if (recipientsMatcher.find()) {
                     Document recipientsHeaderRaw = Jsoup.parse(recipientsMatcher.group(1), SparkleHelper.BASE_URI);
                     processRecipientsHeader(recipientsHeaderRaw, tel);
                 }
-            }
-            else
-            {
+            } else {
                 Document senderHeaderRaw = Jsoup.parse(headerRawHtml);
                 processSenderHeader(senderHeaderRaw, tel, selfName);
             }
@@ -193,20 +182,15 @@ public final class MuffinsHelper {
      * @param targetTelegram See above
      * @param selfName Name of currently logged in nation
      */
-    public static void processSenderHeader(Document targetDoc, Telegram targetTelegram, String selfName)
-    {
+    public static void processSenderHeader(Document targetDoc, Telegram targetTelegram, String selfName) {
         Element nationSenderRaw = targetDoc.select("a.nlink").first();
-        if (nationSenderRaw != null)
-        {
+        if (nationSenderRaw != null) {
             targetTelegram.isNation = true;
             targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(nationSenderRaw.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@";
-        }
-        else
-        {
+        } else {
             targetTelegram.isNation = false;
             targetTelegram.sender = targetDoc.text().replace("&rarr;","").trim();
-            if (targetTelegram.sender.contains(SELF_INDICATOR))
-            {
+            if (targetTelegram.sender.contains(SELF_INDICATOR)) {
                 targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(selfName) + "@@";
             }
         }
@@ -217,54 +201,43 @@ public final class MuffinsHelper {
      * @param targetDoc See above
      * @param targetTelegram See above
      */
-    public static void processRecipientsHeader(Document targetDoc, Telegram targetTelegram)
-    {
+    public static void processRecipientsHeader(Document targetDoc, Telegram targetTelegram) {
         // Check for tag:welcome here to set telegram type (since it's contained in the recepients area)
-        if (targetDoc.text().contains(WELCOME_TELEGRAM))
-        {
+        if (targetDoc.text().contains(WELCOME_TELEGRAM)) {
             targetTelegram.type = Telegram.TELEGRAM_WELCOME;
         }
 
         targetTelegram.recipients = new ArrayList<String>();
 
         Elements nationsRaw = targetDoc.select("a.nlink");
-        for (Element n : nationsRaw)
-        {
+        for (Element n : nationsRaw) {
             targetTelegram.recipients.add("@@" + SparkleHelper.getIdFromName(n.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@");
         }
 
         Elements regionsRaw = targetDoc.select("a.rlink");
-        for (Element r : regionsRaw)
-        {
+        for (Element r : regionsRaw) {
             targetTelegram.recipients.add("%%" + SparkleHelper.getIdFromName(r.attr("href").replace(REGION_LINK_PREFIX, "")) + "%%");
         }
     }
-
-    public static final Pattern NS_TG_RECRUIT_BUTTON = Pattern.compile("(?i)(?s)<div class=\"tgrecruitmovebutton\">(.*?)<\\/div>");
-    public static final Pattern NS_TG_REPLY_LINE = Pattern.compile("(?i)(?s)<p class=\"replyline\">(.*?)<\\/p>");
-    public static final Pattern NS_TG_REPLY_TO = Pattern.compile("(?i)(?s)<div class=\"inreplyto\">(.*?)<\\/div>");
-    public static final Pattern NS_TG_SPACER = Pattern.compile("(?i)(?s)<div class=\"rmbspacer\">(.*?)<\\/div>");
 
     /**
      * Takes in the raw HTML for a given telegram and processes its data.
      * @param rawHtml See above
      * @param targetTelegram Target telegram
      */
-    public static void processTelegramContent(String rawHtml, Telegram targetTelegram)
-    {
+    public static void processTelegramContent(String rawHtml, Telegram targetTelegram) {
         rawHtml = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + rawHtml;
-        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_RECRUIT_BUTTON);
-        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_REPLY_LINE);
-        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_REPLY_TO);
-        rawHtml = SparkleHelper.regexRemove(rawHtml, NS_TG_SPACER);
-        targetTelegram.content = Jsoup.clean(rawHtml, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+        Document rawContent = Jsoup.parse(rawHtml, SparkleHelper.BASE_URI);
+        rawContent.select("div.tgrecruitmovebutton").remove();
+        rawContent.select("p.replyline").remove();
+        rawContent.select("div.inreplyto").remove();
+        rawContent.select("div.rmbspacer").remove();
+        targetTelegram.content = Jsoup.clean(rawContent.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
     }
 
-    public static String getNationIdFromFormat(String raw)
-    {
+    public static String getNationIdFromFormat(String raw) {
         Matcher nationMatcher = NATION_REGEX.matcher(raw);
-        if (nationMatcher.find())
-        {
+        if (nationMatcher.find()) {
             return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_REGEX));
         }
         return null;
@@ -283,8 +256,7 @@ public final class MuffinsHelper {
      * @param t TextView
      * @param content Target content
      */
-    public static void setTelegramHtmlFormatting(Context c, TextView t, String content)
-    {
+    public static void setTelegramHtmlFormatting(Context c, TextView t, String content) {
         String holder = content.trim();
         holder = holder.replace("\n", "<br />");
         holder = holder.replace("&amp;#39;", "'");
