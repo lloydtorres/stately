@@ -103,8 +103,8 @@ public class TelegramsFragment extends DetachFragment {
         telegrams = new ArrayList<Telegram>();
         folders = new ArrayList<TelegramFolder>();
         TelegramFolder activeFolder = new TelegramFolder();
-        activeFolder.name = "Inbox";
-        activeFolder.value = "inbox";
+        activeFolder.name = TelegramFolder.TELEGRAM_FOLDER_INBOX_TMP;
+        activeFolder.value = TelegramFolder.TELEGRAM_FOLDER_INBOX_VAL;
         folders.add(activeFolder);
         selectedFolder = 0;
         uniqueEnforcer = new HashSet<Integer>();
@@ -226,9 +226,10 @@ public class TelegramsFragment extends DetachFragment {
      */
     private void processRawTelegrams(Document d, int direction, boolean firstRun) {
         Element telegramsContainer = d.select("div#tglist").first();
+        Element telegramsAntiquityContainer = d.select("table.tgtable").first();
         Element foldersContainer = d.select("select#tgfolder").first();
 
-        if (telegramsContainer == null || foldersContainer == null) {
+        if ((telegramsContainer == null && telegramsAntiquityContainer == null) || foldersContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
@@ -250,7 +251,18 @@ public class TelegramsFragment extends DetachFragment {
         }
 
         // Build telegram objects from raw telegrams
-        ArrayList<Telegram> scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
+        ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
+        if (telegramsContainer != null) {
+            scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
+        } else if (telegramsAntiquityContainer != null) {
+            String selfName = null;
+            // If currently in sent folder, pass in current user's name
+            if (selectedFolder < folders.size() && TelegramFolder.TELEGRAM_FOLDER_SENT.equals(folders.get(selectedFolder).name)) {
+                selfName = PinkaHelper.getActiveUser(getContext()).name;
+            }
+            scannedTelegrams = MuffinsHelper.processRawTelegramsFromAntiquity(telegramsAntiquityContainer, selfName);
+        }
+
         switch (direction) {
             case SCAN_FORWARD:
                 processTelegramsForward(scannedTelegrams, firstRun);

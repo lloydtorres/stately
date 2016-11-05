@@ -88,10 +88,15 @@ public final class MuffinsHelper {
     public static final String NATION_LINK_PREFIX = "nation=";
     public static final String REGION_LINK_PREFIX = "region=";
     public static final String SELF_INDICATOR = "Wired To";
+    public static final String ANTIQUITY_NEW_INDICATOR = "NEW";
+    public static final String ANTIQUITY_METADATA_SPAN = "span[style=font-size:8pt]";
 
     public static final String REGION_TELEGRAM = "toplinetgcat-3";
+    public static final String REGION_TELEGRAM_IMG = "tgcat-3.png";
     public static final String RECRUITMENT_TELEGRAM = "toplinetgcat-1";
+    public static final String RECRUITMENT_TELEGRAM_IMG = "tgcat-1.png";
     public static final String MODERATOR_TELEGRAM = "toplinetgcat-11";
+    public static final String MODERATOR_TELEGRAM_IMG = "tgcat-11.png";
     public static final String WELCOME_TELEGRAM = "tag: welcome";
 
     // Private constructor
@@ -112,12 +117,10 @@ public final class MuffinsHelper {
             Telegram tel = new Telegram();
 
             // Get telegram ID
-            String rtId = rt.attr("id");
-            tel.id = Integer.valueOf(rtId.replace("tgid-", ""));
+            getRawTelegramId(rt, tel);
 
             // Get time of telegram
-            Element timeRaw = rt.select("time").first();
-            tel.timestamp = Long.valueOf(timeRaw.attr("data-epoch"));
+            getRawTelegramTimestamp(rt, tel);
 
             // Get type of telegram
             tel.type = Telegram.TELEGRAM_GENERIC;
@@ -162,17 +165,113 @@ public final class MuffinsHelper {
             String contentRawHtml = rt.select("div.tgmsg").first().html();
             processTelegramContent(contentRawHtml, tel);
 
-            if (tel.type == Telegram.TELEGRAM_RECRUITMENT) {
-                Element targetRegion = rt.select("input[name=region_name]").first();
-                if (targetRegion != null) {
-                    tel.regionTarget = targetRegion.attr("value");
-                }
-            }
+            getTelegramRecruitmentStatus(rt, tel);
 
             scannedTelegrams.add(tel);
         }
 
         return scannedTelegrams;
+    }
+
+    /**
+     * Processes raw telegrams from the format done in the NS Antiquity Theme.
+     * @param rawTelegramsContainer Table containing telegrams.
+     * @param selfName Name of current user. Should only be added if in "sent" folder.
+     * @return
+     */
+    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Element rawTelegramsContainer, String selfName) {
+        Elements rawTelegrams = rawTelegramsContainer.select("tr.tg");
+        ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
+
+        for (Element rt: rawTelegrams) {
+            Telegram tel = new Telegram();
+
+            // Get telegram ID
+            getRawTelegramId(rt, tel);
+
+            // Get time of telegram
+            getRawTelegramTimestamp(rt, tel);
+
+            // Get type of telegram
+            tel.type = Telegram.TELEGRAM_GENERIC;
+            Element typeRaw = rt.select("img.tgcaticon").first();
+            if (typeRaw != null) {
+                String typeRawSrc = typeRaw.attr("src");
+                if (typeRawSrc.contains(REGION_TELEGRAM_IMG)) {
+                    tel.type = Telegram.TELEGRAM_REGION;
+                }
+                else if (typeRawSrc.contains(RECRUITMENT_TELEGRAM_IMG)) {
+                    tel.type = Telegram.TELEGRAM_RECRUITMENT;
+                }
+                else if (typeRawSrc.contains(MODERATOR_TELEGRAM_IMG)) {
+                    tel.type = Telegram.TELEGRAM_MODERATOR;
+                }
+            }
+
+            Element senderBlock = rt.select("td.tgsender").first();
+            Element senderMetadataSpan = senderBlock.select(ANTIQUITY_METADATA_SPAN).first();
+
+            // Check if unread
+            tel.isUnread = senderMetadataSpan.text().contains(ANTIQUITY_NEW_INDICATOR);
+
+            // Get "from" field
+            // Case 1: Not in the sent folder
+            if (selfName == null) {
+                processSenderHeader(senderBlock, tel, null);
+            }
+            // Case 2: In the sent folder
+            else {
+                tel.sender = "@@" + selfName + "@@";
+                tel.isNation = true;
+            }
+
+            // Get "to" field
+            Element toBlock = null;
+
+            // Case 1: Not in the sent folder
+            if (selfName == null) {
+                Element recepientHeader = rt.select("div.tgheaders").first();
+                if (recepientHeader != null) {
+                    Matcher recipientsMatcher = RECIPIENT_REGEX.matcher(recepientHeader.html());
+                    if (recipientsMatcher.find()) {
+                        toBlock = Jsoup.parse(recipientsMatcher.group(1), SparkleHelper.BASE_URI);
+                    }
+                }
+            }
+            // Case 2: In the sent folder
+            else {
+                toBlock = rt.select("td.tgsender").first();
+            }
+            if (toBlock != null) {
+                processRecipientsHeader(toBlock, tel);
+            }
+
+            String contentRawHtml = rt.select("div.tgcontent").first().html();
+            processTelegramContent(contentRawHtml, tel);
+            tel.content = "<br>" + tel.content;
+            tel.preview = Jsoup.clean(tel.content, Whitelist.none());
+
+            getTelegramRecruitmentStatus(rt, tel);
+
+            scannedTelegrams.add(tel);
+        }
+
+        return scannedTelegrams;
+    }
+
+    /**
+     * Gets the telegram ID from the raw telegram HTML.
+     * @param telegramRaw Root element containing the telegram.
+     * @param tg Telegram model.
+     */
+    public static void getRawTelegramId(Element telegramRaw, Telegram tg) {
+        String rtId = telegramRaw.attr("id");
+        tg.id = Integer.valueOf(rtId.replace("tgid-", ""));
+    }
+
+    public static void getRawTelegramTimestamp(Element telegramRaw, Telegram tg) {
+        Element timeRaw = telegramRaw.select("time").first();
+        tg.timestamp = Long.valueOf(timeRaw.attr("data-epoch"));
     }
 
     /**
@@ -182,13 +281,17 @@ public final class MuffinsHelper {
      * @param targetTelegram See above
      * @param selfName Name of currently logged in nation
      */
-    public static void processSenderHeader(Document targetDoc, Telegram targetTelegram, String selfName) {
+    public static void processSenderHeader(Element targetDoc, Telegram targetTelegram, String selfName) {
         Element nationSenderRaw = targetDoc.select("a.nlink").first();
         if (nationSenderRaw != null) {
             targetTelegram.isNation = true;
             targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(nationSenderRaw.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@";
         } else {
             targetTelegram.isNation = false;
+
+            // For antiquity, remove metadata span
+            targetDoc.select(ANTIQUITY_METADATA_SPAN).remove();
+
             targetTelegram.sender = targetDoc.text().replace("&rarr;","").trim();
             if (targetTelegram.sender.contains(SELF_INDICATOR)) {
                 targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(selfName) + "@@";
@@ -201,7 +304,7 @@ public final class MuffinsHelper {
      * @param targetDoc See above
      * @param targetTelegram See above
      */
-    public static void processRecipientsHeader(Document targetDoc, Telegram targetTelegram) {
+    public static void processRecipientsHeader(Element targetDoc, Telegram targetTelegram) {
         // Check for tag:welcome here to set telegram type (since it's contained in the recepients area)
         if (targetDoc.text().contains(WELCOME_TELEGRAM)) {
             targetTelegram.type = Telegram.TELEGRAM_WELCOME;
@@ -228,11 +331,22 @@ public final class MuffinsHelper {
     public static void processTelegramContent(String rawHtml, Telegram targetTelegram) {
         rawHtml = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + rawHtml;
         Document rawContent = Jsoup.parse(rawHtml, SparkleHelper.BASE_URI);
+        rawContent.select("div.tgheaders").remove();
+        rawContent.select("img.tgcaticon").remove();
         rawContent.select("div.tgrecruitmovebutton").remove();
         rawContent.select("p.replyline").remove();
         rawContent.select("div.inreplyto").remove();
         rawContent.select("div.rmbspacer").remove();
         targetTelegram.content = Jsoup.clean(rawContent.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+    }
+
+    public static void getTelegramRecruitmentStatus(Element telegramRaw, Telegram tg) {
+        if (tg.type == Telegram.TELEGRAM_RECRUITMENT) {
+            Element targetRegion = telegramRaw.select("input[name=region_name]").first();
+            if (targetRegion != null) {
+                tg.regionTarget = targetRegion.attr("value");
+            }
+        }
     }
 
     public static String getNationIdFromFormat(String raw) {

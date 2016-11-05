@@ -115,13 +115,21 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
 
     private void processRawTelegrams(Document d) {
         Element telegramsContainer = d.select("div.widebox").first();
-        if (telegramsContainer == null) {
+        Element telegramsAntiquityContainer = d.select("table.tgtable").first();
+
+        if (telegramsContainer == null || telegramsAntiquityContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
             return;
         }
-        telegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
+
+        if (telegramsAntiquityContainer != null) {
+            telegrams = MuffinsHelper.processRawTelegramsFromAntiquity(telegramsContainer, null);
+        } else if (telegramsContainer != null) {
+            telegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
+        }
+
         initTelegramsRecyclerAdapter();
     }
 
