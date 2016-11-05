@@ -97,11 +97,9 @@ public class TelegramComposeActivity extends SlidrActivity {
         setToolbar(toolbar);
 
         recipientsField = (AppCompatEditText) findViewById(R.id.telegram_compose_recipients);
-        if (recipients != null && recipients.length() > 0)
-        {
+        if (recipients != null && recipients.length() > 0) {
             recipientsField.setText(recipients);
-            if (replyId != NO_REPLY_ID)
-            {
+            if (replyId != NO_REPLY_ID) {
                 // If this is a reply telegram, don't let user edit this field
                 recipientsField.setEnabled(false);
                 recipientsField.setFocusable(false);
@@ -120,8 +118,7 @@ public class TelegramComposeActivity extends SlidrActivity {
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
         String title = getString(R.string.telegrams_compose);
-        if (replyId != NO_REPLY_ID)
-        {
+        if (replyId != NO_REPLY_ID) {
             title = getString(R.string.telegrams_reply);
         }
         getSupportActionBar().setTitle(title);
@@ -134,8 +131,7 @@ public class TelegramComposeActivity extends SlidrActivity {
     /**
      * This makes sure that the recipients entered by the user are valid.
      */
-    private void checkTelegramRecipients()
-    {
+    private void checkTelegramRecipients() {
         // Clear focus then hide keyboard
         recipientsField.clearFocus();
         content.clearFocus();
@@ -144,47 +140,36 @@ public class TelegramComposeActivity extends SlidrActivity {
 
         // Sanity checks
         String recipientsRaw = recipientsField.getText().toString();
-        if (recipientsRaw.length() <= 0)
-        {
+        if (recipientsRaw.length() <= 0) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_empty_recipients));
             return;
         }
 
         String contentRaw = content.getText().toString();
-        if (contentRaw.length() <= 0)
-        {
+        if (contentRaw.length() <= 0) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_empty_content));
             return;
         }
 
         // Check if recipients are valid names
         List<String> recipientIds = new ArrayList<String>();
-        if (recipientsRaw.contains(","))
-        {
+        if (recipientsRaw.contains(",")) {
             List<String> recipientItems = Arrays.asList(recipientsRaw.split(","));
-            for (String r : recipientItems)
-            {
+            for (String r : recipientItems) {
                 String rawRecipient = r.trim();
-                if (SparkleHelper.isValidName(rawRecipient) && rawRecipient.length() > 0)
-                {
+                if (verifyRecipientEntry(rawRecipient)) {
                     recipientIds.add(SparkleHelper.getIdFromName(rawRecipient));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_invalid_recipient));
                     return;
                 }
             }
         }
-        else
-        {
+        else {
             String recipientCheck = recipientsRaw.trim();
-            if (SparkleHelper.isValidName(recipientCheck) && recipientCheck.length() > 0)
-            {
+            if (verifyRecipientEntry(recipientCheck)) {
                 recipientIds.add(SparkleHelper.getIdFromName(recipientCheck));
-            }
-            else
-            {
+            } else {
                 SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_invalid_recipient));
                 return;
             }
@@ -193,12 +178,15 @@ public class TelegramComposeActivity extends SlidrActivity {
         startTelegramSend(recipientIds);
     }
 
+    private boolean verifyRecipientEntry(String entry) {
+        return entry.length() > 0 && (SparkleHelper.isValidName(entry) || SparkleHelper.isValidName(entry.replace("region:", "")));
+    }
+
     /**
      * Helper for starting the telegram sending process.
      * @param recipients List of verified recipients
      */
-    private void startTelegramSend(final List<String> recipients)
-    {
+    private void startTelegramSend(final List<String> recipients) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -212,10 +200,8 @@ public class TelegramComposeActivity extends SlidrActivity {
      * Gets the check value needed to send a telegram.
      * @param recipients List of verified recipients
      */
-    private void getTelegramCheckValue(final List<String> recipients)
-    {
-        if (isInProgress)
-        {
+    private void getTelegramCheckValue(final List<String> recipients) {
+        if (isInProgress) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.multiple_request_error));
             return;
         }
@@ -228,8 +214,7 @@ public class TelegramComposeActivity extends SlidrActivity {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element input = d.select("input[name=chk]").first();
 
-                        if (input == null)
-                        {
+                        if (input == null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                             return;
@@ -246,24 +231,20 @@ public class TelegramComposeActivity extends SlidrActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
-    private void sendTelegram(final List<String> recipients, final String chk)
-    {
+    private void sendTelegram(final List<String> recipients, final String chk) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
@@ -271,12 +252,9 @@ public class TelegramComposeActivity extends SlidrActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         isInProgress = false;
                         String textResponse = Jsoup.parse(response, SparkleHelper.BASE_URI).text();
-                        if (textResponse.contains(SENT_CONFIRM_1) || textResponse.contains(SENT_CONFIRM_2))
-                        {
+                        if (textResponse.contains(SENT_CONFIRM_1) || textResponse.contains(SENT_CONFIRM_2)) {
                             finish();
-                        }
-                        else
-                        {
+                        } else {
                             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_fail));
                         }
                     }
@@ -288,9 +266,7 @@ public class TelegramComposeActivity extends SlidrActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -303,21 +279,18 @@ public class TelegramComposeActivity extends SlidrActivity {
             params.put("recruitregion", "region");
             params.put("recruitregionrealname", PinkaHelper.getRegionSessionData(getApplicationContext()));
             params.put("send", "1");
-        }
-        else {
+        } else {
             params.put("in_reply_to", String.valueOf(replyId));
             if (recipients.size() > 1) {
                 params.put("send_to_all", "1");
-            }
-            else {
+            } else {
                 params.put("send", "1");
             }
         }
         params.put("message", SparkleHelper.escapeHtml(content.getText().toString()));
         stringRequest.setParams(params);
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
