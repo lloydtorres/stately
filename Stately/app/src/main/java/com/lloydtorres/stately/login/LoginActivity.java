@@ -216,6 +216,11 @@ public class LoginActivity extends AppCompatActivity {
                     UserNation nationResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        // Don't bother if user already closed app
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Persister serializer = new Persister();
                         try {
                             nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
