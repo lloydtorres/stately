@@ -43,8 +43,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
 
+        // Disable theme options and show warning on Z-Day
         if (getContext() != null && NightmareHelper.getIsZDayActive(getContext())) {
             Preference themeSetting = findPreference(SettingsActivity.SETTING_THEME);
+            themeSetting.setEnabled(false);
             themeSetting.setSummary(getString(R.string.setting_desc_zombie));
         }
     }
