@@ -521,10 +521,15 @@ public final class SparkleHelper {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
 
-        cal.add(Calendar.HOUR, WA_RESOLUTION_DURATION - hoursElapsed);
+        int hoursRemaining = WA_RESOLUTION_DURATION - hoursElapsed;
+        // Add an hour on top if DST is not active in EDT/EST time zone
+        if (!TIMEZONE_TORONTO.inDaylightTime(cal.getTime())) {
+            hoursRemaining += 1;
+        }
 
-        Date d = cal.getTime();
-        return getReadableDateFromUTC(c, d.getTime() / 1000L);
+        cal.add(Calendar.HOUR, hoursRemaining);
+
+        return getReadableDateFromUTC(c, cal.getTime().getTime() / 1000L);
     }
 
     /**
