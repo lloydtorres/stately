@@ -152,6 +152,8 @@ public class IssueResultsActivity extends RefreshviewActivity {
                 int idHolder = Integer.valueOf(de.attr("href").replaceAll(CensusDelta.REGEX_ID, ""));
                 Element deltaHolder = de.select("span.wc2").first();
                 String deltaValue = deltaHolder.text();
+                // Remove -/+ symbols if present
+                deltaValue = deltaValue.replace("-", "").replace("+", "");
                 boolean isPositive = deltaHolder.hasClass("wcg");
                 censusDelta.censusId = idHolder;
                 censusDelta.delta = deltaValue;
