@@ -117,7 +117,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
         Element telegramsContainer = d.select("div.widebox").first();
         Element telegramsAntiquityContainer = d.select("table.tgtable").first();
 
-        if (telegramsContainer == null || telegramsAntiquityContainer == null) {
+        if (telegramsContainer == null && telegramsAntiquityContainer == null) {
             // safety check
             mSwipeRefreshLayout.setRefreshing(false);
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
