@@ -142,10 +142,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
             if (issue.chain != null) {
-                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), issue.id, issue.chain));
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
             }
             else {
-                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number), issue.id));
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number), SparkleHelper.getPrettifiedNumber(issue.id)));
             }
             content.setText(SparkleHelper.getHtmlFormatting(issue.content).toString());
         }

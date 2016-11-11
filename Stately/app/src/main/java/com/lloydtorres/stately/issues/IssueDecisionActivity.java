@@ -77,7 +77,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, issue.id));
+        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, SparkleHelper.getPrettifiedNumber(issue.id)));
         mSwipeRefreshLayout.setEnabled(false);
 
         startConfirmIssueAvailable();
