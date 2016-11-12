@@ -22,6 +22,8 @@ import android.os.Parcelable;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import java.util.Locale;
+
 /**
  * Created by Lloyd on 2016-01-26.
  * Defines the information needed to login a user.
@@ -35,8 +37,7 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
 
     public UserLogin() { super(); }
 
-    public UserLogin(String i, String n, String a, String p)
-    {
+    public UserLogin(String i, String n, String a, String p) {
         nationId = i;
         name = n;
         autologin = a;
@@ -78,6 +79,6 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
 
     @Override
     public int compareTo(UserLogin another) {
-        return this.name.compareTo(another.name);
+        return this.name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
     }
 }

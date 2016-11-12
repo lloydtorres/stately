@@ -68,7 +68,7 @@ public class NameListDialog extends RecyclerDialogFragment {
     protected void initRecycler(View view) {
         super.initRecycler(view);
         setDialogTitle(title);
-        Collections.sort(names);
+        Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
         mRecyclerAdapter = new NameListRecyclerAdapter(getContext(), this, names, target);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }

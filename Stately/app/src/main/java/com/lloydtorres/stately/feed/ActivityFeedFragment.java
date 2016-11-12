@@ -455,7 +455,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
         }
 
         if (dossierNations.size() > 0) {
-            Collections.sort(dossierNations);
+            Collections.sort(dossierNations, String.CASE_INSENSITIVE_ORDER);
             NameListDialog nameListDialog = new NameListDialog();
             nameListDialog.setTitle(getString(R.string.activityfeed_dossier_n));
             nameListDialog.setNames(dossierNations);
@@ -480,7 +480,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
         }
 
         if (dossierRegions.size() > 0) {
-            Collections.sort(dossierRegions);
+            Collections.sort(dossierRegions, String.CASE_INSENSITIVE_ORDER);
             NameListDialog nameListDialog = new NameListDialog();
             nameListDialog.setTitle(getString(R.string.activityfeed_dossier_r));
             nameListDialog.setNames(dossierRegions);

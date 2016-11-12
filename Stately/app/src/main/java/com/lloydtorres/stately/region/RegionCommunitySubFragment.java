@@ -150,7 +150,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 }
             }
         }
-        Collections.sort(embassyList);
+        Collections.sort(embassyList, String.CASE_INSENSITIVE_ORDER);
         if (embassyList.size() > 0) {
             cards.add(new EmbassyHolder(embassyList));
         }
@@ -312,7 +312,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                                     option.votes += 1;
                                 }
 
-                                Collections.sort(voters);
+                                Collections.sort(voters, String.CASE_INSENSITIVE_ORDER);
                                 option.voters = SparkleHelper.joinStringList(voters, ":");
                                 pollData.options.set(i, option);
                             }

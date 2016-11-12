@@ -19,6 +19,8 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Locale;
+
 /**
  * Created by Lloyd on 2016-04-10.
  * Represents one trend dataset.
@@ -32,7 +34,7 @@ public class Dataset implements Comparable<Dataset>, Parcelable {
 
     @Override
     public int compareTo(Dataset another) {
-        return name.compareTo(another.name);
+        return name.toLowerCase().compareTo(another.name.toLowerCase(Locale.US));
     }
 
     protected Dataset(Parcel in) {
