@@ -277,8 +277,10 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
          */
         private void resetDataSelected() {
             List<CensusHistoryPoint> datapoints = dataset.points;
-            CensusHistoryPoint latest = datapoints.get(Math.max(0, datapoints.size() - 1));
-            setDataSelected(latest);
+            if (datapoints != null && datapoints.size() > 0) {
+                CensusHistoryPoint latest = datapoints.get(datapoints.size() - 1);
+                setDataSelected(latest);
+            }
         }
 
         /**
