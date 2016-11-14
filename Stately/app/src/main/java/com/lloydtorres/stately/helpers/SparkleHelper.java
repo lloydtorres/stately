@@ -815,15 +815,17 @@ public final class SparkleHelper {
     /**
      * Regex patterns
      */
-    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=(" + VALID_ID_BASE + "+?)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(" + VALID_ID_BASE + "+?)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(" + VALID_ID_BASE + "+?)\\?tgid=[0-9]+?");
+    public static final String  NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|)";
+
+    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|$|\\s)");
+    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|$|\\s)");
+    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)\\?tgid=[0-9]+?");
+
     public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
     public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.+?\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
     public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(" + VALID_NAME_BASE + "+?)\\]");
     public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](" + VALID_NAME_BASE + "+?)\\[\\/region\\]");
     public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(" + VALID_NAME_BASE + "+?)\\]");
-    public static final String  NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|)";
     public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
     public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
 
@@ -853,13 +855,6 @@ public final class SparkleHelper {
         holder = holder.replace("&amp;", "&");
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
-        // Replace raw NS nation and region links with Stately versions
-        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
-        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
-        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
-
         // Basic BBcode processing
         holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
 
@@ -870,6 +865,20 @@ public final class SparkleHelper {
         holder = holder.replace("&gt;", ">");
         holder = holder.replace("[*]", "<li>");
         holder = Jsoup.clean(holder, Whitelist.relaxed());
+
+        // Linkify nations and regions
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
+        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
+
+        // Replace raw NS nation and region links with Stately versions
+        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
+        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
+        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
+        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
 
         // Q: Why don't you use the BBCode parser instead of doing this manually? :(
         // A: Because it misses some tags for some reason, so it's limited to lists for now.
@@ -891,13 +900,6 @@ public final class SparkleHelper {
             Spoiler s = spoilers.get(i);
             holder = holder.replace(s.raw, s.replacer);
         }
-
-        // Linkify nations and regions
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder, spoilers, fm);
