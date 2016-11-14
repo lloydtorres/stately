@@ -158,7 +158,9 @@ public final class SparkleHelper {
         return sb.toString();
     }
 
-    public static final Pattern VALID_NATION_NAME = Pattern.compile("^[A-Za-z0-9-_ ]+$");
+    public static final String VALID_ID_BASE = "[A-Za-z0-9-_]";
+    public static final String VALID_NAME_BASE = "[A-Za-z0-9-_ ]";
+    public static final Pattern VALID_NAME_PATTERN = Pattern.compile("^" + VALID_NAME_BASE + "+$");
 
     /**
      * Checks if the passed in name is a valid NationStates name (i.e. A-Z, a-z, 0-9, -, (space)).
@@ -168,7 +170,7 @@ public final class SparkleHelper {
     public static boolean isValidName(String name)
     {
         String normalizedName = normalizeToAscii(name);
-        Matcher validator = VALID_NATION_NAME.matcher(normalizedName);
+        Matcher validator = VALID_NAME_PATTERN.matcher(normalizedName);
         return validator.matches();
     }
 
@@ -752,10 +754,10 @@ public final class SparkleHelper {
         return src;
     }
 
-    public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(.*?)@@");
-    public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(.*?)%%");
-    public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+\" rel=\"nofollow\">");
-    public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+)\" rel=\"nofollow\">");
+    public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(" + VALID_NAME_BASE + "+?)@@");
+    public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(" + VALID_NAME_BASE + "+?)%%");
+    public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(" + VALID_ID_BASE + "+?)\\/page=display_region_rmb\\?postid=(\\d+?)#p\\d+?\" rel=\"nofollow\">");
+    public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+?)\" rel=\"nofollow\">");
 
     /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
@@ -813,17 +815,17 @@ public final class SparkleHelper {
     /**
      * Regex patterns
      */
-    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=([\\w-]*)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)(?:\\/|)$");
-    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=([\\w-]*)\\?tgid=[0-9].*?");
-    public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](.*?)\\[\\/nation\\]");
-    public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.*?\\](.*?)\\[\\/nation\\]");
-    public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(.*?)\\]");
-    public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](.*?)\\[\\/region\\]");
-    public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(.*?)\\]");
+    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/nation=(" + VALID_ID_BASE + "+?)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(" + VALID_ID_BASE + "+?)(?:\\/|)$");
+    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b(?:https?:\\/\\/|)(?:www\\.|)nationstates\\.net\\/region=(" + VALID_ID_BASE + "+?)\\?tgid=[0-9]+?");
+    public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.+?\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(" + VALID_NAME_BASE + "+?)\\]");
+    public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](" + VALID_NAME_BASE + "+?)\\[\\/region\\]");
+    public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(" + VALID_NAME_BASE + "+?)\\]");
     public static final String  NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|)";
-    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=([\\w-]*)(?:\\/|)\\]");
-    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=([\\w-]*)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
 
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
@@ -1041,9 +1043,9 @@ public final class SparkleHelper {
         return holder;
     }
 
-    public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+)\\](.*?)\\[\\/resolution\\]");
-    public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+\\](.*?)\\[\\/resolution\\]");
-    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\\](.*?)\\[\\/url\\]");
     public static final String BBCODE_RESOLUTION_GA = "GA";
 
     /**
@@ -1163,7 +1165,7 @@ public final class SparkleHelper {
     }
 
     public static final Pattern BBCODE_QUOTE = Pattern.compile("(?i)(?s)\\[quote\\](.*?)\\[\\/quote\\]");
-    public static final Pattern BBCODE_QUOTE_1 = Pattern.compile("(?i)(?s)\\[quote=(.*?);[0-9]+\\](.*?)\\[\\/quote\\]");
+    public static final Pattern BBCODE_QUOTE_1 = Pattern.compile("(?i)(?s)\\[quote=(.*?);[0-9]+?\\](.*?)\\[\\/quote\\]");
     public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
 
     /**

@@ -19,12 +19,14 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 /**
  * Created by Lloyd on 2016-03-02.
  * This is a model containing data on the change for one census stat after an issue result.
  */
 public class CensusDelta implements Parcelable {
-    public static final String REGEX_ID = "\\/nation=.*?\\/detail=trend\\?censusid=";
+    public static final String REGEX_ID = "\\/nation=" + SparkleHelper.VALID_NAME_BASE + "+?\\/detail=trend\\?censusid=";
 
     public int censusId;
     public String delta;

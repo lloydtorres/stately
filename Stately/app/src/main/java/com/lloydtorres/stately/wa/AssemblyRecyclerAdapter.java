@@ -234,7 +234,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)");
+    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)");
 
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {

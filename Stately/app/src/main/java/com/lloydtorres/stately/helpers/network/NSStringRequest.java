@@ -106,7 +106,7 @@ public class NSStringRequest extends StringRequest {
         return params;
     }
 
-    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+|;\\s*)pin=(\\d+)(?:$|;\\s*|\\s+)");
+    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {

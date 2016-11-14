@@ -82,9 +82,6 @@ public final class MuffinsHelper {
     public static final Pattern SENDER_REGEX = Pattern.compile(SEND_ARROW_SENDER_REGEX);
     public static final Pattern RECIPIENT_REGEX = Pattern.compile(SEND_ARROW_RECIPIENT_REGEX);
 
-    public static final String NATION_FORMAT_REGEX = "@@(.*?)@@";
-    public static final Pattern NATION_REGEX = Pattern.compile(NATION_FORMAT_REGEX);
-
     public static final String NATION_LINK_PREFIX = "nation=";
     public static final String REGION_LINK_PREFIX = "region=";
     public static final String SELF_INDICATOR = "Wired To";
@@ -350,18 +347,18 @@ public final class MuffinsHelper {
     }
 
     public static String getNationIdFromFormat(String raw) {
-        Matcher nationMatcher = NATION_REGEX.matcher(raw);
+        Matcher nationMatcher = SparkleHelper.NS_HAPPENINGS_NATION.matcher(raw);
         if (nationMatcher.find()) {
-            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), NATION_REGEX));
+            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), SparkleHelper.NS_HAPPENINGS_NATION));
         }
         return null;
     }
 
-    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\\?tgid=[0-9].*?\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=([\\w-]*?)\" rel=\"nofollow\">(.*?)<\\/a>");
-    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+)\" rel=\"nofollow\">");
-    public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+?)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\" rel=\"nofollow\">");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**

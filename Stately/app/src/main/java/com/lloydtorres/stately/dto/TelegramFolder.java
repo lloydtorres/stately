@@ -30,7 +30,7 @@ public class TelegramFolder implements Parcelable {
     public static final String TELEGRAM_FOLDER_INBOX_VAL = "inbox";
     public static final String TELEGRAM_FOLDER_SENT = "Sent Items";
     public static final String TELEGRAM_FOLDER_DELETED = "Deleted Items";
-    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\(.*\\)$");
+    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\([0-9]*?\\)$");
 
     public String name;
     public String value;

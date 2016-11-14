@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends RefreshviewFragment {
-    private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+)\\] (.+)$");
+    private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+?)\\] (.+?)$");
 
     private List<Object> issues;
     private Nation mNation;

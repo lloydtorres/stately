@@ -104,8 +104,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private static final String ENDORSE_REQUEST = "endorse";
     private static final String UNENDORSE_REQUEST = "unendorse";
     private static final String PASSWORD_TAG = "Password";
-    private static final Pattern REGION_MOVE_SUCCESS = Pattern.compile("Success! .*? is now located in .*?\\.");
-    private static final Pattern REGION_MOVE_WRONG_PASS = Pattern.compile("Moving to .*?: You have not entered the correct password for .*?\\.");
+    private static final Pattern REGION_MOVE_SUCCESS = Pattern.compile("Success! " + SparkleHelper.VALID_NAME_BASE + "+? is now located in ");
+    private static final Pattern REGION_MOVE_WRONG_PASS = Pattern.compile("Moving to " + SparkleHelper.VALID_NAME_BASE + "+?: You have not entered the correct password for " + SparkleHelper.VALID_NAME_BASE + "+?\\.");
 
     private String id;
     private String name;

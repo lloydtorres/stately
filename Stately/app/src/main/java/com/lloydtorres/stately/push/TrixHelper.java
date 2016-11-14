@@ -242,9 +242,9 @@ public final class TrixHelper {
         notificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
     }
 
-    private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+)$");
-    private static final Pattern NOTIFS_URL_RMB = Pattern.compile("^region=(.+)\\/page=display_region_rmb\\?postid=(\\d+)#p\\d+$");
-    private static final Pattern NOTIFS_URL_ENDORSE = Pattern.compile("^nation=(.+)$");
+    private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+?)$");
+    private static final Pattern NOTIFS_URL_RMB = Pattern.compile("^region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\/page=display_region_rmb\\?postid=(\\d+?)#p\\d+?$");
+    private static final Pattern NOTIFS_URL_ENDORSE = Pattern.compile("^nation=(" + SparkleHelper.VALID_ID_BASE + "+?)$");
 
     /**
      * Builds and shows a notification for each supported notice type except for issues.
