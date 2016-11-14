@@ -18,6 +18,7 @@ package com.lloydtorres.stately.core;
 
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import java.lang.reflect.Field;
 
@@ -27,6 +28,13 @@ import java.lang.reflect.Field;
  * Same as DetachFragment, but this is for DialogFragments specifically.
  */
 public abstract class DetachDialogFragment extends DialogFragment {
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        if (!isAdded()) {
+            super.show(manager, tag);
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
