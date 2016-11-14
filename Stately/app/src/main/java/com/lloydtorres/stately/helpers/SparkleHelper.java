@@ -832,7 +832,6 @@ public final class SparkleHelper {
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
-    public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](.*?)\\[\\/proposal\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
@@ -866,6 +865,9 @@ public final class SparkleHelper {
         holder = holder.replace("[*]", "<li>");
         holder = Jsoup.clean(holder, Whitelist.relaxed());
 
+        // First handle the [pre] tag -- anything inside must not be formatted
+        holder = regexPreFormat(holder);
+
         // Linkify nations and regions
         holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
         holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
@@ -874,6 +876,7 @@ public final class SparkleHelper {
         holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
 
         // Replace raw NS nation and region links with Stately versions
+        // It's in this order since the last three lines grab raw URLs and formats them
         holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
         holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
         holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
@@ -885,7 +888,6 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_B, "<b>%s</b>");
         holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
-        holder = regexReplace(holder, BBCODE_PRE, "<code>%s</code>");
         holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
         holder = regexResolutionFormat(holder);
         holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);
@@ -1042,6 +1044,36 @@ public final class SparkleHelper {
             holder = holder.replace(n.getKey(), replacer);
         }
 
+        return holder;
+    }
+
+    public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
+    public static final String HTML_LEFT_SQUARE_BRACKET = "&#91;";
+    public static final String HTML_RIGHT_SQUARE_BRACKET = "&#93;";
+    public static final String HTML_COLON = "&#58;";
+    public static final String HTML_FORWARD_SLASH = "&#47;";
+    public static final String HTML_EQUALS_SIGN = "&#61;";
+    public static final String HTML_QUESTION_MARK = "&#63;";
+    public static final String PRE_HTML_TEMPLATE = "<code>%s</code>";
+
+    /**
+     * Processes [pre] tags -- must be wrapped using <code> tag and contents must not be formatted.
+     * @param target
+     * @return
+     */
+    public static String regexPreFormat(String target) {
+        String holder = target;
+        Matcher m = BBCODE_PRE.matcher(holder);
+        while (m.find()) {
+            String rawContent = m.group(1);
+            rawContent = rawContent.replace("[", HTML_LEFT_SQUARE_BRACKET);
+            rawContent = rawContent.replace("]", HTML_RIGHT_SQUARE_BRACKET);
+            rawContent = rawContent.replace(":", HTML_COLON);
+            rawContent = rawContent.replace("/", HTML_FORWARD_SLASH);
+            rawContent = rawContent.replace("=", HTML_EQUALS_SIGN);
+            rawContent = rawContent.replace("?", HTML_QUESTION_MARK);
+            holder = holder.replace(m.group(), String.format(Locale.US, PRE_HTML_TEMPLATE, rawContent));
+        }
         return holder;
     }
 
