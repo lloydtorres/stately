@@ -34,7 +34,7 @@ public class Dataset implements Comparable<Dataset>, Parcelable {
 
     @Override
     public int compareTo(Dataset another) {
-        return name.toLowerCase().compareTo(another.name.toLowerCase(Locale.US));
+        return name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
     }
 
     protected Dataset(Parcel in) {
