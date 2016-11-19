@@ -37,9 +37,4 @@ public class XAxisLabelFormatter implements IAxisValueFormatter {
     public String getFormattedValue(float value, AxisBase axis) {
         return labels.get((int) value);
     }
-
-    @Override
-    public int getDecimalDigits() {
-        return 0;
-    }
 }

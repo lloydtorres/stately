@@ -38,9 +38,4 @@ public class LargeNumberAxisFormatter implements IAxisValueFormatter {
     public String getFormattedValue(float value, AxisBase axis) {
         return SparkleHelper.getPrettifiedShortSuffixedNumber(context, value);
     }
-
-    @Override
-    public int getDecimalDigits() {
-        return 0;
-    }
 }
