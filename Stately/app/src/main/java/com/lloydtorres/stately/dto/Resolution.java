@@ -72,7 +72,7 @@ public class Resolution implements Parcelable {
     public long implemented;
     @Element(name="REPEALED_BY", required=false)
     public int repealed;
-    @Element(name="REPEALS_COUNCILD", required=false)
+    @Element(name="REPEALS_COUNCILID", required=false)
     public int repealTarget;
 
     public Resolution() {
