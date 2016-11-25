@@ -260,6 +260,7 @@
     <string name="spoiler_warn_title">Spoiler: %1$s</string>
     <string name="spoiler_warn_title_link">[spoiler: %1$s]</string>
     <string name="rmb_suppressed">[i]Suppressed by [nation=%1$s].[/i]\n\n[i][spoiler=Tap to view.]%2$s[/spoiler][/i]</string>
+    <string name="clicky_link_internal">&lt;a href=&quot;%1$s&quot;&gt;[link: %2$s]&lt;/a&gt;</string>
     <string name="clicky_link_http">&lt;a href=&quot;%1$s&quot;&gt;[external link: %2$s]&lt;/a&gt;</string>
     <string name="rmb_no_content">Nothing to see here!</string>
     <string name="rmb_caught_up">All caught up!</string>

@@ -815,10 +815,10 @@ public final class SparkleHelper {
     /**
      * Regex patterns
      */
-    public static final String  NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|)";
+    public static final String NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|nationstates\\.net\\/|)";
 
-    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|$|\\s)");
-    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|$|\\s)");
+    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|)(?:$|\\s)");
+    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|)(?:$|\\s)");
     public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)\\?tgid=[0-9]+?");
 
     public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
@@ -1146,6 +1146,7 @@ public final class SparkleHelper {
     }
 
     public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_NOCLOSE = Pattern.compile("(?i)(?s)\\[url=(.*?)\\]");
     public static final Pattern RAW_HTTP_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)((?:http|https):\\/\\/[^\\s\\[\\<]+)");
     public static final Pattern RAW_WWW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)");
 
@@ -1193,6 +1194,28 @@ public final class SparkleHelper {
         Set<Map.Entry<String, String>> set = replaceRaw.entrySet();
         for (Map.Entry<String, String> e : set) {
             holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.getKey() + "\\E(?=$|[\\s\\[\\<])", e.getValue());
+        }
+
+        // Do this last so it doesn't interfere with complete tags
+        Map<String, String> replaceNoClose = new HashMap<String, String>();
+        Matcher m3 = BBCODE_URL_NOCLOSE.matcher(holder);
+        while (m3.find()) {
+            String replaceText = "";
+            Uri link = Uri.parse(m3.group(1)).normalizeScheme();
+            if (link.getScheme() == null) {
+                String finalLink = "http://" + link.toString();
+                Uri finalLinkUri = Uri.parse(finalLink).normalizeScheme();
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), finalLink, finalLinkUri.getHost());
+            } else if (link.getScheme().equals(ExploreActivity.EXPLORE_PROTOCOL)) {
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal), link.toString(), SparkleHelper.getNameFromId(link.getHost()));
+            } else {
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
+            }
+            replaceNoClose.put(m3.group(), replaceText);
+        }
+        Set<Map.Entry<String, String>> setNoClose = replaceNoClose.entrySet();
+        for (Map.Entry<String, String> e : setNoClose) {
+            holder = holder.replace(e.getKey(), e.getValue());
         }
 
         return holder;
