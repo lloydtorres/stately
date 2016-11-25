@@ -7,7 +7,15 @@
         <template>&lt;ul&gt;<var/>&lt;/ul&gt;</template>
     </code>
     <code>
+        <pattern ignoreCase="true">[list]</pattern>
+        <template>&lt;ul&gt;</template>
+    </code>
+    <code>
         <pattern ignoreCase="true">[list=<var name="type"/>]<var name="content"/>[/list]</pattern>
         <template>&lt;ol='<var name="type"/>'&gt;<var name="content"/>&lt;/ol&gt;</template>
+    </code>
+    <code>
+        <pattern ignoreCase="true">[list=<var name="type"/>]</pattern>
+        <template>&lt;ol='<var name="type"/>'&gt;</template>
     </code>
 </configuration>
