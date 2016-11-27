@@ -1079,7 +1079,9 @@ public final class SparkleHelper {
 
     public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
-    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION_2 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\?start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION_3 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution(?:s|)\\/id=([0-9]+?)\\/council=(1|2)(?:\\/|)\\](.*?)\\[\\/url\\]");
     public static final String BBCODE_RESOLUTION_GA = "GA";
 
     /**
@@ -1098,14 +1100,25 @@ public final class SparkleHelper {
             holder = holder.replace(m.group(), properFormat);
         }
 
-        Matcher m2 = BBCODE_URL_RESOLUTION.matcher(holder);
-        while (m2.find()) {
-            int councilId = Integer.valueOf(m2.group(1));
-            int resolutionId = Integer.valueOf(m2.group(2));
-            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m2.group(3));
-            holder = holder.replace(m2.group(), properFormat);
-        }
+        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION, false, false);
+        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_2, false, false);
+        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_3, true, true);
 
+        return holder;
+    }
+
+    public static String regexResolutionReplacer(String target, Pattern pattern, boolean shouldOffsetByOne, boolean shouldSwitchCouncilId) {
+        String holder = target;
+        Matcher m = pattern.matcher(target);
+        while (m.find()) {
+            int councilId = Integer.valueOf(m.group(shouldSwitchCouncilId ? 2 : 1));
+            int resolutionId = Integer.valueOf(m.group(shouldSwitchCouncilId ? 1 : 2));
+            if (shouldOffsetByOne) {
+                resolutionId--;
+            }
+            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
+            holder = holder.replace(m.group(), properFormat);
+        }
         return holder;
     }
 

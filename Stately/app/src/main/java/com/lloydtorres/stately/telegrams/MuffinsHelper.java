@@ -359,6 +359,7 @@ public final class MuffinsHelper {
     public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+?)\" rel=\"nofollow\">");
     public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK_2 = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)\" rel=\"nofollow\">(.+?)</a>");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
@@ -386,12 +387,30 @@ public final class MuffinsHelper {
 
         holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
+        holder = regexResolutionFormat(holder);
 
         holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
 
         holder = SparkleHelper.regexGenericUrlFormat(c, holder);
 
         SparkleHelper.setStyledTextView(c, t, holder);
+    }
+
+    public static String regexResolutionFormat(String target) {
+        String holder = target;
+
+        SparkleHelper.logError(holder);
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
+
+        Matcher m = NS_TG_RAW_RESOLUTION_LINK_2.matcher(target);
+        while (m.find()) {
+            int councilId = Integer.valueOf(m.group(2));
+            int resolutionId = Integer.valueOf(m.group(1)) - 1;
+            String properFormat = SparkleHelper.regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
+            holder = holder.replace(m.group(), properFormat);
+        }
+        SparkleHelper.logError(holder);
+
+        return holder;
     }
 }
