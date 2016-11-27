@@ -67,6 +67,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -536,12 +537,11 @@ public final class SparkleHelper {
 
     /**
      * Checks if the given string indicates that the given stat is for a WA member.
-     * @param c App context
      * @param stat WA state indicator
      * @return bool if stat indicates its a WA member
      */
-    public static boolean isWaMember(Context c, String stat) {
-        return stat.equals(c.getString(R.string.nation_wa_member)) || stat.equals(c.getString(R.string.nation_wa_delegate));
+    public static boolean isWaMember(String stat) {
+        return stat.equals(Nation.WA_MEMBER) || stat.equals(Nation.WA_DELEGATE);
     }
 
     /**

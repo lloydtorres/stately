@@ -200,7 +200,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
 
-            if (SparkleHelper.isWaMember(context, voteStatus.waState)) {
+            if (SparkleHelper.isWaMember(voteStatus.waState)) {
                 // If voting FOR the resolution
                 if (WaVoteStatus.VOTE_FOR.equals(voteStats)) {
                     iconVoteFor.setVisibility(View.VISIBLE);

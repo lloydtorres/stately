@@ -248,7 +248,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), data.established, data.lastSeen.toLowerCase(Locale.US)));
             }
 
-            if (SparkleHelper.isWaMember(context, data.waState)) {
+            if (SparkleHelper.isWaMember(data.waState)) {
                 waSection.setVisibility(View.VISIBLE);
                 waMember.setVisibility(View.VISIBLE);
                 isWaMember.setText(data.waState);

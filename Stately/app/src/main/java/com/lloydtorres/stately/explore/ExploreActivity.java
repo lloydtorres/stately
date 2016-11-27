@@ -349,7 +349,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
                             String exploreId = SparkleHelper.getIdFromName(nationResponse.name);
                             String exploreRegionId = SparkleHelper.getIdFromName(nationResponse.region);
-                            boolean exploreWaMember = SparkleHelper.isWaMember(getApplicationContext(), nationResponse.waState);
+                            boolean exploreWaMember = SparkleHelper.isWaMember(nationResponse.waState);
 
                             // must not be same as session nation, must be in same region, must both be WA members
                             isMe = exploreId.equals(userId);

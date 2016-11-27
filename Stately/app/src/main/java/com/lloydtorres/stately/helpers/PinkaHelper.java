@@ -125,7 +125,7 @@ public final class PinkaHelper {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(USERSESSION_REGION, regionName);
-        editor.putBoolean(USERSESSION_WA_MEMBER, SparkleHelper.isWaMember(c, waStatus));
+        editor.putBoolean(USERSESSION_WA_MEMBER, SparkleHelper.isWaMember(waStatus));
         editor.apply();
     }
 
@@ -149,7 +149,7 @@ public final class PinkaHelper {
     public static void setWaSessionData(Context c, String stat) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
-        editor.putBoolean(USERSESSION_WA_MEMBER, SparkleHelper.isWaMember(c, stat));
+        editor.putBoolean(USERSESSION_WA_MEMBER, SparkleHelper.isWaMember(stat));
         editor.apply();
     }
 

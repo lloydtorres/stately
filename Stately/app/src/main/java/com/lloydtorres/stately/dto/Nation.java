@@ -63,6 +63,10 @@ public class Nation implements Parcelable {
     // @param: banner_id
     public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images/banners/%s.jpg";
 
+    // WA membership types
+    public static final String WA_MEMBER = "WA Member";
+    public static final String WA_DELEGATE = "WA Delegate";
+
     @Element(name="BANNER")
     public String bannerKey;
     @Element(name="FLAG")
