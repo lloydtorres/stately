@@ -24,6 +24,8 @@
     <string name="create_finish">Type in your nation name and password to get started.</string>
     <string name="log_in_load">Logging In…</string>
     <string name="calibration_load">Calibrating…</string>
+    <string name="guidance_invalid_login_title">Problem logging in?</string>
+    <string name="guidance_invalid_login_content">Try typing your nation name in a text field outside Stately, then copy and paste it into the nation name field on this screen.\n\nYeah, it\'s weird.</string>>
 
     <string name="login_error_404">Invalid nation name or password.</string>
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>

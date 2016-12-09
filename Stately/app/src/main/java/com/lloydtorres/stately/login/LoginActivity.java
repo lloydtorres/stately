@@ -79,6 +79,9 @@ public class LoginActivity extends AppCompatActivity {
     public static final int ROUTE_RMB = 2;
     public static final int ROUTE_EXPLORE = 3;
 
+    // Other constants
+    public static final int INVALID_NATION_ERROR_GUIDANCE_LIMIT = 3;
+
     private View view;
     private ImageView headerImage;
     private TextView subtitle;
@@ -91,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isLocked;
 
     private Bundle routeBundle;
+
+    private int invalidAttempts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +202,8 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 setLockedState(false);
                 SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
+                invalidAttempts++;
+                showInvalidLoginGuidance();
             }
         }
     }
@@ -287,6 +294,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else if (error instanceof ServerError || error instanceof AuthFailureError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
+                    invalidAttempts++;
+                    showInvalidLoginGuidance();
                 }
                 else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
@@ -406,6 +415,16 @@ public class LoginActivity extends AppCompatActivity {
             verifyAccount(u);
         } else {
             setLockedState(false);
+        }
+    }
+
+    private void showInvalidLoginGuidance() {
+        if (invalidAttempts == INVALID_NATION_ERROR_GUIDANCE_LIMIT) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            dialogBuilder.setTitle(R.string.guidance_invalid_login_title)
+                    .setMessage(R.string.guidance_invalid_login_content)
+                    .setPositiveButton(R.string.got_it, null)
+                    .show();
         }
     }
 
