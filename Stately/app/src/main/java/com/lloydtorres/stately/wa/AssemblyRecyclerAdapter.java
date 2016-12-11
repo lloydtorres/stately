@@ -234,7 +234,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)");
+    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)");
 
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
@@ -265,8 +265,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (m.find()) {
                 buttonDivider.setVisibility(View.VISIBLE);
                 buttonHolder.setVisibility(View.VISIBLE);
-                final int councilId = Integer.valueOf(m.group(1));
-                final int resId = Integer.valueOf(m.group(2)) + 1;
+                final int councilId = Integer.valueOf(m.group(2));
+                final int resId = Integer.valueOf(m.group(1));
                 buttonHolder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
