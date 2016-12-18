@@ -22,6 +22,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.7.6** - Bug fixes and improvements.
 * **1.7.5** - Bug fixes and improvements.
 * **1.7.4** - Hotfix to deal with illegal state fragment transaction crashes.
 * **1.7.3** - Hotfix for Z-Day.
