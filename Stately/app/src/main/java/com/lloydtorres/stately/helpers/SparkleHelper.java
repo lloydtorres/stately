@@ -957,13 +957,14 @@ public final class SparkleHelper {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
-                logError(e.toString());
+                SparkleHelper.logError(e.toString());
+                SparkleHelper.logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
         }
         else {
-            t.setText(fromHtml(holder));
+            t.setText(SparkleHelper.fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
     }
@@ -977,13 +978,14 @@ public final class SparkleHelper {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
-                logError(e.toString());
+                SparkleHelper.logError(e.toString());
+                SparkleHelper.logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
         }
         else {
-            t.setText(fromHtml(holder));
+            t.setText(SparkleHelper.fromHtml(holder));
         }
 
         // Deal with spoilers here

@@ -399,7 +399,6 @@ public final class MuffinsHelper {
     public static String regexResolutionFormat(String target) {
         String holder = target;
 
-        SparkleHelper.logError(holder);
         holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
 
         Matcher m = NS_TG_RAW_RESOLUTION_LINK_2.matcher(target);
@@ -409,7 +408,6 @@ public final class MuffinsHelper {
             String properFormat = SparkleHelper.regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
             holder = holder.replace(m.group(), properFormat);
         }
-        SparkleHelper.logError(holder);
 
         return holder;
     }
