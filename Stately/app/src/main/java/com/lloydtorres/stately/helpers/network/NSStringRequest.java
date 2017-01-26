@@ -69,41 +69,41 @@ public class NSStringRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() {
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String,String> headers = new HashMap<String, String>();
         UserLogin u = userDataOverride == null ? PinkaHelper.getActiveUser(context) : userDataOverride;
 
         // UserLogin will not be null when user is logged in
         if (u != null && u.nationId != null) {
-            params.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header), u.nationId));
+            headers.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header), u.nationId));
 
             // Case 1: If only autologin cookie is available/pin cookie is invalid
             if ((u.pin == null || PIN_INVALID.equals(u.pin)) && u.autologin != null) {
-                params.put("Cookie", String.format(Locale.US, "autologin=%s", buildCookieAutologinToken(u.nationId, u.autologin)));
-                params.put("Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
+                headers.put("Cookie", String.format(Locale.US, "autologin=%s", buildCookieAutologinToken(u.nationId, u.autologin)));
+                headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
             }
             // Case 2: If both autologin and pin cookies are available and pin cookie is good
             else if (u.autologin != null && u.pin != null && !PIN_INVALID.equals(u.pin)) {
-                params.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", buildCookieAutologinToken(u.nationId, u.autologin), u.pin));
-                params.put("Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
-                params.put("Pin", u.pin);
+                headers.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", buildCookieAutologinToken(u.nationId, u.autologin), u.pin));
+                headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
+                headers.put("X-Pin", u.pin);
             }
             // Case 3: Both are missing, don't do anything
             // ...
         }
         else {
-            params.put("User-Agent", context.getString(R.string.app_header_nouser));
+            headers.put("User-Agent", context.getString(R.string.app_header_nouser));
         }
 
         // If the password is provided, add that to the header
         if (password != null) {
-            params.put("Password", password);
+            headers.put("X-Password", password);
         }
 
         // Only include x-www-form-urlencoded for POSTs
         if (method == Request.Method.POST) {
-            params.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         }
-        return params;
+        return headers;
     }
 
     private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
