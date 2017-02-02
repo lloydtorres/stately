@@ -49,8 +49,6 @@ public class IssueResultsActivity extends RefreshviewActivity {
     public static final String CENSUSDELTA_DATA = "censusDeltaData";
     public static final String NATION_DATA = "nationData";
 
-    private static final String RECLASSIFICATION = "Reclassification";
-
     private String news;
     private IssueOption option;
     private ArrayList<IssueResultHeadline> headlines;
@@ -103,10 +101,14 @@ public class IssueResultsActivity extends RefreshviewActivity {
 
         // Get talking point and reclassification
         Element resultsContainer = d.select("div.dilemma").first();
+        news = null;
         if (resultsContainer != null) {
-            news = resultsContainer.select("p").first().text();
-            if (resultsContainer.text().contains(RECLASSIFICATION)) {
-                news = news + "<br><br>" + resultsContainer.select("p").get(1).text();
+            for (Element p : resultsContainer.select("p")) {
+                if (news == null) {
+                    news = p.text();
+                } else {
+                    news = news + "<br><br>" + p.text();
+                }
             }
         }
 
