@@ -48,6 +48,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -222,6 +224,11 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (option.id != IssueOption.DISMISS_ISSUE_ID) {
                             if (response != null && response.contains(LEGISLATION_PASSED)) {
+                                try {
+                                    response = URLDecoder.decode(URLEncoder.encode(response, "ISO-8859-1"), "UTF-8");
+                                } catch (Exception e) {
+                                    SparkleHelper.logError(e.toString());
+                                }
                                 Intent issueResultsActivity = processAndPackResultsData(response, option);
                                 startActivity(issueResultsActivity);
                                 finish();
