@@ -29,9 +29,13 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
+import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueFullHolder;
 import com.lloydtorres.stately.dto.IssueOption;
+import com.lloydtorres.stately.dto.IssuePostcard;
+import com.lloydtorres.stately.dto.IssueResult;
+import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -39,6 +43,12 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -211,11 +221,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                         isInProgress = false;
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (option.id != IssueOption.DISMISS_ISSUE_ID) {
-                            if (response.contains(LEGISLATION_PASSED)) {
-                                Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
-                                issueResultsActivity.putExtra(IssueResultsActivity.RESPONSE_DATA, response);
-                                issueResultsActivity.putExtra(IssueResultsActivity.OPTION_DATA, option);
-                                issueResultsActivity.putExtra(IssueResultsActivity.NATION_DATA, mNation);
+                            if (response != null && response.contains(LEGISLATION_PASSED)) {
+                                Intent issueResultsActivity = processAndPackResultsData(response, option);
                                 startActivity(issueResultsActivity);
                                 finish();
                             }
@@ -251,6 +258,101 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
+    }
+
+    /**
+     * Builds an intent to IssueResults Activity and packages bits and pieces of the issue decision results HTML into it.
+     * @param response
+     * @param option
+     * @return
+     */
+    private Intent processAndPackResultsData(String response, IssueOption option) {
+        Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
+        issueResultsActivity.putExtra(IssueResultsActivity.NATION_DATA, mNation);
+
+        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+
+        // Get talking point and reclassifications
+        IssueResult issueResult = new IssueResult();
+        issueResult.issueContent = issue.content;
+        issueResult.issuePosition = option.content;
+
+        Element resultsContainer = d.select("div.dilemma").first();
+        if (resultsContainer != null) {
+            for (int i = 0; i < resultsContainer.select("p").size(); i++) {
+                String rawResultData = resultsContainer.select("p").get(i).text();
+                if (i == 0) {
+                    issueResult.mainResult = rawResultData;
+                } else {
+                    if (issueResult.reclassResults == null) {
+                        issueResult.reclassResults = rawResultData;
+                    } else {
+                        StringBuilder sb = new StringBuilder(issueResult.reclassResults);
+                        sb.append(" ");
+                        sb.append(rawResultData);
+                        issueResult.reclassResults = sb.toString();
+                    }
+                }
+            }
+        }
+        issueResultsActivity.putExtra(IssueResultsActivity.ISSUE_RESULTS_DATA, issueResult);
+
+        // Get headlines
+        ArrayList<IssueResultHeadline> headlines = new ArrayList<IssueResultHeadline>();
+        Elements newspapers = d.select("div.dilemmapaper");
+        for (Element n : newspapers) {
+            Elements newspaperContent = n.getAllElements();
+            IssueResultHeadline headline = new IssueResultHeadline();
+
+            Element text = newspaperContent.select("div.dpaper4").first();
+            Element img = newspaperContent.select("img.dpaperpic1").first();
+
+            headline.headline = text.text();
+            headline.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
+            headlines.add(headline);
+        }
+        issueResultsActivity.putExtra(IssueResultsActivity.HEADLINES_DATA, headlines);
+
+        // Get postcards if available
+        ArrayList<IssuePostcard> postcards = new ArrayList<IssuePostcard>();
+        Element postcardContainer = d.select("div.bannerpostcards").first();
+        if (postcardContainer != null) {
+            Elements postcardHolders = postcardContainer.select("a.bannerpostcard");
+            for (Element p : postcardHolders) {
+                IssuePostcard postcard = new IssuePostcard();
+
+                Element img = p.select("img").first();
+                Element text = p.select("div.bannerpostcardtitle").first();
+
+                postcard.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
+                postcard.title = text.text();
+                postcards.add(postcard);
+            }
+        }
+        issueResultsActivity.putExtra(IssueResultsActivity.POSTCARD_DATA, postcards);
+
+        // Get census deltas
+        ArrayList<CensusDelta> censusDeltas = new ArrayList<CensusDelta>();
+        Element censusDeltaContainer = d.select("div.wceffects").first();
+        if (censusDeltaContainer != null) {
+            Elements deltasHolder = censusDeltaContainer.select("a.wc-change");
+            for (Element de : deltasHolder) {
+                CensusDelta censusDelta = new CensusDelta();
+                int idHolder = Integer.valueOf(de.attr("href").replaceAll(CensusDelta.REGEX_ID, ""));
+                Element deltaHolder = de.select("span.wc2").first();
+                String deltaValue = deltaHolder.text();
+                // Remove -/+ symbols if present
+                deltaValue = deltaValue.replace("-", "").replace("+", "");
+                boolean isPositive = deltaHolder.hasClass("wcg");
+                censusDelta.censusId = idHolder;
+                censusDelta.delta = deltaValue;
+                censusDelta.isPositive = isPositive;
+                censusDeltas.add(censusDelta);
+            }
+        }
+        issueResultsActivity.putExtra(IssueResultsActivity.CENSUSDELTA_DATA, censusDeltas);
+
+        return issueResultsActivity;
     }
 
     @Override

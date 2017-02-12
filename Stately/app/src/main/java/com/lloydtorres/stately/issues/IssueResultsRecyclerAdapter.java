@@ -29,8 +29,8 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
-import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
+import com.lloydtorres.stately.dto.IssueResult;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.PinkaHelper;
@@ -49,11 +49,10 @@ import java.util.Locale;
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] WORLD_CENSUS_ITEMS;
 
-    private static final int NEWS_CARD = 0;
-    private static final int POSITION_CARD = 1;
-    private static final int HEADLINE_CARD = 2;
-    private static final int POSTCARD_CARD = 3;
-    private static final int CENSUSDELTA_CARD = 4;
+    private static final int ISSUE_RESULT_CARD = 0;
+    private static final int HEADLINE_CARD = 1;
+    private static final int POSTCARD_CARD = 2;
+    private static final int CENSUSDELTA_CARD = 3;
 
     private Context context;
     private List<Object> content;
@@ -75,14 +74,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View genericCard = inflater.inflate(R.layout.card_generic, parent, false);
 
         switch (viewType) {
-            case NEWS_CARD:
-                viewHolder = new NewsCard(genericCard);
-                break;
-            case POSITION_CARD:
-                viewHolder = new PositionCard(genericCard);
+            case ISSUE_RESULT_CARD:
+                View issueResultCard = inflater.inflate(R.layout.card_issue_result, parent, false);
+                viewHolder = new IssueResultCard(issueResultCard);
                 break;
             case POSTCARD_CARD:
                 View postcardCard = inflater.inflate(R.layout.card_postcard, parent, false);
@@ -103,13 +99,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
-            case NEWS_CARD:
-                NewsCard newsCard = (NewsCard) holder;
-                newsCard.init((String) content.get(position));
-                break;
-            case POSITION_CARD:
-                PositionCard positionCard = (PositionCard) holder;
-                positionCard.init((IssueOption) content.get(position));
+            case ISSUE_RESULT_CARD:
+                IssueResultCard issueResultCard = (IssueResultCard) holder;
+                issueResultCard.init((IssueResult) content.get(position));
                 break;
             case POSTCARD_CARD:
                 PostcardCard postcardCard = (PostcardCard) holder;
@@ -133,11 +125,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if (content.get(position) instanceof String) {
-            return NEWS_CARD;
-        }
-        else if (content.get(position) instanceof IssueOption) {
-            return POSITION_CARD;
+        if (content.get(position) instanceof IssueResult) {
+            return ISSUE_RESULT_CARD;
         }
         else if (content.get(position) instanceof IssueResultHeadline) {
             return HEADLINE_CARD;
@@ -197,35 +186,42 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         t.setText(SparkleHelper.getHtmlFormatting(target).toString());
     }
 
-    public class NewsCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView content;
+    public class IssueResultCard extends RecyclerView.ViewHolder {
+        private TextView mainResult;
+        private TextView reclassResult;
+        private TextView issueContent;
+        private TextView expander;
 
-        public NewsCard(View v) {
+        public IssueResultCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.card_generic_title);
-            content = (TextView) v.findViewById(R.id.card_generic_content);
+            mainResult = (TextView) v.findViewById(R.id.card_issue_result_main_result);
+            reclassResult = (TextView) v.findViewById(R.id.card_issue_result_reclass_result);
+            issueContent = (TextView) v.findViewById(R.id.card_issue_result_issue_content);
+            expander = (TextView) v.findViewById(R.id.card_issue_result_expand);
         }
 
-        public void init(String n) {
-            title.setText(context.getString(R.string.issue_breaking));
-            setIssueResultsFormatting(context, content, mNation, n);
-        }
-    }
+        public void init(IssueResult result) {
+            setIssueResultsFormatting(context, mainResult, mNation, result.mainResult);
+            if (result.reclassResults != null) {
+                reclassResult.setVisibility(View.VISIBLE);
+                setIssueResultsFormatting(context, reclassResult, mNation, result.reclassResults);
+            } else {
+                reclassResult.setVisibility(View.GONE);
+            }
 
-    public class PositionCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView content;
+            StringBuilder sb = new StringBuilder(result.issueContent);
+            sb.append("<br><br>");
+            sb.append(result.issuePosition);
+            issueContent.setText(SparkleHelper.getHtmlFormatting(sb.toString()).toString());
 
-        public PositionCard(View v) {
-            super(v);
-            title = (TextView) v.findViewById(R.id.card_generic_title);
-            content = (TextView) v.findViewById(R.id.card_generic_content);
-        }
-
-        public void init(IssueOption op) {
-            title.setText(context.getString(R.string.issue_position));
-            content.setText(SparkleHelper.getHtmlFormatting(op.content).toString());
+            expander.setText(context.getString(R.string.issue_read_more));
+            expander.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    issueContent.setVisibility(issueContent.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    expander.setText(context.getString(issueContent.getVisibility() == View.VISIBLE ? R.string.issue_show_less : R.string.issue_read_more));
+                }
+            });
         }
     }
 

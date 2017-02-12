@@ -330,7 +330,8 @@
     <string name="issue_dismiss_issue_pirate">Arr, t\'Davey Jones\' Locker with ye all!</string>
     <string name="issue_legislation_passed">Legislation Passed</string>
     <string name="issue_breaking">Breaking News</string>
-    <string name="issue_position">Adopted Position</string>
+    <string name="issue_read_more">Read More</string>
+    <string name="issue_show_less">Show Less</string>
     <string name="issue_capital_none">%1$s City</string>
     <string name="issue_leader_none">Leader</string>
     <string name="issue_religion_none">a major religion</string>
