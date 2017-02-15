@@ -223,6 +223,16 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     alertColor = R.color.colorChart3;
                     alertContent = R.string.telegrams_alert_mod;
                     break;
+                case Telegram.TELEGRAM_WA:
+                    iconRes = isPreview ? R.drawable.ic_wa_blue : R.drawable.ic_wa_white;
+                    alertColor = R.color.colorChart0;
+                    alertContent = R.string.telegrams_alert_wa;
+                    break;
+                case Telegram.TELEGRAM_CAMPAIGN:
+                    iconRes = isPreview ? R.drawable.ic_wa_red : R.drawable.ic_wa_white;
+                    alertColor = R.color.colorChart1;
+                    alertContent = R.string.telegrams_alert_campaign;
+                    break;
             }
 
             icon.setImageResource(iconRes);
