@@ -35,6 +35,10 @@ public class XAxisLabelFormatter implements IAxisValueFormatter {
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        return labels.get((int) value);
+        if (labels == null || value >= labels.size()) {
+            return "";
+        } else {
+            return labels.get((int) value);
+        }
     }
 }
