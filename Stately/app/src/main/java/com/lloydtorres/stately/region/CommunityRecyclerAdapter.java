@@ -340,6 +340,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                         properVoters, ExploreActivity.EXPLORE_NATION);
                 template.setSpan(span, 0, template.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 content.setMovementMethod(LinkMovementMethod.getInstance());
+                content.setLongClickable(false);
             }
             content.append(template);
             content.append(context.getString(R.string.poll_votes_template_end));

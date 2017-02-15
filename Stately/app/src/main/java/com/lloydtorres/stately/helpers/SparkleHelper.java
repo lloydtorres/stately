@@ -666,6 +666,7 @@ public final class SparkleHelper {
         // Need to set this to allow for clickable TextView links.
         if (!(t instanceof HtmlTextView)) {
             t.setMovementMethod(LinkMovementMethod.getInstance());
+            t.setLongClickable(false);
         }
     }
 
