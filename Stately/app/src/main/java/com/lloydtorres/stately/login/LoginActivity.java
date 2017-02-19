@@ -383,7 +383,7 @@ public class LoginActivity extends AppCompatActivity {
         cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (!((month == Calendar.OCTOBER && day >= 29 && day <= 31) ||
+        if (!((month == Calendar.OCTOBER && day >= 25) ||
                 (month == Calendar.NOVEMBER && day <= 2))) {
             NightmareHelper.setIsZDayActive(this, false);
             continueToVerifyAccount(userLogin);
@@ -407,6 +407,10 @@ public class LoginActivity extends AppCompatActivity {
                 continueToVerifyAccount(userLogin);
             }
         });
+        // This forces the request to check without logging in
+        UserLogin nullUser = new UserLogin();
+        nullUser.nationId = null;
+        stringRequest.setUserData(nullUser);
         executeRequest(stringRequest, getString(R.string.calibration_load));
     }
 
