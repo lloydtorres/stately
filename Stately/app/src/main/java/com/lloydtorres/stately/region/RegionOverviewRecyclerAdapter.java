@@ -145,7 +145,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
                     delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
                     English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
-            SparkleHelper.activityLinkBuilder(c, tv, delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
+            delegateTemplate = SparkleHelper.addExploreActivityLink(delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
+            SparkleHelper.setStyledTextView(c, tv, delegateTemplate);
         }
         else {
             tv.setText(c.getString(R.string.region_filler_none));
@@ -154,8 +155,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
     public static void initFounder(Context c, TextView tv, String founder, String founded) {
         if (!"0".equals(founder)) {
-            String founderProper = SparkleHelper.getNameFromId(founder);
-            SparkleHelper.activityLinkBuilder(c, tv, founder, founder, founderProper, ExploreActivity.EXPLORE_NATION);
+            String founderTemplate = SparkleHelper.addExploreActivityLink(founder, founder, SparkleHelper.getNameFromId(founder), ExploreActivity.EXPLORE_NATION);
+            SparkleHelper.setStyledTextView(c, tv, founderTemplate);
         }
         else {
             tv.setText(c.getString(R.string.region_filler_none));

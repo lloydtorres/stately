@@ -178,7 +178,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             String proposer = SparkleHelper.getNameFromId(resolution.proposedBy);
             String proposeTemplate = String.format(Locale.US, context.getString(R.string.wa_proposed), resolution.proposedBy);
-            SparkleHelper.activityLinkBuilder(context, proposedBy, proposeTemplate, resolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
+            proposeTemplate = SparkleHelper.addExploreActivityLink(proposeTemplate, resolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
+            SparkleHelper.setStyledTextView(context, proposedBy, proposeTemplate);
 
             if (isActive) {
                 voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
@@ -243,13 +244,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                         // If target is a nation, linkify it.
                         String nationTarget = SparkleHelper.getNameFromId(pair[1]);
                         String oldTemplate = String.format(Locale.US, template, category, pair[1]);
-                        SparkleHelper.activityLinkBuilder(context, t, oldTemplate, pair[1], nationTarget, ExploreActivity.EXPLORE_NATION);
+                        oldTemplate = SparkleHelper.addExploreActivityLink(oldTemplate, pair[1], nationTarget, ExploreActivity.EXPLORE_NATION);
+                        SparkleHelper.setStyledTextView(context, t, oldTemplate);
                         break;
                     case "R":
                         // If target is a nation, linkify it.
                         String regionTarget = SparkleHelper.getNameFromId(pair[1]);
                         String oldRegionTemplate = String.format(Locale.US, template, category, pair[1]);
-                        SparkleHelper.activityLinkBuilder(context, t, oldRegionTemplate, pair[1], regionTarget, ExploreActivity.EXPLORE_REGION);
+                        oldRegionTemplate = SparkleHelper.addExploreActivityLink(oldRegionTemplate, pair[1], regionTarget, ExploreActivity.EXPLORE_REGION);
+                        SparkleHelper.setStyledTextView(context, t, oldRegionTemplate);
                         break;
                     default:
                         t.setText(String.format(Locale.US, template, category, target));

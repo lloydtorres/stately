@@ -636,111 +636,37 @@ public final class SparkleHelper {
      */
 
     /**
-     * Builds a link invoking an explore activity to the specified ID, and puts it into the
-     * appropriate TextView.
-     * @param c App context
-     * @param t Target TextView
-     * @param template The original text with the old formatting.
-     * @param oTarget The old format that needs to be replaced.
-     * @param nTarget The new format (usually a name) to replace the old.
+     * Embeds a link to ExploreActivity for a given nation/region target in an arbitrary text.
+     * @param template The original text where a link will be embedded.
+     * @param oldContent The substring in the template to be replaced with a linkified nation.
+     * @param exploreTarget The name of the nation/region to be used in the link.
      * @param mode If target is a nation or a region.
-     * @return Returns the new text content for further manipulation.
+     * @return Returns the linkified text.
      */
-    public static String activityLinkBuilder(Context c, TextView t, String template, String oTarget, String nTarget, int mode) {
+    public static String addExploreActivityLink(String template, String oldContent, String exploreTarget, int mode) {
         final String urlFormat = "<a href=\"%s/%d\">%s</a>";
         String tempHolder = template;
-        String targetActivity = ExploreActivity.EXPLORE_TARGET;
-
         // Name needs to be formatted back to its NationStates ID first for the URL.
-        targetActivity = targetActivity + getIdFromName(nTarget);
-        targetActivity = String.format(Locale.US, urlFormat, targetActivity, mode, nTarget);
-
-        tempHolder = tempHolder.replace(oTarget, targetActivity);
-        setStyledTextView(c, t, tempHolder);
-
+        String targetActivity = ExploreActivity.EXPLORE_TARGET + getIdFromName(exploreTarget);
+        targetActivity = String.format(Locale.US, urlFormat, targetActivity, mode, exploreTarget);
+        tempHolder = tempHolder.replace(oldContent, targetActivity);
         return tempHolder;
     }
 
     /**
-     * Stylify text view to primary colour and no underline
-     * @param c App context
-     * @param t TextView
-     */
-    public static void styleLinkifiedTextView(Context c, TextView t) {
-        // Get individual spans and replace them with clickable ones.
-        Spannable s = new SpannableString(t.getText());
-        URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
-        for (URLSpan span: spans) {
-            int start = s.getSpanStart(span);
-            int end = s.getSpanEnd(span);
-            s.removeSpan(span);
-            span = new URLSpanNoUnderline(c, span.getURL());
-            s.setSpan(span, start, end, 0);
-        }
-
-        t.setText(s);
-        // Need to set this to allow for clickable TextView links.
-        if (!(t instanceof HtmlTextView)) {
-            t.setMovementMethod(LinkMovementMethod.getInstance());
-            t.setLongClickable(false);
-        }
-    }
-
-    /**
-     * Given a regex and some content, get all pairs of (old, new) where old is a string matching
-     * the regex in the content, and new is the proper name to replace the old string.
-     * @param regex Regex statement
-     * @param content Target content
-     * @return
-     */
-    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName) {
-        String holder = content;
-        // (old, new) replacement pairs
-        Map<String, String> replacePairs = new HashMap<String, String>();
-
-        Matcher m = regex.matcher(holder);
-        while (m.find()) {
-            String properFormat;
-            if (isName) {
-                // Nameify the ID found and put the (old, new) pair into the map
-                properFormat = getNameFromId(m.group(1));
-            }
-            else {
-                properFormat = m.group(1);
-            }
-            replacePairs.put(m.group(), properFormat);
-        }
-        return replacePairs.entrySet();
-    }
-
-    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content) {
-        String holder = content;
-        // (old, new) replacement pairs
-        Map<String, String> replacePairs = new HashMap<String, String>();
-
-        Matcher m = regex.matcher(holder);
-        while (m.find()) {
-            String properFormat = String.format(Locale.US, afterFormat, m.group(1), m.group(2));
-            replacePairs.put(m.group(), properFormat);
-        }
-        return replacePairs.entrySet();
-    }
-
-    /**
-     * A helper function used to 1) find all strings to be replaced and 2) linkifies them.
-     * @param c App context
-     * @param t TextView
+     * A helper function used to get all instances found of a given regex statement
+     * and linkify them to ExploreActivity.
      * @param content Target content
      * @param regex Regex statement
      * @param mode If nation or region
      * @return
      */
-    public static String linkifyHelper(Context c, TextView t, String content, Pattern regex, int mode) {
+    public static String addExploreActivityLinks(String content, Pattern regex, int mode) {
         String holder = content;
         Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, true);
 
         for (Map.Entry<String, String> n : set) {
-            holder = activityLinkBuilder(c, t, holder, n.getKey(), n.getValue(), mode);
+            holder = addExploreActivityLink(holder, n.getKey(), n.getValue(), mode);
         }
 
         return holder;
@@ -795,26 +721,25 @@ public final class SparkleHelper {
         holder = regexReplace(holder, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
 
         // Linkify nations (@@NATION@@)
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_REGION, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_REGION, ExploreActivity.EXPLORE_REGION);
 
         if (holder.contains("EO:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
-            holder = activityLinkBuilder(c, t, template, "EO:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
+            holder = addExploreActivityLink(template, "EO:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         if (holder.contains("EC:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
-            holder = activityLinkBuilder(c, t, template, "EC:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
+            holder = addExploreActivityLink(template, "EC:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        t.setText(fromHtml(holder));
-        styleLinkifiedTextView(c, t);
+        setStyledTextView(c, t, holder);
     }
 
     /**
@@ -886,19 +811,19 @@ public final class SparkleHelper {
         holder = regexPreFormat(holder);
 
         // Linkify nations and regions
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
-        holder = linkifyHelper(c, t, holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
 
         // Replace raw NS nation and region links with Stately versions
         // It's in this order since the last three lines grab raw URLs and formats them
         holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
         holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
-        holder = linkifyHelper(c, t, holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
-        holder = linkifyHelper(c, t, holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
 
         // Q: Why don't you use the BBCode parser instead of doing this manually? :(
         // A: Because it misses some tags for some reason, so it's limited to lists for now.
@@ -911,7 +836,7 @@ public final class SparkleHelper {
         holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
         holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
-        holder = regexQuoteFormat(c, t, holder);
+        holder = regexQuoteFormat(holder);
 
         // Extract and replace spoilers
         List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
@@ -922,44 +847,6 @@ public final class SparkleHelper {
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder, spoilers, fm);
-    }
-
-    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
-    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
-
-    /**
-     * Helper function that extracts spoilers from BBCode for later use.
-     * @param c App context
-     * @param target Target content
-     * @return List of spoilers
-     */
-    public static List<Spoiler> getSpoilerReplacePairs(Context c, String target) {
-        String holder = target;
-        List<Spoiler> spoilers = new ArrayList<Spoiler>();
-
-        // Handle spoilers without titles first
-        Matcher m1 = BBCODE_SPOILER.matcher(holder);
-        while (m1.find()) {
-            Spoiler s = new Spoiler();
-            s.content = m1.group(1);
-            s.raw = m1.group();
-            s.replacer = c.getString(R.string.spoiler_warn_link);
-            spoilers.add(s);
-        }
-
-        // Handle spoilers with titles next
-        Matcher m2 = BBCODE_SPOILER_2.matcher(holder);
-        while (m2.find()) {
-            Spoiler s = new Spoiler();
-            // Gets rid of HTML in title
-            s.title = Jsoup.parse(m2.group(1)).text();
-            s.content = m2.group(2);
-            s.raw = m2.group();
-            s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
-            spoilers.add(s);
-        }
-
-        return spoilers;
     }
 
     /**
@@ -981,7 +868,7 @@ public final class SparkleHelper {
             }
         }
         else {
-            t.setText(SparkleHelper.fromHtml(holder));
+            t.setText(fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
     }
@@ -1002,7 +889,7 @@ public final class SparkleHelper {
             }
         }
         else {
-            t.setText(SparkleHelper.fromHtml(holder));
+            t.setText(fromHtml(holder));
         }
 
         // Deal with spoilers here
@@ -1022,6 +909,71 @@ public final class SparkleHelper {
             }
         }
         t.setText(span);
+    }
+
+    /**
+     * Stylify text view to primary colour and no underline
+     * @param c App context
+     * @param t TextView
+     */
+    public static void styleLinkifiedTextView(Context c, TextView t) {
+        // Get individual spans and replace them with clickable ones.
+        Spannable s = new SpannableString(t.getText());
+        URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
+        for (URLSpan span: spans) {
+            int start = s.getSpanStart(span);
+            int end = s.getSpanEnd(span);
+            s.removeSpan(span);
+            span = new URLSpanNoUnderline(c, span.getURL());
+            s.setSpan(span, start, end, 0);
+        }
+
+        t.setText(s);
+        // Need to set this to allow for clickable TextView links.
+        if (!(t instanceof HtmlTextView)) {
+            t.setMovementMethod(LinkMovementMethod.getInstance());
+            t.setLongClickable(false);
+        }
+    }
+
+    /**
+     * Given a regex and some content, get all pairs of (old, new) where old is a string matching
+     * the regex in the content, and new is the proper name to replace the old string.
+     * @param regex Regex statement
+     * @param content Target content
+     * @return
+     */
+    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName) {
+        String holder = content;
+        // (old, new) replacement pairs
+        Map<String, String> replacePairs = new HashMap<String, String>();
+
+        Matcher m = regex.matcher(holder);
+        while (m.find()) {
+            String properFormat;
+            if (isName) {
+                // Nameify the ID found and put the (old, new) pair into the map
+                properFormat = getNameFromId(m.group(1));
+            }
+            else {
+                properFormat = m.group(1);
+            }
+            replacePairs.put(m.group(), properFormat);
+        }
+        return replacePairs.entrySet();
+    }
+
+    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content) {
+        String holder = content;
+        // (old, new) replacement pairs
+        Map<String, String> replacePairs = new HashMap<String, String>();
+
+        Matcher m = regex.matcher(holder);
+        while (m.find()) {
+            String properFormat = String.format(Locale.US, afterFormat, m.group(1), m.group(2));
+            replacePairs.put(m.group(), properFormat);
+        }
+        return replacePairs.entrySet();
     }
 
     /**
@@ -1061,6 +1013,40 @@ public final class SparkleHelper {
             // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
             String replacer = n.getValue(); //Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
             holder = holder.replace(n.getKey(), replacer);
+        }
+
+        return holder;
+    }
+
+    /**
+     * Extracts a capture group from a regex
+     * @param target Target content
+     * @param regex Regex
+     * @return
+     */
+    public static String regexExtract(String target, Pattern regex) {
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
+
+        for (Map.Entry<String, String> n : set) {
+            holder = holder.replace(n.getKey(), n.getValue());
+        }
+
+        return holder;
+    }
+
+    /**
+     * Removes all substrings which match the regex
+     * @param target Target content
+     * @param regex Regex
+     * @return
+     */
+    public static String regexRemove(String target, Pattern regex) {
+        String holder = target;
+        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
+
+        for (Map.Entry<String, String> n : set) {
+            holder = holder.replace(n.getKey(), "");
         }
 
         return holder;
@@ -1154,13 +1140,11 @@ public final class SparkleHelper {
 
     /**
      * Convenience class used by regexQuoteFormat() to format blockquotes with author attrib.
-     * @param c App context
-     * @param t Target TextView
      * @param regex Regex to use
      * @param content Original string
      * @return Formatted string
      */
-    public static String regexQuoteFormatHelper(Context c, TextView t, Pattern regex, String content) {
+    public static String regexQuoteFormatHelper(Pattern regex, String content) {
         String holder = content;
         Map<String, String> replacePairs = new HashMap<String, String>();
         Matcher m = regex.matcher(holder);
@@ -1173,8 +1157,46 @@ public final class SparkleHelper {
             String replacer = n.getValue();
             holder = holder.replace(n.getKey(), replacer);
         }
-        holder = linkifyHelper(c, t, holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
         return holder;
+    }
+
+    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
+
+    /**
+     * Helper function that extracts spoilers from BBCode for later use.
+     * @param c App context
+     * @param target Target content
+     * @return List of spoilers
+     */
+    public static List<Spoiler> getSpoilerReplacePairs(Context c, String target) {
+        String holder = target;
+        List<Spoiler> spoilers = new ArrayList<Spoiler>();
+
+        // Handle spoilers without titles first
+        Matcher m1 = BBCODE_SPOILER.matcher(holder);
+        while (m1.find()) {
+            Spoiler s = new Spoiler();
+            s.content = m1.group(1);
+            s.raw = m1.group();
+            s.replacer = c.getString(R.string.spoiler_warn_link);
+            spoilers.add(s);
+        }
+
+        // Handle spoilers with titles next
+        Matcher m2 = BBCODE_SPOILER_2.matcher(holder);
+        while (m2.find()) {
+            Spoiler s = new Spoiler();
+            // Gets rid of HTML in title
+            s.title = Jsoup.parse(m2.group(1)).text();
+            s.content = m2.group(2);
+            s.raw = m2.group();
+            s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
+            spoilers.add(s);
+        }
+
+        return spoilers;
     }
 
     public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
@@ -1259,11 +1281,10 @@ public final class SparkleHelper {
 
     /**
      * Used for formatting blockquotes
-     * @param context App context
      * @param content Original string
      * @return Formatted string
      */
-    public static String regexQuoteFormat(Context context, TextView t, String content) {
+    public static String regexQuoteFormat(String content) {
         String holder = content;
 
         // handle basic quotes
@@ -1271,43 +1292,9 @@ public final class SparkleHelper {
 
         // handle quotes with parameters on them
         // in this case, [quote=name;id]...
-        holder = regexQuoteFormatHelper(context, t, BBCODE_QUOTE_1, holder);
+        holder = regexQuoteFormatHelper(BBCODE_QUOTE_1, holder);
         // in this case, just [quote=name]...
-        holder = regexQuoteFormatHelper(context, t, BBCODE_QUOTE_2, holder);
-
-        return holder;
-    }
-
-    /**
-     * Extracts a capture group from a regex
-     * @param target Target content
-     * @param regex Regex
-     * @return
-     */
-    public static String regexExtract(String target, Pattern regex) {
-        String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
-
-        for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), n.getValue());
-        }
-
-        return holder;
-    }
-
-    /**
-     * Removes all substrings which match the regex
-     * @param target Target content
-     * @param regex Regex
-     * @return
-     */
-    public static String regexRemove(String target, Pattern regex) {
-        String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
-
-        for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), "");
-        }
+        holder = regexQuoteFormatHelper(BBCODE_QUOTE_2, holder);
 
         return holder;
     }
