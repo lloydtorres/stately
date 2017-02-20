@@ -24,10 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-27.
@@ -42,6 +44,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
+
+        Preference appVersionSetting = findPreference(SettingsActivity.SETTING_APP_VERSION);
+        appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version), BuildConfig.VERSION_NAME));
 
         // Disable theme options and show warning on Z-Day
         if (getContext() != null && NightmareHelper.getIsZDayActive(getContext())) {

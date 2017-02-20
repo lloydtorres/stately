@@ -108,7 +108,7 @@
         android:title="@string/setting_title_about"
         android:key="setting_about">
         <android.support.v7.preference.Preference
-            android:key="info"
+            android:key="setting_app_version"
             android:title="@string/app_version"
             android:summary="@string/setting_developer_info"
             android:selectable="false"

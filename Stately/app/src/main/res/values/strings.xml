@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Stately</string>
-    <string name="app_version">Stately 1.7.6</string>
-    <string name="app_header">Stately/1.7.6 (User %1$s; Droid)</string>
-    <string name="app_header_nouser">Stately/1.7.6 (No User; Droid)</string>
+    <string name="app_version">Stately for NationStates (v%1$s)</string>
+    <string name="app_header">Stately/%1$s (User %2$s; Droid)</string>
+    <string name="app_header_nouser">Stately/%1$s (No User; Droid)</string>
     <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
     <string name="stately_alphys">Stately Notification Polling Service</string>
     <string name="stately_notifs_sub_template">%1$s — Stately for NationStates</string>
@@ -511,7 +511,7 @@
     <string name="setting_desc_zombie">Themes will be restored to normal at the end of Z-Day.</string>
     <string name="setting_category">Government Category</string>
     <string name="setting_title_about">About</string>
-    <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributors: Jannes Höke</string>
+    <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributor: Jannes Höke</string>
 
     <!-- Notifications -->
     <string name="notifs_new_issue">A new issue was encountered</string>

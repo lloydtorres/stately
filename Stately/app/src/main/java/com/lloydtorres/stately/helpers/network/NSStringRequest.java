@@ -22,6 +22,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.helpers.PinkaHelper;
@@ -74,7 +75,7 @@ public class NSStringRequest extends StringRequest {
 
         // UserLogin will not be null when user is logged in
         if (u != null && u.nationId != null) {
-            headers.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header), u.nationId));
+            headers.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header), BuildConfig.VERSION_NAME, u.nationId));
 
             // Case 1: If only autologin cookie is available/pin cookie is invalid
             if ((u.pin == null || PIN_INVALID.equals(u.pin)) && u.autologin != null) {
@@ -91,7 +92,7 @@ public class NSStringRequest extends StringRequest {
             // ...
         }
         else {
-            headers.put("User-Agent", context.getString(R.string.app_header_nouser));
+            headers.put("User-Agent", String.format(Locale.US, context.getString(R.string.app_header_nouser), BuildConfig.VERSION_NAME));
         }
 
         // If the password is provided, add that to the header

@@ -57,6 +57,8 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final String SETTING_THEME = "setting_theme";
     public static final String SETTING_GOVERNMENT = "setting_category";
 
+    public static final String SETTING_APP_VERSION = "setting_app_version";
+
     public static final int THEME_VERT = 0;
     public static final int THEME_NOIR = 1;
     public static final int THEME_BLEU = 2;

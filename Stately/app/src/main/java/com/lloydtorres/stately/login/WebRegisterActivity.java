@@ -25,8 +25,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
+
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-08-06.
@@ -57,7 +60,7 @@ public class WebRegisterActivity extends SlidrActivity {
         mWebView = (WebView) findViewById(R.id.register_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setSupportZoom(false);
-        mWebView.getSettings().setUserAgentString(getString(R.string.app_header_nouser));
+        mWebView.getSettings().setUserAgentString(String.format(Locale.US, getString(R.string.app_header_nouser), BuildConfig.VERSION_NAME));
 
         // Checks if the user is in the nation page on loa
         mWebView.setWebViewClient(new WebViewClient() {
