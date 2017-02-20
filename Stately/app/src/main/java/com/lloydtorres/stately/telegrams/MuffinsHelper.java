@@ -397,22 +397,26 @@ public final class MuffinsHelper {
             }
 
             Element spoilerHolder = spoiler.select("div.nscode_spoilertext").first();
-            StringBuilder rawSpoilerContents = new StringBuilder();
+            StringBuilder spoilerContent = new StringBuilder("[spoiler=");
+            spoilerContent.append(spoilerTitle);
+            spoilerContent.append("]");
             if (spoilerHolder != null) {
                 for (Element p : spoilerHolder.select("p")) {
-                    rawSpoilerContents.append(p.html());
-                    rawSpoilerContents.append("<br>");
+                    spoilerContent.append(p.html());
+                    spoilerContent.append("<br>");
                 }
             }
-            String spoilerContents = rawSpoilerContents.toString();
-            String spoilerReplace = "<br>[spoiler=" + spoilerTitle + "]" + spoilerContents + "[/spoiler]";
-            spoiler.html(spoilerReplace);
+            spoilerContent.append("[/spoiler]");
+            spoiler.html(spoilerContent.toString());
+            spoiler.tagName("p");
         }
+        SparkleHelper.logError(content.html());
 
         String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("\n", "<br />");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
+        holder = holder.replace("\u0081", "");
 
         // Do the rest of the formatting
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);

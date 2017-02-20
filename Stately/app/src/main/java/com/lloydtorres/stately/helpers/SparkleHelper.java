@@ -706,6 +706,7 @@ public final class SparkleHelper {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
+        holder = holder.replace("\u0081", "");
         return fromHtml(holder);
     }
 
@@ -725,6 +726,7 @@ public final class SparkleHelper {
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
+        holder = holder.replace("\u0081", "");
 
         // Replace RMB links with targets to the RMB activity
         holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
@@ -795,6 +797,7 @@ public final class SparkleHelper {
         holder = holder.replace("\n", "<br>");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
+        holder = holder.replace("\u0081", "");
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Basic BBcode processing
