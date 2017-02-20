@@ -125,9 +125,9 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
         }
 
         if (telegramsAntiquityContainer != null) {
-            telegrams = MuffinsHelper.processRawTelegramsFromAntiquity(telegramsContainer, null);
+            telegrams = MuffinsHelper.processRawTelegramsFromAntiquity(TelegramHistoryActivity.this, telegramsContainer, null);
         } else if (telegramsContainer != null) {
-            telegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
+            telegrams = MuffinsHelper.processRawTelegrams(TelegramHistoryActivity.this, telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
         }
 
         initTelegramsRecyclerAdapter();
@@ -139,7 +139,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
             Collections.reverse(telegrams);
 
             if (mRecyclerAdapter == null) {
-                mRecyclerAdapter = new TelegramsAdapter(this, telegrams);
+                mRecyclerAdapter = new TelegramsAdapter(this, telegrams, getSupportFragmentManager());
                 mRecyclerView.setAdapter(mRecyclerAdapter);
             } else {
                 ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);

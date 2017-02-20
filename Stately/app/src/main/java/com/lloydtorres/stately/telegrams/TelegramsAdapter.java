@@ -19,6 +19,7 @@ package com.lloydtorres.stately.telegrams;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -68,19 +69,22 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private TelegramsFragment fragment;
     private int displayMode;
     private boolean isHistory;
+    private FragmentManager fm;
 
-    public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName) {
+    public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName, FragmentManager fragMan) {
         setTelegrams(t);
         context = tf.getContext();
         fragment = tf;
         setFolder(folderName);
+        fm = fragMan;
     }
 
-    public TelegramsAdapter(Context c, List<Telegram> t) {
+    public TelegramsAdapter(Context c, List<Telegram> t, FragmentManager fragMan) {
         context = c;
         setTelegrams(t);
         displayMode = POPUP_NONE;
         isHistory = true;
+        fm = fragMan;
     }
 
     /**
@@ -377,7 +381,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, false, alertHolder, alertIcon, alertText);
-            MuffinsHelper.setTelegramHtmlFormatting(context, content, telegram.content);
+            SparkleHelper.setStyledTextView(context, content, telegram.content, fm);
 
             if (isHistory) {
                 telegramHistoryButton.setVisibility(View.GONE);

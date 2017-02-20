@@ -253,14 +253,14 @@ public class TelegramsFragment extends DetachFragment {
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
         if (telegramsContainer != null) {
-            scannedTelegrams = MuffinsHelper.processRawTelegrams(telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
+            scannedTelegrams = MuffinsHelper.processRawTelegrams(getContext(), telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
         } else if (telegramsAntiquityContainer != null) {
             String selfName = null;
             // If currently in sent folder, pass in current user's name
             if (selectedFolder < folders.size() && TelegramFolder.TELEGRAM_FOLDER_SENT.equals(folders.get(selectedFolder).name)) {
                 selfName = PinkaHelper.getActiveUser(getContext()).name;
             }
-            scannedTelegrams = MuffinsHelper.processRawTelegramsFromAntiquity(telegramsAntiquityContainer, selfName);
+            scannedTelegrams = MuffinsHelper.processRawTelegramsFromAntiquity(getContext(), telegramsAntiquityContainer, selfName);
         }
 
         switch (direction) {
@@ -344,7 +344,7 @@ public class TelegramsFragment extends DetachFragment {
         int oldSize = 0;
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new TelegramsAdapter(telegrams, this, folders.get(selectedFolder).name);
+            mRecyclerAdapter = new TelegramsAdapter(telegrams, this, folders.get(selectedFolder).name, getFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {

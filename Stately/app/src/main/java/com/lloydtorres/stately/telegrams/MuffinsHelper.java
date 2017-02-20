@@ -50,7 +50,6 @@ package com.lloydtorres.stately.telegrams;
  */
 
 import android.content.Context;
-import android.widget.TextView;
 
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -106,11 +105,12 @@ public final class MuffinsHelper {
     /**
      * Takes in a JSoup Elements object containing raw telegrams from NS HTML.
      * Returns a list of telegrams obtained from the raw telegrams.
+     * @param c App context
      * @param rawTelegramsContainer See above
      * @param selfName Name of current logged in nation
      * @return See above
      */
-    public static ArrayList<Telegram> processRawTelegrams(Element rawTelegramsContainer, String selfName) {
+    public static ArrayList<Telegram> processRawTelegrams(Context c, Element rawTelegramsContainer, String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("div.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
@@ -170,7 +170,7 @@ public final class MuffinsHelper {
             Element previewRaw = rt.select("div.tgsample").first();
             tel.preview = Jsoup.clean(previewRaw.text(), Whitelist.none().addTags("br"));
             String contentRawHtml = rt.select("div.tgmsg").first().html();
-            processTelegramContent(contentRawHtml, tel);
+            processTelegramContent(c, contentRawHtml, tel);
 
             getTelegramRecruitmentStatus(rt, tel);
 
@@ -182,11 +182,12 @@ public final class MuffinsHelper {
 
     /**
      * Processes raw telegrams from the format done in the NS Antiquity Theme.
+     * @param c App context
      * @param rawTelegramsContainer Table containing telegrams.
      * @param selfName Name of current user. Should only be added if in "sent" folder.
      * @return
      */
-    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Element rawTelegramsContainer, String selfName) {
+    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Context c, Element rawTelegramsContainer, String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("tr.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
@@ -260,7 +261,7 @@ public final class MuffinsHelper {
             }
 
             String contentRawHtml = rt.select("div.tgcontent").first().html();
-            processTelegramContent(contentRawHtml, tel);
+            processTelegramContent(c, contentRawHtml, tel);
             tel.content = "<br>" + tel.content;
             tel.preview = Jsoup.clean(tel.content, Whitelist.none());
 
@@ -338,19 +339,21 @@ public final class MuffinsHelper {
 
     /**
      * Takes in the raw HTML for a given telegram and processes its data.
+     * @param c App context
      * @param rawHtml See above
      * @param targetTelegram Target telegram
      */
-    public static void processTelegramContent(String rawHtml, Telegram targetTelegram) {
+    public static void processTelegramContent(Context c, String rawHtml, Telegram targetTelegram) {
         rawHtml = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + rawHtml;
         Document rawContent = Jsoup.parse(rawHtml, SparkleHelper.BASE_URI);
+        rawContent.select("div.tgstripe").remove();
         rawContent.select("div.tgheaders").remove();
         rawContent.select("img.tgcaticon").remove();
         rawContent.select("div.tgrecruitmovebutton").remove();
         rawContent.select("p.replyline").remove();
         rawContent.select("div.inreplyto").remove();
         rawContent.select("div.rmbspacer").remove();
-        targetTelegram.content = Jsoup.clean(rawContent.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+        targetTelegram.content = transformRawTelegramHtml(c, rawContent);
     }
 
     public static void getTelegramRecruitmentStatus(Element telegramRaw, Telegram tg) {
@@ -381,16 +384,37 @@ public final class MuffinsHelper {
     /**
      * Formats raw HTML from a telegram into something the app can understand.
      * @param c App context
-     * @param t TextView
-     * @param content Target content
+     * @param content Jsoup document containing telegram
      */
-    public static void setTelegramHtmlFormatting(Context c, TextView t, String content) {
-        String holder = content.trim();
+    public static String transformRawTelegramHtml(Context c, Document content) {
+        // Process spoilers
+        Elements spoilerBoxes = content.select("div.nscode_spoilerbox");
+        for (Element spoiler : spoilerBoxes) {
+            String spoilerTitle = "";
+            Element buttonHolder = spoiler.select("button.nscode_spoilerbutton").first();
+            if (buttonHolder != null) {
+                spoilerTitle = buttonHolder.text();
+            }
+
+            Element spoilerHolder = spoiler.select("div.nscode_spoilertext").first();
+            StringBuilder rawSpoilerContents = new StringBuilder();
+            if (spoilerHolder != null) {
+                for (Element p : spoilerHolder.select("p")) {
+                    rawSpoilerContents.append(p.html());
+                    rawSpoilerContents.append("<br>");
+                }
+            }
+            String spoilerContents = rawSpoilerContents.toString();
+            String spoilerReplace = "<br>[spoiler=" + spoilerTitle + "]" + spoilerContents + "[/spoiler]";
+            spoiler.html(spoilerReplace);
+        }
+
+        String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("\n", "<br />");
         holder = holder.replace("&amp;#39;", "'");
         holder = holder.replace("&amp;", "&");
-        holder = "<base href=\"" + SparkleHelper.BASE_URI_NOSLASH + "\">" + holder;
-        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+
+        // Do the rest of the formatting
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"//forum." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"http://forum." + SparkleHelper.DOMAIN_URI + "/");
         holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
@@ -409,7 +433,7 @@ public final class MuffinsHelper {
 
         holder = SparkleHelper.regexGenericUrlFormat(c, holder);
 
-        SparkleHelper.setStyledTextView(c, t, holder);
+        return holder;
     }
 
     public static String regexResolutionFormat(String target) {
