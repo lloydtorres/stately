@@ -42,8 +42,9 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final int TELEGRAM_REGION = 2;
     public static final int TELEGRAM_WELCOME = 3;
     public static final int TELEGRAM_MODERATOR = 4;
-    public static final int TELEGRAM_WA = 5;
-    public static final int TELEGRAM_CAMPAIGN = 6;
+    public static final int TELEGRAM_SYSTEM = 5;
+    public static final int TELEGRAM_WA = 6;
+    public static final int TELEGRAM_CAMPAIGN = 7;
 
     public int id;
     public int type;

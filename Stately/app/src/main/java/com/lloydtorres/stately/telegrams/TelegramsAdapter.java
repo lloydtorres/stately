@@ -224,8 +224,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
                 case Telegram.TELEGRAM_MODERATOR:
                     iconRes = isPreview ? R.drawable.ic_alert_moderator : R.drawable.ic_alert_moderator_white;
-                    alertColor = R.color.colorChart3;
+                    alertColor = R.color.colorChart0;
                     alertContent = R.string.telegrams_alert_mod;
+                    break;
+                case Telegram.TELEGRAM_SYSTEM:
+                    iconRes = isPreview ? R.drawable.ic_gov_blue : R.drawable.ic_gov_white;
+                    alertColor = R.color.colorChart0;
+                    alertContent = R.string.telegrams_alert_system;
                     break;
                 case Telegram.TELEGRAM_WA:
                     iconRes = isPreview ? R.drawable.ic_wa_blue : R.drawable.ic_wa_white;

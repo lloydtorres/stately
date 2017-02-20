@@ -93,6 +93,8 @@ public final class MuffinsHelper {
     public static final String RECRUITMENT_TELEGRAM_IMG = "tgcat-1.png";
     public static final String MODERATOR_TELEGRAM = "toplinetgcat-11";
     public static final String MODERATOR_TELEGRAM_IMG = "tgcat-11.png";
+    public static final String SYSTEM_TELEGRAM = "toplinetgcat-10";
+    public static final String SYSTEM_TELEGRAM_IMG = "tgcat-10.png";
     public static final String WA_TELEGRAM = "toplinetgcat-20";
     public static final String WA_TELEGRAM_IMG = "tgcat-20.png";
     public static final String CAMPAIGN_TELEGRAM = "toplinetgcat-2";
@@ -135,6 +137,9 @@ public final class MuffinsHelper {
                 }
                 else if (typeRaw.hasClass(MODERATOR_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_MODERATOR;
+                }
+                else if (typeRaw.hasClass(SYSTEM_TELEGRAM)) {
+                    tel.type = Telegram.TELEGRAM_SYSTEM;
                 }
                 else if (typeRaw.hasClass(WA_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_WA;
@@ -213,6 +218,9 @@ public final class MuffinsHelper {
                 }
                 else if (typeRawSrc.contains(MODERATOR_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_MODERATOR;
+                }
+                else if (typeRawSrc.contains(SYSTEM_TELEGRAM_IMG)) {
+                    tel.type = Telegram.TELEGRAM_SYSTEM;
                 }
                 else if (typeRawSrc.contains(WA_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_WA;
