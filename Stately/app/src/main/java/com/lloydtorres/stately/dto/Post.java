@@ -52,6 +52,7 @@ public class Post implements Parcelable, Comparable<Post> {
     public int likes;
     @Element(name="LIKERS", required=false)
     public String likedBy;
+    public boolean isExpanded = false;
 
     public Post() { super(); }
 
@@ -64,6 +65,7 @@ public class Post implements Parcelable, Comparable<Post> {
         suppressor = in.readString();
         likes = in.readInt();
         likedBy = in.readString();
+        isExpanded = in.readByte() != 0x00;
     }
 
     @Override
@@ -81,6 +83,7 @@ public class Post implements Parcelable, Comparable<Post> {
         dest.writeString(suppressor);
         dest.writeInt(likes);
         dest.writeString(likedBy);
+        dest.writeByte((byte) (isExpanded ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
@@ -98,16 +101,11 @@ public class Post implements Parcelable, Comparable<Post> {
 
     @Override
     public int compareTo(Post another) {
-        if (this.timestamp > another.timestamp)
-        {
+        if (this.timestamp > another.timestamp) {
             return 1;
-        }
-        else if (this.timestamp == another.timestamp)
-        {
+        } else if (this.timestamp == another.timestamp) {
             return 0;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }

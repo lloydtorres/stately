@@ -55,6 +55,9 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final String DELETED_CONTENT = "Message deleted by author";
     private static final int EMPTY_INDICATOR = -1;
 
+    private static final int POST_EXPANDED = 0;
+    private static final int POST_COLLAPSED = 1;
+
     private Context context;
     private FragmentManager fm;
     private List<Post> messages;
@@ -166,32 +169,51 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View postCard = inflater.inflate(R.layout.card_post, parent, false);
-        RecyclerView.ViewHolder viewHolder = new PostCard(postCard);
+        RecyclerView.ViewHolder viewHolder = null;
+
+        switch (viewType) {
+            case POST_COLLAPSED:
+                viewHolder = new CollapsedPostCard(postCard);
+                break;
+            default:
+                viewHolder = new PostCard(postCard);
+                break;
+        }
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PostCard postCard = (PostCard) holder;
-        Post message = messages.get(position);
-        postCard.init(message);
+        switch (holder.getItemViewType()) {
+            case POST_EXPANDED:
+                PostCard postCard = (PostCard) holder;
+                Post message = messages.get(position);
+                postCard.init(message);
 
-        if (position == replyIndex) {
-            postCard.select();
-        } else {
-            postCard.deselect();
+                if (position == replyIndex) {
+                    postCard.select();
+                } else {
+                    postCard.deselect();
+                }
+
+                if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0) {
+                    // If current user is in the like list, highlight the like buttons
+                    if (context != null && message.likedBy.contains(PinkaHelper.getActiveUser(context).nationId)) {
+                        postCard.like();
+                    } else {
+                        postCard.unlike();
+                    }
+                } else {
+                    postCard.unlike();
+                }
+                break;
+            case POST_COLLAPSED:
+                CollapsedPostCard collapsedPostCard = (CollapsedPostCard) holder;
+                collapsedPostCard.init(messages.get(position));
+                break;
         }
 
-        if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0) {
-            // If current user is in the like list, highlight the like buttons
-            if (context != null && message.likedBy.contains(PinkaHelper.getActiveUser(context).nationId)) {
-                postCard.like();
-            } else {
-                postCard.unlike();
-            }
-        } else {
-            postCard.unlike();
-        }
     }
 
     @Override
@@ -199,11 +221,25 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return messages.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        Post targetPost = messages.get(position);
+        if (targetPost.id != EMPTY_INDICATOR &&
+                (targetPost.status == Post.POST_REGULAR ||
+                        (targetPost.status == Post.POST_SUPPRESSED && targetPost.isExpanded))) {
+            return POST_EXPANDED;
+        } else {
+            return POST_COLLAPSED;
+        }
+    }
+
     public class PostCard extends RecyclerView.ViewHolder {
         private Post post;
         private CardView cardContainer;
         private TextView cardAuthor;
         private TextView cardTime;
+        private RelativeLayout cardSuppressedHolder;
+        private TextView cardSuppressedContent;
         private HtmlTextView cardContent;
         private RelativeLayout actionsHolder;
         private ImageView likeButton;
@@ -269,6 +305,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             cardContainer = (CardView) v.findViewById(R.id.card_post_container);
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);
+            cardSuppressedHolder = (RelativeLayout) v.findViewById(R.id.card_post_suppressed_holder);
+            cardSuppressedContent = (TextView) v.findViewById(R.id.card_post_suppressed_content);
             cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
             actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
             likeButton = (ImageView) v.findViewById(R.id.card_post_like);
@@ -280,96 +318,79 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(Post p) {
             post = p;
-            if (post.id != EMPTY_INDICATOR) {
-                cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
-                cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
-                cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
-                String postContent = post.message;
-                if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {
-                    postContent = String.format(Locale.US, context.getString(R.string.rmb_suppressed), post.suppressor, postContent);
-                    postContent = SparkleHelper.transformBBCodeToHtml(context, postContent);
-                }
-                if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED) {
-                    postContent = "[i]" + postContent + "[/i]";
-                    postContent = SparkleHelper.transformBBCodeToHtml(context, postContent);
-                }
-                SparkleHelper.setStyledTextView(context, cardContent, postContent, fm);
 
-                // Setup actions holder
-                if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED) {
-                    actionsHolder.setVisibility(View.VISIBLE);
+            cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
+            cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
+            cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
 
-                    if (isPostable) {
-                        // All posts can be replied to
-                        replyButton.setOnClickListener(replyClickListener);
-                        // Only user's own posts can be deleted
-                        if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name)) {
-                            deleteButton.setVisibility(View.VISIBLE);
-                            deleteButton.setOnClickListener(deleteClickListener);
-                            reportButton.setVisibility(View.GONE);
-                            reportButton.setOnClickListener(null);
-                        } else {
-                            deleteButton.setVisibility(View.GONE);
-                            deleteButton.setOnClickListener(null);
-                            reportButton.setVisibility(View.VISIBLE);
-                            reportButton.setOnClickListener(reportClickListener);
-                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
-                            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-                            reportButton.setLayoutParams(params);
-                        }
-                    } else {
-                        replyButton.setVisibility(View.GONE);
-                        replyButton.setOnClickListener(null);
-                        deleteButton.setVisibility(View.GONE);
-                        deleteButton.setOnClickListener(null);
+            // Show suppresssed holder if post is suppressed
+            if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {
+                cardSuppressedHolder.setVisibility(View.VISIBLE);
+                String suppressedText = String.format(Locale.US, context.getString(R.string.rmb_suppressed_main), post.suppressor);
+                SparkleHelper.setHappeningsFormatting(context, cardSuppressedContent, suppressedText);
+            } else {
+                cardSuppressedHolder.setVisibility(View.GONE);
+            }
 
-                        reportButton.setVisibility(View.VISIBLE);
-                        reportButton.setOnClickListener(reportClickListener);
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
-                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        reportButton.setLayoutParams(params);
-                    }
+            SparkleHelper.setStyledTextView(context, cardContent, post.message, fm);
 
-                    // like button and count are visible to all
-                    likeButton.setOnClickListener(likeClickListener);
-                    likeCount.setText(SparkleHelper.getPrettifiedNumber(post.likes));
-                    // Only build liked list if there are likes
-                    if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0) {
-                        String[] likes = post.likedBy.split(":");
-                        ArrayList<String> properLikes = new ArrayList<String>();
-                        for (String li : likes) {
-                            properLikes.add(SparkleHelper.getNameFromId(li));
-                        }
-                        final ArrayList<String> fLikes = properLikes;
-                        likeCount.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                FragmentManager fm = ((MessageBoardActivity) context).getSupportFragmentManager();
-                                NameListDialog nameListDialog = new NameListDialog();
-                                nameListDialog.setTitle(context.getString(R.string.rmb_likes));
-                                nameListDialog.setNames(fLikes);
-                                nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
-                                nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
-                            }
-                        });
-                    } else {
-                        likeCount.setOnClickListener(null);
-                    }
+            actionsHolder.setVisibility(View.VISIBLE);
+
+            if (isPostable) {
+                // All posts can be replied to
+                replyButton.setOnClickListener(replyClickListener);
+                // Only user's own posts can be deleted
+                if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name)) {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    deleteButton.setOnClickListener(deleteClickListener);
+                    reportButton.setVisibility(View.GONE);
+                    reportButton.setOnClickListener(null);
                 } else {
-                    actionsHolder.setVisibility(View.GONE);
+                    deleteButton.setVisibility(View.GONE);
+                    deleteButton.setOnClickListener(null);
+                    reportButton.setVisibility(View.VISIBLE);
+                    reportButton.setOnClickListener(reportClickListener);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                    reportButton.setLayoutParams(params);
                 }
             } else {
-                cardTime.setVisibility(View.GONE);
-                cardAuthor.setVisibility(View.GONE);
-                cardContent.setText(context.getString(R.string.rmb_no_content));
-                cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                params.setMargins(0, 0, 0, 0);
-                cardContent.setLayoutParams(params);
-                actionsHolder.setVisibility(View.GONE);
+                replyButton.setVisibility(View.GONE);
+                replyButton.setOnClickListener(null);
+                deleteButton.setVisibility(View.GONE);
+                deleteButton.setOnClickListener(null);
+
+                reportButton.setVisibility(View.VISIBLE);
+                reportButton.setOnClickListener(reportClickListener);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                reportButton.setLayoutParams(params);
+            }
+
+            // like button and count are visible to all
+            likeButton.setOnClickListener(likeClickListener);
+            likeCount.setText(SparkleHelper.getPrettifiedNumber(post.likes));
+            // Only build liked list if there are likes
+            if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0) {
+                String[] likes = post.likedBy.split(":");
+                ArrayList<String> properLikes = new ArrayList<String>();
+                for (String li : likes) {
+                    properLikes.add(SparkleHelper.getNameFromId(li));
+                }
+                final ArrayList<String> fLikes = properLikes;
+                likeCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fm = ((MessageBoardActivity) context).getSupportFragmentManager();
+                        NameListDialog nameListDialog = new NameListDialog();
+                        nameListDialog.setTitle(context.getString(R.string.rmb_likes));
+                        nameListDialog.setNames(fLikes);
+                        nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
+                        nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
+                    }
+                });
+            } else {
+                likeCount.setOnClickListener(null);
             }
         }
 
@@ -398,4 +419,57 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
+    public class CollapsedPostCard extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Post post;
+        private View view;
+        private HtmlTextView cardContent;
+
+        public CollapsedPostCard(View v) {
+            super(v);
+            view = v;
+
+            cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+            cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, 0);
+            cardContent.setLayoutParams(params);
+
+            TextView cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
+            TextView cardTime = (TextView) v.findViewById(R.id.card_post_time);
+            RelativeLayout actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
+            cardAuthor.setVisibility(View.GONE);
+            cardTime.setVisibility(View.GONE);
+            actionsHolder.setVisibility(View.GONE);
+        }
+
+        public void init(Post p) {
+            post = p;
+
+            String messageContent = "";
+            view.setOnClickListener(null);
+            switch (post.status) {
+                case Post.POST_SUPPRESSED:
+                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_suppressed), post.name, post.suppressor);
+                    view.setOnClickListener(this);
+                    break;
+                case Post.POST_DELETED:
+                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_deleted), post.name);
+                    break;
+                case Post.POST_BANHAMMERED:
+                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_banhammered), post.name);
+                    break;
+            }
+
+            SparkleHelper.setHappeningsFormatting(context, cardContent, messageContent);
+        }
+
+        @Override
+        public void onClick(View v) {
+            post.isExpanded = true;
+            notifyItemChanged(getAdapterPosition());
+        }
+    }
 }
