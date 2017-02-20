@@ -558,6 +558,22 @@ public final class SparkleHelper {
     }
 
     /**
+     * Returns an OnClickListener that starts the ExploreActivity targeting the specified nation/region.
+     * @param c Invoking context
+     * @param n Nation/region ID
+     * @param mode Mode if nation or region
+     * @return OnClickListener invoking ExploreActivity
+     */
+    public static View.OnClickListener getExploreOnClickListener(final Context c, final String n, final int mode) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startExploring(c, n, mode);
+            }
+        };
+    }
+
+    /**
      * Starts the TrendsActivity for the given target and census ID.
      * @param c App context
      * @param target Target ID

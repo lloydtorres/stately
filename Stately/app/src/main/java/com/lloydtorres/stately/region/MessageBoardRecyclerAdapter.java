@@ -61,8 +61,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private int replyIndex = NO_SELECTION;
     private boolean isPostable = false;
 
-    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec, FragmentManager f)
-    {
+    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec, FragmentManager f) {
         context = c;
         fm = f;
         isPostable = ec;
@@ -73,12 +72,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Set new messages
      * @param p List of posts
      */
-    public void setMessages(List<Post> p)
-    {
+    public void setMessages(List<Post> p) {
         messages = p;
 
-        if (messages.size() <= 0)
-        {
+        if (messages.size() <= 0) {
             Post np = new Post();
             np.id = EMPTY_INDICATOR;
             messages.add(np);
@@ -90,22 +87,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Set which message to reply to
      * @param i Index
      */
-    public void setReplyIndex(int i)
-    {
+    public void setReplyIndex(int i) {
         int oldReplyIndex = replyIndex;
         replyIndex = i;
 
-        if (oldReplyIndex != -1)
-        {
+        if (oldReplyIndex != -1) {
             notifyItemChanged(oldReplyIndex);
         }
-        if (replyIndex != -1)
-        {
+        if (replyIndex != -1) {
             notifyItemChanged(replyIndex);
         }
 
-        if (replyIndex == oldReplyIndex)
-        {
+        if (replyIndex == oldReplyIndex) {
             replyIndex = NO_SELECTION;
             notifyItemChanged(oldReplyIndex);
         }
@@ -115,10 +108,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Add an offset to the reply index
      * @param a Offset
      */
-    public void addToReplyIndex(int a)
-    {
-        if (replyIndex != -1)
-        {
+    public void addToReplyIndex(int a) {
+        if (replyIndex != -1) {
             setReplyIndex(replyIndex + a);
         }
     }
@@ -127,8 +118,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Mark a message as having been deleted
      * @param i
      */
-    public void setAsDeleted(int i)
-    {
+    public void setAsDeleted(int i) {
         messages.get(i).message = DELETED_CONTENT;
         messages.get(i).status = Post.POST_DELETED;
         notifyItemChanged(i);
@@ -139,39 +129,28 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * @param pos Position of message in adapter
      * @param like True to like, false to unlike
      */
-    public void setLikeStatus(int pos, boolean like)
-    {
-        if (context == null)
-        {
+    public void setLikeStatus(int pos, boolean like) {
+        if (context == null) {
             return;
         }
 
         Post targetPost = messages.get(pos);
         String userId = PinkaHelper.getActiveUser(context).nationId;
-        if (like)
-        {
+        if (like) {
             // Either set the user as the only liker, or append their id to the string
-            if (targetPost.likedBy == null || targetPost.likedBy.length() <= 0)
-            {
+            if (targetPost.likedBy == null || targetPost.likedBy.length() <= 0) {
                 targetPost.likedBy = userId;
-            }
-            else
-            {
+            } else {
                 targetPost.likedBy = targetPost.likedBy + ":" + userId;
             }
             targetPost.likes++;
-        }
-        else
-        {
+        } else {
             // If string contains user ID, remove it
-            if (targetPost.likedBy != null && targetPost.likedBy.contains(userId))
-            {
+            if (targetPost.likedBy != null && targetPost.likedBy.contains(userId)) {
                 String[] likes = targetPost.likedBy.split(":");
                 ArrayList<String> properLikes = new ArrayList<String>();
-                for (String li : likes)
-                {
-                    if (!li.equals(userId))
-                    {
+                for (String li : likes) {
+                    if (!li.equals(userId)) {
                         properLikes.add(li);
                     }
                 }
@@ -197,29 +176,20 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         Post message = messages.get(position);
         postCard.init(message);
 
-        if (position == replyIndex)
-        {
+        if (position == replyIndex) {
             postCard.select();
-        }
-        else
-        {
+        } else {
             postCard.deselect();
         }
 
-        if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0)
-        {
+        if (message.likes > 0 && message.likedBy != null && message.likedBy.length() > 0) {
             // If current user is in the like list, highlight the like buttons
-            if (context != null && message.likedBy.contains(PinkaHelper.getActiveUser(context).nationId))
-            {
+            if (context != null && message.likedBy.contains(PinkaHelper.getActiveUser(context).nationId)) {
                 postCard.like();
-            }
-            else
-            {
+            } else {
                 postCard.unlike();
             }
-        }
-        else
-        {
+        } else {
             postCard.unlike();
         }
     }
@@ -246,17 +216,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION)
-                {
+                if (pos != RecyclerView.NO_POSITION) {
                     String userId = PinkaHelper.getActiveUser(context).nationId;
                     // Users can't like their own posts
-                    if (!SparkleHelper.getIdFromName(post.name).equals(userId))
-                    {
+                    if (!SparkleHelper.getIdFromName(post.name).equals(userId)) {
                         boolean curLikeStatus = post.likedBy != null && post.likedBy.contains(userId);
                         ((MessageBoardActivity) context).setLikeStatus(pos, post.id, !curLikeStatus);
-                    }
-                    else
-                    {
+                    } else {
                         ((MessageBoardActivity) context).selfLikeStatus();
                     }
                 }
@@ -267,14 +233,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION && post.message != null)
-                {
-                    if (replyIndex == pos)
-                    {
+                if (pos != RecyclerView.NO_POSITION && post.message != null) {
+                    if (replyIndex == pos) {
                         ((MessageBoardActivity) context).setReplyMessage(null);
-                    }
-                    else
-                    {
+                    } else {
                         ((MessageBoardActivity) context).setReplyMessage(post, pos);
                         setReplyIndex(pos);
                     }
@@ -286,8 +248,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION)
-                {
+                if (pos != RecyclerView.NO_POSITION) {
                     ((MessageBoardActivity) context).confirmDelete(pos, post.id);
                 }
             }
@@ -297,8 +258,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION)
-                {
+                if (pos != RecyclerView.NO_POSITION) {
                     SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_RMB, post.id, post.name);
                 }
             }
@@ -318,43 +278,35 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
         }
 
-        public void init(Post p)
-        {
+        public void init(Post p) {
             post = p;
-            if (post.id != EMPTY_INDICATOR)
-            {
-                SparkleHelper.activityLinkBuilder(context, cardAuthor, post.name, post.name, SparkleHelper.getNameFromId(post.name), ExploreActivity.EXPLORE_NATION);
+            if (post.id != EMPTY_INDICATOR) {
+                cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
+                cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
                 cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
                 String postContent = post.message;
-                if (post.status == Post.POST_SUPPRESSED && post.suppressor != null)
-                {
+                if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {
                     postContent = String.format(Locale.US, context.getString(R.string.rmb_suppressed), post.suppressor, postContent);
                 }
-                if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED)
-                {
+                if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED) {
                     postContent = "[i]" + postContent + "[/i]";
                 }
                 SparkleHelper.setBbCodeFormatting(context, cardContent, postContent, fm);
 
                 // Setup actions holder
-                if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED)
-                {
+                if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED) {
                     actionsHolder.setVisibility(View.VISIBLE);
 
-                    if (isPostable)
-                    {
+                    if (isPostable) {
                         // All posts can be replied to
                         replyButton.setOnClickListener(replyClickListener);
                         // Only user's own posts can be deleted
-                        if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name))
-                        {
+                        if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name)) {
                             deleteButton.setVisibility(View.VISIBLE);
                             deleteButton.setOnClickListener(deleteClickListener);
                             reportButton.setVisibility(View.GONE);
                             reportButton.setOnClickListener(null);
-                        }
-                        else
-                        {
+                        } else {
                             deleteButton.setVisibility(View.GONE);
                             deleteButton.setOnClickListener(null);
                             reportButton.setVisibility(View.VISIBLE);
@@ -363,9 +315,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
                             reportButton.setLayoutParams(params);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         replyButton.setVisibility(View.GONE);
                         replyButton.setOnClickListener(null);
                         deleteButton.setVisibility(View.GONE);
@@ -382,12 +332,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     likeButton.setOnClickListener(likeClickListener);
                     likeCount.setText(SparkleHelper.getPrettifiedNumber(post.likes));
                     // Only build liked list if there are likes
-                    if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0)
-                    {
+                    if (post.likes > 0 && post.likedBy != null && post.likedBy.length() > 0) {
                         String[] likes = post.likedBy.split(":");
                         ArrayList<String> properLikes = new ArrayList<String>();
-                        for (String li : likes)
-                        {
+                        for (String li : likes) {
                             properLikes.add(SparkleHelper.getNameFromId(li));
                         }
                         final ArrayList<String> fLikes = properLikes;
@@ -402,19 +350,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                                 nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         likeCount.setOnClickListener(null);
                     }
-                }
-                else
-                {
+                } else {
                     actionsHolder.setVisibility(View.GONE);
                 }
-            }
-            else
-            {
+            } else {
                 cardTime.setVisibility(View.GONE);
                 cardAuthor.setVisibility(View.GONE);
                 cardContent.setText(context.getString(R.string.rmb_no_content));
@@ -429,31 +371,26 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         }
 
-        public void select()
-        {
+        public void select() {
             if (SettingsActivity.getTheme(context) != SettingsActivity.THEME_NOIR) {
                 cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
-            }
-            else {
+            } else {
                 cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentNoir));
             }
             replyButton.setImageResource(R.drawable.ic_clear);
         }
 
-        public void deselect()
-        {
+        public void deselect() {
             cardContainer.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
             replyButton.setImageResource(R.drawable.ic_reply);
         }
 
-        public void like()
-        {
+        public void like() {
             likeButton.setImageResource(R.drawable.ic_liked);
             likeCount.setTextColor(ContextCompat.getColor(context, R.color.colorChart1));
         }
 
-        public void unlike()
-        {
+        public void unlike() {
             likeButton.setImageResource(R.drawable.ic_like);
             likeCount.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
         }

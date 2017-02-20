@@ -238,7 +238,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public void init(NationOverviewCardData data) {
             govType.setHtml(data.category);
-            SparkleHelper.activityLinkBuilder(context, region, data.region, data.region, data.region, ExploreActivity.EXPLORE_REGION);
+            region.setText(data.region);
+            region.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, SparkleHelper.getIdFromName(data.region), ExploreActivity.EXPLORE_REGION));
             influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());

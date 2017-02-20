@@ -444,7 +444,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
             label.setText(SparkleHelper.getHtmlFormatting(position));
-            SparkleHelper.activityLinkBuilder(context, content, nation, nation, SparkleHelper.getNameFromId(nation), ExploreActivity.EXPLORE_NATION);
+            content.setText(SparkleHelper.getNameFromId(nation));
+            content.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, nation, ExploreActivity.EXPLORE_NATION));
+            content.setTextColor(RaraHelper.getThemeLinkColour(context));
             officersLayout.addView(delegateView);
         }
     }
