@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -23,6 +24,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,4 +86,14 @@ public class RegionMessages implements Parcelable {
             return new RegionMessages[size];
         }
     };
+
+    public static RegionMessages parseRegionMessagesXML(Context c, Persister serializer, String response) throws Exception {
+        RegionMessages messageResponse = serializer.read(RegionMessages.class, response);
+        if (messageResponse.posts != null && messageResponse.posts.size() > 0) {
+            for (int i=0; i < messageResponse.posts.size(); i++) {
+                messageResponse.posts.get(i).message = SparkleHelper.transformBBCodeToHtml(c, messageResponse.posts.get(i).message);
+            }
+        }
+        return messageResponse;
+    }
 }

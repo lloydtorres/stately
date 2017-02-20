@@ -282,7 +282,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             // Forces card to span across columns
             RaraHelper.setViewHolderFullSpan(itemView);
 
-            SparkleHelper.setBbCodeFormatting(context, content, resolution.content, resolutionActivity.getSupportFragmentManager());
+            SparkleHelper.setStyledTextView(context, content, resolution.content, resolutionActivity.getSupportFragmentManager());
 
             if (isActive && PinkaHelper.getWaSessionData(context)) {
                 voteButton.setVisibility(View.VISIBLE);

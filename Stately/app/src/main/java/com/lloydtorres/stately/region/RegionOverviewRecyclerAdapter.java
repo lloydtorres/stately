@@ -211,7 +211,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
         public void init(RegionFactbookCardData d) {
             data = d;
-            SparkleHelper.setBbCodeFormatting(context, cardContent, data.factbook, fragmentManager);
+            SparkleHelper.setStyledTextView(context, cardContent, data.factbook, fragmentManager);
         }
     }
 

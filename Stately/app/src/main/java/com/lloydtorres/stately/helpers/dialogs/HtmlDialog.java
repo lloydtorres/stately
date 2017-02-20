@@ -88,7 +88,7 @@ public class HtmlDialog extends DetachDialogFragment {
         }
 
         content = (HtmlTextView) view.findViewById(R.id.dialog_html_content);
-        SparkleHelper.setBbCodeFormatting(getContext(), content, raw, fm);
+        SparkleHelper.setStyledTextView(getContext(), content, raw, fm);
         getDialog().setTitle(title);
 
         return view;

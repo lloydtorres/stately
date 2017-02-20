@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,6 +25,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,4 +105,9 @@ public class Assembly extends BaseAssembly implements Parcelable {
             return new Assembly[size];
         }
     };
+
+    public static Assembly parseAssemblyXML(Context c, Persister serializer, String response) throws Exception {
+        Assembly assembly = serializer.read(Assembly.class, response);
+        return ((Assembly) processRawFields(c, assembly));
+    }
 }

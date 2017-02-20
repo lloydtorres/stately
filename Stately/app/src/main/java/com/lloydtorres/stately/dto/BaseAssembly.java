@@ -16,11 +16,15 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.SparkleHelper;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persister;
 
 /**
  * Created by Lloyd on 2016-01-17.
@@ -60,4 +64,17 @@ public class BaseAssembly implements Parcelable {
             return new BaseAssembly[size];
         }
     };
+
+    public static BaseAssembly parseAssemblyXML(Context c, Persister serializer, String response) throws Exception {
+        BaseAssembly baseAssembly = serializer.read(BaseAssembly.class, response);
+        baseAssembly = processRawFields(c, baseAssembly);
+        return baseAssembly;
+    }
+
+    protected static BaseAssembly processRawFields(Context c, BaseAssembly response) {
+        if (response.resolution != null) {
+            response.resolution.content = SparkleHelper.transformBBCodeToHtml(c, response.resolution.content);
+        }
+        return response;
+    }
 }

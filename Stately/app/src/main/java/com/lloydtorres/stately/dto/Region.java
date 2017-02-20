@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -175,8 +176,13 @@ public class Region extends BaseRegion implements Parcelable {
         }
     };
 
-    public static Region parseRegionXML(Persister serializer, String response) throws Exception {
+    public static Region parseRegionXML(Context c, Persister serializer, String response) throws Exception {
         Region regionResponse = serializer.read(Region.class, response);
-        return ((Region) fieldReplacer(regionResponse));
+        regionResponse = ((Region) processRawFields(c, regionResponse));
+        // Convert poll text BBcode to HTML if it exists
+        if (regionResponse.poll != null) {
+            regionResponse.poll.text = SparkleHelper.transformBBCodeToHtml(c, regionResponse.poll.text);
+        }
+        return regionResponse;
     }
 }

@@ -321,7 +321,7 @@ public class MessageBoardActivity extends SlidrActivity {
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            messageResponse = serializer.read(RegionMessages.class, response);
+                            messageResponse = RegionMessages.parseRegionMessagesXML(MessageBoardActivity.this, serializer, response);
                             switch (direction) {
                                 case SCAN_BACKWARD:
                                     processMessageResponseBackward(messageResponse);

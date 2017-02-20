@@ -129,7 +129,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                         }
                         Persister serializer = new Persister();
                         try {
-                            waResponse = serializer.read(Assembly.class, response);
+                            waResponse = Assembly.parseAssemblyXML(getContext(), serializer, response);
 
                             if (chamberId == Assembly.GENERAL_ASSEMBLY) {
                                 // Once a response is obtained for the General Assembly,

@@ -156,7 +156,7 @@ public class WorldFragment extends RefreshviewFragment {
                         }
                         Persister serializer = new Persister();
                         try {
-                            featuredRegion = BaseRegion.parseRegionXML(serializer, response);
+                            featuredRegion = BaseRegion.parseRegionXML(getContext(), serializer, response);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());

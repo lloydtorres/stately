@@ -250,7 +250,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             RegionOverviewRecyclerAdapter.initFounder(context, founder, regionData.founder, regionData.founded);
 
             if (regionData.factbook != null) {
-                SparkleHelper.setBbCodeFormatting(context, factbook, regionData.factbook, fragmentManager);
+                SparkleHelper.setStyledTextView(context, factbook, regionData.factbook, fragmentManager);
                 factbookHolder.setVisibility(View.VISIBLE);
             }
             else {

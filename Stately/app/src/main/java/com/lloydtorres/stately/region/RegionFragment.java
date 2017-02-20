@@ -261,7 +261,7 @@ public class RegionFragment extends DetachFragment {
 
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = Region.parseRegionXML(serializer, response);
+                            regionResponse = Region.parseRegionXML(getContext(), serializer, response);
 
                             mRegion = regionResponse;
                             getAllRegionViews(view);

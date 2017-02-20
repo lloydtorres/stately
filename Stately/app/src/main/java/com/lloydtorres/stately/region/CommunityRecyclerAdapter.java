@@ -265,7 +265,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                     SparkleHelper.getReadableDateFromUTC(context, p.stopTime)));
 
             if (p.text != null && p.text.length() > 0) {
-                SparkleHelper.setBbCodeFormatting(context, content, p.text, fm);
+                SparkleHelper.setStyledTextView(context, content, p.text, fm);
             }
             else {
                 content.setVisibility(View.GONE);

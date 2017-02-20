@@ -187,7 +187,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            BaseAssembly waResponse = serializer.read(BaseAssembly.class, response);
+                            BaseAssembly waResponse = BaseAssembly.parseAssemblyXML(ResolutionActivity.this, serializer, response);
                             mResolution = waResponse.resolution;
 
                             // Resolution doesn't exist, stop now

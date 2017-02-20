@@ -291,7 +291,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (post.status == Post.POST_DELETED || post.status == Post.POST_BANHAMMERED) {
                     postContent = "[i]" + postContent + "[/i]";
                 }
-                SparkleHelper.setBbCodeFormatting(context, cardContent, postContent, fm);
+                SparkleHelper.setStyledTextView(context, cardContent, postContent, fm);
 
                 // Setup actions holder
                 if (post.status == Post.POST_REGULAR || post.status == Post.POST_SUPPRESSED) {

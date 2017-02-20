@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.dto;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -120,16 +121,18 @@ public class BaseRegion implements Parcelable {
         }
     };
 
-    public static BaseRegion parseRegionXML(Persister serializer, String response) throws Exception {
+    public static BaseRegion parseRegionXML(Context c, Persister serializer, String response) throws Exception {
         BaseRegion regionResponse = serializer.read(BaseRegion.class, response);
-        return fieldReplacer(regionResponse);
+        return processRawFields(c, regionResponse);
     }
 
-    protected static BaseRegion fieldReplacer(BaseRegion response) {
+    protected static BaseRegion processRawFields(Context c, BaseRegion response) {
         // Switch flag URL to https
         if (response.flagURL != null) {
             response.flagURL = response.flagURL.replace("http://", "https://");
         }
+        // Convert factbook BBCode to HTML
+        response.factbook = SparkleHelper.transformBBCodeToHtml(c, response.factbook);
         return response;
     }
 }

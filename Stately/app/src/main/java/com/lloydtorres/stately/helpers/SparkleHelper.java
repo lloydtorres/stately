@@ -781,13 +781,14 @@ public final class SparkleHelper {
     /**
      * Transform NationStates' BBCode-formatted content into HTML
      * @param c App context
-     * @param t TextView
      * @param content Target content
-     * @param fm FragmentManager to show spoiler dialogs in
+     * @return HTML-formatted text
      */
-    public static void setBbCodeFormatting(Context c, TextView t, String content, FragmentManager fm) {
-        if (content == null || content.length() < 0) {
-            return;
+    public static String transformBBCodeToHtml(Context c, String content) {
+        if (content == null) {
+            return null;
+        } else if (content.length() <= 0) {
+            return "";
         }
 
         String holder = content.trim();
@@ -838,15 +839,7 @@ public final class SparkleHelper {
         holder = regexGenericUrlFormat(c, holder);
         holder = regexQuoteFormat(holder);
 
-        // Extract and replace spoilers
-        List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
-        for (int i=0; i < spoilers.size(); i++) {
-            Spoiler s = spoilers.get(i);
-            holder = holder.replace(s.raw, s.replacer);
-        }
-
-        // In case there are no nations or regions to linkify, set and style TextView here too
-        setStyledTextView(c, t, holder, spoilers, fm);
+        return holder;
     }
 
     /**
@@ -876,39 +869,35 @@ public final class SparkleHelper {
     /**
      * Overloaded to deal with spoilers.
      */
-    public static void setStyledTextView(Context c, TextView t, String holder, List<Spoiler> spoilers, FragmentManager fm) {
-        if (t instanceof HtmlTextView) {
-            try {
-                ((HtmlTextView)t).setHtml(holder);
-            }
-            catch(Exception e) {
-                SparkleHelper.logError(e.toString());
-                SparkleHelper.logError(holder);
-                t.setText(c.getString(R.string.bbcode_parse_error));
-                t.setTypeface(t.getTypeface(), Typeface.ITALIC);
-            }
-        }
-        else {
-            t.setText(fromHtml(holder));
-        }
-
-        // Deal with spoilers here
-        styleLinkifiedTextView(c, t);   // Ensures TextView contains a spannable
-        Spannable span = new SpannableString(t.getText());
-        String rawSpan = span.toString();
-        int startFromIndex = 0;
-
+    public static void setStyledTextView(Context c, TextView t, String holder, FragmentManager fm) {
+        // Extract and replace spoilers beforehand
+        List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
         for (int i=0; i < spoilers.size(); i++) {
             Spoiler s = spoilers.get(i);
-            int start = rawSpan.indexOf(s.replacer, startFromIndex);
-            if (start != -1) {
-                int end = start + s.replacer.length();
-                startFromIndex = end;
-                SpoilerSpan clickyDialog = new SpoilerSpan(c, s, fm);
-                span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            holder = holder.replace(s.raw, s.replacer);
         }
-        t.setText(span);
+
+        // Stylize the existing text
+        setStyledTextView(c, t, holder);
+
+        // Linkify spoilers, if they exist
+        if (spoilers.size() > 0) {
+            Spannable span = new SpannableString(t.getText());
+            String rawSpan = span.toString();
+            int startFromIndex = 0;
+
+            for (int i=0; i < spoilers.size(); i++) {
+                Spoiler s = spoilers.get(i);
+                int start = rawSpan.indexOf(s.replacer, startFromIndex);
+                if (start != -1) {
+                    int end = start + s.replacer.length();
+                    startFromIndex = end;
+                    SpoilerSpan clickyDialog = new SpoilerSpan(c, s, fm);
+                    span.setSpan(clickyDialog, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            t.setText(span);
+        }
     }
 
     /**
@@ -1178,7 +1167,7 @@ public final class SparkleHelper {
         Matcher m1 = BBCODE_SPOILER.matcher(holder);
         while (m1.find()) {
             Spoiler s = new Spoiler();
-            s.content = m1.group(1);
+            s.content = transformBBCodeToHtml(c, m1.group(1));
             s.raw = m1.group();
             s.replacer = c.getString(R.string.spoiler_warn_link);
             spoilers.add(s);
@@ -1190,7 +1179,7 @@ public final class SparkleHelper {
             Spoiler s = new Spoiler();
             // Gets rid of HTML in title
             s.title = Jsoup.parse(m2.group(1)).text();
-            s.content = m2.group(2);
+            s.content = transformBBCodeToHtml(c, m2.group(2));
             s.raw = m2.group();
             s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
             spoilers.add(s);
