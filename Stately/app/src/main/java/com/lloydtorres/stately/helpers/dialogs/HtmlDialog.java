@@ -46,30 +46,24 @@ public class HtmlDialog extends DetachDialogFragment {
     private String raw;
     private String title;
 
-    public void setRawContent(String c)
-    {
+    public void setRawContent(String c) {
         raw = c;
     }
 
-    public void setTitle(String t)
-    {
+    public void setTitle(String t) {
         title = t;
     }
 
-    public void setFragmentManager(FragmentManager f)
-    {
+    public void setFragmentManager(FragmentManager f) {
         fm = f;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AppCompatDialog dialog = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeLollipopDialog(getContext()));
-        }
-        else
-        {
+        } else {
             dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
@@ -81,8 +75,7 @@ public class HtmlDialog extends DetachDialogFragment {
         View view = inflater.inflate(R.layout.fragment_dialog_html, container, false);
 
         // Restore saved state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             raw = savedInstanceState.getString(KEY_RAW);
             title = savedInstanceState.getString(KEY_TITLE);
         }

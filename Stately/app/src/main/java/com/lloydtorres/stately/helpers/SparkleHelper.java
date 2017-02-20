@@ -854,8 +854,8 @@ public final class SparkleHelper {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
-                SparkleHelper.logError(e.toString());
-                SparkleHelper.logError(holder);
+                logError(e.toString());
+                logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
@@ -1167,7 +1167,7 @@ public final class SparkleHelper {
         Matcher m1 = BBCODE_SPOILER.matcher(holder);
         while (m1.find()) {
             Spoiler s = new Spoiler();
-            s.content = transformBBCodeToHtml(c, m1.group(1));
+            s.content = m1.group(1);
             s.raw = m1.group();
             s.replacer = c.getString(R.string.spoiler_warn_link);
             spoilers.add(s);
@@ -1179,7 +1179,7 @@ public final class SparkleHelper {
             Spoiler s = new Spoiler();
             // Gets rid of HTML in title
             s.title = Jsoup.parse(m2.group(1)).text();
-            s.content = transformBBCodeToHtml(c, m2.group(2));
+            s.content = m2.group(2);
             s.raw = m2.group();
             s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
             spoilers.add(s);
