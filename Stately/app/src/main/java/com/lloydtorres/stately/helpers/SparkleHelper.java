@@ -697,6 +697,18 @@ public final class SparkleHelper {
         return src;
     }
 
+    /**
+     * Basic HTML formatter that returns a styled version of the string.
+     * @param content Target content
+     * @return Styled spanned object
+     */
+    public static Spanned getHtmlFormatting(String content) {
+        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
+        return fromHtml(holder);
+    }
+
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(" + VALID_NAME_BASE + "+?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(" + VALID_NAME_BASE + "+?)%%");
     public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(" + VALID_ID_BASE + "+?)\\/page=display_region_rmb\\?postid=(\\d+?)#p\\d+?\" rel=\"nofollow\">");
@@ -740,18 +752,6 @@ public final class SparkleHelper {
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder);
-    }
-
-    /**
-     * Basic HTML formatter that returns a styled version of the string.
-     * @param content Target content
-     * @return Styled spanned object
-     */
-    public static Spanned getHtmlFormatting(String content) {
-        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        return fromHtml(holder);
     }
 
     /**
