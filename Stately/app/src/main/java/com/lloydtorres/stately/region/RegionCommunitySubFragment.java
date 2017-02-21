@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.Embassy;
@@ -146,7 +147,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
         resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
-        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver, resolutionVoteFilter);
 
         // Check if regional poll can be voted on
         if (mRegion != null && mRegion.poll != null) {

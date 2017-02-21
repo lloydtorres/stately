@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.WaVoteStatus;
@@ -105,7 +106,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
         resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
-        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver, resolutionVoteFilter);
 
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {

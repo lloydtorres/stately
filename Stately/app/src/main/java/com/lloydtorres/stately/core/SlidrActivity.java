@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
@@ -29,7 +28,7 @@ import com.r0adkll.slidr.model.SlidrInterface;
  * Created by Lloyd on 2016-09-10.
  * Base activity for all activities using the 'AppTheme.SlidrActivity' theme.
  */
-public abstract class SlidrActivity extends AppCompatActivity {
+public abstract class SlidrActivity extends BroadcastableActivity {
 
     // Configuration for Slidr (for dem fancy sliding effects)
     public static final SlidrConfig slidrConfig = new SlidrConfig.Builder().edge(true).build();

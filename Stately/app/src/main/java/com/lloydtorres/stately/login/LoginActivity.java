@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +37,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.UserNation;
@@ -66,7 +66,7 @@ import java.util.Locale;
  * The launcher activity for Stately!
  * Takes in user logins and verifies them against NationStates.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BroadcastableActivity {
     // Intent keys
     public static final String USERDATA_KEY = "userdata";
     public static final String NOAUTOLOGIN_KEY = "noAutologin";

@@ -24,6 +24,7 @@ import android.os.Bundle;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
@@ -72,7 +73,7 @@ public class OverviewSubFragment extends NationSubFragment {
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
         resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
-        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver, resolutionVoteFilter);
 
         String[] govTypes = getResources().getStringArray(R.array.gov_types);
         String[] govConservative = getResources().getStringArray(R.array.gov_conservative);
