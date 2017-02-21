@@ -418,7 +418,6 @@ public final class MuffinsHelper {
             spoiler.html(spoilerContent.toString());
             spoiler.tagName("p");
         }
-        SparkleHelper.logError(content.html());
 
         String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("\n", "<br />");
