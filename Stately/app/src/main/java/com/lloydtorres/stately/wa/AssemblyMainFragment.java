@@ -16,6 +16,10 @@
 
 package com.lloydtorres.stately.wa;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -67,6 +71,19 @@ public class AssemblyMainFragment extends RefreshviewFragment {
         voteStatus = w;
     }
 
+    // Receiver for WA vote broadcasts
+    private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() == null || !isAdded()) {
+                return;
+            }
+
+            voteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+            refreshRecycler();
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
@@ -84,6 +101,11 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                                                             queryWorldAssembly(mView);
                                                         }
                                                  });
+
+        // Register resolution vote receiver
+        IntentFilter resolutionVoteFilter = new IntentFilter();
+        resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
+        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
 
         // hack to get swiperefreshlayout to show initially while loading
         mSwipeRefreshLayout.post(new Runnable() {

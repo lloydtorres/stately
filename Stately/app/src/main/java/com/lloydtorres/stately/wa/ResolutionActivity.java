@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.wa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,6 +59,7 @@ public class ResolutionActivity extends RefreshviewActivity {
     // Uri to invoke ResolutionActivity
     public static final String RESOLUTION_PROTOCOL = "com.lloydtorres.stately.resolution";
     public static final String RESOLUTION_TARGET = RESOLUTION_PROTOCOL + "://";
+    public static final String RESOLUTION_BROADCAST = RESOLUTION_PROTOCOL + ".RESOLUTION_VOTE";
 
     // Keys for Intent data
     public static final String TARGET_COUNCIL_ID = "councilId";
@@ -65,6 +67,7 @@ public class ResolutionActivity extends RefreshviewActivity {
     public static final String TARGET_VOTE_STATUS = "voteStatus";
     public static final String TARGET_OVERRIDE_RES_ID = "overrideResId";
     public static final String TARGET_IS_ACTIVE = "isActive";
+    public static final String TARGET_OLD_VOTE_STATUS = "oldVoteStatus";
 
     private static final int NO_RESOLUTION = -1;
 
@@ -242,8 +245,16 @@ public class ResolutionActivity extends RefreshviewActivity {
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
+                            WaVoteStatus oldVoteStatus = voteStatus;
                             voteStatus = serializer.read(WaVoteStatus.class, response);
                             PinkaHelper.setWaSessionData(ResolutionActivity.this, voteStatus.waState);
+
+                            // Send broadcast containing data about the user's WA votes
+                            Intent resolutionVoteBroadcast = new Intent();
+                            resolutionVoteBroadcast.setAction(RESOLUTION_BROADCAST);
+                            resolutionVoteBroadcast.putExtra(TARGET_VOTE_STATUS, voteStatus);
+                            resolutionVoteBroadcast.putExtra(TARGET_OLD_VOTE_STATUS, oldVoteStatus);
+                            sendBroadcast(resolutionVoteBroadcast);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());

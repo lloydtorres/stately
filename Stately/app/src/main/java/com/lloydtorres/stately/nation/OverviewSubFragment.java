@@ -16,6 +16,10 @@
 
 package com.lloydtorres.stately.nation;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.lloydtorres.stately.R;
@@ -25,8 +29,10 @@ import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.HashMap;
@@ -42,10 +48,31 @@ public class OverviewSubFragment extends NationSubFragment {
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
 
+    // Receiver for WA vote broadcasts
+    private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() == null || !isAdded()) {
+                return;
+            }
+
+            WaVoteStatus voteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+            mNation.waState = voteStatus.waState;
+            mNation.gaVote = voteStatus.gaVote;
+            mNation.scVote = voteStatus.scVote;
+            forceRefreshData();
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+
+        // Register resolution vote receiver
+        IntentFilter resolutionVoteFilter = new IntentFilter();
+        resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
+        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
 
         String[] govTypes = getResources().getStringArray(R.array.gov_types);
         String[] govConservative = getResources().getStringArray(R.array.gov_conservative);

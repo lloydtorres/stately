@@ -16,6 +16,10 @@
 
 package com.lloydtorres.stately.region;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -39,10 +43,13 @@ import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
 import com.lloydtorres.stately.dto.RMBButtonHolder;
 import com.lloydtorres.stately.dto.Region;
+import com.lloydtorres.stately.dto.WaVote;
+import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -80,6 +87,47 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
     public void setMainFragmentView(View v) { mainFragmentView = v; }
 
+    // Receiver for WA vote broadcasts
+    private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() == null || !isAdded()) {
+                return;
+            }
+
+            WaVoteStatus currentVoteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+            WaVoteStatus oldVoteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_OLD_VOTE_STATUS);
+
+            if (oldVoteStatus != null) {
+                // Remove old tallies
+                updateWaVoteCount(mRegion.gaVote, oldVoteStatus.gaVote, -1);
+                updateWaVoteCount(mRegion.scVote, oldVoteStatus.scVote, -1);
+
+                // Add in new tallies
+                updateWaVoteCount(mRegion.gaVote, currentVoteStatus.gaVote, 1);
+                updateWaVoteCount(mRegion.scVote, currentVoteStatus.scVote, 1);
+
+                // Update data
+                initData();
+                initRecyclerAdapter(true);
+            }
+        }
+    };
+
+    /**
+     * Helper function for updating WA vote counts.
+     * @param waVote WaVote object to update.
+     * @param voteStatus The current vote status for the given chamber.
+     * @param change The amount to change the vote by.
+     */
+    private void updateWaVoteCount(WaVote waVote, String voteStatus, int change) {
+        if (WaVoteStatus.VOTE_FOR.equals(voteStatus)) {
+            waVote.voteFor += change;
+        } else if (WaVoteStatus.VOTE_AGAINST.equals(voteStatus)) {
+            waVote.voteAgainst += change;
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -95,6 +143,11 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
             }
         }
 
+        // Register resolution vote receiver
+        IntentFilter resolutionVoteFilter = new IntentFilter();
+        resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
+        getActivity().registerReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+
         // Check if regional poll can be voted on
         if (mRegion != null && mRegion.poll != null) {
             regionName = mRegion.name;
@@ -105,12 +158,13 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
             initData();
         }
 
-        initRecyclerAdapter();
+        initRecyclerAdapter(false);
 
         return view;
     }
 
     private void initData() {
+        cards = new ArrayList<Parcelable>();
         regionName = mRegion.name;
 
         // This adds a button to the RMB
@@ -156,13 +210,18 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
         }
     }
 
-    private void initRecyclerAdapter() {
+    private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new CommunityRecyclerAdapter(this, cards, regionName);
+            if (isOnlySetAdapterOnNull) {
+                mRecyclerView.setAdapter(mRecyclerAdapter);
+            }
         } else {
             ((CommunityRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        if (!isOnlySetAdapterOnNull) {
+            mRecyclerView.setAdapter(mRecyclerAdapter);
+        }
     }
 
     /**
