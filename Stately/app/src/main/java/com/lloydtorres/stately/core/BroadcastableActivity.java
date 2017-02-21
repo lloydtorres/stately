@@ -2,6 +2,7 @@ package com.lloydtorres.stately.core;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class BroadcastableActivity extends AppCompatActivity {
     private List<BroadcastReceiver> broadcastReceivers = new ArrayList<BroadcastReceiver>();
 
     public void registerBroadcastReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-        registerReceiver(receiver, filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
         broadcastReceivers.add(receiver);
     }
 
@@ -25,7 +26,7 @@ public class BroadcastableActivity extends AppCompatActivity {
         super.onDestroy();
         if (broadcastReceivers != null) {
             for (BroadcastReceiver br : broadcastReceivers) {
-                unregisterReceiver(br);
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(br);
             }
         }
     }

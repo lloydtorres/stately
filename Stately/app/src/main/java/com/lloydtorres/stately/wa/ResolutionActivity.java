@@ -19,6 +19,7 @@ package com.lloydtorres.stately.wa;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkError;
@@ -254,7 +255,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                             resolutionVoteBroadcast.setAction(RESOLUTION_BROADCAST);
                             resolutionVoteBroadcast.putExtra(TARGET_VOTE_STATUS, voteStatus);
                             resolutionVoteBroadcast.putExtra(TARGET_OLD_VOTE_STATUS, oldVoteStatus);
-                            sendBroadcast(resolutionVoteBroadcast);
+                            LocalBroadcastManager.getInstance(ResolutionActivity.this).sendBroadcast(resolutionVoteBroadcast);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
