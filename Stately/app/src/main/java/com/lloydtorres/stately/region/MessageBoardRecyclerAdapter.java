@@ -366,19 +366,27 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
             actionsHolder.setVisibility(View.VISIBLE);
 
+            // Disable buttons for all cases first
+            replyButton.setVisibility(View.GONE);
+            replyButton.setOnClickListener(null);
+            deleteButton.setVisibility(View.GONE);
+            deleteButton.setOnClickListener(null);
+            reportButton.setVisibility(View.GONE);
+            reportButton.setOnClickListener(null);
+            suppressButton.setVisibility(View.GONE);
+            suppressButton.setOnClickListener(null);
+
             // Setup reply, delete, report, suppress buttons based on user status
             if (isPostable) {
                 // All posts can be replied to
+                replyButton.setVisibility(View.VISIBLE);
                 replyButton.setOnClickListener(replyClickListener);
                 // Only user's own posts can be deleted
                 if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name)) {
                     deleteButton.setVisibility(View.VISIBLE);
                     deleteButton.setOnClickListener(deleteClickListener);
-                    reportButton.setVisibility(View.GONE);
-                    reportButton.setOnClickListener(null);
+
                 } else {
-                    deleteButton.setVisibility(View.GONE);
-                    deleteButton.setOnClickListener(null);
                     reportButton.setVisibility(View.VISIBLE);
                     reportButton.setOnClickListener(reportClickListener);
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
@@ -390,19 +398,9 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                         suppressButton.setVisibility(View.VISIBLE);
                         suppressButton.setOnClickListener(suppressClickListener);
                         suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ? R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
-                    } else {
-                        suppressButton.setVisibility(View.GONE);
-                        suppressButton.setOnClickListener(null);
                     }
                 }
             } else {
-                replyButton.setVisibility(View.GONE);
-                replyButton.setOnClickListener(null);
-                deleteButton.setVisibility(View.GONE);
-                deleteButton.setOnClickListener(null);
-                suppressButton.setVisibility(View.GONE);
-                suppressButton.setOnClickListener(null);
-
                 reportButton.setVisibility(View.VISIBLE);
                 reportButton.setOnClickListener(reportClickListener);
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
