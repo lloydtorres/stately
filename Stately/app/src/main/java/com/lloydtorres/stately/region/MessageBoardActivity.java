@@ -211,8 +211,11 @@ public class MessageBoardActivity extends SlidrActivity {
      */
     private void queryRmbRights() {
         startSwipeRefresh();
-        String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
 
+        // Only enable likeability if in user region
+        isLikeable = PinkaHelper.getRegionSessionData(MessageBoardActivity.this).equals(SparkleHelper.getIdFromName(regionName));
+
+        String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
@@ -255,7 +258,6 @@ public class MessageBoardActivity extends SlidrActivity {
         messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
         messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
         isPostable = true;
-        isLikeable = true;
     }
 
     /**
