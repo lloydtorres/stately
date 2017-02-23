@@ -31,6 +31,7 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.WaVoteStatus;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.wa.ResolutionActivity;
@@ -53,7 +54,14 @@ public class OverviewSubFragment extends NationSubFragment {
     private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (getActivity() == null || !isAdded()) {
+            if (getActivity() == null || !isAdded() || mNation == null) {
+                return;
+            }
+
+            // Only update if user's nation
+            String openNationName = SparkleHelper.getIdFromName(mNation.name);
+            String userNationName = SparkleHelper.getIdFromName(PinkaHelper.getActiveUser(context).name);
+            if (!userNationName.equals(openNationName)) {
                 return;
             }
 

@@ -92,7 +92,14 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (getActivity() == null || !isAdded()) {
+            if (getActivity() == null || !isAdded() || mRegion == null) {
+                return;
+            }
+
+            // Only update if in user's region
+            String openRegionName = SparkleHelper.getIdFromName(mRegion.name);
+            String userRegionName = SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(context));
+            if (!openRegionName.equals(userRegionName)) {
                 return;
             }
 
