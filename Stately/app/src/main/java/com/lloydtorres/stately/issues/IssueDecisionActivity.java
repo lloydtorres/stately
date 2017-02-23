@@ -169,8 +169,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startPostAdoptPosition(option);
                 dialog.dismiss();
+                startPostAdoptPosition(option);
             }
         };
 

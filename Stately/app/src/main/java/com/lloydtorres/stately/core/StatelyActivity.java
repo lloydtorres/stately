@@ -529,8 +529,8 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    SparkleHelper.startAddNation(StatelyActivity.this);
                     dialog.dismiss();
+                    SparkleHelper.startAddNation(StatelyActivity.this);
                 }
             };
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));

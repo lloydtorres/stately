@@ -38,8 +38,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private List<String> names;
     private int target;
 
-    public NameListRecyclerAdapter(Context c, NameListDialog d, List<String> n, int t)
-    {
+    public NameListRecyclerAdapter(Context c, NameListDialog d, List<String> n, int t) {
         context = c;
         selfDialog = d;
         names = n;
@@ -74,8 +73,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             v.setOnClickListener(this);
         }
 
-        public void init(String n)
-        {
+        public void init(String n) {
             nationName.setText(n);
         }
 
@@ -83,10 +81,9 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void onClick(View v) {
             int pos = getAdapterPosition();
 
-            if (pos != RecyclerView.NO_POSITION)
-            {
-                SparkleHelper.startExploring(context, names.get(pos), target);
+            if (pos != RecyclerView.NO_POSITION) {
                 selfDialog.dismiss();
+                SparkleHelper.startExploring(context, names.get(pos), target);
             }
         }
     }

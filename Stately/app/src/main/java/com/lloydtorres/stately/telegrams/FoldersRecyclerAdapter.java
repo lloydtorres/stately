@@ -40,8 +40,7 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ArrayList<TelegramFolder> folders;
     private int selected;
 
-    public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
-    {
+    public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s) {
         fragmentInstance = fr;
         isMove = false;
         selfDialog = d;
@@ -49,8 +48,7 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         selected = s;
     }
 
-    public FoldersRecyclerAdapter(TelegramsFragment fr, int targetId, FoldersDialog d, ArrayList<TelegramFolder> f, int s)
-    {
+    public FoldersRecyclerAdapter(TelegramsFragment fr, int targetId, FoldersDialog d, ArrayList<TelegramFolder> f, int s) {
         fragmentInstance = fr;
         isMove = true;
         targetMoveId = targetId;
@@ -82,42 +80,35 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         private TextView folderName;
         private TelegramFolder folder;
 
-        public FolderEntry(View v)
-        {
+        public FolderEntry(View v) {
             super(v);
             folderName = (TextView) v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 
-        public void init(TelegramFolder f)
-        {
+        public void init(TelegramFolder f) {
             folder = f;
             folderName.setText(folder.name);
             int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && pos == selected)
-            {
+            if (pos != RecyclerView.NO_POSITION && pos == selected) {
                 folderName.setTypeface(folderName.getTypeface(), Typeface.BOLD);
-            }
-            else
-            {
+            } else {
                 folderName.setTypeface(folderName.getTypeface(), Typeface.NORMAL);
             }
         }
 
         @Override
         public void onClick(View v) {
+            selfDialog.dismiss();
             int pos = getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION)
-            {
+            if (pos != RecyclerView.NO_POSITION) {
                 if (!isMove) {
                     fragmentInstance.setSelectedFolder(pos);
-                }
-                else
-                {
+                } else {
                     fragmentInstance.startMoveTelegram(targetMoveId, folders.get(pos).value);
                 }
             }
-            selfDialog.dismiss();
+
         }
     }
 }

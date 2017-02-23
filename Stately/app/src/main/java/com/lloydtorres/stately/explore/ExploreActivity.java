@@ -548,8 +548,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getLocalId(String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
                 dialog.dismiss();
+                getLocalId(String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id)), null);
             }
         };
 
@@ -627,8 +627,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                postDossier();
                 dialog.dismiss();
+                postDossier();
             }
         };
 
@@ -733,8 +733,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 if (fPassView.getText().length() >= 0) {
                     password = fPassView.getText().toString();
                 }
-                getLocalId(String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
                 dialog.dismiss();
+                getLocalId(String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
             }
         };
 

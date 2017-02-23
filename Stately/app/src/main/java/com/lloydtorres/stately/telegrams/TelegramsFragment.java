@@ -444,8 +444,8 @@ public class TelegramsFragment extends DetachFragment {
                 .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        archiveTelegram(id);
                         dialog.dismiss();
+                        archiveTelegram(id);
                     }})
                 .setNegativeButton(getString(R.string.explore_negative), null)
                 .show();
@@ -585,8 +585,8 @@ public class TelegramsFragment extends DetachFragment {
             .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startDeleteTelegram(id);
                     dialog.dismiss();
+                    startDeleteTelegram(id);
                 }
             })
             .setNegativeButton(getString(R.string.explore_negative), null)

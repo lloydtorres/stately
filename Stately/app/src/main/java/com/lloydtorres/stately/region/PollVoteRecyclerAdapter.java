@@ -96,8 +96,8 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void onClick(View v) {
             Poll newPollData = pollData;
             newPollData.votedOption = pollOption.id;
-            fragment.startSubmitPollVote(newPollData);
             dialog.dismiss();
+            fragment.startSubmitPollVote(newPollData);
         }
     }
 }

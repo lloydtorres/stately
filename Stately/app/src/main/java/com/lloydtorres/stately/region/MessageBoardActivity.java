@@ -656,8 +656,8 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startSwipeRefresh();
-                postMessageDelete(pos, id);
                 dialog.dismiss();
+                postMessageDelete(pos, id);
             }
         };
 
@@ -722,8 +722,8 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startSwipeRefresh();
-                postMessageSuppress(pos, id, postStatus);
                 dialog.dismiss();
+                postMessageSuppress(pos, id, postStatus);
             }
         };
 

@@ -38,8 +38,7 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private SwitchNationDialog selfDialog;
     private List<UserLogin> logins;
 
-    public SwitchNationRecyclerAdapter(Context c, SwitchNationDialog d, List<UserLogin> u)
-    {
+    public SwitchNationRecyclerAdapter(Context c, SwitchNationDialog d, List<UserLogin> u) {
         context = c;
         selfDialog = d;
         logins = u;
@@ -74,8 +73,7 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             v.setOnClickListener(this);
         }
 
-        public void init(UserLogin u)
-        {
+        public void init(UserLogin u) {
             login = u;
             nationName.setText(login.name);
         }
@@ -84,13 +82,12 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void onClick(View v) {
             int pos = getAdapterPosition();
 
-            if (pos != RecyclerView.NO_POSITION)
-            {
+            if (pos != RecyclerView.NO_POSITION) {
                 Intent loginActivityLaunch = new Intent(context, LoginActivity.class);
                 loginActivityLaunch.putExtra(LoginActivity.USERDATA_KEY, login);
                 loginActivityLaunch.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
-                context.startActivity(loginActivityLaunch);
                 selfDialog.dismiss();
+                context.startActivity(loginActivityLaunch);
             }
         }
     }
