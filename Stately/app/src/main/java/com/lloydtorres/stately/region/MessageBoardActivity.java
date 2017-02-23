@@ -92,6 +92,7 @@ public class MessageBoardActivity extends SlidrActivity {
     private static final int RMB_LOAD_COUNT = 100;
 
     private static final String CONFIRM_DELETE = "self-deleted by";
+    private static final String CONFIRM_SUPPRESS = "suppressed by";
     private AlertDialog.Builder dialogBuilder;
 
     private RegionMessages messages;
@@ -99,8 +100,9 @@ public class MessageBoardActivity extends SlidrActivity {
     private Set<Integer> uniqueEnforcer;
     private int pastOffset = 0;
     private int latestId = NO_LATEST;
-    private boolean postable = false;
-    private boolean likable = false;
+    private boolean isPostable = false;
+    private boolean isLikeable = false;
+    private boolean isSuppressable = false;
     private Post replyTarget = null;
     private boolean isInProgress;
 
@@ -176,7 +178,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 }
             }
         });
-        queryPostingRights();
+        queryRmbRights();
     }
 
     public void setToolbar(Toolbar t) {
@@ -202,18 +204,10 @@ public class MessageBoardActivity extends SlidrActivity {
     }
 
     /**
-     * Enables message respond box if user has posting rights, then calls on function to load messages.
+     * Checks if the user has posting and suppression rights, enables the appropriate functionality,
+     * then calls on function to load messages.
      */
-    private void queryPostingRights() {
-        // If user is a member of this region, enable posting rights immediately without querying
-        if (PinkaHelper.getRegionSessionData(getApplicationContext()).equals(SparkleHelper.getIdFromName(regionName))) {
-            enablePostingRights();
-            queryPostingRightsCallback();
-            likable = true;
-            markBoardAsRead();
-            return;
-        }
-
+    private void queryRmbRights() {
         startSwipeRefresh();
         String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
 
@@ -226,14 +220,18 @@ public class MessageBoardActivity extends SlidrActivity {
                         if (d.select("textarea[name=message]").first() != null) {
                             enablePostingRights();
                         }
-                        queryPostingRightsCallback();
+                        // If a un/suppress button exists in the page, it means the user has suppression rights
+                        if (d.select("a.rmbsuppress").first() != null || d.select("a.rmbunsuppress").first() != null) {
+                            isSuppressable = true;
+                        }
+                        queryRmbRightsCallback();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 // If an error occurs, fail gracefully and query messages anyway
-                queryPostingRightsCallback();
+                queryRmbRightsCallback();
             }
         });
 
@@ -254,7 +252,8 @@ public class MessageBoardActivity extends SlidrActivity {
         messagePostButton.setOnClickListener(postMessageListener);
         messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
         messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
-        postable = true;
+        isPostable = true;
+        isLikeable = true;
     }
 
     /**
@@ -262,7 +261,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * If there are no messages stored, start query. If there's messages available
      * (meaning they were restored from an old session), just show those messages.
      */
-    private void queryPostingRightsCallback() {
+    private void queryRmbRightsCallback() {
         // If there are no messages, load them from NS
         if (messages.posts.size() <= 0) {
             startSwipeRefresh();
@@ -603,7 +602,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param sendLike True if like should be sent, false if unlike
      */
     public void setLikeStatus(final int pos, final int id, final boolean sendLike) {
-        if (!likable) {
+        if (!isLikeable) {
             SparkleHelper.makeSnackbar(view, getString(R.string.rmb_cant_like));
             return;
         }
@@ -707,12 +706,82 @@ public class MessageBoardActivity extends SlidrActivity {
     }
 
     /**
+     * Confirms the un/suppression of a post.
+     * @param pos Position of the post to un/suppress
+     * @param id The post's ID
+     * @param postStatus The post's current status
+     */
+    public void confirmSuppress(final int pos, final int id, final int postStatus) {
+        if (isFinishing()) {
+            return;
+        }
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startSwipeRefresh();
+                postMessageSuppress(pos, id, postStatus);
+                dialog.dismiss();
+            }
+        };
+
+        int dialogTitle = postStatus != Post.POST_SUPPRESSED ? R.string.rmb_suppress_confirm : R.string.rmb_unsuppress_confirm;
+        int dialogConfirm = postStatus != Post.POST_SUPPRESSED ? R.string.rmb_suppress : R.string.rmb_unsuppress;
+
+        dialogBuilder.setTitle(dialogTitle)
+                .setPositiveButton(dialogConfirm, dialogClickListener)
+                .setNegativeButton(R.string.explore_negative, null)
+                .show();
+    }
+
+    /**
+     * Actually sends the request to NationStates to un/suppress the post.
+     * @param pos Position of the post to un/suppress
+     * @param id The post's ID
+     * @param postStatus The post's current status
+     */
+    private void postMessageSuppress(final int pos, final int id, final int postStatus) {
+        String targetURL = postStatus != Post.POST_SUPPRESSED ? RegionMessages.SUPPRESS_QUERY : RegionMessages.UNSUPPRESS_QUERY;
+        targetURL = String.format(Locale.US, targetURL, SparkleHelper.getIdFromName(regionName), id);
+
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (postStatus != Post.POST_SUPPRESSED && !response.contains(CONFIRM_SUPPRESS)) {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            return;
+                        }
+                        ((MessageBoardRecyclerAdapter) mRecyclerAdapter).toggleSuppressedStatus(pos);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
      * Refreshes the contents of the recycler
      */
     private void refreshRecycler(int direction, int newItems, boolean jumpToTop) {
         Collections.sort(messages.posts);
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, postable, getSupportFragmentManager());
+            mRecyclerAdapter = new MessageBoardRecyclerAdapter(this, messages.posts, isPostable, isSuppressable, getSupportFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
         }
         else {

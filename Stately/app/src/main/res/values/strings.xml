@@ -273,6 +273,10 @@
     <string name="rmb_reply">Replying to %1$s</string>
     <string name="rmb_delete_confirm">Delete this post?</string>
     <string name="rmb_delete">Delete</string>
+    <string name="rmb_suppress_confirm">Suppress this post?</string>
+    <string name="rmb_suppress">Suppress</string>
+    <string name="rmb_unsuppress_confirm">Unsuppress this post?</string>
+    <string name="rmb_unsuppress">Unsuppress</string>
     <string name="rmb_reply_format">[quote=%1$s;%2$d]%3$s[/quote]\n</string>
     <string name="rmb_likes">Likes</string>
     <string name="rmb_cant_like">Can\'t like posts in a foreign region.</string>

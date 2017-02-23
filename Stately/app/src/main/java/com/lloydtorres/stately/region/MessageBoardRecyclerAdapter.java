@@ -63,11 +63,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private List<Post> messages;
     private int replyIndex = NO_SELECTION;
     private boolean isPostable = false;
+    private boolean isSuppressable = false;
 
-    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean ec, FragmentManager f) {
+    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean isP, boolean isS, FragmentManager f) {
         context = c;
         fm = f;
-        isPostable = ec;
+        isPostable = isP;
+        isSuppressable = isS;
         setMessages(p);
     }
 
@@ -125,6 +127,21 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         messages.get(i).message = DELETED_CONTENT;
         messages.get(i).status = Post.POST_DELETED;
         notifyItemChanged(i);
+    }
+
+    public void toggleSuppressedStatus(int i) {
+        if (context != null) {
+            if (messages.get(i).status == Post.POST_SUPPRESSED) {
+                messages.get(i).status = Post.POST_REGULAR;
+                messages.get(i).suppressor = null;
+            } else {
+                String userNationId = PinkaHelper.getActiveUser(context).nationId;
+                messages.get(i).status = Post.POST_SUPPRESSED;
+                messages.get(i).suppressor = userNationId;
+                messages.get(i).isExpanded = true;
+            }
+            notifyItemChanged(i);
+        }
     }
 
     /**
@@ -244,6 +261,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private RelativeLayout actionsHolder;
         private ImageView likeButton;
         private TextView likeCount;
+        private ImageView suppressButton;
         private ImageView deleteButton;
         private ImageView reportButton;
         private ImageView replyButton;
@@ -300,6 +318,17 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
+        private View.OnClickListener suppressClickListener = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    ((MessageBoardActivity) context).confirmSuppress(pos, post.id, post.status);
+                }
+            }
+        };
+
         public PostCard(View v) {
             super(v);
             cardContainer = (CardView) v.findViewById(R.id.card_post_container);
@@ -311,6 +340,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
             likeButton = (ImageView) v.findViewById(R.id.card_post_like);
             likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
+            suppressButton = (ImageView) v.findViewById(R.id.card_post_suppress);
             deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
             reportButton = (ImageView) v.findViewById(R.id.card_post_report);
             replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
@@ -336,6 +366,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
             actionsHolder.setVisibility(View.VISIBLE);
 
+            // Setup reply, delete, report, suppress buttons based on user status
             if (isPostable) {
                 // All posts can be replied to
                 replyButton.setOnClickListener(replyClickListener);
@@ -353,12 +384,24 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
                     params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
                     reportButton.setLayoutParams(params);
+
+                    // Setup suppression button -- only visible if user has suppression rights and for non-self posts
+                    if (isSuppressable) {
+                        suppressButton.setVisibility(View.VISIBLE);
+                        suppressButton.setOnClickListener(suppressClickListener);
+                        suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ? R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
+                    } else {
+                        suppressButton.setVisibility(View.GONE);
+                        suppressButton.setOnClickListener(null);
+                    }
                 }
             } else {
                 replyButton.setVisibility(View.GONE);
                 replyButton.setOnClickListener(null);
                 deleteButton.setVisibility(View.GONE);
                 deleteButton.setOnClickListener(null);
+                suppressButton.setVisibility(View.GONE);
+                suppressButton.setOnClickListener(null);
 
                 reportButton.setVisibility(View.VISIBLE);
                 reportButton.setOnClickListener(reportClickListener);
