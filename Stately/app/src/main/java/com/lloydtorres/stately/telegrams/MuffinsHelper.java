@@ -421,9 +421,7 @@ public final class MuffinsHelper {
 
         String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
         holder = holder.replace("\n", "<br />");
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        holder = holder.replace("\u0081", "");
+        holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);
 
         // Do the rest of the formatting
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);

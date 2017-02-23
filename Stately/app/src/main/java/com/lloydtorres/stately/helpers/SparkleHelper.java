@@ -696,15 +696,27 @@ public final class SparkleHelper {
     }
 
     /**
+     * Replaces malformed HTML characters and artifacts with their proper form.
+     * @param content
+     * @return
+     */
+    public static String replaceMalformedHtmlCharacters(String content) {
+        String holder = content;
+        holder = holder.replace("&amp;#39;", "'");
+        holder = holder.replace("&amp;", "&");
+        holder = holder.replace("\u0081", "");
+        holder = holder.replace("&#129;", "");
+        return holder;
+    }
+
+    /**
      * Basic HTML formatter that returns a styled version of the string.
      * @param content Target content
      * @return Styled spanned object
      */
     public static Spanned getHtmlFormatting(String content) {
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        holder = holder.replace("\u0081", "");
+        holder = replaceMalformedHtmlCharacters(holder);
         return fromHtml(holder);
     }
 
@@ -722,9 +734,7 @@ public final class SparkleHelper {
     public static void setHappeningsFormatting(Context c, TextView t, String content) {
         String holder = "<base href=\"" + BASE_URI_NOSLASH + "\">" + content;
         holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        holder = holder.replace("\u0081", "");
+        holder = replaceMalformedHtmlCharacters(holder);
 
         // Replace RMB links with targets to the RMB activity
         holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
@@ -793,9 +803,7 @@ public final class SparkleHelper {
 
         String holder = content.trim();
         holder = holder.replace("\n", "<br>");
-        holder = holder.replace("&amp;#39;", "'");
-        holder = holder.replace("&amp;", "&");
-        holder = holder.replace("\u0081", "");
+        holder = replaceMalformedHtmlCharacters(holder);
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
         // Basic BBcode processing
@@ -966,6 +974,13 @@ public final class SparkleHelper {
         return replacePairs;
     }
 
+    /**
+     * Given a list of (old, new) pairs and a string, replace all instances of old with new in
+     * that string.
+     * @param content
+     * @param replacePairs
+     * @return
+     */
     public static String replaceFromReplacePairs(String content, List<DataPair> replacePairs) {
         String holder = content;
         for (DataPair dp : replacePairs) {
