@@ -67,6 +67,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.Spoiler;
@@ -95,11 +96,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -663,10 +661,10 @@ public final class SparkleHelper {
      */
     public static String addExploreActivityLinks(String content, Pattern regex, int mode) {
         String holder = content;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, true);
+        List<DataPair> set = getReplacePairsFromRegex(regex, holder, true);
 
-        for (Map.Entry<String, String> n : set) {
-            holder = addExploreActivityLink(holder, n.getKey(), n.getValue(), mode);
+        for (DataPair n : set) {
+            holder = addExploreActivityLink(holder, n.key, n.value, mode);
         }
 
         return holder;
@@ -935,10 +933,10 @@ public final class SparkleHelper {
      * @param content Target content
      * @return
      */
-    public static Set<Map.Entry<String, String>> getReplacePairFromRegex(Pattern regex, String content, boolean isName) {
+    public static List<DataPair> getReplacePairsFromRegex(Pattern regex, String content, boolean isName) {
         String holder = content;
         // (old, new) replacement pairs
-        Map<String, String> replacePairs = new HashMap<String, String>();
+        List<DataPair> replacePairs = new ArrayList<DataPair>();
 
         Matcher m = regex.matcher(holder);
         while (m.find()) {
@@ -950,22 +948,30 @@ public final class SparkleHelper {
             else {
                 properFormat = m.group(1);
             }
-            replacePairs.put(m.group(), properFormat);
+            replacePairs.add(new DataPair(m.group(), properFormat));
         }
-        return replacePairs.entrySet();
+        return replacePairs;
     }
 
-    public static Set<Map.Entry<String, String>> getDoubleReplacePairFromRegex(Pattern regex, String afterFormat, String content) {
+    public static List<DataPair> getDoubleReplacePairsFromRegex(Pattern regex, String afterFormat, String content) {
         String holder = content;
         // (old, new) replacement pairs
-        Map<String, String> replacePairs = new HashMap<String, String>();
+        List<DataPair> replacePairs = new ArrayList<DataPair>();
 
         Matcher m = regex.matcher(holder);
         while (m.find()) {
             String properFormat = String.format(Locale.US, afterFormat, m.group(1), m.group(2));
-            replacePairs.put(m.group(), properFormat);
+            replacePairs.add(new DataPair(m.group(), properFormat));
         }
-        return replacePairs.entrySet();
+        return replacePairs;
+    }
+
+    public static String replaceFromReplacePairs(String content, List<DataPair> replacePairs) {
+        String holder = content;
+        for (DataPair dp : replacePairs) {
+            holder = holder.replace(dp.key, dp.value);
+        }
+        return holder;
     }
 
     /**
@@ -978,14 +984,12 @@ public final class SparkleHelper {
      */
     public static String regexReplace(String target, Pattern regexBefore, String afterFormat) {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regexBefore, holder, false);
+        List<DataPair> set = getReplacePairsFromRegex(regexBefore, holder, false);
 
-        for (Map.Entry<String, String> n : set) {
-            // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
-            String replacer = n.getValue();
-            String properFormat = String.format(Locale.US, afterFormat, replacer); //Jsoup.clean(String.format(afterFormat, n.getValue()), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
-            holder = holder.replace(n.getKey(), properFormat);
+        for (DataPair n : set) {
+            n.value = String.format(Locale.US, afterFormat, n.value);
         }
+        holder = replaceFromReplacePairs(holder, set);
 
         return holder;
     }
@@ -999,14 +1003,8 @@ public final class SparkleHelper {
      */
     public static String regexDoubleReplace(String target, Pattern regexBefore, String afterFormat) {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getDoubleReplacePairFromRegex(regexBefore, afterFormat, holder);
-
-        for (Map.Entry<String, String> n : set) {
-            // disabling whitelisting since improperly-nested tags are common in NS BBCode :(
-            String replacer = n.getValue(); //Jsoup.clean(n.getValue(), Whitelist.basic().addProtocols("a", "href", PROTOCOLS));
-            holder = holder.replace(n.getKey(), replacer);
-        }
-
+        List<DataPair> set = getDoubleReplacePairsFromRegex(regexBefore, afterFormat, holder);
+        holder = replaceFromReplacePairs(holder, set);
         return holder;
     }
 
@@ -1018,12 +1016,8 @@ public final class SparkleHelper {
      */
     public static String regexExtract(String target, Pattern regex) {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
-
-        for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), n.getValue());
-        }
-
+        List<DataPair> set = getReplacePairsFromRegex(regex, holder, false);
+        holder = replaceFromReplacePairs(holder, set);
         return holder;
     }
 
@@ -1035,12 +1029,11 @@ public final class SparkleHelper {
      */
     public static String regexRemove(String target, Pattern regex) {
         String holder = target;
-        Set<Map.Entry<String, String>> set = getReplacePairFromRegex(regex, holder, false);
-
-        for (Map.Entry<String, String> n : set) {
-            holder = holder.replace(n.getKey(), "");
+        List<DataPair> set = getReplacePairsFromRegex(regex, holder, false);
+        for (DataPair n : set) {
+            n.value = "";
         }
-
+        holder = replaceFromReplacePairs(holder, set);
         return holder;
     }
 
@@ -1138,17 +1131,13 @@ public final class SparkleHelper {
      */
     public static String regexQuoteFormatHelper(Pattern regex, String content) {
         String holder = content;
-        Map<String, String> replacePairs = new HashMap<String, String>();
+        List<DataPair> replacePairs = new ArrayList<DataPair>();
         Matcher m = regex.matcher(holder);
         while (m.find()) {
             String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
-            replacePairs.put(m.group(), properFormat);
+            replacePairs.add(new DataPair(m.group(), properFormat));
         }
-        Set<Map.Entry<String, String>> set = replacePairs.entrySet();
-        for (Map.Entry<String, String> n : set) {
-            String replacer = n.getValue();
-            holder = holder.replace(n.getKey(), replacer);
-        }
+        holder = replaceFromReplacePairs(holder, replacePairs);
         holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
         return holder;
     }
@@ -1205,7 +1194,7 @@ public final class SparkleHelper {
     public static String regexGenericUrlFormat(Context c, String content) {
         String holder = content;
 
-        Map<String, String> replaceBasic = new HashMap<String, String>();
+        List<DataPair> replaceBasic = new ArrayList<DataPair>();
         Matcher m0 = BBCODE_URL.matcher(holder);
         while (m0.find()) {
             String template = "<a href=\"%s\">%s</a>";
@@ -1214,36 +1203,32 @@ public final class SparkleHelper {
                 template = "<a href=\"http://%s\">%s</a>";
             }
             String replaceText = String.format(Locale.US, template, link.toString(), m0.group(2));
-            replaceBasic.put(m0.group(), replaceText);
+            replaceBasic.add(new DataPair(m0.group(), replaceText));
         }
-        Set<Map.Entry<String, String>> setBasic = replaceBasic.entrySet();
-        for (Map.Entry<String, String> e : setBasic) {
-            holder = holder.replace(e.getKey(), e.getValue());
-        }
+        holder = replaceFromReplacePairs(holder, replaceBasic);
 
-        Map<String, String> replaceRaw = new HashMap<String, String>();
+        List<DataPair> replaceRaw = new ArrayList<DataPair>();
 
         Matcher m1 = RAW_HTTP_LINK.matcher(holder);
         while (m1.find()) {
             Uri link = Uri.parse(m1.group(1)).normalizeScheme();
             String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
-            replaceRaw.put(m1.group(), replaceText);
+            replaceRaw.add(new DataPair(m1.group(), replaceText));
         }
 
         Matcher m2 = RAW_WWW_LINK.matcher(holder);
         while (m2.find()) {
             Uri link = Uri.parse("http://" + m2.group(1)).normalizeScheme();
             String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
-            replaceRaw.put(m2.group(), replaceText);
+            replaceRaw.add(new DataPair(m2.group(), replaceText));
         }
 
-        Set<Map.Entry<String, String>> set = replaceRaw.entrySet();
-        for (Map.Entry<String, String> e : set) {
-            holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.getKey() + "\\E(?=$|[\\s\\[\\<])", e.getValue());
+        for (DataPair e : replaceRaw) {
+            holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.key + "\\E(?=$|[\\s\\[\\<])", e.value);
         }
 
         // Do this last so it doesn't interfere with complete tags
-        Map<String, String> replaceNoClose = new HashMap<String, String>();
+        List<DataPair> replaceNoClose = new ArrayList<DataPair>();
         Matcher m3 = BBCODE_URL_NOCLOSE.matcher(holder);
         while (m3.find()) {
             String replaceText = "";
@@ -1257,12 +1242,9 @@ public final class SparkleHelper {
             } else {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             }
-            replaceNoClose.put(m3.group(), replaceText);
+            replaceNoClose.add(new DataPair(m3.group(), replaceText));
         }
-        Set<Map.Entry<String, String>> setNoClose = replaceNoClose.entrySet();
-        for (Map.Entry<String, String> e : setNoClose) {
-            holder = holder.replace(e.getKey(), e.getValue());
-        }
+        holder = replaceFromReplacePairs(holder, replaceNoClose);
 
         return holder;
     }
