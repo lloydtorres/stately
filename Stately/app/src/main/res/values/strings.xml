@@ -277,7 +277,6 @@
     <string name="rmb_suppress">Suppress</string>
     <string name="rmb_unsuppress_confirm">Unsuppress this post?</string>
     <string name="rmb_unsuppress">Unsuppress</string>
-    <string name="rmb_reply_format">[quote=%1$s;%2$d]%3$s[/quote]\n</string>
     <string name="rmb_likes">Likes</string>
     <string name="rmb_cant_like">Can\'t like posts in a foreign region.</string>
     <string name="rmb_self_like">Can\'t like your own posts!</string>
