@@ -46,23 +46,19 @@ public class CensusSortDialog extends DetachDialogFragment {
 
     public CensusSortDialog() { }
 
-    public void setMode(int m)
-    {
+    public void setMode(int m) {
         mode = m;
     }
 
-    public void setSortOrder(int so)
-    {
+    public void setSortOrder(int so) {
         sortOrderChoice = so;
     }
 
-    public void setIsAscending(boolean ia)
-    {
+    public void setIsAscending(boolean ia) {
         isAscending = ia;
     }
 
-    public void setAdapter(CensusRecyclerAdapter a)
-    {
+    public void setAdapter(CensusRecyclerAdapter a) {
         adapter = a;
     }
 
@@ -73,14 +69,12 @@ public class CensusSortDialog extends DetachDialogFragment {
 
         sortOrderState = (RadioGroup) dialogView.findViewById(R.id.census_sort_category_radio_group);
 
-        if (mode == CENSUS_MODE_REGION)
-        {
+        if (mode == CENSUS_MODE_REGION) {
             sortOrderState.findViewById(R.id.census_sort_region_rank).setVisibility(View.GONE);
             sortOrderState.findViewById(R.id.census_sort_region_percent).setVisibility(View.GONE);
         }
 
-        switch (sortOrderChoice)
-        {
+        switch (sortOrderChoice) {
             case CensusRecyclerAdapter.SORT_MODE_SCORE:
                 sortOrderState.check(R.id.census_sort_score);
                 break;
@@ -117,11 +111,9 @@ public class CensusSortDialog extends DetachDialogFragment {
         return dialogBuilder.create();
     }
 
-    private void sort()
-    {
+    private void sort() {
         int newChoice = R.id.census_sort_score;
-        switch (sortOrderState.getCheckedRadioButtonId())
-        {
+        switch (sortOrderState.getCheckedRadioButtonId()) {
             case R.id.census_sort_score:
                 newChoice = CensusRecyclerAdapter.SORT_MODE_SCORE;
                 break;
@@ -141,8 +133,7 @@ public class CensusSortDialog extends DetachDialogFragment {
 
         boolean direction = directionState.getCheckedRadioButtonId() == R.id.census_sort_ascending;
 
-        if (sortOrderChoice != newChoice || isAscending != direction)
-        {
+        if (adapter != null && (sortOrderChoice != newChoice || isAscending != direction)) {
             adapter.sort(newChoice, direction);
         }
     }
