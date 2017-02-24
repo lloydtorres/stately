@@ -58,7 +58,6 @@ import org.jsoup.nodes.Document;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -129,7 +128,8 @@ public class LoginActivity extends BroadcastableActivity {
         login = (Button) findViewById(R.id.login_button);
         createNation = (Button) findViewById(R.id.register_button);
 
-        DashHelper.getInstance(this).loadImageWithoutPlaceHolder(R.drawable.stately, headerImage);
+        int statelyLogo = RaraHelper.getSpecialDayStatus(this) != RaraHelper.DAY_Z_DAY ? R.drawable.stately : R.drawable.stately_zday;
+        DashHelper.getInstance(this).loadImageWithoutPlaceHolder(statelyLogo, headerImage);
 
         if (RaraHelper.getSpecialDayStatus(this) == RaraHelper.DAY_NORMAL) {
             switch (SettingsActivity.getGovernmentSetting(this)) {
@@ -145,6 +145,12 @@ public class LoginActivity extends BroadcastableActivity {
             }
         } else {
             switch (RaraHelper.getSpecialDayStatus(this)) {
+                case RaraHelper.DAY_Z_DAY:
+                    subtitle.setText(getString(R.string.login_subtitle_zday));
+                    break;
+                case RaraHelper.DAY_NEW_YEAR:
+                    subtitle.setText(String.format(Locale.US, getString(R.string.login_subtitle_new_year), SparkleHelper.getUtc5Calendar().get(Calendar.YEAR)));
+                    break;
                 case RaraHelper.DAY_STATELY_BIRTHDAY:
                     subtitle.setText(getString(R.string.login_subtitle_stately_bday));
                     break;
@@ -155,7 +161,7 @@ public class LoginActivity extends BroadcastableActivity {
                     subtitle.setText(getString(R.string.login_subtitle_halloween));
                     break;
                 case RaraHelper.DAY_NS_BIRTHDAY:
-                    subtitle.setText(getString(R.string.login_subtitle_ns_bday));
+                    subtitle.setText(String.format(Locale.US, getString(R.string.login_subtitle_ns_bday), (SparkleHelper.getUtc5Calendar().get(Calendar.YEAR) - RaraHelper.NS_FOUNDATION_YEAR)));
                     break;
             }
         }
@@ -379,8 +385,7 @@ public class LoginActivity extends BroadcastableActivity {
      */
     public void checkZDayActive(final UserLogin userLogin) {
         // Skip check if it's not around Halloween
-        Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+        Calendar cal = SparkleHelper.getUtc5Calendar();
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         if (!((month == Calendar.OCTOBER && day >= 25) ||

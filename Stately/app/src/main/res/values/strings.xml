@@ -11,10 +11,12 @@
     <string name="login_subtitle_conservative">Making NationStates Great Again</string>
     <string name="login_subtitle_liberal">A NationStates To Believe In</string>
     <string name="login_subtitle_neutral">for NationStates</string>
+    <string name="login_subtitle_new_year">Happy %1$d!</string>
     <string name="login_subtitle_stately_bday">Special Anniversary Edition</string>
     <string name="login_subtitle_canada_day">Made in Canada / Fabriqué au Canada</string>
-    <string name="login_subtitle_halloween">BRAAAAINS</string>
-    <string name="login_subtitle_ns_bday">Happy Birthday NationStates</string>
+    <string name="login_subtitle_zday">Z-Day: The Undead Horde Rises</string>
+    <string name="login_subtitle_halloween">Trick or Treat~</string>
+    <string name="login_subtitle_ns_bday">NationStates Turns %1$d</string>
     <string name="username_hint">Nation Name</string>
     <string name="password">Password</string>
     <string name="log_in">Log In</string>

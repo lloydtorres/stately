@@ -68,7 +68,6 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -475,10 +474,14 @@ public final class RaraHelper {
     }
 
     public static final int DAY_NORMAL = -1;
+    public static final int DAY_Z_DAY = -2;
+    public static final int DAY_NEW_YEAR = 11;
     public static final int DAY_STATELY_BIRTHDAY = 130;
     public static final int DAY_CANADA_DAY = 701;
     public static final int DAY_HALLOWEEN = 1031;
     public static final int DAY_NS_BIRTHDAY = 1113;
+
+    public static final int NS_FOUNDATION_YEAR = 2002;
 
     /**
      * Determines if the current day in the EST/EDT timezone is a special day.
@@ -486,15 +489,18 @@ public final class RaraHelper {
      */
     public static int getSpecialDayStatus(Context c) {
         if (NightmareHelper.getIsZDayActive(c)) {
-            return DAY_HALLOWEEN;
+            return DAY_Z_DAY;
         }
 
-        Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+        Calendar cal = SparkleHelper.getUtc5Calendar();
 
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
+        if (month == Calendar.JANUARY
+                && day == 1) {
+            return DAY_NEW_YEAR;
+        }
         if (month == Calendar.JANUARY
                 && day == 30) {
             return DAY_STATELY_BIRTHDAY;

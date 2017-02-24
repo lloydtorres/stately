@@ -502,6 +502,16 @@ public final class SparkleHelper {
         return censusType;
     }
 
+    /**
+     * Returns a calendar in UTC-5 (specifically, Toronto's calendar).
+     * @return
+     */
+    public static Calendar getUtc5Calendar() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+        return cal;
+    }
+
     // The number of hours a resolution is on the WA chamber floor
     public static final int WA_RESOLUTION_DURATION = 96;
 
@@ -512,8 +522,7 @@ public final class SparkleHelper {
      * @return Time remaining in human-readable form
      */
     public static String calculateResolutionEnd(Context c, int hoursElapsed) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(TIMEZONE_TORONTO);
+        Calendar cal = getUtc5Calendar();
 
         // Round up to nearest hour
         if (cal.get(Calendar.MINUTE) >= 1) {
