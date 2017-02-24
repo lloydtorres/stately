@@ -377,38 +377,24 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             suppressButton.setOnClickListener(null);
 
             // Setup reply, delete, report, suppress buttons based on user status
+
+            // Only user's own posts can be deleted
+            if (isSelfPost()) {
+                deleteButton.setVisibility(View.VISIBLE);
+                deleteButton.setOnClickListener(deleteClickListener);
+            } else {
+                reportButton.setVisibility(View.VISIBLE);
+                reportButton.setOnClickListener(reportClickListener);
+            }
+
+            // Only show reply button if postable; setup alignment of other buttons depending on case
             if (isPostable) {
                 // All posts can be replied to
                 replyButton.setVisibility(View.VISIBLE);
                 replyButton.setOnClickListener(replyClickListener);
-                // Only user's own posts can be deleted
-                if (isSelfPost()) {
-                    deleteButton.setVisibility(View.VISIBLE);
-                    deleteButton.setOnClickListener(deleteClickListener);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButton.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-                    deleteButton.setLayoutParams(params);
-                } else {
-                    reportButton.setVisibility(View.VISIBLE);
-                    reportButton.setOnClickListener(reportClickListener);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-                    reportButton.setLayoutParams(params);
-                }
+                setAlignParentRight(isSelfPost() ? deleteButton : reportButton, false);
             } else {
-                if (isSelfPost()) {
-                    deleteButton.setVisibility(View.VISIBLE);
-                    deleteButton.setOnClickListener(deleteClickListener);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButton.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    deleteButton.setLayoutParams(params);
-                } else {
-                    reportButton.setVisibility(View.VISIBLE);
-                    reportButton.setOnClickListener(reportClickListener);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    reportButton.setLayoutParams(params);
-                }
+                setAlignParentRight(isSelfPost() ? deleteButton : reportButton, true);
             }
 
             // Setup suppression button -- only visible if user has suppression rights and for non-self posts
@@ -445,8 +431,28 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         }
 
+        /**
+         * Checks if the current post is the user's own.
+         * @return
+         */
         private boolean isSelfPost() {
             return context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name);
+        }
+
+        /**
+         * Given an image view, sets its alignment to parent right to true or false.
+         * @param target
+         * @param shouldAlignRight
+         */
+        private void setAlignParentRight(ImageView target, boolean shouldAlignRight) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) target.getLayoutParams();
+            if (shouldAlignRight) {
+
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            } else {
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            }
+            target.setLayoutParams(params);
         }
 
         public void select() {

@@ -502,11 +502,11 @@ public final class RaraHelper {
                 && day == 1) {
             return DAY_NEW_YEAR;
         }
-        if (month == Calendar.JANUARY
+        else if (month == Calendar.JANUARY
                 && day == 30) {
             return DAY_STATELY_BIRTHDAY;
         }
-        if (month == Calendar.APRIL
+        else if (month == Calendar.APRIL
                 && day == 1) {
             return DAY_APRIL_FOOLS;
         }
