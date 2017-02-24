@@ -107,12 +107,13 @@ public class OverviewSubFragment extends NationSubFragment {
         // Set up custom government category depending on user preferences
         String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
         String customCategory = null;
-        if (SettingsActivity.getGovernmentSetting(getContext()) == SettingsActivity.GOV_CONSERVATIVE
+        int governmentSetting = SettingsActivity.getGovernmentSetting(getContext());
+        if (governmentSetting == SettingsActivity.GOV_CONSERVATIVE
                 && waCategoryConservative.containsKey(waCategory)) {
             customCategory = waCategoryConservative.get(waCategory);
 
         }
-        else if (SettingsActivity.getGovernmentSetting(getContext()) == SettingsActivity.GOV_LIBERAL
+        else if (governmentSetting == SettingsActivity.GOV_LIBERAL
                 && waCategoryLiberal.containsKey(waCategory)) {
             customCategory = waCategoryLiberal.get(waCategory);
         }

@@ -277,13 +277,17 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
             return mode;
         }
 
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        try {
-            mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT, String.valueOf(GOV_NEUTRAL)));
+        if (RaraHelper.getSpecialDayStatus(c) != RaraHelper.DAY_APRIL_FOOLS) {
+            SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+            try {
+                mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT, String.valueOf(GOV_NEUTRAL)));
+            }
+            catch (Exception e) {
+                SparkleHelper.logError(e.toString());
+            }
+            return mode;
+        } else {
+            return Math.random() >= 0.5d ? GOV_CONSERVATIVE : GOV_LIBERAL;
         }
-        catch (Exception e) {
-            SparkleHelper.logError(e.toString());
-        }
-        return mode;
     }
 }

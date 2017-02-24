@@ -154,6 +154,9 @@ public class LoginActivity extends BroadcastableActivity {
                 case RaraHelper.DAY_STATELY_BIRTHDAY:
                     subtitle.setText(getString(R.string.login_subtitle_stately_bday));
                     break;
+                case RaraHelper.DAY_APRIL_FOOLS:
+                    subtitle.setText(getString(R.string.login_subtitle_april_fools));
+                    break;
                 case RaraHelper.DAY_CANADA_DAY:
                     subtitle.setText(getString(R.string.login_subtitle_canada_day));
                     break;

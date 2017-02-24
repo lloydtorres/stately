@@ -477,6 +477,7 @@ public final class RaraHelper {
     public static final int DAY_Z_DAY = -2;
     public static final int DAY_NEW_YEAR = 11;
     public static final int DAY_STATELY_BIRTHDAY = 130;
+    public static final int DAY_APRIL_FOOLS = 41;
     public static final int DAY_CANADA_DAY = 701;
     public static final int DAY_HALLOWEEN = 1031;
     public static final int DAY_NS_BIRTHDAY = 1113;
@@ -504,6 +505,10 @@ public final class RaraHelper {
         if (month == Calendar.JANUARY
                 && day == 30) {
             return DAY_STATELY_BIRTHDAY;
+        }
+        if (month == Calendar.APRIL
+                && day == 1) {
+            return DAY_APRIL_FOOLS;
         }
         else if (month == Calendar.JULY
                 && day == 1) {
