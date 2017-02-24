@@ -382,30 +382,40 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 replyButton.setVisibility(View.VISIBLE);
                 replyButton.setOnClickListener(replyClickListener);
                 // Only user's own posts can be deleted
-                if (context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name)) {
+                if (isSelfPost()) {
                     deleteButton.setVisibility(View.VISIBLE);
                     deleteButton.setOnClickListener(deleteClickListener);
-
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButton.getLayoutParams();
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                    deleteButton.setLayoutParams(params);
                 } else {
                     reportButton.setVisibility(View.VISIBLE);
                     reportButton.setOnClickListener(reportClickListener);
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
                     params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
                     reportButton.setLayoutParams(params);
-
-                    // Setup suppression button -- only visible if user has suppression rights and for non-self posts
-                    if (isSuppressable) {
-                        suppressButton.setVisibility(View.VISIBLE);
-                        suppressButton.setOnClickListener(suppressClickListener);
-                        suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ? R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
-                    }
                 }
             } else {
-                reportButton.setVisibility(View.VISIBLE);
-                reportButton.setOnClickListener(reportClickListener);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                reportButton.setLayoutParams(params);
+                if (isSelfPost()) {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    deleteButton.setOnClickListener(deleteClickListener);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) deleteButton.getLayoutParams();
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    deleteButton.setLayoutParams(params);
+                } else {
+                    reportButton.setVisibility(View.VISIBLE);
+                    reportButton.setOnClickListener(reportClickListener);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) reportButton.getLayoutParams();
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    reportButton.setLayoutParams(params);
+                }
+            }
+
+            // Setup suppression button -- only visible if user has suppression rights and for non-self posts
+            if (isSuppressable && !isSelfPost()) {
+                suppressButton.setVisibility(View.VISIBLE);
+                suppressButton.setOnClickListener(suppressClickListener);
+                suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ? R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
             }
 
             // like button and count are visible to all
@@ -433,6 +443,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             } else {
                 likeCount.setOnClickListener(null);
             }
+        }
+
+        private boolean isSelfPost() {
+            return context != null && PinkaHelper.getActiveUser(context).nationId.equals(post.name);
         }
 
         public void select() {
