@@ -130,15 +130,20 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // Show the issue anyway on error
+                mSwipeRefreshLayout.setRefreshing(false);
                 SparkleHelper.logError(error.toString());
-                setRecyclerAdapter(issue);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             // Show the issue anyway if API limit reached
             mSwipeRefreshLayout.setRefreshing(false);
-            setRecyclerAdapter(issue);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 
