@@ -36,6 +36,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
@@ -81,6 +82,27 @@ public class AssemblyMainFragment extends RefreshviewFragment {
             }
 
             voteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+
+            int broadcastCouncilId = intent.getIntExtra(ResolutionActivity.TARGET_COUNCIL_ID, 0);
+            if (broadcastCouncilId != 0) {
+                int votesFor = intent.getIntExtra(ResolutionActivity.TARGET_VOTES_FOR, 0);
+                int votesAgainst = intent.getIntExtra(ResolutionActivity.TARGET_VOTES_AGAINST, 0);
+                switch (broadcastCouncilId) {
+                    case Assembly.GENERAL_ASSEMBLY:
+                        if (genAssembly != null & genAssembly.resolution != null) {
+                            genAssembly.resolution.votesFor = votesFor;
+                            genAssembly.resolution.votesAgainst = votesAgainst;
+                        }
+                        break;
+                    case Assembly.SECURITY_COUNCIL:
+                        if (secCouncil != null & secCouncil.resolution != null) {
+                            secCouncil.resolution.votesFor = votesFor;
+                            secCouncil.resolution.votesAgainst = votesAgainst;
+                        }
+                        break;
+                }
+            }
+
             refreshRecycler();
         }
     };

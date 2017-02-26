@@ -69,6 +69,8 @@ public class ResolutionActivity extends RefreshviewActivity {
     public static final String TARGET_OVERRIDE_RES_ID = "overrideResId";
     public static final String TARGET_IS_ACTIVE = "isActive";
     public static final String TARGET_OLD_VOTE_STATUS = "oldVoteStatus";
+    public static final String TARGET_VOTES_FOR = "votesFor";
+    public static final String TARGET_VOTES_AGAINST = "votesAgainst";
 
     private static final int NO_RESOLUTION = -1;
 
@@ -255,6 +257,9 @@ public class ResolutionActivity extends RefreshviewActivity {
                             resolutionVoteBroadcast.setAction(RESOLUTION_BROADCAST);
                             resolutionVoteBroadcast.putExtra(TARGET_VOTE_STATUS, voteStatus);
                             resolutionVoteBroadcast.putExtra(TARGET_OLD_VOTE_STATUS, oldVoteStatus);
+                            resolutionVoteBroadcast.putExtra(TARGET_COUNCIL_ID, councilId);
+                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_FOR, mResolution.votesFor);
+                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_AGAINST, mResolution.votesAgainst);
                             LocalBroadcastManager.getInstance(ResolutionActivity.this).sendBroadcast(resolutionVoteBroadcast);
                         }
                         catch (Exception e) {
