@@ -818,11 +818,10 @@ public final class SparkleHelper {
         // First handle the [pre] tag -- anything inside must not be formatted
         holder = regexPreFormat(holder);
 
-        // Then rocess lists (they're problematic!)
+        // Then process lists (they're problematic!)
         holder = regexListFormat(holder);
         // Re-escape all the stuff Jsoup cleared out
         holder = regexPreFormat(holder);
-
 
         // Linkify nations and regions
         holder = addExploreActivityLinks(holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
@@ -839,8 +838,7 @@ public final class SparkleHelper {
         holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
         holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
 
-        // Q: Why don't you use the BBCode parser instead of doing this manually? :(
-        // A: Because it misses some tags for some reason, so it's limited to lists for now.
+        // Other BBCode transforms
         holder = regexReplace(holder, BBCODE_B, "<b>%s</b>");
         holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
