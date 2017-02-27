@@ -61,7 +61,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'org.sufficientlysecure:html-textview:3.2'
     compile 'com.jpardogo.materialtabstrip:library:1.1.1'
-    compile "org.kefirsf:kefirbb:1.5"
     compile 'com.r0adkll:slidableactivity:2.0.5'
     compile 'pl.bclogic:pulsator4droid:1.0.3'
 }

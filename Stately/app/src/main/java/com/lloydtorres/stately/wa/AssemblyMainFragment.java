@@ -36,7 +36,6 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Assembly;
-import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;

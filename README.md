@@ -62,7 +62,6 @@ Stately uses the following open-source libraries:
 * [Evo Inflector](https://github.com/atteo/evo-inflector)
 * [HtmlTextView](https://github.com/SufficientlySecure/html-textview)
 * [jsoup](http://jsoup.org/)
-* [KefirBB](https://github.com/kefirfromperm/kefirbb)
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
 * [Picasso](https://github.com/square/picasso)

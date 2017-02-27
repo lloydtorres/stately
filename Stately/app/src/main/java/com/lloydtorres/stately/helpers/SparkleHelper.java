@@ -83,8 +83,6 @@ import com.lloydtorres.stately.wa.ResolutionActivity;
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import org.kefirsf.bb.BBProcessorFactory;
-import org.kefirsf.bb.TextProcessor;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
@@ -815,18 +813,12 @@ public final class SparkleHelper {
         holder = replaceMalformedHtmlCharacters(holder);
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
-        // Basic BBcode processing
         holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
 
         // Process lists first (they're problematic!)
-        TextProcessor processor = BBProcessorFactory.getInstance().create(c.getResources().openRawResource(R.raw.bbcode));
-        holder = processor.process(holder);
-        holder = holder.replace("&lt;", "<");
-        holder = holder.replace("&gt;", ">");
-        holder = holder.replace("[*]", "<li>");
-        holder = Jsoup.clean(holder, Whitelist.relaxed());
+        holder = regexListFormat(holder);
 
-        // First handle the [pre] tag -- anything inside must not be formatted
+        // Then handle the [pre] tag -- anything inside must not be formatted
         holder = regexPreFormat(holder);
 
         // Linkify nations and regions
@@ -1091,6 +1083,24 @@ public final class SparkleHelper {
         return holder;
     }
 
+    public static final Pattern BBCODE_LIST_ORDERED = Pattern.compile("(?i)(?s)\\[list=(1|a|i)\\]");
+
+    /**
+     * Processes [list] tags and their children. Cheats the whole can't-parse-nested-elements-using-regex
+     * issue by just replacing the appropriate tags then letting Jsoup clean it up afterwards.
+     * @param content
+     * @return
+     */
+    public static String regexListFormat(String content) {
+        String holder = content;
+        holder = holder.replace("[list]", "<ul>");
+        holder = regexReplace(holder, BBCODE_LIST_ORDERED, "<ol type='%s'>");
+        holder = holder.replace("[/list]", "</ul>");
+        holder = holder.replace("[*]", "<li>");
+        holder = Jsoup.clean(holder, Whitelist.relaxed());
+        return holder;
+    }
+
     public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
@@ -1145,25 +1155,6 @@ public final class SparkleHelper {
      */
     public static String regexResolutionFormatHelper(int councilId, int resolutionId, String content) {
         return String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s</a>", councilId, resolutionId, content);
-    }
-
-    /**
-     * Convenience class used by regexQuoteFormat() to format blockquotes with author attrib.
-     * @param regex Regex to use
-     * @param content Original string
-     * @return Formatted string
-     */
-    public static String regexQuoteFormatHelper(Pattern regex, String content) {
-        String holder = content;
-        List<DataPair> replacePairs = new ArrayList<DataPair>();
-        Matcher m = regex.matcher(holder);
-        while (m.find()) {
-            String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
-            replacePairs.add(new DataPair(m.group(), properFormat));
-        }
-        holder = replaceFromReplacePairs(holder, replacePairs);
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
-        return holder;
     }
 
     public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
@@ -1294,6 +1285,25 @@ public final class SparkleHelper {
         // in this case, just [quote=name]...
         holder = regexQuoteFormatHelper(BBCODE_QUOTE_2, holder);
 
+        return holder;
+    }
+
+    /**
+     * Convenience class used by regexQuoteFormat() to format blockquotes with author attrib.
+     * @param regex Regex to use
+     * @param content Original string
+     * @return Formatted string
+     */
+    public static String regexQuoteFormatHelper(Pattern regex, String content) {
+        String holder = content;
+        List<DataPair> replacePairs = new ArrayList<DataPair>();
+        Matcher m = regex.matcher(holder);
+        while (m.find()) {
+            String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            replacePairs.add(new DataPair(m.group(), properFormat));
+        }
+        holder = replaceFromReplacePairs(holder, replacePairs);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
         return holder;
     }
 
