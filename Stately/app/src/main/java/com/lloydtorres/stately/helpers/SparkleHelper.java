@@ -815,11 +815,14 @@ public final class SparkleHelper {
 
         holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
 
-        // Process lists first (they're problematic!)
-        holder = regexListFormat(holder);
-
-        // Then handle the [pre] tag -- anything inside must not be formatted
+        // First handle the [pre] tag -- anything inside must not be formatted
         holder = regexPreFormat(holder);
+
+        // Then rocess lists (they're problematic!)
+        holder = regexListFormat(holder);
+        // Re-escape all the stuff Jsoup cleared out
+        holder = regexPreFormat(holder);
+
 
         // Linkify nations and regions
         holder = addExploreActivityLinks(holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
@@ -1054,6 +1057,7 @@ public final class SparkleHelper {
     }
 
     public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
+    public static final Pattern HTML_CODE_TAG = Pattern.compile("(?i)(?s)<code>(.*?)<\\/code>");
     public static final String HTML_LEFT_SQUARE_BRACKET = "&#91;";
     public static final String HTML_RIGHT_SQUARE_BRACKET = "&#93;";
     public static final String HTML_COLON = "&#58;";
@@ -1069,7 +1073,20 @@ public final class SparkleHelper {
      */
     public static String regexPreFormat(String target) {
         String holder = target;
-        Matcher m = BBCODE_PRE.matcher(holder);
+        holder = regexPreFormatHelper(BBCODE_PRE, holder);
+        holder = regexPreFormatHelper(HTML_CODE_TAG, holder);
+        return holder;
+    }
+
+    /**
+     * Helper function for regexPreFormat -- actually does the processing based on the passed in pattern.
+     * @param pattern
+     * @param target
+     * @return
+     */
+    public static String regexPreFormatHelper(Pattern pattern, String target) {
+        String holder = target;
+        Matcher m = pattern.matcher(holder);
         while (m.find()) {
             String rawContent = m.group(1);
             rawContent = rawContent.replace("[", HTML_LEFT_SQUARE_BRACKET);
