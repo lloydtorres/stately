@@ -53,7 +53,6 @@ import java.util.Locale;
 public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int NO_SELECTION = -1;
     private static final String DELETED_CONTENT = "Message deleted by author";
-    private static final int EMPTY_INDICATOR = -1;
 
     private static final int POST_EXPANDED = 0;
     private static final int POST_COLLAPSED = 1;
@@ -82,7 +81,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         if (messages.size() <= 0) {
             Post np = new Post();
-            np.id = EMPTY_INDICATOR;
+            np.status = Post.POST_EMPTY;
             messages.add(np);
         }
         notifyDataSetChanged();
@@ -241,9 +240,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemViewType(int position) {
         Post targetPost = messages.get(position);
-        if (targetPost.id != EMPTY_INDICATOR &&
-                (targetPost.status == Post.POST_REGULAR ||
-                        (targetPost.status == Post.POST_SUPPRESSED && targetPost.isExpanded))) {
+        if (targetPost.status == Post.POST_REGULAR ||
+                        (targetPost.status == Post.POST_SUPPRESSED && targetPost.isExpanded)) {
             return POST_EXPANDED;
         } else {
             return POST_COLLAPSED;
@@ -521,6 +519,9 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     break;
                 case Post.POST_BANHAMMERED:
                     messageContent = String.format(Locale.US, context.getString(R.string.rmb_banhammered), post.name);
+                    break;
+                case Post.POST_EMPTY:
+                    messageContent = context.getString(R.string.rmb_no_content);
                     break;
             }
 

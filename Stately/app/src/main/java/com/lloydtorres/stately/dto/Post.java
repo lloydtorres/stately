@@ -30,6 +30,7 @@ import org.simpleframework.xml.Root;
 @Root(name="POST", strict=false)
 public class Post implements Parcelable, Comparable<Post> {
 
+    public static final int POST_EMPTY = -1;
     public static final int POST_REGULAR = 0;
     public static final int POST_SUPPRESSED = 1;
     public static final int POST_DELETED = 2;
