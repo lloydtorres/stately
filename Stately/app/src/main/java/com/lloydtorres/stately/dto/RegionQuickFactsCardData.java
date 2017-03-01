@@ -27,7 +27,7 @@ public class RegionQuickFactsCardData implements Parcelable {
     public String waDelegate;
     public int delegateVotes;
     public String founder;
-    public String founded;
+    public long founded;
     public String power;
 
     public RegionQuickFactsCardData() { super(); }
@@ -36,7 +36,7 @@ public class RegionQuickFactsCardData implements Parcelable {
         waDelegate = in.readString();
         delegateVotes = in.readInt();
         founder = in.readString();
-        founded = in.readString();
+        founded = in.readLong();
         power = in.readString();
     }
 
@@ -50,7 +50,7 @@ public class RegionQuickFactsCardData implements Parcelable {
         dest.writeString(waDelegate);
         dest.writeInt(delegateVotes);
         dest.writeString(founder);
-        dest.writeString(founded);
+        dest.writeLong(founded);
         dest.writeString(power);
     }
 

@@ -243,10 +243,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
-            if (data.established.equals("0")) {
-                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), context.getString(R.string.nation_time_immemorial), data.lastSeen.toLowerCase(Locale.US)));
+            String lastLogin = SparkleHelper.getReadableDateFromUTC(context, data.lastSeen);
+            if (data.established == 0) {
+                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), context.getString(R.string.nation_time_immemorial), lastLogin));
             } else {
-                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), data.established, data.lastSeen.toLowerCase(Locale.US)));
+                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), SparkleHelper.getReadableDateFromUTC(context, data.established), lastLogin));
             }
 
             if (SparkleHelper.isWaMember(data.waState)) {

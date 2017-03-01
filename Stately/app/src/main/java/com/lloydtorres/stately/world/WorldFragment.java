@@ -146,7 +146,7 @@ public class WorldFragment extends RefreshviewFragment {
      * @param regionName
      */
     private void queryFeaturedRegionData(String regionName) {
-        final String query = String.format(Locale.US, BaseRegion.BASE_QUERY, SparkleHelper.getIdFromName(regionName));
+        final String query = String.format(Locale.US, BaseRegion.QUERY, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, query,
                 new Response.Listener<String>() {
                     @Override

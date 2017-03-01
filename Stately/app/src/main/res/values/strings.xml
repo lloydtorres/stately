@@ -232,7 +232,7 @@
     <string name="region_filler_vote">vote</string>
     <string name="region_filler_none">None</string>
     <string name="card_region_founder">Founder</string>
-    <string name="region_founded_append">(%1$s)</string>
+    <string name="region_founded_append">(founded %1$s)</string>
     <string name="card_region_power">Regional Power</string>
     <string name="card_region_factbook_title">Factbook</string>
     <string name="card_region_tags_title">Tags</string>

@@ -153,7 +153,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
-    public static void initFounder(Context c, TextView tv, String founder, String founded) {
+    public static void initFounder(Context c, TextView tv, String founder, long founded) {
         if (!"0".equals(founder)) {
             String founderTemplate = SparkleHelper.addExploreActivityLink(founder, founder, SparkleHelper.getNameFromId(founder), ExploreActivity.EXPLORE_NATION);
             SparkleHelper.setStyledTextView(c, tv, founderTemplate);
@@ -162,8 +162,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             tv.setText(c.getString(R.string.region_filler_none));
         }
 
-        if (!"0".equals(founded)) {
-            tv.append(" " + String.format(Locale.US, c.getString(R.string.region_founded_append), founded));
+        if (founded != 0) {
+            tv.append(" " + String.format(Locale.US, c.getString(R.string.region_founded_append), SparkleHelper.getReadableDateFromUTC(c, founded)));
         }
     }
 

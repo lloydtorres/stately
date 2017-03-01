@@ -41,7 +41,7 @@ public class Nation implements Parcelable {
 
     public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
                                                 + "banner+flag+name+type+wa"
-                                                + "+category+region+influence+population+founded+lastactivity+motto"
+                                                + "+category+region+influence+population+foundedtime+lastlogin+motto"
                                                 + "+freedom"
                                                 + "+customleader+customcapital+govtpriority+tax"
                                                 + "+currency+gdp+income+majorindustry"
@@ -86,10 +86,10 @@ public class Nation implements Parcelable {
     public String influence;
     @Element(name="POPULATION")
     public int popBase;
-    @Element(name="FOUNDED")
-    public String foundedAgo;
-    @Element(name="LASTACTIVITY")
-    public String lastActivityAgo;
+    @Element(name="FOUNDEDTIME")
+    public long foundedAgo;
+    @Element(name="LASTLOGIN")
+    public long lastActivityAgo;
     @Element(name="MOTTO")
     public String motto;
 
@@ -180,8 +180,8 @@ public class Nation implements Parcelable {
         region = in.readString();
         influence = in.readString();
         popBase = in.readInt();
-        foundedAgo = in.readString();
-        lastActivityAgo = in.readString();
+        foundedAgo = in.readLong();
+        lastActivityAgo = in.readLong();
         motto = in.readString();
         freedomDesc = (Freedom) in.readValue(Freedom.class.getClassLoader());
         leader = in.readString();
@@ -248,8 +248,8 @@ public class Nation implements Parcelable {
         dest.writeString(region);
         dest.writeString(influence);
         dest.writeInt(popBase);
-        dest.writeString(foundedAgo);
-        dest.writeString(lastActivityAgo);
+        dest.writeLong(foundedAgo);
+        dest.writeLong(lastActivityAgo);
         dest.writeString(motto);
         dest.writeValue(freedomDesc);
         dest.writeString(leader);
@@ -313,14 +313,12 @@ public class Nation implements Parcelable {
         }
     };
 
-
     /**
      * Return the URL of a nation banner.
      * @param id The banner ID.
      * @return The URL to the banner.
      */
-    public static String getBannerURL(String id)
-    {
+    public static String getBannerURL(String id) {
         return String.format(Locale.US, BANNER_TEMPLATE, id);
     }
 
@@ -343,8 +341,7 @@ public class Nation implements Parcelable {
 
         // Map out government priorities
         if (nationResponse.govtPriority != null) {
-            switch (nationResponse.govtPriority)
-            {
+            switch (nationResponse.govtPriority) {
                 case "Defence":
                     nationResponse.govtPriority = c.getString(R.string.defense);
                     break;

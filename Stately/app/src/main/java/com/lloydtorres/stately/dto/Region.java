@@ -38,10 +38,8 @@ import java.util.List;
 @Root(name="REGION", strict=false)
 public class Region extends BaseRegion implements Parcelable {
 
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
-                                        + "name+flag+numnations"
-                                        + "+delegate+delegatevotes+founder+founded+power"
-                                        + "+factbook+tags"
+    public static final String QUERY = BaseRegion.BASE_QUERY
+                                        + "+power"
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
                                         + "+happenings+history"
