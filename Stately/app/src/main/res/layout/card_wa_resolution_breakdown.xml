@@ -44,6 +44,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/resolution_nations_for_holder"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -122,6 +123,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/resolution_nations_against_holder"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -367,8 +367,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         // Views
         private PieChart votingBreakdown;
         private TextView nullVote;
+        private RelativeLayout nationVotesForHolder;
         private TextView nationVotesFor;
         private ImageView nationVotesForIcon;
+        private RelativeLayout nationVotesAgainstHolder;
         private TextView nationVotesAgainst;
         private ImageView nationVotesAgainstIcon;
         private RelativeLayout delegateVotesForButton;
@@ -380,8 +382,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
             votingBreakdown = (PieChart) itemView.findViewById(R.id.wa_voting_breakdown);
             nullVote = (TextView) itemView.findViewById(R.id.resolution_null_vote);
+            nationVotesForHolder = (RelativeLayout) itemView.findViewById(R.id.resolution_nations_for_holder);
             nationVotesFor = (TextView) itemView.findViewById(R.id.resolution_nations_for_count);
             nationVotesForIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_for_icon);
+            nationVotesAgainstHolder = (RelativeLayout) itemView.findViewById(R.id.resolution_nations_against_holder);
             nationVotesAgainst = (TextView) itemView.findViewById(R.id.resolution_nations_against_count);
             nationVotesAgainstIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_against_icon);
             delegateVotesForButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_for);
@@ -413,6 +417,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             int voteAgainstNations = voteAgainstTotal - voteAgainstDelegates;
 
             if (voteTotal > 0) {
+                // Make the necessary views visible again
+                votingBreakdown.setVisibility(View.VISIBLE);
+                nullVote.setVisibility(View.GONE);
+                nationVotesForHolder.setVisibility(View.VISIBLE);
+                nationVotesAgainstHolder.setVisibility(View.VISIBLE);
+                delegateVotesForButton.setVisibility(View.VISIBLE);
+                delegateVotesAgainstButton.setVisibility(View.VISIBLE);
+
+                // Calculate percentages
                 float votePercentForIndividual = (voteForNations * 100f)/voteTotal;
                 float votePercentForDelegates = (voteForDelegates * 100f)/voteTotal;
                 float votePercentAgainstIndividual = (voteAgainstNations * 100f)/voteTotal;
@@ -467,6 +480,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             } else {
                 votingBreakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
+                nationVotesForHolder.setVisibility(View.GONE);
+                nationVotesAgainstHolder.setVisibility(View.GONE);
                 delegateVotesForButton.setVisibility(View.GONE);
                 delegateVotesForButton.setOnClickListener(null);
                 delegateVotesAgainstButton.setVisibility(View.GONE);
