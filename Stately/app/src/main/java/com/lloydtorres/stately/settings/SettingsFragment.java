@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 
 import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.lang.reflect.Field;
@@ -49,10 +50,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version), BuildConfig.VERSION_NAME));
 
         // Disable theme options and show warning on Z-Day
-        if (getContext() != null && NightmareHelper.getIsZDayActive(getContext())) {
-            Preference themeSetting = findPreference(SettingsActivity.SETTING_THEME);
-            themeSetting.setEnabled(false);
-            themeSetting.setSummary(getString(R.string.setting_desc_zombie));
+        if (getContext() != null) {
+            if (NightmareHelper.getIsZDayActive(getContext())) {
+                Preference themeSetting = findPreference(SettingsActivity.SETTING_THEME);
+                themeSetting.setEnabled(false);
+                themeSetting.setSummary(getString(R.string.setting_desc_zombie));
+            }
+            if (RaraHelper.getSpecialDayStatus(getContext()) == RaraHelper.DAY_APRIL_FOOLS) {
+                Preference governmentSetting = findPreference(SettingsActivity.SETTING_GOVERNMENT);
+                governmentSetting.setEnabled(false);
+                governmentSetting.setSummary(getString(R.string.setting_category_april));
+            }
         }
     }
 
