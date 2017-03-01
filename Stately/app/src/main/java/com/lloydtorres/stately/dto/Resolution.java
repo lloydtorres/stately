@@ -36,7 +36,7 @@ import java.util.List;
 public class Resolution implements Parcelable {
 
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d&q="
-                                        + "resolution+votetrack"
+                                        + "resolution+votetrack+delvotes"
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String QUERY_INACTIVE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d"
                                         + "&id=%d&q=resolution"
@@ -60,6 +60,11 @@ public class Resolution implements Parcelable {
     public int votesAgainst;
     @Element(name="TOTAL_VOTES_FOR", required=false)
     public int votesFor;
+
+    @ElementList(name="DELVOTES_FOR", required=false)
+    public List<DelegateVote> delegateVotesFor;
+    @ElementList(name="DELVOTES_AGAINST", required=false)
+    public List<DelegateVote> delegateVotesAgainst;
 
     @ElementList(name="VOTE_TRACK_AGAINST", required=false)
     public List<Integer> voteHistoryAgainst;
@@ -88,6 +93,18 @@ public class Resolution implements Parcelable {
         content = in.readString();
         votesAgainst = in.readInt();
         votesFor = in.readInt();
+        if (in.readByte() == 0x01) {
+            delegateVotesFor = new ArrayList<DelegateVote>();
+            in.readList(delegateVotesFor, DelegateVote.class.getClassLoader());
+        } else {
+            delegateVotesFor = null;
+        }
+        if (in.readByte() == 0x01) {
+            delegateVotesAgainst = new ArrayList<DelegateVote>();
+            in.readList(delegateVotesAgainst, DelegateVote.class.getClassLoader());
+        } else {
+            delegateVotesAgainst = null;
+        }
         if (in.readByte() == 0x01) {
             voteHistoryAgainst = new ArrayList<Integer>();
             in.readList(voteHistoryAgainst, Integer.class.getClassLoader());
@@ -121,6 +138,18 @@ public class Resolution implements Parcelable {
         dest.writeString(content);
         dest.writeInt(votesAgainst);
         dest.writeInt(votesFor);
+        if (delegateVotesFor == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(delegateVotesFor);
+        }
+        if (delegateVotesAgainst == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(delegateVotesAgainst);
+        }
         if (voteHistoryAgainst == null) {
             dest.writeByte((byte) (0x00));
         } else {
