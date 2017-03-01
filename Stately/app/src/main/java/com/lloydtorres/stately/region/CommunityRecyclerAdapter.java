@@ -58,8 +58,10 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Lloyd on 2016-01-24.
@@ -423,10 +425,21 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             else {
                 officersLayout.setVisibility(View.VISIBLE);
-                for (int i=0; i<officers.size(); i++) {
-                    if (officers.get(i).office != null && officers.get(i).name != null) {
-                        inflateOfficerEntry(officersLayout, officers.get(i).office, officers.get(i).name);
+                Map<String, String> officerMap = new LinkedHashMap<String, String>();
+                for (int i=0; i < officers.size(); i++) {
+                    String nationName = officers.get(i).name;
+                    String officeName = officers.get(i).office;
+                    if (nationName != null && officeName != null) {
+                        if (officerMap.get(nationName) == null) {
+                            officerMap.put(nationName, officeName);
+                        } else {
+                            officerMap.put(nationName, officerMap.get(nationName) + " / " + officeName);
+                        }
                     }
+                }
+
+                for (String nationName : officerMap.keySet()) {
+                    inflateOfficerEntry(officersLayout, officerMap.get(nationName), nationName);
                 }
             }
         }
