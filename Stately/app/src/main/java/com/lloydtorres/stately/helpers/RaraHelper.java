@@ -311,17 +311,23 @@ public final class RaraHelper {
      * Formats a pie chart in a standardized way
      * @param c Context
      * @param p Pie chart
+     * @param shouldShowLegend
      * @return the PieChart, whose data must be set and invalidated
      */
-    public static PieChart getFormattedPieChart(Context c, PieChart p) {
+    public static PieChart getFormattedPieChart(Context c, PieChart p, boolean shouldShowLegend) {
         Legend cLegend = p.getLegend();
-        cLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        cLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        cLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        cLegend.setDrawInside(false);
-        cLegend.setForm(Legend.LegendForm.CIRCLE);
-        cLegend.setTextSize(15);
-        cLegend.setWordWrapEnabled(true);
+        if (shouldShowLegend) {
+            cLegend.setEnabled(true);
+            cLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            cLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+            cLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            cLegend.setDrawInside(false);
+            cLegend.setForm(Legend.LegendForm.CIRCLE);
+            cLegend.setTextSize(15);
+            cLegend.setWordWrapEnabled(true);
+        } else {
+            cLegend.setEnabled(false);
+        }
 
         p.setDrawEntryLabels(false);
         p.setDescription(EMPTY_CHART_DESCRIPTION);

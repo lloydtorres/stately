@@ -612,7 +612,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             dataSet.setColors(chartColours);
             PieData dataFull = new PieData(dataSet);
 
-            chart = RaraHelper.getFormattedPieChart(context, chart);
+            chart = RaraHelper.getFormattedPieChart(context, chart, true);
             chart.setData(dataFull);
             chart.invalidate();
         }

@@ -1,39 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="?attr/themedColorCard"
-    card_view:contentPadding="20dp">
+    card_view:cardBackgroundColor="?attr/themedColorCard">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:textSize="15sp"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorHeaderText"
-            android:text="@string/wa_vote_breakdown" />
-        <TextView
-            android:id="@+id/resolution_null_vote"
-            android:visibility="gone"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/votes_null"/>
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/wa_voting_breakdown"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <TextView
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/themedColorHeaderText"
+                android:text="@string/wa_vote_breakdown" />
+            <TextView
+                android:id="@+id/resolution_null_vote"
+                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/votes_null"/>
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/wa_voting_breakdown"
+                android:layout_width="match_parent"
+                android:layout_height="350dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/resolution_delegates_for"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/colorChart0">
+            <TextView
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/wa_delegate_votes_for"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:id="@+id/resolution_delegates_for_count"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif-light"
+                tools:text="10"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/resolution_delegates_against"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/colorChart1">
+            <TextView
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/wa_delegate_votes_against"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:id="@+id/resolution_delegates_against_count"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif-light"
+                tools:text="10"/>
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

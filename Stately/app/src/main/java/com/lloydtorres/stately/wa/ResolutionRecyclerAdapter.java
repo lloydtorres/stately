@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -33,11 +34,15 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.DelegateVote;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -62,8 +67,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     // Types of cards
     public static final int CARD_HEADER = 0;
     public static final int CARD_CONTENT = 1;
-    public static final int CARD_BREAKDOWN = 2;
-    public static final int CARD_HISTORY = 3;
+    public static final int CARD_HISTORY = 2;
+    public static final int CARD_BREAKDOWN = 3;
 
     private ResolutionActivity resolutionActivity;
     private Context context;
@@ -350,17 +355,86 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public class ResolutionBreakdownCard extends ResolutionCard {
         private PieChart votingBreakdown;
         private TextView nullVote;
+        private RelativeLayout delegateVotesForButton;
+        private TextView delegateVotesFor;
+        private RelativeLayout delegateVotesAgainstButton;
+        private TextView delegateVotesAgainst;
 
         public ResolutionBreakdownCard(View itemView) {
             super(itemView);
             votingBreakdown = (PieChart) itemView.findViewById(R.id.wa_voting_breakdown);
             nullVote = (TextView) itemView.findViewById(R.id.resolution_null_vote);
+            delegateVotesForButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_for);
+            delegateVotesFor = (TextView) itemView.findViewById(R.id.resolution_delegates_for_count);
+            delegateVotesAgainstButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_against);
+            delegateVotesAgainst = (TextView) itemView.findViewById(R.id.resolution_delegates_against_count);
         }
 
         public void init() {
-            if (!RaraHelper.getWaVotingChart(context, votingBreakdown, resolution.votesFor, resolution.votesAgainst)) {
+            int voteForTotal = resolution.votesFor;
+            int voteAgainstTotal = resolution.votesAgainst;
+            int voteTotal = voteForTotal + voteAgainstTotal;
+
+            int voteForDelegates = 0;
+            if (resolution.delegateVotesFor != null) {
+                for (DelegateVote dv : resolution.delegateVotesFor) {
+                    voteForDelegates += dv.votes;
+                }
+            }
+
+            int voteAgainstDelegates = 0;
+            if (resolution.delegateVotesAgainst != null) {
+                for (DelegateVote dv : resolution.delegateVotesAgainst) {
+                    voteAgainstDelegates += dv.votes;
+                }
+            }
+
+            if (voteTotal > 0) {
+                float votePercentForIndividual = ((voteForTotal - voteForDelegates) * 100f)/voteTotal;
+                float votePercentForDelegates = (voteForDelegates * 100f)/voteTotal;
+                float votePercentAgainstIndividual = ((voteAgainstTotal - voteAgainstDelegates) * 100f)/voteTotal;
+                float votePercentAgainstDelegates = (voteAgainstDelegates * 100f)/voteTotal;
+
+                List<PieEntry> chartEntries = new ArrayList<PieEntry>();
+                List<Integer> chartColours = new ArrayList<Integer>();
+
+                // Set data
+                if (votePercentForIndividual > 0f) {
+                    chartEntries.add(new PieEntry(votePercentForIndividual, context.getString(R.string.wa_individual_nations_for)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
+                }
+                if (votePercentForDelegates > 0f) {
+                    chartEntries.add(new PieEntry(votePercentForDelegates, context.getString(R.string.wa_delegate_votes_for_newline)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.waDelegateFor));
+                }
+                if (votePercentAgainstDelegates > 0f) {
+                    chartEntries.add(new PieEntry(votePercentAgainstDelegates, context.getString(R.string.wa_delegate_votes_against_newline)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.waDelegateAgainst));
+                }
+                if (votePercentAgainstIndividual > 0f) {
+                    chartEntries.add(new PieEntry(votePercentAgainstIndividual, context.getString(R.string.wa_individual_nations_against)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
+                }
+
+                // Set colour and disable chart labels
+                PieDataSet dataSet = new PieDataSet(chartEntries, "");
+                dataSet.setDrawValues(false);
+                dataSet.setColors(chartColours);
+                PieData dataFull = new PieData(dataSet);
+
+                // Format chart
+                votingBreakdown = RaraHelper.getFormattedPieChart(context, votingBreakdown, false);
+                votingBreakdown.setData(dataFull);
+                votingBreakdown.invalidate();
+
+                // @TODO Setup links to delegate buttons
+                delegateVotesFor.setText(SparkleHelper.getPrettifiedNumber(voteForDelegates));
+                delegateVotesAgainst.setText(SparkleHelper.getPrettifiedNumber(voteAgainstDelegates));
+            } else {
                 votingBreakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
+                delegateVotesForButton.setVisibility(View.GONE);
+                delegateVotesAgainstButton.setVisibility(View.GONE);
             }
         }
     }
@@ -415,7 +489,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             // lots of formatting for the FOR and AGAINST lines
             LineDataSet setFor = new LineDataSet(entryFor, context.getString(R.string.wa_for));
             setFor.setAxisDependency(YAxis.AxisDependency.LEFT);
-            setFor.setColors(RaraHelper.waColourFor, context);
+            setFor.setColors(ContextCompat.getColor(context, R.color.colorChart0));
             setFor.setDrawValues(false);
             setFor.setDrawVerticalHighlightIndicator(true);
             setFor.setDrawHorizontalHighlightIndicator(false);
@@ -426,7 +500,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             LineDataSet setAgainst = new LineDataSet(entryAgainst, context.getString(R.string.wa_against));
             setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
-            setAgainst.setColors(RaraHelper.waColourAgainst, context);
+            setAgainst.setColors(ContextCompat.getColor(context, R.color.colorChart1));
             setAgainst.setDrawValues(false);
             setAgainst.setDrawVerticalHighlightIndicator(true);
             setAgainst.setDrawHorizontalHighlightIndicator(false);

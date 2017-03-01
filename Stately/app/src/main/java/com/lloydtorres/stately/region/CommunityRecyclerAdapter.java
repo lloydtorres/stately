@@ -295,7 +295,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 dataSet.setColors(RaraHelper.chartColours, context);
                 PieData dataFull = new PieData(dataSet);
 
-                breakdown = RaraHelper.getFormattedPieChart(context, breakdown);
+                breakdown = RaraHelper.getFormattedPieChart(context, breakdown, true);
                 breakdown.setData(dataFull);
                 breakdown.invalidate();
             } else {

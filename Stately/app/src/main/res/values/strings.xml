@@ -411,6 +411,12 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
+    <string name="wa_delegate_votes_for">Delegate Votes For</string>
+    <string name="wa_delegate_votes_against">Delegate Votes Against</string>
+    <string name="wa_delegate_votes_for_newline">Delegate Votes\nFor</string>
+    <string name="wa_delegate_votes_against_newline">Delegate Votes\nAgainst</string>
+    <string name="wa_individual_nations_for">Nations\nFor</string>
+    <string name="wa_individual_nations_against">Nations\nAgainst</string>
     <string name="wa_error">Resolution not found.</string>
     <string name="wa_last_resolution">Read this resolution</string>
 

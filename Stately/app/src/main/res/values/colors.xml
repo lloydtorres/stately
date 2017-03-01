@@ -76,4 +76,7 @@
     <color name="white">#FFFFFF</color>
 
     <color name="highlightColor">#FFF9C4</color>
+
+    <color name="waDelegateFor">#1565C0</color>
+    <color name="waDelegateAgainst">#C62828</color>
 </resources>
