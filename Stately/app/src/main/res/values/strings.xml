@@ -251,9 +251,8 @@
     <string name="poll_vote_button_submit">Vote on regional poll</string>
     <string name="poll_vote_button_change">Change vote</string>
     <string name="poll_vote_withdraw">Withdraw vote</string>
-    <string name="card_region_wa_vote">%1$s Resolution</string>
-    <string name="region_wa_filler">Among this region\'s nations, voting is currently %1$s for to %2$s against.</string>
-    <string name="card_region_wa_link">Open the %1$s resolution</string>
+    <string name="card_region_wa_vote">%1$s: Regional Votes</string>
+    <string name="card_region_wa_link">Go to the %1$s resolution</string>
     <string name="votes_null">No votes have been recorded yet!</string>
 
     <!-- Region message board -->

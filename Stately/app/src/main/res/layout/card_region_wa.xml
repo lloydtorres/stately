@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
@@ -14,43 +15,73 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-        <TextView
-            android:id="@+id/region_wa_title"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorHeaderText"
-            android:text="@string/card_region_wa_vote" />
-        <TextView
-            android:id="@+id/region_wa_vote_filler"
-            android:paddingTop="8dp"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/themedColorPrimaryText"
-            android:text="@string/region_wa_filler" />
-        <TextView
-            android:id="@+id/region_wa_null_vote"
-            android:visibility="gone"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/votes_null"/>
-        <com.github.mikephil.charting.charts.PieChart
-            android:layout_marginTop="20dp"
-            android:id="@+id/region_wa_breakdown"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <TextView
+                android:id="@+id/region_wa_title"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/themedColorHeaderText"
+                android:text="@string/card_region_wa_vote" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:weightSum="2">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorChart0"
+                    android:textSize="14sp"
+                    android:text="@string/wa_for"/>
+                <TextView
+                    android:id="@+id/card_region_votes_for"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorChart0"
+                    android:textSize="30sp"
+                    tools:text="54,321"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorChart1"
+                    android:textSize="14sp"
+                    android:text="@string/wa_against"/>
+                <TextView
+                    android:id="@+id/card_region_votes_against"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/colorChart1"
+                    android:textSize="30sp"
+                    tools:text="12,345"/>
+            </LinearLayout>
     </LinearLayout>
     <include layout="@layout/view_divider" />
     <LinearLayout

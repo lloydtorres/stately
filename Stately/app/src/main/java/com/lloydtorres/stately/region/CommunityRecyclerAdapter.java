@@ -356,31 +356,28 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     // Card for the WA poll
     public class RegionWaCard extends RecyclerView.ViewHolder {
         private TextView title;
-        private TextView filler;
-        private PieChart chart;
+        private TextView votesFor;
+        private TextView votesAgainst;
         private LinearLayout resolutionLink;
         private TextView linkContent;
-        private TextView nullVote;
 
         public RegionWaCard(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.region_wa_title);
-            filler = (TextView) v.findViewById(R.id.region_wa_vote_filler);
-            chart = (PieChart) v.findViewById(R.id.region_wa_breakdown);
+            votesFor = (TextView) v.findViewById(R.id.card_region_votes_for);
+            votesAgainst = (TextView) v.findViewById(R.id.card_region_votes_against);
             resolutionLink = (LinearLayout) v.findViewById(R.id.region_wa_link);
             linkContent = (TextView) v.findViewById(R.id.region_wa_link_text);
-            nullVote = (TextView) v.findViewById(R.id.region_wa_null_vote);
         }
 
         public void init(WaVote w) {
             // Setup resolution link
-            Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
+            final Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
             resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
-            final Intent fResolution = resolutionActivityLaunch;
             resolutionLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(fResolution);
+                    context.startActivity(resolutionActivityLaunch);
                 }
             });
 
@@ -397,13 +394,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             title.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_vote), chamberName));
             linkContent.setText(String.format(Locale.US, context.getString(R.string.card_region_wa_link), chamberName));
 
-            filler.setText(String.format(Locale.US, context.getString(R.string.region_wa_filler),
-                    SparkleHelper.getPrettifiedNumber(w.voteFor),
-                    SparkleHelper.getPrettifiedNumber(w.voteAgainst)));
-            if (!RaraHelper.getWaVotingChart(context, chart, w.voteFor, w.voteAgainst)) {
-                chart.setVisibility(View.GONE);
-                nullVote.setVisibility(View.VISIBLE);
-            }
+            votesFor.setText(SparkleHelper.getPrettifiedNumber(w.voteFor));
+            votesAgainst.setText(SparkleHelper.getPrettifiedNumber(w.voteAgainst));
         }
     }
 
