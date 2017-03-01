@@ -580,7 +580,7 @@ public class MessageBoardActivity extends SlidrActivity {
             quoteMessage = String.format(Locale.US, QUOTE_TEMPLATE, replyTarget.name, replyTarget.id, quoteMessage);
             newMessage = quoteMessage + newMessage;
         }
-        params.put("message", SparkleHelper.escapeHtml(newMessage));
+        params.put("message", newMessage);
         params.put("lodge_message", "1");
         stringRequest.setParams(params);
 

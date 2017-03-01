@@ -287,7 +287,7 @@ public class TelegramComposeActivity extends SlidrActivity {
                 params.put("send", "1");
             }
         }
-        params.put("message", SparkleHelper.escapeHtml(content.getText().toString()));
+        params.put("message", content.getText().toString());
         stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {

@@ -290,7 +290,7 @@ public class ReportActivity extends SlidrActivity {
 
         Map<String,String> params = new HashMap<String, String>();
         params.put("problem", Integer.toString(problemHeader));
-        params.put("comment", SparkleHelper.escapeHtml(commentHeader));
+        params.put("comment", commentHeader);
         params.put("submit", "1");
         stringRequest.setParams(params);
 

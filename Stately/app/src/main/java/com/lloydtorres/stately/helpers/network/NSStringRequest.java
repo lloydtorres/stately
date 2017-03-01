@@ -61,7 +61,13 @@ public class NSStringRequest extends StringRequest {
 
     public void setPassword(String p) { password = p; }
 
-    public void setParams(Map<String, String> p) { params = p; }
+    public void setParams(Map<String, String> p) {
+        Map<String, String> escapedHashMap = new HashMap<String, String>();
+        for (String key : p.keySet()) {
+            escapedHashMap.put(SparkleHelper.escapeHtml(key), SparkleHelper.escapeHtml(p.get(key)));
+        }
+        params = escapedHashMap;
+    }
 
     @Override
     protected Map<String,String> getParams(){
