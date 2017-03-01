@@ -865,8 +865,8 @@ public final class SparkleHelper {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
-                logError(e.toString());
-                logError(holder);
+                SparkleHelper.logError(e.toString());
+                SparkleHelper.logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
