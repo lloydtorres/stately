@@ -18,6 +18,7 @@ package com.lloydtorres.stately.zombie;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -164,12 +165,6 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         }
     }
 
-    // An array of colours used for WA votes
-    private static final int[] zombieChartColours = { R.color.colorChart3,
-            R.color.colorChart1,
-            R.color.colorChart20
-    };
-
     private void initZombieChart(Context c, Zombie zombieData) {
         float popTotal = zombieData.survivors + zombieData.zombies + zombieData.dead;
 
@@ -178,31 +173,35 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
             chart.setVisibility(View.VISIBLE);
 
             List<PieEntry> chartEntries = new ArrayList<PieEntry>();
+            List<Integer> chartColours = new ArrayList<Integer>();
 
             // Set data
             if (zombieData.survivors > 0) {
                 float popSurvivors = (zombieData.survivors * 100f)/popTotal;
                 chartEntries.add(new PieEntry(popSurvivors, c.getString(R.string.zombie_survivors)));
+                chartColours.add(ContextCompat.getColor(context, R.color.colorChart3));
             }
 
             if (zombieData.zombies > 0) {
                 float popZombies = (zombieData.zombies * 100f)/popTotal;
                 chartEntries.add(new PieEntry(popZombies, c.getString(R.string.zombie_infected)));
+                chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
             }
 
             if (zombieData.dead > 0) {
                 float popDead = (zombieData.dead * 100f)/popTotal;
                 chartEntries.add(new PieEntry(popDead, c.getString(R.string.zombie_dead)));
+                chartColours.add(ContextCompat.getColor(context, R.color.colorChart20));
             }
 
             // Set colour and disable chart labels
             PieDataSet dataSet = new PieDataSet(chartEntries, "");
             dataSet.setDrawValues(false);
-            dataSet.setColors(zombieChartColours, c);
+            dataSet.setColors(chartColours);
             PieData dataFull = new PieData(dataSet);
 
             // formatting
-            chart = RaraHelper.getFormattedPieChart(c, chart);
+            chart = RaraHelper.getFormattedPieChart(c, chart, true);
             chart.setData(dataFull);
             chart.invalidate();
         } else {

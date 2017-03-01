@@ -58,15 +58,11 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -349,53 +345,6 @@ public final class RaraHelper {
 
         p.setOnChartValueSelectedListener(new PieChartListener(c, p));
         return p;
-    }
-
-    // An array of colours used for WA votes
-    public static final int[] waColours = { R.color.colorChart0,
-            R.color.colorChart1,
-            R.color.colorChart12
-    };
-
-    // Convenience variable to colour WA for and against votes
-    public static final int[] waColourFor = { R.color.colorChart0 };
-    public static final int[] waColourAgainst = { R.color.colorChart1 };
-
-    /**
-     * Formats a pie chart displaying current voting breakdown for a WA resolution.
-     * @param c Context
-     * @param p Pie chart
-     * @param voteFor Number of votes for
-     * @param voteAgainst Number of votes against
-     */
-    public static boolean getWaVotingChart(Context c, PieChart p, float voteFor, float voteAgainst) {
-        // Calculate percentages (floating point math FTW!)
-        float voteTotal = voteFor + voteAgainst;
-
-        if (voteTotal > 0) {
-            float votePercentFor = (voteFor * 100f)/voteTotal;
-            float votePercentAgainst = (voteAgainst * 100f)/voteTotal;
-
-            List<PieEntry> chartEntries = new ArrayList<PieEntry>();
-
-            // Set data
-            chartEntries.add(new PieEntry(votePercentFor, c.getString(R.string.wa_for)));
-            chartEntries.add(new PieEntry(votePercentAgainst, c.getString(R.string.wa_against)));
-
-            // Set colour and disable chart labels
-            PieDataSet dataSet = new PieDataSet(chartEntries, "");
-            dataSet.setDrawValues(false);
-            dataSet.setColors(waColours, c);
-            PieData dataFull = new PieData(dataSet);
-
-            // formatting
-            p = getFormattedPieChart(c, p);
-            p.setData(dataFull);
-            p.invalidate();
-
-            return true;
-        }
-        return false;
     }
 
     /**

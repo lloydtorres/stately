@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.census;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -247,7 +248,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // Formatting
             LineDataSet lineHistoryData = new LineDataSet(historyEntries, "");
             lineHistoryData.setAxisDependency(YAxis.AxisDependency.LEFT);
-            lineHistoryData.setColors(RaraHelper.waColourFor, context);
+            lineHistoryData.setColors(ContextCompat.getColor(context, R.color.colorChart0));
             lineHistoryData.setDrawValues(false);
             lineHistoryData.setDrawVerticalHighlightIndicator(true);
             lineHistoryData.setDrawHorizontalHighlightIndicator(false);

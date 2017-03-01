@@ -332,17 +332,17 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             // If voting FOR the resolution
             if (WaVoteStatus.VOTE_FOR.equals(vote)) {
-                stateColour = RaraHelper.waColours[0];
+                stateColour = R.color.colorChart0;
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If voting AGAINST the resolution
             else if (WaVoteStatus.VOTE_AGAINST.equals(vote)) {
-                stateColour = RaraHelper.waColours[1];
+                stateColour = R.color.colorChart1;
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
             }
             // If no vote yet
             else {
-                stateColour = RaraHelper.waColours[2];
+                stateColour = R.color.colorChart12;
                 content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_novote), assemblyName));
             }
 
@@ -530,7 +530,6 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     GovBudget budget = data.govBudget;
 
                     // Have to add it one by one, how horrifying
-                    int i = 0;
                     if (budget.admin > 0f) {
                         chartEntries.add(new PieEntry(budget.admin, context.getString(R.string.administration)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
@@ -586,7 +585,6 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     // setup data
                     Sectors sectors = data.sectors;
 
-                    int j = 0;
                     if (sectors.government > 0f) {
                         chartEntries.add(new PieEntry(sectors.government, context.getString(R.string.government)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorSector0));
