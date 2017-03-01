@@ -11,7 +11,7 @@ import org.simpleframework.xml.Root;
  * Stores a WA delegate and their vote count.
  */
 @Root(name="DELEGATE", strict=false)
-public class DelegateVote implements Parcelable {
+public class DelegateVote implements Parcelable, Comparable<DelegateVote> {
     @Element(name="NATION", required=false)
     public String delegate;
     @Element(name="VOTES", required=false)
@@ -47,4 +47,14 @@ public class DelegateVote implements Parcelable {
             return new DelegateVote[size];
         }
     };
+
+    @Override
+    public int compareTo(DelegateVote o) {
+        int descendingDiff = o.votes - this.votes;
+        if (descendingDiff != 0) {
+            return descendingDiff;
+        } else {
+            return this.delegate.compareTo(o.delegate);
+        }
+    }
 }

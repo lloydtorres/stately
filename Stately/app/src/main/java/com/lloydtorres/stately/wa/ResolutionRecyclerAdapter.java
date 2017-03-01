@@ -18,7 +18,9 @@ package com.lloydtorres.stately.wa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,7 @@ import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -72,6 +75,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     private ResolutionActivity resolutionActivity;
     private Context context;
+    private FragmentManager fragmentManager;
+    private AlertDialog.Builder dialogBuilder;
     private Resolution resolution;
     private String voteStatus;
     private int councilId;
@@ -81,6 +86,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, int cId) {
         resolutionActivity = activity;
         context = resolutionActivity;
+        fragmentManager = resolutionActivity.getSupportFragmentManager();
+        dialogBuilder = new AlertDialog.Builder(context, RaraHelper.getThemeMaterialDialog(context));
         resolution = res;
         voteStatus = vs;
         councilId = cId;
@@ -353,8 +360,17 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ResolutionBreakdownCard extends ResolutionCard {
+        // State constants
+        private final int DELEGATE_VOTES_FOR = 0;
+        private final int DELEGATE_VOTES_AGAINST = 1;
+
+        // Views
         private PieChart votingBreakdown;
         private TextView nullVote;
+        private TextView nationVotesFor;
+        private ImageView nationVotesForIcon;
+        private TextView nationVotesAgainst;
+        private ImageView nationVotesAgainstIcon;
         private RelativeLayout delegateVotesForButton;
         private TextView delegateVotesFor;
         private RelativeLayout delegateVotesAgainstButton;
@@ -364,6 +380,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
             votingBreakdown = (PieChart) itemView.findViewById(R.id.wa_voting_breakdown);
             nullVote = (TextView) itemView.findViewById(R.id.resolution_null_vote);
+            nationVotesFor = (TextView) itemView.findViewById(R.id.resolution_nations_for_count);
+            nationVotesForIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_for_icon);
+            nationVotesAgainst = (TextView) itemView.findViewById(R.id.resolution_nations_against_count);
+            nationVotesAgainstIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_against_icon);
             delegateVotesForButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_for);
             delegateVotesFor = (TextView) itemView.findViewById(R.id.resolution_delegates_for_count);
             delegateVotesAgainstButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_against);
@@ -389,31 +409,37 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 }
             }
 
+            int voteForNations = voteForTotal - voteForDelegates;
+            int voteAgainstNations = voteAgainstTotal - voteAgainstDelegates;
+
             if (voteTotal > 0) {
-                float votePercentForIndividual = ((voteForTotal - voteForDelegates) * 100f)/voteTotal;
+                float votePercentForIndividual = (voteForNations * 100f)/voteTotal;
                 float votePercentForDelegates = (voteForDelegates * 100f)/voteTotal;
-                float votePercentAgainstIndividual = ((voteAgainstTotal - voteAgainstDelegates) * 100f)/voteTotal;
+                float votePercentAgainstIndividual = (voteAgainstNations * 100f)/voteTotal;
                 float votePercentAgainstDelegates = (voteAgainstDelegates * 100f)/voteTotal;
 
                 List<PieEntry> chartEntries = new ArrayList<PieEntry>();
                 List<Integer> chartColours = new ArrayList<Integer>();
 
                 // Set data
-                if (votePercentForIndividual > 0f) {
-                    chartEntries.add(new PieEntry(votePercentForIndividual, context.getString(R.string.wa_individual_nations_for)));
-                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
-                }
-                if (votePercentForDelegates > 0f) {
-                    chartEntries.add(new PieEntry(votePercentForDelegates, context.getString(R.string.wa_delegate_votes_for_newline)));
-                    chartColours.add(ContextCompat.getColor(context, R.color.waDelegateFor));
+                // It's in this order so that the values that are displayed, from left to right (counter-clockwise) are:
+                // [Nations For] [Delegate Votes For] [Delegate Votes Against] [Nations Against]
+                // This puts the fors and againsts together and in the order they show up in the rest of the UI
+                if (votePercentAgainstIndividual > 0f) {
+                    chartEntries.add(new PieEntry(votePercentAgainstIndividual, context.getString(R.string.wa_individual_nations_against_newline)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
                 }
                 if (votePercentAgainstDelegates > 0f) {
                     chartEntries.add(new PieEntry(votePercentAgainstDelegates, context.getString(R.string.wa_delegate_votes_against_newline)));
                     chartColours.add(ContextCompat.getColor(context, R.color.waDelegateAgainst));
                 }
-                if (votePercentAgainstIndividual > 0f) {
-                    chartEntries.add(new PieEntry(votePercentAgainstIndividual, context.getString(R.string.wa_individual_nations_against)));
-                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
+                if (votePercentForDelegates > 0f) {
+                    chartEntries.add(new PieEntry(votePercentForDelegates, context.getString(R.string.wa_delegate_votes_for_newline)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.waDelegateFor));
+                }
+                if (votePercentForIndividual > 0f) {
+                    chartEntries.add(new PieEntry(votePercentForIndividual, context.getString(R.string.wa_individual_nations_for_newline)));
+                    chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
                 }
 
                 // Set colour and disable chart labels
@@ -427,15 +453,51 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 votingBreakdown.setData(dataFull);
                 votingBreakdown.invalidate();
 
-                // @TODO Setup links to delegate buttons
+                // Set nation vote counts and voted icon
+                nationVotesFor.setText(SparkleHelper.getPrettifiedNumber(voteForNations));
+                nationVotesAgainst.setText(SparkleHelper.getPrettifiedNumber(voteAgainstNations));
+                nationVotesForIcon.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
+                nationVotesAgainstIcon.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
+
+                // Set delegate vote counts
                 delegateVotesFor.setText(SparkleHelper.getPrettifiedNumber(voteForDelegates));
+                delegateVotesForButton.setOnClickListener(getDelegateVotesOnClickListener(DELEGATE_VOTES_FOR, voteForDelegates, resolution.delegateVotesFor));
                 delegateVotesAgainst.setText(SparkleHelper.getPrettifiedNumber(voteAgainstDelegates));
+                delegateVotesAgainstButton.setOnClickListener(getDelegateVotesOnClickListener(DELEGATE_VOTES_AGAINST, voteAgainstDelegates, resolution.delegateVotesAgainst));
             } else {
                 votingBreakdown.setVisibility(View.GONE);
                 nullVote.setVisibility(View.VISIBLE);
                 delegateVotesForButton.setVisibility(View.GONE);
+                delegateVotesForButton.setOnClickListener(null);
                 delegateVotesAgainstButton.setVisibility(View.GONE);
+                delegateVotesAgainstButton.setOnClickListener(null);
             }
+        }
+
+        /**
+         * Returns the proper onClickListener for each type of delegate vote button.
+         * @param mode
+         * @param delegateVotes
+         */
+        private View.OnClickListener getDelegateVotesOnClickListener(final int mode, final int numVotes, final List<DelegateVote> delegateVotes) {
+            return new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int titleStringResource = mode == DELEGATE_VOTES_FOR ? R.string.wa_delegate_votes_for : R.string.wa_delegate_votes_against;
+                    if (numVotes > 0) {
+                        NameListDialog nameListDialog = new NameListDialog();
+                        nameListDialog.setTitle(context.getString(titleStringResource));
+                        nameListDialog.setDelegateVotes(delegateVotes);
+                        nameListDialog.show(fragmentManager, NameListDialog.DIALOG_TAG);
+                    } else {
+                        dialogBuilder
+                                .setTitle(context.getString(titleStringResource))
+                                .setMessage(context.getString(mode == DELEGATE_VOTES_FOR ? R.string.wa_delegate_no_votes_for : R.string.wa_delegate_no_votes_against))
+                                .setPositiveButton(context.getString(R.string.got_it), null)
+                                .show();
+                    }
+                }
+            };
         }
     }
 

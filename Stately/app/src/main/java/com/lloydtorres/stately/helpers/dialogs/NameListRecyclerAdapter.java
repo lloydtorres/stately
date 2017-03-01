@@ -24,9 +24,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.DelegateVote;
+import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
+import org.atteo.evo.inflector.English;
+
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-19.
@@ -36,6 +41,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context context;
     private NameListDialog selfDialog;
     private List<String> names;
+    private List<DelegateVote> delegateVotes;
     private int target;
 
     public NameListRecyclerAdapter(Context c, NameListDialog d, List<String> n, int t) {
@@ -45,29 +51,49 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         target = t;
     }
 
+    public NameListRecyclerAdapter(Context c, NameListDialog d, List<DelegateVote> dvs) {
+        context = c;
+        selfDialog = d;
+        delegateVotes = dvs;
+        target = ExploreActivity.EXPLORE_NATION;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.list_name_basic, parent, false);
-        RecyclerView.ViewHolder viewHolder = new EndorsementEntry(view);
+        RecyclerView.ViewHolder viewHolder = new NameEntry(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        EndorsementEntry happeningCard = (EndorsementEntry) holder;
-        happeningCard.init(names.get(position));
+        NameEntry nameEntry = (NameEntry) holder;
+        if (delegateVotes != null) {
+            DelegateVote dv = delegateVotes.get(position);
+            String displayFormat = String.format(Locale.US, context.getString(R.string.wa_delegate_votes_dialog_format),
+                    SparkleHelper.getNameFromId(dv.delegate),
+                    SparkleHelper.getPrettifiedNumber(dv.votes),
+                    English.plural(context.getString(R.string.wa_delegate_vote_singular), dv.votes));
+            nameEntry.init(displayFormat);
+        } else {
+            nameEntry.init(names.get(position));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return names.size();
+        if (delegateVotes != null) {
+            return delegateVotes.size();
+        } else {
+            return names.size();
+        }
     }
 
-    public class EndorsementEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class NameEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView nationName;
 
-        public EndorsementEntry(View v) {
+        public NameEntry(View v) {
             super(v);
             nationName = (TextView) v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
@@ -83,7 +109,11 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             if (pos != RecyclerView.NO_POSITION) {
                 selfDialog.dismiss();
-                SparkleHelper.startExploring(context, names.get(pos), target);
+                if (delegateVotes != null) {
+                    SparkleHelper.startExploring(context, delegateVotes.get(pos).delegate, target);
+                } else {
+                    SparkleHelper.startExploring(context, names.get(pos), target);
+                }
             }
         }
     }

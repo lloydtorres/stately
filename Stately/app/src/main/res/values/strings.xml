@@ -415,8 +415,14 @@
     <string name="wa_delegate_votes_against">Delegate Votes Against</string>
     <string name="wa_delegate_votes_for_newline">Delegate Votes\nFor</string>
     <string name="wa_delegate_votes_against_newline">Delegate Votes\nAgainst</string>
-    <string name="wa_individual_nations_for">Nations\nFor</string>
-    <string name="wa_individual_nations_against">Nations\nAgainst</string>
+    <string name="wa_individual_nations_for">Nations For</string>
+    <string name="wa_individual_nations_against">Nations Against</string>
+    <string name="wa_individual_nations_for_newline">Nations\nFor</string>
+    <string name="wa_individual_nations_against_newline">Nations\nAgainst</string>
+    <string name="wa_delegate_vote_singular">vote</string>
+    <string name="wa_delegate_votes_dialog_format">%1$s (%2$s %3$s)</string>
+    <string name="wa_delegate_no_votes_for">No delegates have voted for the resolution so far.</string>
+    <string name="wa_delegate_no_votes_against">No delegates have voted against the resolution so far.</string>
     <string name="wa_error">Resolution not found.</string>
     <string name="wa_last_resolution">Read this resolution</string>
 
