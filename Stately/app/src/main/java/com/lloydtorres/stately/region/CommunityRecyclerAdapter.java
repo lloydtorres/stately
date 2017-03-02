@@ -30,7 +30,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -190,6 +192,20 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
+    /**
+     * Sets the updating/loading status of the poll.
+     * @param isPollLoading
+     */
+    public void setPollLoading(boolean isPollLoading) {
+        for (int i=0; i<cards.size(); i++) {
+            if (cards.get(i) instanceof Poll) {
+                ((Poll) cards.get(i)).isVoteLoading = isPollLoading;
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     // Card viewholders
 
     // Card for the RMB button
@@ -240,6 +256,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView nullVote;
         private View divider;
         private LinearLayout voteButton;
+        private ImageView voteButtonIcon;
+        private ProgressBar voteButtonProgress;
         private TextView voteButtonContent;
 
         public PollCard(View v) {
@@ -254,6 +272,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
             divider = v.findViewById(R.id.view_divider);
             voteButton = (LinearLayout) v.findViewById(R.id.card_region_poll_vote_button);
+            voteButtonIcon = (ImageView) v.findViewById(R.id.card_region_poll_icon);
+            voteButtonProgress = (ProgressBar) v.findViewById(R.id.card_region_poll_progressbar);
             voteButtonContent = (TextView) v.findViewById(R.id.card_region_poll_vote_button_content);
         }
 
@@ -315,6 +335,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                         fragment.showPollVoteDialog(p);
                     }
                 });
+
+                voteButtonIcon.setVisibility(p.isVoteLoading ? View.GONE : View.VISIBLE);
+                voteButtonProgress.setVisibility(p.isVoteLoading ? View.VISIBLE : View.GONE);
             } else {
                 divider.setVisibility(View.GONE);
                 voteButton.setVisibility(View.GONE);

@@ -301,6 +301,8 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         isInProgress = true;
 
+        ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(true);
+
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -329,6 +331,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                     return;
                 }
                 isInProgress = false;
+                ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
                 }
@@ -340,6 +343,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             isInProgress = false;
+            ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.rate_limit_error));
         }
     }
@@ -384,6 +388,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                                 pollData.options.set(i, option);
                             }
 
+                            pollData.isVoteLoading = false;
                             ((CommunityRecyclerAdapter) mRecyclerAdapter).updatePoll(pollData);
                         } else {
                             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_generic));
@@ -400,6 +405,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 }
 
                 isInProgress = false;
+                ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
                 }
@@ -423,6 +429,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             isInProgress = false;
+            ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.rate_limit_error));
         }
     }

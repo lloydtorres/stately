@@ -109,12 +109,23 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
             <ImageView
+                android:id="@+id/card_region_poll_icon"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginLeft="-7dp"
                 android:padding="4dp"
                 app:srcCompat="?attr/themedDrawablePoll"/>
+            <ProgressBar
+                style="@style/MaterialCircleProgressBar"
+                android:id="@+id/card_region_poll_progressbar"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="-7dp"
+                android:padding="4dp"
+                android:indeterminate="true"
+                android:visibility="visible" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
