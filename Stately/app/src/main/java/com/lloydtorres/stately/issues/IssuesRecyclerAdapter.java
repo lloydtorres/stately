@@ -118,9 +118,31 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return -1;
     }
 
+    /**
+     * Sets the list of objects as the cards for the recycler adapter.
+     * @param cards
+     */
     public void setIssueCards(List<Object> cards) {
         issues = cards;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Given an issue ID, removes the first issue with that issue ID from the recycler.
+     * @param id
+     */
+    public void removeIssue(int id) {
+        for (int i=0; i < issues.size(); i++) {
+            Object card = issues.get(i);
+            if (card instanceof Issue) {
+                Issue issueCard = (Issue) card;
+                if (issueCard.id == id) {
+                    issues.remove(i);
+                    notifyItemRemoved(i);
+                    return;
+                }
+            }
+        }
     }
 
     // Card viewholders

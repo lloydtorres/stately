@@ -16,6 +16,10 @@
 
 package com.lloydtorres.stately.issues;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -29,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.core.RefreshviewFragment;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueFullHolder;
@@ -62,6 +67,20 @@ public class IssuesFragment extends RefreshviewFragment {
         mNation = n;
     }
 
+    private BroadcastReceiver issueDecisionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getActivity() == null || !isAdded() || mRecyclerAdapter == null) {
+                return;
+            }
+
+            // Remove the decided issue from the recycler adapter
+            // We don't care about our own copy of the issues since it'll get updated soon anyway
+            int issueId = intent.getIntExtra(IssueDecisionActivity.ISSUE_ID_DATA, -1);
+            ((IssuesRecyclerAdapter) mRecyclerAdapter).removeIssue(issueId);
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
@@ -74,6 +93,11 @@ public class IssuesFragment extends RefreshviewFragment {
                 queryIssues(mView);
             }
         });
+
+        // Register receiver
+        IntentFilter issueDecisionFilter = new IntentFilter();
+        issueDecisionFilter.addAction(IssueDecisionActivity.ISSUE_BROADCAST);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(issueDecisionReceiver, issueDecisionFilter);
 
         return mView;
     }

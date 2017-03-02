@@ -19,6 +19,7 @@ package com.lloydtorres.stately.issues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 
 import com.android.volley.NetworkError;
@@ -63,6 +64,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     // Keys for Intent data
     public static final String ISSUE_DATA = "issueData";
     public static final String NATION_DATA = "nationData";
+    public static final String ISSUE_ID_DATA = "issueIdData";
+    public static final String ISSUE_BROADCAST = "com.lloydtorres.stately.issues.ISSUE_DECISION";
 
     private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
     private static final String NOT_AVAILABLE = "Issue Not Available";
@@ -227,6 +230,13 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     public void onResponse(String response) {
                         isInProgress = false;
                         mSwipeRefreshLayout.setRefreshing(false);
+
+                        // Broadcast which issue has been decided and can be cleared
+                        Intent issueDecisionBroadcast = new Intent();
+                        issueDecisionBroadcast.setAction(ISSUE_BROADCAST);
+                        issueDecisionBroadcast.putExtra(ISSUE_ID_DATA, issue.id);
+                        LocalBroadcastManager.getInstance(IssueDecisionActivity.this).sendBroadcast(issueDecisionBroadcast);
+
                         if (option.id != IssueOption.DISMISS_ISSUE_ID) {
                             if (response != null && response.contains(LEGISLATION_PASSED)) {
                                 try {
