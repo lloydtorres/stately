@@ -771,7 +771,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (isPassword) {
             dialogBuilder
-                    .setTitle(getString(R.string.explore_region_password))
+                    .setTitle(String.format(Locale.US, getString(R.string.explore_region_password), name))
                     .setView(dialogView)
                     .setPositiveButton(getString(R.string.explore_move_confirm), dialogClickListener)
                     .setNegativeButton(getString(R.string.explore_negative), null);

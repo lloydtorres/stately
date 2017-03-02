@@ -98,7 +98,7 @@
     <string name="explore_dossier_rem_progress">Removing %1$s from the Dossier…</string>
 
     <string name="explore_region_move">Move to %1$s?</string>
-    <string name="explore_region_password">Password required to move</string>
+    <string name="explore_region_password">Password for %1$s</string>
     <string name="explore_move_confirm">Move</string>
     <string name="explore_move_progress">Moving to %1$s…</string>
     <string name="explore_move_wrong_password">Incorrect password.</string>
