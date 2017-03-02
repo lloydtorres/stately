@@ -17,8 +17,10 @@
 package com.lloydtorres.stately.explore;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -489,6 +491,22 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
         isInProgress = true;
 
+        String progressMessage = "";
+        switch (mode) {
+            case EXPLORE_NATION:
+                if (isEndorsed) {
+                    progressMessage = String.format(Locale.US, getString(R.string.explore_withdraw_endorse_progress), name);
+                } else {
+                    progressMessage = String.format(Locale.US, getString(R.string.explore_endorse_progress), name);
+                }
+                break;
+            case EXPLORE_REGION:
+                progressMessage = String.format(Locale.US, getString(R.string.explore_move_progress), name);
+                break;
+        }
+        final ProgressDialog pd = getProgressDialog(progressMessage);
+        pd.show();
+
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -505,10 +523,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         String localid = input.attr("value");
                         switch (mode) {
                             case EXPLORE_NATION:
-                                postEndorsement(localid);
+                                postEndorsement(localid, pd);
                                 break;
                             case EXPLORE_REGION:
-                                postRegionMove(localid, password);
+                                postRegionMove(localid, password, pd);
                                 break;
                         }
                     }
@@ -564,20 +582,22 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     /**
      * Actually does the post to submit an endorsement.
      * @param localid Required localId value
+     * @param pd ProgressDialog previously shown
      */
-    private void postEndorsement(final String localid) {
+    private void postEndorsement(final String localid, final ProgressDialog pd) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, ENDORSE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
-                        if (isEndorsed) {
+                        isEndorsed = !isEndorsed;
+                        if (!isEndorsed) {
                             SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_withdraw_endorse_response), name));
                         }
                         else {
                             SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_endorsed_response), name));
                         }
-
+                        pd.dismiss();
                         queryNation(id);
                     }
                 }, new Response.ErrorListener() {
@@ -585,6 +605,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+                pd.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -607,6 +628,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             isInProgress = false;
+            pd.dismiss();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -648,12 +670,18 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         if (!isInDossier && mode == EXPLORE_REGION) {
             postUrl = String.format(Locale.US, Dossier.POST_QUERY_ADD_REGION, SparkleHelper.getIdFromName(id));
         }
+
+        String progressMessage = String.format(Locale.US, getString(isInDossier ? R.string.explore_dossier_rem_progress : R.string.explore_dossier_add_progress), name);
+        final ProgressDialog dossierProgress = getProgressDialog(progressMessage);
+        dossierProgress.show();
+
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, postUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
                         isInDossier = !isInDossier;
+                        dossierProgress.dismiss();
                         if (isInDossier) {
                             SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_dossier_added), name));
                         }
@@ -667,6 +695,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+                dossierProgress.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -705,6 +734,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             isInProgress = false;
+            dossierProgress.dismiss();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -764,8 +794,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * POSTs to the server to move a nation to a region.
      * @param localid Required localId
      * @param password Password (can be null)
+     * @param pd ProgressDialog previously shown
      */
-    private void postRegionMove(final String localid, final String password) {
+    private void postRegionMove(final String localid, final String password, final ProgressDialog pd) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, Region.CHANGE_QUERY,
                 new Response.Listener<String>() {
                     @Override
@@ -773,7 +804,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(response);
                         Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(response);
                         isInProgress = false;
-
+                        pd.dismiss();
                         if (moveSuccess.find()) {
                             Intent statelyActivityLaunch = new Intent(ExploreActivity.this, StatelyActivity.class);
                             statelyActivityLaunch.putExtra(StatelyActivity.NAV_INIT, StatelyActivity.REGION_FRAGMENT);
@@ -792,6 +823,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+                pd.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -812,6 +844,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             isInProgress = false;
+            pd.dismiss();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }
@@ -997,6 +1030,15 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
         }
         isInProgress = false;
+    }
+
+    private ProgressDialog getProgressDialog(String content) {
+        ProgressDialog pd = new ProgressDialog(this,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? RaraHelper.getThemeMaterialDialog(this) : RaraHelper.getPreLollipopThemeMaterialDialog(this));
+        pd.setIndeterminate(true);
+        pd.setMessage(content);
+        pd.setCanceledOnTouchOutside(false);
+        return pd;
     }
 
     @Override

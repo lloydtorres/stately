@@ -83,6 +83,8 @@
     <string name="explore_withdraw_endorse_response">Withdrew endorsement for %1$s.</string>
     <string name="explore_endorse_button">Endorse</string>
     <string name="explore_withdraw_endorse_button">Withdraw</string>
+    <string name="explore_endorse_progress">Endorsing %1$s…</string>
+    <string name="explore_withdraw_endorse_progress">Withdrawing endorsement for %1$s…</string>
 
     <string name="explore_menu_dossier_add">Add to Dossier</string>
     <string name="explore_menu_dossier_rem">Remove from Dossier</string>
@@ -92,10 +94,13 @@
     <string name="explore_dossier_rem_confirm">Remove %1$s from the Dossier?</string>
     <string name="explore_dossier_add_button">Add</string>
     <string name="explore_dossier_rem_button">Remove</string>
+    <string name="explore_dossier_add_progress">Adding %1$s to the Dossier…</string>
+    <string name="explore_dossier_rem_progress">Removing %1$s from the Dossier…</string>
 
     <string name="explore_region_move">Move to %1$s?</string>
     <string name="explore_region_password">Password required to move</string>
     <string name="explore_move_confirm">Move</string>
+    <string name="explore_move_progress">Moving to %1$s…</string>
     <string name="explore_move_wrong_password">Incorrect password.</string>
 
     <!-- Switch nation -->
