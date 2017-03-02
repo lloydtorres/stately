@@ -277,14 +277,15 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     /**
      * Shows a dialog allowing the user to vote on a regional poll.
      * @param pollData Data for the target poll.
+     * @param pollCard The card viewholder for the poll
      */
-    public void showPollVoteDialog(Poll pollData) {
+    public void showPollVoteDialog(Poll pollData, CommunityRecyclerAdapter.PollCard pollCard) {
         if (getActivity() == null || !isAdded()) {
             return;
         }
 
         PollVoteDialog voteDialog = new PollVoteDialog();
-        voteDialog.setData(this, pollData);
+        voteDialog.setData(this, pollData, pollCard);
         voteDialog.show(getFragmentManager(), PollVoteDialog.DIALOG_TAG);
     }
 
@@ -292,8 +293,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
      * Starts the process of submitting a poll vote by getting the CHK value, then
      * POSTing the actual vote call.
      * @param pollData
+     * @param pollCard The card viewholder for the poll
      */
-    public void startSubmitPollVote(final Poll pollData) {
+    public void startSubmitPollVote(final Poll pollData, final CommunityRecyclerAdapter.PollCard pollCard) {
         if (isInProgress) {
             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.multiple_request_error));
             return;
@@ -301,7 +303,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         isInProgress = true;
 
-        ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(true);
+        if (pollCard != null) {
+            pollCard.setIsLoading(true);
+        }
 
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
@@ -321,7 +325,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                         }
 
                         String chk = input.attr("value");
-                        postPollVote(chk, pollData);
+                        postPollVote(chk, pollData, pollCard);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -331,7 +335,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                     return;
                 }
                 isInProgress = false;
-                ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
+                if (pollCard != null) {
+                    pollCard.setIsLoading(false);
+                }
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
                 }
@@ -343,7 +349,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             isInProgress = false;
-            ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
+            if (pollCard != null) {
+                pollCard.setIsLoading(false);
+            }
             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.rate_limit_error));
         }
     }
@@ -352,8 +360,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
      * POSTs the actuall poll vote to NationStates and updates the poll card.
      * @param chk NS chk value
      * @param pollData Poll data to submit
+     * @param pollCard The card viewholder for the poll
      */
-    private void postPollVote(final String chk, final Poll pollData) {
+    private void postPollVote(final String chk, final Poll pollData, final CommunityRecyclerAdapter.PollCard pollCard) {
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
@@ -388,7 +397,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                                 pollData.options.set(i, option);
                             }
 
-                            pollData.isVoteLoading = false;
+                            if (pollCard != null) {
+                                pollCard.setIsLoading(false);
+                            }
                             ((CommunityRecyclerAdapter) mRecyclerAdapter).updatePoll(pollData);
                         } else {
                             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_generic));
@@ -405,7 +416,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                 }
 
                 isInProgress = false;
-                ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
+                if (pollCard != null) {
+                    pollCard.setIsLoading(false);
+                }
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
                 }
@@ -429,7 +442,9 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         if (!DashHelper.getInstance(getContext()).addRequest(stringRequest)) {
             isInProgress = false;
-            ((CommunityRecyclerAdapter) mRecyclerAdapter).setPollLoading(false);
+            if (pollCard != null) {
+                pollCard.setIsLoading(false);
+            }
             SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.rate_limit_error));
         }
     }

@@ -36,13 +36,15 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private RegionCommunitySubFragment fragment;
     private PollVoteDialog dialog;
     private Poll pollData;
+    private CommunityRecyclerAdapter.PollCard pollCard;
 
     private final PollOption withdrawOption;
 
-    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p, String withdrawText) {
+    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p, String withdrawText, CommunityRecyclerAdapter.PollCard pc) {
         fragment = frag;
         dialog = diag;
         pollData = p;
+        pollCard = pc;
 
         withdrawOption = new PollOption();
         withdrawOption.text = withdrawText;
@@ -97,7 +99,7 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             Poll newPollData = pollData;
             newPollData.votedOption = pollOption.id;
             dialog.dismiss();
-            fragment.startSubmitPollVote(newPollData);
+            fragment.startSubmitPollVote(newPollData, pollCard);
         }
     }
 }

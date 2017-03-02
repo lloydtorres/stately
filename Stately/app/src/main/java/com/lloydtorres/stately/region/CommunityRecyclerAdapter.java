@@ -192,20 +192,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    /**
-     * Sets the updating/loading status of the poll.
-     * @param isPollLoading
-     */
-    public void setPollLoading(boolean isPollLoading) {
-        for (int i=0; i<cards.size(); i++) {
-            if (cards.get(i) instanceof Poll) {
-                ((Poll) cards.get(i)).isVoteLoading = isPollLoading;
-                notifyItemChanged(i);
-                break;
-            }
-        }
-    }
-
     // Card viewholders
 
     // Card for the RMB button
@@ -332,17 +318,23 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 voteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fragment.showPollVoteDialog(p);
+                        fragment.showPollVoteDialog(p, PollCard.this);
                     }
                 });
 
-                voteButtonIcon.setVisibility(p.isVoteLoading ? View.GONE : View.VISIBLE);
-                voteButtonProgress.setVisibility(p.isVoteLoading ? View.VISIBLE : View.GONE);
+                // Set default visibilities
+                voteButtonIcon.setVisibility(View.VISIBLE);
+                voteButtonProgress.setVisibility(View.GONE);
             } else {
                 divider.setVisibility(View.GONE);
                 voteButton.setVisibility(View.GONE);
                 voteButton.setOnClickListener(null);
             }
+        }
+
+        public void setIsLoading(boolean isLoading) {
+            voteButtonIcon.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+            voteButtonProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         }
 
         private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters, boolean votedOption) {

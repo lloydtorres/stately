@@ -57,7 +57,6 @@ public class Poll implements Parcelable {
     public List<PollOption> options;
     public boolean isVotingEnabled;
     public int votedOption;
-    public boolean isVoteLoading;
 
     public Poll() { super(); }
 
@@ -76,7 +75,6 @@ public class Poll implements Parcelable {
         }
         isVotingEnabled = in.readByte() != 0x00;
         votedOption = in.readInt();
-        isVoteLoading = in.readByte() != 0x00;
     }
 
     @Override
@@ -100,7 +98,6 @@ public class Poll implements Parcelable {
         }
         dest.writeByte((byte) (isVotingEnabled ? 0x01 : 0x00));
         dest.writeInt(votedOption);
-        dest.writeByte((byte) (isVoteLoading ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
