@@ -115,6 +115,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginLeft="-7dp"
                 android:padding="4dp"
+                android:visibility="visible"
                 app:srcCompat="?attr/themedDrawablePoll"/>
             <ProgressBar
                 style="@style/MaterialCircleProgressBar"
@@ -125,7 +126,7 @@
                 android:layout_marginLeft="-7dp"
                 android:padding="4dp"
                 android:indeterminate="true"
-                android:visibility="visible" />
+                android:visibility="gone" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

@@ -39,9 +39,14 @@ public class SuperweaponDialog extends DetachDialogFragment {
 
     private RadioGroup actionState;
     private ZSuperweaponStatus status;
+    private ZombieChartCard zombieCard;
 
     public void setSuperweaponStatus(ZSuperweaponStatus s) {
         status = s;
+    }
+
+    public void setZombieCard(ZombieChartCard card) {
+        zombieCard = card;
     }
 
     @Override
@@ -92,7 +97,7 @@ public class SuperweaponDialog extends DetachDialogFragment {
         }
 
         if (choice != null && getActivity() != null && getActivity() instanceof ExploreActivity) {
-            ((ExploreActivity) getActivity()).deployZSuperweapon(choice);
+            ((ExploreActivity) getActivity()).deployZSuperweapon(choice, zombieCard);
         }
     }
 }

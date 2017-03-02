@@ -60,6 +60,7 @@ import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 import com.lloydtorres.stately.zombie.SuperweaponDialog;
+import com.lloydtorres.stately.zombie.ZombieChartCard;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -880,8 +881,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
     /**
      * Call to show the superweapon dialog.
+     * @param zombieCard The card viewholder calling the action
      */
-    public void showSuperweaponDialog() {
+    public void showSuperweaponDialog(ZombieChartCard zombieCard) {
         if (isFinishing()) {
             return;
         }
@@ -891,6 +893,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 (superweaponStatus.isTZES || superweaponStatus.isCure || superweaponStatus.isHorde)) {
             SuperweaponDialog superweaponDialog = new SuperweaponDialog();
             superweaponDialog.setSuperweaponStatus(superweaponStatus);
+            superweaponDialog.setZombieCard(zombieCard);
             superweaponDialog.show(getSupportFragmentManager(), SuperweaponDialog.DIALOG_TAG);
         } else {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
@@ -905,19 +908,22 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * Sends a POST to NS with the user's selected superweapon. Reacts appropriately based on response.
      * Used for Z-Day.
      * @param superweapon Header for the selected superweapon
+     * @param zombieCard The card viewholder invoking the action
      */
-    public void deployZSuperweapon(final String superweapon) {
+    public void deployZSuperweapon(final String superweapon, final ZombieChartCard zombieCard) {
         if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
             return;
         }
         isInProgress = true;
+        zombieCard.setIsLoading(true);
 
         String targetURL = String.format(Locale.US, Nation.QUERY_HTML, SparkleHelper.getIdFromName(id));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        zombieCard.setIsLoading(false);
                         processZSuperweaponResponse(response);
                     }
                 }, new Response.ErrorListener() {
@@ -925,6 +931,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+                zombieCard.setIsLoading(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 } else {
@@ -939,6 +946,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             isInProgress = false;
+            zombieCard.setIsLoading(false);
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
     }

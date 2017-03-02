@@ -372,6 +372,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                             return;
                         }
 
+                        if (pollCard != null) {
+                            pollCard.setIsLoading(false);
+                        }
+
                         if (response.contains(Poll.RESPONSE_VOTE) || response.contains(Poll.RESPONSE_WITHDRAW)) {
                             // Add user to voted list then update poll data
                             String userId = PinkaHelper.getActiveUser(getContext()).nationId;
@@ -395,10 +399,6 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                                 Collections.sort(voters, String.CASE_INSENSITIVE_ORDER);
                                 option.voters = SparkleHelper.joinStringList(voters, ":");
                                 pollData.options.set(i, option);
-                            }
-
-                            if (pollCard != null) {
-                                pollCard.setIsLoading(false);
                             }
                             ((CommunityRecyclerAdapter) mRecyclerAdapter).updatePoll(pollData);
                         } else {

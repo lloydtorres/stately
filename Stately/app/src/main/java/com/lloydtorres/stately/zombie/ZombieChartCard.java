@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -69,6 +70,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     private TextView genericButtonText;
 
     private LinearLayout missileButton;
+    private ImageView missileIcon;
+    private ProgressBar missileProgressBar;
 
     public ZombieChartCard(View itemView) {
         super(itemView);
@@ -86,6 +89,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         genericButtonText = (TextView) itemView.findViewById(R.id.card_zombie_chart_button_generic_text);
 
         missileButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_missile);
+        missileIcon = (ImageView) itemView.findViewById(R.id.card_zombie_chart_missile_icon);
+        missileProgressBar = (ProgressBar) itemView.findViewById(R.id.card_zombie_chart_missile_progressbar);
     }
 
     public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {
@@ -94,15 +99,25 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
 
         if (mode == MODE_NATION_SUPERWEAPON) {
             missileButton.setVisibility(View.VISIBLE);
+
+            // Set default visibilities
+            missileIcon.setVisibility(View.VISIBLE);
+            missileProgressBar.setVisibility(View.GONE);
+
             missileButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (exploreActivity != null) {
-                        exploreActivity.showSuperweaponDialog();
+                        exploreActivity.showSuperweaponDialog(ZombieChartCard.this);
                     }
                 }
             });
         }
+    }
+
+    public void setIsLoading(boolean isLoading) {
+        missileIcon.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+        missileProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
     }
 
     public void init(final Context c, final Zombie zombieData, final int mode, final String target) {

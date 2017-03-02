@@ -115,12 +115,24 @@
             android:visibility="gone"
             tools:visibility="visible">
             <ImageView
+                android:id="@+id/card_zombie_chart_missile_icon"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginLeft="-7dp"
                 android:padding="4dp"
+                android:visibility="visible"
                 app:srcCompat="@drawable/ic_superweapon"/>
+            <ProgressBar
+                style="@style/MaterialCircleProgressBar"
+                android:id="@+id/card_zombie_chart_missile_progressbar"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginLeft="-7dp"
+                android:padding="4dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
