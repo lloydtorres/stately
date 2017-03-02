@@ -321,6 +321,9 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
             headline.headline = text.text();
             headline.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
+            if ((headline.headline == null || headline.headline.length() <= 0) || (headline.imgUrl == null || headline.imgUrl.length() <= 0)) {
+                break;
+            }
             headlines.add(headline);
         }
         issueResultsActivity.putExtra(IssueResultsActivity.HEADLINES_DATA, headlines);
