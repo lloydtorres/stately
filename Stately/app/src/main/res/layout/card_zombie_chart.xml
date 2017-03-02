@@ -119,7 +119,7 @@
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_marginRight="7dp"
-                android:layout_marginLeft="-7dp"
+                android:layout_marginLeft="-6dp"
                 android:padding="4dp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/ic_superweapon"/>
@@ -129,7 +129,7 @@
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_marginRight="7dp"
-                android:layout_marginLeft="-7dp"
+                android:layout_marginLeft="-6dp"
                 android:padding="4dp"
                 android:indeterminate="true"
                 android:visibility="gone" />
