@@ -328,7 +328,6 @@
 
     <!-- Issues -->
     <string name="next_issue">Next issue expected %1$s.</string>
-    <string name="no_issues">No issues available at the moment.</string>
     <string name="issue_number">Issue #%1$s</string>
     <string name="issue_chain_and_number">Issue #%1$s — %2$s</string>
     <string name="issue_activity_title">%1$s: Issue #%2$s</string>
@@ -354,11 +353,12 @@
     <string name="telegrams_compose">Compose Telegram</string>
     <string name="telegrams_alert_recruitment">Recruitment Telegram</string>
     <string name="telegrams_alert_region">Regional Telegram</string>
-    <string name="telegram_alert_welcome">Regional Welcome Telegram</string>
+    <string name="telegrams_alert_welcome">Regional Welcome Telegram</string>
     <string name="telegrams_alert_mod">Moderator Telegram</string>
     <string name="telegrams_alert_system">Bureaucratic Telegram</string>
     <string name="telegrams_alert_wa">World Assembly Telegram</string>
     <string name="telegrams_alert_campaign">World Assembly Campaign Telegram</string>
+    <string name="telegrams_alert_api">Automated Telegram</string>
     <string name="telegrams_recipients">to %1$s</string>
     <string name="telegrams_region_explore">Visit %1$s</string>
     <string name="telegrams_backtrack_error">Can\'t catch up with the volume of telegrams.</string>

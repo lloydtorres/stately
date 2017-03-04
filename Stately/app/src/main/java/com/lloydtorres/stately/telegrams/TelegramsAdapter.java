@@ -212,6 +212,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             int alertContent = R.string.telegrams_alert_recruitment;
 
             switch (type) {
+                case Telegram.TELEGRAM_API:
+                    alertContent = R.string.telegrams_alert_api;
+                    break;
                 case Telegram.TELEGRAM_REGION:
                     iconRes = isPreview ? R.drawable.ic_region_green : R.drawable.ic_region_white;
                     alertColor = R.color.colorChart3;
@@ -220,7 +223,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case Telegram.TELEGRAM_WELCOME:
                     iconRes = isPreview ? R.drawable.ic_region_green : R.drawable.ic_region_white;
                     alertColor = R.color.colorChart3;
-                    alertContent = R.string.telegram_alert_welcome;
+                    alertContent = R.string.telegrams_alert_welcome;
                     break;
                 case Telegram.TELEGRAM_MODERATOR:
                     iconRes = isPreview ? R.drawable.ic_alert_moderator : R.drawable.ic_alert_moderator_white;
