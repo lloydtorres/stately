@@ -329,12 +329,19 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             Element text = newspaperContent.select("div.dpaper4").first();
             Element img = newspaperContent.select("img.dpaperpic1").first();
 
-            headline.headline = text.text();
-            headline.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
-            if ((headline.headline == null || headline.headline.length() <= 0) || (headline.imgUrl == null || headline.imgUrl.length() <= 0)) {
-                break;
+            if (text != null && img != null) {
+                String headlineText = text.text();
+                String rawImgLink = img.attr("src");
+
+                if (headlineText != null && headlineText.length() > 0 && rawImgLink != null && rawImgLink.length() > 0) {
+                    headline.headline = headlineText;
+                    // Uses the banner version of the image instead of the newspaper version
+                    rawImgLink = rawImgLink.replace("-1", "");
+                    rawImgLink = rawImgLink.replace("newspaper", "banners");
+                    headline.imgUrl = SparkleHelper.BASE_URI_NOSLASH + rawImgLink;
+                    headlines.add(headline);
+                }
             }
-            headlines.add(headline);
         }
         issueResultsActivity.putExtra(IssueResultsActivity.HEADLINES_DATA, headlines);
 
