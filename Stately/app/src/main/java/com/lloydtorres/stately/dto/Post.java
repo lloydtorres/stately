@@ -45,6 +45,7 @@ public class Post implements Parcelable, Comparable<Post> {
     public String name;
     @Element(name="MESSAGE", required=false)
     public String message;
+    public String messageRaw;
     @Element(name="STATUS", required=false)
     public int status;
     @Element(name="SUPPRESSOR", required=false)
@@ -62,6 +63,7 @@ public class Post implements Parcelable, Comparable<Post> {
         timestamp = in.readLong();
         name = in.readString();
         message = in.readString();
+        messageRaw = in.readString();
         status = in.readInt();
         suppressor = in.readString();
         likes = in.readInt();
@@ -80,6 +82,7 @@ public class Post implements Parcelable, Comparable<Post> {
         dest.writeLong(timestamp);
         dest.writeString(name);
         dest.writeString(message);
+        dest.writeString(messageRaw);
         dest.writeInt(status);
         dest.writeString(suppressor);
         dest.writeInt(likes);

@@ -84,7 +84,7 @@ public class MessageBoardActivity extends SlidrActivity {
 
     public static final int NO_LATEST = -1;
 
-    public static final String QUOTE_TEMPLATE = "[quote=%s;%d]%s[/quote]\n";
+    public static final String QUOTE_TEMPLATE = "[quote=%s;%d]%s[/quote]";
 
     // Direction to scan for messages
     private static final int SCAN_BACKWARD = 0;
@@ -573,7 +573,7 @@ public class MessageBoardActivity extends SlidrActivity {
         params.put("chk", chk);
         String newMessage = messageContainer.getText().toString();
         if (replyTarget != null) {
-            String quoteMessage = replyTarget.message;
+            String quoteMessage = replyTarget.messageRaw;
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
             quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_2);

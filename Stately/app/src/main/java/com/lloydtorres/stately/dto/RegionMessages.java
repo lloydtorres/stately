@@ -93,6 +93,7 @@ public class RegionMessages implements Parcelable {
         RegionMessages messageResponse = serializer.read(RegionMessages.class, response);
         if (messageResponse.posts != null && messageResponse.posts.size() > 0) {
             for (int i=0; i < messageResponse.posts.size(); i++) {
+                messageResponse.posts.get(i).messageRaw = messageResponse.posts.get(i).message;
                 messageResponse.posts.get(i).message = SparkleHelper.transformBBCodeToHtml(c, messageResponse.posts.get(i).message);
             }
         }
