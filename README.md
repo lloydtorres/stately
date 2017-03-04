@@ -22,6 +22,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Revision History
 
+* **1.8.1** - Bug fixes and improvements.
 * **1.8.0** - RMB suppressions, WA resolution vote breakdown, visual polishes, bug fixes and other improvements.
 * **1.7.6** - Bug fixes and improvements.
 * **1.7.5** - Bug fixes and improvements.
