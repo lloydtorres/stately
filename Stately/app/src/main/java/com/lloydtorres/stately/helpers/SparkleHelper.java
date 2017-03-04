@@ -506,7 +506,7 @@ public final class SparkleHelper {
      */
     public static Calendar getUtc5Calendar() {
         Calendar cal = new GregorianCalendar();
-        cal.setTimeZone(SparkleHelper.TIMEZONE_TORONTO);
+        cal.setTimeZone(TIMEZONE_TORONTO);
         return cal;
     }
 
@@ -722,6 +722,9 @@ public final class SparkleHelper {
      * @return Styled spanned object
      */
     public static Spanned getHtmlFormatting(String content) {
+        if (content == null) {
+            content = "";
+        }
         String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
         holder = replaceMalformedHtmlCharacters(holder);
         return fromHtml(holder);
@@ -865,8 +868,8 @@ public final class SparkleHelper {
                 ((HtmlTextView)t).setHtml(holder);
             }
             catch(Exception e) {
-                SparkleHelper.logError(e.toString());
-                SparkleHelper.logError(holder);
+                logError(e.toString());
+                logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
@@ -1268,7 +1271,7 @@ public final class SparkleHelper {
                 Uri finalLinkUri = Uri.parse(finalLink).normalizeScheme();
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), finalLink, finalLinkUri.getHost());
             } else if (link.getScheme().equals(ExploreActivity.EXPLORE_PROTOCOL)) {
-                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal), link.toString(), SparkleHelper.getNameFromId(link.getHost()));
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal), link.toString(), getNameFromId(link.getHost()));
             } else {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
             }
