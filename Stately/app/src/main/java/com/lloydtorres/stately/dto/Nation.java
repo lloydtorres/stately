@@ -39,7 +39,7 @@ import java.util.List;
 public class Nation implements Parcelable {
 
     public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
-                                                + "banner+flag+name+type+wa"
+                                                + "banner+flag+name+type+wa+wabadges"
                                                 + "+category+region+influence+population+foundedtime+lastlogin+motto"
                                                 + "+freedom"
                                                 + "+customleader+customcapital+govtpriority+tax"
@@ -87,6 +87,9 @@ public class Nation implements Parcelable {
     public long lastActivityAgo;
     @Element(name="MOTTO")
     public String motto;
+
+    @ElementList(name="WABADGES", required=false)
+    public List<WaBadge> waBadges;
 
     @Element(name="FREEDOM")
     public Freedom freedomDesc;
@@ -178,6 +181,12 @@ public class Nation implements Parcelable {
         foundedAgo = in.readLong();
         lastActivityAgo = in.readLong();
         motto = in.readString();
+        if (in.readByte() == 0x01) {
+            waBadges = new ArrayList<WaBadge>();
+            in.readList(waBadges, WaBadge.class.getClassLoader());
+        } else {
+            waBadges = null;
+        }
         freedomDesc = (Freedom) in.readValue(Freedom.class.getClassLoader());
         leader = in.readString();
         capital = in.readString();
@@ -246,6 +255,12 @@ public class Nation implements Parcelable {
         dest.writeLong(foundedAgo);
         dest.writeLong(lastActivityAgo);
         dest.writeString(motto);
+        if (waBadges == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(waBadges);
+        }
         dest.writeValue(freedomDesc);
         dest.writeString(leader);
         dest.writeString(capital);

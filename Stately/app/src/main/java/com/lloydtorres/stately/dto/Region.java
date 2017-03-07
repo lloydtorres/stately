@@ -39,7 +39,7 @@ import java.util.List;
 public class Region extends BaseRegion implements Parcelable {
 
     public static final String QUERY = BaseRegion.BASE_QUERY
-                                        + "+power"
+                                        + "+power+wabadges"
                                         + "+poll+gavote+scvote"
                                         + "+officers+embassies"
                                         + "+happenings+history"
@@ -51,6 +51,9 @@ public class Region extends BaseRegion implements Parcelable {
 
     @Element(name="POWER")
     public String power;
+
+    @ElementList(name="WABADGES", required=false)
+    public List<WaBadge> waBadges;
 
     @Element(name="POLL", required=false)
     public Poll poll;
@@ -80,6 +83,12 @@ public class Region extends BaseRegion implements Parcelable {
     protected Region(Parcel in) {
         super(in);
         power = in.readString();
+        if (in.readByte() == 0x01) {
+            waBadges = new ArrayList<WaBadge>();
+            in.readList(waBadges, WaBadge.class.getClassLoader());
+        } else {
+            waBadges = null;
+        }
         poll = (Poll) in.readValue(Poll.class.getClassLoader());
         gaVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
         scVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
@@ -125,6 +134,12 @@ public class Region extends BaseRegion implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(power);
+        if (waBadges == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(waBadges);
+        }
         dest.writeValue(poll);
         dest.writeValue(gaVote);
         dest.writeValue(scVote);
