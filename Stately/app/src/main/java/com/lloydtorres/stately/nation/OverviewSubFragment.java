@@ -102,6 +102,10 @@ public class OverviewSubFragment extends NationSubFragment {
             cards.add(mNation.zombieData);
         }
 
+        if (mNation.waBadges != null) {
+            cards.addAll(mNation.waBadges);
+        }
+
         NationOverviewCardData nocData = new NationOverviewCardData();
 
         // Set up custom government category depending on user preferences

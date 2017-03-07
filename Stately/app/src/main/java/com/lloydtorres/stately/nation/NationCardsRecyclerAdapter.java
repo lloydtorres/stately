@@ -46,6 +46,7 @@ import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
 import com.lloydtorres.stately.dto.Sectors;
+import com.lloydtorres.stately.dto.WaBadge;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -54,6 +55,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.wa.ResolutionActivity;
+import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -68,11 +70,12 @@ import java.util.Locale;
  */
 public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // different types of cards
-    public static final int CARD_OVERVIEW = 0;
-    public static final int CARD_FREEDOMS = 1;
-    public static final int CARD_GENERIC = 2;
-    public static final int CARD_CHART = 3;
-    public static final int CARD_ZOMBIE = 4;
+    private static final int CARD_OVERVIEW = 0;
+    private static final int CARD_FREEDOMS = 1;
+    private static final int CARD_GENERIC = 2;
+    private static final int CARD_CHART = 3;
+    private static final int CARD_ZOMBIE = 4;
+    private static final int CARD_WA_BADGE = 5;
 
     private String[] WORLD_CENSUS_ITEMS;
 
@@ -130,6 +133,10 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 View zombieCard = inflater.inflate(R.layout.card_zombie_chart, parent, false);
                 viewHolder = new ZombieChartCard(zombieCard);
                 break;
+            case CARD_WA_BADGE:
+                View waBadgeCard = inflater.inflate(R.layout.card_wa_badge, parent, false);
+                viewHolder = new WaBadgeCard(context, waBadgeCard);
+                break;
         }
 
         return viewHolder;
@@ -164,6 +171,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else {
                     zcc.init(context, zombieData, ZombieChartCard.MODE_NATION_DEFAULT, nationName);
                 }
+                break;
+            case CARD_WA_BADGE:
+                WaBadgeCard bc = (WaBadgeCard) holder;
+                bc.init((WaBadge) cards.get(position));
+                break;
         }
     }
 
@@ -188,6 +200,9 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         else if (cards.get(position) instanceof Zombie) {
             return CARD_ZOMBIE;
+        }
+        else if (cards.get(position) instanceof WaBadge) {
+            return CARD_WA_BADGE;
         }
         return -1;
     }
@@ -309,9 +324,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
          */
         private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote, int councilId) {
             // Intent to open the ResolutionActivity
-            Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
+            final Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
             resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-            final Intent fResolution = resolutionActivityLaunch;
 
             // Colour of the indicator as well as the assembly name
             int stateColour;
@@ -351,7 +365,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             holder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(fResolution);
+                    context.startActivity(resolutionActivityLaunch);
                 }
             });
         }

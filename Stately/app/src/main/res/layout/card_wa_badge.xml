@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wa_badge_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    card_view:cardBackgroundColor="@color/colorChart0">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/wa_badge_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="4dp"
+            android:padding="8dp"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/ic_wa_white"/>
+        <TextView
+            android:id="@+id/wa_resolution_vote_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/wa_badge_icon"
+            android:layout_toRightOf="@+id/wa_badge_icon"
+            android:fontFamily="sans-serif"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/wa_badge_liberated"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

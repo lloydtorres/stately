@@ -29,9 +29,11 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
+import com.lloydtorres.stately.dto.WaBadge;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
 
 import org.atteo.evo.inflector.English;
@@ -50,6 +52,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     private static final int REGION_FACTBOOK = 1;
     private static final int REGION_TAGS = 2;
     private static final int REGION_ZOMBIE = 3;
+    private static final int REGION_WA_BADGE = 4;
 
     private List<Parcelable> cards;
     private String regionName;
@@ -90,6 +93,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 View zombieCard = inflater.inflate(R.layout.card_zombie_chart, parent, false);
                 viewHolder = new ZombieChartCard(zombieCard);
                 break;
+            case REGION_WA_BADGE:
+                View waBadgeCard = inflater.inflate(R.layout.card_wa_badge, parent, false);
+                viewHolder = new WaBadgeCard(context, waBadgeCard);
+                break;
         }
 
         return viewHolder;
@@ -114,6 +121,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 ZombieChartCard zombieChartCard = (ZombieChartCard) holder;
                 zombieChartCard.init(context, (Zombie) cards.get(position), ZombieChartCard.MODE_REGION_DEFAULT, regionName);
                 break;
+            case REGION_WA_BADGE:
+                WaBadgeCard bc = (WaBadgeCard) holder;
+                bc.init((WaBadge) cards.get(position));
+                break;
         }
     }
 
@@ -135,6 +146,9 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
         }
         else if (cards.get(position) instanceof Zombie) {
             return REGION_ZOMBIE;
+        }
+        else if (cards.get(position) instanceof WaBadge) {
+            return REGION_WA_BADGE;
         }
         return -1;
     }

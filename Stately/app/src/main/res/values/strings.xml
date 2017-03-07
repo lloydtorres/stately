@@ -431,6 +431,11 @@
     <string name="wa_error">Resolution not found.</string>
     <string name="wa_last_resolution">Read this resolution</string>
 
+    <!-- WA Badges -->
+    <string name="wa_badge_commend">Commended by the World Assembly (SC #%1$d)</string>
+    <string name="wa_badge_condemn">Condemned by the World Assembly (SC #%1$d)</string>
+    <string name="wa_badge_liberated">Liberated by the World Assembly (SC #%1$d)</string>
+
     <!-- The World -->
     <string name="world_nations">nations</string>
     <string name="world_regions">regions</string>

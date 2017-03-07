@@ -78,6 +78,10 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
             cards.add(mRegion.zombieData);
         }
 
+        if (mRegion.waBadges != null) {
+            cards.addAll(mRegion.waBadges);
+        }
+
         RegionQuickFactsCardData quickFacts = new RegionQuickFactsCardData();
         quickFacts.waDelegate = mRegion.delegate;
         quickFacts.delegateVotes = mRegion.delegateVotes;
