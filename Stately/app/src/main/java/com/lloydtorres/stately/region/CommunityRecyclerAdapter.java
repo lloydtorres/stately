@@ -282,19 +282,22 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             List<PollOption> results = p.options;
             Collections.sort(results);
 
+            // Clear then add vote options
             options.removeAllViews();
+            for (int i=0; i<results.size(); i++) {
+                inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
+            }
+
             int voteTotal = 0;
             for (int i=0; i<results.size(); i++) {
                 voteTotal += results.get(i).votes;
             }
-
             if (voteTotal > 0) {
                 breakdown.setVisibility(View.VISIBLE);
                 nullVote.setVisibility(View.GONE);
 
                 List<PieEntry> chartEntries = new ArrayList<PieEntry>();
                 for (int i=0; i<results.size(); i++) {
-                    inflateOption(options, i+1, results.get(i).text, results.get(i).votes, results.get(i).voters, i==p.votedOption);
                     chartEntries.add(new PieEntry((results.get(i).votes * 100f)/voteTotal, String.format(Locale.US, context.getString(R.string.region_option_index), i+1)));
                 }
 
