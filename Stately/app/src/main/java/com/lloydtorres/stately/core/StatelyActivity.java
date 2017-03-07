@@ -39,7 +39,6 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.UnreadData;
 import com.lloydtorres.stately.dto.UserData;
 import com.lloydtorres.stately.dto.UserLogin;
@@ -246,7 +245,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         if (NightmareHelper.getIsZDayActive(this) && mNation.zombieData != null) {
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
         } else {
-            dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+            dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
         }
 
         dashie.loadImage(mNation.flagURL, nationFlag, true);

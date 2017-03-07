@@ -65,6 +65,7 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-09-30.
@@ -448,6 +449,19 @@ public final class RaraHelper {
         StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
         layoutParams.setFullSpan(isFullSpan);
         itemView.setLayoutParams(layoutParams);
+    }
+
+    // String template used to get nation banners from NationStates
+    // @param: banner_id
+    public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images/banners/%s.jpg";
+
+    /**
+     * Return the URL of a nation banner.
+     * @param id The banner ID.
+     * @return The URL to the banner.
+     */
+    public static String getBannerURL(String id) {
+        return String.format(Locale.US, BANNER_TEMPLATE, id);
     }
 
     public static final int DAY_NORMAL = -1;

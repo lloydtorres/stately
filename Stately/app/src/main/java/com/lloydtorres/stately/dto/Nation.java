@@ -30,7 +30,6 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Lloyd on 2016-01-10.
@@ -58,10 +57,6 @@ public class Nation implements Parcelable {
     public static final String QUERY = BASE_QUERY + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
 
     public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/nation=%s/template-overall=none";
-
-    // String template used to get nation banners from NationStates
-    // @param: banner_id
-    public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images/banners/%s.jpg";
 
     // WA membership types
     public static final String WA_MEMBER = "WA Member";
@@ -312,15 +307,6 @@ public class Nation implements Parcelable {
             return new Nation[size];
         }
     };
-
-    /**
-     * Return the URL of a nation banner.
-     * @param id The banner ID.
-     * @return The URL to the banner.
-     */
-    public static String getBannerURL(String id) {
-        return String.format(Locale.US, BANNER_TEMPLATE, id);
-    }
 
     /**
      * Factory for deserializing a Nation XML.

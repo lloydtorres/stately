@@ -34,6 +34,7 @@ import com.lloydtorres.stately.dto.IssueResult;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.PinkaHelper;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
@@ -187,6 +188,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class IssueResultCard extends RecyclerView.ViewHolder {
+        private ImageView image;
         private TextView mainResult;
         private TextView reclassResult;
         private TextView issueContent;
@@ -194,6 +196,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public IssueResultCard(View v) {
             super(v);
+            image = (ImageView) v.findViewById(R.id.card_issue_result_image);
             mainResult = (TextView) v.findViewById(R.id.card_issue_result_main_result);
             reclassResult = (TextView) v.findViewById(R.id.card_issue_result_reclass_result);
             issueContent = (TextView) v.findViewById(R.id.card_issue_result_issue_content);
@@ -201,6 +204,14 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         public void init(IssueResult result) {
+            if (result.image != null) {
+                image.setVisibility(View.VISIBLE);
+                DashHelper dashie = DashHelper.getInstance(context);
+                dashie.loadImage(RaraHelper.getBannerURL(result.image), image, false);
+            } else {
+                image.setVisibility(View.GONE);
+            }
+
             setIssueResultsFormatting(context, mainResult, mNation, result.mainResult);
             if (result.reclassResults != null) {
                 reclassResult.setVisibility(View.VISIBLE);

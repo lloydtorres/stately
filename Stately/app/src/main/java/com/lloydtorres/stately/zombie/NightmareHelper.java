@@ -56,8 +56,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Zombie;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 /**
  * Created by Lloyd on 2016-10-16.
@@ -118,6 +118,6 @@ public final class NightmareHelper {
                     break;
             }
         }
-        return Nation.getBannerURL(zombieHeader);
+        return RaraHelper.getBannerURL(zombieHeader);
     }
 }

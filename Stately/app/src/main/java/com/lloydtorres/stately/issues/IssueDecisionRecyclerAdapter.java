@@ -30,6 +30,7 @@ import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -127,12 +128,14 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public class IssueInfoCard extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView issueNo;
+        private ImageView image;
         private TextView content;
 
         public IssueInfoCard(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.card_issue_info_title);
             issueNo = (TextView) v.findViewById(R.id.card_issue_info_number);
+            image = (ImageView) v.findViewById(R.id.card_issue_header_image);
             content = (TextView) v.findViewById(R.id.card_issue_option_content);
         }
 
@@ -141,12 +144,22 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             RaraHelper.setViewHolderFullSpan(itemView);
 
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
+
             if (issue.chain != null) {
                 issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
             }
             else {
                 issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number), SparkleHelper.getPrettifiedNumber(issue.id)));
             }
+
+            if (issue.image != null) {
+                image.setVisibility(View.VISIBLE);
+                DashHelper dashie = DashHelper.getInstance(context);
+                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image, false);
+            } else {
+                image.setVisibility(View.GONE);
+            }
+
             content.setText(SparkleHelper.getHtmlFormatting(issue.content).toString());
         }
     }

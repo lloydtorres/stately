@@ -8,6 +8,7 @@ import android.os.Parcelable;
  * Contains data from the results of an issue decision.
  */
 public class IssueResult implements Parcelable {
+    public String image;
     public String mainResult;
     public String reclassResults;
     public String issueContent;
@@ -16,6 +17,7 @@ public class IssueResult implements Parcelable {
     public IssueResult() { super(); }
 
     protected IssueResult(Parcel in) {
+        image = in.readString();
         mainResult = in.readString();
         reclassResults = in.readString();
         issueContent = in.readString();
@@ -29,6 +31,7 @@ public class IssueResult implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(image);
         dest.writeString(mainResult);
         dest.writeString(reclassResults);
         dest.writeString(issueContent);

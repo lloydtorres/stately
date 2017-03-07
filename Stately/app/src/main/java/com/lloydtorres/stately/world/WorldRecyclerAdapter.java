@@ -33,7 +33,6 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.BaseRegion;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.DataIntPair;
-import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
@@ -298,7 +297,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     context.getString(R.string.world_census_score),
                     SparkleHelper.getPrettifiedShortSuffixedNumber(context, featuredCensus.score)));
 
-            String bgUrl = Nation.getBannerURL(censusType[2]);
+            String bgUrl = RaraHelper.getBannerURL(censusType[2]);
             DashHelper.getInstance(context).loadImage(bgUrl, censusBg, false);
         }
 

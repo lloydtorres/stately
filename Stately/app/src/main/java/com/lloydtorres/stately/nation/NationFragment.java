@@ -40,6 +40,7 @@ import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.feed.HappeningsSubFragment;
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
@@ -206,7 +207,7 @@ public class NationFragment extends DetachFragment {
         if (NightmareHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
         } else {
-            dashie.loadImage(Nation.getBannerURL(mNation.bannerKey), nationBanner, false);
+            dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
         }
 
         dashie.loadImage(mNation.flagURL, nationFlag, true);

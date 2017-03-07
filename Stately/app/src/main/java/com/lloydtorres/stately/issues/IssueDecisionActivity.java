@@ -296,6 +296,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
         // Get talking point and reclassifications
         IssueResult issueResult = new IssueResult();
+        issueResult.image = issue.image;
         issueResult.issueContent = issue.content;
         issueResult.issuePosition = option.content;
 

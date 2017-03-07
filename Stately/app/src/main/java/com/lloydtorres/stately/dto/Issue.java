@@ -40,6 +40,8 @@ public class Issue implements Parcelable {
     public String chain;
     @Element(name="TEXT", required=false)
     public String content;
+    @Element(name="PIC1", required=false)
+    public String image;
     @ElementList(name="OPTION", required=false, inline=true)
     public List<IssueOption> options;
 
@@ -50,6 +52,7 @@ public class Issue implements Parcelable {
         title = in.readString();
         chain = in.readString();
         content = in.readString();
+        image = in.readString();
         if (in.readByte() == 0x01) {
             options = new ArrayList<IssueOption>();
             in.readList(options, IssueOption.class.getClassLoader());
@@ -69,6 +72,7 @@ public class Issue implements Parcelable {
         dest.writeString(title);
         dest.writeString(chain);
         dest.writeString(content);
+        dest.writeString(image);
         if (options == null) {
             dest.writeByte((byte) (0x00));
         } else {

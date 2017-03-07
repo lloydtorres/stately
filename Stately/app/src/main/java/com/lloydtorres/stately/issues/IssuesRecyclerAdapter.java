@@ -149,22 +149,33 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
         private TextView id;
+        private ImageView image;
         private Issue issue;
 
         public IssueCard(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.card_issue_main_title);
             id = (TextView) v.findViewById(R.id.card_issue_main_number);
+            image = (ImageView) v.findViewById(R.id.card_issue_image) ;
             v.setOnClickListener(this);
         }
 
         public void init(Issue i) {
             issue = i;
             title.setText(issue.title);
+
             if (issue.chain != null) {
                 id.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
             } else {
                 id.setText(String.format(Locale.US, context.getString(R.string.issue_number), SparkleHelper.getPrettifiedNumber(issue.id)));
+            }
+
+            if (issue.image != null) {
+                image.setVisibility(View.VISIBLE);
+                DashHelper dashie = DashHelper.getInstance(context);
+                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image, false);
+            } else {
+                image.setVisibility(View.GONE);
             }
         }
 

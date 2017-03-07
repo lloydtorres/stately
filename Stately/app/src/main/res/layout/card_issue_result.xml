@@ -9,61 +9,75 @@
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    card_view:cardBackgroundColor="?attr/colorPrimary"
-    card_view:contentPadding="20dp" >
+    card_view:cardBackgroundColor="?attr/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="@string/issue_breaking" />
-        <TextView
-            android:id="@+id/card_issue_result_main_result"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            android:fontFamily="sans-serif-condensed"
+        <ImageView
+            android:id="@+id/card_issue_result_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            tools:text="The family summer vacation has become a thing of the past following the introduction of the year-round school year." />
-        <TextView
-            android:id="@+id/card_issue_result_reclass_result"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            tools:text="Kaugummi's Civil Rights rose from Excellent to Superb. Kaugummi was reclassified from Corrupt Dictatorship to Mother Knows Best State." />
-        <TextView
-            android:id="@+id/card_issue_result_issue_content"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/gray"
             android:visibility="gone"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="italic"
+            tools:visibility="visible"/>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            tools:visibility="visible"
-            tools:text="At a recent international sporting event, Bigtopian fans proudly sung their national anthem: Bigger And Cleverer. Meanwhile, the Stately Users in the crowd each sang half a dozen different tunes, highlighting the fact that Stately still doesn't have an official national anthem.\n\nThat’s not what Stately stands for in our modern age, rebuffs avant-garde composer Belinda Beckham. We're a pan-cultural nation of pan-humanity. I've composed an audiotheatrical tribute to the tribe of all life, with whale-song, echoing voices in ethnic dialects, and the laughter of children. I call it The Peace of Stately." />
-        <TextView
-            android:id="@+id/card_issue_result_expand"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="@string/issue_read_more" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <TextView
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/issue_breaking" />
+            <TextView
+                android:id="@+id/card_issue_result_main_result"
+                android:layout_marginTop="8dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:text="The family summer vacation has become a thing of the past following the introduction of the year-round school year." />
+            <TextView
+                android:id="@+id/card_issue_result_reclass_result"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:text="Kaugummi's Civil Rights rose from Excellent to Superb. Kaugummi was reclassified from Corrupt Dictatorship to Mother Knows Best State." />
+            <TextView
+                android:id="@+id/card_issue_result_issue_content"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:visibility="visible"
+                tools:text="At a recent international sporting event, Bigtopian fans proudly sung their national anthem: Bigger And Cleverer. Meanwhile, the Stately Users in the crowd each sang half a dozen different tunes, highlighting the fact that Stately still doesn't have an official national anthem.\n\nThat’s not what Stately stands for in our modern age, rebuffs avant-garde composer Belinda Beckham. We're a pan-cultural nation of pan-humanity. I've composed an audiotheatrical tribute to the tribe of all life, with whale-song, echoing voices in ethnic dialects, and the laughter of children. I call it The Peace of Stately." />
+            <TextView
+                android:id="@+id/card_issue_result_expand"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:fontFamily="sans-serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/issue_read_more" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
