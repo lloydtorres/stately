@@ -428,7 +428,7 @@ public final class MuffinsHelper {
         }
 
         String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
-        holder = holder.replace("\n", "<br />");
+        holder = holder.replace("\n", "<br>");
         holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);
 
         // Do the rest of the formatting
@@ -449,6 +449,9 @@ public final class MuffinsHelper {
         holder = SparkleHelper.regexReplace(holder, PARAGRAPH, "<br>%s");
 
         holder = SparkleHelper.regexGenericUrlFormat(c, holder);
+
+        holder = holder.replace("<li><br><br>", "<li>");
+        holder = holder.replace("<li><br>", "<li>");
 
         return holder;
     }

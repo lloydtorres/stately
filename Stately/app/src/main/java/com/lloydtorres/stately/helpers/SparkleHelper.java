@@ -1115,6 +1115,8 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_LIST_ORDERED, "<ol type='%s'>");
         holder = holder.replace("[/list]", "</ul>");
         holder = holder.replace("[*]", "<li>");
+        holder = holder.replace("<li><br><br>", "<li>");
+        holder = holder.replace("<li><br>", "<li>");
         holder = Jsoup.clean(holder, Whitelist.relaxed());
         return holder;
     }
