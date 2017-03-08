@@ -157,16 +157,6 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (telegrams != null) {
-            initTelegramsRecyclerAdapter();
-        } else {
-            startQueryTelegramHistory();
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
