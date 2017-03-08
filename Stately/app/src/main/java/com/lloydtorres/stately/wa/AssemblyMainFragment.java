@@ -88,13 +88,13 @@ public class AssemblyMainFragment extends RefreshviewFragment {
                 int votesAgainst = intent.getIntExtra(ResolutionActivity.TARGET_VOTES_AGAINST, 0);
                 switch (broadcastCouncilId) {
                     case Assembly.GENERAL_ASSEMBLY:
-                        if (genAssembly != null & genAssembly.resolution != null) {
+                        if (genAssembly != null && genAssembly.resolution != null) {
                             genAssembly.resolution.votesFor = votesFor;
                             genAssembly.resolution.votesAgainst = votesAgainst;
                         }
                         break;
                     case Assembly.SECURITY_COUNCIL:
-                        if (secCouncil != null & secCouncil.resolution != null) {
+                        if (secCouncil != null && secCouncil.resolution != null) {
                             secCouncil.resolution.votesFor = votesFor;
                             secCouncil.resolution.votesAgainst = votesAgainst;
                         }
