@@ -340,6 +340,11 @@ public final class MuffinsHelper {
             targetTelegram.type = Telegram.TELEGRAM_WELCOME;
         }
 
+        Elements omittedRecepients = targetDoc.getElementsByClass("tgomitted");
+        if (omittedRecepients != null) {
+            omittedRecepients.remove();
+        }
+
         targetTelegram.recipients = new ArrayList<String>();
 
         Elements nationsRaw = targetDoc.select("a.nlink");
