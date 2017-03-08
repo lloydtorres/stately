@@ -1123,6 +1123,8 @@ public final class SparkleHelper {
 
     public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
     public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_URL_GA = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=ga(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_SC = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=sc(?:\\/|)\\](.*?)\\[\\/url\\]");
     public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
     public static final Pattern BBCODE_URL_RESOLUTION_2 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\?start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
     public static final Pattern BBCODE_URL_RESOLUTION_3 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution(?:s|)\\/id=([0-9]+?)\\/council=(1|2)(?:\\/|)\\](.*?)\\[\\/url\\]");
@@ -1143,6 +1145,9 @@ public final class SparkleHelper {
             String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
             holder = holder.replace(m.group(), properFormat);
         }
+
+        holder = regexReplace(holder, BBCODE_URL_GA, regexResolutionFormatHelper(Assembly.GENERAL_ASSEMBLY, -2, "%s"));
+        holder = regexReplace(holder, BBCODE_URL_SC, regexResolutionFormatHelper(Assembly.SECURITY_COUNCIL, -2, "%s"));
 
         holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION, false, false);
         holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_2, false, false);

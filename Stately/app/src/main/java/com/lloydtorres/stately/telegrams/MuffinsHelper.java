@@ -393,6 +393,8 @@ public final class MuffinsHelper {
     public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+?)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_GA_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=ga(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_SC_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=sc(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\" rel=\"nofollow\">");
     public static final Pattern NS_TG_RAW_RESOLUTION_LINK_2 = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)\" rel=\"nofollow\">(.+?)</a>");
     public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
@@ -456,9 +458,16 @@ public final class MuffinsHelper {
         return holder;
     }
 
+    /**
+     * Creates internal links to the WA chambers.
+     * @param target
+     * @return
+     */
     public static String regexResolutionFormat(String target) {
         String holder = target;
 
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GA_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "1/-2\">%s</a>");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_SC_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "2/-2\">%s</a>");
         holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
 
         Matcher m = NS_TG_RAW_RESOLUTION_LINK_2.matcher(target);
