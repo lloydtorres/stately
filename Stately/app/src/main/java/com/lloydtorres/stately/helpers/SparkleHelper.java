@@ -1141,13 +1141,17 @@ public final class SparkleHelper {
                 }
                 // If the next element detected is [/list], add that to the stack and move forward
                 else if (nextIndexEnd != -1) {
-                    String previousElement = htmlStack.pop();
                     String replacer = HTML_UL_CLOSE;
-                    if (HTML_OL_FRAGMENT.equals(previousElement)) {
-                        replacer = HTML_OL_CLOSE;
+
+                    if (!htmlStack.isEmpty()) {
+                        String previousElement = htmlStack.pop();
+                        if (HTML_OL_FRAGMENT.equals(previousElement)) {
+                            replacer = HTML_OL_CLOSE;
+                        }
                     }
+
                     holder = holder.replaceFirst(BBCODE_END_LIST_REGEX, replacer);
-                    scanIndex = nextIndexEnd + HTML_OL_CLOSE.length();
+                    scanIndex = nextIndexEnd + HTML_UL_CLOSE.length();
                 }
                 // If no other instances of [/list] exists, stop.
                 else {
