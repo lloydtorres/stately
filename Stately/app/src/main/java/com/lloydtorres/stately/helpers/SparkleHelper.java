@@ -94,6 +94,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -1102,10 +1103,15 @@ public final class SparkleHelper {
     }
 
     public static final Pattern BBCODE_LIST_ORDERED = Pattern.compile("(?i)(?s)\\[list=(1|a|i)\\]");
+    public static final String BBCODE_END_LIST_RAW = "[/list]";
+    public static final String BBCODE_END_LIST_REGEX = "\\[\\/list\\]";
+    public static final String HTML_UL_FRAGMENT = "<ul";
+    public static final String HTML_OL_FRAGMENT = "<ol";
+    public static final String HTML_UL_CLOSE = "</ul>";
+    public static final String HTML_OL_CLOSE = "</ol>";
 
     /**
-     * Processes [list] tags and their children. Cheats the whole can't-parse-nested-elements-using-regex
-     * issue by just replacing the appropriate tags then letting Jsoup clean it up afterwards.
+     * Processes [list] tags and their children.
      * @param content
      * @return
      */
@@ -1113,7 +1119,44 @@ public final class SparkleHelper {
         String holder = content;
         holder = holder.replace("[list]", "<ul>");
         holder = regexReplace(holder, BBCODE_LIST_ORDERED, "<ol type='%s'>");
-        holder = holder.replace("[/list]", "</ul>");
+
+         // Properly close <ul> and <ol> tags using an honest-to-Holo parser
+        if (holder.contains(BBCODE_END_LIST_RAW)) {
+            LinkedList<String> htmlStack = new LinkedList<String>();
+            int scanIndex = 0;
+            while (scanIndex < holder.length()) {
+                int nextIndexUl = holder.indexOf(HTML_UL_FRAGMENT, scanIndex);
+                int nextIndexOl = holder.indexOf(HTML_OL_FRAGMENT, scanIndex);
+                int nextIndexEnd = holder.indexOf(BBCODE_END_LIST_RAW, scanIndex);
+
+                // If the next element detected is <ul>, add that to the stack and move forward
+                if (nextIndexUl != -1 && nextIndexUl < nextIndexOl && nextIndexUl < nextIndexEnd) {
+                    htmlStack.push(HTML_UL_FRAGMENT);
+                    scanIndex = nextIndexUl + HTML_UL_FRAGMENT.length();
+                }
+                // If the next element detected is <ol>, add that to the stack and move forward
+                else if (nextIndexOl != -1 && nextIndexOl < nextIndexEnd) {
+                    htmlStack.push(HTML_OL_FRAGMENT);
+                    scanIndex = nextIndexOl + HTML_OL_FRAGMENT.length();
+                }
+                // If the next element detected is [/list], add that to the stack and move forward
+                else if (nextIndexEnd != -1) {
+                    String previousElement = htmlStack.pop();
+                    String replacer = HTML_UL_CLOSE;
+                    if (HTML_OL_FRAGMENT.equals(previousElement)) {
+                        replacer = HTML_OL_CLOSE;
+                    }
+                    holder = holder.replaceFirst(BBCODE_END_LIST_REGEX, replacer);
+                    scanIndex = nextIndexEnd + HTML_OL_CLOSE.length();
+                }
+                // If no other instances of [/list] exists, stop.
+                else {
+                    break;
+                }
+            }
+        }
+
+        // Transform and cleanup <li> elements
         holder = holder.replace("[*]", "<li>");
         holder = holder.replace("<li><br><br>", "<li>");
         holder = holder.replace("<li><br>", "<li>");
