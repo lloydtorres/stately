@@ -617,8 +617,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void onNothingSelected() {
-            voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(votesFor.get(votesFor.size()-1)));
-            voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(votesAgainst.get(votesAgainst.size()-1)));
+            voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
+            voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
         }
     }
 }
