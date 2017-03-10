@@ -226,6 +226,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             iconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
         }
 
+        private static final String RESOLUTION_LINK_TEMPLATE = "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s #%d</a>";
+
         /**
          * This formats the topmost TextView with information on the category and resolution target.
          * @param t
@@ -238,10 +240,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             if (pair.length <= 1) {
                 if (repealTarget > 0) {
-                    StringBuilder linkBuilder = new StringBuilder("<a href=\"");
-                    linkBuilder.append(ResolutionActivity.RESOLUTION_TARGET);
-                    linkBuilder.append("%d/%d\">%s #%d</a>");
-                    String link = String.format(Locale.US, linkBuilder.toString(),
+                    String link = String.format(Locale.US, RESOLUTION_LINK_TEMPLATE,
                             councilId, repealTarget - 1,
                             context.getString(prefixId),
                             repealTarget);

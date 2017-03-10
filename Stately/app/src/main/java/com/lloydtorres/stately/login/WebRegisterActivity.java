@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
 import java.util.Locale;
 
@@ -60,7 +61,7 @@ public class WebRegisterActivity extends SlidrActivity {
         mWebView = (WebView) findViewById(R.id.register_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setSupportZoom(false);
-        mWebView.getSettings().setUserAgentString(String.format(Locale.US, getString(R.string.app_header_nouser), BuildConfig.VERSION_NAME));
+        mWebView.getSettings().setUserAgentString(String.format(Locale.US, NSStringRequest.STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));
 
         // Checks if the user is in the nation page on loa
         mWebView.setWebViewClient(new WebViewClient() {

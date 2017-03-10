@@ -215,6 +215,8 @@ public class ReportActivity extends SlidrActivity {
                 .show();
     }
 
+    private static final String REPORT_POST_TEMPLATE = "%s ID:#%d\n\n%s:\n%s\n\n(sent via Stately)";
+
     private void sendReport() {
         if (isInProgress)
         {
@@ -243,7 +245,7 @@ public class ReportActivity extends SlidrActivity {
                 reasonHeader = "";
                 break;
         }
-        final String commentHeader = String.format(Locale.US, getString(R.string.report_header_comment_template),
+        final String commentHeader = String.format(Locale.US, REPORT_POST_TEMPLATE,
                 typeHeader, targetId, reasonHeader, reportContent.getText().toString());
 
         final int problemHeader;

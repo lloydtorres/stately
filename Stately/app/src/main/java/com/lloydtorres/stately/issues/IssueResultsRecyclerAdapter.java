@@ -141,7 +141,17 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
-    public static void setIssueResultsFormatting(Context c, TextView t, Nation nationData, String target) {
+    private static final String NS_DEFAULT_CAPITAL = "%s City";
+    private static final String NS_DEFAULT_LEADER = "Leader";
+    private static final String NS_DEFAULT_RELIGION = "a major religion";
+
+    /**
+     * Replaces NationStates template artifacts with their proper values.
+     * @param t Target textview
+     * @param nationData User nation's data
+     * @param target String to replace data
+     */
+    private static void setIssueResultsFormatting(TextView t, Nation nationData, String target) {
         if (nationData != null && target != null) {
             target = target.replace("@@NAME@@", nationData.name);
             target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
@@ -162,21 +172,21 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             target = target.replace("@@DEMONYM2@@", nationData.demNoun);
             target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
 
-            String valCapital = String.format(Locale.US, c.getString(R.string.issue_capital_none), nationData.name);
+            String valCapital = String.format(Locale.US, NS_DEFAULT_CAPITAL, nationData.name);
             if (nationData.capital != null) {
                 valCapital = nationData.capital;
             }
             target = target.replace("@@CAPITAL@@", valCapital);
             target = target.replace("@@$nation->query_capital()@@", valCapital);
 
-            String valLeader = c.getString(R.string.issue_leader_none);
+            String valLeader = NS_DEFAULT_LEADER;
             if (nationData.leader != null) {
                 valLeader = nationData.leader;
             }
             target = target.replace("@@LEADER@@", valLeader);
             target = target.replace("@@$nation->query_leader()@@", valLeader);
 
-            String valReligion = c.getString(R.string.issue_religion_none);
+            String valReligion = NS_DEFAULT_RELIGION;
             if (nationData.religion != null) {
                 valReligion = nationData.religion;
             }
@@ -212,10 +222,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 image.setVisibility(View.GONE);
             }
 
-            setIssueResultsFormatting(context, mainResult, mNation, result.mainResult);
+            setIssueResultsFormatting(mainResult, mNation, result.mainResult);
             if (result.reclassResults != null) {
                 reclassResult.setVisibility(View.VISIBLE);
-                setIssueResultsFormatting(context, reclassResult, mNation, result.reclassResults);
+                setIssueResultsFormatting(reclassResult, mNation, result.reclassResults);
             } else {
                 reclassResult.setVisibility(View.GONE);
             }
@@ -248,7 +258,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(IssueResultHeadline headline) {
             headline.headline = headline.headline.trim();
-            setIssueResultsFormatting(context, title, mNation, headline.headline);
+            setIssueResultsFormatting(title, mNation, headline.headline);
             DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
         }
     }
@@ -267,7 +277,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(IssuePostcard card) {
             nationName.setText(mNation.name);
-            setIssueResultsFormatting(context, postContent, mNation, card.title.trim());
+            setIssueResultsFormatting(postContent, mNation, card.title.trim());
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }

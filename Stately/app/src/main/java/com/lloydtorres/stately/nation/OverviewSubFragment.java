@@ -46,6 +46,8 @@ import java.util.Locale;
  * Takes in a Nation object.
  */
 public class OverviewSubFragment extends NationSubFragment {
+    private final static String CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE = "<font color=\"#727272\"><strike>%s</strike></font>>br>%s";
+
     private String[] WORLD_CENSUS_ITEMS;
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
@@ -123,7 +125,7 @@ public class OverviewSubFragment extends NationSubFragment {
         }
 
         if (customCategory != null) {
-            nocData.category = String.format(Locale.US, getString(R.string.nation_government_custom),
+            nocData.category = String.format(Locale.US, CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE,
                     mNation.govType, customCategory);
         }
         else {

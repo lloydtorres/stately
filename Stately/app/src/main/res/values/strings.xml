@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Stately</string>
     <string name="app_version">Stately for NationStates (v%1$s)</string>
-    <string name="app_header">Stately/%1$s (User %2$s; Droid)</string>
-    <string name="app_header_nouser">Stately/%1$s (No User; Droid)</string>
     <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
     <string name="stately_alphys">Stately Notification Polling Service</string>
     <string name="stately_notifs_sub_template">%1$s — Stately for NationStates</string>
@@ -116,7 +114,6 @@
     <string name="exit">Exit</string>
 
     <!-- Nation main card -->
-    <string name="nation_government_custom">&lt;font color=&quot;#727272&quot;&gt;&lt;strike&gt;%1$s&lt;/strike&gt;&lt;/font&gt;&lt;br&gt;%2$s</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
     <string name="nation_time_immemorial">since time immemorial</string>
     <string name="nation_power_template">%1$s (%2$s)</string>
@@ -344,9 +341,6 @@
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_read_more">Read More</string>
     <string name="issue_show_less">Show Less</string>
-    <string name="issue_capital_none">%1$s City</string>
-    <string name="issue_leader_none">Leader</string>
-    <string name="issue_religion_none">a major religion</string>
 
     <!-- Telegrams -->
     <string name="telegrams_folders">Folders</string>
@@ -459,7 +453,6 @@
     <string name="report_blank">Report seems empty.</string>
     <string name="report_confirm">Send report to NationStates moderators?</string>
     <string name="report_send_confirm">Send</string>
-    <string name="report_header_comment_template">%1$s ID:#%2$d\n\n%3$s:\n%4$s\n\n(sent via Stately)</string>
     <string name="report_header_telegram">Telegram</string>
     <string name="report_header_rmb_post">RMB Post</string>
     <string name="report_header_task">Task</string>
@@ -492,7 +485,7 @@
     <string name="zombie_superweapon_cure_title">Cure Missile</string>
     <string name="zombie_superweapon_cure_content">Launching cure missiles to other nations will heal their zombies back to survivors.</string>
     <string name="zombie_superweapon_horde_title">The Horde</string>
-    <string name="zombie_superweapon_horde_content">Sending the zombie horde to other nations will turn their survivors into the undead.</string>
+    <string name="zombie_superweapon_horde_content">Sending the zombie horde to other nations will consume their survivors into the undead.</string>
     <string name="zombie_button_noaction">Take action</string>
     <string name="zombie_button_change">Change course</string>
     <string name="zombie_button_weapon">Explore and deploy superweapon</string>
@@ -513,8 +506,8 @@
     <string name="superweapon_deploy">Deploy</string>
     <string name="superweapon_none">No superweapons are available for deployment.</string>
     <string name="superweapon_tzes_response">A squad of zombie hunters was deployed to %1$s.</string>
-    <string name="superweapon_cure_response">An airdrop of cure missiles were launched at %1$s.</string>
-    <string name="superweapon_horde_response">The horde of undead cometh at %1$s.</string>
+    <string name="superweapon_cure_response">Cure missiles were launched against %1$s.</string>
+    <string name="superweapon_horde_response">The horde of undead cometh for %1$s.</string>
     <string name="superweapon_misfire">Superweapon not ready, try again in 20 seconds.</string>
     <string name="superweapon_hit">Superweapon unavailable due to a direct hit back home. Try again in a minute.</string>
     <string name="superweapon_no_zombies">%1$s is already free of zombies.</string>
@@ -539,7 +532,7 @@
     <string name="setting_notifs_endorse">Endorsements</string>
     <string name="setting_title_style">Styling</string>
     <string name="setting_theme">Theme</string>
-    <string name="setting_desc_zombie">Theme will be restored to normal at the end of Z-Day.</string>
+    <string name="setting_desc_zombie">Theme will be restored to normal after Z-Day.</string>
     <string name="setting_category">Government Category</string>
     <string name="setting_category_april">April Fools! Government category will be restored to normal after today.</string>
     <string name="setting_title_about">About</string>
