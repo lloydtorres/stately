@@ -113,7 +113,6 @@
     <!-- Nation main card -->
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
     <string name="nation_time_immemorial">since time immemorial</string>
-    <string name="nation_power_template">%1$s (%2$s)</string>
 
     <!-- Nation freedom card -->
     <string name="overview_label_civrights">Civil Rights</string>
@@ -146,16 +145,13 @@
     <string name="card_overview_other_demonym_txt2">%1$s (noun/adjective, plural %2$s)</string>
     <string name="card_overview_other_religion">Religion</string>
     <string name="card_overview_other_animal">National Animal</string>
-    <string name="card_overview_other_animal_template">%1$s — %2$s.</string>
     <string name="card_overview_other_census_title">Today\'s Census: %1$s</string>
-    <string name="card_overview_other_census_content">%1$s — %2$s</string>
     <string name="card_overview_other_census_region">#%1$s in %2$s (top %3$s%%)</string>
     <string name="card_overview_other_census_world">#%1$s in the world (top %2$s%%)</string>
     <string name="card_overview_census_button">Trends for %1$s</string>
 
     <!-- Nation subfragment cards -->
     <string name="card_main_title_summary">Summary</string>
-    <string name="chart_inner_text">%1$s\n%2$.1f%%</string>
 
     <!-- Nation people subfragment -->
     <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
@@ -201,10 +197,6 @@
     <string name="billion_short">b</string>
     <string name="trillion">trillion</string>
     <string name="trillion_short">t</string>
-    <string name="val_currency">%1$s %2$s</string>
-    <string name="val_short">%1$s%2$s</string>
-    <string name="percent">%1$.1f%%</string>
-    <string name="val_suffix_currency">%1$s %2$s %3$s</string>
 
     <!-- Activity Feed -->
     <string name="activityfeed_subscriptions">Subscriptions</string>
@@ -241,9 +233,6 @@
     <string name="poll_open">Opened %1$s</string>
     <string name="poll_close">Closes %1$s</string>
     <string name="region_option_index">Option %1$d</string>
-    <string name="poll_votes_template_start">%1$s (</string>
-    <string name="poll_votes_template_votes">%1$d %2$s</string>
-    <string name="poll_votes_template_end">)</string>
     <string name="poll_votes_voter_dialog">Voted for %1$s</string>
     <string name="poll_vote_button_submit">Vote on regional poll</string>
     <string name="poll_vote_button_change">Change vote</string>
@@ -294,9 +283,7 @@
     <string name="census_sort_region_rank">Region rank</string>
     <string name="census_sort_region_percent">Region top percent</string>
     <string name="census_hash_symbol">#</string>
-    <string name="census_blank">—</string>
     <string name="census_top">Top</string>
-    <string name="census_percent">%1$s%%</string>
 
     <string name="census_sort_ascending">Ascending</string>
     <string name="census_sort_descending">Descending</string>
@@ -377,7 +364,6 @@
     <string name="wa_general_assembly">General Assembly</string>
     <string name="wa_security_council">Security Council</string>
     <string name="wa_voting_time">Voting ends %1$s</string>
-    <string name="wa_implemented">%1$s #%2$d — %3$s</string>
     <string name="wa_ga_prefix">GA</string>
     <string name="wa_sc_prefix">SC</string>
     <string name="wa_for">For</string>
@@ -385,7 +371,6 @@
     <string name="wa_members">members</string>
     <string name="wa_delegates">delegates</string>
     <string name="wa_proposed">Proposed by %1$s</string>
-    <string name="wa_nominee_template">%1$s — %2$s</string>
     <string name="wa_repeal_target">Repeal — %1$s</string>
     <string name="wa_repealed">Repealed by %1$s #%2$d</string>
     <string name="wa_resolution">Resolution</string>

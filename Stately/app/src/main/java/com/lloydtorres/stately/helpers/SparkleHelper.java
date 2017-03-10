@@ -304,7 +304,7 @@ public final class SparkleHelper {
             popHolder /= 1000D;
         }
 
-        return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(popHolder), suffix);
+        return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(popHolder), suffix);
     }
 
     /**
@@ -338,9 +338,11 @@ public final class SparkleHelper {
                 d /= 1000000000000D;
             }
 
-            return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(d), suffix);
+            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(d), suffix);
         }
     }
+
+    public static final String SHORT_SUFFIXED_NUMBER_TEMPLATE = "%s%s";
 
     /**
      * Same as above, but starts at 1000 and uses short suffixes.
@@ -371,7 +373,7 @@ public final class SparkleHelper {
                 d /= 1000000000000D;
             }
 
-            return String.format(Locale.US, c.getString(R.string.val_short), getPrettifiedNumber(d), suffix);
+            return String.format(Locale.US, SHORT_SUFFIXED_NUMBER_TEMPLATE, getPrettifiedNumber(d), suffix);
         }
     }
 
@@ -418,6 +420,9 @@ public final class SparkleHelper {
         return English.plural(currency);
     }
 
+    public static final String CURRENCY_NOSUFFIX_TEMPLATE = "%s %s";
+    public static final String CURRENCY_SUFFIX_TEMPLATE = "%s %s %s";
+
     /**
      * Takes in a money value and currency name from the NationStates API and formats it to the
      * NS format.
@@ -431,7 +436,7 @@ public final class SparkleHelper {
     public static String getMoneyFormatted(Context c, long money, String currency) {
         if (money < 1000000L) {
             // If the money is less than 1 million, we don't need a suffix.
-            return String.format(Locale.US, c.getString(R.string.val_currency), getPrettifiedNumber(money), getCurrencyPlural(currency));
+            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(money), getCurrencyPlural(currency));
         }
         else {
             // NS drops the least significant digits depending on the suffix needed.
@@ -450,7 +455,7 @@ public final class SparkleHelper {
                 money /= 1000000000000L;
             }
 
-            return String.format(Locale.US, c.getString(R.string.val_suffix_currency), getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
+            return String.format(Locale.US, CURRENCY_SUFFIX_TEMPLATE, getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
         }
     }
 

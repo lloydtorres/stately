@@ -82,7 +82,7 @@
                     android:fontFamily="sans-serif-light"
                     android:textColor="?attr/themedColorSecondaryText"
                     android:gravity="center"
-                    tools:text="@string/region_pop"/>
+                    tools:text="1,000 Nations"/>
 
                 <View
                     android:layout_width="match_parent"

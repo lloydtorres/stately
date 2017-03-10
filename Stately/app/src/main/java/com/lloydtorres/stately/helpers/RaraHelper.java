@@ -366,7 +366,7 @@ public final class RaraHelper {
 
         p.setRotationEnabled(false);
 
-        p.setOnChartValueSelectedListener(new PieChartListener(c, p));
+        p.setOnChartValueSelectedListener(new PieChartListener(p));
         return p;
     }
 

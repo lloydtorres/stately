@@ -69,6 +69,9 @@ import java.util.Locale;
  * A RecyclerView adapter for the four main nation tabs.
  */
 public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // String container templates
+    private static final String POWER_TEMPLATE = "%s (%s)";
+
     // different types of cards
     private static final int CARD_OVERVIEW = 0;
     private static final int CARD_FREEDOMS = 1;
@@ -255,7 +258,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             govType.setHtml(data.category);
             region.setText(data.region);
             region.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, SparkleHelper.getIdFromName(data.region), ExploreActivity.EXPLORE_REGION));
-            influence.setText(String.format(Locale.US, context.getString(R.string.nation_power_template), data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
+            influence.setText(String.format(Locale.US, POWER_TEMPLATE, data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
             String lastLogin = SparkleHelper.getReadableDateFromUTC(context, data.lastSeen);

@@ -42,6 +42,9 @@ import java.util.Locale;
  * along with a button at the top to open a dialog for sorting.
  */
 public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TOP_PERCENT_TEMPLATE = "%s%%";
+    private static final String CENSUS_BLANK = "—";
+
     public static final int SORT_MODE_SCORE = 0;
     public static final int SORT_MODE_WORLD_RANK = 1;
     public static final int SORT_MODE_WORLD_PERCENT = 2;
@@ -333,7 +336,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 case SORT_MODE_WORLD_RANK:
                     if (censusData.worldRank <= 0) {
                         superScript.setVisibility(View.GONE);
-                        value.setText(context.getString(R.string.census_blank));
+                        value.setText(CENSUS_BLANK);
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else {
@@ -346,20 +349,20 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 case SORT_MODE_WORLD_PERCENT:
                     if (censusData.worldRankPercent <= 0) {
                         superScript.setVisibility(View.GONE);
-                        value.setText(context.getString(R.string.census_blank));
+                        value.setText(CENSUS_BLANK);
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else {
                         superScript.setVisibility(View.VISIBLE);
                         superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
                         superScript.setText(context.getString(R.string.census_top));
-                        value.setText(String.format(Locale.US, context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
+                        value.setText(String.format(Locale.US, TOP_PERCENT_TEMPLATE, SparkleHelper.getPrettifiedNumber(censusData.worldRankPercent)));
                     }
                     break;
                 case SORT_MODE_REGION_RANK:
                     if (censusData.regionRank <= 0) {
                         superScript.setVisibility(View.GONE);
-                        value.setText(context.getString(R.string.census_blank));
+                        value.setText(CENSUS_BLANK);
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else {
@@ -372,14 +375,14 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 case SORT_MODE_REGION_PERCENT:
                     if (censusData.regionRankPercent <= 0) {
                         superScript.setVisibility(View.GONE);
-                        value.setText(context.getString(R.string.census_blank));
+                        value.setText(CENSUS_BLANK);
                         cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
                     }
                     else {
                         superScript.setVisibility(View.VISIBLE);
                         superScript.setPadding(0, 0, TWO_DP_IN_PIXELS*2, 0);
                         superScript.setText(context.getString(R.string.census_top));
-                        value.setText(String.format(Locale.US, context.getString(R.string.census_percent), SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
+                        value.setText(String.format(Locale.US, TOP_PERCENT_TEMPLATE, SparkleHelper.getPrettifiedNumber(censusData.regionRankPercent)));
                     }
                     break;
             }

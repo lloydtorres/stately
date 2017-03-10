@@ -234,7 +234,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             header.setOnClickListener(regionOnClick);
             regionName.setText(regionData.name);
             nationCount.setText(String.format(Locale.US,
-                    context.getString(R.string.val_currency),
+                    SparkleHelper.CURRENCY_NOSUFFIX_TEMPLATE,
                     SparkleHelper.getPrettifiedNumber(regionData.numNations),
                     context.getResources().getQuantityString(R.plurals.nation_prop, regionData.numNations)));
             if (regionData.flagURL != null) {

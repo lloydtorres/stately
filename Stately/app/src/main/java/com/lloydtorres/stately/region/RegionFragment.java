@@ -205,7 +205,7 @@ public class RegionFragment extends DetachFragment {
         }
 
         regionName.setText(mRegion.name);
-        regionPop.setText(String.format(Locale.US, getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), getResources().getQuantityString(R.plurals.nation_prop, mRegion.numNations)));
+        regionPop.setText(String.format(Locale.US, SparkleHelper.CURRENCY_NOSUFFIX_TEMPLATE, SparkleHelper.getPrettifiedNumber(mRegion.numNations), getResources().getQuantityString(R.plurals.nation_prop, mRegion.numNations)));
 
         regionOverviewSubFragment = new RegionOverviewSubFragment();
         regionOverviewSubFragment.setRegion(mRegion);

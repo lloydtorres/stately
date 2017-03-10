@@ -67,6 +67,8 @@ import java.util.Locale;
  */
 
 public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String IMPLEMENTED_TEMPLATE = "%s #%d — %s";
+
     // Types of cards
     public static final int CARD_HEADER = 0;
     public static final int CARD_CONTENT = 1;
@@ -196,7 +198,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             if (isActive) {
                 voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
             } else {
-                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_implemented),
+                voteStart.setText(String.format(Locale.US, IMPLEMENTED_TEMPLATE,
                         context.getString(prefixId),
                         resolution.id,
                         SparkleHelper.sdf.format(new Date(resolution.implemented * 1000L))));
@@ -227,6 +229,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         }
 
         private static final String RESOLUTION_LINK_TEMPLATE = "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s #%d</a>";
+        private static final String NOMINEE_TEMPLATE = "%s — %s";
 
         /**
          * This formats the topmost TextView with information on the category and resolution target.
@@ -235,7 +238,6 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
          * @param target
          */
         private void setTargetView(TextView t, String category, String target, int repealTarget) {
-            String template = context.getString(R.string.wa_nominee_template);
             String[] pair = target.split(":");
 
             if (pair.length <= 1) {
@@ -254,19 +256,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     case "N":
                         // If target is a nation, linkify it.
                         String nationTarget = SparkleHelper.getNameFromId(pair[1]);
-                        String oldTemplate = String.format(Locale.US, template, category, pair[1]);
+                        String oldTemplate = String.format(Locale.US, NOMINEE_TEMPLATE, category, pair[1]);
                         oldTemplate = SparkleHelper.addExploreActivityLink(oldTemplate, pair[1], nationTarget, ExploreActivity.EXPLORE_NATION);
                         SparkleHelper.setStyledTextView(context, t, oldTemplate);
                         break;
                     case "R":
                         // If target is a nation, linkify it.
                         String regionTarget = SparkleHelper.getNameFromId(pair[1]);
-                        String oldRegionTemplate = String.format(Locale.US, template, category, pair[1]);
+                        String oldRegionTemplate = String.format(Locale.US, NOMINEE_TEMPLATE, category, pair[1]);
                         oldRegionTemplate = SparkleHelper.addExploreActivityLink(oldRegionTemplate, pair[1], regionTarget, ExploreActivity.EXPLORE_REGION);
                         SparkleHelper.setStyledTextView(context, t, oldRegionTemplate);
                         break;
                     default:
-                        t.setText(String.format(Locale.US, template, category, target));
+                        t.setText(String.format(Locale.US, NOMINEE_TEMPLATE, category, target));
                         break;
                 }
             }

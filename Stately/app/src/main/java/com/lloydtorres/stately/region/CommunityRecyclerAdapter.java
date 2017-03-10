@@ -339,15 +339,19 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             voteButtonProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         }
 
+        private static final String POLL_OPTION_FRAGMENT_START = "%s (";
+        private static final String POLL_OPTION_FRAGMENT_VOTES = "%s %s";
+        private static final String POLL_OPTION_FRAGMENT_END = ")";
+
         private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters, boolean votedOption) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
             TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
             label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
-            content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template_start), SparkleHelper.getHtmlFormatting(option)));
+            content.setText(String.format(Locale.US, POLL_OPTION_FRAGMENT_START, SparkleHelper.getHtmlFormatting(option)));
 
-            Spannable template = new SpannableString(String.format(Locale.US, context.getString(R.string.poll_votes_template_votes), votes, context.getResources().getQuantityString(R.plurals.vote, votes)));
+            Spannable template = new SpannableString(String.format(Locale.US, POLL_OPTION_FRAGMENT_VOTES, SparkleHelper.getPrettifiedNumber(votes), context.getResources().getQuantityString(R.plurals.vote, votes)));
             if (votes > 0) {
                 String[] rawVoters = voters.split(":");
                 final ArrayList<String> properVoters = new ArrayList<String>();
@@ -362,7 +366,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 content.setLongClickable(false);
             }
             content.append(template);
-            content.append(context.getString(R.string.poll_votes_template_end));
+            content.append(POLL_OPTION_FRAGMENT_END);
 
             if (votedOption) {
                 content.setTypeface(null, Typeface.BOLD);

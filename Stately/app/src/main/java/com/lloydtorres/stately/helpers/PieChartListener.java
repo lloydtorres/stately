@@ -16,14 +16,11 @@
 
 package com.lloydtorres.stately.helpers;
 
-import android.content.Context;
-
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.lloydtorres.stately.R;
 
 import java.util.Locale;
 
@@ -34,11 +31,11 @@ import java.util.Locale;
  * modularization.
  */
 public class PieChartListener implements OnChartValueSelectedListener {
-    private Context mContext;
+    private static final String INNER_TEXT_TEMPLATE = "%1s\n%.1f%%";
+
     private PieChart pieChart;
 
-    public PieChartListener(Context c, PieChart p) {
-        mContext = c;
+    public PieChartListener(PieChart p) {
         pieChart = p;
     }
 
@@ -46,7 +43,7 @@ public class PieChartListener implements OnChartValueSelectedListener {
     public void onValueSelected(Entry e, Highlight h) {
         if (pieChart != null) {
             PieEntry entry = (PieEntry) e;
-            pieChart.setCenterText(String.format(Locale.US, mContext.getString(R.string.chart_inner_text), entry.getLabel(), entry.getValue()));
+            pieChart.setCenterText(String.format(Locale.US, INNER_TEXT_TEMPLATE, entry.getLabel(), entry.getValue()));
         }
     }
 
