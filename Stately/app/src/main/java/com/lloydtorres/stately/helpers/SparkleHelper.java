@@ -239,19 +239,19 @@ public final class SparkleHelper {
             // less than an hour
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
             int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, minutes, English.plural(c.getString(R.string.time_minute), minutes), pastIndicator);
+            template = String.format(Locale.US, template, minutes, c.getResources().getQuantityString(R.plurals.time_minute, minutes), pastIndicator);
         }
         else if (timeDiffAbs < 86400000L) {
             // less than a day
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
             int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, hours, English.plural(c.getString(R.string.time_hour), hours), pastIndicator);
+            template = String.format(Locale.US, template, hours, c.getResources().getQuantityString(R.plurals.time_hour, hours), pastIndicator);
         }
         else if (timeDiffAbs < 604800000L) {
             // less than a week
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
             int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, days, English.plural(c.getString(R.string.time_day), days), pastIndicator);
+            template = String.format(Locale.US, template, days, c.getResources().getQuantityString(R.plurals.time_day, days), pastIndicator);
         }
         else {
             template = sdf.format(new Date(inputTime));

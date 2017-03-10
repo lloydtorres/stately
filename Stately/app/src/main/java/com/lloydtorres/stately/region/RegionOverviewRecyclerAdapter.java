@@ -36,7 +36,6 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
 
-import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.List;
@@ -158,7 +157,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             String delegateProper = SparkleHelper.getNameFromId(delegateId);
             String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
                     delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
-                    English.plural(c.getString(R.string.region_filler_vote), delegateVotes));
+                    c.getResources().getQuantityString(R.plurals.vote, delegateVotes));
             delegateTemplate = SparkleHelper.addExploreActivityLink(delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
             SparkleHelper.setStyledTextView(c, tv, delegateTemplate);
         }

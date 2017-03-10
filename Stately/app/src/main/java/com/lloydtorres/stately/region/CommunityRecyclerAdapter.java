@@ -55,7 +55,6 @@ import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.helpers.links.NameListSpan;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
-import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
@@ -348,7 +347,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
             content.setText(String.format(Locale.US, context.getString(R.string.poll_votes_template_start), SparkleHelper.getHtmlFormatting(option)));
 
-            Spannable template = new SpannableString(String.format(Locale.US, context.getString(R.string.poll_votes_template_votes), votes, English.plural(context.getString(R.string.region_filler_vote), votes)));
+            Spannable template = new SpannableString(String.format(Locale.US, context.getString(R.string.poll_votes_template_votes), votes, context.getResources().getQuantityString(R.plurals.vote, votes)));
             if (votes > 0) {
                 String[] rawVoters = voters.split(":");
                 final ArrayList<String> properVoters = new ArrayList<String>();

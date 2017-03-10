@@ -42,7 +42,6 @@ import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.region.RegionOverviewRecyclerAdapter;
 
-import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
@@ -237,7 +236,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             nationCount.setText(String.format(Locale.US,
                     context.getString(R.string.val_currency),
                     SparkleHelper.getPrettifiedNumber(regionData.numNations),
-                    English.plural(context.getString(R.string.region_pop), regionData.numNations)));
+                    context.getResources().getQuantityString(R.plurals.nation_prop, regionData.numNations)));
             if (regionData.flagURL != null) {
                 flag.setVisibility(View.VISIBLE);
                 DashHelper.getInstance(context).loadImage(regionData.flagURL, flag, false);

@@ -28,8 +28,6 @@ import com.lloydtorres.stately.dto.DelegateVote;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 
-import org.atteo.evo.inflector.English;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -74,7 +72,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             String displayFormat = String.format(Locale.US, context.getString(R.string.wa_delegate_votes_dialog_format),
                     SparkleHelper.getNameFromId(dv.delegate),
                     SparkleHelper.getPrettifiedNumber(dv.votes),
-                    English.plural(context.getString(R.string.wa_delegate_vote_singular), dv.votes));
+                    context.getResources().getQuantityString(R.plurals.vote, dv.votes));
             nameEntry.init(displayFormat);
         } else {
             nameEntry.init(names.get(position));

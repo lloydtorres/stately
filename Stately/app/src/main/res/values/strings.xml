@@ -58,9 +58,6 @@
     <string name="time_moments_template">%1$s %2$s</string>
     <string name="time_generic_template">%1$d %2$s %3$s</string>
     <string name="time_moments">moments</string>
-    <string name="time_minute">minute</string>
-    <string name="time_hour">hour</string>
-    <string name="time_day">day</string>
     <string name="time_ago">ago</string>
     <string name="time_from_now">from now</string>
 
@@ -225,13 +222,11 @@
 
     <!-- Region -->
     <string name="region_404">Region not found.</string>
-    <string name="region_pop">Nation</string>
 
     <!-- Region overview subfragment -->
     <string name="card_region_quick_facts_title">Quick Facts</string>
     <string name="card_region_wa_delegate">WA Delegate</string>
     <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
-    <string name="region_filler_vote">vote</string>
     <string name="region_filler_none">None</string>
     <string name="card_region_founder">Founder</string>
     <string name="region_founded_append">(founded %1$s)</string>
@@ -418,7 +413,6 @@
     <string name="wa_individual_nations_against">Nations Against</string>
     <string name="wa_individual_nations_for_newline">Nations\nFor</string>
     <string name="wa_individual_nations_against_newline">Nations\nAgainst</string>
-    <string name="wa_delegate_vote_singular">vote</string>
     <string name="wa_delegate_votes_dialog_format">%1$s (%2$s %3$s)</string>
     <string name="wa_delegate_no_votes_for">No delegates have voted for the resolution so far.</string>
     <string name="wa_delegate_no_votes_against">No delegates have voted against the resolution so far.</string>

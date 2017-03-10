@@ -35,7 +35,6 @@ import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
-import com.lloydtorres.stately.wa.VoteDialog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

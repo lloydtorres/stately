@@ -52,7 +52,6 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 
-import org.atteo.evo.inflector.English;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
@@ -206,7 +205,7 @@ public class RegionFragment extends DetachFragment {
         }
 
         regionName.setText(mRegion.name);
-        regionPop.setText(String.format(Locale.US, getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), English.plural(getString(R.string.region_pop), mRegion.numNations)));
+        regionPop.setText(String.format(Locale.US, getString(R.string.val_currency), SparkleHelper.getPrettifiedNumber(mRegion.numNations), getResources().getQuantityString(R.plurals.nation_prop, mRegion.numNations)));
 
         regionOverviewSubFragment = new RegionOverviewSubFragment();
         regionOverviewSubFragment.setRegion(mRegion);
