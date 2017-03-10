@@ -140,7 +140,7 @@ public class IssuesFragment extends RefreshviewFragment {
                         Persister serializer = new Persister();
                         try {
                             IssueFullHolder issueResponse = serializer.read(IssueFullHolder.class, response);
-                            processIssues(view, issueResponse);
+                            processIssues(issueResponse);
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -173,10 +173,9 @@ public class IssuesFragment extends RefreshviewFragment {
 
     /**
      * Process the HTML contents of the issues into actual Issue objects
-     * @param v Root view
      * @param holder Issue response from NS
      */
-    private void processIssues(View v, IssueFullHolder holder) {
+    private void processIssues(IssueFullHolder holder) {
         issues = new ArrayList<Object>();
 
         // Add zombie card if Z-Day is active

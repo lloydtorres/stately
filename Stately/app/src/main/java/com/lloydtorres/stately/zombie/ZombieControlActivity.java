@@ -281,7 +281,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
 
         ZombieDecisionDialog zombieDialog = new ZombieDecisionDialog();
         zombieDialog.setZombieData(userData.zombieData);
-        zombieDialog.show(getSupportFragmentManager(), VoteDialog.DIALOG_TAG);
+        zombieDialog.show(getSupportFragmentManager(), ZombieDecisionDialog.DIALOG_TAG);
     }
 
     /**

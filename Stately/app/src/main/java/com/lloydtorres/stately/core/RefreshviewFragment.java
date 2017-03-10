@@ -42,12 +42,6 @@ public abstract class RefreshviewFragment extends DetachFragment {
     protected RecyclerView.Adapter mRecyclerAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         mView = inflater.inflate(R.layout.fragment_refreshview, container, false);

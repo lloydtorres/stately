@@ -103,11 +103,6 @@ public class RegionFragment extends DetachFragment {
     public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
 

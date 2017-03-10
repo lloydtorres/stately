@@ -91,7 +91,6 @@ public final class TrixHelper {
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
 
     // Keys for shared prefs stuff
-    public static final String KEY_FIREBASE = "spike_firebase_token";
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
 
     // Private constructor

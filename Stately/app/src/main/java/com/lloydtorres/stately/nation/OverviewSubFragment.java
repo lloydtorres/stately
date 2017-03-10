@@ -46,7 +46,7 @@ import java.util.Locale;
  * Takes in a Nation object.
  */
 public class OverviewSubFragment extends NationSubFragment {
-    private final static String CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE = "<font color=\"#727272\"><strike>%s</strike></font>>br>%s";
+    private final static String CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE = "<font color=\"#727272\"><strike>%s</strike></font><br>%s";
 
     private String[] WORLD_CENSUS_ITEMS;
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
