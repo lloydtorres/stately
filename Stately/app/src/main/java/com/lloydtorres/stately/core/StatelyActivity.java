@@ -119,7 +119,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     private BroadcastReceiver requeryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isFinishing()) {
+            if (isFinishing() || mNation == null) {
                 return;
             }
             shouldReload = true;
@@ -723,7 +723,14 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         TrixHelper.updateLastActiveTime(this);
         // Redownload nation data on resume if set to reload data
         if (shouldReload) {
-            updateNation(mNation.name, false);
+            String nationName;
+            if (mNation != null) {
+                nationName = mNation.name;
+            } else {
+                UserLogin u = PinkaHelper.getActiveUser(this);
+                nationName = u.name;
+            }
+            updateNation(nationName, false);
         }
     }
 }
