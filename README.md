@@ -59,6 +59,22 @@ Detailed release notes and APKs can be found in the [releases page](https://gith
 * **1.0.1** - Fix bug with malformed vectors.
 * **1.0.0** - Initial release.
 
+### Translations
+
+English strings in the Stately app can be found in three files:
+
+* [`res/values/strings.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/strings.xml)
+* [`res/values/plurals.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/plurals.xml)
+* [`res/values/arrays.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/arrays.xml) (lines 4-50 only; rest are from NationStates)
+
+To translate Stately into another language, fork this repository and create a copy of these files in a new directory called `res/values-[xx]/`, where `[xx]` represents the target language's [ISO 639-1 code](https://www.loc.gov/standards/iso639-2/php/code_list.php) (e.g. `fr` for French and `ja` for Japanese).
+
+For languages with special pluralization rules, refer to the [official Android guide on pluralization](https://developer.android.com/guide/topics/resources/string-resource.html#Plurals) for information on how to format `res/values/plurals.xml`.
+
+Commit to your fork and submit a pull request once your translation is ready. I'll reach out and work with you to properly integrate your translation into Stately.
+
+Note that translations only affect in-app strings. Strings from the NationStates gameside (such as issues) will remain in English.
+
 ### Libraries
 
 Stately uses the following open-source libraries:
@@ -80,26 +96,10 @@ Stately also uses the following proprietary libraries:
 
 * [Crashlytics](https://try.crashlytics.com/)
 
-### Translations
-
-English strings in the Stately app can be found in three files:
-
-* [`res/values/strings.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/strings.xml)
-* [`res/values/plurals.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/plurals.xml)
-* [`res/values/arrays.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/arrays.xml) (lines 4-50 only; rest are from NationStates)
-
-To translate Stately into another language, fork this repository and create a copy of these files in a new directory called `res/values-[xx]/`, where `[xx]` represents the target language's [ISO 639-1 code](https://www.loc.gov/standards/iso639-2/php/code_list.php) (e.g. `fr` for French and `ja` for Japanese).
-
-For languages with special pluralization rules, refer to the [official Android guide on pluralization](https://developer.android.com/guide/topics/resources/string-resource.html#Plurals) for information on how to format `res/values/plurals.xml`.
-
-Commit to your fork and submit a pull request once your translation is ready. I'll reach out and work with you to properly integrate your translation into Stately.
-
-Note that translations only affect in-app strings. Strings from the NationStates gameside (such as issues) will remain in English.
-
 ### License
 
 ```
-Copyright 2016 Lloyd Torres
+Copyright 2017 Lloyd Torres
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
