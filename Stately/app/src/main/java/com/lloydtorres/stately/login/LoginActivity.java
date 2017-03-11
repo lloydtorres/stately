@@ -439,7 +439,7 @@ public class LoginActivity extends BroadcastableActivity {
      * when too many login errors occur.
      */
     private void showInvalidLoginGuidance() {
-        if (invalidAttempts == INVALID_NATION_ERROR_GUIDANCE_LIMIT) {
+        if (invalidAttempts == INVALID_NATION_ERROR_GUIDANCE_LIMIT && !isFinishing()) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.guidance_invalid_login_title)
                     .setMessage(R.string.guidance_invalid_login_content)

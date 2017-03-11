@@ -278,6 +278,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         UserExploreData userDataResponse;
                         Persister serializer = new Persister();
                         try {
@@ -338,6 +342,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     Nation nationResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Persister serializer = new Persister();
                         try {
                             nationResponse = Nation.parseNationFromXML(getApplicationContext(), serializer, response);
@@ -410,6 +418,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     Region regionResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Persister serializer = new Persister();
                         try {
                             regionResponse = Region.parseRegionXML(ExploreActivity.this, serializer, response);
@@ -511,6 +523,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element input = d.select("input[name=localid]").first();
 
@@ -589,6 +605,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         isInProgress = false;
                         isEndorsed = !isEndorsed;
                         if (!isEndorsed) {
@@ -679,6 +699,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         isInProgress = false;
                         isInDossier = !isInDossier;
                         dossierProgress.dismiss();
@@ -801,6 +825,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(response);
                         Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(response);
                         isInProgress = false;
@@ -887,6 +915,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         superweaponStatus = new ZSuperweaponStatus();
                         superweaponStatus.isTZES = d.select(String.format(Locale.US, SUPERWEAPON_BUTTON_TEMPLATE,
@@ -956,6 +988,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         zombieCard.setIsLoading(false);
                         processZSuperweaponResponse(response);
                     }

@@ -90,8 +90,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
     }
 
-    private void setToolbar(Toolbar toolbar)
-    {
+    private void setToolbar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -120,22 +119,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isChangeThemeTriggered) {
-            setupNewTheme();
-        }
-        else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        storage.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -289,5 +272,21 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         } else {
             return Math.random() >= 0.5d ? GOV_CONSERVATIVE : GOV_LIBERAL;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isChangeThemeTriggered) {
+            setupNewTheme();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        storage.unregisterOnSharedPreferenceChangeListener(this);
     }
 }
