@@ -552,6 +552,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private void setVotingHistory(List<Integer> vF, List<Integer> vA) {
             votesFor = vF;
             votesAgainst = vA;
+            votesFor.add(resolution.votesFor);
+            votesAgainst.add(resolution.votesAgainst);
 
             final float lineWidth = 2.5f;
 
