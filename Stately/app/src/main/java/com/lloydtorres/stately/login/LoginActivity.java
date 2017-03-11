@@ -422,6 +422,10 @@ public class LoginActivity extends BroadcastableActivity {
         executeRequest(stringRequest, getString(R.string.calibration_load));
     }
 
+    /**
+     * Helper function used to continue the account verification process.
+     * @param u
+     */
     private void continueToVerifyAccount(UserLogin u) {
         if (u != null) {
             verifyAccount(u);
@@ -430,6 +434,10 @@ public class LoginActivity extends BroadcastableActivity {
         }
     }
 
+    /**
+     * Shows a dialog providing a suggestion to copy-paste nation name into field (has helped some users)
+     * when too many login errors occur.
+     */
     private void showInvalidLoginGuidance() {
         if (invalidAttempts == INVALID_NATION_ERROR_GUIDANCE_LIMIT) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));

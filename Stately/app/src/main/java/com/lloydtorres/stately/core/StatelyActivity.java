@@ -16,8 +16,11 @@
 
 package com.lloydtorres.stately.core;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -51,6 +54,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.issues.IssueDecisionActivity;
 import com.lloydtorres.stately.issues.IssuesFragment;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.login.SwitchNationDialog;
@@ -60,6 +64,7 @@ import com.lloydtorres.stately.region.RegionFragment;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramsFragment;
 import com.lloydtorres.stately.wa.AssemblyMainFragment;
+import com.lloydtorres.stately.wa.ResolutionActivity;
 import com.lloydtorres.stately.world.WorldFragment;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
@@ -96,7 +101,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private int currentPosition = R.id.nav_nation;
-    private boolean isLoaded = false;
+    private boolean shouldReload = false;
     private int navInit = NATION_FRAGMENT;
 
     private UserNation mNation;
@@ -108,6 +113,18 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     private TextView telegramCountView;
     private TextView rmbCountView;
     private TextView waCountView;
+
+    // Used for listening to broadcasts that 1) an issue decision is made, or
+    // 2) a WA vote is submitted. Sets a flag that nation data should be requeried.
+    private BroadcastReceiver requeryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isFinishing()) {
+                return;
+            }
+            shouldReload = true;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +165,15 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         getSupportActionBar().hide();
         getSupportActionBar().setTitle("");
 
+        // Register receivers
+        IntentFilter issueDecisionFilter = new IntentFilter();
+        issueDecisionFilter.addAction(IssueDecisionActivity.ISSUE_BROADCAST);
+        IntentFilter waVoteFilter = new IntentFilter();
+        waVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
+        registerBroadcastReceiver(requeryReceiver, issueDecisionFilter);
+        registerBroadcastReceiver(requeryReceiver, waVoteFilter);
+
+        // Load nation data
         if (mNation == null) {
             UserLogin u = PinkaHelper.getActiveUser(this);
             updateNation(u.name, true);
@@ -252,41 +278,6 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save state
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(NAV_INIT, navInit);
-        if (mNation != null) {
-            savedInstanceState.putParcelable(NATION_DATA, mNation);
-        }
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Restore state
-        super.onRestoreInstanceState(savedInstanceState);
-        navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
-        if (savedInstanceState != null && mNation == null) {
-            mNation = savedInstanceState.getParcelable(NATION_DATA);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        TrixHelper.updateLastActiveTime(this);
-
-        // Redownload nation data on resume
-        // isLoaded will only be false on first run, true on all subsequent runs
-        // This prevents nation data from being redundantly loaded twice.
-        if (isLoaded) {
-            updateNation(mNation.name, false);
-        } else {
-            isLoaded = true;
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         // Handle back presses
         // Close drawer if open, call super function otherwise
@@ -307,11 +298,9 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
+    /**
+     * Shows a dialog that confirms if a user wants to exit the app.
+     */
     public void confirmExit() {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
@@ -675,6 +664,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
 
                             mNation = nationResponse;
                             PinkaHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
+                            shouldReload = false;
 
                             if (firstLaunch) {
                                 initNavigationView(navInit);
@@ -704,6 +694,36 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             SparkleHelper.makeSnackbar(fView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(NAV_INIT, navInit);
+        if (mNation != null) {
+            savedInstanceState.putParcelable(NATION_DATA, mNation);
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore state
+        super.onRestoreInstanceState(savedInstanceState);
+        navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
+        if (savedInstanceState != null && mNation == null) {
+            mNation = savedInstanceState.getParcelable(NATION_DATA);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TrixHelper.updateLastActiveTime(this);
+        // Redownload nation data on resume if set to reload data
+        if (shouldReload) {
+            updateNation(mNation.name, false);
         }
     }
 }
