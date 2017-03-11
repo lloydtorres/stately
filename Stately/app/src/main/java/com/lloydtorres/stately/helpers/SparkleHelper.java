@@ -90,6 +90,7 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -165,8 +166,7 @@ public final class SparkleHelper {
      * @param name The name to be checked.
      * @return Bool if valid or not.
      */
-    public static boolean isValidName(String name)
-    {
+    public static boolean isValidName(String name) {
         String normalizedName = normalizeToAscii(name);
         Matcher validator = VALID_NAME_PATTERN.matcher(normalizedName);
         return validator.matches();
@@ -182,14 +182,31 @@ public final class SparkleHelper {
      * @param n the name
      * @return the NS ID
      */
-    public static String getIdFromName(String n)
-    {
+    public static String getIdFromName(String n) {
         if (n != null) {
             String normalizedName = normalizeToAscii(n);
             return normalizedName.toLowerCase(Locale.US).replace(" ", "_");
         }
         return null;
     }
+
+    public static final String[] ARTICLES_THE = { "the", "le", "la", "les", "el", "lo", "los", "las", "al", "der", "die", "das", "des", "dem", "il", "het" };
+    public static final String[] ARTICLES_OF = { "of", "du", "de", "del", "dello", "della", "dei", "degli", "delle", "von", "no" };
+    public static final String[] ARTICLES_AN = { "an", "a", "un", "une", "ein", "eine", "einer", "eines", "einem", "einen", "uno", "una", "unos", "unas" };
+    public static final String[] ARTICLES_TO = { "to", "au", "ad", "in", "zu", "zum" };
+    public static final String[] ARTICLES_AND = { "and", "et", "e", "ac", "atque", "und", "y" };
+    public static final List<String> ARTICLES_EXCEPTIONS = new ArrayList<String>() {
+        {
+            addAll(Arrays.asList(ARTICLES_THE));
+            addAll(Arrays.asList(ARTICLES_OF));
+            addAll(Arrays.asList(ARTICLES_AN));
+            addAll(Arrays.asList(ARTICLES_TO));
+            addAll(Arrays.asList(ARTICLES_AND));
+        }
+    };
+
+    // Pattern for matching Roman numerals, taken from: http://stackoverflow.com/a/267405
+    public static final Pattern ROMAN_NUMERALS = Pattern.compile("(?i)(?s)^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
 
     /**
      * This turns a NationStates ID like greater_tern to a nicely formatted string.
@@ -199,14 +216,40 @@ public final class SparkleHelper {
      */
     public static String getNameFromId(String id) {
         if (id != null) {
-            // IDs have no whitespace and are only separated by underscores.
+            // Split main ID by "_" -- IDs in NationStates have no whitespace, these are replaced by _
             String[] words = id.split("_");
-            // A list of properly-formatted words.
             List<String> properWords = new ArrayList<String>();
 
-            for (String w : words) {
-                // Transform word from lower case to proper case.
-                properWords.add(toNormalCase(w));
+            // Loop through each token separated by "_"
+            for (int i = 0; i < words.length; i++) {
+                String w = words[i].toLowerCase(Locale.US);
+
+                // Further split token by "-"
+                String[] subwords = w.split("-");
+                List<String> properSubWords = new ArrayList<String>();
+
+                // Loop through the base subtokens
+                for (int j = 0; j < subwords.length; j++) {
+                    String sw = subwords[j].toLowerCase(Locale.US);
+
+                    // If detected to be a Roman numeral, set to upper case
+                    if (ROMAN_NUMERALS.matcher(sw).matches()) {
+                        properSubWords.add(sw.toUpperCase(Locale.US));
+                    }
+                    // If first word, definitely set to normal case
+                    else if (i == 0 && j == 0) {
+                        properSubWords.add(toNormalCase(sw));
+                    }
+                    // If part of list of exceptions, don't normal-case
+                    else if (ARTICLES_EXCEPTIONS.contains(sw)) {
+                        properSubWords.add(sw);
+                    }
+                    // Otherwise just normal case as usual
+                    else {
+                        properSubWords.add(toNormalCase(sw));
+                    }
+                }
+                properWords.add(joinStringList(properSubWords, "-"));
             }
 
             // Join all the proper words back together with spaces.
