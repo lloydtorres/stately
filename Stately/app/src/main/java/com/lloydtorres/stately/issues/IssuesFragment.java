@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,6 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,10 +57,16 @@ import java.util.regex.Pattern;
  * A fragment to display current issues.
  */
 public class IssuesFragment extends RefreshviewFragment {
+    // on save keys
+    private static final String KEY_ISSUES_DATA = "issuesData";
+    private static final String KEY_NATION_DATA = "nationData";
+    private static final String KEY_NEXT_ISSUE_TIME_DATA = "nextIssueTimeData";
+
     private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+?)\\] (.+?)$");
 
-    private List<Object> issues;
+    private ArrayList<Parcelable> issues;
     private Nation mNation;
+    private long nextIssueTime = IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME;
 
     public void setNationData(Nation n)
     {
@@ -70,14 +76,14 @@ public class IssuesFragment extends RefreshviewFragment {
     private BroadcastReceiver issueDecisionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (getActivity() == null || !isAdded() || mRecyclerAdapter == null) {
+            if (getActivity() == null || !isAdded() || issues == null) {
                 return;
             }
 
-            // Remove the decided issue from the recycler adapter
-            // We don't care about our own copy of the issues since it'll get updated soon anyway
-            int issueId = intent.getIntExtra(IssueDecisionActivity.ISSUE_ID_DATA, -1);
-            ((IssuesRecyclerAdapter) mRecyclerAdapter).removeIssue(issueId);
+            // Mark the decided issue to be removed
+            int issueToRemove = intent.getIntExtra(IssueDecisionActivity.ISSUE_ID_DATA, -1);
+            removeIssue(issueToRemove);
+            refreshRecycler();
         }
     };
 
@@ -99,14 +105,18 @@ public class IssuesFragment extends RefreshviewFragment {
         issueDecisionFilter.addAction(IssueDecisionActivity.ISSUE_BROADCAST);
         ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(issueDecisionReceiver, issueDecisionFilter);
 
-        return mView;
-    }
+        // Restore state
+        if (savedInstanceState != null) {
+            if (issues == null) {
+                issues = savedInstanceState.getParcelableArrayList(KEY_ISSUES_DATA);
+            }
+            if (mNation == null) {
+                mNation = savedInstanceState.getParcelable(KEY_NATION_DATA);
+            }
+            nextIssueTime = savedInstanceState.getLong(KEY_NEXT_ISSUE_TIME_DATA, IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME);
+        }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Refresh on resume
-        startQueryIssues();
+        return mView;
     }
 
     /**
@@ -176,7 +186,7 @@ public class IssuesFragment extends RefreshviewFragment {
      * @param holder Issue response from NS
      */
     private void processIssues(IssueFullHolder holder) {
-        issues = new ArrayList<Object>();
+        issues = new ArrayList<Parcelable>();
 
         // Add zombie card if Z-Day is active
         if (NightmareHelper.getIsZDayActive(getContext()) && holder.zombieData != null) {
@@ -211,15 +221,63 @@ public class IssuesFragment extends RefreshviewFragment {
 
         long currentTime = System.currentTimeMillis() / 1000L;
         if (currentTime < holder.nextIssueTime) {
-            issues.add(holder.nextIssueTime);
+            nextIssueTime = holder.nextIssueTime;
         }
 
+        refreshRecycler();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Given an issue ID, removes the first issue with that issue ID from the list.
+     * @param id
+     */
+    public void removeIssue(int id) {
+        for (int i = 0; i < issues.size(); i++) {
+            Parcelable card = issues.get(i);
+            if (card instanceof Issue) {
+                Issue issueCard = (Issue) card;
+                if (issueCard.id == id) {
+                    issues.remove(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * If the recycler doesn't exist, create a new one. Otherwise just update the contents of the existing one.
+     */
+    public void refreshRecycler() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, mNation);
+            mRecyclerAdapter = new IssuesRecyclerAdapter(getContext(), issues, nextIssueTime, mNation);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
-            ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues);
+            ((IssuesRecyclerAdapter) mRecyclerAdapter).setIssueCards(issues, nextIssueTime);
         }
-        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Only requery issues on resume if no data available or
+        // the next issue time is unknown and the issues list isn't already at max
+        int maxIssues = !NightmareHelper.getIsZDayActive(getContext()) ? IssueFullHolder.MAX_ISSUE_COUNT_REGULAR : IssueFullHolder.MAX_ISSUE_COUNT_ZOMBIE;
+        if (issues == null || (nextIssueTime == IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME && issues.size() < maxIssues)) {
+            startQueryIssues();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        if (issues != null) {
+            savedInstanceState.putParcelableArrayList(KEY_ISSUES_DATA, issues);
+        }
+        if (mNation != null) {
+            savedInstanceState.putParcelable(KEY_NATION_DATA, mNation);
+        }
+        savedInstanceState.putLong(KEY_NEXT_ISSUE_TIME_DATA, nextIssueTime);
     }
 }

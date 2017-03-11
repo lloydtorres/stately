@@ -38,6 +38,10 @@ public class IssueFullHolder implements Parcelable {
                                         + "&v=" + SparkleHelper.API_VERSION;
     public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
 
+    public static final long UNKNOWN_NEXT_ISSUE_TIME = -1;
+    public static final int MAX_ISSUE_COUNT_REGULAR = 5;
+    public static final int MAX_ISSUE_COUNT_ZOMBIE = 6;
+
     @ElementList(name="ISSUES", required=false)
     public List<Issue> issues;
     @Element(name="NEXTISSUETIME", required=false)

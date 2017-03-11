@@ -19,6 +19,7 @@ package com.lloydtorres.stately.issues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
+import com.lloydtorres.stately.dto.IssueFullHolder;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -37,6 +39,7 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 import com.lloydtorres.stately.zombie.ZombieControlActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,13 +53,13 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int ZOMBIE_CARD = 2;
 
     private Context context;
-    private List<Object> issues;
+    private List<Object> issuesCards;
     private Nation mNation;
 
-    public IssuesRecyclerAdapter(Context c, List<Object> i, Nation n) {
+    public IssuesRecyclerAdapter(Context c, List<Parcelable> i, long nextIssueTime, Nation n) {
         context = c;
         mNation = n;
-        setIssueCards(i);
+        setIssueCards(i, nextIssueTime);
     }
 
     @Override
@@ -86,33 +89,33 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         switch (holder.getItemViewType()) {
             case ISSUE_CARD:
                 IssueCard issueCard = (IssueCard) holder;
-                issueCard.init((Issue) issues.get(position));
+                issueCard.init((Issue) issuesCards.get(position));
                 break;
             case ZOMBIE_CARD:
                 ZombieIssueCard zombieCard = (ZombieIssueCard) holder;
-                zombieCard.init((Zombie) issues.get(position));
+                zombieCard.init((Zombie) issuesCards.get(position));
                 break;
             default:
                 NextCard nextCard = (NextCard) holder;
-                nextCard.init((Long) issues.get(position));
+                nextCard.init((Long) issuesCards.get(position));
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return issues.size();
+        return issuesCards.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (issues.get(position) instanceof Issue) {
+        if (issuesCards.get(position) instanceof Issue) {
             return ISSUE_CARD;
         }
-        else if (issues.get(position) instanceof Zombie) {
+        else if (issuesCards.get(position) instanceof Zombie) {
             return ZOMBIE_CARD;
         }
-        else if (issues.get(position) instanceof Long) {
+        else if (issuesCards.get(position) instanceof Long) {
             return NEXT_CARD;
         }
         return -1;
@@ -122,27 +125,12 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      * Sets the list of objects as the cards for the recycler adapter.
      * @param cards
      */
-    public void setIssueCards(List<Object> cards) {
-        issues = cards;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Given an issue ID, removes the first issue with that issue ID from the recycler.
-     * @param id
-     */
-    public void removeIssue(int id) {
-        for (int i=0; i < issues.size(); i++) {
-            Object card = issues.get(i);
-            if (card instanceof Issue) {
-                Issue issueCard = (Issue) card;
-                if (issueCard.id == id) {
-                    issues.remove(i);
-                    notifyItemRemoved(i);
-                    return;
-                }
-            }
+    public void setIssueCards(List<Parcelable> cards, long nextIssueTime) {
+        issuesCards = new ArrayList<Object>(cards);
+        if (nextIssueTime != IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME) {
+            issuesCards.add(nextIssueTime);
         }
+        notifyDataSetChanged();
     }
 
     // Card viewholders
