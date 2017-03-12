@@ -322,7 +322,9 @@ public final class SparkleHelper {
     }
 
     public static String getPrettifiedNumber(double d) {
-        return NumberFormat.getInstance(Locale.US).format(d);
+        NumberFormat nf = NumberFormat.getInstance(Locale.US);
+        nf.setMaximumFractionDigits(1);
+        return nf.format(d);
     }
 
     public static String getPrettifiedNumber(long l) {

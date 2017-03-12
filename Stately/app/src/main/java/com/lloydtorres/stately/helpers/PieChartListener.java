@@ -31,7 +31,7 @@ import java.util.Locale;
  * modularization.
  */
 public class PieChartListener implements OnChartValueSelectedListener {
-    private static final String INNER_TEXT_TEMPLATE = "%1s\n%.1f%%";
+    private static final String INNER_TEXT_TEMPLATE = "%1s\n%s%%";
 
     private PieChart pieChart;
 
@@ -43,7 +43,12 @@ public class PieChartListener implements OnChartValueSelectedListener {
     public void onValueSelected(Entry e, Highlight h) {
         if (pieChart != null) {
             PieEntry entry = (PieEntry) e;
-            pieChart.setCenterText(String.format(Locale.US, INNER_TEXT_TEMPLATE, entry.getLabel(), entry.getValue()));
+            pieChart.setCenterText(
+                    String.format(Locale.US, INNER_TEXT_TEMPLATE,
+                            entry.getLabel(),
+                            SparkleHelper.getPrettifiedNumber(entry.getValue())
+                    )
+            );
         }
     }
 
