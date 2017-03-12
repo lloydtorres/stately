@@ -261,9 +261,12 @@ public class IssuesFragment extends RefreshviewFragment {
     public void onResume() {
         super.onResume();
         // Only requery issues on resume if no data available or
-        // the next issue time is unknown and the issues list isn't already at max
+        // the next issue time is unknown and the issues list isn't already at max or
+        // the time to next issue has passed
         int maxIssues = !NightmareHelper.getIsZDayActive(getContext()) ? IssueFullHolder.MAX_ISSUE_COUNT_REGULAR : IssueFullHolder.MAX_ISSUE_COUNT_ZOMBIE;
-        if (issues == null || (nextIssueTime == IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME && issues.size() < maxIssues)) {
+        if (issues == null ||
+                (nextIssueTime == IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME && issues.size() < maxIssues) ||
+                (nextIssueTime < System.currentTimeMillis() / 1000L)) {
             startQueryIssues();
         }
     }
