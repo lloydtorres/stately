@@ -216,6 +216,10 @@ public final class SparkleHelper {
      */
     public static String getNameFromId(String id) {
         if (id != null) {
+            // Make sure it's in ~ID form~ first
+            id = id.toLowerCase(Locale.US);
+            id = id.replace(" ", "_");
+
             // Split main ID by "_" -- IDs in NationStates have no whitespace, these are replaced by _
             String[] words = id.split("_");
             List<String> properWords = new ArrayList<String>();
