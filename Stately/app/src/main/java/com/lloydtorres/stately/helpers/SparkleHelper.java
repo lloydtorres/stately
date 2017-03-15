@@ -252,7 +252,15 @@ public final class SparkleHelper {
                         properSubWords.add(toNormalCase(sw));
                     }
                 }
-                properWords.add(joinStringList(properSubWords, "-"));
+
+                String newSubWord = joinStringList(properSubWords, "-");
+
+                // If last item was a "-", add it back (gets lost in the split)
+                if ("-".equals(w.substring(w.length() - 1))) {
+                    newSubWord = newSubWord + "-";
+                }
+
+                properWords.add(newSubWord);
             }
 
             // Join all the proper words back together with spaces.
