@@ -870,8 +870,6 @@ public final class SparkleHelper {
         holder = replaceMalformedHtmlCharacters(holder);
         holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
 
-        holder = holder.replaceAll("(?i)\\[hr\\]", "<br>");
-
         // First handle the [pre] tag -- anything inside must not be formatted
         holder = regexPreFormat(holder);
 
@@ -879,6 +877,9 @@ public final class SparkleHelper {
         holder = regexListFormat(holder);
         // Re-escape all the stuff Jsoup cleared out
         holder = regexPreFormat(holder);
+
+        // Handle the [hr] tag; there's no Android equivalent so we'll cheat here
+        holder = holder.replaceAll("(?s)(?i)(?:<br>|\\s)*\\[hr\\](?:<br>|\\s)*", "<br><br><center>—————</center><br>");
 
         // Linkify nations and regions
         holder = addExploreActivityLinks(holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
