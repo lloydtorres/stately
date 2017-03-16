@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.helpers.RaraHelper;
-import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 

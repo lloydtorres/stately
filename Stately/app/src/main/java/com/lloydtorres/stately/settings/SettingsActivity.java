@@ -40,6 +40,10 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
  * An activity to show app settings.
  */
 public class SettingsActivity extends SlidrActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    // Keys for data passed in activity intent
+    public static final String INTENT_IS_CHANGE_THEME_TRIGGERED = "isChangeThemeTriggered";
+
+    // Keys for each setting option
     public static final String SETTING_AUTOLOGIN = "setting_autologin";
     public static final String SETTING_ISSUECONFIRM = "setting_issueconfirm";
     public static final String SETTING_EXITCONFIRM = "setting_exitconfirm";
@@ -59,12 +63,14 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
 
     public static final String SETTING_APP_VERSION = "setting_app_version";
 
+    // Theme keys
     public static final int THEME_VERT = 0;
     public static final int THEME_NOIR = 1;
     public static final int THEME_BLEU = 2;
     public static final int THEME_ROUGE = 3;
     public static final int THEME_VIOLET = 4;
 
+    // Government category keys
     public static final int GOV_CONSERVATIVE = 0;
     public static final int GOV_LIBERAL = 1;
     public static final int GOV_NEUTRAL = 2;
@@ -83,6 +89,14 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setToolbar(toolbar);
+
+        if (getIntent() != null) {
+            isChangeThemeTriggered = getIntent().getBooleanExtra(INTENT_IS_CHANGE_THEME_TRIGGERED, false);
+        }
+
+        if (isChangeThemeTriggered) {
+            slidrInterface.lock();
+        }
 
         storage = PreferenceManager.getDefaultSharedPreferences(this);
         storage.registerOnSharedPreferenceChangeListener(this);
@@ -138,11 +152,14 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
                 }
                 break;
             case SETTING_THEME:
+                // Restart settings activity on theme change
+                Intent settingsActivityLaunch = new Intent(this, SettingsActivity.class);
+                settingsActivityLaunch.putExtra(INTENT_IS_CHANGE_THEME_TRIGGERED, true);
+                startActivity(settingsActivityLaunch);
+                finish();
+                break;
             case SETTING_GOVERNMENT:
                 isChangeThemeTriggered = true;
-                if (slidrInterface != null) {
-                    slidrInterface.lock();
-                }
                 break;
         }
     }
