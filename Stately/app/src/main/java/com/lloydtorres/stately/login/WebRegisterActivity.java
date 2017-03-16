@@ -18,79 +18,43 @@ package com.lloydtorres.stately.login;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
-import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
-import com.lloydtorres.stately.core.SlidrActivity;
-import com.lloydtorres.stately.helpers.network.NSStringRequest;
-
-import java.util.Locale;
+import com.lloydtorres.stately.core.WebViewActivity;
+import com.lloydtorres.stately.helpers.network.ProgressBarWebViewClient;
 
 /**
  * Created by Lloyd on 2016-08-06.
  * An activity containing a WebView for creating new nations.
  */
-public class WebRegisterActivity extends SlidrActivity {
+public class WebRegisterActivity extends WebViewActivity {
 
     public static final String REGISTER_URL = "https://m.nationstates.net/page=create_nation";
     public static final int REGISTER_RESULT = 54321;
 
     public static final String FINISHED_URL_PART = "https://m.nationstates.net/nation=";
 
-    private WebView mWebView;
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_register);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.register_toolbar);
-        setToolbar(toolbar);
+        setTitle(getString(R.string.create_nation));
 
-        progressBar = (ProgressBar) findViewById(R.id.register_progress_bar);
-
-
-        // Initialize WebView
-        mWebView = (WebView) findViewById(R.id.register_webview);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setSupportZoom(false);
-        mWebView.getSettings().setUserAgentString(String.format(Locale.US, NSStringRequest.STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));
-
-        // Checks if the user is in the nation page on loa
-        mWebView.setWebViewClient(new WebViewClient() {
+        // Checks if the user is in the nation page on load
+        mWebView.setWebViewClient(new ProgressBarWebViewClient(progressBar) {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setVisibility(View.VISIBLE);
+                super.onPageStarted(view, url, favicon);
                 if (url != null && url.contains(FINISHED_URL_PART)) {
                     setResult(RESULT_OK);
                     finish();
                 }
             }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
-            }
         });
 
         mWebView.loadUrl(REGISTER_URL);
-    }
-
-    public void setToolbar(Toolbar t) {
-        setSupportActionBar(t);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(getString(R.string.create_nation));
-
-        // Need to be able to get back to previous activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
