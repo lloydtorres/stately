@@ -121,6 +121,14 @@
             <intent android:targetPackage="com.lloydtorres.stately"
                 android:targetClass="com.lloydtorres.stately.settings.LicensesActivity"/>
         </android.support.v7.preference.Preference>
+        <android.support.v7.preference.Preference
+            android:key="setting_privacy_policy"
+            android:title="@string/setting_privacy_policy"
+            android:selectable="true"
+            android:icon="@null">
+            <intent android:targetPackage="com.lloydtorres.stately"
+                android:targetClass="com.lloydtorres.stately.settings.PrivacyPolicyActivity"/>
+        </android.support.v7.preference.Preference>
     </android.support.v7.preference.PreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

@@ -122,6 +122,11 @@
             android:label="@string/licenses_title"
             android:theme="@style/AppTheme.SlidrActivity">
         </activity>
+        <activity
+            android:name=".settings.PrivacyPolicyActivity"
+            android:label="@string/setting_privacy_policy"
+            android:theme="@style/AppTheme.SlidrActivity">
+        </activity>
         <receiver android:name=".push.AlphysReceiver"
             android:label="@string/stately_alphys_r" />
         <service
