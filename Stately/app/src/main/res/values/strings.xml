@@ -516,6 +516,7 @@
     <string name="setting_category_april">April Fools! Government category will be restored to normal after today.</string>
     <string name="setting_title_about">About</string>
     <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributor: Jannes Höke</string>
+    <string name="setting_send_telegram">Send Telegram</string>
     <string name="setting_privacy_policy">Privacy Policy</string>
 
     <!-- Licenses -->

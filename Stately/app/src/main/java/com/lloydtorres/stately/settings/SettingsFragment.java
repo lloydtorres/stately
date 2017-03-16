@@ -27,6 +27,8 @@ import android.view.ViewGroup;
 import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
+import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.telegrams.TelegramComposeActivity;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.lang.reflect.Field;
@@ -37,12 +39,24 @@ import java.util.Locale;
  * The fragment within the Settings activity.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private static final String DEVELOPER_TARGET = "Greater Tern";
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
 
         Preference appVersionSetting = findPreference(SettingsActivity.SETTING_APP_VERSION);
         appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version), BuildConfig.VERSION_NAME));
+
+        // Set on click listener to send telegram
+        Preference sendTelegramSetting = findPreference(SettingsActivity.SETTING_SEND_TELEGRAM);
+        sendTelegramSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                SparkleHelper.startTelegramCompose(getContext(), DEVELOPER_TARGET, TelegramComposeActivity.NO_REPLY_ID);
+                return true;
+            }
+        });
 
         // Disable theme options and show warning on Z-Day
         if (getContext() != null) {

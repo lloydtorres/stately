@@ -122,6 +122,11 @@
                 android:targetClass="com.lloydtorres.stately.settings.LicensesActivity"/>
         </android.support.v7.preference.Preference>
         <android.support.v7.preference.Preference
+            android:key="setting_send_telegram"
+            android:title="@string/setting_send_telegram"
+            android:selectable="true"
+            android:icon="@null"/>
+        <android.support.v7.preference.Preference
             android:key="setting_privacy_policy"
             android:title="@string/setting_privacy_policy"
             android:selectable="true"
