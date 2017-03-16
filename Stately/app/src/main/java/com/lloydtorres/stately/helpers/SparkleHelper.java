@@ -599,6 +599,13 @@ public final class SparkleHelper {
 
         cal.add(Calendar.HOUR, hoursRemaining);
 
+        long resolutionEndTimeInMs = cal.getTime().getTime();
+        long currentTimeInMs = System.currentTimeMillis();
+        // If the calculated end time is in the past, add another 11 hours to the estimate
+        if (resolutionEndTimeInMs < currentTimeInMs) {
+            cal.add(Calendar.HOUR, 11);
+        }
+
         return getReadableDateFromUTC(c, cal.getTime().getTime() / 1000L);
     }
 
