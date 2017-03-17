@@ -22,6 +22,7 @@ import android.view.MenuItem;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.WebViewActivity;
+import com.lloydtorres.stately.helpers.network.ProgressBarWebViewClient;
 
 /**
  * Created by lloyd on 2017-03-16.
@@ -35,6 +36,7 @@ public class PrivacyPolicyActivity extends WebViewActivity {
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.setting_privacy_policy));
+        mWebView.setWebViewClient(new ProgressBarWebViewClient(progressBar));
 
         mWebView.loadUrl(PRIVACY_POLICY_URL);
     }
