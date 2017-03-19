@@ -309,6 +309,7 @@
     <string name="next_issue">Next issue expected %1$s.</string>
     <string name="issue_number">Issue #%1$s</string>
     <string name="issue_chain_and_number">Issue #%1$s — %2$s</string>
+    <string name="issue_easter_egg">Easter Egg</string>
     <string name="issue_activity_title">%1$s: Issue #%2$s</string>
     <string name="issue_unavailable">This issue is not available to %1$s.</string>
     <string name="issue_select_option">Adopt this position</string>

@@ -63,6 +63,7 @@ public class IssuesFragment extends RefreshviewFragment {
     private static final String KEY_NEXT_ISSUE_TIME_DATA = "nextIssueTimeData";
 
     private static final Pattern CHAIN_ISSUE_REGEX = Pattern.compile("^\\[(.+?)\\] (.+?)$");
+    private static final Pattern EASTER_EGG_ISSUE_REGEX = Pattern.compile("^Easter Egg: (.+?)$");
 
     private ArrayList<Parcelable> issues;
     private Nation mNation;
@@ -197,9 +198,13 @@ public class IssuesFragment extends RefreshviewFragment {
             for (Issue i : holder.issues) {
                 // Get data on issue chains
                 Matcher chainMatcher = CHAIN_ISSUE_REGEX.matcher(i.title);
+                Matcher easterEggMatcher = EASTER_EGG_ISSUE_REGEX.matcher(i.title);
                 if (chainMatcher.find()) {
                     i.chain = chainMatcher.group(1);
                     i.title = chainMatcher.group(2);
+                } else if (easterEggMatcher.find()) {
+                    i.chain = getString(R.string.issue_easter_egg);
+                    i.title = easterEggMatcher.group(1);
                 }
 
                 // Add dismiss option
