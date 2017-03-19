@@ -56,7 +56,6 @@ public class AlphysService extends IntentService {
         // If there's no active user, don't even bother.
         final UserLogin active = PinkaHelper.getActiveUser(this);
         if (active == null) {
-            TrixHelper.setAlarmForAlphys(this);
             return;
         }
 

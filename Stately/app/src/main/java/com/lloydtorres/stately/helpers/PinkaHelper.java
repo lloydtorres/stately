@@ -54,6 +54,8 @@ import android.preference.PreferenceManager;
 
 import com.lloydtorres.stately.dto.UserLogin;
 
+import java.util.List;
+
 /**
  * Created by Lloyd on 2016-09-30.
  * A collection of functions used for handling the current user session.
@@ -163,8 +165,7 @@ public final class PinkaHelper {
         String name = storage.getString(USERSESSION_NAME, null);
         String autologin = storage.getString(USERSESSION_AUTOLOGIN, null);
         String pin = storage.getString(USERSESSION_PIN, null);
-        if (name != null && autologin != null)
-        {
+        if (name != null && autologin != null) {
             return new UserLogin(SparkleHelper.getIdFromName(name), name, autologin, pin);
         }
 
@@ -206,6 +207,17 @@ public final class PinkaHelper {
      * @param c App context
      */
     public static void removeActiveUser(Context c) {
+        // Delete current user login from database
+        UserLogin activeUser = getActiveUser(c);
+        if (activeUser != null) {
+            List<UserLogin> dbActiveUserList = UserLogin.find(UserLogin.class, "nation_id = ?", activeUser.nationId);
+            if (dbActiveUserList != null && dbActiveUserList.size() > 0) {
+                UserLogin dbActiveUser = dbActiveUserList.get(0);
+                dbActiveUser.delete();
+            }
+        }
+
+        // Delete current user login from shared prefs
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor editor = storage.edit();
         editor.remove(USERSESSION_NAME);
