@@ -156,8 +156,8 @@ public final class TrixHelper {
      * @param c App context.
      */
     public static void stopAlarmForAlphys(Context c) {
-        Intent alphysIntent = new Intent(c, AlphysService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent alphysIntent = new Intent(c, AlphysReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pendingIntent);
     }
