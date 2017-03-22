@@ -85,4 +85,10 @@ public class AlphysService extends IntentService {
         DashHelper.getInstance(this).addRequest(stringRequest);
         TrixHelper.setAlarmForAlphys(this);
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
 }
