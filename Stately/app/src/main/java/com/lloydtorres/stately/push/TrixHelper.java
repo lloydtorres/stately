@@ -93,6 +93,8 @@ public final class TrixHelper {
     // Keys for shared prefs stuff
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
 
+    public static final String NOTIFICATION_CONTENT_TEXT_TEMPLATE = "%s %s";
+
     // Private constructor
     private TrixHelper() {}
 
@@ -203,7 +205,7 @@ public final class TrixHelper {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(primaryColour)
-                .setContentText(String.format(Locale.US, c.getString(R.string.stately_notifs_sub_template), SparkleHelper.getNameFromId(account)))
+                .setContentTitle(String.format(Locale.US, c.getString(R.string.stately_notifs_sub_template), SparkleHelper.getNameFromId(account)))
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
 
@@ -226,7 +228,7 @@ public final class TrixHelper {
         issueBundle.putInt(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
-                .setContentTitle(c.getString(R.string.notifs_new_issue))
+                .setContentText(String.format(Locale.US, c.getString(R.string.notifs_new_issue), SparkleHelper.getNameFromId(account)))
                 .setOnlyAlertOnce(true)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
 
@@ -272,7 +274,7 @@ public final class TrixHelper {
             return;
         }
 
-        String title = String.format(Locale.US, c.getString(R.string.time_moments_template), notice.subject, notice.content);
+        String title = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, notice.subject, notice.content);
         // Remove period from end of notification
         if (title.length() > 1) {
             title = title.substring(0, title.length() - 1);
@@ -322,7 +324,7 @@ public final class TrixHelper {
         }
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
-                .setContentTitle(title)
+                .setContentText(title)
                 .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, bundle), PendingIntent.FLAG_ONE_SHOT));
 

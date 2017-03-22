@@ -526,5 +526,5 @@
     <string name="licenses_desc">Stately is an open source app that uses third-party open source projects for many of its features.\n\nThe attributions and licenses for both Stately and the projects it relies on are included here.</string>
 
     <!-- Notifications -->
-    <string name="notifs_new_issue">A new issue was encountered</string>
+    <string name="notifs_new_issue">A new issue is facing %1$s</string>
 </resources>
