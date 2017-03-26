@@ -209,6 +209,10 @@ public final class TrixHelper {
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
 
+    private static NotificationCompat.BigTextStyle getBigTextStyle(String content) {
+        return new NotificationCompat.BigTextStyle().bigText(content);
+    }
+
     /**
      * Builds the notification for issue notices. Unlike other types of notifications, issue
      * notices are limited to one notification. This prevents the status bar from
@@ -227,8 +231,11 @@ public final class TrixHelper {
         issueBundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_ISSUES);
         issueBundle.putInt(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
 
+        String contentText = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, SparkleHelper.getNameFromId(account), SparkleHelper.fromHtml(notice.content).toString());
+
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
-                .setContentText(String.format(Locale.US, c.getString(R.string.notifs_new_issue), SparkleHelper.getNameFromId(account)))
+                .setContentText(contentText)
+                .setStyle(getBigTextStyle(contentText))
                 .setOnlyAlertOnce(true)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
 
@@ -275,10 +282,6 @@ public final class TrixHelper {
         }
 
         String title = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, notice.subject, notice.content);
-        // Remove period from end of notification
-        if (title.length() > 1) {
-            title = title.substring(0, title.length() - 1);
-        }
 
         String tagSuffix = notice.type;
 
@@ -325,6 +328,7 @@ public final class TrixHelper {
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account)
                 .setContentText(title)
+                .setStyle(getBigTextStyle(title))
                 .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, bundle), PendingIntent.FLAG_ONE_SHOT));
 
