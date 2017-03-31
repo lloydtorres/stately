@@ -145,6 +145,7 @@ public final class TrixHelper {
         }
 
         long notificationIntervalInMs = SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
+        // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
         Random r = new Random();
         long notificationJitterIntervalInMs = (long)(r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
 
@@ -155,12 +156,11 @@ public final class TrixHelper {
                     .build();
             JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
-            SparkleHelper.logError("Scheduled = " + scheduler.schedule(alphysJobInfo));
+            scheduler.schedule(alphysJobInfo);
         } else {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
-            // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
             timeToNextAlarm += notificationJitterIntervalInMs;
 
             // Source:
