@@ -144,6 +144,7 @@ public final class TrixHelper {
             return;
         }
 
+        boolean shouldFallback = false;
         long notificationIntervalInMs = SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
         // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
         Random r = new Random();
@@ -156,8 +157,10 @@ public final class TrixHelper {
                     .build();
             JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
-            scheduler.schedule(alphysJobInfo);
-        } else {
+            shouldFallback = scheduler.schedule(alphysJobInfo) == JobScheduler.RESULT_FAILURE;
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || shouldFallback) {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
@@ -166,7 +169,10 @@ public final class TrixHelper {
             // Source:
             // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
             AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+            }
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
             }
             else {
