@@ -54,6 +54,9 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,6 +65,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
 import com.lloydtorres.stately.dto.Notice;
@@ -71,10 +77,14 @@ import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.network.DashHelper;
+import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.login.LoginActivity;
 import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.lloydtorres.stately.telegrams.TelegramHistoryActivity;
+
+import org.simpleframework.xml.core.Persister;
 
 import java.util.List;
 import java.util.Locale;
@@ -89,6 +99,8 @@ import java.util.regex.Pattern;
 public final class TrixHelper {
     // Common prefix for notification tags
     public static final String TAG_PREFIX = "com.lloydtorres.stately.push.";
+    public static final String TAG_NOTICES_REQUEST = TAG_PREFIX + "request";
+    public static final int TAG_JOB_ID = 8675309;
 
     // Keys for shared prefs stuff
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
@@ -118,7 +130,7 @@ public final class TrixHelper {
         return storage.getLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
     }
 
-    private static final long FIVE_MIN_IN_MS = 5L * 60L * 1000L;
+    private static final long NOTIFICATION_JITTER_TIME_IN_MS = 5L * 60L * 1000L;
 
     /**
      * Sets an alarm for Alphys to query NS for new notices. The alarm time is on whatever the user
@@ -132,24 +144,34 @@ public final class TrixHelper {
             return;
         }
 
-        Intent alphysIntent = new Intent(c, AlphysReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long timeToNextAlarm = System.currentTimeMillis() + SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
-        // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
+        long notificationIntervalInMs = SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
         Random r = new Random();
-        timeToNextAlarm += (long)(r.nextDouble() * FIVE_MIN_IN_MS);
+        long notificationJitterIntervalInMs = (long)(r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
 
-        // Source:
-        // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
-        AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-        }
-        else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-        }
-        else {
-            am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ComponentName alphysLollipopServiceName = new ComponentName(c, AlphysLollipopService.class);
+            JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
+                    .setPeriodic(notificationIntervalInMs + notificationJitterIntervalInMs)
+                    .build();
+            JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            scheduler.cancel(TAG_JOB_ID);
+            SparkleHelper.logError("Scheduled = " + scheduler.schedule(alphysJobInfo));
+        } else {
+            Intent alphysIntent = new Intent(c, AlphysReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
+            // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
+            timeToNextAlarm += notificationJitterIntervalInMs;
+
+            // Source:
+            // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
+            AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+            }
+            else {
+                am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
+            }
         }
     }
 
@@ -158,10 +180,60 @@ public final class TrixHelper {
      * @param c App context.
      */
     public static void stopAlarmForAlphys(Context c) {
-        Intent alphysIntent = new Intent(c, AlphysReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-        am.cancel(pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            scheduler.cancel(TAG_JOB_ID);
+        } else {
+            Intent alphysIntent = new Intent(c, AlphysReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+            am.cancel(pendingIntent);
+        }
+    }
+
+    /**
+     * Starts the process of querying NationStates for notices data.
+     * @param c
+     */
+    public static void startNoticesQuery(final Context c) {
+        SparkleHelper.logError("startNoticesQuery has started");
+        // If the user doesn't want notifications, don't bother
+        if (!SettingsActivity.getNotificationSetting(c)) {
+            return;
+        }
+
+        // If there's no active user, don't even bother.
+        final UserLogin active = PinkaHelper.getActiveUser(c);
+        if (active == null) {
+            return;
+        }
+
+        String query = String.format(Locale.US, NoticeHolder.QUERY, active.nationId);
+        NSStringRequest stringRequest = new NSStringRequest(c, Request.Method.GET, query,
+                new Response.Listener<String>() {
+                    NoticeHolder notices = null;
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            notices = serializer.read(NoticeHolder.class, response);
+                            TrixHelper.processNotices(c, active.name, notices);
+                            TrixHelper.updateLastActiveTime(c);
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                        }
+                        TrixHelper.setAlarmForAlphys(c);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                TrixHelper.setAlarmForAlphys(c);
+            }
+        });
+        stringRequest.setTag(TAG_NOTICES_REQUEST);
+        DashHelper.getInstance(c).addRequest(stringRequest);
     }
 
     /**
