@@ -104,7 +104,7 @@ public class NSStringRequest extends StringRequest {
 
         // If the password is provided, add that to the header
         if (password != null) {
-            headers.put("X-Password", password);
+            headers.put("X-Password", SparkleHelper.escapeHtml(password));
         }
 
         // Only include x-www-form-urlencoded for POSTs
