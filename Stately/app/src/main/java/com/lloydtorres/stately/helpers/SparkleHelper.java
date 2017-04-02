@@ -256,7 +256,7 @@ public final class SparkleHelper {
                 String newSubWord = joinStringList(properSubWords, "-");
 
                 // If last item was a "-", add it back (gets lost in the split)
-                if ("-".equals(w.substring(w.length() - 1))) {
+                if ("-".equals(w.substring(Math.max(0, w.length() - 1)))) {
                     newSubWord = newSubWord + "-";
                 }
 

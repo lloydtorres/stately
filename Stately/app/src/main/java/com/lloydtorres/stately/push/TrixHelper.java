@@ -202,7 +202,6 @@ public final class TrixHelper {
      * @param c
      */
     public static void startNoticesQuery(final Context c) {
-        SparkleHelper.logError("startNoticesQuery has started");
         // If the user doesn't want notifications, don't bother
         if (!SettingsActivity.getNotificationSetting(c)) {
             return;
