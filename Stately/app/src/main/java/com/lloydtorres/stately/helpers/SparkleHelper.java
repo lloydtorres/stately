@@ -766,9 +766,12 @@ public final class SparkleHelper {
      * @return Escaped string.
      */
     public static String escapeHtml(String src) {
-        src = Html.escapeHtml(src);
-        src = src.replace("&#10;", "\n");
-        return src;
+        if (src != null && src.length() > 0) {
+            src = Html.escapeHtml(src);
+            src = src.replace("&#10;", "\n");
+            return src;
+        }
+        return "";
     }
 
     /**
