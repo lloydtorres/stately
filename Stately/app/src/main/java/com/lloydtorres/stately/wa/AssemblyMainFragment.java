@@ -76,7 +76,7 @@ public class AssemblyMainFragment extends RefreshviewFragment {
     private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (getActivity() == null || !isAdded()) {
+            if (getActivity() == null || !isAdded() || genAssembly == null || secCouncil == null) {
                 return;
             }
 
