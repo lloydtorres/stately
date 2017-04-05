@@ -278,28 +278,6 @@ public final class RaraHelper {
     }
 
     /**
-     * Same as above, but returns themes specific to pre-Lollipop devices.
-     * @param c
-     * @return
-     */
-    public static int getPreLollipopThemeMaterialDialog(Context c) {
-        switch (SettingsActivity.getTheme(c)) {
-            case SettingsActivity.THEME_VERT:
-                return R.style.PreLollipopMaterialDialog;
-            case SettingsActivity.THEME_NOIR:
-                return R.style.PreLollipopMaterialDialogNoir;
-            case SettingsActivity.THEME_BLEU:
-                return R.style.PreLollipopMaterialDialogBleu;
-            case SettingsActivity.THEME_ROUGE:
-                return R.style.PreLollipopMaterialDialogRouge;
-            case SettingsActivity.THEME_VIOLET:
-                return R.style.PreLollipopMaterialDialogViolet;
-            default:
-                return R.style.PreLollipopMaterialDialog;
-        }
-    }
-
-    /**
      * Gets the theme for the newer Lollipop AlertDialogs for the current theme.
      * @param c App context.
      * @return Theme ID for the dialog.

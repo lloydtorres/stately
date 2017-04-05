@@ -17,10 +17,8 @@
 package com.lloydtorres.stately.explore;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -55,6 +53,7 @@ import com.lloydtorres.stately.dto.ZSuperweaponStatus;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.helpers.dialogs.ProgressDialog;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.nation.NationFragment;
@@ -516,8 +515,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 progressMessage = String.format(Locale.US, getString(R.string.explore_move_progress), name);
                 break;
         }
-        final ProgressDialog pd = getProgressDialog(progressMessage);
-        pd.show();
+        final ProgressDialog pd = new ProgressDialog();
+        pd.setContent(progressMessage);
+        pd.show(getSupportFragmentManager(), ProgressDialog.DIALOG_TAG);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -692,8 +692,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
 
         String progressMessage = String.format(Locale.US, getString(isInDossier ? R.string.explore_dossier_rem_progress : R.string.explore_dossier_add_progress), name);
-        final ProgressDialog dossierProgress = getProgressDialog(progressMessage);
-        dossierProgress.show();
+        final ProgressDialog dossierProgress = new ProgressDialog();
+        dossierProgress.setContent(progressMessage);
+        dossierProgress.show(getSupportFragmentManager(), ProgressDialog.DIALOG_TAG);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, postUrl,
                 new Response.Listener<String>() {
@@ -1066,15 +1067,6 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
         }
         isInProgress = false;
-    }
-
-    private ProgressDialog getProgressDialog(String content) {
-        ProgressDialog pd = new ProgressDialog(this,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? RaraHelper.getThemeMaterialDialog(this) : RaraHelper.getPreLollipopThemeMaterialDialog(this));
-        pd.setIndeterminate(true);
-        pd.setMessage(content);
-        pd.setCanceledOnTouchOutside(false);
-        return pd;
     }
 
     @Override

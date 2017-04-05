@@ -52,6 +52,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
@@ -752,7 +753,7 @@ public final class SparkleHelper {
      * @return
      */
     public static Spanned fromHtml(String src) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(src, Html.FROM_HTML_MODE_COMPACT);
         }
         else {
