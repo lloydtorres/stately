@@ -334,8 +334,12 @@ public final class SparkleHelper {
     }
 
     public static String getPrettifiedNumber(double d) {
+        return getPrettifiedNumber(d, 1);
+    }
+
+    public static String getPrettifiedNumber(double d, int numFractionDigits) {
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
-        nf.setMaximumFractionDigits(1);
+        nf.setMaximumFractionDigits(numFractionDigits);
         return nf.format(d);
     }
 
