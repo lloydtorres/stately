@@ -72,7 +72,7 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         if ((cards == null || cards.size() <= 0) && mNation != null) {
             nationName = mNation.name;
             String curRegionName = PinkaHelper.getRegionSessionData(getContext());
-            isSameRegion = (SparkleHelper.getIdFromName(curRegionName).equals(SparkleHelper.getIdFromName(mNation.region)));
+            isSameRegion = (SparkleHelper.getIdFromName(mNation.region).equals(SparkleHelper.getIdFromName(curRegionName)));
             initData();
         }
 
