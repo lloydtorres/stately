@@ -20,7 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+    <com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
         android:id="@+id/message_board_refresher"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -35,6 +35,6 @@
             android:paddingTop="4dp"
             android:paddingBottom="20dp"
             android:clipToPadding="false" />
-    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+    </com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>
