@@ -91,7 +91,7 @@ Stately uses the following open-source libraries:
 * [Simple XML](http://simple.sourceforge.net/)
 * [Slidr](https://github.com/r0adkll/Slidr)
 * [Sugar ORM](https://github.com/satyan/sugar)
-* [SwipyRefreshLayout](https://github.com/OrangeGangsters/SwipyRefreshLayout)
+* [SwipyRefreshLayout](https://github.com/omadahealth/SwipyRefreshLayout)
 * [Volley](http://developer.android.com/training/volley/index.html)
 
 Stately also uses the following proprietary libraries:
