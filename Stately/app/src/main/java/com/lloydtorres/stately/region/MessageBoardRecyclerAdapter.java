@@ -254,6 +254,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private TextView cardAuthor;
         private TextView cardTime;
         private RelativeLayout cardSuppressedHolder;
+        private ImageView cardSuppressedIcon;
         private TextView cardSuppressedContent;
         private HtmlTextView cardContent;
         private RelativeLayout actionsHolder;
@@ -333,6 +334,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
             cardTime = (TextView) v.findViewById(R.id.card_post_time);
             cardSuppressedHolder = (RelativeLayout) v.findViewById(R.id.card_post_suppressed_holder);
+            cardSuppressedIcon = (ImageView) v.findViewById(R.id.card_post_suppressed_icon);
             cardSuppressedContent = (TextView) v.findViewById(R.id.card_post_suppressed_content);
             cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
             actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
@@ -347,15 +349,28 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         public void init(Post p) {
             post = p;
 
-            cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
-            cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
+            if (!Post.POST_NS_MODERATORS.equals(post.name)) {
+                cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
+                cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
+            } else {
+                cardAuthor.setText(post.name);
+                cardAuthor.setOnClickListener(null);
+            }
+
             cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
 
             // Show suppresssed holder if post is suppressed
             if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {
                 cardSuppressedHolder.setVisibility(View.VISIBLE);
+                cardSuppressedIcon.setImageResource(R.drawable.ic_unsuppress_post);
                 String suppressedText = String.format(Locale.US, context.getString(R.string.rmb_suppressed_main), post.suppressor);
                 SparkleHelper.setHappeningsFormatting(context, cardSuppressedContent, suppressedText);
+                cardSuppressedContent.setTextColor(ContextCompat.getColor(context, R.color.colorChart1));
+            } else if (Post.POST_NS_MODERATORS.equals(post.name)) {
+                cardSuppressedHolder.setVisibility(View.VISIBLE);
+                cardSuppressedIcon.setImageResource(R.drawable.ic_alert_moderator);
+                cardSuppressedContent.setText(context.getString(R.string.rmb_moderation));
+                cardSuppressedContent.setTextColor(ContextCompat.getColor(context, R.color.colorChart0));
             } else {
                 cardSuppressedHolder.setVisibility(View.GONE);
             }

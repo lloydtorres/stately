@@ -70,6 +70,7 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Post;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.Spoiler;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -1449,6 +1450,9 @@ public final class SparkleHelper {
         Matcher m = regex.matcher(holder);
         while (m.find()) {
             String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            if (Post.POST_NS_MODERATORS.equals(m.group(1))) {
+                properFormat = String.format(Locale.US, "<blockquote><i>%s:<br />%s</i></blockquote>", Post.POST_NS_MODERATORS, m.group(2));
+            }
             replacePairs.add(new DataPair(m.group(), properFormat));
         }
         holder = replaceFromReplacePairs(holder, replacePairs);

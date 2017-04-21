@@ -36,6 +36,8 @@ public class Post implements Parcelable, Comparable<Post> {
     public static final int POST_DELETED = 2;
     public static final int POST_BANHAMMERED = 9;
 
+    public static final String POST_NS_MODERATORS = "NationStates Moderators";
+
     @Attribute(required=false)
     public int id;
 

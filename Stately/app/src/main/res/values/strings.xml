@@ -249,6 +249,7 @@
     <string name="spoiler_warn_title_link">[spoiler: %1$s]</string>
     <string name="rmb_suppressed">\@@%1$s@@\'s post was suppressed by @@%2$s@@. Tap to open post.</string>
     <string name="rmb_suppressed_main">Suppressed by @@%1$s@@</string>
+    <string name="rmb_moderation">Moderation Team</string>
     <string name="rmb_deleted">\@@%1$s@@ deleted their post.</string>
     <string name="rmb_banhammered">\@@%1$s@@\'s post was deleted by the moderation team.</string>
     <string name="clicky_link_internal">&lt;a href=&quot;%1$s&quot;&gt;[link: %2$s]&lt;/a&gt;</string>
