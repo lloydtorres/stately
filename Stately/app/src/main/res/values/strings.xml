@@ -31,7 +31,7 @@
     <string name="login_error_404">Invalid nation name or password.</string>
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
-    <string name="login_error_generic">An error occurred. Please try again.</string>
+    <string name="login_error_generic">An error occurred. Please try again later.</string>
 
     <string name="rate_limit_error">Too fast! Try again in a bit.</string>
     <string name="multiple_request_error">An action is already in progress.</string>

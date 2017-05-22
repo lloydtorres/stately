@@ -95,6 +95,8 @@ public class MessageBoardActivity extends SlidrActivity {
 
     private static final String CONFIRM_DELETE = "self-deleted by";
     private static final String CONFIRM_SUPPRESS = "suppressed by";
+    private static final String CONFIRM_POST = "Your message has been lodged";
+
     private AlertDialog.Builder dialogBuilder;
 
     private RegionMessages messages;
@@ -549,12 +551,17 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        // Stop loading actions but only clear if post was successful.
                         mSwipeRefreshLayout.setRefreshing(false);
                         isInProgress = false;
-                        messageContainer.setText("");
                         messagePostButton.setOnClickListener(postMessageListener);
-                        setReplyMessage(null);
-                        startQueryMessages(SCAN_FORWARD, false);
+                        if (response.contains(CONFIRM_POST)) {
+                            messageContainer.setText("");
+                            setReplyMessage(null);
+                            startQueryMessages(SCAN_FORWARD, false);
+                        } else {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
