@@ -212,8 +212,11 @@ public class MessageBoardActivity extends SlidrActivity {
     private void queryRmbRights() {
         startSwipeRefresh();
 
-        // Only enable likeability if in user region
-        isLikeable = PinkaHelper.getRegionSessionData(MessageBoardActivity.this).equals(SparkleHelper.getIdFromName(regionName));
+        // Enable both likeability and posting rights if in user region
+        if (SparkleHelper.getIdFromName(regionName).equals(PinkaHelper.getRegionSessionData(this))) {
+            isLikeable = true;
+            enablePostingRights();
+        }
 
         String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY, SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
@@ -222,7 +225,7 @@ public class MessageBoardActivity extends SlidrActivity {
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         // If the textbox exists in the page, it means that the user has posting rights
-                        if (d.select("textarea[name=message]").first() != null) {
+                        if (!isPostable && d.select("textarea[name=message]").first() != null) {
                             enablePostingRights();
                         }
                         // If a un/suppress button exists in the page, it means the user has suppression rights

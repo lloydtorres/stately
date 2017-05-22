@@ -66,9 +66,10 @@ import com.squareup.picasso.Picasso;
  * Used for getting instances of the Volley request queue, imageloaders, etc.
  */
 public class DashHelper {
-    private static final int HALF_MINUTE_MS = 30000;
+    private static final int TIMEOUT_IN_MS = 60000;
+    private static final int RATE_LIMIT_RESET_IN_MS = 30000;
     private static final int RATE_LIMIT = 45;
-    private static final DefaultRetryPolicy RETRY_POLICY = new DefaultRetryPolicy(HALF_MINUTE_MS,
+    private static final DefaultRetryPolicy RETRY_POLICY = new DefaultRetryPolicy(TIMEOUT_IN_MS,
                                                                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                                                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
@@ -135,7 +136,7 @@ public class DashHelper {
     private boolean isNotLockout() {
         // Reset the call counter if more than 30 seconds have passed
         long curTime = System.currentTimeMillis();
-        if ((curTime - lastReset) >= HALF_MINUTE_MS) {
+        if ((curTime - lastReset) >= RATE_LIMIT_RESET_IN_MS) {
             numCalls = 0;
             lastReset = curTime;
         }
