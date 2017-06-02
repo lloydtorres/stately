@@ -18,26 +18,29 @@ package com.lloydtorres.stately.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-import com.lloydtorres.stately.helpers.SparkleHelper;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  * Created by Lloyd on 2016-03-02.
  * This is a model containing data on the change for one census stat after an issue result.
  */
-public class CensusDelta implements Parcelable {
-    public static final String REGEX_ID = "\\/nation=" + SparkleHelper.VALID_NAME_BASE + "+?\\/detail=trend\\?censusid=";
+@Root(name="RANK", strict=false)
+public class CensusDelta implements Parcelable, Comparable<CensusDelta> {
 
+    @Attribute(name="id", required=false)
     public int censusId;
-    public String delta;
-    public boolean isPositive;
+    @Element(name="PCHANGE", required=false)
+    public double percentDelta;
 
     public CensusDelta() { super(); }
 
     protected CensusDelta(Parcel in) {
         censusId = in.readInt();
-        delta = in.readString();
-        isPositive = in.readByte() != 0x00;
+        percentDelta = in.readDouble();
     }
 
     @Override
@@ -48,8 +51,7 @@ public class CensusDelta implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(censusId);
-        dest.writeString(delta);
-        dest.writeByte((byte) (isPositive ? 0x01 : 0x00));
+        dest.writeDouble(percentDelta);
     }
 
     @SuppressWarnings("unused")
@@ -64,4 +66,15 @@ public class CensusDelta implements Parcelable {
             return new CensusDelta[size];
         }
     };
+
+    @Override
+    public int compareTo(@NonNull CensusDelta o) {
+        if (this.percentDelta > o.percentDelta) {
+            return -1;
+        } else if (this.percentDelta < o.percentDelta) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

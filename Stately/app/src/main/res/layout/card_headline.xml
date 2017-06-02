@@ -23,20 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/themedColorPrimaryText"
-            tools:text="Peter piper picked"
-            android:layout_toLeftOf="@+id/card_issue_headline_img"
-            android:layout_toStartOf="@+id/card_issue_headline_img" />
-        <ImageView
-            android:id="@+id/card_issue_headline_img"
-            android:layout_height="match_parent"
-            android:layout_width="70dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/gray"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/card_issue_headline" />
+            tools:text="Peter Piper picked a peck of pickled pepper; a peck of pickled pepper Peter Piper picked."/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

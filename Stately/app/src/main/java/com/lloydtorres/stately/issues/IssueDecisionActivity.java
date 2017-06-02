@@ -30,12 +30,11 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
-import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.Issue;
 import com.lloydtorres.stately.dto.IssueFullHolder;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
-import com.lloydtorres.stately.dto.IssueResult;
+import com.lloydtorres.stately.dto.IssueResultContainer;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -44,14 +43,10 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
 import com.lloydtorres.stately.settings.SettingsActivity;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.simpleframework.xml.core.Persister;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -222,38 +217,38 @@ public class IssueDecisionActivity extends RefreshviewActivity {
      */
     public void postAdoptPosition(final IssueOption option) {
         isInProgress = true;
-        String targetURL = String.format(Locale.US, IssueOption.POST_QUERY, issue.id);
-
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, IssueOption.POST_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         isInProgress = false;
                         mSwipeRefreshLayout.setRefreshing(false);
 
-                        // Broadcast which issue has been decided and can be cleared
-                        Intent issueDecisionBroadcast = new Intent();
-                        issueDecisionBroadcast.setAction(ISSUE_BROADCAST);
-                        issueDecisionBroadcast.putExtra(ISSUE_ID_DATA, issue.id);
-                        LocalBroadcastManager.getInstance(IssueDecisionActivity.this).sendBroadcast(issueDecisionBroadcast);
+                        Persister serializer = new Persister();
+                        try {
+                            IssueResultContainer issueResults = serializer.read(IssueResultContainer.class, response);
 
-                        if (option.id != IssueOption.DISMISS_ISSUE_ID) {
-                            if (response != null && response.contains(LEGISLATION_PASSED)) {
-                                try {
-                                    response = URLDecoder.decode(URLEncoder.encode(response, "ISO-8859-1"), "UTF-8");
-                                } catch (Exception e) {
-                                    SparkleHelper.logError(e.toString());
+                            if (issueResults.results.errorMessage == null || issueResults.results.errorMessage.isEmpty()) {
+                                // Broadcast which issue has been decided and can be cleared
+                                Intent issueDecisionBroadcast = new Intent();
+                                issueDecisionBroadcast.setAction(ISSUE_BROADCAST);
+                                issueDecisionBroadcast.putExtra(ISSUE_ID_DATA, issue.id);
+                                LocalBroadcastManager.getInstance(IssueDecisionActivity.this).sendBroadcast(issueDecisionBroadcast);
+
+                                if (option.id != IssueOption.DISMISS_ISSUE_ID) {
+                                    Intent issueResultsActivity = processAndPackResultsData(issueResults, option);
+                                    startActivity(issueResultsActivity);
+                                    finish();
                                 }
-                                Intent issueResultsActivity = processAndPackResultsData(response, option);
-                                startActivity(issueResultsActivity);
-                                finish();
-                            }
-                            else {
+                                else {
+                                    finish();
+                                }
+                            } else {
                                 SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                             }
-                        }
-                        else {
-                            finish();
+                        } catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -272,7 +267,10 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         });
 
         Map<String,String> params = new HashMap<String, String>();
-        params.put(String.format(Locale.US, IssueOption.POST_HEADER_TEMPLATE, option.id), "1");
+        params.put("nation", SparkleHelper.getIdFromName(mNation.name));
+        params.put("c", "issue");
+        params.put("issue", String.valueOf(issue.id));
+        params.put("option", String.valueOf(option.id));
         stringRequest.setParams(params);
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
@@ -284,106 +282,51 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
     /**
      * Builds an intent to IssueResults Activity and packages bits and pieces of the issue decision results HTML into it.
-     * @param response
+     * @param issueResult
      * @param option
      * @return
      */
-    private Intent processAndPackResultsData(String response, IssueOption option) {
+    private Intent processAndPackResultsData(IssueResultContainer issueResult, IssueOption option) {
         Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
         issueResultsActivity.putExtra(IssueResultsActivity.NATION_DATA, mNation);
 
-        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+        // Prettify the main description
+        String mainResult = issueResult.results.mainResult;
+        if (mainResult != null && !mainResult.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(mainResult.substring(0, 1).toUpperCase(Locale.US));
+            if (mainResult.length() >= 1) {
+                sb.append(mainResult.substring(1, mainResult.length()));
+            }
+            sb.append(".");
+            mainResult = sb.toString();
+        }
+        issueResult.results.mainResult = mainResult;
 
-        // Get talking point and reclassifications
-        IssueResult issueResult = new IssueResult();
-        issueResult.image = issue.image;
-        issueResult.issueContent = issue.content;
-        issueResult.issuePosition = option.content;
+        // Get talking points
+        issueResult.results.image = issue.image;
+        issueResult.results.issueContent = issue.content;
+        issueResult.results.issuePosition = option.content;
 
-        Element resultsContainer = d.select("div.dilemma").first();
-        if (resultsContainer != null) {
-            for (int i = 0; i < resultsContainer.select("p").size(); i++) {
-                String rawResultData = resultsContainer.select("p").get(i).text();
-                if (i == 0) {
-                    issueResult.mainResult = rawResultData;
-                } else {
-                    if (issueResult.reclassResults == null) {
-                        issueResult.reclassResults = rawResultData;
-                    } else {
-                        StringBuilder sb = new StringBuilder(issueResult.reclassResults);
-                        sb.append(" ");
-                        sb.append(rawResultData);
-                        issueResult.reclassResults = sb.toString();
-                    }
-                }
+        // Properly format the issue headlines and postcards
+        if (issueResult.results.headlines != null && !issueResult.results.headlines.isEmpty()) {
+            issueResult.results.niceHeadlines = new ArrayList<IssueResultHeadline>();
+            for (String h : issueResult.results.headlines) {
+                issueResult.results.niceHeadlines.add(new IssueResultHeadline(h));
             }
         }
+
+        if (issueResult.results.postcards != null && !issueResult.results.postcards.isEmpty()) {
+            issueResult.results.nicePostcards = new ArrayList<IssuePostcard>();
+            for (String id : issueResult.results.postcards) {
+                issueResult.results.nicePostcards.add(new IssuePostcard(id));
+            }
+        }
+
+        // Sort census deltas
+        Collections.sort(issueResult.results.rankings);
+
         issueResultsActivity.putExtra(IssueResultsActivity.ISSUE_RESULTS_DATA, issueResult);
-
-        // Get headlines
-        ArrayList<IssueResultHeadline> headlines = new ArrayList<IssueResultHeadline>();
-        Elements newspapers = d.select("div.dilemmapaper");
-        for (Element n : newspapers) {
-            Elements newspaperContent = n.getAllElements();
-            IssueResultHeadline headline = new IssueResultHeadline();
-
-            Element text = newspaperContent.select("div.dpaper4").first();
-            Element img = newspaperContent.select("img.dpaperpic1").first();
-
-            if (text != null && img != null) {
-                String headlineText = text.text();
-                String rawImgLink = img.attr("src");
-
-                if (headlineText != null && headlineText.length() > 0 && rawImgLink != null && rawImgLink.length() > 0) {
-                    headline.headline = headlineText;
-                    // Uses the banner version of the image instead of the newspaper version
-                    rawImgLink = rawImgLink.replace("-1", "");
-                    rawImgLink = rawImgLink.replace("newspaper", "banners");
-                    headline.imgUrl = SparkleHelper.BASE_URI_NOSLASH + rawImgLink;
-                    headlines.add(headline);
-                }
-            }
-        }
-        issueResultsActivity.putExtra(IssueResultsActivity.HEADLINES_DATA, headlines);
-
-        // Get postcards if available
-        ArrayList<IssuePostcard> postcards = new ArrayList<IssuePostcard>();
-        Element postcardContainer = d.select("div.bannerpostcards").first();
-        if (postcardContainer != null) {
-            Elements postcardHolders = postcardContainer.select("a.bannerpostcard");
-            for (Element p : postcardHolders) {
-                IssuePostcard postcard = new IssuePostcard();
-
-                Element img = p.select("img").first();
-                Element text = p.select("div.bannerpostcardtitle").first();
-
-                postcard.imgUrl = SparkleHelper.BASE_URI_NOSLASH + img.attr("src");
-                postcard.title = text.text();
-                postcards.add(postcard);
-            }
-        }
-        issueResultsActivity.putExtra(IssueResultsActivity.POSTCARD_DATA, postcards);
-
-        // Get census deltas
-        ArrayList<CensusDelta> censusDeltas = new ArrayList<CensusDelta>();
-        Element censusDeltaContainer = d.select("div.wceffects").first();
-        if (censusDeltaContainer != null) {
-            Elements deltasHolder = censusDeltaContainer.select("a.wc-change");
-            for (Element de : deltasHolder) {
-                CensusDelta censusDelta = new CensusDelta();
-                int idHolder = Integer.valueOf(de.attr("href").replaceAll(CensusDelta.REGEX_ID, ""));
-                Element deltaHolder = de.select("span.wc2").first();
-                String deltaValue = deltaHolder.text();
-                // Remove -/+ symbols if present
-                deltaValue = deltaValue.replace("-", "").replace("+", "");
-                boolean isPositive = deltaHolder.hasClass("wcg");
-                censusDelta.censusId = idHolder;
-                censusDelta.delta = deltaValue;
-                censusDelta.isPositive = isPositive;
-                censusDeltas.add(censusDelta);
-            }
-        }
-        issueResultsActivity.putExtra(IssueResultsActivity.CENSUSDELTA_DATA, censusDeltas);
 
         return issueResultsActivity;
     }

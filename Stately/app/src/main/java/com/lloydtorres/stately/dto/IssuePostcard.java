@@ -19,19 +19,24 @@ package com.lloydtorres.stately.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lloydtorres.stately.helpers.RaraHelper;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 /**
  * Created by Lloyd on 2016-02-29.
  * A postcard from the issues result activity.
  */
 public class IssuePostcard implements Parcelable {
     public String imgUrl;
-    public String title;
 
     public IssuePostcard() { super(); }
 
+    public IssuePostcard(String id) { imgUrl = RaraHelper.getBannerURL(id); }
+
     protected IssuePostcard(Parcel in) {
         imgUrl = in.readString();
-        title = in.readString();
     }
 
     @Override
@@ -42,7 +47,6 @@ public class IssuePostcard implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(imgUrl);
-        dest.writeString(title);
     }
 
     @SuppressWarnings("unused")

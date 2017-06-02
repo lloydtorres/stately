@@ -31,8 +31,7 @@ import org.simpleframework.xml.Text;
  */
 @Root(name="OPTION", strict=false)
 public class IssueOption implements Parcelable {
-    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=enact_dilemma/dilemma=%d/template-overall=none";
-    public static final String POST_HEADER_TEMPLATE = "choice-%d";
+    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi";
     public static final int DISMISS_ISSUE_ID = -1;
 
     @Attribute(required=false)

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Lloyd Torres
+ * Copyright 2017 Lloyd Torres
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +23,19 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * Created by Lloyd on 2016-02-29.
- * An object containing information about a headline from resolving an issue.
+ * Created by lloyd on 2017-06-01.
+ * Contains data about the results of an issue decision.
  */
-public class IssueResultHeadline implements Parcelable {
-    public String headline;
+@Root(name="NATION", strict=false)
+public class IssueResultContainer implements Parcelable {
 
-    public IssueResultHeadline() { super(); }
+    @Element(name="ISSUE")
+    public IssueResult results;
 
-    public IssueResultHeadline(String h) { headline = h; }
+    public IssueResultContainer() { super(); }
 
-    protected IssueResultHeadline(Parcel in) {
-        headline = in.readString();
+    protected IssueResultContainer(Parcel in) {
+        results = (IssueResult) in.readValue(IssueResult.class.getClassLoader());
     }
 
     @Override
@@ -44,19 +45,19 @@ public class IssueResultHeadline implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(headline);
+        dest.writeValue(results);
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueResultHeadline> CREATOR = new Parcelable.Creator<IssueResultHeadline>() {
+    public static final Parcelable.Creator<IssueResultContainer> CREATOR = new Parcelable.Creator<IssueResultContainer>() {
         @Override
-        public IssueResultHeadline createFromParcel(Parcel in) {
-            return new IssueResultHeadline(in);
+        public IssueResultContainer createFromParcel(Parcel in) {
+            return new IssueResultContainer(in);
         }
 
         @Override
-        public IssueResultHeadline[] newArray(int size) {
-            return new IssueResultHeadline[size];
+        public IssueResultContainer[] newArray(int size) {
+            return new IssueResultContainer[size];
         }
     };
 }

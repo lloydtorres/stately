@@ -31,8 +31,10 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResult;
+import com.lloydtorres.stately.dto.IssueResultContainer;
 import com.lloydtorres.stately.dto.IssueResultHeadline;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Reclassification;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -40,6 +42,7 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import org.atteo.evo.inflector.English;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,18 +58,30 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int POSTCARD_CARD = 2;
     private static final int CENSUSDELTA_CARD = 3;
 
+    private static final String PERCENT_TEMPLATE = "%s%%";
+
     private Context context;
     private List<Object> content;
     private Nation mNation;
 
-    public IssueResultsRecyclerAdapter(Context c, List<Object> con, Nation n) {
+    public IssueResultsRecyclerAdapter(Context c, IssueResultContainer con, Nation n) {
         context = c;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
         setContent(con, n);
     }
 
-    public void setContent(List<Object> con, Nation n) {
-        content = con;
+    public void setContent(IssueResultContainer con, Nation n) {
+        content = new ArrayList<Object>();
+        content.add(con.results);
+        if (con.results.nicePostcards != null) {
+            content.addAll(con.results.nicePostcards);
+        }
+        if (con.results.niceHeadlines != null) {
+            content.addAll(con.results.niceHeadlines);
+        }
+        if (con.results.rankings != null) {
+            content.addAll(con.results.rankings);
+        }
         mNation = n;
         notifyDataSetChanged();
     }
@@ -223,9 +238,30 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
 
             setIssueResultsFormatting(mainResult, mNation, result.mainResult);
-            if (result.reclassResults != null) {
+
+            if (result.reclassifications != null && !result.reclassifications.isEmpty()) {
+                StringBuilder sb = new StringBuilder();
+                for (Reclassification rec : result.reclassifications) {
+                    int templateId = R.string.issue_template_reclass_govt;
+                    switch (rec.type) {
+                        case Reclassification.TYPE_GOVERNMENT:
+                            templateId = R.string.issue_template_reclass_govt;
+                            break;
+                        case Reclassification.TYPE_CIVILRIGHTS:
+                            templateId = R.string.issue_template_reclass_civil_rights;
+                            break;
+                        case Reclassification.TYPE_ECONOMY:
+                            templateId = R.string.issue_template_reclass_economy;
+                            break;
+                        case Reclassification.TYPE_POLITICALFREEDOM:
+                            templateId = R.string.issue_template_reclass_political_freedom;
+                            break;
+                    }
+                    sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, rec.from, rec.to));
+                    sb.append(" ");
+                }
                 reclassResult.setVisibility(View.VISIBLE);
-                setIssueResultsFormatting(reclassResult, mNation, result.reclassResults);
+                reclassResult.setText(sb.toString().trim());
             } else {
                 reclassResult.setVisibility(View.GONE);
             }
@@ -248,36 +284,30 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class HeadlineCard extends RecyclerView.ViewHolder {
         private TextView title;
-        private ImageView img;
 
         public HeadlineCard(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.card_issue_headline);
-            img = (ImageView) v.findViewById(R.id.card_issue_headline_img);
         }
 
         public void init(IssueResultHeadline headline) {
             headline.headline = headline.headline.trim();
             setIssueResultsFormatting(title, mNation, headline.headline);
-            DashHelper.getInstance(context).loadImage(headline.imgUrl, img, false);
         }
     }
 
     public class PostcardCard extends RecyclerView.ViewHolder {
         private TextView nationName;
-        private TextView postContent;
         private ImageView img;
 
         public PostcardCard(View v) {
             super(v);
             nationName = (TextView) v.findViewById(R.id.card_postcard_nation) ;
-            postContent = (TextView) v.findViewById(R.id.card_postcard_title);
             img = (ImageView) v.findViewById(R.id.card_postcard_img);
         }
 
         public void init(IssuePostcard card) {
             nationName.setText(mNation.name);
-            setIssueResultsFormatting(postContent, mNation, card.title.trim());
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
         }
     }
@@ -304,13 +334,26 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(CensusDelta d) {
             delta = d;
-            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.isPositive ? R.color.colorFreedom14 : R.color.colorFreedom0));
+            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.percentDelta >= 0 ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
             String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, delta.censusId);
             title.setText(censusType[0]);
             unit.setText(censusType[1]);
-            trend.setImageResource(delta.isPositive ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
-            value.setText(delta.delta);
+            trend.setImageResource(delta.percentDelta >= 0 ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
+            int maxDecimals = 1;
+            double absValue = Math.abs(delta.percentDelta);
+            if (absValue > 1) {
+                maxDecimals = 0;
+            }
+            else if (absValue < 0.001) {
+                maxDecimals = 4;
+            } else if (absValue < 0.01) {
+                maxDecimals = 3;
+            } else if (absValue < 0.1) {
+                maxDecimals = 2;
+            }
+            String deltaText = SparkleHelper.getPrettifiedNumber(delta.percentDelta >= 0 ? delta.percentDelta : delta.percentDelta * -1, maxDecimals);
+            value.setText(String.format(Locale.US, PERCENT_TEMPLATE, deltaText));
         }
 
         @Override
