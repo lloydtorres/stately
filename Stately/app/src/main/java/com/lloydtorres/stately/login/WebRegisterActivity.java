@@ -34,7 +34,7 @@ public class WebRegisterActivity extends WebViewActivity {
     public static final String REGISTER_URL = "https://m.nationstates.net/page=create_nation";
     public static final int REGISTER_RESULT = 54321;
 
-    public static final String FINISHED_URL_PART = "https://m.nationstates.net/nation=";
+    public static final String FINISHED_URL_HOME = "https://m.nationstates.net/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class WebRegisterActivity extends WebViewActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (url != null && url.contains(FINISHED_URL_PART)) {
+                if (url != null && url.equals(FINISHED_URL_HOME)) {
                     setResult(RESULT_OK);
                     finish();
                 }
