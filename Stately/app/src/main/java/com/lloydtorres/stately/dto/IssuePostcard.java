@@ -27,13 +27,18 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  */
 public class IssuePostcard implements Parcelable {
     public String imgUrl;
+    public String rawId;
 
     public IssuePostcard() { super(); }
 
-    public IssuePostcard(String id) { imgUrl = RaraHelper.getBannerURL(id); }
+    public IssuePostcard(String id) {
+        rawId = id;
+        imgUrl = RaraHelper.getBannerURL(rawId);
+    }
 
     protected IssuePostcard(Parcel in) {
         imgUrl = in.readString();
+        rawId = in.readString();
     }
 
     @Override
@@ -44,6 +49,7 @@ public class IssuePostcard implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(imgUrl);
+        dest.writeString(rawId);
     }
 
     @SuppressWarnings("unused")

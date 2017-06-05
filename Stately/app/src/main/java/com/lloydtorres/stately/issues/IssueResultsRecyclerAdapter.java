@@ -45,6 +45,7 @@ import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,6 +55,7 @@ import java.util.Locale;
  */
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] WORLD_CENSUS_ITEMS;
+    private HashMap<String, String> postcardData;
 
     private static final int ISSUE_RESULT_CARD = 0;
     private static final int HEADLINE_CARD = 1;
@@ -69,6 +71,14 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public IssueResultsRecyclerAdapter(Context c, IssueResultContainer con, Nation n) {
         context = c;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+
+        String[] rawPostcardData = context.getResources().getStringArray(R.array.postcards);
+        postcardData = new HashMap<String, String>();
+        for (String r : rawPostcardData) {
+            String[] postcard = r.split("##");
+            postcardData.put(postcard[1], postcard[0]);
+        }
+
         setContent(con, n);
     }
 
@@ -317,16 +327,24 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public class PostcardCard extends RecyclerView.ViewHolder {
         private TextView nationName;
         private ImageView img;
+        private TextView description;
 
         public PostcardCard(View v) {
             super(v);
             nationName = (TextView) v.findViewById(R.id.card_postcard_nation) ;
             img = (ImageView) v.findViewById(R.id.card_postcard_img);
+            description = (TextView) v.findViewById(R.id.card_postcard_title);
         }
 
         public void init(IssuePostcard card) {
             nationName.setText(mNation.name);
             DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
+            if (postcardData.containsKey(card.rawId)) {
+                description.setVisibility(View.VISIBLE);
+                description.setText(postcardData.get(card.rawId));
+            } else {
+                description.setVisibility(View.GONE);
+            }
         }
     }
 
