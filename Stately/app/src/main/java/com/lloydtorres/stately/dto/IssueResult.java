@@ -52,7 +52,7 @@ public class IssueResult implements Parcelable {
     @ElementList(name="UNLOCKS", required=false)
     public List<String> postcards;
 
-    public List<IssueResultHeadline> niceHeadlines;
+    public IssueResultHeadlinesContainer niceHeadlines;
     public List<IssuePostcard> nicePostcards;
 
     public IssueResult() { super(); }
@@ -87,12 +87,7 @@ public class IssueResult implements Parcelable {
         } else {
             postcards = null;
         }
-        if (in.readByte() == 0x01) {
-            niceHeadlines = new ArrayList<IssueResultHeadline>();
-            in.readList(niceHeadlines, IssueResultHeadline.class.getClassLoader());
-        } else {
-            niceHeadlines = null;
-        }
+        niceHeadlines = (IssueResultHeadlinesContainer) in.readValue(IssueResultHeadlinesContainer.class.getClassLoader());
         if (in.readByte() == 0x01) {
             nicePostcards = new ArrayList<IssuePostcard>();
             in.readList(nicePostcards, IssuePostcard.class.getClassLoader());
@@ -137,12 +132,7 @@ public class IssueResult implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(postcards);
         }
-        if (niceHeadlines == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(niceHeadlines);
-        }
+        dest.writeValue(niceHeadlines);
         if (nicePostcards == null) {
             dest.writeByte((byte) (0x00));
         } else {

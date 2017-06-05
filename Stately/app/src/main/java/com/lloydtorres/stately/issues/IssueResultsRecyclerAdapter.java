@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
@@ -32,7 +33,7 @@ import com.lloydtorres.stately.dto.CensusDelta;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResult;
 import com.lloydtorres.stately.dto.IssueResultContainer;
-import com.lloydtorres.stately.dto.IssueResultHeadline;
+import com.lloydtorres.stately.dto.IssueResultHeadlinesContainer;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Reclassification;
 import com.lloydtorres.stately.helpers.PinkaHelper;
@@ -41,6 +42,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import org.atteo.evo.inflector.English;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             content.addAll(con.results.nicePostcards);
         }
         if (con.results.niceHeadlines != null) {
-            content.addAll(con.results.niceHeadlines);
+            content.add(con.results.niceHeadlines);
         }
         if (con.results.rankings != null) {
             content.addAll(con.results.rankings);
@@ -105,8 +107,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 viewHolder = new CensusDeltaCard(censusDeltaCard);
                 break;
             default:
-                View headlineCard = inflater.inflate(R.layout.card_headline, parent, false);
-                viewHolder = new HeadlineCard(headlineCard);
+                View headlineCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                viewHolder = new HeadlinesCard(headlineCard);
                 break;
         }
         return viewHolder;
@@ -128,8 +130,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 censusDeltaCard.init((CensusDelta) content.get(position));
                 break;
             default:
-                HeadlineCard headlineCard = (HeadlineCard) holder;
-                headlineCard.init((IssueResultHeadline) content.get(position));
+                HeadlinesCard headlinesCard = (HeadlinesCard) holder;
+                headlinesCard.init((IssueResultHeadlinesContainer) content.get(position));
                 break;
         }
     }
@@ -144,7 +146,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (content.get(position) instanceof IssueResult) {
             return ISSUE_RESULT_CARD;
         }
-        else if (content.get(position) instanceof IssueResultHeadline) {
+        else if (content.get(position) instanceof IssueResultHeadlinesContainer) {
             return HEADLINE_CARD;
         }
         else if (content.get(position) instanceof IssuePostcard) {
@@ -282,17 +284,33 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public class HeadlineCard extends RecyclerView.ViewHolder {
-        private TextView title;
+    public class HeadlinesCard extends RecyclerView.ViewHolder {
+        private TextView headlinesTitle;
+        private LinearLayout headlinesHolder;
 
-        public HeadlineCard(View v) {
+        public HeadlinesCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.card_issue_headline);
+            headlinesTitle = (TextView) v.findViewById(R.id.card_world_breaking_news_title);
+            headlinesHolder = (LinearLayout) v.findViewById(R.id.card_world_breaking_news_holder);
         }
 
-        public void init(IssueResultHeadline headline) {
-            headline.headline = headline.headline.trim();
-            setIssueResultsFormatting(title, mNation, headline.headline);
+        public void init(IssueResultHeadlinesContainer headlines) {
+            headlinesTitle.setText(context.getString(R.string.issue_trending));
+            LayoutInflater inflater = LayoutInflater.from(context);
+            headlinesHolder.removeAllViews();
+            int index = 0;
+            for (String h : headlines.headlines) {
+                View headlineTextHolder = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
+                HtmlTextView newsContent = (HtmlTextView) headlineTextHolder.findViewById(R.id.card_world_breaking_news_content);
+                h = h.trim();
+                setIssueResultsFormatting(newsContent, mNation, h);
+
+                if (++index >= headlines.headlines.size()) {
+                    headlineTextHolder.findViewById(R.id.view_divider).setVisibility(View.GONE);
+                }
+
+                headlinesHolder.addView(headlineTextHolder);
+            }
         }
     }
 

@@ -325,9 +325,10 @@
     <string name="issue_breaking">Breaking News</string>
     <string name="issue_read_more">Read More</string>
     <string name="issue_show_less">Show Less</string>
+    <string name="issue_trending">Trending</string>
     <string name="issue_template_reclass_govt">%1$s was reclassified from %2$s to %3$s.</string>
     <string name="issue_template_reclass_civil_rights">%1$s\'s civil rights ratings changed from %2$s to %3$s.</string>
-    <string name="issue_template_reclass_economy">%1$s\'s economy ratings changed from %2$s to %3$s.</string>
+    <string name="issue_template_reclass_economy">%1$s\'s economic ratings changed from %2$s to %3$s.</string>
     <string name="issue_template_reclass_political_freedom">%1$s\'s political freedom ratings changed from %2$s to %3$s.</string>
 
     <!-- Telegrams -->

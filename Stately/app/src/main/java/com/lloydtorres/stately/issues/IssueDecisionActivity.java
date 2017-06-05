@@ -35,7 +35,7 @@ import com.lloydtorres.stately.dto.IssueFullHolder;
 import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultContainer;
-import com.lloydtorres.stately.dto.IssueResultHeadline;
+import com.lloydtorres.stately.dto.IssueResultHeadlinesContainer;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -310,10 +310,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
         // Properly format the issue headlines and postcards
         if (issueResult.results.headlines != null && !issueResult.results.headlines.isEmpty()) {
-            issueResult.results.niceHeadlines = new ArrayList<IssueResultHeadline>();
-            for (String h : issueResult.results.headlines) {
-                issueResult.results.niceHeadlines.add(new IssueResultHeadline(h));
-            }
+            issueResult.results.niceHeadlines = new IssueResultHeadlinesContainer();
+            issueResult.results.niceHeadlines.headlines = issueResult.results.headlines;
         }
 
         if (issueResult.results.postcards != null && !issueResult.results.postcards.isEmpty()) {

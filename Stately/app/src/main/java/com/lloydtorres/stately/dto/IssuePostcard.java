@@ -21,9 +21,6 @@ import android.os.Parcelable;
 
 import com.lloydtorres.stately.helpers.RaraHelper;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 /**
  * Created by Lloyd on 2016-02-29.
  * A postcard from the issues result activity.
