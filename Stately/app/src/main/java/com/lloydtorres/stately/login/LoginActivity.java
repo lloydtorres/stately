@@ -324,6 +324,8 @@ public class LoginActivity extends BroadcastableActivity {
     private void verifyAccount(String user, String pass) {
         NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user), null);
         stringRequest.setPassword(pass);
+        // Set dummy UserLogin data
+        stringRequest.setUserData(new UserLogin());
         executeRequest(stringRequest);
     }
 
