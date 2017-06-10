@@ -46,7 +46,6 @@ import com.lloydtorres.stately.settings.SettingsActivity;
 import org.simpleframework.xml.core.Persister;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -228,7 +227,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
                         Persister serializer = new Persister();
                         try {
-                            response = URLDecoder.decode(URLEncoder.encode(response, "ISO-8859-1"), "UTF-8");
+                            response = URLDecoder.decode(response, "UTF-8");
+                            response = response.replace("&", "&amp;");
                             IssueResultContainer issueResults = serializer.read(IssueResultContainer.class, response);
 
                             if (issueResults.results.errorMessage == null || issueResults.results.errorMessage.isEmpty()) {
@@ -248,6 +248,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                                 }
                             } else {
                                 SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                                SparkleHelper.logError(issueResults.results.errorMessage);
                             }
                         } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
