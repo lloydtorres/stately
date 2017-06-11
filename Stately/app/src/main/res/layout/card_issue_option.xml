@@ -52,7 +52,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginLeft="-9dp"
                 android:padding="4dp"
-                app:srcCompat="?attr/themedDrawableCheck"/>
+                app:srcCompat="@drawable/ic_check"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

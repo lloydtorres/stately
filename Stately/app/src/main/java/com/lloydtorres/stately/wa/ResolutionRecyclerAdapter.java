@@ -52,7 +52,6 @@ import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
-import com.lloydtorres.stately.settings.SettingsActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -322,23 +321,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 }
                 else {
                     voteButtonDivider.setVisibility(View.VISIBLE);
-                    switch (SettingsActivity.getTheme(context)) {
-                        case SettingsActivity.THEME_VERT:
-                            voteButtonIcon.setImageResource(R.drawable.ic_wa_green);
-                            break;
-                        case SettingsActivity.THEME_NOIR:
-                            voteButtonIcon.setImageResource(R.drawable.ic_wa_white);
-                            break;
-                        case SettingsActivity.THEME_BLEU:
-                            voteButtonIcon.setImageResource(R.drawable.ic_wa_blue);
-                            break;
-                        case SettingsActivity.THEME_ROUGE:
-                            voteButtonIcon.setImageResource(R.drawable.ic_wa_red);
-                            break;
-                        case SettingsActivity.THEME_VIOLET:
-                            voteButtonIcon.setImageResource(R.drawable.ic_wa_violet);
-                            break;
-                    }
+                    voteButtonIcon.setImageResource(R.drawable.ic_wa_button);
                     voteButton.setBackgroundColor(RaraHelper.getThemeCardColour(context));
                     voteButtonContent.setTextColor(RaraHelper.getThemeButtonColour(context));
                     voteButtonContent.setText(context.getString(R.string.wa_resolution_vote_default));

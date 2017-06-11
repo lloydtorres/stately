@@ -17,13 +17,6 @@
         <item name="themedColorNavDrawer">@color/nav_color</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
-        <item name="themedDrawablePost">@drawable/ic_post</item>
-        <item name="themedDrawableCheck">@drawable/ic_check_green</item>
-        <item name="themedDrawableDismiss">@drawable/ic_dismiss_green</item>
-        <item name="themedDrawableTrend">@drawable/ic_trend_green</item>
-        <item name="themedDrawablePoll">@drawable/ic_poll_green</item>
-        <item name="themedDrawableWa">@drawable/ic_wa_green</item>
-        <item name="themedDrawableRegion">@drawable/ic_region_green</item>
         <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
@@ -57,13 +50,6 @@
         <item name="themedColorNavDrawer">@color/tab_color_noir</item>
         <item name="themedColorCard">@color/colorPrimaryNoir</item>
         <item name="themedColorBackground">@color/colorBackgroundNoir</item>
-        <item name="themedDrawablePost">@drawable/ic_post_white</item>
-        <item name="themedDrawableCheck">@drawable/ic_check_white</item>
-        <item name="themedDrawableDismiss">@drawable/ic_dismiss_white</item>
-        <item name="themedDrawableTrend">@drawable/ic_trend_up</item>
-        <item name="themedDrawableWa">@drawable/ic_wa_white</item>
-        <item name="themedDrawablePoll">@drawable/ic_poll_white</item>
-        <item name="themedDrawableRegion">@drawable/ic_region_white</item>
         <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
@@ -98,13 +84,6 @@
         <item name="themedColorNavDrawer">@color/nav_color_bleu</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
-        <item name="themedDrawablePost">@drawable/ic_post_blue</item>
-        <item name="themedDrawableCheck">@drawable/ic_check_blue</item>
-        <item name="themedDrawableDismiss">@drawable/ic_dismiss_blue</item>
-        <item name="themedDrawableTrend">@drawable/ic_trend_blue</item>
-        <item name="themedDrawablePoll">@drawable/ic_poll_blue</item>
-        <item name="themedDrawableWa">@drawable/ic_wa_blue</item>
-        <item name="themedDrawableRegion">@drawable/ic_region_blue</item>
         <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
@@ -138,13 +117,6 @@
         <item name="themedColorNavDrawer">@color/nav_color_rouge</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
-        <item name="themedDrawablePost">@drawable/ic_post_red</item>
-        <item name="themedDrawableCheck">@drawable/ic_check_red</item>
-        <item name="themedDrawableDismiss">@drawable/ic_dismiss_red</item>
-        <item name="themedDrawableTrend">@drawable/ic_trend_red</item>
-        <item name="themedDrawablePoll">@drawable/ic_poll_red</item>
-        <item name="themedDrawableWa">@drawable/ic_wa_red</item>
-        <item name="themedDrawableRegion">@drawable/ic_region_red</item>
         <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
@@ -178,13 +150,6 @@
         <item name="themedColorNavDrawer">@color/nav_color_violet</item>
         <item name="themedColorCard">@android:color/white</item>
         <item name="themedColorBackground">@color/colorBackgroundLight</item>
-        <item name="themedDrawablePost">@drawable/ic_post_violet</item>
-        <item name="themedDrawableCheck">@drawable/ic_check_violet</item>
-        <item name="themedDrawableDismiss">@drawable/ic_dismiss_violet</item>
-        <item name="themedDrawableTrend">@drawable/ic_trend_violet</item>
-        <item name="themedDrawablePoll">@drawable/ic_poll_violet</item>
-        <item name="themedDrawableWa">@drawable/ic_wa_violet</item>
-        <item name="themedDrawableRegion">@drawable/ic_region_violet</item>
         <item name="themedToolbarPopup">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 

@@ -190,7 +190,7 @@
                     android:layout_marginRight="3dp"
                     android:layout_marginLeft="-6dp"
                     android:padding="8dp"
-                    app:srcCompat="?attr/themedDrawableRegion"/>
+                    app:srcCompat="@drawable/ic_region_button"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

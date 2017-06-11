@@ -57,7 +57,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_marginLeft="-7dp"
                 android:padding="8dp"
-                app:srcCompat="?attr/themedDrawableWa"/>
+                app:srcCompat="@drawable/ic_wa_button"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

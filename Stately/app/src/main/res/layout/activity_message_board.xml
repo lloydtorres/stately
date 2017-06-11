@@ -77,7 +77,7 @@
             android:layout_gravity="end"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            app:srcCompat="?attr/themedDrawablePost"/>
+            app:srcCompat="@drawable/ic_post"/>
     </RelativeLayout>
 </LinearLayout>
 

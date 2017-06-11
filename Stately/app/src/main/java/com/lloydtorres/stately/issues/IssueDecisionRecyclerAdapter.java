@@ -31,7 +31,6 @@ import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
-import com.lloydtorres.stately.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,23 +189,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             // Resets some values to default
             RaraHelper.setViewHolderFullSpan(itemView, false);
             contentHolder.setVisibility(View.VISIBLE);
-            switch (SettingsActivity.getTheme(context)) {
-                case SettingsActivity.THEME_VERT:
-                    selectIcon.setImageResource(R.drawable.ic_check_green);
-                    break;
-                case SettingsActivity.THEME_NOIR:
-                    selectIcon.setImageResource(R.drawable.ic_check_white);
-                    break;
-                case SettingsActivity.THEME_BLEU:
-                    selectIcon.setImageResource(R.drawable.ic_check_blue);
-                    break;
-                case SettingsActivity.THEME_ROUGE:
-                    selectIcon.setImageResource(R.drawable.ic_check_red);
-                    break;
-                case SettingsActivity.THEME_VIOLET:
-                    selectIcon.setImageResource(R.drawable.ic_check_violet);
-                    break;
-            }
+            selectIcon.setImageResource(R.drawable.ic_check);
             divider.setVisibility(View.VISIBLE);
             selectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,23 +207,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
                 contentHolder.setVisibility(View.GONE);
                 selectContent.setText(context.getString(pirateMode ? R.string.issue_dismiss_issue_pirate : R.string.issue_dismiss_issue));
-                switch (SettingsActivity.getTheme(context)) {
-                    case SettingsActivity.THEME_VERT:
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_green);
-                        break;
-                    case SettingsActivity.THEME_NOIR:
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_white);
-                        break;
-                    case SettingsActivity.THEME_BLEU:
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_blue);
-                        break;
-                    case SettingsActivity.THEME_ROUGE:
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_red);
-                        break;
-                    case SettingsActivity.THEME_VIOLET:
-                        selectIcon.setImageResource(R.drawable.ic_dismiss_violet);
-                        break;
-                }
+                selectIcon.setImageResource(R.drawable.ic_dismiss);
                 divider.setVisibility(View.GONE);
             }
         }

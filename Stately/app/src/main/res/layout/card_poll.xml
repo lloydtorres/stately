@@ -116,7 +116,7 @@
                 android:layout_marginLeft="-6dp"
                 android:padding="4dp"
                 android:visibility="visible"
-                app:srcCompat="?attr/themedDrawablePoll"/>
+                app:srcCompat="@drawable/ic_poll"/>
             <ProgressBar
                 style="@style/MaterialCircleProgressBar"
                 android:id="@+id/card_region_poll_progressbar"
