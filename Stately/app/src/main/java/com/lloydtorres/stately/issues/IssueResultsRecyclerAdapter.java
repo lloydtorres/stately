@@ -45,6 +45,7 @@ import org.atteo.evo.inflector.English;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +57,7 @@ import java.util.Locale;
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private String[] WORLD_CENSUS_ITEMS;
     private HashMap<String, String> postcardData;
+    private List<String> unifiedFreedomScale;
 
     private static final int ISSUE_RESULT_CARD = 0;
     private static final int HEADLINE_CARD = 1;
@@ -78,6 +80,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             String[] postcard = r.split("##");
             postcardData.put(postcard[1], postcard[0]);
         }
+
+        unifiedFreedomScale = Arrays.asList(context.getResources().getStringArray(R.array.freedom_scale));
 
         setContent(con, n);
     }
@@ -254,22 +258,34 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (result.reclassifications != null && !result.reclassifications.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (Reclassification rec : result.reclassifications) {
-                    int templateId = R.string.issue_template_reclass_govt;
-                    switch (rec.type) {
-                        case Reclassification.TYPE_GOVERNMENT:
-                            templateId = R.string.issue_template_reclass_govt;
-                            break;
-                        case Reclassification.TYPE_CIVILRIGHTS:
-                            templateId = R.string.issue_template_reclass_civil_rights;
-                            break;
-                        case Reclassification.TYPE_ECONOMY:
-                            templateId = R.string.issue_template_reclass_economy;
-                            break;
-                        case Reclassification.TYPE_POLITICALFREEDOM:
-                            templateId = R.string.issue_template_reclass_political_freedom;
-                            break;
+                    if (Reclassification.TYPE_GOVERNMENT.equals(rec.type)) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.issue_template_reclass_govt), mNation.name, rec.from, rec.to));
+                    } else {
+                        int templateId = R.string.issue_template_reclass_civil_rights;
+                        switch (rec.type) {
+                            case Reclassification.TYPE_CIVILRIGHTS:
+                                templateId = R.string.issue_template_reclass_civil_rights;
+                                break;
+                            case Reclassification.TYPE_ECONOMY:
+                                templateId = R.string.issue_template_reclass_economy;
+                                break;
+                            case Reclassification.TYPE_POLITICALFREEDOM:
+                                templateId = R.string.issue_template_reclass_political_freedom;
+                                break;
+                        }
+
+                        int deltaDesc = R.string.issue_reclass_unknown;
+                        int indexFrom = unifiedFreedomScale.indexOf(rec.from);
+                        int indexTo = unifiedFreedomScale.indexOf(rec.to);
+                        if (indexFrom != -1 && indexTo != -1) {
+                            if (indexFrom < indexTo) {
+                                deltaDesc = R.string.issue_reclass_went_up;
+                            } else {
+                                deltaDesc = R.string.issue_reclass_went_down;
+                            }
+                            sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, context.getString(deltaDesc), rec.from, rec.to));
+                        }
                     }
-                    sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, rec.from, rec.to));
                     sb.append(" ");
                 }
                 reclassResult.setVisibility(View.VISIBLE);

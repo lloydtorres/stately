@@ -392,6 +392,37 @@
         <item>Windswept##l38</item>
         <item>You Didn\'t Build That##b10</item>
     </string-array>
+    <string-array name="freedom_scale">
+        <item>Imploded</item>
+        <item>Basket Case</item>
+        <item>Struggling</item>
+        <item>Fragile</item>
+        <item>Weak</item>
+        <item>Developing</item>
+        <item>Fair</item>
+        <item>Reasonable</item>
+        <item>Outlawed</item>
+        <item>Unheard Of</item>
+        <item>Rare</item>
+        <item>Few</item>
+        <item>Some</item>
+        <item>Below Average</item>
+        <item>Average</item>
+        <item>Good</item>
+        <item>Strong</item>
+        <item>Very Strong</item>
+        <item>Thriving</item>
+        <item>Powerhouse</item>
+        <item>All-Consuming</item>
+        <item>Very Good</item>
+        <item>Excellent</item>
+        <item>Superb</item>
+        <item>World Benchmark</item>
+        <item>Excessive</item>
+        <item>Widely Abused</item>
+        <item>Frightening</item>
+        <item>Corrupted</item>
+    </string-array>
     <string-array name="gov_types">
         <item>anarchy</item>
         <item>authoritarian_democracy</item>
