@@ -58,7 +58,7 @@ dependencies {
     compile 'com.github.omadahealth:swipy:1.2.3@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'org.atteo:evo-inflector:1.2.2'
-    compile 'org.jsoup:jsoup:1.10.2'
+    compile 'org.jsoup:jsoup:1.10.3'
     compile 'org.sufficientlysecure:html-textview:3.4'
     compile 'com.jpardogo.materialtabstrip:library:1.1.1'
     compile 'com.r0adkll:slidableactivity:2.0.5'
