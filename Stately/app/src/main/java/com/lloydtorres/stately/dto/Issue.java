@@ -37,7 +37,10 @@ public class Issue implements Parcelable {
     public int id;
     @Element(name="TITLE", required=false)
     public String title;
+    @Element(name="CHAIN", required=false)
     public String chain;
+    @Element(name="RECAP", required=false)
+    public String recap;
     @Element(name="TEXT", required=false)
     public String content;
     @Element(name="PIC1", required=false)
@@ -51,6 +54,7 @@ public class Issue implements Parcelable {
         id = in.readInt();
         title = in.readString();
         chain = in.readString();
+        recap = in.readString();
         content = in.readString();
         image = in.readString();
         if (in.readByte() == 0x01) {
@@ -71,6 +75,7 @@ public class Issue implements Parcelable {
         dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(chain);
+        dest.writeString(recap);
         dest.writeString(content);
         dest.writeString(image);
         if (options == null) {

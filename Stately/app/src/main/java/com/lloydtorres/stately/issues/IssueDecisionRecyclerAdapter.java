@@ -159,7 +159,15 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 image.setVisibility(View.GONE);
             }
 
-            content.setText(SparkleHelper.getHtmlFormatting(issue.content).toString());
+            StringBuilder issueContent = new StringBuilder();
+
+            if (issue.recap != null && !issue.recap.isEmpty()) {
+                issueContent.append(issue.recap);
+                issueContent.append("<br><br>");
+            }
+            issueContent.append(issue.content);
+
+            content.setText(SparkleHelper.getHtmlFormatting(issueContent.toString()).toString());
         }
     }
 
