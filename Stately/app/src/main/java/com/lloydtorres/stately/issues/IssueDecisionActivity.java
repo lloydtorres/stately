@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lloyd on 2016-01-28.
@@ -62,8 +63,14 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     public static final String ISSUE_ID_DATA = "issueIdData";
     public static final String ISSUE_BROADCAST = "com.lloydtorres.stately.issues.ISSUE_DECISION";
 
-    private static final String LEGISLATION_PASSED = "LEGISLATION PASSED";
     private static final String NOT_AVAILABLE = "Issue Not Available";
+
+    private static final String CDATA_FRAGMENT = "<![CDATA[";
+    private static final String CDATA_DESC_TEMPLATE = "<DESC><![CDATA[%s]]></DESC>";
+    private static final String CDATA_HEADLINE_TEMPLATE = "<HEADLINE><![CDATA[%s]]></HEADLINE>";
+
+    private static final Pattern RAW_DESC_REGEX = Pattern.compile("(?i)(?s)<DESC>(.*?)<\\/DESC>");
+    private static final Pattern RAW_HEADLINE_REGEX = Pattern.compile("(?i)(?s)<HEADLINE>(.*?)<\\/HEADLINE>");
 
     private Issue issue;
     private Nation mNation;
@@ -223,6 +230,12 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                     public void onResponse(String response) {
                         isInProgress = false;
                         mSwipeRefreshLayout.setRefreshing(false);
+
+                        // Wrap response tags around CDATA
+                        if (!response.contains(CDATA_FRAGMENT)) {
+                            response = SparkleHelper.regexReplace(response, RAW_DESC_REGEX, CDATA_DESC_TEMPLATE);
+                            response = SparkleHelper.regexReplace(response, RAW_HEADLINE_REGEX, CDATA_HEADLINE_TEMPLATE);
+                        }
 
                         Persister serializer = new Persister();
                         try {
