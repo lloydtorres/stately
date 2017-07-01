@@ -872,6 +872,9 @@ public final class SparkleHelper {
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
+    public static final Pattern BBCODE_SUP = Pattern.compile("(?i)(?s)\\[sup\\](.*?)\\[\\/sup\\]");
+    public static final Pattern BBCODE_SUB = Pattern.compile("(?i)(?s)\\[sub\\](.*?)\\[\\/sub\\]");
+    public static final Pattern BBCODE_STRIKE = Pattern.compile("(?i)(?s)\\[strike\\](.*?)\\[\\/strike\\]");
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](.*?)\\[\\/proposal\\]");
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
@@ -924,6 +927,9 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_B, "<b>%s</b>");
         holder = regexReplace(holder, BBCODE_I, "<i>%s</i>");
         holder = regexReplace(holder, BBCODE_U, "<u>%s</u>");
+        holder = regexReplace(holder, BBCODE_SUP, "<sup>%s</sup>");
+        holder = regexReplace(holder, BBCODE_SUB, "<sub>%s</sub>");
+        holder = regexReplace(holder, BBCODE_STRIKE, "<strike>%s</strike>");
         holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
         holder = regexResolutionFormat(holder);
         holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);

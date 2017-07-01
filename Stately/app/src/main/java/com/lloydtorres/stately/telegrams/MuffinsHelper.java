@@ -434,9 +434,22 @@ public final class MuffinsHelper {
             spoiler.tagName("p");
         }
 
-        String holder = Jsoup.clean(content.html(), Whitelist.basic().preserveRelativeLinks(true).addTags("br"));
+        // Replace <span class="nscodestrike"> with <strike>
+        Elements strikeTags = content.select("span.nscodestrike");
+        strikeTags.tagName("strike");
+
+        // Disable JSoup pretty-printing
+        content.outputSettings().indentAmount(0).prettyPrint(false);
+        Document.OutputSettings outputSettings = new Document.OutputSettings();
+        outputSettings.indentAmount(0);
+        outputSettings.prettyPrint(false);
+
+        String holder = Jsoup.clean(content.html(), SparkleHelper.BASE_URI, Whitelist.basic().preserveRelativeLinks(true).addTags("br", "strike"), outputSettings);
         holder = holder.replace("\n", "<br>");
         holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);
+
+        // Remove extra padding at top
+        holder = holder.replaceFirst("<br> <br> ", "");
 
         // Do the rest of the formatting
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
