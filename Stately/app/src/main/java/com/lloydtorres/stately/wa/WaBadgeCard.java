@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.WaBadge;
+import com.lloydtorres.stately.helpers.RaraHelper;
 
 import java.util.Locale;
 
@@ -51,6 +52,8 @@ public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClick
     }
 
     public void init(WaBadge badge) {
+        RaraHelper.setViewHolderFullSpan(itemView);
+
         badgeData = badge;
 
         int containerColour = ContextCompat.getColor(context, R.color.colorChart12);
