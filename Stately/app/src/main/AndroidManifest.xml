@@ -9,6 +9,9 @@
     <uses-feature android:name="android.hardware.touchscreen"
         android:required="false" />
 
+    <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+        android:value="true" />
+
     <application
         android:name="com.lloydtorres.stately.core.StatelyApp"
         android:allowBackup="false"
