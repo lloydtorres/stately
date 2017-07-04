@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.9.0** - New logo, issue decision API, Android O prep, bug fixes and improvements.
 * **1.8.3** - Bug fixes and improvements.
 * **1.8.2** - Issue images, WA badges, app licenses, bug fixes and improvements.
 * **1.8.1** - Bug fixes and improvements.
@@ -97,6 +98,13 @@ Stately uses the following open-source libraries:
 Stately also uses the following proprietary libraries:
 
 * [Crashlytics](https://try.crashlytics.com/)
+
+### Creative Commons
+
+Stately uses Creative Commons-licensed content from the following sources:
+
+* [Android Material Icon Generator (CC BY-NC 3.0)](https://android-material-icon-generator.bitdroid.de/)
+* [Medical Icons Pack (CC BY 3.0)](http://www.flaticon.com/packs/medical-icons)
 
 ### License
 
