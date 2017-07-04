@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/login_header"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="128dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
@@ -25,7 +25,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
         android:textColor="@android:color/white"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:text="@string/login_subtitle_neutral" />
 
     <View
