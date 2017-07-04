@@ -89,13 +89,13 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public void setContent(IssueResultContainer con, Nation n) {
         content = new ArrayList<Object>();
         content.add(con.results);
-        if (con.results.nicePostcards != null) {
+        if (con.results.nicePostcards != null && con.results.nicePostcards.size() > 0) {
             content.addAll(con.results.nicePostcards);
         }
-        if (con.results.niceHeadlines != null) {
+        if (con.results.niceHeadlines != null && con.results.niceHeadlines.headlines.size() > 0) {
             content.add(con.results.niceHeadlines);
         }
-        if (con.results.rankings != null) {
+        if (con.results.rankings != null && con.results.rankings.size() > 0) {
             content.addAll(con.results.rankings);
         }
         mNation = n;

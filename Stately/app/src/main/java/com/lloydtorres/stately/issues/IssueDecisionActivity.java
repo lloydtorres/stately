@@ -325,7 +325,12 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         // Properly format the issue headlines and postcards
         if (issueResult.results.headlines != null && !issueResult.results.headlines.isEmpty()) {
             issueResult.results.niceHeadlines = new IssueResultHeadlinesContainer();
-            issueResult.results.niceHeadlines.headlines = issueResult.results.headlines;
+            issueResult.results.niceHeadlines.headlines = new ArrayList<String>();
+            for (String h : issueResult.results.headlines) {
+                if (h != null) {
+                    issueResult.results.niceHeadlines.headlines.add(h);
+                }
+            }
         }
 
         if (issueResult.results.postcards != null && !issueResult.results.postcards.isEmpty()) {
