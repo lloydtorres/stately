@@ -65,8 +65,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.StatelyActivity;
@@ -153,7 +155,7 @@ public final class TrixHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ComponentName alphysLollipopServiceName = new ComponentName(c, AlphysLollipopService.class);
             JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
-                    .setPeriodic(notificationIntervalInMs + notificationJitterIntervalInMs)
+                    .setMinimumLatency(notificationIntervalInMs + notificationJitterIntervalInMs)
                     .build();
             JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
@@ -234,6 +236,9 @@ public final class TrixHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+                if (error instanceof ServerError || error instanceof AuthFailureError) {
+                    return;
+                }
                 TrixHelper.setAlarmForAlphys(c);
             }
         });
