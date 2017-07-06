@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.9.1** - Bug fix for aggressive notification service for Lollipop and above.
 * **1.9.0** - New logo, issue decision API, Android O prep, bug fixes and improvements.
 * **1.8.3** - Bug fixes and improvements.
 * **1.8.2** - Issue images, WA badges, app licenses, bug fixes and improvements.
