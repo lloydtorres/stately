@@ -449,7 +449,7 @@ public final class MuffinsHelper {
         holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);
 
         // Remove extra padding at top
-        holder = holder.replaceFirst("<br> <br> ", "");
+        holder = holder.replaceFirst("(?:<br>\\s*)+", "");
 
         // Do the rest of the formatting
         holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
