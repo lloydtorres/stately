@@ -286,7 +286,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                             sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, context.getString(deltaDesc), rec.from, rec.to));
                         }
                     }
-                    sb.append(" ");
+                    sb.append("\n\n");
                 }
                 reclassResult.setVisibility(View.VISIBLE);
                 reclassResult.setText(sb.toString().trim());
