@@ -256,7 +256,7 @@
     <string name="clicky_link_http">&lt;a href=&quot;%1$s&quot;&gt;[external link: %2$s]&lt;/a&gt;</string>
     <string name="rmb_no_content">Nothing to see here!</string>
     <string name="rmb_caught_up">All caught up!</string>
-    <string name="rmb_backtrack_error">Can\'t catch up with the volume of posts.</string>
+    <string name="rmb_backtrack_error">Couldn\'t catch up with the volume of posts.</string>
     <string name="bbcode_parse_error">A parsing error was encountered: couldn\'t load content.</string>
     <string name="rmb_message_hint">Post a message…</string>
     <string name="rmb_reply">Replying to %1$s</string>
@@ -267,8 +267,8 @@
     <string name="rmb_unsuppress_confirm">Unsuppress this post?</string>
     <string name="rmb_unsuppress">Unsuppress</string>
     <string name="rmb_likes">Likes</string>
-    <string name="rmb_cant_like">Can\'t like posts in a foreign region.</string>
-    <string name="rmb_self_like">Can\'t like your own posts!</string>
+    <string name="rmb_cant_like">Your nation doesn\'t have permission to like posts in this region.</string>
+    <string name="rmb_self_like">You can\'t like your own post!</string>
 
     <!-- Region governance subfragment -->
     <string name="card_region_officers">Officers</string>

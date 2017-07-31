@@ -216,7 +216,6 @@ public class MessageBoardActivity extends SlidrActivity {
 
         // Enable both likeability and posting rights if in user region
         if (SparkleHelper.getIdFromName(regionName).equals(PinkaHelper.getRegionSessionData(this))) {
-            isLikeable = true;
             enablePostingRights();
         }
 
@@ -262,6 +261,7 @@ public class MessageBoardActivity extends SlidrActivity {
         messagePostButton.setOnClickListener(postMessageListener);
         messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
         messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
+        isLikeable = true;
         isPostable = true;
     }
 
