@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="20dp">
-            <TextView
+            <org.sufficientlysecure.htmltextview.HtmlTextView
                 android:id="@+id/card_issue_option_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

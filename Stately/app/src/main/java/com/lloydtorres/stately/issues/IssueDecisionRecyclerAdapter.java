@@ -18,6 +18,7 @@ package com.lloydtorres.stately.issues;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import com.lloydtorres.stately.dto.IssueOption;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,14 +131,14 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private TextView title;
         private TextView issueNo;
         private ImageView image;
-        private TextView content;
+        private HtmlTextView content;
 
         public IssueInfoCard(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.card_issue_info_title);
             issueNo = (TextView) v.findViewById(R.id.card_issue_info_number);
             image = (ImageView) v.findViewById(R.id.card_issue_header_image);
-            content = (TextView) v.findViewById(R.id.card_issue_option_content);
+            content = (HtmlTextView) v.findViewById(R.id.card_issue_option_content);
         }
 
         public void init(Issue issue) {
@@ -167,14 +170,16 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             }
             issueContent.append(issue.content);
 
-            content.setText(SparkleHelper.getHtmlFormatting(issueContent.toString()).toString());
+            String rawContent = SparkleHelper.replaceMalformedHtmlCharacters(issueContent.toString());
+            Spanned formattedContent = SparkleHelper.fromHtml(rawContent);
+            content.setText(formattedContent);
         }
     }
 
     // Card for options
     public class IssueOptionCard extends RecyclerView.ViewHolder {
         private IssueOption option;
-        private TextView content;
+        private HtmlTextView content;
         private LinearLayout contentHolder;
         private LinearLayout selectButton;
         private ImageView selectIcon;
@@ -183,7 +188,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         public IssueOptionCard(View v) {
             super(v);
-            content = (TextView) v.findViewById(R.id.card_issue_option_content);
+            content = (HtmlTextView) v.findViewById(R.id.card_issue_option_content);
             contentHolder = (LinearLayout) v.findViewById(R.id.card_issue_option_content_holder);
             selectButton = (LinearLayout) v.findViewById(R.id.card_issue_option_select);
             selectIcon = (ImageView) v.findViewById(R.id.card_issue_option_select_icon);
@@ -207,7 +212,9 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             });
 
             if (mode != DISMISS_CARD) {
-                content.setText(SparkleHelper.getHtmlFormatting(option.content).toString());
+                String rawOptionContent = SparkleHelper.replaceMalformedHtmlCharacters(option.content);
+                Spanned formattedOptionContent = SparkleHelper.fromHtml(rawOptionContent);
+                content.setText(formattedOptionContent);
                 selectContent.setText(context.getString(pirateMode ? R.string.issue_select_option_pirate : R.string.issue_select_option));
             } else {
                 // Forces card to span across columns
