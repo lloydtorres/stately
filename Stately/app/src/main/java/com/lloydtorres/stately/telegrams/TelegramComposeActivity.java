@@ -64,6 +64,7 @@ public class TelegramComposeActivity extends SlidrActivity {
     public static final String REPLY_ID_DATA = "replyIdData";
     public static final String RECIPIENTS_DATA = "recipientsData";
     public static final String DEVELOPER_TG_DATA = "developerTgData";
+    public static final String TG_CONTENT_DATA = "tgContentData";
     public static final int NO_REPLY_ID = -1;
     private static final String SENT_CONFIRM_1 = "Your telegram is being wired";
     private static final String SENT_CONFIRM_2 = "Your telegram has been wired";
@@ -95,6 +96,14 @@ public class TelegramComposeActivity extends SlidrActivity {
             isDeveloperTg = getIntent().getBooleanExtra(DEVELOPER_TG_DATA, false);
         }
 
+        String savedContent = null;
+        if (savedInstanceState != null) {
+            replyId = savedInstanceState.getInt(REPLY_ID_DATA, NO_REPLY_ID);
+            isDeveloperTg = savedInstanceState.getBoolean(DEVELOPER_TG_DATA, false);
+            recipients = savedInstanceState.getString(RECIPIENTS_DATA);
+            savedContent = savedInstanceState.getString(TG_CONTENT_DATA);
+        }
+
         mView = findViewById(R.id.telegram_compose_main);
 
         headerCardView = (CardView) findViewById(R.id.telegram_compose_header) ;
@@ -123,6 +132,11 @@ public class TelegramComposeActivity extends SlidrActivity {
         senderField.setText(PinkaHelper.getActiveUser(this).name);
 
         content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
+
+        if (savedContent != null) {
+            content.setText(savedContent);
+        }
+
         content.requestFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
@@ -307,6 +321,33 @@ public class TelegramComposeActivity extends SlidrActivity {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save state
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(REPLY_ID_DATA, replyId);
+        savedInstanceState.putBoolean(DEVELOPER_TG_DATA, isDeveloperTg);
+
+        if (recipients != null) {
+            savedInstanceState.putString(RECIPIENTS_DATA, recipients);
+        }
+        if (content.getText() != null) {
+            savedInstanceState.putString(TG_CONTENT_DATA, content.getText().toString());
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore state
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            replyId = savedInstanceState.getInt(REPLY_ID_DATA, NO_REPLY_ID);
+            isDeveloperTg = savedInstanceState.getBoolean(DEVELOPER_TG_DATA, false);
+            recipients = savedInstanceState.getString(RECIPIENTS_DATA);
+            content.setText(savedInstanceState.getString(TG_CONTENT_DATA));
         }
     }
 
