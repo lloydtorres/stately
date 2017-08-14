@@ -40,14 +40,24 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 public class ExploreDialog extends DetachDialogFragment {
     public static final String DIALOG_TAG = "fragment_explore_dialog";
 
+    public static final int NO_SEARCH_TYPE_OVERRIDE = -1;
+
     private AppCompatEditText exploreSearch;
     private RadioGroup exploreToggleState;
+
     private Activity activityCloseOnFinish;
+    private String searchContentOverride;
+    private int searchTypeOverride = NO_SEARCH_TYPE_OVERRIDE;
 
     public ExploreDialog() { }
 
     public void setActivityCloseOnFinish(Activity closeOnFinish) {
         activityCloseOnFinish = closeOnFinish;
+    }
+
+    public void setSearchOverride(String content, int type) {
+        searchContentOverride = content;
+        searchTypeOverride = type;
     }
 
     @Override
@@ -57,6 +67,20 @@ public class ExploreDialog extends DetachDialogFragment {
 
         exploreSearch = (AppCompatEditText) dialogView.findViewById(R.id.explore_searchbar);
         exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
+
+        if (searchContentOverride != null) {
+            exploreSearch.setText(searchContentOverride);
+        }
+        if (searchTypeOverride != NO_SEARCH_TYPE_OVERRIDE) {
+            switch (searchTypeOverride) {
+                case ExploreActivity.EXPLORE_NATION:
+                    exploreToggleState.check(R.id.explore_radio_nation);
+                    break;
+                case ExploreActivity.EXPLORE_REGION:
+                    exploreToggleState.check(R.id.explore_radio_region);
+                    break;
+            }
+        }
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override

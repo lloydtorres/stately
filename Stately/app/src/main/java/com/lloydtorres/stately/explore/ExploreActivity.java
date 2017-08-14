@@ -137,7 +137,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (getIntent() != null) {
             // If name passed in as intent
-            id = SparkleHelper.getIdFromName(getIntent().getStringExtra(EXPLORE_ID));
+            name = getIntent().getStringExtra(EXPLORE_ID);
+            id = SparkleHelper.getIdFromName(name);
             mode = getIntent().getIntExtra(EXPLORE_MODE, EXPLORE_NATION);
             if (id == null) {
                 // If ID passed in through Uri
@@ -890,6 +891,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
         if (closeOnFinish) {
             exploreDialog.setActivityCloseOnFinish(this);
+        }
+
+        if (exploreButton.getVisibility() == View.VISIBLE) {
+            exploreDialog.setSearchOverride(name, mode);
         }
 
         exploreDialog.show(getSupportFragmentManager(), ExploreDialog.DIALOG_TAG);
