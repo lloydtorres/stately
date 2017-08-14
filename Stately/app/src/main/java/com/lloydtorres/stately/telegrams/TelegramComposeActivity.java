@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +63,7 @@ public class TelegramComposeActivity extends SlidrActivity {
     // Keys for intent data
     public static final String REPLY_ID_DATA = "replyIdData";
     public static final String RECIPIENTS_DATA = "recipientsData";
+    public static final String DEVELOPER_TG_DATA = "developerTgData";
     public static final int NO_REPLY_ID = -1;
     private static final String SENT_CONFIRM_1 = "Your telegram is being wired";
     private static final String SENT_CONFIRM_2 = "Your telegram has been wired";
@@ -69,9 +71,13 @@ public class TelegramComposeActivity extends SlidrActivity {
     private int replyId = NO_REPLY_ID;
     private String recipients;
     private boolean isInProgress = false;
+    private boolean isDeveloperTg = false;
 
     private View mView;
+    private CardView headerCardView;
+    private CardView developerCardView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private AppCompatEditText recipientsField;
     private TextView senderField;
     private AppCompatEditText content;
@@ -86,9 +92,16 @@ public class TelegramComposeActivity extends SlidrActivity {
         if (getIntent() != null) {
             replyId = getIntent().getIntExtra(REPLY_ID_DATA, NO_REPLY_ID);
             recipients = getIntent().getStringExtra(RECIPIENTS_DATA);
+            isDeveloperTg = getIntent().getBooleanExtra(DEVELOPER_TG_DATA, false);
         }
 
         mView = findViewById(R.id.telegram_compose_main);
+
+        headerCardView = (CardView) findViewById(R.id.telegram_compose_header) ;
+        developerCardView = (CardView) findViewById(R.id.telegram_compose_developer_header);
+        headerCardView.setVisibility(isDeveloperTg ? View.GONE : View.VISIBLE);
+        developerCardView.setVisibility(isDeveloperTg ? View.VISIBLE : View.GONE);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.telegram_compose_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);

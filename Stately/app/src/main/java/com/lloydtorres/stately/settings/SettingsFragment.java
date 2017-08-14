@@ -53,7 +53,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         sendTelegramSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SparkleHelper.startTelegramCompose(getContext(), DEVELOPER_TARGET, TelegramComposeActivity.NO_REPLY_ID);
+                SparkleHelper.startTelegramCompose(getContext(), DEVELOPER_TARGET, TelegramComposeActivity.NO_REPLY_ID, true);
                 return true;
             }
         });

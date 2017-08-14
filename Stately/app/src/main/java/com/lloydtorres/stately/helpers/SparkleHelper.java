@@ -677,9 +677,14 @@ public final class SparkleHelper {
      * @param replyId Reply ID, can be filled or TelegramComposeActivity.NO_REPLY_ID
      */
     public static void startTelegramCompose(Context c, String recipients, int replyId) {
+        startTelegramCompose(c, recipients, replyId, false);
+    }
+
+    public static void startTelegramCompose(Context c, String recipients, int replyId, boolean isDeveloperTg) {
         Intent telegramComposeActivityLaunch = new Intent(c, TelegramComposeActivity.class);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.RECIPIENTS_DATA, recipients);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.REPLY_ID_DATA, replyId);
+        telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.DEVELOPER_TG_DATA, isDeveloperTg);
         c.startActivity(telegramComposeActivityLaunch);
     }
 
