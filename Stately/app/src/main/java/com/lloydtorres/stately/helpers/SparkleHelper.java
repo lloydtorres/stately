@@ -800,13 +800,21 @@ public final class SparkleHelper {
      * @return Styled spanned object
      */
     public static Spanned getHtmlFormatting(String content) {
+        return getHtmlFormatting(content, true);
+    }
+
+    public static Spanned getHtmlFormatting(String content, boolean shouldClean) {
         if (content == null) {
             content = "";
         }
-        String holder = Jsoup.clean(content, Whitelist.none().addTags("br"));
+        String holder = content;
+        if (shouldClean) {
+            holder = Jsoup.clean(holder, Whitelist.none().addTags("br"));
+        }
         holder = replaceMalformedHtmlCharacters(holder);
         return fromHtml(holder);
     }
+
 
     public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(" + VALID_NAME_BASE + "+?)@@");
     public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(" + VALID_NAME_BASE + "+?)%%");

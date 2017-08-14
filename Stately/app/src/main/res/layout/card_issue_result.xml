@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:text="@string/issue_breaking" />
-            <TextView
+            <org.sufficientlysecure.htmltextview.HtmlTextView
                 android:id="@+id/card_issue_result_main_result"
                 android:layout_marginTop="8dp"
                 android:textSize="20sp"
@@ -55,8 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                tools:text="Kaugummi's Civil Rights rose from Excellent to Superb. Kaugummi was reclassified from Corrupt Dictatorship to Mother Knows Best State." />
-            <TextView
+                tools:text="Kaugummi's Civil Rights rose from Excellent to Superb.\nKaugummi was reclassified from Corrupt Dictatorship to Mother Knows Best State." />
+            <org.sufficientlysecure.htmltextview.HtmlTextView
                 android:id="@+id/card_issue_result_issue_content"
                 android:visibility="gone"
                 android:layout_marginTop="8dp"

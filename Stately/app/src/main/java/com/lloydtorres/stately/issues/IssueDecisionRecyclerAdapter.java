@@ -170,9 +170,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             }
             issueContent.append(issue.content);
 
-            String rawContent = SparkleHelper.replaceMalformedHtmlCharacters(issueContent.toString());
-            Spanned formattedContent = SparkleHelper.fromHtml(rawContent);
-            content.setText(formattedContent);
+            content.setText(SparkleHelper.getHtmlFormatting(issueContent.toString(), false));
         }
     }
 
@@ -212,9 +210,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             });
 
             if (mode != DISMISS_CARD) {
-                String rawOptionContent = SparkleHelper.replaceMalformedHtmlCharacters(option.content);
-                Spanned formattedOptionContent = SparkleHelper.fromHtml(rawOptionContent);
-                content.setText(formattedOptionContent);
+                content.setText(SparkleHelper.getHtmlFormatting(option.content, false));
                 selectContent.setText(context.getString(pirateMode ? R.string.issue_select_option_pirate : R.string.issue_select_option));
             } else {
                 // Forces card to span across columns

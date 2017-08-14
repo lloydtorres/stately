@@ -225,22 +225,22 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             target = target.replace("@@$nation->query_faith()@@", valReligion);
         }
 
-        t.setText(SparkleHelper.getHtmlFormatting(target).toString());
+        t.setText(SparkleHelper.getHtmlFormatting(target, false));
     }
 
     public class IssueResultCard extends RecyclerView.ViewHolder {
         private ImageView image;
-        private TextView mainResult;
+        private HtmlTextView mainResult;
         private TextView reclassResult;
-        private TextView issueContent;
+        private HtmlTextView issueContent;
         private TextView expander;
 
         public IssueResultCard(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.card_issue_result_image);
-            mainResult = (TextView) v.findViewById(R.id.card_issue_result_main_result);
+            mainResult = (HtmlTextView) v.findViewById(R.id.card_issue_result_main_result);
             reclassResult = (TextView) v.findViewById(R.id.card_issue_result_reclass_result);
-            issueContent = (TextView) v.findViewById(R.id.card_issue_result_issue_content);
+            issueContent = (HtmlTextView) v.findViewById(R.id.card_issue_result_issue_content);
             expander = (TextView) v.findViewById(R.id.card_issue_result_expand);
         }
 
@@ -286,7 +286,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                             sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, context.getString(deltaDesc), rec.from, rec.to));
                         }
                     }
-                    sb.append("\n\n");
+                    sb.append("\n");
                 }
                 reclassResult.setVisibility(View.VISIBLE);
                 reclassResult.setText(sb.toString().trim());
@@ -297,7 +297,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             StringBuilder sb = new StringBuilder(result.issueContent);
             sb.append("<br><br>");
             sb.append(result.issuePosition);
-            issueContent.setText(SparkleHelper.getHtmlFormatting(sb.toString()).toString());
+            issueContent.setText(SparkleHelper.getHtmlFormatting(sb.toString(), false));
 
             expander.setText(context.getString(R.string.issue_read_more));
             expander.setOnClickListener(new View.OnClickListener() {
