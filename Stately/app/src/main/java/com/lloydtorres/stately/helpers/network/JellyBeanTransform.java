@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
+import com.lloydtorres.stately.helpers.RaraHelper;
 import com.squareup.picasso.Transformation;
 
 /**
@@ -44,7 +45,7 @@ public class JellyBeanTransform implements Transformation {
     public Bitmap transform(Bitmap source) {
         int width = source.getWidth();
         int height = source.getHeight();
-        int bounding = dpToPx(BOUNDING_SIZE);
+        int bounding = RaraHelper.dpToPx(context, BOUNDING_SIZE);
 
         float xScale = ((float) bounding) / width;
         float yScale = ((float) bounding) / height;
@@ -64,10 +65,5 @@ public class JellyBeanTransform implements Transformation {
     @Override
     public String key() {
         return "JellyBeanTransform";
-    }
-
-    private int dpToPx(int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
     }
 }

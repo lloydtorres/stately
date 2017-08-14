@@ -16,6 +16,7 @@
 
 package com.lloydtorres.stately.nation;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -186,6 +187,12 @@ public class NationFragment extends DetachFragment {
         nationPrename = (TextView) view.findViewById(R.id.nation_prename);
         nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
         nationFlag = (ImageView) view.findViewById(R.id.nation_flag);
+
+        // Dynamically change nation banner height
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int maxScreenWidth = RaraHelper.dpToPx(getContext(), 200);
+        nationBanner.getLayoutParams().height = Math.min(Math.round(screenWidth / 3f) + 50, maxScreenWidth);
+
         initNationData(view);
     }
 
