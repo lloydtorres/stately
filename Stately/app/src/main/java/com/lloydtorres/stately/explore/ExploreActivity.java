@@ -147,6 +147,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 // But we need it as a name so we convert it back
                 id = getIntent().getData().getHost();
                 id = SparkleHelper.getNameFromId(id);
+                name = SparkleHelper.getNameFromId(id);
                 mode = Integer.valueOf(getIntent().getData().getLastPathSegment());
             }
         }
