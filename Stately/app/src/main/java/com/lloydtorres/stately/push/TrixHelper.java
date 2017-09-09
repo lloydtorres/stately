@@ -152,6 +152,7 @@ public final class TrixHelper {
             int primaryColour = RaraHelper.getThemePrimaryColour(c);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(primaryColour);
+            notificationChannel.setShowBadge(true);
             return notificationChannel;
         }
         return null;
