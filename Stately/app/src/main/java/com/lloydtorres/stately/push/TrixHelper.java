@@ -52,6 +52,7 @@ package com.lloydtorres.stately.push;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.job.JobInfo;
@@ -107,10 +108,54 @@ public final class TrixHelper {
     // Keys for shared prefs stuff
     public static final String KEY_LASTACTIVITY = "spike_last_activity";
 
+    // Notification channel IDs
+    public static final String NOTCHAN_ID_ISSUES = "stately_notchan_issues";
+    public static final String NOTCHAN_ID_TELEGRAMS = "stately_notchan_telegrams";
+    public static final String NOTCHAN_ID_ENDORSE = "stately_notchan_endorse";
+    public static final String NOTCHAN_ID_RMBM = "stately_notchan_rmbm";
+    public static final String NOTCHAN_ID_RMBQ = "stately_notchan_rmbq";
+    public static final String NOTCHAN_ID_RMBL = "stately_notchan_rmbl";
+
     public static final String NOTIFICATION_CONTENT_TEXT_TEMPLATE = "%s %s";
 
     // Private constructor
     private TrixHelper() {}
+
+
+    /**
+     * Builds the app's notification channels for Android O. Should be initialized on startup.
+     * @param context App context
+     */
+    public static void initNotificationChannels(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_ISSUES, context.getString(R.string.setting_notifs_issues)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_TELEGRAMS, context.getString(R.string.setting_notifs_tgs)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_ENDORSE, context.getString(R.string.setting_notifs_endorse)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBM, context.getString(R.string.setting_notifs_rmb_mention)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBQ, context.getString(R.string.setting_notifs_rmb_quote)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBL, context.getString(R.string.setting_notifs_rmb_like)));
+        }
+    }
+
+    /**
+     * Creates a notification channel with default values.
+     * @param c App context
+     * @param id Notification channel ID
+     * @param name Notification channel user-visible name
+     * @return Notification channel if API >= 26, null otherwise
+     */
+    private static NotificationChannel buildNotificationChannel(Context c, String id, String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT);
+            int primaryColour = RaraHelper.getThemePrimaryColour(c);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(primaryColour);
+            return notificationChannel;
+        }
+        return null;
+    }
 
     /**
      * Updates the stored last active time, in Unix seconds.
@@ -281,9 +326,9 @@ public final class TrixHelper {
      * Returns a NotificationCompat builder with set parameters common to all notifications from Stately.
      * @return See above
      */
-    private static NotificationCompat.Builder getBaseBuilder(Context c, String account) {
+    private static NotificationCompat.Builder getBaseBuilder(Context c, String account, String notificationChannelId) {
         int primaryColour = RaraHelper.getThemePrimaryColour(c);
-        return new NotificationCompat.Builder(c)
+        return new NotificationCompat.Builder(c, notificationChannelId)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(primaryColour)
@@ -315,7 +360,7 @@ public final class TrixHelper {
 
         String contentText = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, SparkleHelper.getNameFromId(account), SparkleHelper.fromHtml(notice.content).toString());
 
-        NotificationCompat.Builder builder = getBaseBuilder(c, account)
+        NotificationCompat.Builder builder = getBaseBuilder(c, account, NOTCHAN_ID_ISSUES)
                 .setContentText(contentText)
                 .setStyle(getBigTextStyle(contentText))
                 .setOnlyAlertOnce(true)
@@ -371,6 +416,7 @@ public final class TrixHelper {
         int smallIcon = 0;
         int smallIconCompat = 0;
         Bundle bundle = new Bundle();
+        String channelId = "";
         switch (notice.type) {
             case Notice.TG:
                 smallIcon = R.drawable.ic_menu_telegrams;
@@ -381,6 +427,8 @@ public final class TrixHelper {
 
                 bundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_TG);
                 bundle.putInt(TelegramHistoryActivity.ID_DATA, telegramId);
+
+                channelId = NOTCHAN_ID_TELEGRAMS;
                 break;
             case Notice.RMB_MENTION:
             case Notice.RMB_QUOTE:
@@ -405,10 +453,25 @@ public final class TrixHelper {
                 bundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_EXPLORE);
                 bundle.putString(ExploreActivity.EXPLORE_ID, matcherEndorse.group(1));
                 bundle.putInt(ExploreActivity.EXPLORE_MODE, ExploreActivity.EXPLORE_NATION);
+
+                channelId = NOTCHAN_ID_ENDORSE;
                 break;
         }
 
-        NotificationCompat.Builder builder = getBaseBuilder(c, account)
+        // For channel IDs
+        switch(notice.type) {
+            case Notice.RMB_MENTION:
+                channelId = NOTCHAN_ID_RMBM;
+                break;
+            case Notice.RMB_QUOTE:
+                channelId = NOTCHAN_ID_RMBQ;
+                break;
+            case Notice.RMB_LIKE:
+                channelId = NOTCHAN_ID_RMBL;
+                break;
+        }
+
+        NotificationCompat.Builder builder = getBaseBuilder(c, account, channelId)
                 .setContentText(title)
                 .setStyle(getBigTextStyle(title))
                 .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)

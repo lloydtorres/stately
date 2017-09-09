@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.core;
 
 import com.crashlytics.android.Crashlytics;
+import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
 
@@ -33,9 +34,11 @@ public class StatelyApp extends SugarApp {
         super.onCreate();
 
         // analytics
-        if (SettingsActivity.getCrashReportSetting(this))
-        {
+        if (SettingsActivity.getCrashReportSetting(this)) {
             Fabric.with(this, new Crashlytics());
         }
+
+        // notification channels
+        TrixHelper.initNotificationChannels(this);
     }
 }
