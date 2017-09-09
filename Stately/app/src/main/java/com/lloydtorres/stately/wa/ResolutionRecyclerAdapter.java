@@ -45,6 +45,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.DelegateVote;
+import com.lloydtorres.stately.dto.RegionWaVotes;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -71,8 +72,9 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     // Types of cards
     public static final int CARD_HEADER = 0;
     public static final int CARD_CONTENT = 1;
-    public static final int CARD_HISTORY = 2;
-    public static final int CARD_BREAKDOWN = 3;
+    public static final int CARD_REGION_VOTES = 2;
+    public static final int CARD_HISTORY = 3;
+    public static final int CARD_BREAKDOWN = 4;
 
     private ResolutionActivity resolutionActivity;
     private Context context;
@@ -80,17 +82,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private AlertDialog.Builder dialogBuilder;
     private Resolution resolution;
     private String voteStatus;
+    private RegionWaVotes regionVotes;
     private int councilId;
     private int prefixId;
     private boolean isActive;
 
-    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, int cId) {
+    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, RegionWaVotes rv, int cId) {
         resolutionActivity = activity;
         context = resolutionActivity;
         fragmentManager = resolutionActivity.getSupportFragmentManager();
         dialogBuilder = new AlertDialog.Builder(context, RaraHelper.getThemeMaterialDialog(context));
         resolution = res;
         voteStatus = vs;
+        regionVotes = rv;
         councilId = cId;
         prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix : R.string.wa_sc_prefix;
         isActive = voteStatus != null;
@@ -118,6 +122,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 View historyCard = inflater.inflate(R.layout.card_wa_resolution_history, parent, false);
                 viewHolder = new ResolutionHistoryCard(historyCard);
                 break;
+            case CARD_REGION_VOTES:
+                View regionVotesCard = inflater.inflate(R.layout.card_region_wa, parent, false);
+                viewHolder = new RegionVotesCard(regionVotesCard);
+                break;
         }
 
         return viewHolder;
@@ -129,7 +137,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         resCardHolder.init();
     }
 
-    private static final int COUNT_ACTIVE = 4;
+    private static final int COUNT_ACTIVE = 5;
     private static final int COUNT_INACTIVE = 2;
 
     @Override
@@ -137,9 +145,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         return isActive ? COUNT_ACTIVE : COUNT_INACTIVE;
     }
 
-    public void setUpdatedResolutionData(Resolution res, String vs) {
+    public void setUpdatedResolutionData(Resolution res, String vs, RegionWaVotes rv) {
         resolution = res;
         voteStatus = vs;
+        regionVotes = rv;
         notifyDataSetChanged();
     }
 
@@ -605,6 +614,51 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         public void onNothingSelected() {
             voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
             voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
+        }
+    }
+
+    public class RegionVotesCard extends ResolutionCard {
+        private TextView title;
+        private TextView votesFor;
+        private TextView votesAgainst;
+        private LinearLayout rmbLink;
+        private ImageView linkIcon;
+        private TextView linkContent;
+
+        public RegionVotesCard(View v) {
+            super(v);
+            title = (TextView) v.findViewById(R.id.region_wa_title);
+            votesFor = (TextView) v.findViewById(R.id.card_region_votes_for);
+            votesAgainst = (TextView) v.findViewById(R.id.card_region_votes_against);
+            rmbLink = (LinearLayout) v.findViewById(R.id.region_wa_link);
+            linkIcon = (ImageView) v.findViewById(R.id.region_wa_link_icon);
+            linkContent = (TextView) v.findViewById(R.id.region_wa_link_text);
+        }
+
+        @Override
+        public void init() {
+            String titleContent = String.format(Locale.US, context.getString(R.string.wa_region_vote_title), regionVotes.regionName);
+            title.setText(titleContent);
+
+            // Set voting numbers
+            int voteFor = regionVotes.gaVote.voteFor;
+            int voteAgainst = regionVotes.gaVote.voteAgainst;
+            if (councilId == Assembly.SECURITY_COUNCIL) {
+                voteFor = regionVotes.scVote.voteFor;
+                voteAgainst = regionVotes.scVote.voteAgainst;
+            }
+            votesFor.setText(SparkleHelper.getPrettifiedNumber(voteFor));
+            votesAgainst.setText(SparkleHelper.getPrettifiedNumber(voteAgainst));
+
+            // Setup button
+            linkIcon.setImageResource(R.drawable.ic_region_button);
+            linkContent.setText(context.getString(R.string.wa_region_rmb_button));
+            rmbLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SparkleHelper.startRegionRMB(context, regionVotes.regionName);
+                }
+            });
         }
     }
 }

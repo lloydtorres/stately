@@ -654,6 +654,17 @@ public final class SparkleHelper {
     }
 
     /**
+     * Starts the MessageBoardActivity, which opens the specified region's RMB.
+     * @param c App context
+     * @param regionName Target region name
+     */
+    public static void startRegionRMB(Context c, String regionName) {
+        Intent messageBoardActivity = new Intent(c, MessageBoardActivity.class);
+        messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, regionName);
+        c.startActivity(messageBoardActivity);
+    }
+
+    /**
      * Starts the TrendsActivity for the given target and census ID.
      * @param c App context
      * @param target Target ID

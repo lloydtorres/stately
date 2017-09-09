@@ -95,6 +95,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
         <ImageView
+            android:id="@+id/region_wa_link_icon"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginRight="3dp"

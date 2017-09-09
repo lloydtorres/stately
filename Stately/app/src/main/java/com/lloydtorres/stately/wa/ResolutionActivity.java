@@ -32,6 +32,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RefreshviewActivity;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.BaseAssembly;
+import com.lloydtorres.stately.dto.RegionWaVotes;
 import com.lloydtorres.stately.dto.Resolution;
 import com.lloydtorres.stately.dto.UserLogin;
 import com.lloydtorres.stately.dto.WaVoteStatus;
@@ -76,6 +77,7 @@ public class ResolutionActivity extends RefreshviewActivity {
 
     private Resolution mResolution;
     private WaVoteStatus voteStatus;
+    private RegionWaVotes regionVotes;
     private int councilId;
     private int overrideResId = NO_RESOLUTION;
     private boolean isActive = true;
@@ -126,9 +128,9 @@ public class ResolutionActivity extends RefreshviewActivity {
         if (mResolution == null) {
             startQueryResolution();
         }
-        // Otherwise just show it normally
+        // Otherwise query region vote status, which will then show it normally
         else {
-            setRecyclerAdapter();
+            startQueryRegionVotes();
         }
     }
 
@@ -157,10 +159,10 @@ public class ResolutionActivity extends RefreshviewActivity {
         }
 
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats, councilId);
+            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats, regionVotes, councilId);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
-            ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution, voteStats);
+            ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution, voteStats, regionVotes);
         }
 
         mSwipeRefreshLayout.setRefreshing(false);
@@ -173,6 +175,17 @@ public class ResolutionActivity extends RefreshviewActivity {
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
                 queryResolution(councilId);
+            }
+        });
+    }
+
+    private void startQueryRegionVotes() {
+        // hack to get swiperefreshlayout to show
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                queryRegionVotes();
             }
         });
     }
@@ -261,26 +274,76 @@ public class ResolutionActivity extends RefreshviewActivity {
                             resolutionVoteBroadcast.putExtra(TARGET_VOTES_FOR, mResolution.votesFor);
                             resolutionVoteBroadcast.putExtra(TARGET_VOTES_AGAINST, mResolution.votesAgainst);
                             LocalBroadcastManager.getInstance(ResolutionActivity.this).sendBroadcast(resolutionVoteBroadcast);
+
+                            queryRegionVotes();
                         }
                         catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            mSwipeRefreshLayout.setRefreshing(false);
                         }
-
-                        setRecyclerAdapter();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Continue even on error
                 SparkleHelper.logError(error.toString());
-                setRecyclerAdapter();
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
             }
         });
 
         if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
-            // Continue even on error
-            setRecyclerAdapter();
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
+     * Called from queryVoteStatus(). Checks the current nation's region's voting record.
+     */
+    private void queryRegionVotes() {
+        final String regionId = SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(this));
+        String targetURL = String.format(Locale.US, RegionWaVotes.QUERY, regionId);
+
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Persister serializer = new Persister();
+                        try {
+                            regionVotes = serializer.read(RegionWaVotes.class, response);
+                            regionVotes.councilId = councilId;
+                            regionVotes.regionName = SparkleHelper.getNameFromId(regionId);
+                            setRecyclerAdapter();
+                        }
+                        catch (Exception e) {
+                            SparkleHelper.logError(e.toString());
+                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                }
+                else {
+                    SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
         }
     }
 

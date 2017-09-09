@@ -221,10 +221,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             unreadCounter.setVisibility(View.INVISIBLE);
             buttonData.unreadCount = null;
             notifyItemChanged(getAdapterPosition());
-
-            Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
-            messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, buttonData.regionName);
-            context.startActivity(messageBoardActivity);
+            SparkleHelper.startRegionRMB(context, buttonData.regionName);
         }
     }
 

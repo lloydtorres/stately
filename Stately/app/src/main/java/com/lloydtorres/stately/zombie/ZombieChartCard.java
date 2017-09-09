@@ -34,7 +34,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.RaraHelper;
-import com.lloydtorres.stately.region.MessageBoardActivity;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,9 +171,7 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
                 genericButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent messageBoardActivity = new Intent(context, MessageBoardActivity.class);
-                        messageBoardActivity.putExtra(MessageBoardActivity.BOARD_REGION_NAME, target);
-                        context.startActivity(messageBoardActivity);
+                        SparkleHelper.startRegionRMB(context, target);
                     }
                 });
                 break;

@@ -402,6 +402,8 @@
     <string name="wa_post_for">Vote For</string>
     <string name="wa_post_against">Vote Against</string>
     <string name="wa_post_undecided">Withdraw Vote</string>
+    <string name="wa_region_vote_title">Voting Record: %1$s</string>
+    <string name="wa_region_rmb_button">Discuss on RMB</string>
     <string name="wa_delegate_votes_for">Delegate Votes For</string>
     <string name="wa_delegate_votes_against">Delegate Votes Against</string>
     <string name="wa_delegate_votes_for_newline">Delegate Votes\nFor</string>
