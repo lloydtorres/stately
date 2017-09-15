@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Poll;
 import com.lloydtorres.stately.dto.PollOption;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 /**
  * Created by Lloyd on 2016-10-02.
@@ -90,7 +91,7 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public void init(PollOption op) {
             pollOption = op;
-            pollOptionContent.setText(pollOption.text);
+            pollOptionContent.setText(SparkleHelper.getHtmlFormatting(pollOption.text));
             pollOptionContent.setTypeface(null, pollOption.id == pollData.votedOption ? Typeface.BOLD : Typeface.NORMAL);
         }
 
