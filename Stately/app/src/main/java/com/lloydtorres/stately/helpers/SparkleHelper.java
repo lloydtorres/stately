@@ -169,6 +169,9 @@ public final class SparkleHelper {
      * @return Bool if valid or not.
      */
     public static boolean isValidName(String name) {
+        if (name == null) {
+            return false;
+        }
         String normalizedName = normalizeToAscii(name);
         Matcher validator = VALID_NAME_PATTERN.matcher(normalizedName);
         return validator.matches();
