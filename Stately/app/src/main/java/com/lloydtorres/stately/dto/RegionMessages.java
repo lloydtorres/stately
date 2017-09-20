@@ -43,6 +43,8 @@ public class RegionMessages implements Parcelable {
     public static final String LIKE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=%s/postid=%d";
     public static final String RAW_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=display_region_rmb/region=%s/template-overall=none";
     public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=lodgermbpost/region=%s/template-overall=none";
+    public static final String EDIT_QUERY_CHK = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost/postid=%s/template-overall=none";
+    public static final String EDIT_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost/edit=%s/template-overall=none";
     public static final String DELETE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbdelete/region=%s/postid=%d";
     public static final String SUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbsuppress/region=%s/postid=%d";
     public static final String UNSUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbunsuppress/region=%s/postid=%d";

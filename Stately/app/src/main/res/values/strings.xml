@@ -260,6 +260,7 @@
     <string name="bbcode_parse_error">A parsing error was encountered: couldn\'t load content.</string>
     <string name="rmb_message_hint">Post a message…</string>
     <string name="rmb_reply">Replying to %1$s</string>
+    <string name="rmb_edit">Editing post</string>
     <string name="rmb_delete_confirm">Delete this post?</string>
     <string name="rmb_delete">Delete</string>
     <string name="rmb_suppress_confirm">Suppress this post?</string>

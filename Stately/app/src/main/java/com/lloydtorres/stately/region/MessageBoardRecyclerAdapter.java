@@ -60,9 +60,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private Context context;
     private FragmentManager fm;
     private List<Post> messages;
-    private int replyIndex = NO_SELECTION;
+    private int modifierIndex = NO_SELECTION;
     private boolean isPostable = false;
     private boolean isSuppressable = false;
+    private int messageMode = MessageBoardActivity.MODE_NORMAL;
 
     public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean isP, boolean isS, FragmentManager f) {
         context = c;
@@ -91,20 +92,23 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Set which message to reply to
      * @param i Index
      */
-    public void setReplyIndex(int i) {
-        int oldReplyIndex = replyIndex;
-        replyIndex = i;
+    public void setModifierIndex(int i, int mode) {
+        int oldModifierIndex = modifierIndex;
+        modifierIndex = i;
+        int oldMessageMode = messageMode;
+        messageMode = mode;
 
-        if (oldReplyIndex != -1) {
-            notifyItemChanged(oldReplyIndex);
+        if (oldModifierIndex != NO_SELECTION) {
+            notifyItemChanged(oldModifierIndex);
         }
-        if (replyIndex != -1) {
-            notifyItemChanged(replyIndex);
+        if (modifierIndex != NO_SELECTION) {
+            notifyItemChanged(modifierIndex);
         }
 
-        if (replyIndex == oldReplyIndex) {
-            replyIndex = NO_SELECTION;
-            notifyItemChanged(oldReplyIndex);
+        if (modifierIndex == oldModifierIndex && messageMode == oldMessageMode) {
+            modifierIndex = NO_SELECTION;
+            messageMode = MessageBoardActivity.MODE_NORMAL;
+            notifyItemChanged(oldModifierIndex);
         }
     }
 
@@ -112,9 +116,9 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
      * Add an offset to the reply index
      * @param a Offset
      */
-    public void addToReplyIndex(int a) {
-        if (replyIndex != -1) {
-            setReplyIndex(replyIndex + a);
+    public void addToModifierIndex(int a) {
+        if (modifierIndex != -1) {
+            setModifierIndex(modifierIndex + a, messageMode);
         }
     }
 
@@ -140,6 +144,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 messages.get(i).isExpanded = true;
             }
             notifyItemChanged(i);
+        }
+    }
+
+    public void updatePostContent(int id, String message) {
+        for (int i = 0; i < messages.size(); i++) {
+            Post p = messages.get(i);
+            if (p.id == id) {
+                p.messageRaw = message;
+                p.message = SparkleHelper.transformBBCodeToHtml(context, message);
+                notifyItemChanged(i);
+                break;
+            }
         }
     }
 
@@ -207,7 +223,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 Post message = messages.get(position);
                 postCard.init(message);
 
-                if (position == replyIndex) {
+                if (position == modifierIndex) {
                     postCard.select();
                 } else {
                     postCard.deselect();
@@ -261,6 +277,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private ImageView likeButton;
         private TextView likeCount;
         private ImageView suppressButton;
+        private ImageView editButton;
         private ImageView deleteButton;
         private ImageView reportButton;
         private ImageView replyButton;
@@ -287,11 +304,26 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             public void onClick(View v) {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION && post.message != null) {
-                    if (replyIndex == pos) {
-                        ((MessageBoardActivity) context).setReplyMessage(null);
+                    if (modifierIndex == pos && messageMode == MessageBoardActivity.MODE_REPLY) {
+                        ((MessageBoardActivity) context).setModifierMessage(null, MessageBoardActivity.MODE_NORMAL);
                     } else {
-                        ((MessageBoardActivity) context).setReplyMessage(post, pos);
-                        setReplyIndex(pos);
+                        ((MessageBoardActivity) context).setModifierMessage(post, MessageBoardActivity.MODE_REPLY, pos);
+                        setModifierIndex(pos, MessageBoardActivity.MODE_REPLY);
+                    }
+                }
+            }
+        };
+
+        private View.OnClickListener editClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && post.message != null) {
+                    if (modifierIndex == pos && messageMode == MessageBoardActivity.MODE_EDIT) {
+                        ((MessageBoardActivity) context).setModifierMessage(null, MessageBoardActivity.MODE_NORMAL);
+                    } else {
+                        ((MessageBoardActivity) context).setModifierMessage(post, MessageBoardActivity.MODE_EDIT, pos);
+                        setModifierIndex(pos, MessageBoardActivity.MODE_EDIT);
                     }
                 }
             }
@@ -341,6 +373,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             likeButton = (ImageView) v.findViewById(R.id.card_post_like);
             likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
             suppressButton = (ImageView) v.findViewById(R.id.card_post_suppress);
+            editButton = (ImageView) v.findViewById(R.id.card_post_edit);
             deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
             reportButton = (ImageView) v.findViewById(R.id.card_post_report);
             replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
@@ -382,6 +415,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             // Disable buttons for all cases first
             replyButton.setVisibility(View.GONE);
             replyButton.setOnClickListener(null);
+            editButton.setVisibility(View.GONE);
+            editButton.setOnClickListener(null);
             deleteButton.setVisibility(View.GONE);
             deleteButton.setOnClickListener(null);
             reportButton.setVisibility(View.GONE);
@@ -391,10 +426,12 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
             // Setup reply, delete, report, suppress buttons based on user status
 
-            // Only user's own posts can be deleted
+            // Only user's own posts can be deleted and edited
             if (isSelfPost()) {
                 deleteButton.setVisibility(View.VISIBLE);
                 deleteButton.setOnClickListener(deleteClickListener);
+                editButton.setVisibility(View.VISIBLE);
+                editButton.setOnClickListener(editClickListener);
             } else {
                 reportButton.setVisibility(View.VISIBLE);
                 reportButton.setOnClickListener(reportClickListener);
@@ -474,11 +511,22 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             } else {
                 cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentNoir));
             }
-            replyButton.setImageResource(R.drawable.ic_clear);
+
+            editButton.setImageResource(R.drawable.ic_edit_post);
+            replyButton.setImageResource(R.drawable.ic_reply);
+            switch (messageMode) {
+                case MessageBoardActivity.MODE_REPLY:
+                    replyButton.setImageResource(R.drawable.ic_clear);
+                    break;
+                case MessageBoardActivity.MODE_EDIT:
+                    editButton.setImageResource(R.drawable.ic_clear);
+                    break;
+            }
         }
 
         public void deselect() {
             cardContainer.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
+            editButton.setImageResource(R.drawable.ic_edit_post);
             replyButton.setImageResource(R.drawable.ic_reply);
         }
 

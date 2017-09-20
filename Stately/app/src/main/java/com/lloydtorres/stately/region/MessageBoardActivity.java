@@ -96,6 +96,11 @@ public class MessageBoardActivity extends SlidrActivity {
     private static final String CONFIRM_DELETE = "self-deleted by";
     private static final String CONFIRM_SUPPRESS = "suppressed by";
     private static final String CONFIRM_POST = "Your message has been lodged";
+    private static final String CONFIRM_EDIT = "Your message has been edited";
+
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_REPLY = 1;
+    public static final int MODE_EDIT = 2;
 
     private AlertDialog.Builder dialogBuilder;
 
@@ -107,16 +112,19 @@ public class MessageBoardActivity extends SlidrActivity {
     private boolean isPostable = false;
     private boolean isLikeable = false;
     private boolean isSuppressable = false;
-    private Post replyTarget = null;
     private boolean isInProgress;
+
+    private int messageMode = MODE_NORMAL;
+    private Post modifierTarget = null;
 
     private SwipyRefreshLayout mSwipeRefreshLayout;
     private LinearLayout messageResponder;
     private AppCompatEditText messageContainer;
     private ImageView messagePostButton;
     private ImageView.OnClickListener postMessageListener;
-    private RelativeLayout messageReplyContainer;
-    private TextView messageReplyContent;
+    private RelativeLayout messageModifierContainer;
+    private ImageView messageModifierIcon;
+    private TextView messageModifierContent;
     private View view;
 
     private RecyclerView mRecyclerView;
@@ -259,8 +267,9 @@ public class MessageBoardActivity extends SlidrActivity {
         messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
         messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
         messagePostButton.setOnClickListener(postMessageListener);
-        messageReplyContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
-        messageReplyContent = (TextView) findViewById(R.id.responder_reply_content);
+        messageModifierContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
+        messageModifierIcon = (ImageView) findViewById(R.id.responder_reply_icon) ;
+        messageModifierContent = (TextView) findViewById(R.id.responder_reply_content);
         isLikeable = true;
         isPostable = true;
     }
@@ -457,18 +466,37 @@ public class MessageBoardActivity extends SlidrActivity {
      * Used for setting a reply message for the post.
      * @param p
      */
-    public void setReplyMessage(Post p) {
-        replyTarget = p;
-        if (replyTarget != null) {
-            messageReplyContainer.setVisibility(View.VISIBLE);
-            messageReplyContent.setText(String.format(Locale.US, getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name)));
+    public void setModifierMessage(Post p, int mode) {
+        if (messageMode == MODE_EDIT) {
+            messageContainer.setText("");
+        }
+
+        modifierTarget = p;
+        messageMode = mode;
+        if (modifierTarget != null) {
+            messageModifierContainer.setVisibility(View.VISIBLE);
+            String messageModifierAlert = "";
+            switch (messageMode) {
+                case MODE_REPLY:
+                    messageModifierIcon.setImageResource(R.drawable.ic_reply);
+                    messagePostButton.setImageResource(R.drawable.ic_post);
+                    messageModifierAlert = String.format(Locale.US, getString(R.string.rmb_reply), SparkleHelper.getNameFromId(p.name));
+                    break;
+                case MODE_EDIT:
+                    messageModifierIcon.setImageResource(R.drawable.ic_edit_post);
+                    messagePostButton.setImageResource(R.drawable.ic_check_circle);
+                    messageModifierAlert = getString(R.string.rmb_edit);
+                    break;
+            }
+            messageModifierContent.setText(messageModifierAlert);
             messageContainer.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
         }
         else if (mRecyclerAdapter != null) {
-            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setReplyIndex(MessageBoardRecyclerAdapter.NO_SELECTION);
-            messageReplyContainer.setVisibility(View.GONE);
+            ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setModifierIndex(MessageBoardRecyclerAdapter.NO_SELECTION, MODE_NORMAL);
+            messageModifierContainer.setVisibility(View.GONE);
+            messagePostButton.setImageResource(R.drawable.ic_post);
         }
     }
 
@@ -477,8 +505,14 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param p Post
      * @param i Post index
      */
-    public void setReplyMessage(Post p, int i) {
-        setReplyMessage(p);
+    public void setModifierMessage(Post p, int mode, int i) {
+        // Initial setup
+        if (mode == MODE_EDIT) {
+            messageContainer.setText(messages.posts.get(i).messageRaw);
+        }
+
+        // Set mode and modifier
+        setModifierMessage(p, mode);
         mLayoutManager.scrollToPosition(i);
     }
 
@@ -501,6 +535,9 @@ public class MessageBoardActivity extends SlidrActivity {
         startSwipeRefresh();
         messagePostButton.setOnClickListener(null);
         String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
+        if (messageMode == MODE_EDIT && modifierTarget != null) {
+            targetURL = String.format(Locale.US, RegionMessages.EDIT_QUERY_CHK, modifierTarget.id);
+        }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
@@ -546,6 +583,9 @@ public class MessageBoardActivity extends SlidrActivity {
      */
     private void postActualMessage(final String chk) {
         String targetURL = String.format(Locale.US, RegionMessages.POST_QUERY, SparkleHelper.getIdFromName(regionName));
+        if (messageMode == MODE_EDIT && modifierTarget != null) {
+            targetURL = String.format(Locale.US, RegionMessages.EDIT_QUERY, modifierTarget.id);
+        }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
@@ -555,12 +595,20 @@ public class MessageBoardActivity extends SlidrActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                         isInProgress = false;
                         messagePostButton.setOnClickListener(postMessageListener);
-                        if (response.contains(CONFIRM_POST)) {
+                        if ((messageMode == MODE_NORMAL || messageMode == MODE_REPLY) && response.contains(CONFIRM_POST)) {
                             messageContainer.setText("");
-                            setReplyMessage(null);
+                            setModifierMessage(null, MODE_NORMAL);
                             startQueryMessages(SCAN_FORWARD, false);
-                        } else {
+                        } else if (messageMode == MODE_EDIT && response.contains(CONFIRM_EDIT)) {
+                            if (mRecyclerAdapter != null) {
+                                ((MessageBoardRecyclerAdapter) mRecyclerAdapter).updatePostContent(modifierTarget.id, messageContainer.getText().toString());
+                            }
+                            messageContainer.setText("");
+                            setModifierMessage(null, MODE_NORMAL);
+                        }
+                        else {
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            SparkleHelper.logError(response);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -582,13 +630,15 @@ public class MessageBoardActivity extends SlidrActivity {
         Map<String,String> params = new HashMap<String, String>();
         params.put("chk", chk);
         String newMessage = messageContainer.getText().toString();
-        if (replyTarget != null) {
-            String quoteMessage = replyTarget.messageRaw;
-            quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
-            quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
-            quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_2);
-            quoteMessage = String.format(Locale.US, QUOTE_TEMPLATE, replyTarget.name, replyTarget.id, quoteMessage);
-            newMessage = quoteMessage + newMessage;
+        if (modifierTarget != null) {
+            if (messageMode == MODE_REPLY) {
+                String quoteMessage = modifierTarget.messageRaw;
+                quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE);
+                quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_1);
+                quoteMessage = SparkleHelper.regexRemove(quoteMessage, SparkleHelper.BBCODE_QUOTE_2);
+                quoteMessage = String.format(Locale.US, QUOTE_TEMPLATE, modifierTarget.name, modifierTarget.id, quoteMessage);
+                newMessage = quoteMessage + newMessage;
+            }
         }
         params.put("message", newMessage);
         params.put("lodge_message", "1");
@@ -812,7 +862,7 @@ public class MessageBoardActivity extends SlidrActivity {
                     break;
                 case SCAN_BACKWARD:
                     ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(newItems, 40);
-                    ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToReplyIndex(newItems);
+                    ((MessageBoardRecyclerAdapter) mRecyclerAdapter).addToModifierIndex(newItems);
                     break;
             }
         }

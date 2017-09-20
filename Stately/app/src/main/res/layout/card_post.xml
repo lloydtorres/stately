@@ -109,6 +109,20 @@
                 android:layout_toEndOf="@+id/card_post_like"
                 tools:text="123"/>
             <ImageView
+                android:id="@+id/card_post_edit"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_edit_post"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/card_post_delete"
+                android:layout_toStartOf="@+id/card_post_delete"
+                tools:visibility="gone"/>
+            <ImageView
                 android:id="@+id/card_post_delete"
                 android:paddingTop="8dp"
                 android:paddingLeft="8dp"
