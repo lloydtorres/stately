@@ -153,6 +153,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (p.id == id) {
                 p.messageRaw = message;
                 p.message = SparkleHelper.transformBBCodeToHtml(context, message);
+                p.editedTimestamp = System.currentTimeMillis() / 1000L;
                 notifyItemChanged(i);
                 break;
             }
@@ -391,6 +392,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
 
             cardTime.setText(SparkleHelper.getReadableDateFromUTC(context, post.timestamp));
+            if (post.editedTimestamp != 0) {
+                cardTime.append(" ");
+                cardTime.append(context.getString(R.string.rmb_edit_indicator));
+            }
 
             // Show suppresssed holder if post is suppressed
             if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {

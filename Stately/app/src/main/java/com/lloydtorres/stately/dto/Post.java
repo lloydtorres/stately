@@ -43,6 +43,8 @@ public class Post implements Parcelable, Comparable<Post> {
 
     @Element(name="TIMESTAMP", required=false)
     public long timestamp;
+    @Element(name="EDITED", required=false)
+    public long editedTimestamp;
     @Element(name="NATION", required=false)
     public String name;
     @Element(name="MESSAGE", required=false)
@@ -63,6 +65,7 @@ public class Post implements Parcelable, Comparable<Post> {
     protected Post(Parcel in) {
         id = in.readInt();
         timestamp = in.readLong();
+        editedTimestamp = in.readLong();
         name = in.readString();
         message = in.readString();
         messageRaw = in.readString();
@@ -82,6 +85,7 @@ public class Post implements Parcelable, Comparable<Post> {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeLong(timestamp);
+        dest.writeLong(editedTimestamp);
         dest.writeString(name);
         dest.writeString(message);
         dest.writeString(messageRaw);
