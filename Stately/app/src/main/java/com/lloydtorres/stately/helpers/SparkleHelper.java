@@ -906,13 +906,28 @@ public final class SparkleHelper {
     public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
 
+    public static final int BBCODE_PERMISSIONS_GENERAL = 0;
+    public static final int BBCODE_PERMISSIONS_RMB = 1;
+    public static final int BBCODE_PERMISSIONS_REGION = 2;
+
     /**
      * Transform NationStates' BBCode-formatted content into HTML
      * @param c App context
-     * @param content Target content
+     * @param content Raw BBCode content
      * @return HTML-formatted text
      */
     public static String transformBBCodeToHtml(Context c, String content) {
+        return transformBBCodeToHtml(c, content, BBCODE_PERMISSIONS_GENERAL);
+    }
+
+    /**
+     * Transform NationStates' BBCode-formatted content into HTML
+     * @param c App context
+     * @param content Raw BBCode content
+     * @param permissions Level of permissions to transform BBCode
+     * @return HTML-formatted text
+     */
+    public static String transformBBCodeToHtml(Context c, String content, int permissions) {
         if (content == null) {
             return null;
         } else if (content.length() <= 0) {
@@ -960,10 +975,17 @@ public final class SparkleHelper {
         holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
         holder = regexResolutionFormat(holder);
         holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);
-        holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
+
+        if (permissions == BBCODE_PERMISSIONS_REGION) {
+            holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
+        }
+
         holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
-        holder = regexQuoteFormat(holder);
+
+        if (permissions == BBCODE_PERMISSIONS_RMB) {
+            holder = regexQuoteFormat(holder);
+        }
 
         return holder;
     }

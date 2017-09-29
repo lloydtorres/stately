@@ -132,7 +132,7 @@ public class BaseRegion implements Parcelable {
             response.flagURL = response.flagURL.replace("http://", "https://");
         }
         // Convert factbook BBCode to HTML
-        response.factbook = SparkleHelper.transformBBCodeToHtml(c, response.factbook);
+        response.factbook = SparkleHelper.transformBBCodeToHtml(c, response.factbook, SparkleHelper.BBCODE_PERMISSIONS_REGION);
         return response;
     }
 }

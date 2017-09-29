@@ -152,7 +152,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             Post p = messages.get(i);
             if (p.id == id) {
                 p.messageRaw = message;
-                p.message = SparkleHelper.transformBBCodeToHtml(context, message);
+                p.message = SparkleHelper.transformBBCodeToHtml(context, message, SparkleHelper.BBCODE_PERMISSIONS_RMB);
                 p.editedTimestamp = System.currentTimeMillis() / 1000L;
                 notifyItemChanged(i);
                 break;
