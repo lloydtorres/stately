@@ -152,12 +152,13 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
         return -1;
     }
 
-    public static void initWaDelegate(Context c, TextView tv, String delegateId, int delegateVotes) {
+    public static void initWaDelegate(Context c, TextView tv, String delegateId, int delegateVotes, long lastUpdate) {
         if (!"0".equals(delegateId)) {
             String delegateProper = SparkleHelper.getNameFromId(delegateId);
             String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
                     delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
-                    c.getResources().getQuantityString(R.plurals.vote, delegateVotes));
+                    c.getResources().getQuantityString(R.plurals.vote, delegateVotes),
+                    SparkleHelper.getReadableDateFromUTC(c, lastUpdate));
             delegateTemplate = SparkleHelper.addExploreActivityLink(delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
             SparkleHelper.setStyledTextView(c, tv, delegateTemplate);
         }
@@ -197,7 +198,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
         public void init(RegionQuickFactsCardData d) {
             data = d;
-            initWaDelegate(context, delegate, data.waDelegate, data.delegateVotes);
+            initWaDelegate(context, delegate, data.waDelegate, data.delegateVotes, data.lastUpdate);
             initFounder(context, founder, data.founder, data.founded);
             power.setText(data.power);
         }

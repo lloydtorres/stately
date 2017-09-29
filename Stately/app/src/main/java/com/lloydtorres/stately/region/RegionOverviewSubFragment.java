@@ -85,6 +85,7 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
         RegionQuickFactsCardData quickFacts = new RegionQuickFactsCardData();
         quickFacts.waDelegate = mRegion.delegate;
         quickFacts.delegateVotes = mRegion.delegateVotes;
+        quickFacts.lastUpdate = mRegion.lastUpdate;
         quickFacts.founder = mRegion.founder;
         quickFacts.founded = mRegion.founded;
         quickFacts.power = mRegion.power;

@@ -244,7 +244,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 flag.setVisibility(View.GONE);
             }
 
-            RegionOverviewRecyclerAdapter.initWaDelegate(context, waDelegate, regionData.delegate, regionData.delegateVotes);
+            RegionOverviewRecyclerAdapter.initWaDelegate(context, waDelegate, regionData.delegate, regionData.delegateVotes, regionData.lastUpdate);
             RegionOverviewRecyclerAdapter.initFounder(context, founder, regionData.founder, regionData.founded);
 
             if (regionData.factbook != null) {

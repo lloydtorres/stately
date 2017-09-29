@@ -26,6 +26,7 @@ import android.os.Parcelable;
 public class RegionQuickFactsCardData implements Parcelable {
     public String waDelegate;
     public int delegateVotes;
+    public long lastUpdate;
     public String founder;
     public long founded;
     public String power;
@@ -35,6 +36,7 @@ public class RegionQuickFactsCardData implements Parcelable {
     protected RegionQuickFactsCardData(Parcel in) {
         waDelegate = in.readString();
         delegateVotes = in.readInt();
+        lastUpdate = in.readLong();
         founder = in.readString();
         founded = in.readLong();
         power = in.readString();
@@ -49,6 +51,7 @@ public class RegionQuickFactsCardData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(waDelegate);
         dest.writeInt(delegateVotes);
+        dest.writeLong(lastUpdate);
         dest.writeString(founder);
         dest.writeLong(founded);
         dest.writeString(power);

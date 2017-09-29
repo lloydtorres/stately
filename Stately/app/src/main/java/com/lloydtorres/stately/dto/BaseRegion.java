@@ -40,7 +40,7 @@ public class BaseRegion implements Parcelable {
 
     public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
                                                 + "name+flag+numnations"
-                                                + "+delegate+delegatevotes+founder+foundedtime"
+                                                + "+delegate+delegatevotes+founder+foundedtime+lastupdate"
                                                 + "+factbook+tags";
     public static final String QUERY = BASE_QUERY + "&v=" + SparkleHelper.API_VERSION;
 
@@ -55,6 +55,8 @@ public class BaseRegion implements Parcelable {
     public String delegate;
     @Element(name="DELEGATEVOTES")
     public int delegateVotes;
+    @Element(name="LASTUPDATE")
+    public long lastUpdate;
     @Element(name="FOUNDER")
     public String founder;
     @Element(name="FOUNDEDTIME")
@@ -74,6 +76,7 @@ public class BaseRegion implements Parcelable {
         numNations = in.readInt();
         delegate = in.readString();
         delegateVotes = in.readInt();
+        lastUpdate = in.readLong();
         founder = in.readString();
         founded = in.readLong();
         factbook = in.readString();
@@ -97,6 +100,7 @@ public class BaseRegion implements Parcelable {
         dest.writeInt(numNations);
         dest.writeString(delegate);
         dest.writeInt(delegateVotes);
+        dest.writeLong(lastUpdate);
         dest.writeString(founder);
         dest.writeLong(founded);
         dest.writeString(factbook);

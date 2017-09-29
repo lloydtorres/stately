@@ -218,7 +218,7 @@
     <!-- Region overview subfragment -->
     <string name="card_region_quick_facts_title">Quick Facts</string>
     <string name="card_region_wa_delegate">WA Delegate</string>
-    <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
+    <string name="region_delegate_votes">%1$s (%2$s %3$s, tallied %4$s)</string>
     <string name="region_filler_none">None</string>
     <string name="card_region_founder">Founder</string>
     <string name="region_founded_append">(founded %1$s)</string>
