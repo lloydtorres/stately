@@ -18,8 +18,8 @@ android {
         applicationId "com.lloydtorres.stately"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 39
-        versionName "1.9.1"
+        versionCode 40
+        versionName "1.9.2"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -38,13 +38,12 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile('org.simpleframework:simple-xml:2.7.+') {
         exclude module: 'stax'
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true;
     }
     compile 'com.android.support:appcompat-v7:26.1.0'
