@@ -247,7 +247,13 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         }
                         break;
                     case ZSuperweaponProgress.TYPE_HORDE:
-                        superweaponProgress.hordeProgress = progress;
+                        level = e.select(".zsuperweapon_level").first().text();
+                        if (ZSuperweaponProgress.ONE_HUNDRED_PERCENT.equals(progress)) {
+                            superweaponProgress.hordeCurrentLevel = level;
+                        } else {
+                            superweaponProgress.hordeNextLevel = level;
+                            superweaponProgress.hordeNextProgress = progress;
+                        }
                         break;
                 }
             }

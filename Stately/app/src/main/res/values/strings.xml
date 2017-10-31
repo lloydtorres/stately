@@ -473,8 +473,7 @@
     <string name="zombie_superweapon_desc">Superweapons may be deployed against other nations in your region. Superweapons have a 20 second cooldown. Being hit by another nation\'s superweapon triggers a longer cooldown.</string>
     <string name="zombie_superweapon_current">%1$s — Ready to deploy!\n</string>
     <string name="zombie_superweapon_next">%1$s — %2$s Complete\n</string>
-    <string name="zombie_superweapon_horde_current">Ready to unleash!\n</string>
-    <string name="zombie_superweapon_horde_next">%1$s Complete\n</string>
+    <string name="zombie_superweapon_horde_current">%1$s — Ready to unleash!\n</string>
     <string name="zombie_superweapon_tze_title">Tactical Zombie Elimination Squad (TZES)</string>
     <string name="zombie_superweapon_tze_content">Deploying TZESs to other nations will exterminate their undead, rendering them actually dead.</string>
     <string name="zombie_superweapon_cure_title">Cure Missile</string>

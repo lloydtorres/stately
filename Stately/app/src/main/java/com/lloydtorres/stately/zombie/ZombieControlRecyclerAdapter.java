@@ -232,9 +232,10 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 if (progress.isHordeVisible()) {
                     StringBuilder sb = new StringBuilder();
                     if (progress.isHordeReady()) {
-                        sb.append(context.getString(R.string.zombie_superweapon_horde_current));
-                    } else if (progress.isHordeNextVisible()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_horde_next), progress.hordeProgress));
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_horde_current), progress.hordeCurrentLevel));
+                    }
+                    if (progress.isHordeNextVisible()) {
+                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.hordeNextLevel, progress.hordeNextProgress));
                     }
                     sb.append(context.getString(R.string.zombie_superweapon_horde_content));
                     inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_horde_title), sb.toString());

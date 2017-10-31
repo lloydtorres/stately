@@ -42,7 +42,9 @@ public class ZSuperweaponProgress implements Parcelable {
     public String cureNextLevel;
     public String cureNextProgress;
 
-    public String hordeProgress;
+    public String hordeCurrentLevel;
+    public String hordeNextLevel;
+    public String hordeNextProgress;
 
     public ZSuperweaponProgress() { super(); }
 
@@ -71,11 +73,11 @@ public class ZSuperweaponProgress implements Parcelable {
     }
 
     public boolean isHordeReady() {
-        return ONE_HUNDRED_PERCENT.equals(hordeProgress);
+        return hordeCurrentLevel != null;
     }
 
     public boolean isHordeNextVisible() {
-        return hordeProgress != null;
+        return hordeNextProgress != null;
     }
 
     public boolean isHordeVisible() {
@@ -97,7 +99,9 @@ public class ZSuperweaponProgress implements Parcelable {
         cureCurrentLevel = in.readString();
         cureNextLevel = in.readString();
         cureNextProgress = in.readString();
-        hordeProgress = in.readString();
+        hordeCurrentLevel = in.readString();
+        hordeNextLevel = in.readString();
+        hordeNextProgress = in.readString();
     }
 
     @Override
@@ -113,7 +117,9 @@ public class ZSuperweaponProgress implements Parcelable {
         dest.writeString(cureCurrentLevel);
         dest.writeString(cureNextLevel);
         dest.writeString(cureNextProgress);
-        dest.writeString(hordeProgress);
+        dest.writeString(hordeCurrentLevel);
+        dest.writeString(hordeNextLevel);
+        dest.writeString(hordeNextProgress);
     }
 
     @SuppressWarnings("unused")
