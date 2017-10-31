@@ -136,6 +136,10 @@
         <item>Foreign Aid##Clooney Contribution Index##e3</item>
         <item>Black Market##Standard Monetary Units##u2</item>
         <item>Residency##Days##l14</item>
+        <item>Z-Day: Survivors##Capita##m8</item>
+        <item>Z-Day: Zombies##Capita##x5</item>
+        <item>Z-Day: Dead##Capita##l26</item>
+        <item>Z-Day: Zombification##Romero-Brooks Index##x5</item>
         <item>Unknown##Mystery Units##d4</item>
     </string-array>
     <string-array name="postcards">

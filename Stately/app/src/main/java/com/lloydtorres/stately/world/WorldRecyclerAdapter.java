@@ -41,6 +41,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.region.RegionOverviewRecyclerAdapter;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -69,6 +70,11 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         context = c;
         fragmentManager = fm;
         WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+
+        if (!NightmareHelper.getIsZDayActive(context)) {
+            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
+        }
+
         setContent(w, fr);
     }
 

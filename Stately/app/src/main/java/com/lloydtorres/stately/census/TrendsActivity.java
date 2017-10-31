@@ -41,6 +41,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -75,6 +76,9 @@ public class TrendsActivity extends SlidrActivity {
     public static final int CENSUS_AVERAGE_INCOME = 72;
     public static final int CENSUS_ECONOMIC_OUTPUT = 76;
     public static final int CENSUS_CRIME = 77;
+    public static final int CENSUS_ZDAY_SURVIVORS = 81;
+    public static final int CENSUS_ZDAY_ZOMBIES = 82;
+    public static final int CENSUS_ZDAY_ZOMBIFICATION = 84;
 
     private String target;
     private int id;
@@ -95,12 +99,19 @@ public class TrendsActivity extends SlidrActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trends);
 
-        WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
-
         if (getIntent() != null) {
             target = getIntent().getStringExtra(TREND_DATA_TARGET);
             id = getIntent().getIntExtra(TREND_DATA_ID, 0);
             mode = getIntent().getIntExtra(TREND_DATA_MODE, TREND_NATION);
+        }
+
+        // Setup list of census datasets
+        WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+        // Only show Z-Day related datasets if it's actually Z-Day
+        // and we're showing regional or world rankings
+        if (!(NightmareHelper.getIsZDayActive(this) &&
+           (mode == TREND_REGION || mode == TREND_WORLD))) {
+            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
@@ -147,16 +158,14 @@ public class TrendsActivity extends SlidrActivity {
      * Convenience function to change toolbar title.
      * @param t New title
      */
-    private void setToolbarTitle(String t)
-    {
+    private void setToolbarTitle(String t) {
         getSupportActionBar().setTitle(t);
     }
 
     /**
      * Convenience class to show refresh animation on dataset query.
      */
-    private void startQueryDataset()
-    {
+    private void startQueryDataset() {
         mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
         mSwipeRefreshLayout.post(new Runnable() {
@@ -172,8 +181,7 @@ public class TrendsActivity extends SlidrActivity {
      * Public function for DatasetDialog; allows it to scan for a new dataset.
      * @param i Census ID
      */
-    public void queryNewDataset(int i)
-    {
+    public void queryNewDataset(int i) {
         id = i;
         startQueryDataset();
     }
@@ -182,8 +190,7 @@ public class TrendsActivity extends SlidrActivity {
      * Queries NS for the history of a given dataset.
      * Gets data from 60 days ago up to the present.
      */
-    private void queryDataset()
-    {
+    private void queryDataset() {
         start = 1;
 
         String targetURL = "";
@@ -263,14 +270,13 @@ public class TrendsActivity extends SlidrActivity {
      * Sets the given dataset as the global dataset and then displays the data to the user.
      * @param data
      */
-    private void processDataset(CensusHistory data)
-    {
+    private void processDataset(CensusHistory data) {
         dataset = data;
         updateStartCounter(dataset.ranks);
 
         String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, id);
 
-        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, censusType[0], censusType[1], dataset);
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, id, censusType[0], censusType[1], dataset);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         stopRefreshing();
     }

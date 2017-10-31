@@ -30,6 +30,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +74,10 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         target = t;
         mode = m;
+
+        if (!(NightmareHelper.getIsZDayActive(context) && mode == CensusSortDialog.CENSUS_MODE_REGION)) {
+            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
+        }
 
         float dpScale = context.getResources().getDisplayMetrics().density;
         TWO_DP_IN_PIXELS = (int) (2*dpScale + 0.5f);

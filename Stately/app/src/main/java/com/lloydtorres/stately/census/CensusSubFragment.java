@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,9 @@ public class CensusSubFragment extends RecyclerSubFragment {
 
     public void setTarget(String t) { target = t; }
 
-    public void setCensusData(ArrayList<CensusDetailedRank> c) { censusData = c; }
+    public void setCensusData(ArrayList<CensusDetailedRank> c) {
+        censusData = c;
+    }
 
     public void setMode(int mode) { censusMode = mode; }
 
@@ -58,6 +61,11 @@ public class CensusSubFragment extends RecyclerSubFragment {
         }
 
         if (censusData != null) {
+            // Get rid of Z-Day data if needed
+            if (!(NightmareHelper.getIsZDayActive(getContext()) && censusMode == CensusSortDialog.CENSUS_MODE_REGION)) {
+                censusData = new ArrayList<CensusDetailedRank>(NightmareHelper.trimZDayCensusData(censusData));
+            }
+
             if (mRecyclerAdapter == null) {
                 mRecyclerAdapter = new CensusRecyclerAdapter(this, censusData, target, censusMode);
             } else {

@@ -56,8 +56,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.helpers.RaraHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lloyd on 2016-10-16.
@@ -119,5 +124,35 @@ public final class NightmareHelper {
             }
         }
         return RaraHelper.getBannerURL(zombieHeader);
+    }
+
+    /**
+     * Helper used to get rid of Z-Day related datasets from the raw list of census datasets.
+     * @param censusDatasetArray Raw census datasets
+     * @return Census datasets without Z-Day datasets
+     */
+    public static String[] trimZDayCensusDatasets(String[] censusDatasetArray) {
+        List<String> worldCensusItems = new ArrayList<String>();
+        for (int i = 0; i < censusDatasetArray.length; i++) {
+            if (i < TrendsActivity.CENSUS_ZDAY_SURVIVORS || i > TrendsActivity.CENSUS_ZDAY_ZOMBIFICATION) {
+                worldCensusItems.add(censusDatasetArray[i]);
+            }
+        }
+        return worldCensusItems.toArray(new String[worldCensusItems.size()]);
+    }
+
+    /**
+     * Helper used to get rid of Z-Day related data from census rankings.
+     * @param censusData Raw census rankings
+     * @return Census rankings without Z-Day data
+     */
+    public static List<CensusDetailedRank> trimZDayCensusData(List<CensusDetailedRank> censusData) {
+        List<CensusDetailedRank> trimmedData = new ArrayList<CensusDetailedRank>();
+        for (CensusDetailedRank rankData : censusData) {
+            if (rankData.id < TrendsActivity.CENSUS_ZDAY_SURVIVORS || rankData.id > TrendsActivity.CENSUS_ZDAY_ZOMBIFICATION) {
+                trimmedData.add(rankData);
+            }
+        }
+        return trimmedData;
     }
 }

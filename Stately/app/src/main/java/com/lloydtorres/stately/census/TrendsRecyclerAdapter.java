@@ -82,12 +82,15 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public TrendsRecyclerAdapter(Context c, int mode, String title, String unit, CensusHistory censusData) {
+    public TrendsRecyclerAdapter(Context c, int mode, int censusId, String title, String unit, CensusHistory censusData) {
         context = c;
 
         trendItems = new ArrayList<Object>();
         trendItems.add(new TrendsHeader(title, unit));
-        trendItems.add(censusData.scale);
+        // Don't show graph for Z-Day datasets
+        if (censusId < TrendsActivity.CENSUS_ZDAY_SURVIVORS || censusId > TrendsActivity.CENSUS_ZDAY_ZOMBIFICATION) {
+            trendItems.add(censusData.scale);
+        }
         if (censusData.ranks != null) {
             trendItems.add(new TrendsRankTitle(mode, title));
             trendItems.addAll(censusData.ranks.ranks);

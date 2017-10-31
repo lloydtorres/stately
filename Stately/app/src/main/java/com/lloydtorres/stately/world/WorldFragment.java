@@ -38,6 +38,7 @@ import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 import com.lloydtorres.stately.helpers.network.NSStringRequest;
+import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import org.simpleframework.xml.core.Persister;
 
@@ -109,6 +110,12 @@ public class WorldFragment extends RefreshviewFragment {
                         Persister serializer = new Persister();
                         try {
                             worldData = serializer.read(World.class, response);
+
+                            // Get rid of Z-Day data if needed
+                            if (!NightmareHelper.getIsZDayActive(getContext())) {
+                                worldData.census = NightmareHelper.trimZDayCensusData(worldData.census);
+                            }
+
                             queryFeaturedRegionData(worldData.featuredRegion);
                         }
                         catch (Exception e) {
