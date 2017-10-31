@@ -30,16 +30,22 @@ public class TrendsOnClickListener implements View.OnClickListener {
     private Context context;
     private String nationId;
     private int id;
+    private int mode;
 
-    public TrendsOnClickListener(Context c, String n, int i)
-    {
+    public TrendsOnClickListener(Context c, String n, int i) {
         context = c;
         nationId = n;
         id = i;
+        mode = TrendsActivity.TREND_NATION;
+    }
+
+    public TrendsOnClickListener(Context c, String n, int i, int m) {
+        this(c, n, i);
+        mode = m;
     }
 
     @Override
     public void onClick(View v) {
-        SparkleHelper.startTrends(context, nationId, TrendsActivity.TREND_NATION, id);
+        SparkleHelper.startTrends(context, nationId, mode, id);
     }
 }

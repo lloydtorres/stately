@@ -28,12 +28,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.census.TrendsActivity;
+import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.ZSuperweaponProgress;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.dto.ZombieControlData;
 import com.lloydtorres.stately.dto.ZombieRegion;
-import com.lloydtorres.stately.explore.ExploreDialog;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import java.util.Locale;
@@ -146,7 +148,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         private View divider;
         private LinearLayout button;
         private TextView buttonText;
-        private LinearLayout exploreButton;
+        private LinearLayout trendsButton;
+        private TextView trendsText;
 
         public ZombieActionCard(View itemView) {
             super(itemView);
@@ -160,7 +163,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             divider = itemView.findViewById(R.id.view_divider);
             button = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_button);
             buttonText = (TextView) itemView.findViewById(R.id.card_zombie_action_button_text);
-            exploreButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
+            trendsButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
+            trendsText = (TextView) itemView.findViewById(R.id.card_zombie_trends_list);
         }
 
         public void init(final ZombieControlData data, final ZSuperweaponProgress progress) {
@@ -267,17 +271,23 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             }
 
             if (progress != null && progress.isAnySuperweaponReady()) {
-                exploreButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ExploreDialog exploreDialog = new ExploreDialog();
-                        exploreDialog.show(fm, ExploreDialog.DIALOG_TAG);
-                    }
-                });
-                exploreButton.setVisibility(View.VISIBLE);
+                int censusTarget = TrendsActivity.CENSUS_ZDAY_ZOMBIES;
+                switch (data.zombieData.action) {
+                    case Zombie.ZACTION_MILITARY:
+                    case Zombie.ZACTION_CURE:
+                        censusTarget = TrendsActivity.CENSUS_ZDAY_ZOMBIES;
+                        trendsText.setText(context.getString(R.string.zombie_button_zombie_list));
+                        break;
+                    case Zombie.ZACTION_ZOMBIE:
+                        censusTarget = TrendsActivity.CENSUS_ZDAY_SURVIVORS;
+                        trendsText.setText(context.getString(R.string.zombie_button_survivor_list));
+                        break;
+                }
+                trendsButton.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(regionData.name), censusTarget, TrendsActivity.TREND_REGION));
+                trendsButton.setVisibility(View.VISIBLE);
             } else {
-                exploreButton.setOnClickListener(null);
-                exploreButton.setVisibility(View.GONE);
+                trendsButton.setOnClickListener(null);
+                trendsButton.setVisibility(View.GONE);
             }
 
             divider.setVisibility((isActionButtonVisible || isExploreButtonVisible) ? View.VISIBLE : View.GONE);

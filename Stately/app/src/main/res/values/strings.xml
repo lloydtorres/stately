@@ -482,7 +482,8 @@
     <string name="zombie_superweapon_horde_content">Unleashing the zombie horde to other nations will consume their survivors into the undead.</string>
     <string name="zombie_button_noaction">Take action</string>
     <string name="zombie_button_change">Change course</string>
-    <string name="zombie_button_weapon">Explore and deploy superweapon</string>
+    <string name="zombie_button_zombie_list">Targets with the most zombies</string>
+    <string name="zombie_button_survivor_list">Targets with the most survivors</string>
     <string name="zombie_button_missile">Deploy superweapon</string>
     <string name="zombie_action_military">Exterminate zombies</string>
     <string name="zombie_action_cure">Develop a cure</string>
