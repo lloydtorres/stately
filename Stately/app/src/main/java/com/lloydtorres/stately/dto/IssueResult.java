@@ -45,6 +45,10 @@ public class IssueResult implements Parcelable {
 
     @ElementList(name="RECLASSIFICATIONS", required=false)
     public List<Reclassification> reclassifications;
+    @ElementList(name="NEW_POLICIES", required=false)
+    public List<Policy> enactedPolicies;
+    @ElementList(name="REMOVED_POLICIES", required=false)
+    public List<Policy> abolishedPolicies;
     @ElementList(name="RANKINGS", required=false)
     public List<CensusDelta> rankings;
     @ElementList(name="HEADLINES", required=false)
@@ -68,6 +72,18 @@ public class IssueResult implements Parcelable {
             in.readList(reclassifications, Reclassification.class.getClassLoader());
         } else {
             reclassifications = null;
+        }
+        if (in.readByte() == 0x01) {
+            enactedPolicies = new ArrayList<Policy>();
+            in.readList(enactedPolicies, Policy.class.getClassLoader());
+        } else {
+            enactedPolicies = null;
+        }
+        if (in.readByte() == 0x01) {
+            abolishedPolicies = new ArrayList<Policy>();
+            in.readList(abolishedPolicies, Policy.class.getClassLoader());
+        } else {
+            abolishedPolicies = null;
         }
         if (in.readByte() == 0x01) {
             rankings = new ArrayList<CensusDelta>();
@@ -113,6 +129,18 @@ public class IssueResult implements Parcelable {
         } else {
             dest.writeByte((byte) (0x01));
             dest.writeList(reclassifications);
+        }
+        if (enactedPolicies == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(enactedPolicies);
+        }
+        if (abolishedPolicies == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(abolishedPolicies);
         }
         if (rankings == null) {
             dest.writeByte((byte) (0x00));

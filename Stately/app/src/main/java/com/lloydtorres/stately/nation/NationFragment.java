@@ -58,16 +58,18 @@ public class NationFragment extends DetachFragment {
 
     // Constants used to determine view pager index.
     private static final int OVERVIEW_TAB = 0;
-    private static final int PEOPLE_TAB = 1;
-    private static final int GOV_TAB = 2;
-    private static final int ECONOMY_TAB = 3;
-    private static final int RANKINGS_TAB = 4;
-    private static final int HAPPEN_TAB = 5;
+    private static final int POLICY_TAB = 1;
+    private static final int PEOPLE_TAB = 2;
+    private static final int GOV_TAB = 3;
+    private static final int ECONOMY_TAB = 4;
+    private static final int RANKINGS_TAB = 5;
+    private static final int HAPPEN_TAB = 6;
 
     private Nation mNation;
 
     // sub fragments
     private OverviewSubFragment overviewSubFragment;
+    private PolicySubFragment policySubFragment;
     private PeopleSubFragment peopleSubFragment;
     private GovernmentSubFragment governmentSubFragment;
     private EconomySubFragment economySubFragment;
@@ -217,6 +219,9 @@ public class NationFragment extends DetachFragment {
         overviewSubFragment = new OverviewSubFragment();
         overviewSubFragment.setNation(mNation);
 
+        policySubFragment = new PolicySubFragment();
+        policySubFragment.setNation(mNation);
+
         peopleSubFragment = new PeopleSubFragment();
         peopleSubFragment.setNation(mNation);
 
@@ -273,6 +278,8 @@ public class NationFragment extends DetachFragment {
             switch(position) {
                 case OVERVIEW_TAB:
                     return overviewSubFragment;
+                case POLICY_TAB:
+                    return policySubFragment;
                 case PEOPLE_TAB:
                     return peopleSubFragment;
                 case GOV_TAB:

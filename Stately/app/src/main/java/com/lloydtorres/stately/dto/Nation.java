@@ -45,6 +45,7 @@ public class Nation implements Parcelable {
                                                 + "+customleader+customcapital+govtpriority+tax"
                                                 + "+currency+gdp+income+majorindustry"
                                                 + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
+                                                + "+policies"
                                                 + "+census+wcensus"
                                                 + "+gavote+scvote+endorsements"
                                                 + "+notable+sensibilities+crime+deaths"
@@ -125,6 +126,9 @@ public class Nation implements Parcelable {
     @Element(name="ANIMALTRAIT", required=false)
     public String animalTrait;
 
+    @ElementList(name="POLICIES", required=false)
+    public List<Policy> policies;
+
     @ElementList(name="CENSUS")
     public List<CensusDetailedRank> census;
     @Element(name="WCENSUS", required=false)
@@ -203,6 +207,12 @@ public class Nation implements Parcelable {
         animal = in.readString();
         animalTrait = in.readString();
         if (in.readByte() == 0x01) {
+            policies = new ArrayList<Policy>();
+            in.readList(policies, Policy.class.getClassLoader());
+        } else {
+            policies = null;
+        }
+        if (in.readByte() == 0x01) {
             census = new ArrayList<CensusDetailedRank>();
             in.readList(census, CensusDetailedRank.class.getClassLoader());
         } else {
@@ -276,6 +286,12 @@ public class Nation implements Parcelable {
         dest.writeString(religion);
         dest.writeString(animal);
         dest.writeString(animalTrait);
+        if (policies == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(policies);
+        }
         if (census == null) {
             dest.writeByte((byte) (0x00));
         } else {

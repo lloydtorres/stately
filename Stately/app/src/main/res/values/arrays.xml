@@ -2,6 +2,7 @@
 <resources>
     <string-array name="nation_tabs">
         <item>Overview</item>
+        <item>Policies</item>
         <item>People</item>
         <item>Government</item>
         <item>Economy</item>

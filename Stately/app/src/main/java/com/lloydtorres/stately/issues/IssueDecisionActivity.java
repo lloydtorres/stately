@@ -37,6 +37,7 @@ import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResultContainer;
 import com.lloydtorres.stately.dto.IssueResultHeadlinesContainer;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Policy;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
@@ -330,6 +331,18 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                 if (h != null) {
                     issueResult.results.niceHeadlines.headlines.add(h);
                 }
+            }
+        }
+
+        if (issueResult.results.enactedPolicies != null && !issueResult.results.enactedPolicies.isEmpty()) {
+            for (Policy p : issueResult.results.enactedPolicies) {
+                p.renderType = Policy.VIEW_ENACTED;
+            }
+        }
+
+        if (issueResult.results.abolishedPolicies != null && !issueResult.results.abolishedPolicies.isEmpty()) {
+            for (Policy p : issueResult.results.abolishedPolicies) {
+                p.renderType = Policy.VIEW_ABOLISHED;
             }
         }
 

@@ -153,6 +153,10 @@
     <!-- Nation subfragment cards -->
     <string name="card_main_title_summary">Summary</string>
 
+    <!-- Nation policy subfragment -->
+    <string name="card_policy_enacted">Policy Enacted</string>
+    <string name="card_policy_abolished">Policy Abolished</string>
+
     <!-- Nation people subfragment -->
     <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string>
     <string name="card_people_mortality_title">Mortality</string>

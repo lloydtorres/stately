@@ -35,6 +35,7 @@ import com.lloydtorres.stately.dto.IssueResult;
 import com.lloydtorres.stately.dto.IssueResultContainer;
 import com.lloydtorres.stately.dto.IssueResultHeadlinesContainer;
 import com.lloydtorres.stately.dto.Nation;
+import com.lloydtorres.stately.dto.Policy;
 import com.lloydtorres.stately.dto.Reclassification;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -63,6 +64,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int HEADLINE_CARD = 1;
     private static final int POSTCARD_CARD = 2;
     private static final int CENSUSDELTA_CARD = 3;
+    private static final int POLICY_CARD = 4;
 
     private static final String PERCENT_TEMPLATE = "%s%%";
 
@@ -89,13 +91,19 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public void setContent(IssueResultContainer con, Nation n) {
         content = new ArrayList<Object>();
         content.add(con.results);
-        if (con.results.nicePostcards != null && con.results.nicePostcards.size() > 0) {
+        if (con.results.enactedPolicies != null && !con.results.enactedPolicies.isEmpty()) {
+            content.addAll(con.results.enactedPolicies);
+        }
+        if (con.results.abolishedPolicies != null && !con.results.abolishedPolicies.isEmpty()) {
+            content.addAll(con.results.abolishedPolicies);
+        }
+        if (con.results.nicePostcards != null && !con.results.nicePostcards.isEmpty()) {
             content.addAll(con.results.nicePostcards);
         }
-        if (con.results.niceHeadlines != null && con.results.niceHeadlines.headlines.size() > 0) {
+        if (con.results.niceHeadlines != null && !con.results.niceHeadlines.headlines.isEmpty()) {
             content.add(con.results.niceHeadlines);
         }
-        if (con.results.rankings != null && con.results.rankings.size() > 0) {
+        if (con.results.rankings != null && !con.results.rankings.isEmpty()) {
             content.addAll(con.results.rankings);
         }
         mNation = n;
@@ -120,6 +128,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 View censusDeltaCard = inflater.inflate(R.layout.card_census_delta, parent, false);
                 viewHolder = new CensusDeltaCard(censusDeltaCard);
                 break;
+            case POLICY_CARD:
+                View policyCard = inflater.inflate(R.layout.card_policy, parent, false);
+                viewHolder = new PolicyCard(context, policyCard);
+                break;
             default:
                 View headlineCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
                 viewHolder = new HeadlinesCard(headlineCard);
@@ -142,6 +154,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             case CENSUSDELTA_CARD:
                 CensusDeltaCard censusDeltaCard = (CensusDeltaCard) holder;
                 censusDeltaCard.init((CensusDelta) content.get(position));
+                break;
+            case POLICY_CARD:
+                PolicyCard policyCard = (PolicyCard) holder;
+                policyCard.init((Policy) content.get(position));
                 break;
             default:
                 HeadlinesCard headlinesCard = (HeadlinesCard) holder;
@@ -168,6 +184,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
         else if (content.get(position) instanceof CensusDelta) {
             return CENSUSDELTA_CARD;
+        } else if (content.get(position) instanceof  Policy) {
+            return POLICY_CARD;
         }
         return -1;
     }

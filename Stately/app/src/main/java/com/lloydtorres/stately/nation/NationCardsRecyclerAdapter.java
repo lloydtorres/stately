@@ -39,21 +39,25 @@ import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.DataPair;
+import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.GovBudget;
 import com.lloydtorres.stately.dto.MortalityCause;
 import com.lloydtorres.stately.dto.NationChartCardData;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
 import com.lloydtorres.stately.dto.NationOverviewCardData;
+import com.lloydtorres.stately.dto.Policy;
 import com.lloydtorres.stately.dto.Sectors;
 import com.lloydtorres.stately.dto.WaBadge;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.feed.HappeningCard;
 import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
+import com.lloydtorres.stately.issues.PolicyCard;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
@@ -79,6 +83,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int CARD_CHART = 3;
     private static final int CARD_ZOMBIE = 4;
     private static final int CARD_WA_BADGE = 5;
+    private static final int CARD_POLICY = 6;
+    private static final int CARD_EMPTY = 7;
 
     private String[] WORLD_CENSUS_ITEMS;
 
@@ -140,6 +146,14 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 View waBadgeCard = inflater.inflate(R.layout.card_wa_badge, parent, false);
                 viewHolder = new WaBadgeCard(context, waBadgeCard);
                 break;
+            case CARD_POLICY:
+                View policyCard = inflater.inflate(R.layout.card_policy, parent, false);
+                viewHolder = new PolicyCard(context, policyCard);
+                break;
+            case CARD_EMPTY:
+                View emptyCard = inflater.inflate(R.layout.card_happening, parent, false);
+                viewHolder = new HappeningCard(context, emptyCard);
+                break;
         }
 
         return viewHolder;
@@ -179,6 +193,14 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 WaBadgeCard bc = (WaBadgeCard) holder;
                 bc.init((WaBadge) cards.get(position));
                 break;
+            case CARD_POLICY:
+                PolicyCard pc = (PolicyCard) holder;
+                pc.init((Policy) cards.get(position));
+                break;
+            case CARD_EMPTY:
+                HappeningCard hc = (HappeningCard) holder;
+                hc.init((Event) cards.get(position));
+                break;
         }
     }
 
@@ -206,6 +228,12 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         else if (cards.get(position) instanceof WaBadge) {
             return CARD_WA_BADGE;
+        }
+        else if (cards.get(position) instanceof Policy) {
+            return CARD_POLICY;
+        }
+        else if (cards.get(position) instanceof Event) {
+            return CARD_EMPTY;
         }
         return -1;
     }
