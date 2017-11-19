@@ -232,6 +232,10 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         // If the textbox exists in the page, it means that the user has posting rights
                         if (!isPostable && d.select("textarea[name=message]").first() != null) {
@@ -336,6 +340,10 @@ public class MessageBoardActivity extends SlidrActivity {
                     RegionMessages messageResponse = null;
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Persister serializer = new Persister();
                         try {
                             messageResponse = RegionMessages.parseRegionMessagesXML(MessageBoardActivity.this, serializer, response);
@@ -358,6 +366,11 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
@@ -467,7 +480,7 @@ public class MessageBoardActivity extends SlidrActivity {
      * @param p
      */
     public void setModifierMessage(Post p, int mode) {
-        if (messageMode == MODE_EDIT) {
+        if (messageContainer != null && messageMode == MODE_EDIT) {
             messageContainer.setText("");
         }
 
@@ -489,9 +502,11 @@ public class MessageBoardActivity extends SlidrActivity {
                     break;
             }
             messageModifierContent.setText(messageModifierAlert);
-            messageContainer.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
+            if (messageContainer != null) {
+                messageContainer.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(messageContainer, InputMethodManager.SHOW_IMPLICIT);
+            }
         }
         else if (mRecyclerAdapter != null) {
             ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setModifierIndex(MessageBoardRecyclerAdapter.NO_SELECTION, MODE_NORMAL);
@@ -507,7 +522,7 @@ public class MessageBoardActivity extends SlidrActivity {
      */
     public void setModifierMessage(Post p, int mode, int i) {
         // Initial setup
-        if (mode == MODE_EDIT) {
+        if (messageContainer != null && mode == MODE_EDIT) {
             messageContainer.setText(messages.posts.get(i).messageRaw);
         }
 
@@ -543,6 +558,10 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
                         Element input = d.select("input[name=chk]").first();
 
@@ -559,6 +578,11 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
@@ -591,6 +615,10 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         // Stop loading actions but only clear if post was successful.
                         mSwipeRefreshLayout.setRefreshing(false);
                         isInProgress = false;
@@ -615,6 +643,11 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 isInProgress = false;
                 messagePostButton.setOnClickListener(postMessageListener);
@@ -685,13 +718,17 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 // Undo action on error
                 ((MessageBoardRecyclerAdapter) mRecyclerAdapter).setLikeStatus(pos, !sendLike);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
-                else
-                {
+                else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
@@ -741,6 +778,10 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (!response.contains(CONFIRM_DELETE)) {
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
@@ -812,6 +853,10 @@ public class MessageBoardActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (postStatus != Post.POST_SUPPRESSED && !response.contains(CONFIRM_SUPPRESS)) {
                             SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
@@ -823,6 +868,11 @@ public class MessageBoardActivity extends SlidrActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
