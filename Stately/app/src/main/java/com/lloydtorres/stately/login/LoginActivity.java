@@ -297,6 +297,11 @@ public class LoginActivity extends BroadcastableActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 setLockedState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));

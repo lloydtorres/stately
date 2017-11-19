@@ -306,6 +306,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 // Keep going even if there's an error
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 queryHelper(name);
             }
         });
@@ -390,6 +395,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     setExploreStatusError(getString(R.string.login_error_no_internet));
                 }
@@ -446,6 +456,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     setExploreStatusError(getString(R.string.login_error_no_internet));
                 }
@@ -553,6 +568,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 }
@@ -627,6 +647,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 pd.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
@@ -722,6 +747,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 dossierProgress.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
@@ -854,6 +884,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 pd.dismiss();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
@@ -941,6 +976,11 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 // Keep going even if there's an error
                 SparkleHelper.logError(error.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
                 initFragment(nationResponse);
             }
         });
@@ -999,7 +1039,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             return;
                         }
 
-                        zombieCard.setIsLoading(false);
+                        if (zombieCard != null) {
+                            zombieCard.setIsLoading(false);
+                        }
                         processZSuperweaponResponse(response);
                     }
                 }, new Response.ErrorListener() {
@@ -1007,7 +1049,14 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             public void onErrorResponse(VolleyError error) {
                 SparkleHelper.logError(error.toString());
                 isInProgress = false;
-                zombieCard.setIsLoading(false);
+
+                if (isFinishing()) {
+                    return;
+                }
+
+                if (zombieCard != null) {
+                    zombieCard.setIsLoading(false);
+                }
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
                 } else {
