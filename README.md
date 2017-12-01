@@ -7,15 +7,15 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 ### Features
 
-* Browse your nation's data: stats, people, government, economy, rankings and happenings.
+* Get your nation's stats, policies, rankings and happenings.
 * Respond to issues encountered by your nation.
-* Discover trends in national, regional and world census statistics.
 * Login and switch between different nations.
-* Read, organize, write and reply to telegrams.
-* Browse through regional factbooks and communities.
-* Read, quote, post and do more in RMBs.
+* Browse through and move to different regional communities.
+* Chat with other players and more in RMBs.
 * Observe and vote on current World Assembly resolutions.
-* Explore, endorse nations and move to different regions in NationStates.
+* Endorse nations and participate in R/D gameplay.
+* Read, manage, write and reply to telegrams.
+* Discover trends in national, regional and world census statistics.
 * Compile all your happenings together with the Activity Feed.
 * Get notified and stay up to date on new issues, telegrams and other events.
 * Make it your own: choose between five different themes and more.
@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.10.0** - New logo, nation policies support.
 * **1.9.3** - Z-Day improvements.
 * **1.9.2** - Edit RMB posts, regional voting data in resolutions, Android Oreo support, bug fixes and improvements.
 * **1.9.1** - Bug fix for aggressive notification service for Lollipop and above.
@@ -106,7 +107,6 @@ Stately also uses the following proprietary libraries:
 
 Stately uses Creative Commons-licensed content from the following sources:
 
-* [Android Material Icon Generator (CC BY-NC 3.0)](https://android-material-icon-generator.bitdroid.de/)
 * [Medical Icons Pack (CC BY 3.0)](http://www.flaticon.com/packs/medical-icons)
 
 ### License
