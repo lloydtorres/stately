@@ -246,6 +246,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
          * @param target
          */
         private void setTargetView(TextView t, String category, String target, int repealTarget) {
+            if (target == null) {
+                t.setText(category);
+            }
+
             String[] pair = target.split(":");
 
             if (pair.length <= 1) {
