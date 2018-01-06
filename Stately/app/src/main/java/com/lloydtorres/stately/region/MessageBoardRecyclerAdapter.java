@@ -435,8 +435,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (isSelfPost()) {
                 deleteButton.setVisibility(View.VISIBLE);
                 deleteButton.setOnClickListener(deleteClickListener);
-                editButton.setVisibility(View.VISIBLE);
-                editButton.setOnClickListener(editClickListener);
+                // Only show edit buttons if user can post in board
+                if (isPostable) {
+                    editButton.setVisibility(View.VISIBLE);
+                    editButton.setOnClickListener(editClickListener);
+                }
             } else {
                 reportButton.setVisibility(View.VISIBLE);
                 reportButton.setOnClickListener(reportClickListener);
