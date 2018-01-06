@@ -376,6 +376,7 @@
     <string name="telegrams_empty_content">Telegram seems empty.</string>
     <string name="telegrams_invalid_recipient">Something seems wrong with the recipients.</string>
     <string name="telegrams_fail">Couldn\'t send telegram. Try again in a bit.</string>
+    <string name="telegrams_factbook_template">[factbook: %1$s]</string>
     <string name="telegram_history_title">Telegram History</string>
 
     <!-- World Assembly -->

@@ -51,6 +51,7 @@ package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
 
+import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -64,6 +65,7 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -438,6 +440,15 @@ public final class MuffinsHelper {
         Elements strikeTags = content.select("span.nscodestrike");
         strikeTags.tagName("strike");
 
+        // Replace factbook previews with simple link
+        Elements factbookPreviews = content.select("div.dispatchsample");
+        for (Element factbookPreview : factbookPreviews) {
+            Element factbookLink = factbookPreview.select("a").first();
+            String factbookTitle = factbookLink.text();
+            factbookLink.text(String.format(Locale.US, c.getString(R.string.telegrams_factbook_template), factbookTitle));
+            factbookPreview.replaceWith(factbookLink);
+        }
+
         // Disable JSoup pretty-printing
         content.outputSettings().indentAmount(0).prettyPrint(false);
         Document.OutputSettings outputSettings = new Document.OutputSettings();
@@ -456,6 +467,7 @@ public final class MuffinsHelper {
         holder = holder.replace("<a href=\"//forum." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"http://forum." + SparkleHelper.DOMAIN_URI + "/");
         holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"page=", "<a href=\"" + SparkleHelper.BASE_URI + "page=");
 
         holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "\">%s</a>");
 
