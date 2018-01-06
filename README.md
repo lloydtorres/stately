@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.10.1** - Bug fixes and improvements.
 * **1.10.0** - New logo, nation policies support.
 * **1.9.3** - Z-Day improvements.
 * **1.9.2** - Edit RMB posts, regional voting data in resolutions, Android Oreo support, bug fixes and improvements.
