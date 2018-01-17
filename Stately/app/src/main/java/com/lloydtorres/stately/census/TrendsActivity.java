@@ -196,7 +196,7 @@ public class TrendsActivity extends SlidrActivity {
         String targetURL = "";
         String queryTarget = "";
         long curTime = System.currentTimeMillis() / 1000L;
-        long sixtyDaysAgo = curTime - CensusHistory.SIXTY_DAYS_IN_SECONDS;
+        long sixtyDaysAgo = curTime - CensusHistory.CENSUS_TRENDS_RANGE_IN_SECONDS;
 
         switch (mode) {
             case TREND_NATION:

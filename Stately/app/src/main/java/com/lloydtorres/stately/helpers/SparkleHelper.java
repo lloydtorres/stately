@@ -130,8 +130,8 @@ public final class SparkleHelper {
     public static final String BASE_URI_REGEX = "https:\\/\\/www\\.nationstates\\.net\\/";
 
     // Initialized to provide human-readable date strings for Date objects
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-    public static final SimpleDateFormat sdfNoYear = new SimpleDateFormat("dd MMM", Locale.US);
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+    public static final SimpleDateFormat SDF_MONTH_YEAR = new SimpleDateFormat("MMM yyyy", Locale.US);
 
     // Reference time zone for update-related calculations
     public static final TimeZone TIMEZONE_TORONTO = TimeZone.getTimeZone("America/Toronto");
@@ -313,19 +313,28 @@ public final class SparkleHelper {
             template = String.format(Locale.US, template, days, c.getResources().getQuantityString(R.plurals.time_day, days), pastIndicator);
         }
         else {
-            template = sdf.format(new Date(inputTime));
+            template = SDF.format(new Date(inputTime));
         }
 
         return template;
     }
 
     /**
-     * Returns a formatted date (with no year) given a time in UTC seconds.
+     * Returns a formatted date given a time in UTC seconds.
      * @param sec UTC seconds
-     * @return Formatted date with no year
+     * @return Formatted date
      */
-    public static String getDateNoYearFromUTC(long sec) {
-        return sdfNoYear.format(new Date(sec * 1000L));
+    public static String getDateFromUTC(long sec) {
+        return SDF.format(new Date(sec * 1000L));
+    }
+
+    /**
+     * Returns the month and year of the given time in UTC seconds.
+     * @param sec UTC seconds
+     * @return Month and year of the given time
+     */
+    public static String getMonthYearDateFromUTC(long sec) {
+        return SDF_MONTH_YEAR.format(new Date(sec * 1000L));
     }
 
     /**

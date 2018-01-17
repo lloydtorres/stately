@@ -266,12 +266,12 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             LineData dataFinal = new LineData(dataSets);
             List<String> xLabels = new ArrayList<String>();
             for (int i=0; i < datapoints.size(); i++) {
-                xLabels.add(String.format(Locale.US, SparkleHelper.getDateNoYearFromUTC(datapoints.get(i).timestamp), i));
+                xLabels.add(String.format(Locale.US, SparkleHelper.getMonthYearDateFromUTC(datapoints.get(i).timestamp), i));
             }
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 7, false);
+            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 12, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }
@@ -292,7 +292,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
          * @param point
          */
         private void setDataSelected(CensusHistoryPoint point) {
-            date.setText(SparkleHelper.getDateNoYearFromUTC(point.timestamp));
+            date.setText(SparkleHelper.getDateFromUTC(point.timestamp));
             value.setText(SparkleHelper.getPrettifiedNumber(point.score));
         }
 

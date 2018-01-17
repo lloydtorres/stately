@@ -209,7 +209,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 voteStart.setText(String.format(Locale.US, IMPLEMENTED_TEMPLATE,
                         context.getString(prefixId),
                         resolution.id,
-                        SparkleHelper.sdf.format(new Date(resolution.implemented * 1000L))));
+                        SparkleHelper.SDF.format(new Date(resolution.implemented * 1000L))));
 
                 if (resolution.repealed > 0) {
                     repealed.setVisibility(View.VISIBLE);
