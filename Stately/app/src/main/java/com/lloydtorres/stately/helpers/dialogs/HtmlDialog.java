@@ -80,7 +80,7 @@ public class HtmlDialog extends DetachDialogFragment {
             title = savedInstanceState.getString(KEY_TITLE);
         }
 
-        content = (HtmlTextView) view.findViewById(R.id.dialog_html_content);
+        content = view.findViewById(R.id.dialog_html_content);
         SparkleHelper.setStyledTextView(getContext(), content, raw, fm);
         getDialog().setTitle(title);
 

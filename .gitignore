@@ -29,3 +29,4 @@ proguard/
 Stately/app/google-services.json
 Stately/projectFilesBackup/.idea/workspace.xml
 output.json
+thriftCompiler.xml

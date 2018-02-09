@@ -363,21 +363,21 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public PostCard(View v) {
             super(v);
-            cardContainer = (CardView) v.findViewById(R.id.card_post_container);
-            cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
-            cardTime = (TextView) v.findViewById(R.id.card_post_time);
-            cardSuppressedHolder = (RelativeLayout) v.findViewById(R.id.card_post_suppressed_holder);
-            cardSuppressedIcon = (ImageView) v.findViewById(R.id.card_post_suppressed_icon);
-            cardSuppressedContent = (TextView) v.findViewById(R.id.card_post_suppressed_content);
-            cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
-            actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
-            likeButton = (ImageView) v.findViewById(R.id.card_post_like);
-            likeCount = (TextView) v.findViewById(R.id.card_post_like_count);
-            suppressButton = (ImageView) v.findViewById(R.id.card_post_suppress);
-            editButton = (ImageView) v.findViewById(R.id.card_post_edit);
-            deleteButton = (ImageView) v.findViewById(R.id.card_post_delete);
-            reportButton = (ImageView) v.findViewById(R.id.card_post_report);
-            replyButton = (ImageView) v.findViewById(R.id.card_post_reply);
+            cardContainer = v.findViewById(R.id.card_post_container);
+            cardAuthor = v.findViewById(R.id.card_post_name);
+            cardTime = v.findViewById(R.id.card_post_time);
+            cardSuppressedHolder = v.findViewById(R.id.card_post_suppressed_holder);
+            cardSuppressedIcon = v.findViewById(R.id.card_post_suppressed_icon);
+            cardSuppressedContent = v.findViewById(R.id.card_post_suppressed_content);
+            cardContent = v.findViewById(R.id.card_post_content);
+            actionsHolder = v.findViewById(R.id.card_post_actions_holder);
+            likeButton = v.findViewById(R.id.card_post_like);
+            likeCount = v.findViewById(R.id.card_post_like_count);
+            suppressButton = v.findViewById(R.id.card_post_suppress);
+            editButton = v.findViewById(R.id.card_post_edit);
+            deleteButton = v.findViewById(R.id.card_post_delete);
+            reportButton = v.findViewById(R.id.card_post_report);
+            replyButton = v.findViewById(R.id.card_post_reply);
         }
 
         public void init(Post p) {
@@ -558,7 +558,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             super(v);
             view = v;
 
-            cardContent = (HtmlTextView) v.findViewById(R.id.card_post_content);
+            cardContent = v.findViewById(R.id.card_post_content);
             cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -567,9 +567,9 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             params.setMargins(0, 0, 0, 0);
             cardContent.setLayoutParams(params);
 
-            TextView cardAuthor = (TextView) v.findViewById(R.id.card_post_name);
-            TextView cardTime = (TextView) v.findViewById(R.id.card_post_time);
-            RelativeLayout actionsHolder = (RelativeLayout) v.findViewById(R.id.card_post_actions_holder);
+            TextView cardAuthor = v.findViewById(R.id.card_post_name);
+            TextView cardTime = v.findViewById(R.id.card_post_time);
+            RelativeLayout actionsHolder = v.findViewById(R.id.card_post_actions_holder);
             cardAuthor.setVisibility(View.GONE);
             cardTime.setVisibility(View.GONE);
             actionsHolder.setVisibility(View.GONE);

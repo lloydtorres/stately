@@ -72,17 +72,17 @@ public class SubscriptionsDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_subscriptions_dialog, null);
 
-        curNation = (CheckBox) dialogView.findViewById(R.id.subscriptions_curnation);
+        curNation = dialogView.findViewById(R.id.subscriptions_curnation);
         curNation.setChecked(storage.getBoolean(CURRENT_NATION, true));
-        switchNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_switch);
+        switchNations = dialogView.findViewById(R.id.subscriptions_switch);
         switchNations.setChecked(storage.getBoolean(SWITCH_NATIONS, true));
-        dossierNations = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_n);
+        dossierNations = dialogView.findViewById(R.id.subscriptions_dossier_n);
         dossierNations.setChecked(storage.getBoolean(DOSSIER_NATIONS, true));
-        curRegion = (CheckBox) dialogView.findViewById(R.id.subscriptions_region);
+        curRegion = dialogView.findViewById(R.id.subscriptions_region);
         curRegion.setChecked(storage.getBoolean(CURRENT_REGION, true));
-        dossierRegions = (CheckBox) dialogView.findViewById(R.id.subscriptions_dossier_r);
+        dossierRegions = dialogView.findViewById(R.id.subscriptions_dossier_r);
         dossierRegions.setChecked(storage.getBoolean(DOSSIER_REGIONS, true));
-        assembly = (CheckBox) dialogView.findViewById(R.id.subscriptions_wa);
+        assembly = dialogView.findViewById(R.id.subscriptions_wa);
         assembly.setChecked(storage.getBoolean(WORLD_ASSEMBLY, true));
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {

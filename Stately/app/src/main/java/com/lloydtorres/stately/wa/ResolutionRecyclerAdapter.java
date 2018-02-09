@@ -180,15 +180,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public ResolutionHeaderCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.wa_resolution_title);
-            target = (TextView) itemView.findViewById(R.id.wa_nominee);
-            proposedBy = (TextView) itemView.findViewById(R.id.wa_proposed_by);
-            voteStart = (TextView) itemView.findViewById(R.id.wa_activetime);
-            repealed = (TextView) itemView.findViewById(R.id.wa_repealed);
-            votesFor = (TextView) itemView.findViewById(R.id.wa_resolution_for);
-            votesAgainst = (TextView) itemView.findViewById(R.id.wa_resolution_against);
-            iconVoteFor = (ImageView) itemView.findViewById(R.id.content_icon_vote_for);
-            iconVoteAgainst = (ImageView) itemView.findViewById(R.id.content_icon_vote_against);
+            title = itemView.findViewById(R.id.wa_resolution_title);
+            target = itemView.findViewById(R.id.wa_nominee);
+            proposedBy = itemView.findViewById(R.id.wa_proposed_by);
+            voteStart = itemView.findViewById(R.id.wa_activetime);
+            repealed = itemView.findViewById(R.id.wa_repealed);
+            votesFor = itemView.findViewById(R.id.wa_resolution_for);
+            votesAgainst = itemView.findViewById(R.id.wa_resolution_against);
+            iconVoteFor = itemView.findViewById(R.id.content_icon_vote_for);
+            iconVoteAgainst = itemView.findViewById(R.id.content_icon_vote_against);
         }
 
         public void init() {
@@ -296,11 +296,11 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public ResolutionContentCard(View itemView) {
             super(itemView);
-            content = (HtmlTextView) itemView.findViewById(R.id.wa_resolution_content);
-            voteButtonIcon = (ImageView) itemView.findViewById(R.id.wa_resolution_button_icon);
+            content = itemView.findViewById(R.id.wa_resolution_content);
+            voteButtonIcon = itemView.findViewById(R.id.wa_resolution_button_icon);
             voteButtonDivider = itemView.findViewById(R.id.view_divider);
-            voteButton = (LinearLayout) itemView.findViewById(R.id.wa_resolution_vote);
-            voteButtonContent = (TextView) itemView.findViewById(R.id.wa_resolution_vote_content);
+            voteButton = itemView.findViewById(R.id.wa_resolution_vote);
+            voteButtonContent = itemView.findViewById(R.id.wa_resolution_vote_content);
         }
 
         public void init() {
@@ -377,18 +377,18 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public ResolutionBreakdownCard(View itemView) {
             super(itemView);
-            votingBreakdown = (PieChart) itemView.findViewById(R.id.wa_voting_breakdown);
-            nullVote = (TextView) itemView.findViewById(R.id.resolution_null_vote);
-            nationVotesForHolder = (RelativeLayout) itemView.findViewById(R.id.resolution_nations_for_holder);
-            nationVotesFor = (TextView) itemView.findViewById(R.id.resolution_nations_for_count);
-            nationVotesForIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_for_icon);
-            nationVotesAgainstHolder = (RelativeLayout) itemView.findViewById(R.id.resolution_nations_against_holder);
-            nationVotesAgainst = (TextView) itemView.findViewById(R.id.resolution_nations_against_count);
-            nationVotesAgainstIcon = (ImageView) itemView.findViewById(R.id.resolution_nations_against_icon);
-            delegateVotesForButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_for);
-            delegateVotesFor = (TextView) itemView.findViewById(R.id.resolution_delegates_for_count);
-            delegateVotesAgainstButton = (RelativeLayout) itemView.findViewById(R.id.resolution_delegates_against);
-            delegateVotesAgainst = (TextView) itemView.findViewById(R.id.resolution_delegates_against_count);
+            votingBreakdown = itemView.findViewById(R.id.wa_voting_breakdown);
+            nullVote = itemView.findViewById(R.id.resolution_null_vote);
+            nationVotesForHolder = itemView.findViewById(R.id.resolution_nations_for_holder);
+            nationVotesFor = itemView.findViewById(R.id.resolution_nations_for_count);
+            nationVotesForIcon = itemView.findViewById(R.id.resolution_nations_for_icon);
+            nationVotesAgainstHolder = itemView.findViewById(R.id.resolution_nations_against_holder);
+            nationVotesAgainst = itemView.findViewById(R.id.resolution_nations_against_count);
+            nationVotesAgainstIcon = itemView.findViewById(R.id.resolution_nations_against_icon);
+            delegateVotesForButton = itemView.findViewById(R.id.resolution_delegates_for);
+            delegateVotesFor = itemView.findViewById(R.id.resolution_delegates_for_count);
+            delegateVotesAgainstButton = itemView.findViewById(R.id.resolution_delegates_against);
+            delegateVotesAgainst = itemView.findViewById(R.id.resolution_delegates_against_count);
         }
 
         public void init() {
@@ -525,11 +525,11 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public ResolutionHistoryCard(View itemView) {
             super(itemView);
-            votingHistory = (LineChart) itemView.findViewById(R.id.wa_voting_history);
-            voteHistoryFor = (TextView) itemView.findViewById(R.id.wa_vote_history_for);
-            voteHistoryAgainst = (TextView) itemView.findViewById(R.id.wa_vote_history_against);
-            histIconVoteFor = (ImageView) itemView.findViewById(R.id.history_icon_vote_for);
-            histIconVoteAgainst = (ImageView) itemView.findViewById(R.id.history_icon_vote_against);
+            votingHistory = itemView.findViewById(R.id.wa_voting_history);
+            voteHistoryFor = itemView.findViewById(R.id.wa_vote_history_for);
+            voteHistoryAgainst = itemView.findViewById(R.id.wa_vote_history_against);
+            histIconVoteFor = itemView.findViewById(R.id.history_icon_vote_for);
+            histIconVoteAgainst = itemView.findViewById(R.id.history_icon_vote_against);
         }
 
         public void init() {
@@ -631,12 +631,12 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         public RegionVotesCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.region_wa_title);
-            votesFor = (TextView) v.findViewById(R.id.card_region_votes_for);
-            votesAgainst = (TextView) v.findViewById(R.id.card_region_votes_against);
-            rmbLink = (LinearLayout) v.findViewById(R.id.region_wa_link);
-            linkIcon = (ImageView) v.findViewById(R.id.region_wa_link_icon);
-            linkContent = (TextView) v.findViewById(R.id.region_wa_link_text);
+            title = v.findViewById(R.id.region_wa_title);
+            votesFor = v.findViewById(R.id.card_region_votes_for);
+            votesAgainst = v.findViewById(R.id.card_region_votes_against);
+            rmbLink = v.findViewById(R.id.region_wa_link);
+            linkIcon = v.findViewById(R.id.region_wa_link_icon);
+            linkContent = v.findViewById(R.id.region_wa_link_text);
         }
 
         @Override

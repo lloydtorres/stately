@@ -85,7 +85,7 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public PollOptionEntry(View v) {
             super(v);
-            pollOptionContent = (TextView) v.findViewById(R.id.basic_nation_name);
+            pollOptionContent = v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 

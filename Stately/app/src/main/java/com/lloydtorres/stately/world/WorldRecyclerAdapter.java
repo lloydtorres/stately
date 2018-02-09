@@ -221,21 +221,21 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public FeaturedRegionCard(View itemView) {
             super(itemView);
-            header = (RelativeLayout) itemView.findViewById(R.id.card_world_featured_header_container);
-            regionName = (TextView) itemView.findViewById(R.id.card_world_featured_region_name);
-            nationCount = (TextView) itemView.findViewById(R.id.card_world_featured_nation_count);
-            flag = (ImageView) itemView.findViewById(R.id.card_world_featured_flag);
+            header = itemView.findViewById(R.id.card_world_featured_header_container);
+            regionName = itemView.findViewById(R.id.card_world_featured_region_name);
+            nationCount = itemView.findViewById(R.id.card_world_featured_nation_count);
+            flag = itemView.findViewById(R.id.card_world_featured_flag);
 
-            waDelegate = (TextView) itemView.findViewById(R.id.card_world_featured_wa);
-            founder = (TextView) itemView.findViewById(R.id.card_world_featured_founder);
+            waDelegate = itemView.findViewById(R.id.card_world_featured_wa);
+            founder = itemView.findViewById(R.id.card_world_featured_founder);
 
-            factbookHolder = (LinearLayout) itemView.findViewById(R.id.card_world_featured_factbook_holder);
-            factbook = (HtmlTextView) itemView.findViewById(R.id.card_world_featured_factbook);
+            factbookHolder = itemView.findViewById(R.id.card_world_featured_factbook_holder);
+            factbook = itemView.findViewById(R.id.card_world_featured_factbook);
 
-            tags = (TextView) itemView.findViewById(R.id.card_world_featured_tags);
+            tags = itemView.findViewById(R.id.card_world_featured_tags);
 
-            visitButton = (LinearLayout) itemView.findViewById(R.id.card_world_featured_region_button_holder);
-            visitText = (TextView) itemView.findViewById(R.id.card_world_featured_region_button_name);
+            visitButton = itemView.findViewById(R.id.card_world_featured_region_button_holder);
+            visitText = itemView.findViewById(R.id.card_world_featured_region_button_name);
         }
 
         public void init(BaseRegion r) {
@@ -284,10 +284,10 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public FeaturedCensusCard(View itemView) {
             super(itemView);
-            censusTitle = (TextView) itemView.findViewById(R.id.card_world_featured_census);
-            censusUnit = (TextView) itemView.findViewById(R.id.card_world_featured_census_unit);
-            censusScore = (TextView) itemView.findViewById(R.id.card_world_featured_census_score);
-            censusBg = (ImageView) itemView.findViewById(R.id.card_world_census_background);
+            censusTitle = itemView.findViewById(R.id.card_world_featured_census);
+            censusUnit = itemView.findViewById(R.id.card_world_featured_census_unit);
+            censusScore = itemView.findViewById(R.id.card_world_featured_census_score);
+            censusBg = itemView.findViewById(R.id.card_world_census_background);
             itemView.setOnClickListener(this);
         }
 
@@ -327,10 +327,10 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public WorldCensusCard(View itemView) {
             super(itemView);
-            censusCard = (CardView) itemView.findViewById(R.id.card_census_delta_main);
-            scale = (TextView) itemView.findViewById(R.id.card_delta_name);
-            unit = (TextView) itemView.findViewById(R.id.card_delta_unit);
-            score = (TextView) itemView.findViewById(R.id.card_delta_value);
+            censusCard = itemView.findViewById(R.id.card_census_delta_main);
+            scale = itemView.findViewById(R.id.card_delta_name);
+            unit = itemView.findViewById(R.id.card_delta_unit);
+            score = itemView.findViewById(R.id.card_delta_value);
             itemView.setOnClickListener(this);
         }
 

@@ -86,7 +86,7 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public DatasetEntry(View v)
         {
             super(v);
-            datasetName = (TextView) v.findViewById(R.id.basic_nation_name);
+            datasetName = v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 

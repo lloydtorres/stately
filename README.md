@@ -73,7 +73,7 @@ English strings in the Stately app can be found in three files:
 
 * [`res/values/strings.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/strings.xml)
 * [`res/values/plurals.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/plurals.xml)
-* [`res/values/arrays.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/arrays.xml) (lines 4-50 only; rest are from NationStates or licensing)
+* [`res/values/arrays.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/arrays.xml) (lines 4-51 only; rest are from NationStates or licensing)
 
 To translate Stately into another language, fork this repository and create a copy of these files in a new directory called `res/values-[xx]/`, where `[xx]` represents the target language's [ISO 639-1 code](https://www.loc.gov/standards/iso639-2/php/code_list.php) (e.g. `fr` for French and `ja` for Japanese).
 

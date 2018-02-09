@@ -44,7 +44,7 @@ public abstract class RecyclerSubFragment extends DetachFragment {
         View view = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         // Setup recycler view
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.happenings_recycler);
+        mRecyclerView = view.findViewById(R.id.happenings_recycler);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 

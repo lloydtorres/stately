@@ -118,7 +118,7 @@ public class TelegramsFragment extends DetachFragment {
             rebuildUniqueEnforcer();
         }
 
-        toolbar = (Toolbar) mView.findViewById(R.id.message_board_toolbar);
+        toolbar = mView.findViewById(R.id.message_board_toolbar);
         toolbar.setTitle(getString(R.string.menu_telegrams));
 
         if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
@@ -126,7 +126,7 @@ public class TelegramsFragment extends DetachFragment {
         }
 
         // Set up refresher to reload data on refresh
-        mSwipeRefreshLayout = (SwipyRefreshLayout) mView.findViewById(R.id.message_board_refresher);
+        mSwipeRefreshLayout = mView.findViewById(R.id.message_board_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(getContext()));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
@@ -141,7 +141,7 @@ public class TelegramsFragment extends DetachFragment {
         });
 
         // Setup recyclerview
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.message_board_recycler);
+        mRecyclerView = mView.findViewById(R.id.message_board_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

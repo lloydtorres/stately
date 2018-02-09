@@ -88,7 +88,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
         setToolbar(toolbar);
 
         if (getIntent() != null) {

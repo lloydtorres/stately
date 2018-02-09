@@ -201,7 +201,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public MessageBoardCard(View v) {
             super(v);
-            unreadCounter = (TextView) v.findViewById(R.id.card_button_num);
+            unreadCounter = v.findViewById(R.id.card_button_num);
             v.setOnClickListener(this);
         }
 
@@ -244,19 +244,19 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public PollCard(View v) {
             super(v);
-            question = (TextView) v.findViewById(R.id.card_region_poll_question);
-            content = (HtmlTextView) v.findViewById(R.id.card_region_poll_content);
-            author = (TextView) v.findViewById(R.id.card_region_poll_author);
-            open = (TextView) v.findViewById(R.id.card_region_poll_open);
-            close = (TextView) v.findViewById(R.id.card_region_poll_close);
-            options = (LinearLayout) v.findViewById(R.id.card_region_poll_options);
-            breakdown = (PieChart) v.findViewById(R.id.card_region_poll_chart);
-            nullVote = (TextView) v.findViewById(R.id.region_poll_null_vote);
+            question = v.findViewById(R.id.card_region_poll_question);
+            content = v.findViewById(R.id.card_region_poll_content);
+            author = v.findViewById(R.id.card_region_poll_author);
+            open = v.findViewById(R.id.card_region_poll_open);
+            close = v.findViewById(R.id.card_region_poll_close);
+            options = v.findViewById(R.id.card_region_poll_options);
+            breakdown = v.findViewById(R.id.card_region_poll_chart);
+            nullVote = v.findViewById(R.id.region_poll_null_vote);
             divider = v.findViewById(R.id.view_divider);
-            voteButton = (LinearLayout) v.findViewById(R.id.card_region_poll_vote_button);
-            voteButtonIcon = (ImageView) v.findViewById(R.id.card_region_poll_icon);
-            voteButtonProgress = (ProgressBar) v.findViewById(R.id.card_region_poll_progressbar);
-            voteButtonContent = (TextView) v.findViewById(R.id.card_region_poll_vote_button_content);
+            voteButton = v.findViewById(R.id.card_region_poll_vote_button);
+            voteButtonIcon = v.findViewById(R.id.card_region_poll_icon);
+            voteButtonProgress = v.findViewById(R.id.card_region_poll_progressbar);
+            voteButtonContent = v.findViewById(R.id.card_region_poll_vote_button_content);
         }
 
         public void init(final Poll p) {
@@ -343,8 +343,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private void inflateOption(LinearLayout optionLayout, int index, String option, int votes, String voters, boolean votedOption) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
-            TextView label = (TextView) optionView.findViewById(R.id.cardentry_label);
-            TextView content = (TextView) optionView.findViewById(R.id.cardentry_content);
+            TextView label = optionView.findViewById(R.id.cardentry_label);
+            TextView content = optionView.findViewById(R.id.cardentry_content);
             label.setText(String.format(Locale.US, context.getString(R.string.region_option_index), index));
             content.setText(String.format(Locale.US, POLL_OPTION_FRAGMENT_START, SparkleHelper.getHtmlFormatting(option)));
 
@@ -383,11 +383,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public RegionWaCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.region_wa_title);
-            votesFor = (TextView) v.findViewById(R.id.card_region_votes_for);
-            votesAgainst = (TextView) v.findViewById(R.id.card_region_votes_against);
-            resolutionLink = (LinearLayout) v.findViewById(R.id.region_wa_link);
-            linkContent = (TextView) v.findViewById(R.id.region_wa_link_text);
+            title = v.findViewById(R.id.region_wa_title);
+            votesFor = v.findViewById(R.id.card_region_votes_for);
+            votesAgainst = v.findViewById(R.id.card_region_votes_against);
+            resolutionLink = v.findViewById(R.id.region_wa_link);
+            linkContent = v.findViewById(R.id.region_wa_link_text);
         }
 
         public void init(WaVote w) {
@@ -428,8 +428,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         public OfficerCard(View itemView) {
             super(itemView);
             inflater = LayoutInflater.from(context);
-            officersLayout = (LinearLayout) itemView.findViewById(R.id.card_region_officers_layout);
-            noOfficers = (TextView) itemView.findViewById(R.id.governance_none);
+            officersLayout = itemView.findViewById(R.id.card_region_officers_layout);
+            noOfficers = itemView.findViewById(R.id.governance_none);
         }
 
         public void init(OfficerHolder offhold) {
@@ -464,8 +464,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         private void inflateOfficerEntry(LinearLayout officersLayout, String position, String nation) {
             View delegateView = inflater.inflate(R.layout.view_cardentry, null);
-            TextView label = (TextView) delegateView.findViewById(R.id.cardentry_label);
-            TextView content = (TextView) delegateView.findViewById(R.id.cardentry_content);
+            TextView label = delegateView.findViewById(R.id.cardentry_label);
+            TextView content = delegateView.findViewById(R.id.cardentry_content);
             label.setText(SparkleHelper.getHtmlFormatting(position));
             content.setText(SparkleHelper.getNameFromId(nation));
             content.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, nation, ExploreActivity.EXPLORE_NATION));
@@ -481,8 +481,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public EmbassyCard(View itemView) {
             super(itemView);
-            embassyCard = (CardView) itemView.findViewById(R.id.card_region_embassies);
-            embassyNum = (TextView) itemView.findViewById(R.id.card_region_embassies_num);
+            embassyCard = itemView.findViewById(R.id.card_region_embassies);
+            embassyNum = itemView.findViewById(R.id.card_region_embassies_num);
         }
 
         public void init(EmbassyHolder embhold) {

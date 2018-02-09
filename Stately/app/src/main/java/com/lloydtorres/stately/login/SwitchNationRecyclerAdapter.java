@@ -69,7 +69,7 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public SwitchNationEntry(View v) {
             super(v);
-            nationName = (TextView) v.findViewById(R.id.basic_nation_name);
+            nationName = v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 

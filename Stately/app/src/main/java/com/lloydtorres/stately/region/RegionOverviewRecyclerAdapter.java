@@ -191,9 +191,9 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
         public RegionQuickFactsCard(View itemView) {
             super(itemView);
-            delegate = (TextView) itemView.findViewById(R.id.region_delegate);
-            founder = (TextView) itemView.findViewById(R.id.region_founder);
-            power = (TextView) itemView.findViewById(R.id.region_power);
+            delegate = itemView.findViewById(R.id.region_delegate);
+            founder = itemView.findViewById(R.id.region_founder);
+            power = itemView.findViewById(R.id.region_power);
         }
 
         public void init(RegionQuickFactsCardData d) {
@@ -210,8 +210,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
         public RegionGenericCard(View itemView) {
             super(itemView);
-            cardTitle = (TextView) itemView.findViewById(R.id.card_region_factbook_title) ;
-            cardContent = (HtmlTextView) itemView.findViewById(R.id.region_factbook);
+            cardTitle = itemView.findViewById(R.id.card_region_factbook_title);
+            cardContent = itemView.findViewById(R.id.region_factbook);
         }
     }
 

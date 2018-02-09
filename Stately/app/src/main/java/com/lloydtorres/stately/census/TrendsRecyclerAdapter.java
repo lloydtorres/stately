@@ -184,8 +184,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public TitleCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.trends_title);
-            unit = (TextView) itemView.findViewById(R.id.trends_unit);
+            title = itemView.findViewById(R.id.trends_title);
+            unit = itemView.findViewById(R.id.trends_unit);
         }
 
         public void init(TrendsHeader header) {
@@ -206,12 +206,12 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public GraphCard(View itemView) {
             super(itemView);
-            date = (TextView) itemView.findViewById(R.id.trends_date);
-            value = (TextView) itemView.findViewById(R.id.trends_value);
-            max = (TextView) itemView.findViewById(R.id.trends_max);
-            min = (TextView) itemView.findViewById(R.id.trends_min);
-            avg = (TextView) itemView.findViewById(R.id.trends_avg);
-            chart = (LineChart) itemView.findViewById(R.id.trends_chart);
+            date = itemView.findViewById(R.id.trends_date);
+            value = itemView.findViewById(R.id.trends_value);
+            max = itemView.findViewById(R.id.trends_max);
+            min = itemView.findViewById(R.id.trends_min);
+            avg = itemView.findViewById(R.id.trends_avg);
+            chart = itemView.findViewById(R.id.trends_chart);
         }
 
         public void init(CensusHistoryScale scale) {
@@ -316,8 +316,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public RankTitleViewHolder(View itemView) {
             super(itemView);
-            type = (TextView) itemView.findViewById(R.id.trends_ranking_type);
-            census = (TextView) itemView.findViewById(R.id.trends_ranking_census);
+            type = itemView.findViewById(R.id.trends_ranking_type);
+            census = itemView.findViewById(R.id.trends_ranking_census);
         }
 
         public void init(TrendsRankTitle title) {
@@ -345,9 +345,9 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public NationRankViewHolder(View itemView) {
             super(itemView);
-            nation = (TextView) itemView.findViewById(R.id.trends_ranking_nation);
-            score = (TextView) itemView.findViewById(R.id.trends_ranking_score);
-            rank = (TextView) itemView.findViewById(R.id.trends_ranking_rank);
+            nation = itemView.findViewById(R.id.trends_ranking_nation);
+            score = itemView.findViewById(R.id.trends_ranking_score);
+            rank = itemView.findViewById(R.id.trends_ranking_rank);
             itemView.setOnClickListener(this);
         }
 

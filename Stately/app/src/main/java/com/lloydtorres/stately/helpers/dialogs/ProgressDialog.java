@@ -61,7 +61,7 @@ public class ProgressDialog extends DetachDialogFragment {
             content = savedInstanceState.getString(KEY_CONTENT);
         }
 
-        contentTextView = (TextView) view.findViewById(R.id.fragment_dialog_progress_content);
+        contentTextView = view.findViewById(R.id.fragment_dialog_progress_content);
         contentTextView.setText(content);
 
         return view;

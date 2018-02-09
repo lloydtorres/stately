@@ -82,7 +82,7 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public FolderEntry(View v) {
             super(v);
-            folderName = (TextView) v.findViewById(R.id.basic_nation_name);
+            folderName = v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 

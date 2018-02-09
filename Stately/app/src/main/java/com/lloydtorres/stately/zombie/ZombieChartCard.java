@@ -76,21 +76,21 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     public ZombieChartCard(View itemView) {
         super(itemView);
 
-        title = (TextView) itemView.findViewById(R.id.card_zombie_chart_title);
-        action = (TextView) itemView.findViewById(R.id.card_zombie_chart_action);
+        title = itemView.findViewById(R.id.card_zombie_chart_title);
+        action = itemView.findViewById(R.id.card_zombie_chart_action);
 
-        nullData = (TextView) itemView.findViewById(R.id.card_zombie_chart_null);
-        chart = (PieChart) itemView.findViewById(R.id.card_zombie_chart);
+        nullData = itemView.findViewById(R.id.card_zombie_chart_null);
+        chart = itemView.findViewById(R.id.card_zombie_chart);
 
         divider = itemView.findViewById(R.id.view_divider);
 
-        genericButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_generic);
-        genericButtonIcon = (ImageView) itemView.findViewById(R.id.card_zombie_chart_button_generic_icon);
-        genericButtonText = (TextView) itemView.findViewById(R.id.card_zombie_chart_button_generic_text);
+        genericButton = itemView.findViewById(R.id.card_zombie_chart_button_generic);
+        genericButtonIcon = itemView.findViewById(R.id.card_zombie_chart_button_generic_icon);
+        genericButtonText = itemView.findViewById(R.id.card_zombie_chart_button_generic_text);
 
-        missileButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_chart_button_missile);
-        missileIcon = (ImageView) itemView.findViewById(R.id.card_zombie_chart_missile_icon);
-        missileProgressBar = (ProgressBar) itemView.findViewById(R.id.card_zombie_chart_missile_progressbar);
+        missileButton = itemView.findViewById(R.id.card_zombie_chart_button_missile);
+        missileIcon = itemView.findViewById(R.id.card_zombie_chart_missile_icon);
+        missileProgressBar = itemView.findViewById(R.id.card_zombie_chart_missile_progressbar);
     }
 
     public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {

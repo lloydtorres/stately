@@ -36,10 +36,10 @@ public class StatsCard extends RecyclerView.ViewHolder {
 
     public StatsCard(View v) {
         super(v);
-        cardLeftValue = (TextView) v.findViewById(R.id.card_wa_members);
-        cardLeftSub = (TextView)  v.findViewById(R.id.card_wa_members_sub);
-        cardRightValue = (TextView) v.findViewById(R.id.card_wa_delegates);
-        cardRightSub = (TextView)  v.findViewById(R.id.card_wa_delegates_sub);
+        cardLeftValue = v.findViewById(R.id.card_wa_members);
+        cardLeftSub = v.findViewById(R.id.card_wa_members_sub);
+        cardRightValue = v.findViewById(R.id.card_wa_delegates);
+        cardRightSub = v.findViewById(R.id.card_wa_delegates_sub);
     }
 
     public void init(DataIntPair s, String left, String right)

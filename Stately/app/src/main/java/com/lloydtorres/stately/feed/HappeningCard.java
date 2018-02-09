@@ -40,8 +40,8 @@ public class HappeningCard extends RecyclerView.ViewHolder {
     public HappeningCard(Context c, View v) {
         super(v);
         context = c;
-        cardTime = (TextView) v.findViewById(R.id.card_happening_time);
-        cardContent = (TextView) v.findViewById(R.id.card_happening_content);
+        cardTime = v.findViewById(R.id.card_happening_time);
+        cardContent = v.findViewById(R.id.card_happening_content);
     }
 
     public void init(Event ev)

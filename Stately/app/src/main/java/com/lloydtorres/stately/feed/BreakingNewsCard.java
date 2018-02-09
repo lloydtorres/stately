@@ -40,7 +40,7 @@ public class BreakingNewsCard extends RecyclerView.ViewHolder {
 
     public BreakingNewsCard(View itemView) {
         super(itemView);
-        newsHolder = (LinearLayout) itemView.findViewById(R.id.card_world_breaking_news_holder);
+        newsHolder = itemView.findViewById(R.id.card_world_breaking_news_holder);
     }
 
     public void init(Context context, List<Event> newsItems) {
@@ -49,7 +49,7 @@ public class BreakingNewsCard extends RecyclerView.ViewHolder {
         int index = 0;
         for (Event e : newsItems) {
             View newsItemView = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
-            HtmlTextView newsContent = (HtmlTextView) newsItemView.findViewById(R.id.card_world_breaking_news_content);
+            HtmlTextView newsContent = newsItemView.findViewById(R.id.card_world_breaking_news_content);
             SparkleHelper.setHappeningsFormatting(context, newsContent, e.content);
 
             if (++index >= newsItems.size()) {

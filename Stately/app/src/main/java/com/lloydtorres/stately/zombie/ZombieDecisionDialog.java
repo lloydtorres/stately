@@ -48,7 +48,7 @@ public class ZombieDecisionDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_zombie_decision_dialog, null);
 
-        actionState = (RadioGroup) dialogView.findViewById(R.id.zombie_decision_group);
+        actionState = dialogView.findViewById(R.id.zombie_decision_group);
 
         // Show available options
         if (zombieData != null) {

@@ -41,17 +41,17 @@ public abstract class WebViewActivity extends SlidrActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_register);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.register_toolbar);
+        Toolbar toolbar = findViewById(R.id.register_toolbar);
         setToolbar(toolbar);
 
-        progressBar = (ProgressBar) findViewById(R.id.register_progress_bar);
+        progressBar = findViewById(R.id.register_progress_bar);
 
         // Disable cookies
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(false);
 
         // Initialize WebView
-        mWebView = (WebView) findViewById(R.id.register_webview);
+        mWebView = findViewById(R.id.register_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setSupportZoom(false);
         mWebView.getSettings().setUserAgentString(String.format(Locale.US, NSStringRequest.STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));

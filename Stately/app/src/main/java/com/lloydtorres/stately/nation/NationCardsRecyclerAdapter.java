@@ -266,23 +266,23 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public NationOverviewCard(View view) {
             super(view);
-            govType = (HtmlTextView) view.findViewById(R.id.nation_gov_type);
-            region = (TextView) view.findViewById(R.id.nation_region);
-            influence = (TextView) view.findViewById(R.id.nation_influence);
-            population = (TextView) view.findViewById(R.id.nation_population);
-            motto = (TextView) view.findViewById(R.id.nation_motto);
-            time = (TextView) view.findViewById(R.id.nation_time);
+            govType = view.findViewById(R.id.nation_gov_type);
+            region = view.findViewById(R.id.nation_region);
+            influence = view.findViewById(R.id.nation_influence);
+            population = view.findViewById(R.id.nation_population);
+            motto = view.findViewById(R.id.nation_motto);
+            time = view.findViewById(R.id.nation_time);
 
-            waMember = (RelativeLayout) view.findViewById(R.id.nation_wa_member);
-            waSection = (LinearLayout) view.findViewById(R.id.card_overview_section_wa);
-            isWaMember = (TextView) view.findViewById(R.id.nation_wa_status);
+            waMember = view.findViewById(R.id.nation_wa_member);
+            waSection = view.findViewById(R.id.card_overview_section_wa);
+            isWaMember = view.findViewById(R.id.nation_wa_status);
             divider = view.findViewById(R.id.view_divider);
-            endorsementsHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_endorsements);
-            endorsementsCount = (TextView) view.findViewById(R.id.nation_wa_num_endorsements);
-            gaVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_ga_vote);
-            gaVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_ga);
-            scVoteHolder = (RelativeLayout) view.findViewById(R.id.nation_wa_sc_vote);
-            scVote = (TextView) view.findViewById(R.id.card_overview_wa_vote_sc);
+            endorsementsHolder = view.findViewById(R.id.nation_wa_endorsements);
+            endorsementsCount = view.findViewById(R.id.nation_wa_num_endorsements);
+            gaVoteHolder = view.findViewById(R.id.nation_wa_ga_vote);
+            gaVote = view.findViewById(R.id.card_overview_wa_vote_ga);
+            scVoteHolder = view.findViewById(R.id.nation_wa_sc_vote);
+            scVote = view.findViewById(R.id.card_overview_wa_vote_sc);
         }
 
         public void init(NationOverviewCardData data) {
@@ -421,15 +421,15 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public NationFreedomCard(View view) {
             super(view);
-            civilRightsCard = (CardView) view.findViewById(R.id.card_overview_civrights);
-            civilRightsDesc = (TextView) view.findViewById(R.id.overview_civrights);
-            civilRightsPts = (TextView) view.findViewById(R.id.overview_civrights_pts);
-            economyCard = (CardView) view.findViewById(R.id.card_overview_economy);
-            economyDesc = (TextView) view.findViewById(R.id.overview_economy);
-            economyPts = (TextView) view.findViewById(R.id.overview_economy_pts);
-            politicalCard = (CardView) view.findViewById(R.id.card_overview_polifree);
-            politicalDesc = (TextView) view.findViewById(R.id.overview_polifree);
-            politicalPts = (TextView) view.findViewById(R.id.overview_polifree_pts);
+            civilRightsCard = view.findViewById(R.id.card_overview_civrights);
+            civilRightsDesc = view.findViewById(R.id.overview_civrights);
+            civilRightsPts = view.findViewById(R.id.overview_civrights_pts);
+            economyCard = view.findViewById(R.id.card_overview_economy);
+            economyDesc = view.findViewById(R.id.overview_economy);
+            economyPts = view.findViewById(R.id.overview_economy_pts);
+            politicalCard = view.findViewById(R.id.card_overview_polifree);
+            politicalDesc = view.findViewById(R.id.overview_polifree);
+            politicalPts = view.findViewById(R.id.overview_polifree_pts);
         }
 
         public void init(NationFreedomCardData data) {
@@ -458,8 +458,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content) {
         View entryView = inflater.inflate(R.layout.view_cardentry, null);
-        TextView titleView = (TextView) entryView.findViewById(R.id.cardentry_label);
-        TextView contentView = (TextView) entryView.findViewById(R.id.cardentry_content);
+        TextView titleView = entryView.findViewById(R.id.cardentry_label);
+        TextView contentView = entryView.findViewById(R.id.cardentry_content);
         titleView.setText(SparkleHelper.getHtmlFormatting(title));
         contentView.setText(SparkleHelper.getHtmlFormatting(content));
         targetLayout.addView(entryView);
@@ -476,11 +476,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public NationGenericCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.card_nation_generic_title);
-            content = (TextView) itemView.findViewById(R.id.card_nation_generic_content);
-            detailsHolder = (LinearLayout) itemView.findViewById(R.id.card_nation_generic_details_holder);
-            trendButton = (LinearLayout) itemView.findViewById(R.id.card_nation_generic_trend_button);
-            trendContent = (TextView) itemView.findViewById(R.id.card_nation_generic_trend_content);
+            title = itemView.findViewById(R.id.card_nation_generic_title);
+            content = itemView.findViewById(R.id.card_nation_generic_content);
+            detailsHolder = itemView.findViewById(R.id.card_nation_generic_details_holder);
+            trendButton = itemView.findViewById(R.id.card_nation_generic_trend_button);
+            trendContent = itemView.findViewById(R.id.card_nation_generic_trend_content);
         }
 
         public void init(NationGenericCardData data) {
@@ -529,9 +529,9 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public NationChartCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.card_nation_chart_title);
-            details = (LinearLayout) itemView.findViewById(R.id.card_nation_chart_details_holder);
-            chart = (PieChart) itemView.findViewById(R.id.card_nation_chart_chart);
+            title = itemView.findViewById(R.id.card_nation_chart_title);
+            details = itemView.findViewById(R.id.card_nation_chart_details_holder);
+            chart = itemView.findViewById(R.id.card_nation_chart_chart);
         }
 
         public void init(NationChartCardData data) {

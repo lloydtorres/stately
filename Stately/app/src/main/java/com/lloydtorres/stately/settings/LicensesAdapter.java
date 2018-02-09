@@ -84,8 +84,8 @@ public class LicensesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public LicenseCard(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.card_license_title);
-            content = (HtmlTextView) itemView.findViewById(R.id.card_license_content);
+            title = itemView.findViewById(R.id.card_license_title);
+            content = itemView.findViewById(R.id.card_license_content);
         }
 
         public void init(DataPair license) {

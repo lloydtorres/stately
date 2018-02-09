@@ -65,8 +65,8 @@ public class ExploreDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
 
-        exploreSearch = (AppCompatEditText) dialogView.findViewById(R.id.explore_searchbar);
-        exploreToggleState = (RadioGroup) dialogView.findViewById(R.id.explore_radio_group);
+        exploreSearch = dialogView.findViewById(R.id.explore_searchbar);
+        exploreToggleState = dialogView.findViewById(R.id.explore_radio_group);
 
         if (searchContentOverride != null) {
             exploreSearch.setText(searchContentOverride);

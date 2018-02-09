@@ -170,13 +170,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public ActiveCard(View v) {
             super(v);
-            cardTitle = (TextView) v.findViewById(R.id.card_wa_council);
-            cardHeader = (TextView) v.findViewById(R.id.card_wa_title);
-            cardActiveTime = (TextView) v.findViewById(R.id.card_wa_activetime);
-            cardFor = (TextView) v.findViewById(R.id.card_wa_for);
-            cardAgainst = (TextView) v.findViewById(R.id.card_wa_against);
-            iconVoteFor = (ImageView) v.findViewById(R.id.main_icon_vote_for);
-            iconVoteAgainst = (ImageView) v.findViewById(R.id.main_icon_vote_against);
+            cardTitle = v.findViewById(R.id.card_wa_council);
+            cardHeader = v.findViewById(R.id.card_wa_title);
+            cardActiveTime = v.findViewById(R.id.card_wa_activetime);
+            cardFor = v.findViewById(R.id.card_wa_for);
+            cardAgainst = v.findViewById(R.id.card_wa_against);
+            iconVoteFor = v.findViewById(R.id.main_icon_vote_for);
+            iconVoteAgainst = v.findViewById(R.id.main_icon_vote_against);
 
             v.setOnClickListener(this);
         }
@@ -248,10 +248,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public InactiveCard(View v) {
             super(v);
-            cardTitle = (TextView) v.findViewById(R.id.wa_inactive_title);
-            cardContent = (TextView) v.findViewById(R.id.wa_inactive_content);
+            cardTitle = v.findViewById(R.id.wa_inactive_title);
+            cardContent = v.findViewById(R.id.wa_inactive_content);
             buttonDivider = v.findViewById(R.id.view_divider);
-            buttonHolder = (LinearLayout) v.findViewById(R.id.wa_inactive_read_button);
+            buttonHolder = v.findViewById(R.id.wa_inactive_read_button);
         }
 
         public void init(Assembly a, int pos) {

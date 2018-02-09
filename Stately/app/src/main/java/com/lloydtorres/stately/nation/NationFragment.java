@@ -126,7 +126,7 @@ public class NationFragment extends DetachFragment {
      * @param view
      */
     private void initToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar_nation);
+        toolbar = view.findViewById(R.id.toolbar_nation);
         toolbar.setTitle("");
 
         if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
@@ -134,10 +134,10 @@ public class NationFragment extends DetachFragment {
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container);
+        final CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_container);
         collapsingToolbarLayout.setTitle("");
 
-        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.nation_appbar);
+        AppBarLayout appBarLayout = view.findViewById(R.id.nation_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -172,11 +172,11 @@ public class NationFragment extends DetachFragment {
      */
     private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
-        tabsPager = (ViewPager) view.findViewById(R.id.nation_pager);
+        tabsPager = view.findViewById(R.id.nation_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
         tabsPager.setAdapter(tabsAdapter);
         // Bind the tabs to the ViewPager
-        tabs = (PagerSlidingTabStrip) view.findViewById(R.id.nation_tabs);
+        tabs = view.findViewById(R.id.nation_tabs);
         tabs.setViewPager(tabsPager);
     }
 
@@ -185,10 +185,10 @@ public class NationFragment extends DetachFragment {
      * @param view
      */
     private void getAllNationViews(View view) {
-        nationName = (TextView) view.findViewById(R.id.nation_name);
-        nationPrename = (TextView) view.findViewById(R.id.nation_prename);
-        nationBanner = (ImageView) view.findViewById(R.id.nation_banner);
-        nationFlag = (ImageView) view.findViewById(R.id.nation_flag);
+        nationName = view.findViewById(R.id.nation_name);
+        nationPrename = view.findViewById(R.id.nation_prename);
+        nationBanner = view.findViewById(R.id.nation_banner);
+        nationFlag = view.findViewById(R.id.nation_flag);
 
         // Dynamically change nation banner height
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;

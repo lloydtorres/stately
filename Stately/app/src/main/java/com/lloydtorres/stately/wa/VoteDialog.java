@@ -53,7 +53,7 @@ public class VoteDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_vote_dialog, null);
 
-        voteToggleState = (RadioGroup) dialogView.findViewById(R.id.vote_radio_group);
+        voteToggleState = dialogView.findViewById(R.id.vote_radio_group);
 
         switch(choice)
         {

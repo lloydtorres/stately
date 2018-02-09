@@ -106,19 +106,19 @@ public class TelegramComposeActivity extends SlidrActivity {
 
         mView = findViewById(R.id.telegram_compose_main);
 
-        headerCardView = (CardView) findViewById(R.id.telegram_compose_header) ;
-        developerCardView = (CardView) findViewById(R.id.telegram_compose_developer_header);
+        headerCardView = findViewById(R.id.telegram_compose_header);
+        developerCardView = findViewById(R.id.telegram_compose_developer_header);
         headerCardView.setVisibility(isDeveloperTg ? View.GONE : View.VISIBLE);
         developerCardView.setVisibility(isDeveloperTg ? View.VISIBLE : View.GONE);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.telegram_compose_refresher);
+        mSwipeRefreshLayout = findViewById(R.id.telegram_compose_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.telegram_compose_toolbar);
+        Toolbar toolbar = findViewById(R.id.telegram_compose_toolbar);
         setToolbar(toolbar);
 
-        recipientsField = (AppCompatEditText) findViewById(R.id.telegram_compose_recipients);
+        recipientsField = findViewById(R.id.telegram_compose_recipients);
         if (recipients != null && recipients.length() > 0) {
             recipientsField.setText(recipients);
             if (replyId != NO_REPLY_ID) {
@@ -128,10 +128,10 @@ public class TelegramComposeActivity extends SlidrActivity {
             }
         }
 
-        senderField = (TextView) findViewById(R.id.telegram_compose_sender);
+        senderField = findViewById(R.id.telegram_compose_sender);
         senderField.setText(PinkaHelper.getActiveUser(this).name);
 
-        content = (AppCompatEditText) findViewById(R.id.telegram_compose_content);
+        content = findViewById(R.id.telegram_compose_content);
 
         if (savedContent != null) {
             content.setText(savedContent);

@@ -67,7 +67,7 @@ public class CensusSortDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_census_sort_dialog, null);
 
-        sortOrderState = (RadioGroup) dialogView.findViewById(R.id.census_sort_category_radio_group);
+        sortOrderState = dialogView.findViewById(R.id.census_sort_category_radio_group);
 
         if (mode == CENSUS_MODE_REGION) {
             sortOrderState.findViewById(R.id.census_sort_region_rank).setVisibility(View.GONE);
@@ -92,7 +92,7 @@ public class CensusSortDialog extends DetachDialogFragment {
                 break;
         }
 
-        directionState = (RadioGroup) dialogView.findViewById(R.id.census_sort_order_radio_group);
+        directionState = dialogView.findViewById(R.id.census_sort_order_radio_group);
         directionState.check(isAscending ? R.id.census_sort_ascending : R.id.census_sort_descending);
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {

@@ -105,7 +105,7 @@ public class RegionFragment extends DetachFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.region_progress_bar);
+        progressBar = view.findViewById(R.id.region_progress_bar);
 
         initToolbar(view);
 
@@ -132,7 +132,7 @@ public class RegionFragment extends DetachFragment {
      * @param view
      */
     private void initToolbar(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar_region);
+        toolbar = view.findViewById(R.id.toolbar_region);
         toolbar.setTitle("");
 
         if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
@@ -140,10 +140,10 @@ public class RegionFragment extends DetachFragment {
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_container_region);
+        final CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_container_region);
         collapsingToolbarLayout.setTitle("");
 
-        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.region_appbar);
+        AppBarLayout appBarLayout = view.findViewById(R.id.region_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -174,11 +174,11 @@ public class RegionFragment extends DetachFragment {
      */
     private void initTabs(View view) {
         // Initialize the ViewPager and set an adapter
-        tabsPager = (ViewPager) view.findViewById(R.id.region_pager);
+        tabsPager = view.findViewById(R.id.region_pager);
         tabsAdapter = new LayoutAdapter(getChildFragmentManager());
         tabsPager.setAdapter(tabsAdapter);
         // Bind the tabs to the ViewPager
-        tabs = (PagerSlidingTabStrip) view.findViewById(R.id.region_tabs);
+        tabs = view.findViewById(R.id.region_tabs);
         tabs.setViewPager(tabsPager);
     }
 
@@ -187,9 +187,9 @@ public class RegionFragment extends DetachFragment {
      * @param view
      */
     private void getAllRegionViews(View view) {
-        regionName = (TextView) view.findViewById(R.id.region_name);
-        regionPop = (TextView) view.findViewById(R.id.region_pop);
-        regionFlag = (ImageView) view.findViewById(R.id.region_flag);
+        regionName = view.findViewById(R.id.region_name);
+        regionPop = view.findViewById(R.id.region_pop);
+        regionFlag = view.findViewById(R.id.region_flag);
 
         initRegionData(view);
     }

@@ -125,10 +125,10 @@ public class ReportActivity extends SlidrActivity {
             contentHolder = savedInstanceState.getString(REPORT_CONTENT);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_report);
+        Toolbar toolbar = findViewById(R.id.toolbar_report);
         setToolbar(toolbar);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.report_refresher);
+        mSwipeRefreshLayout = findViewById(R.id.report_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
 
@@ -146,11 +146,11 @@ public class ReportActivity extends SlidrActivity {
         };
 
         view = findViewById(R.id.report_main);
-        targetHolder = (RelativeLayout) findViewById(R.id.report_target_holder);
-        reportTarget = (TextView) findViewById(R.id.report_target);
-        reportCategoryHolder = (CardView) findViewById(R.id.report_category_holder);
-        reportCategorySelect = (RadioGroup) findViewById(R.id.report_category);
-        reportContent = (AppCompatEditText) findViewById(R.id.report_content);
+        targetHolder = findViewById(R.id.report_target_holder);
+        reportTarget = findViewById(R.id.report_target);
+        reportCategoryHolder = findViewById(R.id.report_category_holder);
+        reportCategorySelect = findViewById(R.id.report_category);
+        reportContent = findViewById(R.id.report_content);
 
         targetHolder.setVisibility(View.VISIBLE);
         reportCategoryHolder.setVisibility(View.VISIBLE);

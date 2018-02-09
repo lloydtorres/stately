@@ -275,7 +275,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public SortButtonCard(View v) {
             super(v);
-            buttonText = (TextView) v.findViewById(R.id.card_button_text);
+            buttonText = v.findViewById(R.id.card_button_text);
             v.setOnClickListener(this);
         }
 
@@ -309,11 +309,11 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public CensusCard(View v) {
             super(v);
-            cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
-            title = (TextView) v.findViewById(R.id.card_delta_name);
-            unit = (TextView) v.findViewById(R.id.card_delta_unit);
-            superScript = (TextView) v.findViewById(R.id.card_delta_superscript);
-            value = (TextView) v.findViewById(R.id.card_delta_value);
+            cardHolder = v.findViewById(R.id.card_census_delta_main);
+            title = v.findViewById(R.id.card_delta_name);
+            unit = v.findViewById(R.id.card_delta_unit);
+            superScript = v.findViewById(R.id.card_delta_superscript);
+            value = v.findViewById(R.id.card_delta_value);
             v.setOnClickListener(this);
         }
 

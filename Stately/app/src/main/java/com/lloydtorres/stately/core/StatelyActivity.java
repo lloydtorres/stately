@@ -160,7 +160,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
             navInit = savedInstanceState.getInt(NAV_INIT, NATION_FRAGMENT);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_app_bar);
+        Toolbar toolbar = findViewById(R.id.toolbar_app_bar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setTitle("");
@@ -193,7 +193,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         setSupportActionBar(t);
         getSupportActionBar().setElevation(0);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, t, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -206,7 +206,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
      * @param start Index of the view to start with
      */
     private void initNavigationView(int start) {
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(start).setChecked(true);
         initNavBanner();
@@ -260,9 +260,9 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
      */
     private void initNavBanner() {
         View view = navigationView.getHeaderView(0);
-        nationBanner = (ImageView) view.findViewById(R.id.nav_banner_back);
-        nationFlag = (ImageView) view.findViewById(R.id.nav_flag);
-        nationNameView = (TextView) view.findViewById(R.id.nav_nation_name);
+        nationBanner = view.findViewById(R.id.nav_banner_back);
+        nationFlag = view.findViewById(R.id.nav_flag);
+        nationNameView = view.findViewById(R.id.nav_nation_name);
 
         nationNameView.setText(mNation.name);
 
@@ -282,7 +282,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         // Handle back presses
         // Close drawer if open, call super function otherwise
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }

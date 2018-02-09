@@ -285,20 +285,20 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public TelegramCard( View v) {
             super(v);
-            sender = (TextView) v.findViewById(R.id.card_telegram_from);
-            recipients = (TextView) v.findViewById(R.id.card_telegram_to);
-            timestamp = (TextView) v.findViewById(R.id.card_telegram_time);
-            popupMenuButton = (ImageView) v.findViewById(R.id.card_telegram_popup_menu);
-            alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_alert_holder);
-            alertIcon = (ImageView) v.findViewById(R.id.card_telegram_alert_icon);
-            alertText = (TextView) v.findViewById(R.id.card_telegram_alert_message);
-            content = (HtmlTextView) v.findViewById(R.id.card_telegram_content);
-            telegramHistoryButton = (ImageView) v.findViewById(R.id.card_telegram_history);
-            replyHolder = (LinearLayout) v.findViewById(R.id.card_telegram_actions_holder);
-            reply = (ImageView) v.findViewById(R.id.card_telegram_reply);
-            replyAll = (ImageView) v.findViewById(R.id.card_telegram_reply_all);
-            regionVisitButton = (LinearLayout) v.findViewById(R.id.card_telegram_region_holder);
-            regionVisitButtonContent = (TextView) v.findViewById(R.id.card_telegram_region_text);
+            sender = v.findViewById(R.id.card_telegram_from);
+            recipients = v.findViewById(R.id.card_telegram_to);
+            timestamp = v.findViewById(R.id.card_telegram_time);
+            popupMenuButton = v.findViewById(R.id.card_telegram_popup_menu);
+            alertHolder = v.findViewById(R.id.card_telegram_alert_holder);
+            alertIcon = v.findViewById(R.id.card_telegram_alert_icon);
+            alertText = v.findViewById(R.id.card_telegram_alert_message);
+            content = v.findViewById(R.id.card_telegram_content);
+            telegramHistoryButton = v.findViewById(R.id.card_telegram_history);
+            replyHolder = v.findViewById(R.id.card_telegram_actions_holder);
+            reply = v.findViewById(R.id.card_telegram_reply);
+            replyAll = v.findViewById(R.id.card_telegram_reply_all);
+            regionVisitButton = v.findViewById(R.id.card_telegram_region_holder);
+            regionVisitButtonContent = v.findViewById(R.id.card_telegram_region_text);
         }
 
         @Override
@@ -477,12 +477,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public TelegramPreviewCard(View v) {
             super(v);
-            header = (TextView) v.findViewById(R.id.card_telegram_preview_from);
-            timestamp = (TextView) v.findViewById(R.id.card_telegram_preview_time);
-            alertHolder = (RelativeLayout) v.findViewById(R.id.card_telegram_preview_alert_holder);
-            alertIcon = (ImageView) v.findViewById(R.id.card_telegram_preview_alert_icon);
-            alertText = (TextView) v.findViewById(R.id.card_telegram_preview_alert_message);
-            preview = (HtmlTextView) v.findViewById(R.id.card_telegram_preview_content);
+            header = v.findViewById(R.id.card_telegram_preview_from);
+            timestamp = v.findViewById(R.id.card_telegram_preview_time);
+            alertHolder = v.findViewById(R.id.card_telegram_preview_alert_holder);
+            alertIcon = v.findViewById(R.id.card_telegram_preview_alert_icon);
+            alertText = v.findViewById(R.id.card_telegram_preview_alert_message);
+            preview = v.findViewById(R.id.card_telegram_preview_content);
             v.setOnClickListener(this);
         }
 
@@ -526,8 +526,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class NoTelegramsCard extends RecyclerView.ViewHolder {
         public NoTelegramsCard(View v) {
             super(v);
-            TextView cardTime = (TextView) v.findViewById(R.id.card_happening_time);
-            TextView cardContent = (TextView) v.findViewById(R.id.card_happening_content);
+            TextView cardTime = v.findViewById(R.id.card_happening_time);
+            TextView cardContent = v.findViewById(R.id.card_happening_content);
             cardTime.setVisibility(View.GONE);
             cardContent.setText(context.getString(R.string.rmb_no_content));
             cardContent.setTypeface(cardContent.getTypeface(), Typeface.ITALIC);

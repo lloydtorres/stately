@@ -258,11 +258,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public IssueResultCard(View v) {
             super(v);
-            image = (ImageView) v.findViewById(R.id.card_issue_result_image);
-            mainResult = (HtmlTextView) v.findViewById(R.id.card_issue_result_main_result);
-            reclassResult = (TextView) v.findViewById(R.id.card_issue_result_reclass_result);
-            issueContent = (HtmlTextView) v.findViewById(R.id.card_issue_result_issue_content);
-            expander = (TextView) v.findViewById(R.id.card_issue_result_expand);
+            image = v.findViewById(R.id.card_issue_result_image);
+            mainResult = v.findViewById(R.id.card_issue_result_main_result);
+            reclassResult = v.findViewById(R.id.card_issue_result_reclass_result);
+            issueContent = v.findViewById(R.id.card_issue_result_issue_content);
+            expander = v.findViewById(R.id.card_issue_result_expand);
         }
 
         public void init(IssueResult result) {
@@ -337,8 +337,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public HeadlinesCard(View v) {
             super(v);
-            headlinesTitle = (TextView) v.findViewById(R.id.card_world_breaking_news_title);
-            headlinesHolder = (LinearLayout) v.findViewById(R.id.card_world_breaking_news_holder);
+            headlinesTitle = v.findViewById(R.id.card_world_breaking_news_title);
+            headlinesHolder = v.findViewById(R.id.card_world_breaking_news_holder);
         }
 
         public void init(IssueResultHeadlinesContainer headlines) {
@@ -348,7 +348,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             int index = 0;
             for (String h : headlines.headlines) {
                 View headlineTextHolder = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
-                HtmlTextView newsContent = (HtmlTextView) headlineTextHolder.findViewById(R.id.card_world_breaking_news_content);
+                HtmlTextView newsContent = headlineTextHolder.findViewById(R.id.card_world_breaking_news_content);
                 h = h.trim();
                 setIssueResultsFormatting(newsContent, mNation, h);
 
@@ -368,9 +368,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public PostcardCard(View v) {
             super(v);
-            nationName = (TextView) v.findViewById(R.id.card_postcard_nation) ;
-            img = (ImageView) v.findViewById(R.id.card_postcard_img);
-            description = (TextView) v.findViewById(R.id.card_postcard_title);
+            nationName = v.findViewById(R.id.card_postcard_nation);
+            img = v.findViewById(R.id.card_postcard_img);
+            description = v.findViewById(R.id.card_postcard_title);
         }
 
         public void init(IssuePostcard card) {
@@ -396,12 +396,12 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public CensusDeltaCard(View v) {
             super(v);
-            cardHolder = (CardView) v.findViewById(R.id.card_census_delta_main);
-            title = (TextView) v.findViewById(R.id.card_delta_name);
-            unit = (TextView) v.findViewById(R.id.card_delta_unit);
-            trend = (ImageView) v.findViewById(R.id.card_delta_trend);
+            cardHolder = v.findViewById(R.id.card_census_delta_main);
+            title = v.findViewById(R.id.card_delta_name);
+            unit = v.findViewById(R.id.card_delta_unit);
+            trend = v.findViewById(R.id.card_delta_trend);
             trend.setVisibility(View.VISIBLE);
-            value = (TextView) v.findViewById(R.id.card_delta_value);
+            value = v.findViewById(R.id.card_delta_value);
             v.setOnClickListener(this);
         }
 
@@ -409,9 +409,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             delta = d;
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.percentDelta >= 0 ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
-            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, delta.censusId);
-            title.setText(censusType[0]);
-            unit.setText(censusType[1]);
+            CensusScale censusType = SparkleHelper.getCensusScale(censusScales, delta.censusId);
+            title.setText(censusType.name);
+            unit.setText(censusType.unit);
             trend.setImageResource(delta.percentDelta >= 0 ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
             int maxDecimals = 1;
             double absValue = Math.abs(delta.percentDelta);

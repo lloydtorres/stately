@@ -169,12 +169,12 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             superweaponStatus = savedInstanceState.getParcelable(SUPERWEAPON_STATUS);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.explore_toolbar);
+        Toolbar toolbar = findViewById(R.id.explore_toolbar);
         setToolbar(toolbar);
         getSupportActionBar().hide();
 
-        statusMessage = (TextView) findViewById(R.id.explore_status);
-        exploreButton = (ImageView) findViewById(R.id.explore_button);
+        statusMessage = findViewById(R.id.explore_status);
+        exploreButton = findViewById(R.id.explore_button);
 
         verifyInput(id);
     }
@@ -812,7 +812,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
-        AppCompatEditText passView = (AppCompatEditText) dialogView.findViewById(R.id.move_password);
+        AppCompatEditText passView = dialogView.findViewById(R.id.move_password);
         final AppCompatEditText fPassView = passView;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override

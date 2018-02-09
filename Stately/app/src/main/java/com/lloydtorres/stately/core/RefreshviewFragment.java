@@ -46,7 +46,7 @@ public abstract class RefreshviewFragment extends DetachFragment {
     {
         mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
-        toolbar = (Toolbar) mView.findViewById(R.id.refreshview_toolbar);
+        toolbar = mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getString(R.string.menu_issues));
 
         if (getActivity() != null && getActivity() instanceof IToolbarActivity)
@@ -55,11 +55,11 @@ public abstract class RefreshviewFragment extends DetachFragment {
         }
 
         // Set up refresher to reload data on refresh
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout = mView.findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(getContext()));
 
         // Setup recyclerview
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.refreshview_recycler);
+        mRecyclerView = mView.findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

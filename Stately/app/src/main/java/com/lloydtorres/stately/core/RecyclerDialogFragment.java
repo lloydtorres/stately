@@ -64,7 +64,7 @@ public abstract class RecyclerDialogFragment extends DetachDialogFragment {
     }
 
     protected void initRecycler(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+        mRecyclerView = view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

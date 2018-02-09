@@ -54,7 +54,7 @@ public class SuperweaponDialog extends DetachDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_superweapon_dialog, null);
 
-        actionState = (RadioGroup) dialogView.findViewById(R.id.superweapon_group);
+        actionState = dialogView.findViewById(R.id.superweapon_group);
 
         // Show available options
         if (status != null) {

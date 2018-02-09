@@ -160,12 +160,12 @@ public class MessageBoardActivity extends SlidrActivity {
             rebuildUniqueEnforcer();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.message_board_toolbar);
+        Toolbar toolbar = findViewById(R.id.message_board_toolbar);
         setToolbar(toolbar);
 
         dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.message_board_recycler);
+        mRecyclerView = findViewById(R.id.message_board_recycler);
         mLayoutManager = new LinearLayoutManager(this);
         ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -178,7 +178,7 @@ public class MessageBoardActivity extends SlidrActivity {
         };
 
         // Setup refresher to requery for resolution on swipe
-        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.message_board_refresher);
+        mSwipeRefreshLayout = findViewById(R.id.message_board_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
@@ -266,14 +266,14 @@ public class MessageBoardActivity extends SlidrActivity {
      * When this is called, it enables a bunch of views that lets the user post in the RMB.
      */
     private void enablePostingRights() {
-        messageResponder = (LinearLayout) findViewById(R.id.message_board_responder);
+        messageResponder = findViewById(R.id.message_board_responder);
         messageResponder.setVisibility(View.VISIBLE);
-        messageContainer = (AppCompatEditText) findViewById(R.id.responder_content);
-        messagePostButton = (ImageView) findViewById(R.id.responder_post_button);
+        messageContainer = findViewById(R.id.responder_content);
+        messagePostButton = findViewById(R.id.responder_post_button);
         messagePostButton.setOnClickListener(postMessageListener);
-        messageModifierContainer = (RelativeLayout) findViewById(R.id.responder_reply_container);
-        messageModifierIcon = (ImageView) findViewById(R.id.responder_reply_icon) ;
-        messageModifierContent = (TextView) findViewById(R.id.responder_reply_content);
+        messageModifierContainer = findViewById(R.id.responder_reply_container);
+        messageModifierIcon = findViewById(R.id.responder_reply_icon);
+        messageModifierContent = findViewById(R.id.responder_reply_content);
         isLikeable = true;
         isPostable = true;
     }

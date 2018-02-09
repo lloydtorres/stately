@@ -117,12 +117,12 @@ public class TrendsActivity extends SlidrActivity {
             censusScales = NightmareHelper.trimZDayCensusDatasets(censusScales);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
+        Toolbar toolbar = findViewById(R.id.trends_toolbar);
         setToolbar(toolbar);
 
         view = findViewById(R.id.trends_main);
 
-        mSwipeRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.trends_refresher);
+        mSwipeRefreshLayout = findViewById(R.id.trends_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
         mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
@@ -134,7 +134,7 @@ public class TrendsActivity extends SlidrActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.trends_recycler);
+        mRecyclerView = findViewById(R.id.trends_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

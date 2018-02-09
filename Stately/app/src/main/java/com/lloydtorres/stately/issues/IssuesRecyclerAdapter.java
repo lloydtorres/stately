@@ -142,9 +142,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public IssueCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.card_issue_main_title);
-            id = (TextView) v.findViewById(R.id.card_issue_main_number);
-            image = (ImageView) v.findViewById(R.id.card_issue_image) ;
+            title = v.findViewById(R.id.card_issue_main_title);
+            id = v.findViewById(R.id.card_issue_main_number);
+            image = v.findViewById(R.id.card_issue_image);
             v.setOnClickListener(this);
         }
 
@@ -185,7 +185,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public NextCard(View v) {
             super(v);
             v.findViewById(R.id.card_generic_title).setVisibility(View.GONE);
-            nextUpdate = (TextView) v.findViewById(R.id.card_generic_content);
+            nextUpdate = v.findViewById(R.id.card_generic_content);
         }
 
         // Heh
@@ -211,8 +211,8 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public ZombieIssueCard(View v) {
             super(v);
-            background = (ImageView) v.findViewById(R.id.card_issue_zombie_control_background);
-            survivalRate = (TextView) v.findViewById(R.id.card_issue_zombie_control_survival_rate);
+            background = v.findViewById(R.id.card_issue_zombie_control_background);
+            survivalRate = v.findViewById(R.id.card_issue_zombie_control_survival_rate);
             v.setOnClickListener(this);
         }
 

@@ -153,18 +153,18 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         public ZombieActionCard(View itemView) {
             super(itemView);
-            headerBackground = (ImageView) itemView.findViewById(R.id.card_zombie_action_header_background);
-            flag = (ImageView) itemView.findViewById(R.id.card_zombie_action_header_flag);
-            pulsator = (PulsatorLayout) itemView.findViewById(R.id.card_zombie_action_header_pulse);
+            headerBackground = itemView.findViewById(R.id.card_zombie_action_header_background);
+            flag = itemView.findViewById(R.id.card_zombie_action_header_flag);
+            pulsator = itemView.findViewById(R.id.card_zombie_action_header_pulse);
 
-            action = (TextView) itemView.findViewById(R.id.card_zombie_action_content);
-            superweaponContent = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_superweapon_holder);
+            action = itemView.findViewById(R.id.card_zombie_action_content);
+            superweaponContent = itemView.findViewById(R.id.card_zombie_action_superweapon_holder);
 
             divider = itemView.findViewById(R.id.view_divider);
-            button = (LinearLayout) itemView.findViewById(R.id.card_zombie_action_button);
-            buttonText = (TextView) itemView.findViewById(R.id.card_zombie_action_button_text);
-            trendsButton = (LinearLayout) itemView.findViewById(R.id.card_zombie_explore_button);
-            trendsText = (TextView) itemView.findViewById(R.id.card_zombie_trends_list);
+            button = itemView.findViewById(R.id.card_zombie_action_button);
+            buttonText = itemView.findViewById(R.id.card_zombie_action_button_text);
+            trendsButton = itemView.findViewById(R.id.card_zombie_explore_button);
+            trendsText = itemView.findViewById(R.id.card_zombie_trends_list);
         }
 
         public void init(final ZombieControlData data, final ZSuperweaponProgress progress) {
@@ -302,8 +302,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
          */
         private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content) {
             View entryView = inflater.inflate(R.layout.view_cardentry, null);
-            TextView titleView = (TextView) entryView.findViewById(R.id.cardentry_label);
-            TextView contentView = (TextView) entryView.findViewById(R.id.cardentry_content);
+            TextView titleView = entryView.findViewById(R.id.cardentry_label);
+            TextView contentView = entryView.findViewById(R.id.cardentry_content);
             titleView.setText(title);
             contentView.setText(content);
             targetLayout.addView(entryView);

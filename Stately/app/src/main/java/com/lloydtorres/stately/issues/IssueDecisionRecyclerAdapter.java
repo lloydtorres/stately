@@ -134,10 +134,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         public IssueInfoCard(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.card_issue_info_title);
-            issueNo = (TextView) v.findViewById(R.id.card_issue_info_number);
-            image = (ImageView) v.findViewById(R.id.card_issue_header_image);
-            content = (HtmlTextView) v.findViewById(R.id.card_issue_option_content);
+            title = v.findViewById(R.id.card_issue_info_title);
+            issueNo = v.findViewById(R.id.card_issue_info_number);
+            image = v.findViewById(R.id.card_issue_header_image);
+            content = v.findViewById(R.id.card_issue_option_content);
         }
 
         public void init(Issue issue) {
@@ -185,11 +185,11 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         public IssueOptionCard(View v) {
             super(v);
-            content = (HtmlTextView) v.findViewById(R.id.card_issue_option_content);
-            contentHolder = (LinearLayout) v.findViewById(R.id.card_issue_option_content_holder);
-            selectButton = (LinearLayout) v.findViewById(R.id.card_issue_option_select);
-            selectIcon = (ImageView) v.findViewById(R.id.card_issue_option_select_icon);
-            selectContent = (TextView) v.findViewById(R.id.card_issue_option_select_text);
+            content = v.findViewById(R.id.card_issue_option_content);
+            contentHolder = v.findViewById(R.id.card_issue_option_content_holder);
+            selectButton = v.findViewById(R.id.card_issue_option_select);
+            selectIcon = v.findViewById(R.id.card_issue_option_select_icon);
+            selectContent = v.findViewById(R.id.card_issue_option_select_text);
             divider = v.findViewById(R.id.view_divider);
         }
 

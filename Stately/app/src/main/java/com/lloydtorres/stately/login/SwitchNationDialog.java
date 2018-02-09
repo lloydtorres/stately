@@ -105,7 +105,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
     private void initRecycler(View view)
     {
         // Base recycler stuff
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_padded);
+        mRecyclerView = view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

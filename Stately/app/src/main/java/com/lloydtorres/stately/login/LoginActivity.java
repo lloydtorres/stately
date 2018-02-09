@@ -119,14 +119,14 @@ public class LoginActivity extends BroadcastableActivity {
         setContentView(R.layout.activity_login);
 
         view = findViewById(R.id.activity_login_main);
-        headerImage = (ImageView) findViewById(R.id.login_header);
-        subtitle = (TextView) findViewById(R.id.login_subtitle);
-        username = (AppCompatEditText) findViewById(R.id.field_username);
-        password = (AppCompatEditText) findViewById(R.id.field_password);
-        userHolder = (TextInputLayout) findViewById(R.id.holder_user);
-        passHolder = (TextInputLayout) findViewById(R.id.holder_password);
-        login = (Button) findViewById(R.id.login_button);
-        createNation = (Button) findViewById(R.id.register_button);
+        headerImage = findViewById(R.id.login_header);
+        subtitle = findViewById(R.id.login_subtitle);
+        username = findViewById(R.id.field_username);
+        password = findViewById(R.id.field_password);
+        userHolder = findViewById(R.id.holder_user);
+        passHolder = findViewById(R.id.holder_password);
+        login = findViewById(R.id.login_button);
+        createNation = findViewById(R.id.register_button);
 
         int statelyLogo = RaraHelper.getSpecialDayStatus(this) != RaraHelper.DAY_Z_DAY ? R.drawable.stately : R.drawable.stately_zday;
         DashHelper.getInstance(this).loadImageWithoutPlaceHolder(statelyLogo, headerImage);

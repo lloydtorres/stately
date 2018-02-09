@@ -46,17 +46,17 @@ public abstract class RefreshviewActivity extends SlidrActivity {
 
         mView = findViewById(R.id.refreshview_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.refreshview_toolbar);
+        Toolbar toolbar = findViewById(R.id.refreshview_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
         // Need to be able to get back to previous activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshview_refresher);
+        mSwipeRefreshLayout = findViewById(R.id.refreshview_refresher);
         mSwipeRefreshLayout.setColorSchemeResources(RaraHelper.getThemeRefreshColours(this));
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.refreshview_recycler);
+        mRecyclerView = findViewById(R.id.refreshview_recycler);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = RaraHelper.getStaggeredLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

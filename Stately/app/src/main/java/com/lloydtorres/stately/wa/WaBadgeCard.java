@@ -46,8 +46,8 @@ public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClick
     public WaBadgeCard(Context c, View v) {
         super(v);
         context = c;
-        container = (CardView) v.findViewById(R.id.wa_badge_root);
-        badgeDescription = (TextView) v.findViewById(R.id.wa_resolution_vote_content);
+        container = v.findViewById(R.id.wa_badge_root);
+        badgeDescription = v.findViewById(R.id.wa_resolution_vote_content);
         v.setOnClickListener(this);
     }
 
