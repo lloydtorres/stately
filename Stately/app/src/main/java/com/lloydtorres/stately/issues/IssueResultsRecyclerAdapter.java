@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDelta;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.IssuePostcard;
 import com.lloydtorres.stately.dto.IssueResult;
 import com.lloydtorres.stately.dto.IssueResultContainer;
@@ -48,6 +49,7 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,7 +58,7 @@ import java.util.Locale;
  * An adapter for showing the results of an issue resolution.
  */
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScales;
     private HashMap<String, String> postcardData;
     private List<String> unifiedFreedomScale;
 
@@ -74,7 +76,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public IssueResultsRecyclerAdapter(Context c, IssueResultContainer con, Nation n) {
         context = c;
-        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
         String[] rawPostcardData = context.getResources().getStringArray(R.array.postcards);
         postcardData = new HashMap<String, String>();

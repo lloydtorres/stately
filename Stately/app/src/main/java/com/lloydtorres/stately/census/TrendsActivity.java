@@ -37,6 +37,7 @@ import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
 import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.network.DashHelper;
@@ -48,6 +49,7 @@ import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirec
 import org.simpleframework.xml.core.Persister;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 /**
@@ -86,7 +88,7 @@ public class TrendsActivity extends SlidrActivity {
     private int start = 1;
     private CensusHistory dataset;
 
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScales;
 
     private View view;
     private SwipyRefreshLayout mSwipeRefreshLayout;
@@ -106,12 +108,13 @@ public class TrendsActivity extends SlidrActivity {
         }
 
         // Setup list of census datasets
-        WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+        censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
         // Only show Z-Day related datasets if it's actually Z-Day
         // and we're showing regional or world rankings
         if (!(NightmareHelper.getIsZDayActive(this) &&
            (mode == TREND_REGION || mode == TREND_WORLD))) {
-            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
+            censusScales = NightmareHelper.trimZDayCensusDatasets(censusScales);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.trends_toolbar);
@@ -274,9 +277,9 @@ public class TrendsActivity extends SlidrActivity {
         dataset = data;
         updateStartCounter(dataset.ranks);
 
-        String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, id);
+        CensusScale censusType = SparkleHelper.getCensusScale(censusScales, id);
 
-        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, id, censusType[0], censusType[1], dataset);
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, id, censusType.name, censusType.unit, dataset);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         stopRefreshing();
     }
@@ -386,7 +389,7 @@ public class TrendsActivity extends SlidrActivity {
                 if (!isFinishing()) {
                     FragmentManager fm = getSupportFragmentManager();
                     DatasetDialog dialog = new DatasetDialog();
-                    dialog.setDatasets(WORLD_CENSUS_ITEMS, id);
+                    dialog.setDatasets(censusScales, id);
                     dialog.show(fm, DatasetDialog.DIALOG_TAG);
                 }
                 return true;

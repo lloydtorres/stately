@@ -26,6 +26,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.core.BroadcastableActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.NationFreedomCardData;
 import com.lloydtorres.stately.dto.NationGenericCardData;
@@ -38,6 +39,7 @@ import com.lloydtorres.stately.wa.ResolutionActivity;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 /**
@@ -51,7 +53,7 @@ public class OverviewSubFragment extends NationSubFragment {
     private static final String CENSUS_TEMPLATE = "%s — %s";
     public static final String TAX_TEMPLATE = "%s%%";
 
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScales;
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
 
@@ -81,7 +83,8 @@ public class OverviewSubFragment extends NationSubFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+        censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
@@ -207,10 +210,10 @@ public class OverviewSubFragment extends NationSubFragment {
         }
         ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal), animalText));
         int censusRawId = mNation.wCensus.id;
-        String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, mNation.wCensus.id);
-        String todayCensusTitle = String.format(Locale.US, getString(R.string.card_overview_other_census_title), worldCensusItem[0]);
+        CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales, mNation.wCensus.id);
+        String todayCensusTitle = String.format(Locale.US, getString(R.string.card_overview_other_census_title), worldCensusItem.name);
         CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
-        StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US, CENSUS_TEMPLATE, SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem[1]));
+        StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US, CENSUS_TEMPLATE, SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem.unit));
         if (detailedRank.regionRank > 0) {
             todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
         }

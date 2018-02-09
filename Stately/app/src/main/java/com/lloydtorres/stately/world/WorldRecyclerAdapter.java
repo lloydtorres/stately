@@ -32,6 +32,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.BaseRegion;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.explore.ExploreActivity;
@@ -46,6 +47,7 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,15 +66,16 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private List<Object> cards;
     private Context context;
     private FragmentManager fragmentManager;
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScale;
 
     public WorldRecyclerAdapter(Context c, FragmentManager fm, World w, BaseRegion fr) {
         context = c;
         fragmentManager = fm;
-        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        censusScale = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
         if (!NightmareHelper.getIsZDayActive(context)) {
-            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
+            censusScale = NightmareHelper.trimZDayCensusDatasets(censusScale);
         }
 
         setContent(w, fr);
@@ -294,15 +297,15 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             featuredCensus = census;
 
-            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, featuredCensus.id);
+            CensusScale censusType = SparkleHelper.getCensusScale(censusScale, featuredCensus.id);
 
-            censusTitle.setText(censusType[0]);
-            censusUnit.setText(censusType[1]);
+            censusTitle.setText(censusType.name);
+            censusUnit.setText(censusType.unit);
             censusScore.setText(String.format(Locale.US,
                     context.getString(R.string.world_census_score),
                     SparkleHelper.getPrettifiedShortSuffixedNumber(context, featuredCensus.score)));
 
-            String bgUrl = RaraHelper.getBannerURL(censusType[2]);
+            String bgUrl = RaraHelper.getBannerURL(censusType.banner);
             DashHelper.getInstance(context).loadImage(bgUrl, censusBg, false);
         }
 
@@ -341,10 +344,10 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             censusCard.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
 
-            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
+            CensusScale censusType = SparkleHelper.getCensusScale(censusScale, censusData.id);
 
-            scale.setText(censusType[0]);
-            unit.setText(censusType[1]);
+            scale.setText(censusType.name);
+            unit.setText(censusType.unit);
             score.setText(SparkleHelper.getPrettifiedShortSuffixedNumber(context, censusData.score));
 
             scale.setTextColor(RaraHelper.getThemeLinkColour(context));

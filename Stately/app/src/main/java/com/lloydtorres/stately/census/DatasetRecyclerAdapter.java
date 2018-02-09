@@ -29,6 +29,7 @@ import com.lloydtorres.stately.dto.Dataset;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Lloyd on 2016-04-10.
@@ -41,11 +42,10 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private DatasetDialog selfDialog;
     private ArrayList<Dataset> datasets;
 
-    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, ArrayList<Dataset> ds)
-    {
+    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, LinkedHashMap<Integer, Dataset> ds) {
         activity = a;
         selfDialog = d;
-        datasets = ds;
+        datasets = new ArrayList<Dataset>(ds.values());
         Collections.sort(datasets);
     }
 

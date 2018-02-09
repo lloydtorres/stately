@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
@@ -35,6 +36,7 @@ import com.lloydtorres.stately.zombie.NightmareHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 /**
@@ -55,7 +57,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int CARD_BUTTON = 0;
     private static final int CARD_CENSUS = 1;
 
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScales;
 
     private Context context;
     private CensusSubFragment fragment;
@@ -70,13 +72,14 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, String t, int m) {
         context = c.getContext();
         fragment = c;
-        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
         target = t;
         mode = m;
 
         if (!(NightmareHelper.getIsZDayActive(context) && mode == CensusSortDialog.CENSUS_MODE_REGION)) {
-            WORLD_CENSUS_ITEMS = NightmareHelper.trimZDayCensusDatasets(WORLD_CENSUS_ITEMS);
+            censusScales = NightmareHelper.trimZDayCensusDatasets(censusScales);
         }
 
         float dpScale = context.getResources().getDisplayMetrics().density;
@@ -329,9 +332,9 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             censusColorIndex = Math.min(Math.max(censusColorIndex, 0), (RaraHelper.freedomColours.length - 1));
             cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[censusColorIndex]));
 
-            String[] censusType = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, censusData.id);
-            title.setText(censusType[0]);
-            unit.setText(censusType[1]);
+            CensusScale censusType = SparkleHelper.getCensusScale(censusScales, censusData.id);
+            title.setText(censusType.name);
+            unit.setText(censusType.unit);
 
             switch (sortOrder) {
                 case SORT_MODE_SCORE:

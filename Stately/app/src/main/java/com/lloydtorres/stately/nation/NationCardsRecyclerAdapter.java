@@ -38,6 +38,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.census.TrendsOnClickListener;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.GovBudget;
@@ -65,6 +66,7 @@ import com.lloydtorres.stately.zombie.ZombieChartCard;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -86,7 +88,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int CARD_POLICY = 6;
     private static final int CARD_EMPTY = 7;
 
-    private String[] WORLD_CENSUS_ITEMS;
+    private LinkedHashMap<Integer, CensusScale> censusScales;
 
     private List<Parcelable> cards;
     private String nationName;
@@ -106,7 +108,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         nationName = n;
         isSameRegion = sameRegion;
 
-        WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        String[] WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
+        censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
         setCards(cds);
     }
@@ -506,8 +509,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 trendButton.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationCensusTarget), data.idCensusTarget));
 
                 // if census ID is out of bounds, set it as unknown
-                String[] worldCensusItem = SparkleHelper.getCensusScale(WORLD_CENSUS_ITEMS, data.idCensusTarget);
-                trendContent.setText(String.format(Locale.US, context.getString(R.string.card_overview_census_button), worldCensusItem[0]));
+                CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales, data.idCensusTarget);
+                trendContent.setText(String.format(Locale.US, context.getString(R.string.card_overview_census_button), worldCensusItem.name));
             } else {
                 trendButton.setVisibility(View.GONE);
                 trendButton.setOnClickListener(null);

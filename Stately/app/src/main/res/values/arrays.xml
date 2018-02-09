@@ -109,7 +109,7 @@
         <item>Freedom From Taxation##Hayek Index##e5</item>
         <item>Corruption##Kickbacks Per Hour##t18</item>
         <item>Integrity##Percentage of Bribes Refused##t17</item>
-        <item>Authoritarianism##Stalins##k3</item>
+        <item>Authoritarianism##MilliStalins##k3</item>
         <item>Youth Rebelliousness##Stark-Dean Displacement Index##u1</item>
         <item>Culture##Snufflebottom-Wiggendum Pentatonic Scale##t21</item>
         <item>Employment##Workforce Participation Rate##c13</item>
@@ -141,6 +141,7 @@
         <item>Z-Day: Zombies##Capita##x5</item>
         <item>Z-Day: Dead##Capita##l26</item>
         <item>Z-Day: Zombification##Romero-Brooks Index##x5</item>
+        <item>Average Disposable Income##Standard Monetary Units##t20</item>
         <item>Unknown##Mystery Units##d4</item>
     </string-array>
     <string-array name="postcards">

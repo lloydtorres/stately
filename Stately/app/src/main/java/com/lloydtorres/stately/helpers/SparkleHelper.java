@@ -68,6 +68,7 @@ import android.widget.TextView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Assembly;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.DataPair;
 import com.lloydtorres.stately.dto.Nation;
 import com.lloydtorres.stately.dto.Post;
@@ -97,6 +98,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -564,20 +566,38 @@ public final class SparkleHelper {
     }
 
     /**
-     * Makes sure that the specified ID is within range, then returns the properly-split
-     * data from the raw array. The format returned is [scale, unit, background image]
-     * @param rawCensusData Array of raw census units from arrays.xml
+     * Makes sure that the specified ID is within range, then returns the appropriate scale.
+     * @param censusData Array of raw census units from arrays.xml
      * @param id Census ID to use
      * @return Formatted census data
      */
-    public static String[] getCensusScale(String[] rawCensusData, int id) {
-        int censusId = id;
-        // if census ID is out of bounds, set it as unknown
-        if (censusId >= rawCensusData.length - 1) {
-            censusId = rawCensusData.length - 1;
+    public static CensusScale getCensusScale(LinkedHashMap<Integer, CensusScale> censusData, int id) {
+        if (censusData.containsKey(id)) {
+            return censusData.get(id);
         }
-        String[] censusType = rawCensusData[censusId].split("##");
-        return censusType;
+
+        // Get last entry
+        CensusScale[] scales = (CensusScale[]) censusData.values().toArray();
+        return scales[scales.length - 1];
+    }
+
+    /**
+     * Transforms the raw census data from arrays.xml to Java objects.
+     * @param rawCensusData Raw census array from arrays.xml
+     * @return Linked hashmap of census scale objects
+     */
+    public static LinkedHashMap<Integer, CensusScale> getCensusScales(String[] rawCensusData) {
+        LinkedHashMap<Integer, CensusScale> scales = new LinkedHashMap<Integer, CensusScale>();
+        for (int i = 0; i < rawCensusData.length; i++) {
+            String[] censusType = rawCensusData[i].split("##");
+            CensusScale scale = new CensusScale();
+            scale.id = i;
+            scale.name = censusType[0];
+            scale.unit = censusType[1];
+            scale.banner = censusType[2];
+            scales.put(i, scale);
+        }
+        return scales;
     }
 
     /**

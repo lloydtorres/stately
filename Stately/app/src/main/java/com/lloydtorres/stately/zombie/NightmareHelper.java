@@ -58,10 +58,12 @@ import android.preference.PreferenceManager;
 
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.helpers.RaraHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -127,18 +129,17 @@ public final class NightmareHelper {
     }
 
     /**
-     * Helper used to get rid of Z-Day related datasets from the raw list of census datasets.
-     * @param censusDatasetArray Raw census datasets
+     * Helper used to get rid of Z-Day related datasets from the raw map of census datasets.
+     * @param censusDatasets Raw census datasets
      * @return Census datasets without Z-Day datasets
      */
-    public static String[] trimZDayCensusDatasets(String[] censusDatasetArray) {
-        List<String> worldCensusItems = new ArrayList<String>();
-        for (int i = 0; i < censusDatasetArray.length; i++) {
-            if (i < TrendsActivity.CENSUS_ZDAY_SURVIVORS || i > TrendsActivity.CENSUS_ZDAY_ZOMBIFICATION) {
-                worldCensusItems.add(censusDatasetArray[i]);
-            }
+    public static LinkedHashMap<Integer, CensusScale> trimZDayCensusDatasets(LinkedHashMap<Integer, CensusScale> censusDatasets) {
+        int start = TrendsActivity.CENSUS_ZDAY_SURVIVORS;
+        int end = TrendsActivity.CENSUS_ZDAY_ZOMBIFICATION + 1;
+        for (int i = start; i < end; i++) {
+            censusDatasets.remove(i);
         }
-        return worldCensusItems.toArray(new String[worldCensusItems.size()]);
+        return censusDatasets;
     }
 
     /**
