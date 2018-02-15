@@ -284,9 +284,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         public void init(CensusDetailedRank census) {
-            // Forces card to span across columns
-            RaraHelper.setViewHolderFullSpan(itemView);
-
             featuredCensus = census;
 
             CensusScale censusType = SparkleHelper.getCensusScale(censusScale, featuredCensus.id);

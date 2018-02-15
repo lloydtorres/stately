@@ -187,9 +187,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public void init(Assembly a, int pos) {
-            // Forces card to span across columns
-            RaraHelper.setViewHolderFullSpan(itemView);
-
             String voteStats = "";
             if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));
