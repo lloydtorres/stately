@@ -36,7 +36,7 @@ import java.util.List;
 public class World implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q="
                                         + "numnations+numregions+featuredregion+happenings"
-                                        + "+census+censusid;scale=all;limit=5"
+                                        + "+census+censusid;limit=5"
                                         + "&v=" + SparkleHelper.API_VERSION;
 
     @Element(name="NUMNATIONS")

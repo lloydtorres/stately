@@ -18,7 +18,6 @@ package com.lloydtorres.stately.world;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +61,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int WORLD_FEATURED_REGION = 1;
     private static final int WORLD_BREAKING_NEWS = 2;
     private static final int WORLD_FEATURED_CENSUS = 3;
-    private static final int WORLD_CENSUS_DATA = 4;
 
     private List<Object> cards;
     private Context context;
@@ -84,24 +82,26 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void setContent(World w, BaseRegion fr) {
         cards = new ArrayList<Object>();
+
         // Add the number of nations and regions
         cards.add(new DataIntPair(w.numNations, w.numRegions));
+
+        // Get featured census
+        if (w.census.size() > 0) {
+            CensusDetailedRank featuredCensus = w.census.get(0);
+            featuredCensus.isFeatured = true;
+            cards.add(featuredCensus);
+        }
+
         // Add featured region if available
         if (fr != null) {
             cards.add(fr);
         }
+
         // Add world happenings as one data structure
         EventsHolder events = new EventsHolder(w.happenings);
         cards.add(events);
-        // Try grabbing the featured census, if it's within range
-        if (w.featuredCensus < w.census.size()) {
-            CensusDetailedRank featuredCensus = w.census.get(w.featuredCensus);
-            featuredCensus.isFeatured = true;
-            w.census.remove(w.featuredCensus);
-            cards.add(featuredCensus);
-        }
-        // Add the rest of the census data
-        cards.addAll(w.census);
+
         notifyDataSetChanged();
     }
 
@@ -126,10 +126,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             case WORLD_FEATURED_CENSUS:
                 View featuredCensusCard = inflater.inflate(R.layout.card_world_featured_census, parent, false);
                 viewHolder = new FeaturedCensusCard(featuredCensusCard);
-                break;
-            case WORLD_CENSUS_DATA:
-                View worldCensusCard = inflater.inflate(R.layout.card_census_delta, parent, false);
-                viewHolder = new WorldCensusCard(worldCensusCard);
                 break;
         }
 
@@ -157,10 +153,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 FeaturedCensusCard featuredCensusCard = (FeaturedCensusCard) holder;
                 featuredCensusCard.init((CensusDetailedRank) cards.get(position));
                 break;
-            case WORLD_CENSUS_DATA:
-                WorldCensusCard worldCensusCard = (WorldCensusCard) holder;
-                worldCensusCard.init((CensusDetailedRank) cards.get(position));
-                break;
         }
     }
 
@@ -181,8 +173,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             return WORLD_BREAKING_NEWS;
         }
         else if (cards.get(position) instanceof CensusDetailedRank) {
-            CensusDetailedRank censusRank = (CensusDetailedRank) cards.get(position);
-            return censusRank.isFeatured ? WORLD_FEATURED_CENSUS : WORLD_CENSUS_DATA;
+            return WORLD_FEATURED_CENSUS;
         }
         return -1;
     }
@@ -313,47 +304,6 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View view) {
             SparkleHelper.startTrends(context, null, TrendsActivity.TREND_WORLD, featuredCensus.id);
-        }
-    }
-
-    // Regular world census data
-    public class WorldCensusCard extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private CensusDetailedRank censusData;
-
-        private CardView censusCard;
-        private TextView scale;
-        private TextView unit;
-        private TextView score;
-
-        public WorldCensusCard(View itemView) {
-            super(itemView);
-            censusCard = itemView.findViewById(R.id.card_census_delta_main);
-            scale = itemView.findViewById(R.id.card_delta_name);
-            unit = itemView.findViewById(R.id.card_delta_unit);
-            score = itemView.findViewById(R.id.card_delta_value);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            SparkleHelper.startTrends(context, null, TrendsActivity.TREND_WORLD, censusData.id);
-        }
-
-        public void init(CensusDetailedRank census) {
-            censusData = census;
-
-            censusCard.setCardBackgroundColor(RaraHelper.getThemeCardColour(context));
-
-            CensusScale censusType = SparkleHelper.getCensusScale(censusScale, censusData.id);
-
-            scale.setText(censusType.name);
-            unit.setText(censusType.unit);
-            score.setText(SparkleHelper.getPrettifiedShortSuffixedNumber(context, censusData.score));
-
-            scale.setTextColor(RaraHelper.getThemeLinkColour(context));
-            unit.setTextColor(RaraHelper.getThemeLinkColour(context));
-            score.setTextColor(RaraHelper.getThemeLinkColour(context));
         }
     }
 }
