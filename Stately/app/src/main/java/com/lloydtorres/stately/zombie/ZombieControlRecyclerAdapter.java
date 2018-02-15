@@ -118,7 +118,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 break;
             case CARD_HAPPENINGS:
                 BreakingNewsCard breakingNewsCard = (BreakingNewsCard) holder;
-                breakingNewsCard.init(context, userData.events);
+                breakingNewsCard.init(context, context.getString(R.string.zombie_reports), userData.events);
                 break;
         }
     }

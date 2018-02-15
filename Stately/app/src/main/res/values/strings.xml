@@ -432,6 +432,7 @@
     <string name="wa_delegate_no_votes_against">No delegates have voted against the resolution so far.</string>
     <string name="wa_error">Resolution not found.</string>
     <string name="wa_last_resolution">Read this resolution</string>
+    <string name="wa_happenings_title">World Assembly Hansard</string>
 
     <!-- WA Badges -->
     <string name="wa_badge_commend">Commended by the World Assembly (SC #%1$d)</string>
@@ -469,6 +470,7 @@
 
     <!-- Zombie -->
     <string name="zombie_control">Zombie Control</string>
+    <string name="zombie_reports">Zombie Reports</string>
     <string name="zombie_control_survival">Survival Rate: %1$s%%</string>
     <string name="zombie_survivors">Survivors</string>
     <string name="zombie_infected">Infected</string>

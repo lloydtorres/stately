@@ -34,6 +34,7 @@ import com.lloydtorres.stately.dto.BaseRegion;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.CensusScale;
 import com.lloydtorres.stately.dto.DataIntPair;
+import com.lloydtorres.stately.dto.EventsHolder;
 import com.lloydtorres.stately.dto.World;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
@@ -89,9 +90,9 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (fr != null) {
             cards.add(fr);
         }
-        // I know, this is the entire World model, but we only want the happenings from it
-        // since we're showing it in one card
-        cards.add(w);
+        // Add world happenings as one data structure
+        EventsHolder events = new EventsHolder(w.happenings);
+        cards.add(events);
         // Try grabbing the featured census, if it's within range
         if (w.featuredCensus < w.census.size()) {
             CensusDetailedRank featuredCensus = w.census.get(w.featuredCensus);
@@ -150,7 +151,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case WORLD_BREAKING_NEWS:
                 BreakingNewsCard breakingNewsCard = (BreakingNewsCard) holder;
-                breakingNewsCard.init(context, ((World) cards.get(position)).happenings);
+                breakingNewsCard.init(context, context.getString(R.string.issue_breaking), ((EventsHolder) cards.get(position)).events);
                 break;
             case WORLD_FEATURED_CENSUS:
                 FeaturedCensusCard featuredCensusCard = (FeaturedCensusCard) holder;
@@ -176,7 +177,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         else if (cards.get(position) instanceof BaseRegion) {
             return WORLD_FEATURED_REGION;
         }
-        else if (cards.get(position) instanceof World) {
+        else if (cards.get(position) instanceof EventsHolder) {
             return WORLD_BREAKING_NEWS;
         }
         else if (cards.get(position) instanceof CensusDetailedRank) {

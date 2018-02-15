@@ -30,7 +30,9 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.DataIntPair;
 import com.lloydtorres.stately.dto.Event;
+import com.lloydtorres.stately.dto.EventsHolder;
 import com.lloydtorres.stately.dto.WaVoteStatus;
+import com.lloydtorres.stately.feed.BreakingNewsCard;
 import com.lloydtorres.stately.feed.HappeningCard;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
@@ -89,8 +91,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder = new WaHeaderCard(statsCard);
                 break;
             default:
-                View happeningCard = inflater.inflate(R.layout.card_happening, parent, false);
-                viewHolder = new HappeningCard(context, happeningCard);
+                View happeningCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                viewHolder = new BreakingNewsCard(happeningCard);
                 break;
         }
         return viewHolder;
@@ -112,8 +114,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 statsCard.init((DataIntPair) cards.get(position));
                 break;
             default:
-                HappeningCard happeningCard = (HappeningCard) holder;
-                happeningCard.init((Event) cards.get(position));
+                BreakingNewsCard happeningCard = (BreakingNewsCard) holder;
+                happeningCard.init(context, context.getString(R.string.wa_happenings_title), ((EventsHolder) cards.get(position)).events);
                 break;
         }
     }
@@ -132,7 +134,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         else if (cards.get(position) instanceof DataIntPair) {
             return STATS_CARD;
         }
-        else if (cards.get(position) instanceof HappeningCard) {
+        else if (cards.get(position) instanceof EventsHolder) {
             return HAPPENING_CARD;
         }
         return -1;
@@ -152,8 +154,9 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         List<Event> happen = sc.events;
         Collections.sort(happen);
+        EventsHolder events = new EventsHolder(happen);
 
-        cards.addAll(happen);
+        cards.add(events);
         notifyDataSetChanged();
     }
 

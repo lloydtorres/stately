@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
@@ -36,15 +37,18 @@ import java.util.List;
  */
 public class BreakingNewsCard extends RecyclerView.ViewHolder {
     private LinearLayout newsHolder;
+    private TextView title;
     private LayoutInflater inflater;
 
     public BreakingNewsCard(View itemView) {
         super(itemView);
         newsHolder = itemView.findViewById(R.id.card_world_breaking_news_holder);
+        title = itemView.findViewById(R.id.card_world_breaking_news_title);
     }
 
-    public void init(Context context, List<Event> newsItems) {
+    public void init(Context context, String titleText, List<Event> newsItems) {
         inflater = LayoutInflater.from(context);
+        title.setText(titleText);
         newsHolder.removeAllViews();
         int index = 0;
         for (Event e : newsItems) {
