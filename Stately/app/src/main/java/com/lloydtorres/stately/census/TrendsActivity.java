@@ -199,19 +199,19 @@ public class TrendsActivity extends SlidrActivity {
         String targetURL = "";
         String queryTarget = "";
         long curTime = System.currentTimeMillis() / 1000L;
-        long sixtyDaysAgo = curTime - CensusHistory.CENSUS_TRENDS_RANGE_IN_SECONDS;
+        long twoYearsAgo = curTime - CensusHistory.CENSUS_TRENDS_RANGE_IN_SECONDS;
 
         switch (mode) {
             case TREND_NATION:
                 queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY, SparkleHelper.getIdFromName(target));
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id, sixtyDaysAgo, curTime);
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id, twoYearsAgo, curTime);
                 break;
             case TREND_REGION:
                 queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, twoYearsAgo, curTime, start);
                 break;
             case TREND_WORLD:
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, sixtyDaysAgo, curTime, start);
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, twoYearsAgo, curTime, start);
         }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
