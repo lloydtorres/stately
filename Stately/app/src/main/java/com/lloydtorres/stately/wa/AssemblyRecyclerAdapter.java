@@ -35,6 +35,7 @@ import com.lloydtorres.stately.feed.HappeningCard;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
+import com.lloydtorres.stately.helpers.network.DashHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,8 +56,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final int HAPPENING_CARD = 3;
 
     // positions of the council cards
-    private static final int GENERAL_ASSEMBLY_INDEX = 0;
-    private static final int SECURITY_COUNCIL_INDEX = 1;
+    private static final int GENERAL_ASSEMBLY_INDEX = 1;
+    private static final int SECURITY_COUNCIL_INDEX = 2;
+
+    private static final String WA_BANNER_URL = SparkleHelper.BASE_URI + "images/banners/wa1.jpg";
 
     private List<Object> cards;
     private Context context;
@@ -83,7 +86,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             case STATS_CARD:
                 View statsCard = inflater.inflate(R.layout.card_wa_members, parent, false);
-                viewHolder = new StatsCard(statsCard);
+                viewHolder = new WaHeaderCard(statsCard);
                 break;
             default:
                 View happeningCard = inflater.inflate(R.layout.card_happening, parent, false);
@@ -105,10 +108,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 inactiveCard.init((Assembly) cards.get(position), position);
                 break;
             case STATS_CARD:
-                StatsCard statsCard = (StatsCard) holder;
-                statsCard.init((DataIntPair) cards.get(position),
-                        context.getString(R.string.wa_members),
-                        context.getString(R.string.wa_delegates));
+                WaHeaderCard statsCard = (WaHeaderCard) holder;
+                statsCard.init((DataIntPair) cards.get(position));
                 break;
             default:
                 HappeningCard happeningCard = (HappeningCard) holder;
@@ -142,11 +143,12 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         // Setup objects based on RecyclerView content
         cards = new ArrayList<Object>();
-        cards.add(ga);
-        cards.add(sc);
 
         DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
         cards.add(s);
+
+        cards.add(ga);
+        cards.add(sc);
 
         List<Event> happen = sc.events;
         Collections.sort(happen);
@@ -284,6 +286,21 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 buttonHolder.setVisibility(View.GONE);
                 buttonHolder.setOnClickListener(null);
             }
+        }
+    }
+
+    public class WaHeaderCard extends StatsCard {
+        private ImageView banner;
+
+        public WaHeaderCard(View v) {
+            super(v);
+            banner = v.findViewById(R.id.card_wa_header);
+
+            DashHelper.getInstance(context).loadImage(WA_BANNER_URL, banner, false);
+        }
+
+        public void init(DataIntPair s) {
+            super.init(s, context.getString(R.string.wa_members), context.getString(R.string.wa_delegates));
         }
     }
 }

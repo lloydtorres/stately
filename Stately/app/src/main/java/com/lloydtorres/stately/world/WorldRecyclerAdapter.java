@@ -111,7 +111,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         switch (viewType) {
             case WORLD_COUNT:
-                View statsCard = inflater.inflate(R.layout.card_wa_members, parent, false);
+                View statsCard = inflater.inflate(R.layout.card_stats, parent, false);
                 viewHolder = new StatsCard(statsCard);
                 break;
             case WORLD_FEATURED_REGION:
