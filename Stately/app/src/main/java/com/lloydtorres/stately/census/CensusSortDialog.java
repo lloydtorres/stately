@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RadioGroup;
 
 import com.lloydtorres.stately.R;
@@ -39,8 +40,10 @@ public class CensusSortDialog extends DetachDialogFragment {
 
     private int mode;
     private RadioGroup sortOrderState;
+    private CheckBox alphabeticalCheckBox;
     private RadioGroup directionState;
     private int sortOrderChoice;
+    private boolean isAlphabetical;
     private boolean isAscending;
     private CensusRecyclerAdapter adapter;
 
@@ -52,6 +55,10 @@ public class CensusSortDialog extends DetachDialogFragment {
 
     public void setSortOrder(int so) {
         sortOrderChoice = so;
+    }
+
+    public void setIsAlphabetical(boolean isAlph) {
+        isAlphabetical = isAlph;
     }
 
     public void setIsAscending(boolean ia) {
@@ -92,6 +99,9 @@ public class CensusSortDialog extends DetachDialogFragment {
                 break;
         }
 
+        alphabeticalCheckBox = dialogView.findViewById(R.id.census_option_alphabetical);
+        alphabeticalCheckBox.setChecked(isAlphabetical);
+
         directionState = dialogView.findViewById(R.id.census_sort_order_radio_group);
         directionState.check(isAscending ? R.id.census_sort_ascending : R.id.census_sort_descending);
 
@@ -131,10 +141,12 @@ public class CensusSortDialog extends DetachDialogFragment {
                 break;
         }
 
+        boolean alphabeticalMode = alphabeticalCheckBox.isChecked();
+
         boolean direction = directionState.getCheckedRadioButtonId() == R.id.census_sort_ascending;
 
-        if (adapter != null && (sortOrderChoice != newChoice || isAscending != direction)) {
-            adapter.sort(newChoice, direction);
+        if (adapter != null && (sortOrderChoice != newChoice || isAlphabetical != alphabeticalMode || isAscending != direction)) {
+            adapter.sort(newChoice, alphabeticalMode, direction);
         }
     }
 }

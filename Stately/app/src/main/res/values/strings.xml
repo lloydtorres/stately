@@ -284,6 +284,7 @@
     <string name="region_ec">Embassy closed with %1$s.</string>
 
     <!-- Census subfragment -->
+    <string name="census_sort_category">Category</string>
     <string name="census_sort_score">Score</string>
     <string name="census_sort_world_rank">World rank</string>
     <string name="census_sort_world_percent">World top percent</string>
@@ -292,12 +293,19 @@
     <string name="census_hash_symbol">#</string>
     <string name="census_top">Top</string>
 
+    <string name="census_sort_options">Options</string>
+    <string name="census_sort_alphabetical">Force alphabetical</string>
+
+    <string name="census_sort_order">Order</string>
     <string name="census_sort_ascending">Ascending</string>
     <string name="census_sort_descending">Descending</string>
 
     <string name="census_sort_label">Sort by: %1$s (%2$s)</string>
+    <string name="census_sort_label_alphabetical">Sort by: Alphabetical (%1$s; showing %2$s)</string>
     <string name="census_sort_dialog_title">Sort by</string>
     <string name="census_sort_confirm">Sort</string>
+
+    <string name="census_type_unknown">Unknown</string>
 
     <!-- Trends -->
     <string name="trends_title_generic">Trends</string>

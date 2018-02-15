@@ -21,11 +21,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RecyclerSubFragment;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
+import com.lloydtorres.stately.dto.CensusScale;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Lloyd on 2016-04-09.
@@ -64,6 +68,18 @@ public class CensusSubFragment extends RecyclerSubFragment {
             // Get rid of Z-Day data if needed
             if (!(NightmareHelper.getIsZDayActive(getContext()) && censusMode == CensusSortDialog.CENSUS_MODE_REGION)) {
                 censusData = new ArrayList<CensusDetailedRank>(NightmareHelper.trimZDayCensusData(censusData));
+            }
+
+            // Attach names to census data
+            String[] WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
+            LinkedHashMap<Integer, CensusScale> censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
+
+            for (CensusDetailedRank rank : censusData) {
+                if (censusScales.containsKey(rank.id)) {
+                    rank.name = censusScales.get(rank.id).name;
+                } else {
+                    rank.name = getString(R.string.census_type_unknown);
+                }
             }
 
             if (mRecyclerAdapter == null) {

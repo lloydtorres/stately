@@ -63,6 +63,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private CensusSubFragment fragment;
     private ArrayList<CensusDetailedRank> censusData;
     private int sortOrder = SORT_MODE_WORLD_PERCENT;
+    private boolean isAlphabetical = false;
     private boolean isAscending = true;
     private String target;
     private int mode;
@@ -95,7 +96,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private String getSortLabel() {
-        String censusLabel = context.getString(R.string.census_sort_label);
+        String censusLabel = context.getString(isAlphabetical ? R.string.census_sort_label_alphabetical : R.string.census_sort_label);
 
         String censusType = context.getString(R.string.census_sort_score);
         switch (sortOrder) {
@@ -116,10 +117,19 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         String censusOrder = context.getString(isAscending ? R.string.census_sort_ascending : R.string.census_sort_descending);
         censusOrder = censusOrder.toLowerCase(Locale.US);
 
+        if (isAlphabetical) {
+            censusType = censusType.toLowerCase(Locale.US);
+            return String.format(Locale.US, censusLabel, censusOrder, censusType);
+        }
+
         return String.format(Locale.US, censusLabel, censusType, censusOrder);
     }
 
     private Comparator<CensusDetailedRank> getSort() {
+        if (isAlphabetical) {
+            return isAscending ? SORT_ALPHABETICAL : sortDescending(SORT_ALPHABETICAL);
+        }
+
         Comparator<CensusDetailedRank> comparator = SORT_SCORE;
         switch (sortOrder) {
             case SORT_MODE_WORLD_RANK:
@@ -142,10 +152,12 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     /**
      * Sorts the list of census data based on the passed-in criteria and direction.
      * @param criteria Sort order (as specified by the constants)
+     * @param isAlph True if alphabetical order should be forced, false otherwise
      * @param a True if ascending, false if descending
      */
-    public void sort(int criteria, boolean a) {
+    public void sort(int criteria, boolean isAlph, boolean a) {
         sortOrder = criteria;
+        isAlphabetical = isAlph;
         isAscending = a;
         Collections.sort(censusData, getSort());
         notifyDataSetChanged();
@@ -265,6 +277,13 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     };
 
+    private static final Comparator<CensusDetailedRank> SORT_ALPHABETICAL = new Comparator<CensusDetailedRank>() {
+        @Override
+        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+            return lhs.name.compareTo(rhs.name);
+        }
+    };
+
     /**
      * View holders.
      */
@@ -292,6 +311,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             CensusSortDialog censusSortDialog = new CensusSortDialog();
             censusSortDialog.setMode(mode);
             censusSortDialog.setSortOrder(sortOrder);
+            censusSortDialog.setIsAlphabetical(isAlphabetical);
             censusSortDialog.setIsAscending(isAscending);
             censusSortDialog.setAdapter(CensusRecyclerAdapter.this);
             censusSortDialog.show(fm, CensusSortDialog.DIALOG_TAG);
