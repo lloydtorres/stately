@@ -220,10 +220,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     repealed.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
-                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-                            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolution.repealed);
-                            context.startActivity(resolutionActivityIntent);
+                            SparkleHelper.startResolution(context, councilId, resolution.repealed);
                         }
                     });
                 }

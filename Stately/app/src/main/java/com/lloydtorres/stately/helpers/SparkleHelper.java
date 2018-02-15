@@ -757,6 +757,21 @@ public final class SparkleHelper {
     }
 
     /**
+     * Launches the ResolutionActivity to show a given resolution (or the current resolution).
+     * @param c App context
+     * @param councilId ID of target council (GA or SC)
+     * @param resolutionId ID of target resolution; shows current if null
+     */
+    public static void startResolution(Context c, Integer councilId, Integer resolutionId) {
+        Intent resolutionActivityIntent = new Intent(c, ResolutionActivity.class);
+        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
+        if (resolutionId != null) {
+            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolutionId);
+        }
+        c.startActivity(resolutionActivityIntent);
+    }
+
+    /**
      * LINK AND HTML PROCESSING
      * These are functions used to transform raw NationStates BBCode and formatting into clickable
      * links and formatted text. Separate from the other formatting functions due to their unique

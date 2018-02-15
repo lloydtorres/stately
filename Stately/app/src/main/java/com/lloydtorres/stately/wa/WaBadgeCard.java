@@ -28,6 +28,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
 import com.lloydtorres.stately.dto.WaBadge;
 import com.lloydtorres.stately.helpers.RaraHelper;
+import com.lloydtorres.stately.helpers.SparkleHelper;
 
 import java.util.Locale;
 
@@ -81,10 +82,7 @@ public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClick
     @Override
     public void onClick(View v) {
         if (badgeData != null) {
-            Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.SECURITY_COUNCIL);
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, badgeData.scResolution);
-            context.startActivity(resolutionActivityIntent);
+            SparkleHelper.startResolution(context, Assembly.SECURITY_COUNCIL, badgeData.scResolution);
         }
     }
 }

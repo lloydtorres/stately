@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textColor="?attr/themedColorPrimaryText"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     tools:text="54,321"/>
                 <TextView
                     android:id="@+id/card_wa_members_sub"
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textColor="?attr/themedColorPrimaryText"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     tools:text="12,345"/>
                 <TextView
                     android:id="@+id/card_wa_delegates_sub"
@@ -116,6 +116,50 @@
                     android:text="@string/wa_delegates"/>
             </LinearLayout>
 
+        </LinearLayout>
+
+        <include layout="@layout/view_divider" />
+        <LinearLayout
+            android:id="@+id/card_wa_header_foundation_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="-7dp"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_wa_button"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/themedColorButton"
+                    android:text="@string/wa_foundation_button"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:textColor="?attr/themedColorButton"
+                    android:textSize="30sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="invisible"
+                    android:text=""/>
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>

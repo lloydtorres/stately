@@ -390,14 +390,12 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             linkContent = v.findViewById(R.id.region_wa_link_text);
         }
 
-        public void init(WaVote w) {
+        public void init(final WaVote w) {
             // Setup resolution link
-            final Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
-            resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, w.chamber);
             resolutionLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(resolutionActivityLaunch);
+                    SparkleHelper.startResolution(context, w.chamber, null);
                 }
             });
 

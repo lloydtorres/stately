@@ -356,11 +356,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
          * @param vote
          * @param councilId
          */
-        private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote, int councilId) {
-            // Intent to open the ResolutionActivity
-            final Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
-            resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-
+        private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote, final int councilId) {
             // Colour of the indicator as well as the assembly name
             int stateColour;
             String assemblyName;
@@ -399,7 +395,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             holder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(resolutionActivityLaunch);
+                    SparkleHelper.startResolution(context, councilId, null);
                 }
             });
         }

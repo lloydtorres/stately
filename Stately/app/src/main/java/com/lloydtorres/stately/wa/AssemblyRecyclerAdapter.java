@@ -33,7 +33,6 @@ import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.EventsHolder;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
-import com.lloydtorres.stately.feed.HappeningCard;
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
@@ -58,10 +57,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final int HAPPENING_CARD = 3;
 
     // positions of the council cards
-    private static final int GENERAL_ASSEMBLY_INDEX = 1;
-    private static final int SECURITY_COUNCIL_INDEX = 2;
+    private static final int GENERAL_ASSEMBLY_INDEX = 0;
+    private static final int SECURITY_COUNCIL_INDEX = 1;
 
     private static final String WA_BANNER_URL = SparkleHelper.BASE_URI + "images/banners/wa1.jpg";
+    private static final int WA_FOUNDATION_ID = 2;
 
     private List<Object> cards;
     private Context context;
@@ -146,11 +146,11 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         // Setup objects based on RecyclerView content
         cards = new ArrayList<Object>();
 
-        DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
-        cards.add(s);
-
         cards.add(ga);
         cards.add(sc);
+
+        DataIntPair s = new DataIntPair(sc.numNations, sc.numDelegates);
+        cards.add(s);
 
         List<Event> happen = sc.events;
         Collections.sort(happen);
@@ -277,10 +277,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 buttonHolder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent resolutionActivityIntent = new Intent(context, ResolutionActivity.class);
-                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
-                        resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resId);
-                        context.startActivity(resolutionActivityIntent);
+                        SparkleHelper.startResolution(context, councilId, resId);
                     }
                 });
 
@@ -294,16 +291,25 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public class WaHeaderCard extends StatsCard {
         private ImageView banner;
+        private LinearLayout foundationButton;
 
         public WaHeaderCard(View v) {
             super(v);
             banner = v.findViewById(R.id.card_wa_header);
+            foundationButton = v.findViewById(R.id.card_wa_header_foundation_button);
 
             DashHelper.getInstance(context).loadImage(WA_BANNER_URL, banner, false);
         }
 
         public void init(DataIntPair s) {
             super.init(s, context.getString(R.string.wa_members), context.getString(R.string.wa_delegates));
+
+            foundationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SparkleHelper.startResolution(context, Assembly.GENERAL_ASSEMBLY, WA_FOUNDATION_ID);
+                }
+            });
         }
     }
 }
