@@ -33,7 +33,6 @@ import com.lloydtorres.stately.dto.Event;
 import com.lloydtorres.stately.dto.EventsHolder;
 import com.lloydtorres.stately.dto.WaVoteStatus;
 import com.lloydtorres.stately.feed.BreakingNewsCard;
-import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.StatsCard;
 import com.lloydtorres.stately.helpers.network.DashHelper;

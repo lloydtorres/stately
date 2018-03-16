@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.region;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
@@ -53,7 +52,6 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.helpers.links.NameListSpan;
-import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 

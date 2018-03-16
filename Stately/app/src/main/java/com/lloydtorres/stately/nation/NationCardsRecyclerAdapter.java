@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.nation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -59,7 +58,6 @@ import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;
 import com.lloydtorres.stately.issues.PolicyCard;
-import com.lloydtorres.stately.wa.ResolutionActivity;
 import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
 
