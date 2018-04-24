@@ -253,9 +253,10 @@ public class LoginActivity extends BroadcastableActivity {
                             PinkaHelper.setActiveUser(LoginActivity.this, nationResponse.name);
                             PinkaHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
 
+                            Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
+                            nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
+
                             if (routeBundle == null) {
-                                Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
-                                nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
                                 nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(nationActivityLaunch);
                             } else {
@@ -283,6 +284,9 @@ public class LoginActivity extends BroadcastableActivity {
                                         nextActivity.putExtra(bundleKey, (Integer) routeBundle.get(bundleKey));
                                     }
                                 }
+                                nationActivityLaunch.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(nationActivityLaunch);
+
                                 nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(nextActivity);
                             }
