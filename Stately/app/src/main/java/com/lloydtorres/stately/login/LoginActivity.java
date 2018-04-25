@@ -265,6 +265,7 @@ public class LoginActivity extends BroadcastableActivity {
                                 switch (routePath) {
                                     case ROUTE_ISSUES:
                                         nextActivity = new Intent(LoginActivity.this, StatelyActivity.class);
+                                        nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         break;
                                     case ROUTE_TG:
                                         nextActivity = new Intent(LoginActivity.this, TelegramHistoryActivity.class);
@@ -284,10 +285,12 @@ public class LoginActivity extends BroadcastableActivity {
                                         nextActivity.putExtra(bundleKey, (Integer) routeBundle.get(bundleKey));
                                     }
                                 }
-                                nationActivityLaunch.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(nationActivityLaunch);
 
-                                nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                if (routePath != ROUTE_ISSUES) {
+                                    nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(nationActivityLaunch);
+                                }
+
                                 startActivity(nextActivity);
                             }
                         }
