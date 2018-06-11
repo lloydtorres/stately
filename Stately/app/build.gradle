@@ -43,7 +43,7 @@ dependencies {
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.satyan:sugar:1.5'
     implementation 'com.github.omadahealth:swipy:1.2.3@aar'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'org.atteo:evo-inflector:1.2.2'
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'org.sufficientlysecure:html-textview:3.5'
