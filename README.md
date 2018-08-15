@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.10.3** - Bug fixes and improvements.
 * **1.10.2** - Support new census scales, alphabetical sort, longer trend graphs, visual polishes.
 * **1.10.1** - Bug fixes and improvements.
 * **1.10.0** - New logo, nation policies support.
