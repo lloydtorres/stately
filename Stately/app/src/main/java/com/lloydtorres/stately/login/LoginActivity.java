@@ -20,11 +20,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,10 +83,8 @@ public class LoginActivity extends BroadcastableActivity {
     private View view;
     private ImageView headerImage;
     private TextView subtitle;
-    private AppCompatEditText username;
-    private AppCompatEditText password;
-    private TextInputLayout userHolder;
-    private TextInputLayout passHolder;
+    private EditText username;
+    private EditText password;
     private Button login;
     private Button createNation;
     private boolean isLocked;
@@ -123,8 +120,6 @@ public class LoginActivity extends BroadcastableActivity {
         subtitle = findViewById(R.id.login_subtitle);
         username = findViewById(R.id.field_username);
         password = findViewById(R.id.field_password);
-        userHolder = findViewById(R.id.holder_user);
-        passHolder = findViewById(R.id.holder_password);
         login = findViewById(R.id.login_button);
         createNation = findViewById(R.id.register_button);
 
@@ -506,13 +501,13 @@ public class LoginActivity extends BroadcastableActivity {
 
     private void setLockedState(boolean stat, String message) {
         if (stat) {
-            userHolder.setVisibility(View.GONE);
-            passHolder.setVisibility(View.GONE);
+            username.setVisibility(View.GONE);
+            password.setVisibility(View.GONE);
             login.setText(message);
             createNation.setVisibility(View.GONE);
         } else {
-            userHolder.setVisibility(View.VISIBLE);
-            passHolder.setVisibility(View.VISIBLE);
+            username.setVisibility(View.VISIBLE);
+            password.setVisibility(View.VISIBLE);
             login.setText(getString(R.string.log_in));
             createNation.setVisibility(View.VISIBLE);
         }
