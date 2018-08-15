@@ -598,7 +598,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             }
 
             // formatting
-            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory, this, xLabels, true, 24, false);
+            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory, this, xLabels, true, 24, false, true);
 
             votingHistory.setData(data);
             votingHistory.invalidate();

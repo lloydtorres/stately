@@ -357,9 +357,17 @@ public final class RaraHelper {
      * @param valueFormatter True if large value formatter should be used
      * @param skip Number of values to skip
      * @param legend True if show legend, false if hide legend
+     * @param isYAxisLocked True if y-axis should be locked from user interaction, false otherwise
      * @return Formatted linechart
      */
-    public static LineChart getFormattedLineChart(Context c, LineChart chart, OnChartValueSelectedListener listener, List<String> xLabels, boolean valueFormatter, int skip, boolean legend) {
+    public static LineChart getFormattedLineChart(Context c,
+                                                  LineChart chart,
+                                                  OnChartValueSelectedListener listener,
+                                                  List<String> xLabels,
+                                                  boolean valueFormatter,
+                                                  int skip,
+                                                  boolean legend,
+                                                  boolean isYAxisLocked) {
         Legend cLegend = chart.getLegend();
         cLegend.setEnabled(legend);
 
@@ -386,7 +394,7 @@ public final class RaraHelper {
         chart.setDoubleTapToZoomEnabled(false);
         chart.setDescription(EMPTY_CHART_DESCRIPTION);
         chart.setDragEnabled(true);
-        chart.setScaleYEnabled(false);
+        chart.setScaleYEnabled(!isYAxisLocked);
         chart.setDrawGridBackground(false);
         chart.setOnChartValueSelectedListener(listener);
 

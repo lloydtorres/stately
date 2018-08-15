@@ -271,7 +271,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 30, false);
+            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 30, false, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }
