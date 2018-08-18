@@ -812,14 +812,13 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.fragment_dialog_move_password, null);
-        AppCompatEditText passView = dialogView.findViewById(R.id.move_password);
-        final AppCompatEditText fPassView = passView;
+        final AppCompatEditText passView = dialogView.findViewById(R.id.move_password);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String password = null;
-                if (fPassView.getText().length() >= 0) {
-                    password = fPassView.getText().toString();
+                if (passView.getText().length() >= 0) {
+                    password = passView.getText().toString();
                 }
                 dialog.dismiss();
                 getLocalId(String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(id)), password);
