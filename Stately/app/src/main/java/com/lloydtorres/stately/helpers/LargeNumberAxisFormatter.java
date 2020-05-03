@@ -18,15 +18,14 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 /**
  * Created by Lloyd on 2016-10-31.
  * Axis formatter for charts that deals with large numbers.
  * Implemented because MPAndroidChart's own implementation breaks for REALLY large numbers.
  */
-public class LargeNumberAxisFormatter implements IAxisValueFormatter {
+public class LargeNumberAxisFormatter extends ValueFormatter {
 
     private Context context;
 
@@ -35,7 +34,7 @@ public class LargeNumberAxisFormatter implements IAxisValueFormatter {
     }
 
     @Override
-    public String getFormattedValue(float value, AxisBase axis) {
+    public String getFormattedValue(float value) {
         return SparkleHelper.getPrettifiedShortSuffixedNumber(context, value);
     }
 }

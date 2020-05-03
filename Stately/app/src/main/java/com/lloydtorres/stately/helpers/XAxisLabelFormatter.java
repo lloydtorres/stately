@@ -16,8 +16,7 @@
 
 package com.lloydtorres.stately.helpers;
 
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
  * Created by Lloyd on 2016-10-22.
  * Provides labels to show in a chart's XAxis.
  */
-public class XAxisLabelFormatter implements IAxisValueFormatter {
+public class XAxisLabelFormatter extends ValueFormatter {
 
     private List<String> labels;
 
@@ -34,7 +33,7 @@ public class XAxisLabelFormatter implements IAxisValueFormatter {
     }
 
     @Override
-    public String getFormattedValue(float value, AxisBase axis) {
+    public String getFormattedValue(float value) {
         if (labels == null || value >= labels.size()) {
             return "";
         } else {
