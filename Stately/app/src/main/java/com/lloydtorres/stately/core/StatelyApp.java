@@ -16,12 +16,10 @@
 
 package com.lloydtorres.stately.core;
 
-import com.crashlytics.android.Crashlytics;
 import com.lloydtorres.stately.push.TrixHelper;
 import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
 
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Lloyd on 2016-01-29.
@@ -32,11 +30,6 @@ public class StatelyApp extends SugarApp {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // analytics
-        if (SettingsActivity.getCrashReportSetting(this)) {
-            Fabric.with(this, new Crashlytics());
-        }
 
         // notification channels
         TrixHelper.initNotificationChannels(this);
