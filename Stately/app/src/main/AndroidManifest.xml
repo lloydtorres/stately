@@ -138,9 +138,6 @@
         <service android:name=".push.AlphysLollipopService"
             android:label="@string/stately_alphys"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="651c62b07195273645b7c74e9b21a68bf3d124cd" />
     </application>
 
 </manifest>
