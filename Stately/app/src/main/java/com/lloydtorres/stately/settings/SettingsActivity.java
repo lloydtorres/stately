@@ -47,7 +47,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final String SETTING_AUTOLOGIN = "setting_autologin";
     public static final String SETTING_ISSUECONFIRM = "setting_issueconfirm";
     public static final String SETTING_EXITCONFIRM = "setting_exitconfirm";
-    public static final String SETTING_CRASHREPORT = "setting_crashreport";
 
     public static final String SETTING_NOTIFS = "setting_notifs";
     public static final String SETTING_NOTIFS_CHECK = "setting_notifs_check";
@@ -139,12 +138,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
-            case SETTING_CRASHREPORT:
-                if (isFinishing()) {
-                    return;
-                }
-                dialogBuilder.setMessage(getString(R.string.warn_crashreport)).setPositiveButton(getString(R.string.got_it), null).show();
-                break;
             case SETTING_NOTIFS:
             case SETTING_NOTIFS_CHECK:
                 TrixHelper.stopAlarmForAlphys(this);
@@ -182,11 +175,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static boolean getConfirmExitSetting(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         return storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true);
-    }
-
-    public static boolean getCrashReportSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(SettingsActivity.SETTING_CRASHREPORT, true);
     }
 
     /**

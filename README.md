@@ -102,10 +102,6 @@ Stately uses the following open-source libraries:
 * [SwipyRefreshLayout](https://github.com/omadahealth/SwipyRefreshLayout)
 * [Volley](https://github.com/google/volley)
 
-Stately also uses the following proprietary libraries:
-
-* [Crashlytics](https://try.crashlytics.com/)
-
 ### Creative Commons
 
 Stately uses Creative Commons-licensed content from the following sources:

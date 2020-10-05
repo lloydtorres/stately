@@ -20,11 +20,6 @@
             android:title="@string/setting_exitconfirm"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="setting_crashreport"
-            android:title="@string/setting_crashreport"
-            android:defaultValue="true"
-            android:icon="@null" />
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory
