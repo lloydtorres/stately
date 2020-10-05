@@ -529,8 +529,6 @@
     <string name="setting_title_behavior">General</string>
     <string name="setting_autologin">Log in automatically</string>
     <string name="setting_issueconfirm">Confirm issue decisions</string>
-    <string name="setting_crashreport">Send crash reports</string>
-    <string name="warn_crashreport">Stately must be restarted before changes take effect.</string>
     <string name="got_it">Got It</string>
     <string name="setting_title_notifs">Notifications</string>
     <string name="setting_notifs">Get notifications</string>
