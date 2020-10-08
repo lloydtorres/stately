@@ -142,6 +142,7 @@
         <item>Z-Day: Dead##Capita##d25</item>
         <item>Z-Day: Zombification##Romero-Brooks Index##x5</item>
         <item>Average Disposable Income##Standard Monetary Units##t38</item>
+        <item>International Artwork##Bank##c13</item>
         <item>Unknown##Mystery Units##x12</item>
     </string-array>
     <string-array name="postcards">
