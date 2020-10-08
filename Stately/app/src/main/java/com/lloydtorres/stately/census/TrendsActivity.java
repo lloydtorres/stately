@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
 import com.lloydtorres.stately.dto.CensusHistory;
+import com.lloydtorres.stately.dto.CensusHistoryPoint;
 import com.lloydtorres.stately.dto.CensusNationRankData;
 import com.lloydtorres.stately.dto.CensusNationRankList;
 import com.lloydtorres.stately.dto.CensusScale;
@@ -76,11 +77,15 @@ public class TrendsActivity extends SlidrActivity {
     public static final int CENSUS_TAXATION = 49;
     public static final int CENSUS_INFLUENCE = 65;
     public static final int CENSUS_AVERAGE_INCOME = 72;
+    public static final int CENSUS_AVERAGE_INCOME_RICH = 74;
     public static final int CENSUS_ECONOMIC_OUTPUT = 76;
     public static final int CENSUS_CRIME = 77;
     public static final int CENSUS_ZDAY_SURVIVORS = 81;
     public static final int CENSUS_ZDAY_ZOMBIES = 82;
     public static final int CENSUS_ZDAY_ZOMBIFICATION = 84;
+
+    // Unix time for midnight on 9 September 2020 (Eastern Time)
+    private static final long AVERAGE_RICH_SCALE_CUTOFF = 1599624000L;
 
     private String target;
     private int id;
@@ -276,6 +281,16 @@ public class TrendsActivity extends SlidrActivity {
     private void processDataset(CensusHistory data) {
         dataset = data;
         updateStartCounter(dataset.ranks);
+
+        // Census history was cut by a factor of 100 after 9 September 2020
+        // Multiply that scale by 100 for all data points after that date
+        if (id == CENSUS_AVERAGE_INCOME_RICH) {
+            for (CensusHistoryPoint point : dataset.scale.points) {
+                if (point.timestamp > AVERAGE_RICH_SCALE_CUTOFF) {
+                    point.score = point.score * 100f;
+                }
+            }
+        }
 
         CensusScale censusType = SparkleHelper.getCensusScale(censusScales, id);
 
