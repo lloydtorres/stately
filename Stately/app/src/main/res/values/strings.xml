@@ -379,7 +379,7 @@
     <string name="telegrams_compose_hint">Compose telegram…</string>
     <string name="telegrams_send">Send Telegram</string>
     <string name="telegrams_developer_header">Sending a telegram to Stately\'s developer — Greater Tern.</string>
-    <string name="telegrams_developer_warning">Please only send telegrams related to the Stately app or basic NationStates gameplay. All other telegrams may be ignored.\n\nQuestions concerning NationStates should be posted on the forums: forum.nationstates.net</string>
+    <string name="telegrams_developer_warning">Please only send telegrams related to the Stately app.\n\nAlthough the developer cannot respond to everyone, please be assured that all telegrams are carefully considered.\n\nQuestions concerning NationStates should be posted on the forums: forum.nationstates.net</string>
     <string name="telegrams_empty_recipients">No recipients found for this telegram.</string>
     <string name="telegrams_empty_content">Telegram seems empty.</string>
     <string name="telegrams_invalid_recipient">Something seems wrong with the recipients.</string>
