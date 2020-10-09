@@ -1,0 +1,15 @@
+Stately is an unofficial app for NationStates (nationstates.net), a text-based political nation simulation game. Stately delivers the best NationStates experience on your mobile device.
+
+<b>With Stately, you can:</b>
+• Get your nation's stats, policies, rankings and happenings.
+• Respond to issues encountered by your nation.
+• Login and switch between different nations.
+• Browse through and move to different regional communities.
+• Chat with other players and more in RMBs.
+• Observe and vote on current World Assembly resolutions.
+• Endorse nations and participate in R/D gameplay.
+• Read, manage, write and reply to telegrams.
+• Discover trends in national, regional and world census statistics.
+• Compile all your happenings together with the Activity Feed.
+• Get notified and stay up to date on new issues, telegrams and other events.
+• Make it your own: choose between five different themes and more.

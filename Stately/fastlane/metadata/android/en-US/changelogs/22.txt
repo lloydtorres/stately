@@ -1,0 +1,6 @@
+• Remove Guava dependency.
+• Merge WA card in Nation > Overview into main card.
+• Add loading progress indicator in region fragment.
+• Change census rank cards to show "Top" instead.
+• Confirm app exit when pressing back button.
+• Bug fixes and improvements.

@@ -1,0 +1,7 @@
+• Post in any RMB with posting permissions.
+• Improved support for suppressed, deleted and banned RMB posts.
+• Like RMB posts and view users who have liked the post.
+• Display census rankings for nations and regions.
+• Discover historical trends in national and regional census stats.
+• Vectorize icons.
+• Bug fixes and improvements.

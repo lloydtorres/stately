@@ -1,0 +1,3 @@
+• Add time to next issue in Issues screen.
+• Add WA category descriptions to Nation > People screen.
+• Bug fixes and improvements.

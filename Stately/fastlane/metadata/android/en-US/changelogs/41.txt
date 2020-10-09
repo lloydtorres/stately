@@ -1,0 +1,3 @@
+• Update Android SDKs to v27.
+• Add support for Z-Day census datasets.
+• Get access to zombie stats directly from Zombie Control.

@@ -1,0 +1,2 @@
+• Enable option to move the app to SD card.
+• Bug fixes and improvements.

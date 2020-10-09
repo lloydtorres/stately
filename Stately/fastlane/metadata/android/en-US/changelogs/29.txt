@@ -1,0 +1,5 @@
+• Added Z-Day support.
+• Replaced HTML issues parser with direct issues API access.
+• Upgraded MPAndroidChart to v3.
+• Upgraded Android APIs to 25 (Nougat/7.1).
+• Bug fixes and other improvements.

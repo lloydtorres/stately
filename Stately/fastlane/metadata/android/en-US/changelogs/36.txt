@@ -1,0 +1,7 @@
+• Add support for issue header images.
+• Show WA condemnation, commendation and liberation badges for nations and regions.
+• Add options to send support telegram and read licenses and privacy policy in settings.
+• Improved reload strategy for issue and nation data.
+• Improved support for [list] and [hr] BBCode tags.
+• Improved normal case logic for converting IDs to proper names.
+• Bug fixes and other improvements.

@@ -1,0 +1,4 @@
+• Added support for telegrams for users with the NationStates Antiquity theme.
+• Fixed bug on trends screen where app crashed on large numbers.
+• Fixed bug with pie charts where values equal to or less than 1 were not rendered.
+• Other bug fixes and improvements.

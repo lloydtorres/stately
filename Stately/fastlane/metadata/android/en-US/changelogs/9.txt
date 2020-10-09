@@ -1,0 +1,2 @@
+• Support for instant issues.
+• Bug fix for issue preventing users from logging in.

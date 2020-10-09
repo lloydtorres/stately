@@ -1,0 +1,2 @@
+• Restored text selection in EditText views.
+• Critical bug fixes and other improvements.

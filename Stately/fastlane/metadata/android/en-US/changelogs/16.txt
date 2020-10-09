@@ -1,0 +1,2 @@
+• Additional POST safety checks.
+• Bug fixes and improvements.

@@ -1,0 +1,2 @@
+• Fix bug where issues fragment can crash when user dismisses all issues.
+• Replace post and poll content views with HtmlTextView.

@@ -1,0 +1,15 @@
+• Added link to open NationStates registration page on the login screen.
+• Rebuilt the login process to use the NationStates API instead.
+• Added unread count for issues, telegrams, RMB posts and WA resolutions in the navigation drawer.
+• Converted nation tabs from hard-coded ScrollViews to dynamic RecyclerView cards.
+• Improved telegram support - unread styling, organization tools and 'visit region' button for recruitment.
+• Merged Region > Community and Region > Governance tabs.
+• Increased RMB posts to load to 100, improved RMB forward queries and added 'jump to specific post' option.
+• Improved Unicode support for RMB posts and telegrams.
+• Added domain name in link text for external links in RMB posts and telegrams.
+• Added option to report RMB posts and telegrams.
+• Removed Activity Feed restrictions on number of nations/regions to query.
+• Swipe right from the left edge to dismiss new activities.
+• Removed enforced portrait mode on all activities.
+• Visual improvements across the app.
+• Bug fixes and other improvements.

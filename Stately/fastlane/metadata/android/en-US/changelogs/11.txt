@@ -1,0 +1,4 @@
+• Add today's featured census data in Nation > Overview screen.
+• Add changes to census data in Legislation Passed screen.
+• Fill in missing nation macros in Legislation Passed screen.
+• Bug fixes and improvements.

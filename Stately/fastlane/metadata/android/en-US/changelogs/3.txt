@@ -1,0 +1,5 @@
+• Multi-nation login.
+• Post on your own regional RMB.
+• Vote on WA resolutions.
+• Limit API access rate to 45 requests/30 seconds.
+• Bug fixes and improvements.

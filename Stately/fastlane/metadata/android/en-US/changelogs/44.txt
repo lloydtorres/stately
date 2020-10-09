@@ -1,0 +1,4 @@
+• Add support for "Average Disposable Income" census scale.
+• Add alphabetical sort to census tab in nation and region pages.
+• Extend trends graph from 60 days to two years.
+• Visual polishes to WA and World pages.

@@ -1,0 +1,4 @@
+• RMB improvements: edit your posts and like posts in other regions.
+• See your region's votes on active WA resolutions.
+• Improved Android Oreo support.
+• Bug fixes and improvements.

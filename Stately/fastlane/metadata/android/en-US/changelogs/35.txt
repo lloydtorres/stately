@@ -1,0 +1,4 @@
+• Fixed issue with quoting formatted posts in the RMB.
+• Use high-quality images in issue decision results headlines.
+• Add indicator for API telegrams.
+• Other bug fixes.

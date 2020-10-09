@@ -1,0 +1,5 @@
+• Initial release!
+• Quickly get stats on your nation
+• Respond to national issues
+• Open your region's factbook/board
+• Observe World Assembly proceedings

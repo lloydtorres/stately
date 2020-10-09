@@ -1,0 +1,3 @@
+• Telegram support: read, compose and reply to telegrams.
+• Increase network timeout to 30s.
+• Bug fixes and improvements.

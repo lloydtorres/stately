@@ -1,0 +1,8 @@
+• Endorse other WA nations in your region.
+• Move to other regions, both open and password-protected.
+• Quote other posts and delete your own in your region's RMB.
+• Dossier support in the Activity Feed.
+• Add custom User-Agent to web requests.
+• Updated libraries.
+• Removed ads.
+• Bug fixes and other improvements.

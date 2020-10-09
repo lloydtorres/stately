@@ -1,0 +1,1 @@
+• Bug fix for possible null values while parsing HTML in issue result.

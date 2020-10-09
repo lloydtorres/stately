@@ -1,0 +1,13 @@
+• Notifications! Get notified on new issues, telegrams and more.
+• Themes! Choose from five exciting options such as 'Mercantile Noir'.
+• Choose between Conservative, Liberal or Neutral government categories.
+• Added World section — see the latest happenings around NationStates.
+• Added census rankings for regions and the World.
+• Telegrams can now be read directly from the main telegrams list.
+• Restored the option to read through a telegram's conversation history.
+• Add/remove nations and regions on your Dossier from the Explore screen.
+• Improved regional poll support: vote on polls and see who else has voted.
+• Added support for opening links to old WA resolutions.
+• Improved layout formatting for devices on landscape.
+• Cleaned up class architectures.
+• Bug fixes and other improvements.

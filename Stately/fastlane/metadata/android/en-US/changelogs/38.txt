@@ -1,0 +1,7 @@
+• New logo!
+• Replaced HTML issue decision parser with API integration.
+• Support for [sub], [sup] and [strike] tags in regions and telegrams.
+• Update notifications service and dialogs in preparation for Android O.
+• Fix bug where RMB draft post is cleared even when posting failed.
+• Fix bug where census values less than 0.1% were rendered as 0%.
+• Other bug fixes and improvements.

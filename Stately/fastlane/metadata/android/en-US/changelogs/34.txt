@@ -1,0 +1,10 @@
+• Remove issue from issues list when a decision is made.
+• Show indicators for WA and WA Campaign telegrams.
+• [spoiler] tag support for telegrams.
+• Nations with regional authority can suppress posts on the RMB.
+• Show WA resolution vote breakdown between individual nations and delegates.
+• Propagate WA user vote across the app.
+• Visual improvements across the app.
+• Removed KefirBB parser dependency.
+• BBCode is preprocessed to HTML immediately after deserialization.
+• Bug fixes and other improvements.

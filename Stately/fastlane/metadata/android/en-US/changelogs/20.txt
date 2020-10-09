@@ -1,0 +1,1 @@
+• Fix bug preventing new users from logging in.

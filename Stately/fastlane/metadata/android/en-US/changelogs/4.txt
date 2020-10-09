@@ -1,0 +1,5 @@
+• Activity Feed: See all your happenings in one place (not the same as the NS Dossier).
+• Universal Image Loader replaced with Picasso.
+• Material dialogs for older versions of Android.
+• Improved BBCode parsing, including support for [color], [spoiler], raw links and [quote] authorship.
+• Bug fixes and improvements.

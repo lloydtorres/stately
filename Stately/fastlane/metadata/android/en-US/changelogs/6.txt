@@ -1,0 +1,2 @@
+• Fix bug where issue option header may be different from its index.
+• Add influence indicator to nation page.
