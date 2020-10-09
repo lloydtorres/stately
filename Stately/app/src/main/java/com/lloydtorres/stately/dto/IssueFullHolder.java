@@ -40,7 +40,7 @@ public class IssueFullHolder implements Parcelable {
 
     public static final long UNKNOWN_NEXT_ISSUE_TIME = -1;
     public static final int MAX_ISSUE_COUNT_REGULAR = 5;
-    public static final int MAX_ISSUE_COUNT_ZOMBIE = 6;
+    public static final int MAX_ISSUE_COUNT_ZOMBIE = MAX_ISSUE_COUNT_REGULAR + 1;
 
     @ElementList(name="ISSUES", required=false)
     public List<Issue> issues;

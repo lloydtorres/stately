@@ -127,7 +127,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      */
     public void setIssueCards(List<Parcelable> cards, long nextIssueTime) {
         issuesCards = new ArrayList<Object>(cards);
-        if (nextIssueTime != IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME) {
+        final int maxIssues = !NightmareHelper.getIsZDayActive(context)
+            ? IssueFullHolder.MAX_ISSUE_COUNT_REGULAR : IssueFullHolder.MAX_ISSUE_COUNT_ZOMBIE;
+        if (cards.size() < maxIssues || nextIssueTime != IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME) {
             issuesCards.add(nextIssueTime);
         }
         notifyDataSetChanged();
