@@ -16,7 +16,10 @@
 
 package com.lloydtorres.stately.census;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.RecyclerDialogFragment;
@@ -32,14 +35,15 @@ import java.util.LinkedHashMap;
  */
 public class DatasetDialog extends RecyclerDialogFragment {
     public static final String DIALOG_TAG = "fragment_dataset_dialog";
-    public static final String DATASETS_KEY = "datasets";
+    public static final String DATASETS_KEY = "datasets_key";
+    public static final String SELECTED_KEY = "selected_dataset_key";
 
     private LinkedHashMap<Integer, Dataset> datasets;
+    private int selected;
 
     public void setDatasets(LinkedHashMap<Integer, CensusScale> rawDataset, int selected) {
-        datasets = new LinkedHashMap<Integer, Dataset> ();
+        this.datasets = new LinkedHashMap<Integer, Dataset> ();
         ArrayList<CensusScale> rawScales = new ArrayList<CensusScale>(rawDataset.values());
-
         for (int i = 0; i < rawScales.size()-1; i++) {
             CensusScale scale = rawScales.get(i);
 
@@ -47,11 +51,16 @@ public class DatasetDialog extends RecyclerDialogFragment {
             d.name = scale.name;
             d.id = scale.id;
             d.selected = false;
-            datasets.put(d.id, d);
+            this.datasets.put(d.id, d);
         }
 
-        if (datasets.containsKey(selected)) {
-            datasets.get(selected).selected = true;
+        setSelectedDataset(selected);
+    }
+
+    private void setSelectedDataset(final int selected) {
+        this.selected = selected;
+        if (this.datasets.containsKey(selected)) {
+            this.datasets.get(selected).selected = true;
         }
     }
 
@@ -67,5 +76,29 @@ public class DatasetDialog extends RecyclerDialogFragment {
         if (position != DatasetRecyclerAdapter.INVALID_POSITION) {
             mLayoutManager.scrollToPosition(position);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            ArrayList<Dataset> rawDataset =
+                    savedInstanceState.getParcelableArrayList(DATASETS_KEY);
+            this.datasets = new LinkedHashMap<Integer, Dataset> ();
+            for (Dataset dataset : rawDataset) {
+                this.datasets.put(dataset.id, dataset);
+            }
+            
+            setSelectedDataset(savedInstanceState.getInt(SELECTED_KEY));
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save state
+        super.onSaveInstanceState(outState);
+        final ArrayList<Dataset> rawDatasets = new ArrayList<>(datasets.values());
+        outState.putParcelableArrayList(DATASETS_KEY, rawDatasets);
+        outState.putInt(SELECTED_KEY, selected);
     }
 }
