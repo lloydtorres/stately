@@ -639,7 +639,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         else {
                             SparkleHelper.makeSnackbar(view, String.format(Locale.US, getString(R.string.explore_endorsed_response), name));
                         }
-                        pd.dismiss();
+                        if (pd != null) {
+                            pd.dismiss();
+                        }
                         queryNation(id);
                     }
                 }, new Response.ErrorListener() {
