@@ -427,24 +427,25 @@ public final class SparkleHelper {
      * @return Prettified number with short suffix
      */
     public static String getPrettifiedShortSuffixedNumber(Context c, double d) {
-        if (d < 1000D) {
+        final double absoluteValue = Math.abs(d);
+        if (absoluteValue < 1000D) {
             // We only care about cases greater than 1000
             return getPrettifiedNumber(d);
         } else {
             String suffix = "";
-            if (d >= 1000D && d < 1000000D) {
+            if (absoluteValue >= 1000D && absoluteValue < 1000000D) {
                 suffix = c.getString(R.string.thousand_short);
                 d /= 1000D;
             }
-            else if (d >= 1000000D && d < 1000000000D) {
+            else if (absoluteValue >= 1000000D && absoluteValue < 1000000000D) {
                 suffix = c.getString(R.string.million_short);
                 d /= 1000000D;
             }
-            else if (d >= 1000000000D && d < 1000000000000D) {
+            else if (absoluteValue >= 1000000000D && absoluteValue < 1000000000000D) {
                 suffix = c.getString(R.string.billion_short);
                 d /= 1000000000D;
             }
-            else if (d >= 1000000000000D) {
+            else if (absoluteValue >= 1000000000000D) {
                 suffix = c.getString(R.string.trillion_short);
                 d /= 1000000000000D;
             }
