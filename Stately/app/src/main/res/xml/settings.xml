@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_behavior"
         android:key="setting_behavior">
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_autologin"
             android:title="@string/setting_autologin"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_issueconfirm"
             android:title="@string/setting_issueconfirm"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_exitconfirm"
             android:title="@string/setting_exitconfirm"
             android:defaultValue="true"
             android:icon="@null" />
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_notifs"
         android:key="setting_notifs_cat">
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs"
             android:title="@string/setting_notifs"
             android:summary="@string/setting_notifs_desc"
             android:defaultValue="false"
             android:icon="@null" />
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/setting_notifs_check"
             android:key="setting_notifs_check"
             android:defaultValue="21600"
@@ -40,48 +40,48 @@
             android:entryValues="@array/notifs_data"
             android:summary="%1$s"
             android:icon="@null"/>
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_issues"
             android:title="@string/setting_notifs_issues"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_tgs"
             android:title="@string/setting_notifs_tgs"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_endorse"
             android:title="@string/setting_notifs_endorse"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_rmb_mention"
             android:title="@string/setting_notifs_rmb_mention"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_rmb_quote"
             android:title="@string/setting_notifs_rmb_quote"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_rmb_like"
             android:title="@string/setting_notifs_rmb_like"
             android:dependency="setting_notifs"
             android:defaultValue="true"
             android:icon="@null" />
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_style"
         android:key="setting_style">
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/setting_theme"
             android:key="setting_theme"
             android:defaultValue="0"
@@ -89,7 +89,7 @@
             android:entryValues="@array/themes_data"
             android:summary="%1$s"
             android:icon="@null"/>
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/setting_category"
             android:key="setting_category"
             android:defaultValue="2"
@@ -97,38 +97,38 @@
             android:entryValues="@array/gov_category_data"
             android:summary="%1$s"
             android:icon="@null"/>
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_about"
         android:key="setting_about">
-        <android.support.v7.preference.Preference
+        <androidx.preference.Preference
             android:key="setting_app_version"
             android:title="@string/app_version"
             android:summary="@string/setting_developer_info"
             android:selectable="false"
             android:icon="@null" />
-        <android.support.v7.preference.Preference
+        <androidx.preference.Preference
             android:key="setting_send_telegram"
             android:title="@string/setting_send_telegram"
             android:selectable="true"
             android:icon="@null"/>
-        <android.support.v7.preference.Preference
+        <androidx.preference.Preference
             android:key="setting_licenses"
             android:title="@string/licenses_title"
             android:selectable="true"
             android:icon="@null">
             <intent android:targetPackage="com.lloydtorres.stately"
                 android:targetClass="com.lloydtorres.stately.settings.LicensesActivity"/>
-        </android.support.v7.preference.Preference>
-        <android.support.v7.preference.Preference
+        </androidx.preference.Preference>
+        <androidx.preference.Preference
             android:key="setting_privacy_policy"
             android:title="@string/setting_privacy_policy"
             android:selectable="true"
             android:icon="@null">
             <intent android:targetPackage="com.lloydtorres.stately"
                 android:targetClass="com.lloydtorres.stately.settings.PrivacyPolicyActivity"/>
-        </android.support.v7.preference.Preference>
-    </android.support.v7.preference.PreferenceCategory>
+        </androidx.preference.Preference>
+    </androidx.preference.PreferenceCategory>
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

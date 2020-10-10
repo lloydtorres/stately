@@ -18,7 +18,7 @@ package com.lloydtorres.stately.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

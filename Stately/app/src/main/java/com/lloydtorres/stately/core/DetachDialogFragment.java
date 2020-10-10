@@ -16,36 +16,19 @@
 
 package com.lloydtorres.stately.core;
 
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-
-import java.lang.reflect.Field;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by Lloyd on 2016-11-01.
- * Workaround for illegal state exception in fragments, as shown in http://stackoverflow.com/a/15656428
- * Same as DetachFragment, but this is for DialogFragments specifically.
+ * Workaround for illegal state exception in fragments,
+ * as shown in http://stackoverflow.com/a/15656428
  */
 public abstract class DetachDialogFragment extends DialogFragment {
     @Override
     public void show(FragmentManager manager, String tag) {
         if (!isAdded()) {
             super.show(manager, tag);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
     }
 }

@@ -18,13 +18,13 @@ package com.lloydtorres.stately.nation;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +35,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
-import com.lloydtorres.stately.core.DetachFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
@@ -53,7 +52,7 @@ import java.util.ArrayList;
  * The main nation fragment called either by StatelyActivity or ExploreNationActivity.
  * Displays information about a target nation, takes in a nation object.
  */
-public class NationFragment extends DetachFragment {
+public class NationFragment extends Fragment {
     public static final String NATION_DATA_KEY = "mNationData";
 
     // Constants used to determine view pager index.

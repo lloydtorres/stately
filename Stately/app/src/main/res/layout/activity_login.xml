@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="24dp"/>
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/field_username"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:theme="@style/TextLoginField"
         android:nextFocusForward="@+id/field_password"/>
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/field_password"
         android:layout_width="250dp"
         android:layout_height="wrap_content"

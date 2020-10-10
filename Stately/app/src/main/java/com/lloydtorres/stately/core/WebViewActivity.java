@@ -17,7 +17,7 @@
 package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.ProgressBar;

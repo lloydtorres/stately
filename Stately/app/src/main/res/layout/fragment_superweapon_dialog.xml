@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
-        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/superweapon_tzes"
+        <androidx.appcompat.widget.AppCompatRadioButton android:id="@+id/superweapon_tzes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -19,7 +19,7 @@
             app:buttonTint="?attr/themedColorTab"
             android:visibility="gone"
             tools:visibility="visible"/>
-        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/superweapon_cure"
+        <androidx.appcompat.widget.AppCompatRadioButton android:id="@+id/superweapon_cure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -28,7 +28,7 @@
             app:buttonTint="?attr/themedColorTab"
             android:visibility="gone"
             tools:visibility="visible"/>
-        <android.support.v7.widget.AppCompatRadioButton android:id="@+id/superweapon_horde"
+        <androidx.appcompat.widget.AppCompatRadioButton android:id="@+id/superweapon_horde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -38,4 +38,4 @@
             android:visibility="gone"
             tools:visibility="visible"/>
     </RadioGroup>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

@@ -17,7 +17,7 @@
 package com.lloydtorres.stately.helpers.links;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;

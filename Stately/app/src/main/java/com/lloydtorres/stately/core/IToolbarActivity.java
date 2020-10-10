@@ -16,7 +16,7 @@
 
 package com.lloydtorres.stately.core;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * Created by Lloyd on 2016-01-17.

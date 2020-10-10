@@ -17,13 +17,13 @@
 package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +42,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
-import com.lloydtorres.stately.core.DetachFragment;
 import com.lloydtorres.stately.core.IToolbarActivity;
 import com.lloydtorres.stately.dto.CensusDetailedRank;
 import com.lloydtorres.stately.dto.Event;
@@ -63,7 +62,7 @@ import java.util.Locale;
  * Displays information about a target region, takes in a region name or object.
  * Can do the search and refresh by itself.
  */
-public class RegionFragment extends DetachFragment {
+public class RegionFragment extends Fragment {
     public static final String REGION_NAME_KEY = "mRegionName";
     public static final String REGION_DATA_KEY = "mRegionData";
     public static final String REGION_RMB_UNREAD_KEY = "rmbUnreadCountData";
