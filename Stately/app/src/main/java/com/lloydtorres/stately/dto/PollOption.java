@@ -27,20 +27,34 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-21.
  * An option in the regional poll, along with current vote count.
  */
-@Root(name="OPTION", strict=false)
+@Root(name = "OPTION", strict = false)
 public class PollOption implements Parcelable, Comparable<PollOption> {
 
-    @Attribute(required=false)
-    public int id;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<PollOption> CREATOR =
+            new Parcelable.Creator<PollOption>() {
+        @Override
+        public PollOption createFromParcel(Parcel in) {
+            return new PollOption(in);
+        }
 
-    @Element(name="OPTIONTEXT", required=false)
+        @Override
+        public PollOption[] newArray(int size) {
+            return new PollOption[size];
+        }
+    };
+    @Attribute(required = false)
+    public int id;
+    @Element(name = "OPTIONTEXT", required = false)
     public String text;
-    @Element(name="VOTES", required=false)
+    @Element(name = "VOTES", required = false)
     public int votes;
-    @Element(name="VOTERS", required=false)
+    @Element(name = "VOTERS", required = false)
     public String voters;
 
-    public PollOption() { super(); }
+    public PollOption() {
+        super();
+    }
 
     protected PollOption(Parcel in) {
         id = in.readInt();
@@ -61,19 +75,6 @@ public class PollOption implements Parcelable, Comparable<PollOption> {
         dest.writeInt(votes);
         dest.writeString(voters);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<PollOption> CREATOR = new Parcelable.Creator<PollOption>() {
-        @Override
-        public PollOption createFromParcel(Parcel in) {
-            return new PollOption(in);
-        }
-
-        @Override
-        public PollOption[] newArray(int size) {
-            return new PollOption[size];
-        }
-    };
 
     @Override
     public int compareTo(PollOption another) {

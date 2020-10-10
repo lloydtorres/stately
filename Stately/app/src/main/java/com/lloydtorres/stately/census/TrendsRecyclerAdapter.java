@@ -17,12 +17,13 @@
 package com.lloydtorres.stately.census;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -60,29 +61,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<Object> trendItems;
     private Context context;
 
-    // Holder for census title and unit header;
-    private class TrendsHeader {
-        public String title;
-        public String unit;
-
-        public TrendsHeader(String t, String u) {
-            title = t;
-            unit = u;
-        }
-    }
-
-    // Holder for rankings type and census name
-    private class TrendsRankTitle {
-        public int mode;
-        public String census;
-
-        public TrendsRankTitle(int m, String c) {
-            mode = m;
-            census = c;
-        }
-    }
-
-    public TrendsRecyclerAdapter(Context c, int mode, int censusId, String title, String unit, CensusHistory censusData) {
+    public TrendsRecyclerAdapter(Context c, int mode, int censusId, String title, String unit,
+                                 CensusHistory censusData) {
         context = c;
 
         trendItems = new ArrayList<Object>();
@@ -120,11 +100,13 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 viewHolder = new GraphCard(graphCard);
                 break;
             case DIVIDER_VIEW:
-                View rankTitleView = inflater.inflate(R.layout.view_census_trends_ranking_title, parent, false);
+                View rankTitleView = inflater.inflate(R.layout.view_census_trends_ranking_title,
+                        parent, false);
                 viewHolder = new RankTitleViewHolder(rankTitleView);
                 break;
             case RANKING_VIEW:
-                View nationRankView = inflater.inflate(R.layout.view_census_trends_ranking_entry, parent, false);
+                View nationRankView = inflater.inflate(R.layout.view_census_trends_ranking_entry,
+                        parent, false);
                 viewHolder = new NationRankViewHolder(nationRankView);
                 break;
         }
@@ -162,17 +144,36 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         if (trendItems.get(position) instanceof TrendsHeader) {
             return TITLE_CARD;
-        }
-        else if (trendItems.get(position) instanceof CensusHistoryScale) {
+        } else if (trendItems.get(position) instanceof CensusHistoryScale) {
             return GRAPH_CARD;
-        }
-        else if (trendItems.get(position) instanceof TrendsRankTitle) {
+        } else if (trendItems.get(position) instanceof TrendsRankTitle) {
             return DIVIDER_VIEW;
-        }
-        else if (trendItems.get(position) instanceof CensusNationRank) {
+        } else if (trendItems.get(position) instanceof CensusNationRank) {
             return RANKING_VIEW;
         }
         return -1;
+    }
+
+    // Holder for census title and unit header;
+    private class TrendsHeader {
+        public String title;
+        public String unit;
+
+        public TrendsHeader(String t, String u) {
+            title = t;
+            unit = u;
+        }
+    }
+
+    // Holder for rankings type and census name
+    private class TrendsRankTitle {
+        public int mode;
+        public String census;
+
+        public TrendsRankTitle(int m, String c) {
+            mode = m;
+            census = c;
+        }
     }
 
     // Card viewholders
@@ -225,7 +226,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             float maxVal = Float.MIN_VALUE;
             float minVal = Float.MAX_VALUE;
             float total = 0;
-            for (int i=0; i < datapoints.size(); i++) {
+            for (int i = 0; i < datapoints.size(); i++) {
                 float value = datapoints.get(i).score;
                 if (value > maxVal) {
                     maxVal = value;
@@ -244,7 +245,7 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             // Set up chart
             final float lineWidth = 2.5f;
             List<Entry> historyEntries = new ArrayList<Entry>();
-            for (int i=0; i < datapoints.size(); i++) {
+            for (int i = 0; i < datapoints.size(); i++) {
                 historyEntries.add(new Entry(i, datapoints.get(i).score));
             }
 
@@ -265,13 +266,15 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             dataSets.add(lineHistoryData);
             LineData dataFinal = new LineData(dataSets);
             List<String> xLabels = new ArrayList<String>();
-            for (int i=0; i < datapoints.size(); i++) {
-                xLabels.add(String.format(Locale.US, SparkleHelper.getMonthYearDateFromUTC(datapoints.get(i).timestamp), i));
+            for (int i = 0; i < datapoints.size(); i++) {
+                xLabels.add(String.format(Locale.US,
+                        SparkleHelper.getMonthYearDateFromUTC(datapoints.get(i).timestamp), i));
             }
 
             // formatting
             boolean isLargeValue = maxVal >= 1000f;
-            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue, 30, false, false);
+            chart = RaraHelper.getFormattedLineChart(context, chart, this, xLabels, isLargeValue,
+                    30, false, false);
             chart.setData(dataFinal);
             chart.invalidate();
         }
@@ -354,7 +357,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void init(CensusNationRank r) {
             rankData = r;
             nation.setText(SparkleHelper.getNameFromId(rankData.name));
-            score.setText(String.format(Locale.US, context.getString(R.string.trends_score_template),
+            score.setText(String.format(Locale.US,
+                    context.getString(R.string.trends_score_template),
                     SparkleHelper.getPrettifiedNumber(rankData.score)));
             rank.setText(SparkleHelper.getPrettifiedNumber(rankData.rank));
         }

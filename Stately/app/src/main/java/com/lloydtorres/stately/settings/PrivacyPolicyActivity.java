@@ -29,7 +29,8 @@ import com.lloydtorres.stately.helpers.network.ProgressBarWebViewClient;
  * Shows Stately's privacy policy.
  */
 public class PrivacyPolicyActivity extends WebViewActivity {
-    private static final String PRIVACY_POLICY_URL = "https://www.iubenda.com/privacy-policy/7793041";
+    private static final String PRIVACY_POLICY_URL = "https://www.iubenda" +
+            ".com/privacy-policy/7793041";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

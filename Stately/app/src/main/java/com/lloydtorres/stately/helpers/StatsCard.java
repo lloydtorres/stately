@@ -16,9 +16,10 @@
 
 package com.lloydtorres.stately.helpers;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.DataIntPair;
@@ -42,8 +43,7 @@ public class StatsCard extends RecyclerView.ViewHolder {
         cardRightSub = v.findViewById(R.id.card_wa_delegates_sub);
     }
 
-    public void init(DataIntPair s, String left, String right)
-    {
+    public void init(DataIntPair s, String left, String right) {
         cardLeftValue.setText(SparkleHelper.getPrettifiedNumber(s.members));
         cardLeftSub.setText(left);
         cardRightValue.setText(SparkleHelper.getPrettifiedNumber(s.delegates));

@@ -32,29 +32,40 @@ import java.util.List;
  * Created by Lloyd on 2016-09-11.
  * Model used for storing world data.
  */
-@Root(name="WORLD", strict=false)
+@Root(name = "WORLD", strict = false)
 public class World implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q="
-                                        + "numnations+numregions+featuredregion+happenings"
-                                        + "+census+censusid;limit=5"
-                                        + "&v=" + SparkleHelper.API_VERSION;
+            + "numnations+numregions+featuredregion+happenings"
+            + "+census+censusid;limit=5"
+            + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<World> CREATOR = new Parcelable.Creator<World>() {
+        @Override
+        public World createFromParcel(Parcel in) {
+            return new World(in);
+        }
 
-    @Element(name="NUMNATIONS")
+        @Override
+        public World[] newArray(int size) {
+            return new World[size];
+        }
+    };
+    @Element(name = "NUMNATIONS")
     public int numNations;
-    @Element(name="NUMREGIONS")
+    @Element(name = "NUMREGIONS")
     public int numRegions;
-    @Element(name="FEATUREDREGION")
+    @Element(name = "FEATUREDREGION")
     public String featuredRegion;
-
-    @ElementList(name="HAPPENINGS")
+    @ElementList(name = "HAPPENINGS")
     public List<Event> happenings;
-
-    @Element(name="CENSUSID")
+    @Element(name = "CENSUSID")
     public int featuredCensus;
-    @ElementList(name="CENSUS")
+    @ElementList(name = "CENSUS")
     public List<CensusDetailedRank> census;
 
-    public World() { super(); }
+    public World() {
+        super();
+    }
 
     protected World(Parcel in) {
         numNations = in.readInt();
@@ -99,17 +110,4 @@ public class World implements Parcelable {
             dest.writeList(census);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<World> CREATOR = new Parcelable.Creator<World>() {
-        @Override
-        public World createFromParcel(Parcel in) {
-            return new World(in);
-        }
-
-        @Override
-        public World[] newArray(int size) {
-            return new World[size];
-        }
-    };
 }

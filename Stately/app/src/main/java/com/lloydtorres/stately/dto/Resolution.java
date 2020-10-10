@@ -32,52 +32,62 @@ import java.util.List;
  * Created by Lloyd on 2016-01-16.
  * A DTO that stores information on an active WA resolution, as returned by the NationStates API.
  */
-@Root(name="WA", strict=false)
+@Root(name = "WA", strict = false)
 public class Resolution implements Parcelable {
 
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d&q="
-                                        + "resolution+votetrack+delvotes"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_INACTIVE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=%d"
-                                        + "&id=%d&q=resolution"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String PATH_PROPOSAL = SparkleHelper.BASE_URI_NOSLASH + "/page=UN_view_proposal/id=%s";
+            + "resolution+votetrack+delvotes"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_INACTIVE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?wa=%d"
+            + "&id=%d&q=resolution"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String PATH_PROPOSAL = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=UN_view_proposal/id=%s";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Resolution> CREATOR =
+            new Parcelable.Creator<Resolution>() {
+        @Override
+        public Resolution createFromParcel(Parcel in) {
+            return new Resolution(in);
+        }
 
-    @Element(name="NAME", required=false)
+        @Override
+        public Resolution[] newArray(int size) {
+            return new Resolution[size];
+        }
+    };
+    @Element(name = "NAME", required = false)
     public String name;
-    @Element(name="CREATED", required=false)
+    @Element(name = "CREATED", required = false)
     public long created;
-    @Element(name="CATEGORY", required=false)
+    @Element(name = "CATEGORY", required = false)
     public String category;
-    @Element(name="OPTION", required=false)
+    @Element(name = "OPTION", required = false)
     public String target;
-    @Element(name="PROPOSED_BY", required=false)
+    @Element(name = "PROPOSED_BY", required = false)
     public String proposedBy;
-    @Element(name="DESC", required=false)
+    @Element(name = "DESC", required = false)
     public String content;
-
-    @Element(name="TOTAL_VOTES_AGAINST", required=false)
+    @Element(name = "TOTAL_VOTES_AGAINST", required = false)
     public int votesAgainst;
-    @Element(name="TOTAL_VOTES_FOR", required=false)
+    @Element(name = "TOTAL_VOTES_FOR", required = false)
     public int votesFor;
-
-    @ElementList(name="DELVOTES_FOR", required=false)
+    @ElementList(name = "DELVOTES_FOR", required = false)
     public List<DelegateVote> delegateVotesFor;
-    @ElementList(name="DELVOTES_AGAINST", required=false)
+    @ElementList(name = "DELVOTES_AGAINST", required = false)
     public List<DelegateVote> delegateVotesAgainst;
-
-    @ElementList(name="VOTE_TRACK_AGAINST", required=false)
+    @ElementList(name = "VOTE_TRACK_AGAINST", required = false)
     public List<Integer> voteHistoryAgainst;
-    @ElementList(name="VOTE_TRACK_FOR", required=false)
+    @ElementList(name = "VOTE_TRACK_FOR", required = false)
     public List<Integer> voteHistoryFor;
-
-    @Element(name="COUNCILID", required=false)
+    @Element(name = "COUNCILID", required = false)
     public int id;
-    @Element(name="IMPLEMENTED", required=false)
+    @Element(name = "IMPLEMENTED", required = false)
     public long implemented;
-    @Element(name="REPEALED_BY", required=false)
+    @Element(name = "REPEALED_BY", required = false)
     public int repealed;
-    @Element(name="REPEALS_COUNCILID", required=false)
+    @Element(name = "REPEALS_COUNCILID", required = false)
     public int repealTarget;
 
     public Resolution() {
@@ -167,17 +177,4 @@ public class Resolution implements Parcelable {
         dest.writeInt(repealed);
         dest.writeInt(repealTarget);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Resolution> CREATOR = new Parcelable.Creator<Resolution>() {
-        @Override
-        public Resolution createFromParcel(Parcel in) {
-            return new Resolution(in);
-        }
-
-        @Override
-        public Resolution[] newArray(int size) {
-            return new Resolution[size];
-        }
-    };
 }

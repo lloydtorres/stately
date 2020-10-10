@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.region;
 
 import android.graphics.Typeface;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Poll;
@@ -34,14 +35,14 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  * to the fragment that then submits the vote.
  */
 public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final PollOption withdrawOption;
     private RegionCommunitySubFragment fragment;
     private PollVoteDialog dialog;
     private Poll pollData;
     private CommunityRecyclerAdapter.PollCard pollCard;
 
-    private final PollOption withdrawOption;
-
-    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p, String withdrawText, CommunityRecyclerAdapter.PollCard pc) {
+    public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p,
+                                   String withdrawText, CommunityRecyclerAdapter.PollCard pc) {
         fragment = frag;
         dialog = diag;
         pollData = p;
@@ -92,7 +93,8 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void init(PollOption op) {
             pollOption = op;
             pollOptionContent.setText(SparkleHelper.getHtmlFormatting(pollOption.text));
-            pollOptionContent.setTypeface(null, pollOption.id == pollData.votedOption ? Typeface.BOLD : Typeface.NORMAL);
+            pollOptionContent.setTypeface(null, pollOption.id == pollData.votedOption ?
+                    Typeface.BOLD : Typeface.NORMAL);
         }
 
         @Override

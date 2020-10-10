@@ -19,10 +19,11 @@ package com.lloydtorres.stately.zombie;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -50,7 +51,7 @@ public class SuperweaponDialog extends DetachDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)  {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_superweapon_dialog, null);
 
@@ -58,9 +59,12 @@ public class SuperweaponDialog extends DetachDialogFragment {
 
         // Show available options
         if (status != null) {
-            actionState.findViewById(R.id.superweapon_tzes).setVisibility(status.isTZES ? View.VISIBLE : View.GONE);
-            actionState.findViewById(R.id.superweapon_cure).setVisibility(status.isCure ? View.VISIBLE : View.GONE);
-            actionState.findViewById(R.id.superweapon_horde).setVisibility(status.isHorde ? View.VISIBLE : View.GONE);
+            actionState.findViewById(R.id.superweapon_tzes).setVisibility(status.isTZES ?
+                    View.VISIBLE : View.GONE);
+            actionState.findViewById(R.id.superweapon_cure).setVisibility(status.isCure ?
+                    View.VISIBLE : View.GONE);
+            actionState.findViewById(R.id.superweapon_horde).setVisibility(status.isHorde ?
+                    View.VISIBLE : View.GONE);
         }
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
@@ -70,7 +74,8 @@ public class SuperweaponDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.zombie_button_missile)
                 .setView(dialogView)
                 .setPositiveButton(R.string.superweapon_deploy, dialogListener)

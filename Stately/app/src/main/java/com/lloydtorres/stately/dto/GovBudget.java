@@ -27,35 +27,50 @@ import org.simpleframework.xml.Root;
  * A DTO used to track a nation's government spending for each area in percent, as returned
  * by the NationStates API.
  */
-@Root(name="GOVT", strict=false)
+@Root(name = "GOVT", strict = false)
 public class GovBudget implements Parcelable {
 
-    @Element(name="ADMINISTRATION")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<GovBudget> CREATOR =
+            new Parcelable.Creator<GovBudget>() {
+        @Override
+        public GovBudget createFromParcel(Parcel in) {
+            return new GovBudget(in);
+        }
+
+        @Override
+        public GovBudget[] newArray(int size) {
+            return new GovBudget[size];
+        }
+    };
+    @Element(name = "ADMINISTRATION")
     public float admin;
-    @Element(name="DEFENCE")
+    @Element(name = "DEFENCE")
     public float defense;
-    @Element(name="EDUCATION")
+    @Element(name = "EDUCATION")
     public float education;
-    @Element(name="ENVIRONMENT")
+    @Element(name = "ENVIRONMENT")
     public float environment;
-    @Element(name="HEALTHCARE")
+    @Element(name = "HEALTHCARE")
     public float healthcare;
-    @Element(name="COMMERCE")
+    @Element(name = "COMMERCE")
     public float industry;
-    @Element(name="INTERNATIONALAID")
+    @Element(name = "INTERNATIONALAID")
     public float internationalAid;
-    @Element(name="LAWANDORDER")
+    @Element(name = "LAWANDORDER")
     public float lawAndOrder;
-    @Element(name="PUBLICTRANSPORT")
+    @Element(name = "PUBLICTRANSPORT")
     public float publicTransport;
-    @Element(name="SOCIALEQUALITY")
+    @Element(name = "SOCIALEQUALITY")
     public float socialPolicy;
-    @Element(name="SPIRITUALITY")
+    @Element(name = "SPIRITUALITY")
     public float spirituality;
-    @Element(name="WELFARE")
+    @Element(name = "WELFARE")
     public float welfare;
 
-    public GovBudget() { super(); }
+    public GovBudget() {
+        super();
+    }
 
     protected GovBudget(Parcel in) {
         admin = in.readFloat();
@@ -92,17 +107,4 @@ public class GovBudget implements Parcelable {
         dest.writeFloat(spirituality);
         dest.writeFloat(welfare);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<GovBudget> CREATOR = new Parcelable.Creator<GovBudget>() {
-        @Override
-        public GovBudget createFromParcel(Parcel in) {
-            return new GovBudget(in);
-        }
-
-        @Override
-        public GovBudget[] newArray(int size) {
-            return new GovBudget[size];
-        }
-    };
 }

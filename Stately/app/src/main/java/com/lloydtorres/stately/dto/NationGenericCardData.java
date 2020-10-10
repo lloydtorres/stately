@@ -27,13 +27,28 @@ import java.util.List;
  * A holder for a generic data card in the nation fragment.
  */
 public class NationGenericCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationGenericCardData> CREATOR =
+            new Parcelable.Creator<NationGenericCardData>() {
+        @Override
+        public NationGenericCardData createFromParcel(Parcel in) {
+            return new NationGenericCardData(in);
+        }
+
+        @Override
+        public NationGenericCardData[] newArray(int size) {
+            return new NationGenericCardData[size];
+        }
+    };
     public String title;
     public String mainContent;
     public List<DataPair> items = new ArrayList<DataPair>();
     public String nationCensusTarget;
     public int idCensusTarget;
 
-    public NationGenericCardData() { super(); }
+    public NationGenericCardData() {
+        super();
+    }
 
     protected NationGenericCardData(Parcel in) {
         title = in.readString();
@@ -66,17 +81,4 @@ public class NationGenericCardData implements Parcelable {
         dest.writeString(nationCensusTarget);
         dest.writeInt(idCensusTarget);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<NationGenericCardData> CREATOR = new Parcelable.Creator<NationGenericCardData>() {
-        @Override
-        public NationGenericCardData createFromParcel(Parcel in) {
-            return new NationGenericCardData(in);
-        }
-
-        @Override
-        public NationGenericCardData[] newArray(int size) {
-            return new NationGenericCardData[size];
-        }
-    };
 }

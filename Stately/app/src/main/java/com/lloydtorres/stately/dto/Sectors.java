@@ -27,19 +27,33 @@ import org.simpleframework.xml.Root;
  * A DTO that stores information on a nation's economic sectors, as returned by the
  * NationStates API.
  */
-@Root(name="SECTORS", strict=false)
+@Root(name = "SECTORS", strict = false)
 public class Sectors implements Parcelable {
 
-    @Element(name="BLACKMARKET")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Sectors> CREATOR = new Parcelable.Creator<Sectors>() {
+        @Override
+        public Sectors createFromParcel(Parcel in) {
+            return new Sectors(in);
+        }
+
+        @Override
+        public Sectors[] newArray(int size) {
+            return new Sectors[size];
+        }
+    };
+    @Element(name = "BLACKMARKET")
     public float blackMarket;
-    @Element(name="GOVERNMENT")
+    @Element(name = "GOVERNMENT")
     public float government;
-    @Element(name="INDUSTRY")
+    @Element(name = "INDUSTRY")
     public float privateSector;
-    @Element(name="PUBLIC")
+    @Element(name = "PUBLIC")
     public float stateOwned;
 
-    public Sectors() { super(); }
+    public Sectors() {
+        super();
+    }
 
     protected Sectors(Parcel in) {
         blackMarket = in.readFloat();
@@ -60,17 +74,4 @@ public class Sectors implements Parcelable {
         dest.writeFloat(privateSector);
         dest.writeFloat(stateOwned);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Sectors> CREATOR = new Parcelable.Creator<Sectors>() {
-        @Override
-        public Sectors createFromParcel(Parcel in) {
-            return new Sectors(in);
-        }
-
-        @Override
-        public Sectors[] newArray(int size) {
-            return new Sectors[size];
-        }
-    };
 }

@@ -31,35 +31,14 @@ import org.simpleframework.xml.core.Persister;
  * Same as the Nation model, but contains data from private shards as well.
  * Used to get data from a user.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class UserNation extends Nation {
 
     public static final String QUERY = BASE_QUERY + "+unread"
-                                + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
-
-    @Element(name="UNREAD", required=false)
-    public UnreadData unread;
-
-    public UserNation() { super(); }
-
-    protected UserNation(Parcel in) {
-        super(in);
-        unread = (UnreadData) in.readValue(UnreadData.class.getClassLoader());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeValue(unread);
-    }
-
+            + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UserNation> CREATOR = new Parcelable.Creator<UserNation>() {
+    public static final Parcelable.Creator<UserNation> CREATOR =
+            new Parcelable.Creator<UserNation>() {
         @Override
         public UserNation createFromParcel(Parcel in) {
             return new UserNation(in);
@@ -70,6 +49,17 @@ public class UserNation extends Nation {
             return new UserNation[size];
         }
     };
+    @Element(name = "UNREAD", required = false)
+    public UnreadData unread;
+
+    public UserNation() {
+        super();
+    }
+
+    protected UserNation(Parcel in) {
+        super(in);
+        unread = (UnreadData) in.readValue(UnreadData.class.getClassLoader());
+    }
 
     /**
      * Factory for deserializing a UserNation XML.
@@ -82,5 +72,16 @@ public class UserNation extends Nation {
     public static UserNation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
         UserNation nationResponse = serializer.read(UserNation.class, response);
         return ((UserNation) fieldReplacer(c, nationResponse));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeValue(unread);
     }
 }

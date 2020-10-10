@@ -24,9 +24,23 @@ import java.util.List;
 
 /**
  * Created by Lloyd on 2016-09-14.
- * Convenience class used within the CommunityRecyclerAdapter for holding card data about region officers.
+ * Convenience class used within the CommunityRecyclerAdapter for holding card data about region
+ * officers.
  */
 public class OfficerHolder implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<OfficerHolder> CREATOR =
+            new Parcelable.Creator<OfficerHolder>() {
+        @Override
+        public OfficerHolder createFromParcel(Parcel in) {
+            return new OfficerHolder(in);
+        }
+
+        @Override
+        public OfficerHolder[] newArray(int size) {
+            return new OfficerHolder[size];
+        }
+    };
     public ArrayList<Officer> officers;
 
     public OfficerHolder(List<Officer> off) {
@@ -56,18 +70,5 @@ public class OfficerHolder implements Parcelable {
             dest.writeList(officers);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<OfficerHolder> CREATOR = new Parcelable.Creator<OfficerHolder>() {
-        @Override
-        public OfficerHolder createFromParcel(Parcel in) {
-            return new OfficerHolder(in);
-        }
-
-        @Override
-        public OfficerHolder[] newArray(int size) {
-            return new OfficerHolder[size];
-        }
-    };
 
 }

@@ -64,6 +64,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.core.app.NotificationCompat;
 
 import com.android.volley.AuthFailureError;
@@ -117,10 +118,19 @@ public final class TrixHelper {
     public static final String NOTCHAN_ID_RMBL = "stately_notchan_rmbl";
 
     public static final String NOTIFICATION_CONTENT_TEXT_TEMPLATE = "%s %s";
+    private static final long NOTIFICATION_JITTER_TIME_IN_MS = 5L * 60L * 1000L;
+    // Duration of the LED on/off for notifications
+    private static final int LED_DURATION_MS = 250;
+    private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+?)$");
+    private static final Pattern NOTIFS_URL_RMB =
+            Pattern.compile("^region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\/page" +
+                    "=display_region_rmb\\?postid=(\\d+?)#p\\d+?$");
+    private static final Pattern NOTIFS_URL_ENDORSE =
+            Pattern.compile("^nation=(" + SparkleHelper.VALID_ID_BASE + "+?)$");
 
     // Private constructor
-    private TrixHelper() {}
-
+    private TrixHelper() {
+    }
 
     /**
      * Builds the app's notification channels for Android O. Should be initialized on startup.
@@ -128,14 +138,21 @@ public final class TrixHelper {
      */
     public static void initNotificationChannels(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_ISSUES, context.getString(R.string.setting_notifs_issues)));
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_TELEGRAMS, context.getString(R.string.setting_notifs_tgs)));
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_ENDORSE, context.getString(R.string.setting_notifs_endorse)));
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBM, context.getString(R.string.setting_notifs_rmb_mention)));
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBQ, context.getString(R.string.setting_notifs_rmb_quote)));
-            notificationManager.createNotificationChannel(buildNotificationChannel(context, NOTCHAN_ID_RMBL, context.getString(R.string.setting_notifs_rmb_like)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_ISSUES, context.getString(R.string.setting_notifs_issues)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_TELEGRAMS, context.getString(R.string.setting_notifs_tgs)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_ENDORSE, context.getString(R.string.setting_notifs_endorse)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_RMBM, context.getString(R.string.setting_notifs_rmb_mention)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_RMBQ, context.getString(R.string.setting_notifs_rmb_quote)));
+            notificationManager.createNotificationChannel(buildNotificationChannel(context,
+                    NOTCHAN_ID_RMBL, context.getString(R.string.setting_notifs_rmb_like)));
         }
     }
 
@@ -148,7 +165,8 @@ public final class TrixHelper {
      */
     private static NotificationChannel buildNotificationChannel(Context c, String id, String name) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel(id, name,
+                    NotificationManager.IMPORTANCE_DEFAULT);
             int primaryColour = RaraHelper.getThemePrimaryColour(c);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(primaryColour);
@@ -178,8 +196,6 @@ public final class TrixHelper {
         return storage.getLong(KEY_LASTACTIVITY, System.currentTimeMillis() / 1000L);
     }
 
-    private static final long NOTIFICATION_JITTER_TIME_IN_MS = 5L * 60L * 1000L;
-
     /**
      * Sets an alarm for Alphys to query NS for new notices. The alarm time is on whatever the user
      * selected in settings, starting from the time the function was called. A "jitter" of up to
@@ -196,34 +212,39 @@ public final class TrixHelper {
         long notificationIntervalInMs = SettingsActivity.getNotificationIntervalSetting(c) * 1000L;
         // add "jitter" from 0 min to 5 min to next alarm to prevent overwhelming NS servers
         Random r = new Random();
-        long notificationJitterIntervalInMs = (long)(r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
+        long notificationJitterIntervalInMs =
+                (long) (r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ComponentName alphysLollipopServiceName = new ComponentName(c, AlphysLollipopService.class);
+            ComponentName alphysLollipopServiceName = new ComponentName(c,
+                    AlphysLollipopService.class);
             JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
                     .setMinimumLatency(notificationIntervalInMs + notificationJitterIntervalInMs)
                     .build();
-            JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            JobScheduler scheduler =
+                    (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
             shouldFallback = scheduler.schedule(alphysJobInfo) == JobScheduler.RESULT_FAILURE;
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || shouldFallback) {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
             timeToNextAlarm += notificationJitterIntervalInMs;
 
             // Source:
-            // https://www.reddit.com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage/czs3ne4
+            // https://www.reddit
+            // .com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage
+            // /czs3ne4
             AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-            }
-            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm,
+                        pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-            }
-            else {
+            } else {
                 am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
             }
         }
@@ -235,11 +256,13 @@ public final class TrixHelper {
      */
     public static void stopAlarmForAlphys(Context c) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobScheduler scheduler = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            JobScheduler scheduler =
+                    (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
         } else {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
             am.cancel(pendingIntent);
         }
@@ -265,6 +288,7 @@ public final class TrixHelper {
         NSStringRequest stringRequest = new NSStringRequest(c, Request.Method.GET, query,
                 new Response.Listener<String>() {
                     NoticeHolder notices = null;
+
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
@@ -272,8 +296,7 @@ public final class TrixHelper {
                             notices = serializer.read(NoticeHolder.class, response);
                             TrixHelper.processNotices(c, active.name, notices);
                             TrixHelper.updateLastActiveTime(c);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
                         }
                         TrixHelper.setAlarmForAlphys(c);
@@ -320,20 +343,21 @@ public final class TrixHelper {
         }
     }
 
-    // Duration of the LED on/off for notifications
-    private static final int LED_DURATION_MS = 250;
-
     /**
-     * Returns a NotificationCompat builder with set parameters common to all notifications from Stately.
+     * Returns a NotificationCompat builder with set parameters common to all notifications from
+     * Stately.
      * @return See above
      */
-    private static NotificationCompat.Builder getBaseBuilder(Context c, String account, String notificationChannelId) {
+    private static NotificationCompat.Builder getBaseBuilder(Context c, String account,
+                                                             String notificationChannelId) {
         int primaryColour = RaraHelper.getThemePrimaryColour(c);
         return new NotificationCompat.Builder(c, notificationChannelId)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setColor(primaryColour)
-                .setContentTitle(String.format(Locale.US, c.getString(R.string.stately_notifs_sub_template), SparkleHelper.getNameFromId(account)))
+                .setContentTitle(String.format(Locale.US,
+                        c.getString(R.string.stately_notifs_sub_template),
+                        SparkleHelper.getNameFromId(account)))
                 .setLights(primaryColour, LED_DURATION_MS, LED_DURATION_MS);
     }
 
@@ -359,28 +383,27 @@ public final class TrixHelper {
         issueBundle.putInt(LoginActivity.ROUTE_PATH_KEY, LoginActivity.ROUTE_ISSUES);
         issueBundle.putInt(StatelyActivity.NAV_INIT, StatelyActivity.ISSUES_FRAGMENT);
 
-        String contentText = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, SparkleHelper.getNameFromId(account), SparkleHelper.fromHtml(notice.content).toString());
+        String contentText = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE,
+                SparkleHelper.getNameFromId(account),
+                SparkleHelper.fromHtml(notice.content).toString());
 
         NotificationCompat.Builder builder = getBaseBuilder(c, account, NOTCHAN_ID_ISSUES)
                 .setContentText(contentText)
                 .setStyle(getBigTextStyle(contentText))
                 .setOnlyAlertOnce(true)
-                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
+                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c,
+                        account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setSmallIcon(R.drawable.ic_menu_issues);
-        }
-        else {
+        } else {
             builder.setSmallIcon(R.drawable.ic_notifs_kitkat_issue);
         }
 
-        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(TAG_PREFIX+notice.type, 0, builder.build());
+        NotificationManager notificationManager =
+                (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TAG_PREFIX + notice.type, 0, builder.build());
     }
-
-    private static final Pattern NOTIFS_URL_TG = Pattern.compile("^page=tg\\/tgid=(\\d+?)$");
-    private static final Pattern NOTIFS_URL_RMB = Pattern.compile("^region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\/page=display_region_rmb\\?postid=(\\d+?)#p\\d+?$");
-    private static final Pattern NOTIFS_URL_ENDORSE = Pattern.compile("^nation=(" + SparkleHelper.VALID_ID_BASE + "+?)$");
 
     /**
      * Builds and shows a notification for each supported notice type except for issues.
@@ -395,21 +418,18 @@ public final class TrixHelper {
         }
         if (Notice.TG.equals(notice.type) && !SettingsActivity.getTelegramsNotificationSetting(c)) {
             return;
-        }
-        else if (Notice.RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(c)) {
+        } else if (Notice.RMB_MENTION.equals(notice.type) && !SettingsActivity.getRmbMentionNotificationSetting(c)) {
             return;
-        }
-        else if (Notice.RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(c)) {
+        } else if (Notice.RMB_QUOTE.equals(notice.type) && !SettingsActivity.getRmbQuoteNotificationSetting(c)) {
             return;
-        }
-        else if (Notice.RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(c)) {
+        } else if (Notice.RMB_LIKE.equals(notice.type) && !SettingsActivity.getRmbLikeNotificationSetting(c)) {
             return;
-        }
-        else if (Notice.ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(c)) {
+        } else if (Notice.ENDORSE.equals(notice.type) && !SettingsActivity.getEndorsementNotificationSetting(c)) {
             return;
         }
 
-        String title = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE, notice.subject, notice.content);
+        String title = String.format(Locale.US, NOTIFICATION_CONTENT_TEXT_TEMPLATE,
+                notice.subject, notice.content);
 
         String tagSuffix = notice.type;
 
@@ -460,7 +480,7 @@ public final class TrixHelper {
         }
 
         // For channel IDs
-        switch(notice.type) {
+        switch (notice.type) {
             case Notice.RMB_MENTION:
                 channelId = NOTCHAN_ID_RMBM;
                 break;
@@ -475,11 +495,14 @@ public final class TrixHelper {
         NotificationCompat.Builder builder = getBaseBuilder(c, account, channelId)
                 .setContentText(title)
                 .setStyle(getBigTextStyle(title))
-                .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon : smallIconCompat)
-                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c, account, bundle), PendingIntent.FLAG_ONE_SHOT));
+                .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon :
+                        smallIconCompat)
+                .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c,
+                        account, bundle), PendingIntent.FLAG_ONE_SHOT));
 
-        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(TAG_PREFIX+tagSuffix, (int) notice.timestamp, builder.build());
+        NotificationManager notificationManager =
+                (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TAG_PREFIX + tagSuffix, (int) notice.timestamp, builder.build());
     }
 
     /**
@@ -509,7 +532,8 @@ public final class TrixHelper {
      */
     private static Intent getLoginActivityIntent(Context c, String account, Bundle bundle) {
         Intent loginActivityIntent = new Intent(c, LoginActivity.class);
-        loginActivityIntent.putExtra(LoginActivity.USERDATA_KEY, getUserLoginFromId(c, SparkleHelper.getIdFromName(account)));
+        loginActivityIntent.putExtra(LoginActivity.USERDATA_KEY, getUserLoginFromId(c,
+                SparkleHelper.getIdFromName(account)));
         loginActivityIntent.putExtra(LoginActivity.NOAUTOLOGIN_KEY, true);
         loginActivityIntent.putExtra(LoginActivity.ROUTE_BUNDLE_KEY, bundle);
         loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -22,18 +22,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -41,6 +41,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.material.navigation.NavigationView;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.UnreadData;
 import com.lloydtorres.stately.dto.UserData;
@@ -92,11 +93,11 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     public static final int ACTIVITY_FEED_FRAGMENT = 6;
 
     // A list of navdrawer options that shouldn't switch the nav position on select.
-    private static final int[] noSelect = {     R.id.nav_explore,
-                                                R.id.nav_switch,
-                                                R.id.nav_settings,
-                                                R.id.nav_logout
-                                            };
+    private static final int[] noSelect = {R.id.nav_explore,
+            R.id.nav_switch,
+            R.id.nav_settings,
+            R.id.nav_logout
+    };
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -129,7 +130,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch(SettingsActivity.getTheme(this)) {
+        switch (SettingsActivity.getTheme(this)) {
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme_CoreActivity);
                 break;
@@ -211,9 +212,12 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         navigationView.getMenu().getItem(start).setChecked(true);
         initNavBanner();
 
-        issueCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_issues).getActionView();
-        telegramCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_telegrams).getActionView();
-        rmbCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_region).getActionView();
+        issueCountView =
+                (TextView) navigationView.getMenu().findItem(R.id.nav_issues).getActionView();
+        telegramCountView =
+                (TextView) navigationView.getMenu().findItem(R.id.nav_telegrams).getActionView();
+        rmbCountView =
+                (TextView) navigationView.getMenu().findItem(R.id.nav_region).getActionView();
         waCountView = (TextView) navigationView.getMenu().findItem(R.id.nav_wa).getActionView();
 
         Fragment f;
@@ -269,7 +273,8 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         DashHelper dashie = DashHelper.getInstance(this);
 
         if (NightmareHelper.getIsZDayActive(this) && mNation.zombieData != null) {
-            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action),
+                    nationBanner, false);
         } else {
             dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
         }
@@ -285,11 +290,9 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else if (currentPosition != R.id.nav_nation) {
+        } else if (currentPosition != R.id.nav_nation) {
             initNavigationView(NATION_FRAGMENT);
-        }
-        else {
+        } else {
             if (SettingsActivity.getConfirmExitSetting(this)) {
                 confirmExit();
             } else {
@@ -310,7 +313,8 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         };
 
         if (!isFinishing()) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                    RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.exit_confirm)
                     .setPositiveButton(R.string.exit, dialogListener)
                     .setNegativeButton(R.string.explore_negative, null)
@@ -401,8 +405,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
             }
             drawer.closeDrawer(GravityCompat.START);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -481,7 +484,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
      * Determine if a nav key is part of the unselectable IDs
      */
     private boolean isNoSelect(int key) {
-        for (int i=0; i<noSelect.length; i++) {
+        for (int i = 0; i < noSelect.length; i++) {
             if (noSelect[i] == key) {
                 return true;
             }
@@ -514,14 +517,16 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
         // If no other nations besides current one, show warning dialog
         // with link to login activity
         if (logins.size() <= 1) {
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            DialogInterface.OnClickListener dialogClickListener =
+                    new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     SparkleHelper.startAddNation(StatelyActivity.this);
                 }
             };
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                    RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder
                     .setTitle(getString(R.string.menu_switch))
                     .setMessage(getString(R.string.switch_single_warn))
@@ -563,7 +568,8 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.logout_confirm)
                 .setPositiveButton(R.string.menu_logout, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
@@ -576,8 +582,10 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
      */
     private void queryUnreadCounts() {
         if (mNation != null) {
-            String target = String.format(Locale.US, UserData.UNREAD_QUERY, SparkleHelper.getIdFromName(mNation.name));
-            NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, target,
+            String target = String.format(Locale.US, UserData.UNREAD_QUERY,
+                    SparkleHelper.getIdFromName(mNation.name));
+            NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                    Request.Method.GET, target,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -585,8 +593,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
                             try {
                                 UserData userData = serializer.read(UserData.class, response);
                                 processUnreadCounts(userData.unread);
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
                                 // Do nothing for dat ~seamless experience~
                             }
@@ -623,11 +630,9 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
             targetView.setVisibility(View.VISIBLE);
             if (count > 100) {
                 targetView.setText(getString(R.string.menu_unread_count_over100));
-            }
-            else if (count > 0) {
+            } else if (count > 0) {
                 targetView.setText(String.valueOf(count));
-            }
-            else {
+            } else {
                 targetView.setText("");
                 targetView.setVisibility(View.GONE);
             }
@@ -651,19 +656,25 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
      */
     private void updateNation(String name, final boolean firstLaunch) {
         final View fView = findViewById(R.id.drawer_layout);
-        String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(name));
+        String targetURL = String.format(Locale.US, UserNation.QUERY,
+                SparkleHelper.getIdFromName(name));
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     UserNation nationResponse = null;
+
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            nationResponse = UserNation.parseNationFromXML(getApplicationContext(), serializer, response);
+                            nationResponse =
+                                    UserNation.parseNationFromXML(getApplicationContext(),
+                                            serializer, response);
 
                             mNation = nationResponse;
-                            PinkaHelper.setSessionData(getApplicationContext(), SparkleHelper.getIdFromName(mNation.region), mNation.waState);
+                            PinkaHelper.setSessionData(getApplicationContext(),
+                                    SparkleHelper.getIdFromName(mNation.region), mNation.waState);
                             shouldReload = false;
 
                             if (firstLaunch) {
@@ -674,10 +685,10 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
                                     processUnreadCounts(mNation.unread);
                                 }
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(fView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(fView,
+                                    getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {

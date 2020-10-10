@@ -32,23 +32,39 @@ import java.util.List;
  * Created by Lloyd on 2016-10-15.
  * Model contains user data used for zombie control.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class ZombieControlData implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
-                                        + "name+flag+zombie+happenings"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String ZOMBIE_CONTROL = SparkleHelper.BASE_URI_NOSLASH + "/page=zombie_control";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q="
+            + "name+flag+zombie+happenings"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String ZOMBIE_CONTROL = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=zombie_control";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ZombieControlData> CREATOR =
+            new Parcelable.Creator<ZombieControlData>() {
+        @Override
+        public ZombieControlData createFromParcel(Parcel in) {
+            return new ZombieControlData(in);
+        }
 
-    @Element(name="NAME")
+        @Override
+        public ZombieControlData[] newArray(int size) {
+            return new ZombieControlData[size];
+        }
+    };
+    @Element(name = "NAME")
     public String name;
-    @Element(name="FLAG")
+    @Element(name = "FLAG")
     public String flagURL;
-    @Element(name="ZOMBIE")
+    @Element(name = "ZOMBIE")
     public Zombie zombieData;
-    @ElementList(name="HAPPENINGS")
+    @ElementList(name = "HAPPENINGS")
     public List<Event> events;
 
-    public ZombieControlData() { super(); }
+    public ZombieControlData() {
+        super();
+    }
 
     protected ZombieControlData(Parcel in) {
         name = in.readString();
@@ -79,17 +95,4 @@ public class ZombieControlData implements Parcelable {
             dest.writeList(events);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ZombieControlData> CREATOR = new Parcelable.Creator<ZombieControlData>() {
-        @Override
-        public ZombieControlData createFromParcel(Parcel in) {
-            return new ZombieControlData(in);
-        }
-
-        @Override
-        public ZombieControlData[] newArray(int size) {
-            return new ZombieControlData[size];
-        }
-    };
 }

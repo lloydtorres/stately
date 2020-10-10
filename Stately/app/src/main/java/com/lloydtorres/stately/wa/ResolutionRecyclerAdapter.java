@@ -17,10 +17,6 @@
 package com.lloydtorres.stately.wa;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -66,15 +67,15 @@ import java.util.Locale;
  */
 
 public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String IMPLEMENTED_TEMPLATE = "%s #%d — %s";
-
     // Types of cards
     public static final int CARD_HEADER = 0;
     public static final int CARD_CONTENT = 1;
     public static final int CARD_REGION_VOTES = 2;
     public static final int CARD_HISTORY = 3;
     public static final int CARD_BREAKDOWN = 4;
-
+    private static final String IMPLEMENTED_TEMPLATE = "%s #%d — %s";
+    private static final int COUNT_ACTIVE = 5;
+    private static final int COUNT_INACTIVE = 2;
     private ResolutionActivity resolutionActivity;
     private Context context;
     private FragmentManager fragmentManager;
@@ -86,16 +87,19 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private int prefixId;
     private boolean isActive;
 
-    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs, RegionWaVotes rv, int cId) {
+    public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs,
+                                     RegionWaVotes rv, int cId) {
         resolutionActivity = activity;
         context = resolutionActivity;
         fragmentManager = resolutionActivity.getSupportFragmentManager();
-        dialogBuilder = new AlertDialog.Builder(context, RaraHelper.getThemeMaterialDialog(context));
+        dialogBuilder = new AlertDialog.Builder(context,
+                RaraHelper.getThemeMaterialDialog(context));
         resolution = res;
         voteStatus = vs;
         regionVotes = rv;
         councilId = cId;
-        prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix : R.string.wa_sc_prefix;
+        prefixId = councilId == Assembly.GENERAL_ASSEMBLY ? R.string.wa_ga_prefix :
+                R.string.wa_sc_prefix;
         isActive = voteStatus != null;
     }
 
@@ -106,19 +110,23 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         switch (viewType) {
             case CARD_HEADER:
-                View headerCard = inflater.inflate(R.layout.card_wa_resolution_header, parent, false);
+                View headerCard = inflater.inflate(R.layout.card_wa_resolution_header, parent,
+                        false);
                 viewHolder = new ResolutionHeaderCard(headerCard);
                 break;
             case CARD_CONTENT:
-                View contentCard = inflater.inflate(R.layout.card_wa_resolution_content, parent, false);
+                View contentCard = inflater.inflate(R.layout.card_wa_resolution_content, parent,
+                        false);
                 viewHolder = new ResolutionContentCard(contentCard);
                 break;
             case CARD_BREAKDOWN:
-                View breakdownCard = inflater.inflate(R.layout.card_wa_resolution_breakdown, parent, false);
+                View breakdownCard = inflater.inflate(R.layout.card_wa_resolution_breakdown,
+                        parent, false);
                 viewHolder = new ResolutionBreakdownCard(breakdownCard);
                 break;
             case CARD_HISTORY:
-                View historyCard = inflater.inflate(R.layout.card_wa_resolution_history, parent, false);
+                View historyCard = inflater.inflate(R.layout.card_wa_resolution_history, parent,
+                        false);
                 viewHolder = new ResolutionHistoryCard(historyCard);
                 break;
             case CARD_REGION_VOTES:
@@ -135,9 +143,6 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ResolutionCard resCardHolder = (ResolutionCard) holder;
         resCardHolder.init();
     }
-
-    private static final int COUNT_ACTIVE = 5;
-    private static final int COUNT_INACTIVE = 2;
 
     @Override
     public int getItemCount() {
@@ -167,6 +172,9 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ResolutionHeaderCard extends ResolutionCard {
+        private static final String RESOLUTION_LINK_TEMPLATE =
+                "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s #%d</a>";
+        private static final String NOMINEE_TEMPLATE = "%s — %s";
         private TextView title;
         private TextView target;
         private TextView proposedBy;
@@ -198,12 +206,17 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             setTargetView(target, resolution.category, resolution.target, resolution.repealTarget);
 
             String proposer = SparkleHelper.getNameFromId(resolution.proposedBy);
-            String proposeTemplate = String.format(Locale.US, context.getString(R.string.wa_proposed), resolution.proposedBy);
-            proposeTemplate = SparkleHelper.addExploreActivityLink(proposeTemplate, resolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
+            String proposeTemplate = String.format(Locale.US,
+                    context.getString(R.string.wa_proposed), resolution.proposedBy);
+            proposeTemplate = SparkleHelper.addExploreActivityLink(proposeTemplate,
+                    resolution.proposedBy, proposer, ExploreActivity.EXPLORE_NATION);
             SparkleHelper.setStyledTextView(context, proposedBy, proposeTemplate);
 
             if (isActive) {
-                voteStart.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, resolution.voteHistoryFor.size())));
+                voteStart.setText(String.format(Locale.US,
+                        context.getString(R.string.wa_voting_time),
+                        SparkleHelper.calculateResolutionEnd(context,
+                                resolution.voteHistoryFor.size())));
             } else {
                 voteStart.setText(String.format(Locale.US, IMPLEMENTED_TEMPLATE,
                         context.getString(prefixId),
@@ -228,12 +241,11 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             votesFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
             votesAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
 
-            iconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
-            iconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
+            iconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE :
+                    View.GONE);
+            iconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ?
+                    View.VISIBLE : View.GONE);
         }
-
-        private static final String RESOLUTION_LINK_TEMPLATE = "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s #%d</a>";
-        private static final String NOMINEE_TEMPLATE = "%s — %s";
 
         /**
          * This formats the topmost TextView with information on the category and resolution target.
@@ -254,25 +266,30 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                             councilId, repealTarget - 1,
                             context.getString(prefixId),
                             repealTarget);
-                    SparkleHelper.setStyledTextView(context, t, context.getString(R.string.wa_repeal_target, link));
+                    SparkleHelper.setStyledTextView(context, t,
+                            context.getString(R.string.wa_repeal_target, link));
                 } else {
                     t.setText(category);
                 }
-            }
-            else {
-                switch(pair[0]) {
+            } else {
+                switch (pair[0]) {
                     case "N":
                         // If target is a nation, linkify it.
                         String nationTarget = SparkleHelper.getNameFromId(pair[1]);
-                        String oldTemplate = String.format(Locale.US, NOMINEE_TEMPLATE, category, pair[1]);
-                        oldTemplate = SparkleHelper.addExploreActivityLink(oldTemplate, pair[1], nationTarget, ExploreActivity.EXPLORE_NATION);
+                        String oldTemplate = String.format(Locale.US, NOMINEE_TEMPLATE, category,
+                                pair[1]);
+                        oldTemplate = SparkleHelper.addExploreActivityLink(oldTemplate, pair[1],
+                                nationTarget, ExploreActivity.EXPLORE_NATION);
                         SparkleHelper.setStyledTextView(context, t, oldTemplate);
                         break;
                     case "R":
                         // If target is a nation, linkify it.
                         String regionTarget = SparkleHelper.getNameFromId(pair[1]);
-                        String oldRegionTemplate = String.format(Locale.US, NOMINEE_TEMPLATE, category, pair[1]);
-                        oldRegionTemplate = SparkleHelper.addExploreActivityLink(oldRegionTemplate, pair[1], regionTarget, ExploreActivity.EXPLORE_REGION);
+                        String oldRegionTemplate = String.format(Locale.US, NOMINEE_TEMPLATE,
+                                category, pair[1]);
+                        oldRegionTemplate =
+                                SparkleHelper.addExploreActivityLink(oldRegionTemplate, pair[1],
+                                        regionTarget, ExploreActivity.EXPLORE_REGION);
                         SparkleHelper.setStyledTextView(context, t, oldRegionTemplate);
                         break;
                     default:
@@ -303,7 +320,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             // Forces card to span across columns
             RaraHelper.setViewHolderFullSpan(itemView);
 
-            SparkleHelper.setStyledTextView(context, content, resolution.content, resolutionActivity.getSupportFragmentManager());
+            SparkleHelper.setStyledTextView(context, content, resolution.content,
+                    resolutionActivity.getSupportFragmentManager());
 
             if (isActive && PinkaHelper.getWaSessionData(context)) {
                 voteButton.setVisibility(View.VISIBLE);
@@ -314,7 +332,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 if (WaVoteStatus.VOTE_FOR.equals(voteStatus)) {
                     voteButtonDivider.setVisibility(View.GONE);
                     voteButtonIcon.setImageResource(R.drawable.ic_wa_white);
-                    voteButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChart0));
+                    voteButton.setBackgroundColor(ContextCompat.getColor(context,
+                            R.color.colorChart0));
                     voteButtonContent.setTextColor(ContextCompat.getColor(context, R.color.white));
                     voteButtonContent.setText(context.getString(R.string.wa_resolution_vote_for));
                     voteChoice = VoteDialog.VOTE_FOR;
@@ -323,12 +342,12 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 else if (WaVoteStatus.VOTE_AGAINST.equals(voteStatus)) {
                     voteButtonDivider.setVisibility(View.GONE);
                     voteButtonIcon.setImageResource(R.drawable.ic_wa_white);
-                    voteButton.setBackgroundColor(ContextCompat.getColor(context, R.color.colorChart1));
+                    voteButton.setBackgroundColor(ContextCompat.getColor(context,
+                            R.color.colorChart1));
                     voteButtonContent.setTextColor(ContextCompat.getColor(context, R.color.white));
                     voteButtonContent.setText(context.getString(R.string.wa_resolution_vote_against));
                     voteChoice = VoteDialog.VOTE_AGAINST;
-                }
-                else {
+                } else {
                     voteButtonDivider.setVisibility(View.VISIBLE);
                     voteButtonIcon.setImageResource(R.drawable.ic_wa_button);
                     voteButton.setBackgroundColor(RaraHelper.getThemeCardColour(context));
@@ -343,8 +362,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                         resolutionActivity.showVoteDialog(voteChoice);
                     }
                 });
-            }
-            else {
+            } else {
                 voteButtonDivider.setVisibility(View.GONE);
                 voteButton.setVisibility(View.GONE);
                 voteButton.setOnClickListener(null);
@@ -378,7 +396,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             nationVotesForHolder = itemView.findViewById(R.id.resolution_nations_for_holder);
             nationVotesFor = itemView.findViewById(R.id.resolution_nations_for_count);
             nationVotesForIcon = itemView.findViewById(R.id.resolution_nations_for_icon);
-            nationVotesAgainstHolder = itemView.findViewById(R.id.resolution_nations_against_holder);
+            nationVotesAgainstHolder =
+                    itemView.findViewById(R.id.resolution_nations_against_holder);
             nationVotesAgainst = itemView.findViewById(R.id.resolution_nations_against_count);
             nationVotesAgainstIcon = itemView.findViewById(R.id.resolution_nations_against_icon);
             delegateVotesForButton = itemView.findViewById(R.id.resolution_delegates_for);
@@ -419,32 +438,38 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 delegateVotesAgainstButton.setVisibility(View.VISIBLE);
 
                 // Calculate percentages
-                float votePercentForIndividual = (voteForNations * 100f)/voteTotal;
-                float votePercentForDelegates = (voteForDelegates * 100f)/voteTotal;
-                float votePercentAgainstIndividual = (voteAgainstNations * 100f)/voteTotal;
-                float votePercentAgainstDelegates = (voteAgainstDelegates * 100f)/voteTotal;
+                float votePercentForIndividual = (voteForNations * 100f) / voteTotal;
+                float votePercentForDelegates = (voteForDelegates * 100f) / voteTotal;
+                float votePercentAgainstIndividual = (voteAgainstNations * 100f) / voteTotal;
+                float votePercentAgainstDelegates = (voteAgainstDelegates * 100f) / voteTotal;
 
                 List<PieEntry> chartEntries = new ArrayList<PieEntry>();
                 List<Integer> chartColours = new ArrayList<Integer>();
 
                 // Set data
-                // It's in this order so that the values that are displayed, from left to right (counter-clockwise) are:
+                // It's in this order so that the values that are displayed, from left to right
+                // (counter-clockwise) are:
                 // [Nations For] [Delegate Votes For] [Delegate Votes Against] [Nations Against]
-                // This puts the fors and againsts together and in the order they show up in the rest of the UI
+                // This puts the fors and againsts together and in the order they show up in the
+                // rest of the UI
                 if (votePercentAgainstIndividual > 0f) {
-                    chartEntries.add(new PieEntry(votePercentAgainstIndividual, context.getString(R.string.wa_individual_nations_against_newline)));
+                    chartEntries.add(new PieEntry(votePercentAgainstIndividual,
+                            context.getString(R.string.wa_individual_nations_against_newline)));
                     chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
                 }
                 if (votePercentAgainstDelegates > 0f) {
-                    chartEntries.add(new PieEntry(votePercentAgainstDelegates, context.getString(R.string.wa_delegate_votes_against_newline)));
+                    chartEntries.add(new PieEntry(votePercentAgainstDelegates,
+                            context.getString(R.string.wa_delegate_votes_against_newline)));
                     chartColours.add(ContextCompat.getColor(context, R.color.waDelegateAgainst));
                 }
                 if (votePercentForDelegates > 0f) {
-                    chartEntries.add(new PieEntry(votePercentForDelegates, context.getString(R.string.wa_delegate_votes_for_newline)));
+                    chartEntries.add(new PieEntry(votePercentForDelegates,
+                            context.getString(R.string.wa_delegate_votes_for_newline)));
                     chartColours.add(ContextCompat.getColor(context, R.color.waDelegateFor));
                 }
                 if (votePercentForIndividual > 0f) {
-                    chartEntries.add(new PieEntry(votePercentForIndividual, context.getString(R.string.wa_individual_nations_for_newline)));
+                    chartEntries.add(new PieEntry(votePercentForIndividual,
+                            context.getString(R.string.wa_individual_nations_for_newline)));
                     chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
                 }
 
@@ -462,7 +487,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 // Set nation vote counts and voted icon
                 nationVotesFor.setText(SparkleHelper.getPrettifiedNumber(voteForNations));
                 nationVotesAgainst.setText(SparkleHelper.getPrettifiedNumber(voteAgainstNations));
-                nationVotesForIcon.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
+                nationVotesForIcon.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ?
+                        View.VISIBLE : View.GONE);
                 nationVotesAgainstIcon.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
 
                 // Set delegate vote counts
@@ -487,11 +513,14 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
          * @param mode
          * @param delegateVotes
          */
-        private View.OnClickListener getDelegateVotesOnClickListener(final int mode, final int numVotes, final List<DelegateVote> delegateVotes) {
+        private View.OnClickListener getDelegateVotesOnClickListener(final int mode,
+                                                                     final int numVotes,
+                                                                     final List<DelegateVote> delegateVotes) {
             return new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int titleStringResource = mode == DELEGATE_VOTES_FOR ? R.string.wa_delegate_votes_for : R.string.wa_delegate_votes_against;
+                    int titleStringResource = mode == DELEGATE_VOTES_FOR ?
+                            R.string.wa_delegate_votes_for : R.string.wa_delegate_votes_against;
                     if (numVotes > 0) {
                         NameListDialog nameListDialog = new NameListDialog();
                         nameListDialog.setTitle(context.getString(titleStringResource));
@@ -500,7 +529,9 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                     } else {
                         dialogBuilder
                                 .setTitle(context.getString(titleStringResource))
-                                .setMessage(context.getString(mode == DELEGATE_VOTES_FOR ? R.string.wa_delegate_no_votes_for : R.string.wa_delegate_no_votes_against))
+                                .setMessage(context.getString(mode == DELEGATE_VOTES_FOR ?
+                                        R.string.wa_delegate_no_votes_for :
+                                        R.string.wa_delegate_no_votes_against))
                                 .setPositiveButton(context.getString(R.string.got_it), null)
                                 .show();
                     }
@@ -532,8 +563,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             setVotingHistory(resolution.voteHistoryFor, resolution.voteHistoryAgainst);
             voteHistoryFor.setText(SparkleHelper.getPrettifiedNumber(resolution.votesFor));
             voteHistoryAgainst.setText(SparkleHelper.getPrettifiedNumber(resolution.votesAgainst));
-            histIconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ? View.VISIBLE : View.GONE);
-            histIconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ? View.VISIBLE : View.GONE);
+            histIconVoteFor.setVisibility(WaVoteStatus.VOTE_FOR.equals(voteStatus) ?
+                    View.VISIBLE : View.GONE);
+            histIconVoteAgainst.setVisibility(WaVoteStatus.VOTE_AGAINST.equals(voteStatus) ?
+                    View.VISIBLE : View.GONE);
         }
 
         /**
@@ -553,7 +586,7 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             List<Entry> entryAgainst = new ArrayList<Entry>();
 
             // Build data
-            for (int i=0; i < votesFor.size(); i++) {
+            for (int i = 0; i < votesFor.size(); i++) {
                 entryFor.add(new Entry(i, votesFor.get(i)));
                 entryAgainst.add(new Entry(i, votesAgainst.get(i)));
             }
@@ -570,7 +603,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             setFor.setDrawCircles(false);
             setFor.setLineWidth(lineWidth);
 
-            LineDataSet setAgainst = new LineDataSet(entryAgainst, context.getString(R.string.wa_against));
+            LineDataSet setAgainst = new LineDataSet(entryAgainst,
+                    context.getString(R.string.wa_against));
             setAgainst.setAxisDependency(YAxis.AxisDependency.LEFT);
             setAgainst.setColors(ContextCompat.getColor(context, R.color.colorChart1));
             setAgainst.setDrawValues(false);
@@ -588,17 +622,20 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
             LineData data = new LineData(dataSets);
             List<String> xLabels = new ArrayList<String>();
-            for (int i=0; i < votesFor.size(); i++) {
+            for (int i = 0; i < votesFor.size(); i++) {
                 // Only add labels for each day
-                if (i%24 == 0) {
-                    xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_d), (i/24)+1));
+                if (i % 24 == 0) {
+                    xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_d),
+                            (i / 24) + 1));
                 } else {
-                    xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_h), i));
+                    xLabels.add(String.format(Locale.US, context.getString(R.string.wa_x_axis_h),
+                            i));
                 }
             }
 
             // formatting
-            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory, this, xLabels, true, 24, false, true);
+            votingHistory = RaraHelper.getFormattedLineChart(context, votingHistory, this,
+                    xLabels, true, 24, false, true);
 
             votingHistory.setData(data);
             votingHistory.invalidate();
@@ -637,7 +674,8 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         @Override
         public void init() {
-            String titleContent = String.format(Locale.US, context.getString(R.string.wa_region_vote_title), regionVotes.regionName);
+            String titleContent = String.format(Locale.US,
+                    context.getString(R.string.wa_region_vote_title), regionVotes.regionName);
             title.setText(titleContent);
 
             // Set voting numbers

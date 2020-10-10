@@ -35,40 +35,52 @@ import java.util.List;
  * Model used to store basic region data. This class is specifically used for world featured
  * region queries.
  */
-@Root(name="REGION", strict=false)
+@Root(name = "REGION", strict = false)
 public class BaseRegion implements Parcelable {
 
-    public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
-                                                + "name+flag+numnations"
-                                                + "+delegate+delegatevotes+founder+foundedtime+lastupdate"
-                                                + "+factbook+tags";
+    public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?region=%s&q="
+            + "name+flag+numnations"
+            + "+delegate+delegatevotes+founder+foundedtime+lastupdate"
+            + "+factbook+tags";
     public static final String QUERY = BASE_QUERY + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<BaseRegion> CREATOR =
+            new Parcelable.Creator<BaseRegion>() {
+        @Override
+        public BaseRegion createFromParcel(Parcel in) {
+            return new BaseRegion(in);
+        }
 
-    @Element(name="NAME")
+        @Override
+        public BaseRegion[] newArray(int size) {
+            return new BaseRegion[size];
+        }
+    };
+    @Element(name = "NAME")
     public String name;
-    @Element(name="FLAG", required=false)
+    @Element(name = "FLAG", required = false)
     public String flagURL;
-    @Element(name="NUMNATIONS")
+    @Element(name = "NUMNATIONS")
     public int numNations;
-
-    @Element(name="DELEGATE")
+    @Element(name = "DELEGATE")
     public String delegate;
-    @Element(name="DELEGATEVOTES")
+    @Element(name = "DELEGATEVOTES")
     public int delegateVotes;
-    @Element(name="LASTUPDATE")
+    @Element(name = "LASTUPDATE")
     public long lastUpdate;
-    @Element(name="FOUNDER")
+    @Element(name = "FOUNDER")
     public String founder;
-    @Element(name="FOUNDEDTIME")
+    @Element(name = "FOUNDEDTIME")
     public long founded;
-
-    @Element(name="FACTBOOK", required=false)
+    @Element(name = "FACTBOOK", required = false)
     public String factbook;
-
-    @ElementList(name="TAGS")
+    @ElementList(name = "TAGS")
     public List<String> tags;
 
-    public BaseRegion() { super(); }
+    public BaseRegion() {
+        super();
+    }
 
     protected BaseRegion(Parcel in) {
         name = in.readString();
@@ -86,6 +98,22 @@ public class BaseRegion implements Parcelable {
         } else {
             tags = null;
         }
+    }
+
+    public static BaseRegion parseRegionXML(Context c, Persister serializer, String response) throws Exception {
+        BaseRegion regionResponse = serializer.read(BaseRegion.class, response);
+        return processRawFields(c, regionResponse);
+    }
+
+    protected static BaseRegion processRawFields(Context c, BaseRegion response) {
+        // Switch flag URL to https
+        if (response.flagURL != null) {
+            response.flagURL = response.flagURL.replace("http://", "https://");
+        }
+        // Convert factbook BBCode to HTML
+        response.factbook = SparkleHelper.transformBBCodeToHtml(c, response.factbook,
+                SparkleHelper.BBCODE_PERMISSIONS_REGION);
+        return response;
     }
 
     @Override
@@ -110,33 +138,5 @@ public class BaseRegion implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(tags);
         }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<BaseRegion> CREATOR = new Parcelable.Creator<BaseRegion>() {
-        @Override
-        public BaseRegion createFromParcel(Parcel in) {
-            return new BaseRegion(in);
-        }
-
-        @Override
-        public BaseRegion[] newArray(int size) {
-            return new BaseRegion[size];
-        }
-    };
-
-    public static BaseRegion parseRegionXML(Context c, Persister serializer, String response) throws Exception {
-        BaseRegion regionResponse = serializer.read(BaseRegion.class, response);
-        return processRawFields(c, regionResponse);
-    }
-
-    protected static BaseRegion processRawFields(Context c, BaseRegion response) {
-        // Switch flag URL to https
-        if (response.flagURL != null) {
-            response.flagURL = response.flagURL.replace("http://", "https://");
-        }
-        // Convert factbook BBCode to HTML
-        response.factbook = SparkleHelper.transformBBCodeToHtml(c, response.factbook, SparkleHelper.BBCODE_PERMISSIONS_REGION);
-        return response;
     }
 }

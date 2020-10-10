@@ -28,16 +28,30 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-08-06.
  * This model contains private user data from the NationStates API.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class UserData implements Parcelable {
 
-    public static final String UNREAD_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=unread"
-                                            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String UNREAD_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q=unread"
+            + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UserData> CREATOR = new Parcelable.Creator<UserData>() {
+        @Override
+        public UserData createFromParcel(Parcel in) {
+            return new UserData(in);
+        }
 
-    @Element(name="UNREAD", required=false)
+        @Override
+        public UserData[] newArray(int size) {
+            return new UserData[size];
+        }
+    };
+    @Element(name = "UNREAD", required = false)
     public UnreadData unread;
 
-    public UserData() { super(); }
+    public UserData() {
+        super();
+    }
 
     protected UserData(Parcel in) {
         unread = (UnreadData) in.readValue(UnreadData.class.getClassLoader());
@@ -52,17 +66,4 @@ public class UserData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(unread);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UserData> CREATOR = new Parcelable.Creator<UserData>() {
-        @Override
-        public UserData createFromParcel(Parcel in) {
-            return new UserData(in);
-        }
-
-        @Override
-        public UserData[] newArray(int size) {
-            return new UserData[size];
-        }
-    };
 }

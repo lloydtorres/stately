@@ -104,9 +104,34 @@ public final class MuffinsHelper {
     public static final String API_TELEGRAM = "toplinetgcat-4";
     public static final String API_TELEGRAM_IMG = "tgcat-4.png";
     public static final String WELCOME_TELEGRAM = "tag: welcome";
+    public static final Pattern NS_TG_RAW_NATION_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK_TG =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_REGION_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_GHR_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help" +
+                    "\\?taskid=(\\d+?)\" rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_GA_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=ga" +
+                    "(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_SC_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=sc" +
+                    "(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)" +
+                    "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\" " +
+                    "rel=\"nofollow\">");
+    public static final Pattern NS_TG_RAW_RESOLUTION_LINK_2 =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)" +
+                    "page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)\" rel=\"nofollow\">(" +
+                    ".+?)</a>");
+    public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     // Private constructor
-    private MuffinsHelper() {}
+    private MuffinsHelper() {
+    }
 
     /**
      * Takes in a JSoup Elements object containing raw telegrams from NS HTML.
@@ -116,7 +141,9 @@ public final class MuffinsHelper {
      * @param selfName Name of current logged in nation
      * @return See above
      */
-    public static ArrayList<Telegram> processRawTelegrams(Context c, Element rawTelegramsContainer, String selfName) {
+    public static ArrayList<Telegram> processRawTelegrams(Context c,
+                                                          Element rawTelegramsContainer,
+                                                          String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("div.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
@@ -135,23 +162,17 @@ public final class MuffinsHelper {
             if (typeRaw != null) {
                 if (typeRaw.hasClass(REGION_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_REGION;
-                }
-                else if (typeRaw.hasClass(RECRUITMENT_TELEGRAM)) {
+                } else if (typeRaw.hasClass(RECRUITMENT_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_RECRUITMENT;
-                }
-                else if (typeRaw.hasClass(MODERATOR_TELEGRAM)) {
+                } else if (typeRaw.hasClass(MODERATOR_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_MODERATOR;
-                }
-                else if (typeRaw.hasClass(SYSTEM_TELEGRAM)) {
+                } else if (typeRaw.hasClass(SYSTEM_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_SYSTEM;
-                }
-                else if (typeRaw.hasClass(WA_TELEGRAM)) {
+                } else if (typeRaw.hasClass(WA_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_WA;
-                }
-                else if (typeRaw.hasClass(CAMPAIGN_TELEGRAM)) {
+                } else if (typeRaw.hasClass(CAMPAIGN_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_CAMPAIGN;
-                }
-                else if (typeRaw.hasClass(API_TELEGRAM)) {
+                } else if (typeRaw.hasClass(API_TELEGRAM)) {
                     tel.type = Telegram.TELEGRAM_API;
                 }
             }
@@ -165,13 +186,15 @@ public final class MuffinsHelper {
             if (headerRawHtml.contains(SEND_ARROW)) {
                 Matcher senderMatcher = SENDER_REGEX.matcher(headerRawHtml);
                 if (senderMatcher.find()) {
-                    Document senderHeaderRaw = Jsoup.parse(senderMatcher.group(1), SparkleHelper.BASE_URI);
+                    Document senderHeaderRaw = Jsoup.parse(senderMatcher.group(1),
+                            SparkleHelper.BASE_URI);
                     processSenderHeader(senderHeaderRaw, tel, selfName);
                 }
 
                 Matcher recipientsMatcher = RECIPIENT_REGEX.matcher(headerRawHtml);
                 if (recipientsMatcher.find()) {
-                    Document recipientsHeaderRaw = Jsoup.parse(recipientsMatcher.group(1), SparkleHelper.BASE_URI);
+                    Document recipientsHeaderRaw = Jsoup.parse(recipientsMatcher.group(1),
+                            SparkleHelper.BASE_URI);
                     processRecipientsHeader(recipientsHeaderRaw, tel);
                 }
             } else {
@@ -199,11 +222,12 @@ public final class MuffinsHelper {
      * @param selfName Name of current user. Should only be added if in "sent" folder.
      * @return
      */
-    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Context c, Element rawTelegramsContainer, String selfName) {
+    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Context c,
+                                                                       Element rawTelegramsContainer, String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("tr.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
-        for (Element rt: rawTelegrams) {
+        for (Element rt : rawTelegrams) {
             Telegram tel = new Telegram();
 
             // Get telegram ID
@@ -219,23 +243,17 @@ public final class MuffinsHelper {
                 String typeRawSrc = typeRaw.attr("src");
                 if (typeRawSrc.contains(REGION_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_REGION;
-                }
-                else if (typeRawSrc.contains(RECRUITMENT_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(RECRUITMENT_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_RECRUITMENT;
-                }
-                else if (typeRawSrc.contains(MODERATOR_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(MODERATOR_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_MODERATOR;
-                }
-                else if (typeRawSrc.contains(SYSTEM_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(SYSTEM_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_SYSTEM;
-                }
-                else if (typeRawSrc.contains(WA_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(WA_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_WA;
-                }
-                else if (typeRawSrc.contains(CAMPAIGN_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(CAMPAIGN_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_CAMPAIGN;
-                }
-                else if (typeRawSrc.contains(API_TELEGRAM_IMG)) {
+                } else if (typeRawSrc.contains(API_TELEGRAM_IMG)) {
                     tel.type = Telegram.TELEGRAM_API;
                 }
             }
@@ -307,24 +325,27 @@ public final class MuffinsHelper {
     }
 
     /**
-     * This goes through the sender part of the raw telegram header and adds the appropriate attributes
+     * This goes through the sender part of the raw telegram header and adds the appropriate
+     * attributes
      * to a target telegram.
      * @param targetDoc See above
      * @param targetTelegram See above
      * @param selfName Name of currently logged in nation
      */
-    public static void processSenderHeader(Element targetDoc, Telegram targetTelegram, String selfName) {
+    public static void processSenderHeader(Element targetDoc, Telegram targetTelegram,
+                                           String selfName) {
         Element nationSenderRaw = targetDoc.select("a.nlink").first();
         if (nationSenderRaw != null) {
             targetTelegram.isNation = true;
-            targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(nationSenderRaw.attr("href").replace(NATION_LINK_PREFIX, "")) + "@@";
+            targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(nationSenderRaw.attr("href"
+            ).replace(NATION_LINK_PREFIX, "")) + "@@";
         } else {
             targetTelegram.isNation = false;
 
             // For antiquity, remove metadata span
             targetDoc.select(ANTIQUITY_METADATA_SPAN).remove();
 
-            targetTelegram.sender = targetDoc.text().replace("&rarr;","").trim();
+            targetTelegram.sender = targetDoc.text().replace("&rarr;", "").trim();
             if (targetTelegram.sender.contains(SELF_INDICATOR)) {
                 targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(selfName) + "@@";
             }
@@ -337,7 +358,8 @@ public final class MuffinsHelper {
      * @param targetTelegram See above
      */
     public static void processRecipientsHeader(Element targetDoc, Telegram targetTelegram) {
-        // Check for tag:welcome here to set telegram type (since it's contained in the recepients area)
+        // Check for tag:welcome here to set telegram type (since it's contained in the
+        // recepients area)
         if (targetDoc.text().contains(WELCOME_TELEGRAM)) {
             targetTelegram.type = Telegram.TELEGRAM_WELCOME;
         }
@@ -391,20 +413,11 @@ public final class MuffinsHelper {
     public static String getNationIdFromFormat(String raw) {
         Matcher nationMatcher = SparkleHelper.NS_HAPPENINGS_NATION.matcher(raw);
         if (nationMatcher.find()) {
-            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0), SparkleHelper.NS_HAPPENINGS_NATION));
+            return SparkleHelper.getIdFromName(SparkleHelper.regexExtract(nationMatcher.group(0),
+                    SparkleHelper.NS_HAPPENINGS_NATION));
         }
         return null;
     }
-
-    public static final Pattern NS_TG_RAW_NATION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK_TG = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
-    public static final Pattern NS_TG_RAW_REGION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
-    public static final Pattern NS_TG_RAW_GHR_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help\\?taskid=(\\d+?)\" rel=\"nofollow\">");
-    public static final Pattern NS_TG_RAW_GA_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=ga(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
-    public static final Pattern NS_TG_RAW_SC_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=sc(?:\\/|)\" rel=\"nofollow\">(.+?)<\\/a>");
-    public static final Pattern NS_TG_RAW_RESOLUTION_LINK = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)\" rel=\"nofollow\">");
-    public static final Pattern NS_TG_RAW_RESOLUTION_LINK_2 = Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)\" rel=\"nofollow\">(.+?)</a>");
-    public static final Pattern PARAGRAPH = Pattern.compile("(?i)(?s)<p>(.*?)<\\/p>");
 
     /**
      * Formats raw HTML from a telegram into something the app can understand.
@@ -445,7 +458,8 @@ public final class MuffinsHelper {
         for (Element factbookPreview : factbookPreviews) {
             Element factbookLink = factbookPreview.select("a").first();
             String factbookTitle = factbookLink.text();
-            factbookLink.text(String.format(Locale.US, c.getString(R.string.telegrams_factbook_template), factbookTitle));
+            factbookLink.text(String.format(Locale.US,
+                    c.getString(R.string.telegrams_factbook_template), factbookTitle));
             factbookPreview.replaceWith(factbookLink);
         }
 
@@ -455,7 +469,9 @@ public final class MuffinsHelper {
         outputSettings.indentAmount(0);
         outputSettings.prettyPrint(false);
 
-        String holder = Jsoup.clean(content.html(), SparkleHelper.BASE_URI, Whitelist.basic().preserveRelativeLinks(true).addTags("br", "strike"), outputSettings);
+        String holder = Jsoup.clean(content.html(), SparkleHelper.BASE_URI,
+                Whitelist.basic().preserveRelativeLinks(true).addTags("br", "strike"),
+                outputSettings);
         holder = holder.replace("\n", "<br>");
         holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);
 
@@ -463,18 +479,25 @@ public final class MuffinsHelper {
         holder = holder.replaceFirst("(?:<br>\\s*)+", "");
 
         // Do the rest of the formatting
-        holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
-        holder = holder.replace("<a href=\"//forum." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"http://forum." + SparkleHelper.DOMAIN_URI + "/");
-        holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/", "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"//" + SparkleHelper.DOMAIN_URI + "/",
+                "<a href=\"" + SparkleHelper.BASE_URI);
+        holder = holder.replace("<a href=\"//forum." + SparkleHelper.DOMAIN_URI + "/", "<a " +
+                "href=\"http://forum." + SparkleHelper.DOMAIN_URI + "/");
+        holder = holder.replace("<a href=\"//www." + SparkleHelper.DOMAIN_URI + "/",
+                "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"/", "<a href=\"" + SparkleHelper.BASE_URI);
         holder = holder.replace("<a href=\"page=", "<a href=\"" + SparkleHelper.BASE_URI + "page=");
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_NATION_LINK,
+                "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "\">%s</a>");
 
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK, "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK_TG,
+                "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK,
+                "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
 
-        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK, "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK,
+                "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
 
         holder = regexResolutionFormat(holder);
 
@@ -496,15 +519,19 @@ public final class MuffinsHelper {
     public static String regexResolutionFormat(String target) {
         String holder = target;
 
-        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GA_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "1/-2\">%s</a>");
-        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_SC_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "2/-2\">%s</a>");
-        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GA_LINK,
+                "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "1/-2\">%s</a>");
+        holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_SC_LINK,
+                "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "2/-2\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RESOLUTION_LINK,
+                "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%s/%s\">");
 
         Matcher m = NS_TG_RAW_RESOLUTION_LINK_2.matcher(target);
         while (m.find()) {
             int councilId = Integer.valueOf(m.group(2));
             int resolutionId = Integer.valueOf(m.group(1)) - 1;
-            String properFormat = SparkleHelper.regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
+            String properFormat = SparkleHelper.regexResolutionFormatHelper(councilId,
+                    resolutionId, m.group(3));
             holder = holder.replace(m.group(), properFormat);
         }
 

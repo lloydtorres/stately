@@ -42,9 +42,9 @@ public class DatasetDialog extends RecyclerDialogFragment {
     private int selected;
 
     public void setDatasets(LinkedHashMap<Integer, CensusScale> rawDataset, int selected) {
-        this.datasets = new LinkedHashMap<Integer, Dataset> ();
+        this.datasets = new LinkedHashMap<Integer, Dataset>();
         ArrayList<CensusScale> rawScales = new ArrayList<CensusScale>(rawDataset.values());
-        for (int i = 0; i < rawScales.size()-1; i++) {
+        for (int i = 0; i < rawScales.size() - 1; i++) {
             CensusScale scale = rawScales.get(i);
 
             Dataset d = new Dataset();
@@ -79,15 +79,16 @@ public class DatasetDialog extends RecyclerDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             ArrayList<Dataset> rawDataset =
                     savedInstanceState.getParcelableArrayList(DATASETS_KEY);
-            this.datasets = new LinkedHashMap<Integer, Dataset> ();
+            this.datasets = new LinkedHashMap<Integer, Dataset>();
             for (Dataset dataset : rawDataset) {
                 this.datasets.put(dataset.id, dataset);
             }
-            
+
             setSelectedDataset(savedInstanceState.getInt(SELECTED_KEY));
         }
         return super.onCreateView(inflater, container, savedInstanceState);

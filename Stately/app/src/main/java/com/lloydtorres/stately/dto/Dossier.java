@@ -31,23 +31,38 @@ import java.util.List;
  * Created by Lloyd on 2016-09-26.
  * This model stores data about a nation's dossier, both for nations and regions.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class Dossier implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=dossier+rdossier"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String POST_QUERY_GENERIC = SparkleHelper.BASE_URI_NOSLASH + "/page=dossier";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q=dossier+rdossier"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String POST_QUERY_GENERIC = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=dossier";
     public static final String POST_QUERY_ADD_REGION = POST_QUERY_GENERIC + "/action=add/region=%s";
 
     public static final String PARAM_REMOVE_TEMPLATE = "remove_%s_%s";
     public static final String PARAM_REMOVE_NATION = "nation";
     public static final String PARAM_REMOVE_REGION = "region";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Dossier> CREATOR = new Parcelable.Creator<Dossier>() {
+        @Override
+        public Dossier createFromParcel(Parcel in) {
+            return new Dossier(in);
+        }
 
-    @ElementList(name="DOSSIER")
+        @Override
+        public Dossier[] newArray(int size) {
+            return new Dossier[size];
+        }
+    };
+    @ElementList(name = "DOSSIER")
     public List<String> nations;
-    @ElementList(name="RDOSSIER")
+    @ElementList(name = "RDOSSIER")
     public List<String> regions;
 
-    public Dossier() { super(); }
+    public Dossier() {
+        super();
+    }
 
     protected Dossier(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -84,18 +99,5 @@ public class Dossier implements Parcelable {
             dest.writeList(regions);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Dossier> CREATOR = new Parcelable.Creator<Dossier>() {
-        @Override
-        public Dossier createFromParcel(Parcel in) {
-            return new Dossier(in);
-        }
-
-        @Override
-        public Dossier[] newArray(int size) {
-            return new Dossier[size];
-        }
-    };
 
 }

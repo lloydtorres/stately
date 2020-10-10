@@ -26,13 +26,28 @@ import org.simpleframework.xml.Root;
  * Created by lloyd on 2017-06-01.
  * Contains data about the results of an issue decision.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class IssueResultContainer implements Parcelable {
 
-    @Element(name="ISSUE")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssueResultContainer> CREATOR =
+            new Parcelable.Creator<IssueResultContainer>() {
+        @Override
+        public IssueResultContainer createFromParcel(Parcel in) {
+            return new IssueResultContainer(in);
+        }
+
+        @Override
+        public IssueResultContainer[] newArray(int size) {
+            return new IssueResultContainer[size];
+        }
+    };
+    @Element(name = "ISSUE")
     public IssueResult results;
 
-    public IssueResultContainer() { super(); }
+    public IssueResultContainer() {
+        super();
+    }
 
     protected IssueResultContainer(Parcel in) {
         results = (IssueResult) in.readValue(IssueResult.class.getClassLoader());
@@ -47,17 +62,4 @@ public class IssueResultContainer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(results);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueResultContainer> CREATOR = new Parcelable.Creator<IssueResultContainer>() {
-        @Override
-        public IssueResultContainer createFromParcel(Parcel in) {
-            return new IssueResultContainer(in);
-        }
-
-        @Override
-        public IssueResultContainer[] newArray(int size) {
-            return new IssueResultContainer[size];
-        }
-    };
 }

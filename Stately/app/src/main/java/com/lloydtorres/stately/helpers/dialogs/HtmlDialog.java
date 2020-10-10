@@ -19,11 +19,12 @@ package com.lloydtorres.stately.helpers.dialogs;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AppCompatDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.fragment.app.FragmentManager;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -62,16 +63,19 @@ public class HtmlDialog extends DetachDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeLollipopDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(),
+                    RaraHelper.getThemeLollipopDialog(getContext()));
         } else {
-            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(),
+                    RaraHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_html, container, false);
 
         // Restore saved state

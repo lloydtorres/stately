@@ -21,9 +21,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.SlidrActivity;
@@ -82,6 +83,128 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     private SharedPreferences storage;
     private boolean isChangeThemeTriggered = false;
 
+    /**
+     * GENERAL SETTINGS
+     */
+
+    public static boolean getAutologinSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true);
+    }
+
+    public static boolean getConfirmIssueDecisionSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_ISSUECONFIRM, true);
+    }
+
+    public static boolean getConfirmExitSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true);
+    }
+
+    /**
+     * NOTIFICATIONS SETTINGS
+     */
+
+    public static boolean getNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
+    }
+
+    public static long getNotificationIntervalSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        long interval = NOTIFS_6_HOURS_IN_SEC;
+        try {
+            interval = Long.valueOf(storage.getString(SettingsActivity.SETTING_NOTIFS_CHECK,
+                    String.valueOf(NOTIFS_6_HOURS_IN_SEC)));
+        } catch (Exception e) {
+            SparkleHelper.logError(e.toString());
+        }
+        return interval;
+    }
+
+    public static boolean getIssuesNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ISSUES, true);
+    }
+
+    public static boolean getTelegramsNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_TGS, true);
+    }
+
+    public static boolean getRmbMentionNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_MENTION, true);
+    }
+
+    public static boolean getRmbQuoteNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_QUOTES, true);
+    }
+
+    public static boolean getRmbLikeNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_LIKE, true);
+    }
+
+    public static boolean getEndorsementNotificationSetting(Context c) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        return getNotificationSetting(c) &&
+                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ENDORSE, true);
+    }
+
+    /**
+     * STYLING SETTINGS
+     */
+
+    public static int getTheme(Context c) {
+        // Safety check
+        if (c == null) {
+            return THEME_VERT;
+        }
+
+        // Force noir theme on Z-Day
+        if (NightmareHelper.getIsZDayActive(c)) {
+            return THEME_NOIR;
+        }
+
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        int theme = THEME_VERT;
+        try {
+            theme = Integer.valueOf(storage.getString(SettingsActivity.SETTING_THEME,
+                    String.valueOf(THEME_VERT)));
+        } catch (Exception e) {
+            SparkleHelper.logError(e.toString());
+        }
+        return theme;
+    }
+
+    public static int getGovernmentSetting(Context c) {
+        int mode = GOV_NEUTRAL;
+        if (c == null) {
+            return mode;
+        }
+
+        if (RaraHelper.getSpecialDayStatus(c) != RaraHelper.DAY_APRIL_FOOLS) {
+            SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+            try {
+                mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT,
+                        String.valueOf(GOV_NEUTRAL)));
+            } catch (Exception e) {
+                SparkleHelper.logError(e.toString());
+            }
+            return mode;
+        } else {
+            return Math.random() >= 0.5d ? GOV_CONSERVATIVE : GOV_LIBERAL;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +214,8 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         setToolbar(toolbar);
 
         if (getIntent() != null) {
-            isChangeThemeTriggered = getIntent().getBooleanExtra(INTENT_IS_CHANGE_THEME_TRIGGERED, false);
+            isChangeThemeTriggered = getIntent().getBooleanExtra(INTENT_IS_CHANGE_THEME_TRIGGERED
+                    , false);
         }
 
         if (isChangeThemeTriggered) {
@@ -158,134 +282,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         }
     }
 
-    /**
-     * GENERAL SETTINGS
-     */
-
-    public static boolean getAutologinSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(SettingsActivity.SETTING_AUTOLOGIN, true);
-    }
-
-    public static boolean getConfirmIssueDecisionSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(SettingsActivity.SETTING_ISSUECONFIRM, true);
-    }
-
-    public static boolean getConfirmExitSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(SettingsActivity.SETTING_EXITCONFIRM, true);
-    }
-
-    /**
-     * NOTIFICATIONS SETTINGS
-     */
-
-    public static boolean getNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
-    }
-
-    public static long getNotificationIntervalSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        long interval = NOTIFS_6_HOURS_IN_SEC;
-        try {
-            interval = Long.valueOf(storage.getString(SettingsActivity.SETTING_NOTIFS_CHECK, String.valueOf(NOTIFS_6_HOURS_IN_SEC)));
-        }
-        catch (Exception e) {
-            SparkleHelper.logError(e.toString());
-        }
-        return interval;
-    }
-
-    public static boolean getIssuesNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ISSUES, true);
-    }
-
-    public static boolean getTelegramsNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_TGS, true);
-    }
-
-    public static boolean getRmbMentionNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_MENTION, true);
-    }
-
-    public static boolean getRmbQuoteNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_QUOTES, true);
-    }
-
-    public static boolean getRmbLikeNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_RMB_LIKE, true);
-    }
-
-    public static boolean getEndorsementNotificationSetting(Context c) {
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        return getNotificationSetting(c) &&
-                storage.getBoolean(SettingsActivity.SETTING_NOTIFS_ENDORSE, true);
-    }
-
-    /**
-     * STYLING SETTINGS
-     */
-
-    public static int getTheme(Context c) {
-        // Safety check
-        if (c == null) {
-            return THEME_VERT;
-        }
-
-        // Force noir theme on Z-Day
-        if (NightmareHelper.getIsZDayActive(c)) {
-            return THEME_NOIR;
-        }
-
-        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-        int theme = THEME_VERT;
-        try {
-            theme = Integer.valueOf(storage.getString(SettingsActivity.SETTING_THEME, String.valueOf(THEME_VERT)));
-        }
-        catch (Exception e) {
-            SparkleHelper.logError(e.toString());
-        }
-        return theme;
-    }
-
-    public static int getGovernmentSetting(Context c) {
-        int mode = GOV_NEUTRAL;
-        if (c == null) {
-            return mode;
-        }
-
-        if (RaraHelper.getSpecialDayStatus(c) != RaraHelper.DAY_APRIL_FOOLS) {
-            SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
-            try {
-                mode = Integer.valueOf(storage.getString(SettingsActivity.SETTING_GOVERNMENT, String.valueOf(GOV_NEUTRAL)));
-            }
-            catch (Exception e) {
-                SparkleHelper.logError(e.toString());
-            }
-            return mode;
-        } else {
-            return Math.random() >= 0.5d ? GOV_CONSERVATIVE : GOV_LIBERAL;
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (isChangeThemeTriggered) {
             setupNewTheme();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

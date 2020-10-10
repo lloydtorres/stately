@@ -26,14 +26,26 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-11.
  * A DTO used to store the freedom descriptors of a nation returned by the NationStates API.
  */
-@Root(name="FREEDOM", strict=false)
+@Root(name = "FREEDOM", strict = false)
 public class Freedom implements Parcelable {
 
-    @Element(name="CIVILRIGHTS")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Freedom> CREATOR = new Parcelable.Creator<Freedom>() {
+        @Override
+        public Freedom createFromParcel(Parcel in) {
+            return new Freedom(in);
+        }
+
+        @Override
+        public Freedom[] newArray(int size) {
+            return new Freedom[size];
+        }
+    };
+    @Element(name = "CIVILRIGHTS")
     public String civilRightsDesc;
-    @Element(name="ECONOMY")
+    @Element(name = "ECONOMY")
     public String economyDesc;
-    @Element(name="POLITICALFREEDOM")
+    @Element(name = "POLITICALFREEDOM")
     public String politicalDesc;
 
     public Freedom() {
@@ -57,17 +69,4 @@ public class Freedom implements Parcelable {
         dest.writeString(economyDesc);
         dest.writeString(politicalDesc);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Freedom> CREATOR = new Parcelable.Creator<Freedom>() {
-        @Override
-        public Freedom createFromParcel(Parcel in) {
-            return new Freedom(in);
-        }
-
-        @Override
-        public Freedom[] newArray(int size) {
-            return new Freedom[size];
-        }
-    };
 }

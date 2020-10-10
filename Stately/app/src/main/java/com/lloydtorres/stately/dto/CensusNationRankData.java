@@ -28,18 +28,32 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-09-10.
  * Model for querying nation census rank data by itself.
  */
-@Root(strict=false)
+@Root(strict = false)
 public class CensusNationRankData implements Parcelable {
     public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?%sq="
             + "censusranks"
             + ";scale=%d"
             + "&start=%d"
             + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusNationRankData> CREATOR =
+            new Parcelable.Creator<CensusNationRankData>() {
+        @Override
+        public CensusNationRankData createFromParcel(Parcel in) {
+            return new CensusNationRankData(in);
+        }
 
-    @Element(name="CENSUSRANKS", required=false)
+        @Override
+        public CensusNationRankData[] newArray(int size) {
+            return new CensusNationRankData[size];
+        }
+    };
+    @Element(name = "CENSUSRANKS", required = false)
     public CensusNationRankList ranks;
 
-    public CensusNationRankData() { super(); }
+    public CensusNationRankData() {
+        super();
+    }
 
     protected CensusNationRankData(Parcel in) {
         ranks = (CensusNationRankList) in.readValue(CensusNationRankList.class.getClassLoader());
@@ -54,17 +68,4 @@ public class CensusNationRankData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(ranks);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusNationRankData> CREATOR = new Parcelable.Creator<CensusNationRankData>() {
-        @Override
-        public CensusNationRankData createFromParcel(Parcel in) {
-            return new CensusNationRankData(in);
-        }
-
-        @Override
-        public CensusNationRankData[] newArray(int size) {
-            return new CensusNationRankData[size];
-        }
-    };
 }

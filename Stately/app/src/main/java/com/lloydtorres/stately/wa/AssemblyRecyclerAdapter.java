@@ -18,13 +18,14 @@ package com.lloydtorres.stately.wa;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
@@ -61,7 +62,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private static final String WA_BANNER_URL = SparkleHelper.BASE_URI + "images/banners/wa1.jpg";
     private static final int WA_FOUNDATION_ID = 2;
-
+    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)" +
+            "\\/page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)");
     private List<Object> cards;
     private Context context;
     private WaVoteStatus voteStatus;
@@ -90,7 +92,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder = new WaHeaderCard(statsCard);
                 break;
             default:
-                View happeningCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                View happeningCard = inflater.inflate(R.layout.card_world_breaking_news, parent,
+                        false);
                 viewHolder = new BreakingNewsCard(happeningCard);
                 break;
         }
@@ -114,7 +117,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             default:
                 BreakingNewsCard happeningCard = (BreakingNewsCard) holder;
-                happeningCard.init(context, context.getString(R.string.wa_happenings_title), ((EventsHolder) cards.get(position)).events);
+                happeningCard.init(context, context.getString(R.string.wa_happenings_title),
+                        ((EventsHolder) cards.get(position)).events);
                 break;
         }
     }
@@ -129,15 +133,15 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (cards.get(position) instanceof Assembly) {
             Assembly a = (Assembly) cards.get(position);
             return a.resolution.name != null ? ACTIVE_CARD : INACTIVE_CARD;
-        }
-        else if (cards.get(position) instanceof DataIntPair) {
+        } else if (cards.get(position) instanceof DataIntPair) {
             return STATS_CARD;
-        }
-        else if (cards.get(position) instanceof EventsHolder) {
+        } else if (cards.get(position) instanceof EventsHolder) {
             return HAPPENING_CARD;
         }
         return -1;
     }
+
+    // Card viewholders
 
     public void setData(Assembly ga, Assembly sc, WaVoteStatus vs) {
         voteStatus = vs;
@@ -158,8 +162,6 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         cards.add(events);
         notifyDataSetChanged();
     }
-
-    // Card viewholders
 
     // Card for active resolutions
     public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -190,14 +192,16 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_general_assembly));
                 voteStats = voteStatus.gaVote;
-            }
-            else if (pos == SECURITY_COUNCIL_INDEX) {
+            } else if (pos == SECURITY_COUNCIL_INDEX) {
                 cardTitle.setText(AssemblyRecyclerAdapter.this.context.getResources().getString(R.string.wa_security_council));
                 voteStats = voteStatus.scVote;
             }
 
             cardHeader.setText(a.resolution.name);
-            cardActiveTime.setText(String.format(Locale.US, context.getString(R.string.wa_voting_time), SparkleHelper.calculateResolutionEnd(context, a.resolution.voteHistoryFor.size())));
+            cardActiveTime.setText(String.format(Locale.US,
+                    context.getString(R.string.wa_voting_time),
+                    SparkleHelper.calculateResolutionEnd(context,
+                            a.resolution.voteHistoryFor.size())));
             cardFor.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesFor));
             cardAgainst.setText(SparkleHelper.getPrettifiedNumber(a.resolution.votesAgainst));
 
@@ -223,21 +227,24 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 Intent resolutionActivityLaunch = new Intent(context, ResolutionActivity.class);
                 switch (pos) {
                     case GENERAL_ASSEMBLY_INDEX:
-                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.GENERAL_ASSEMBLY);
-                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(GENERAL_ASSEMBLY_INDEX)).resolution);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID,
+                                Assembly.GENERAL_ASSEMBLY);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION,
+                                ((Assembly) cards.get(GENERAL_ASSEMBLY_INDEX)).resolution);
                         break;
                     case SECURITY_COUNCIL_INDEX:
-                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, Assembly.SECURITY_COUNCIL);
-                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION, ((Assembly)cards.get(SECURITY_COUNCIL_INDEX)).resolution);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_COUNCIL_ID,
+                                Assembly.SECURITY_COUNCIL);
+                        resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_RESOLUTION,
+                                ((Assembly) cards.get(SECURITY_COUNCIL_INDEX)).resolution);
                         break;
                 }
-                resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_VOTE_STATUS, voteStatus);
+                resolutionActivityLaunch.putExtra(ResolutionActivity.TARGET_VOTE_STATUS,
+                        voteStatus);
                 context.startActivity(resolutionActivityLaunch);
             }
         }
     }
-
-    private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)\\/page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)");
 
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
@@ -258,8 +265,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void init(Assembly a, int pos) {
             if (pos == GENERAL_ASSEMBLY_INDEX) {
                 cardTitle.setText(context.getResources().getString(R.string.wa_general_assembly));
-            }
-            else if (pos == SECURITY_COUNCIL_INDEX) {
+            } else if (pos == SECURITY_COUNCIL_INDEX) {
                 cardTitle.setText(context.getResources().getString(R.string.wa_security_council));
             }
 
@@ -298,12 +304,14 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public void init(DataIntPair s) {
-            super.init(s, context.getString(R.string.wa_members), context.getString(R.string.wa_delegates));
+            super.init(s, context.getString(R.string.wa_members),
+                    context.getString(R.string.wa_delegates));
 
             foundationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SparkleHelper.startResolution(context, Assembly.GENERAL_ASSEMBLY, WA_FOUNDATION_ID);
+                    SparkleHelper.startResolution(context, Assembly.GENERAL_ASSEMBLY,
+                            WA_FOUNDATION_ID);
                 }
             });
         }

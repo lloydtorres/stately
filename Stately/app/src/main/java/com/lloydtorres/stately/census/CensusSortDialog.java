@@ -19,11 +19,12 @@ package com.lloydtorres.stately.census;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -47,7 +48,8 @@ public class CensusSortDialog extends DetachDialogFragment {
     private boolean isAscending;
     private CensusRecyclerAdapter adapter;
 
-    public CensusSortDialog() { }
+    public CensusSortDialog() {
+    }
 
     public void setMode(int m) {
         mode = m;
@@ -103,7 +105,8 @@ public class CensusSortDialog extends DetachDialogFragment {
         alphabeticalCheckBox.setChecked(isAlphabetical);
 
         directionState = dialogView.findViewById(R.id.census_sort_order_radio_group);
-        directionState.check(isAscending ? R.id.census_sort_ascending : R.id.census_sort_descending);
+        directionState.check(isAscending ? R.id.census_sort_ascending :
+                R.id.census_sort_descending);
 
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
@@ -112,7 +115,8 @@ public class CensusSortDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.census_sort_dialog_title)
                 .setView(dialogView)
                 .setPositiveButton(R.string.census_sort_confirm, dialogListener)

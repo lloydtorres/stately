@@ -20,15 +20,16 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -54,8 +55,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
 
     private ArrayList<UserLogin> logins;
 
-    public void setLogins(ArrayList<UserLogin> l)
-    {
+    public void setLogins(ArrayList<UserLogin> l) {
         logins = l;
     }
 
@@ -63,12 +63,9 @@ public class SwitchNationDialog extends DetachDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeLollipopDialog(getContext()));
-        }
-        else
-        {
+        } else {
             setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeMaterialDialog(getContext()));
         }
     }
@@ -79,8 +76,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
         View view = inflater.inflate(R.layout.fragment_dialog_recycler, null);
 
         // Restore saved state
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             logins = savedInstanceState.getParcelableArrayList(LOGINS_KEY);
         }
 
@@ -94,7 +90,8 @@ public class SwitchNationDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_switch)
                 .setView(view)
                 .setPositiveButton(R.string.add_nation, dialogListener);
@@ -102,8 +99,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
         return dialogBuilder.create();
     }
 
-    private void initRecycler(View view)
-    {
+    private void initRecycler(View view) {
         // Base recycler stuff
         mRecyclerView = view.findViewById(R.id.recycler_padded);
         mRecyclerView.setHasFixedSize(true);
@@ -114,9 +110,11 @@ public class SwitchNationDialog extends DetachDialogFragment {
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
         // Add swipe to delete
-        ItemTouchHelper.SimpleCallback deleteCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback deleteCallback = new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
                 // not needed
                 return false;
             }
@@ -126,8 +124,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
                 // remove on swipe
                 int pos = viewHolder.getAdapterPosition();
 
-                if (pos != RecyclerView.NO_POSITION)
-                {
+                if (pos != RecyclerView.NO_POSITION) {
                     logins.get(pos).delete();
                     logins.remove(pos);
                     mRecyclerAdapter.notifyItemRemoved(pos);
@@ -140,20 +137,19 @@ public class SwitchNationDialog extends DetachDialogFragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
         // If the recyclerview is larger than 75% of the screen height, resize
         DisplayMetrics displaymetrics = new DisplayMetrics();
-        if (getActivity() != null && isAdded())
-        {
+        if (getActivity() != null && isAdded()) {
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             int screenHeight = displaymetrics.heightPixels;
             int recyclerHeight = mRecyclerView.getLayoutParams().height;
-            if (recyclerHeight > screenHeight * 0.75)
-            {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.5));
+            if (recyclerHeight > screenHeight * 0.75) {
+                LinearLayout.LayoutParams lp =
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                (int) (screenHeight * 0.5));
                 mRecyclerView.setLayoutParams(lp);
             }
         }

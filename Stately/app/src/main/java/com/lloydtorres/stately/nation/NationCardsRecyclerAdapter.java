@@ -18,16 +18,17 @@ package com.lloydtorres.stately.nation;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -73,9 +74,9 @@ import java.util.Locale;
  * A RecyclerView adapter for the four main nation tabs.
  */
 public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String ANIMAL_ATTACK = "Animal Attack";
     // String container templates
     private static final String POWER_TEMPLATE = "%s (%s)";
-
     // different types of cards
     private static final int CARD_OVERVIEW = 0;
     private static final int CARD_FREEDOMS = 1;
@@ -85,9 +86,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int CARD_WA_BADGE = 5;
     private static final int CARD_POLICY = 6;
     private static final int CARD_EMPTY = 7;
-
     private LinkedHashMap<Integer, CensusScale> censusScales;
-
     private List<Parcelable> cards;
     private String nationName;
     private boolean isSameRegion;
@@ -95,12 +94,14 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context context;
     private FragmentManager fm;
 
-    public NationCardsRecyclerAdapter(List<Parcelable> cds, FragmentManager f, String n, boolean sameRegion, ExploreActivity act) {
+    public NationCardsRecyclerAdapter(List<Parcelable> cds, FragmentManager f, String n,
+                                      boolean sameRegion, ExploreActivity act) {
         this(act, cds, f, n, sameRegion);
         exploreActivity = act;
     }
 
-    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f, String n, boolean sameRegion) {
+    public NationCardsRecyclerAdapter(Context c, List<Parcelable> cds, FragmentManager f,
+                                      String n, boolean sameRegion) {
         context = c;
         fm = f;
         nationName = n;
@@ -185,7 +186,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 String curUserId = PinkaHelper.getActiveUser(context).nationId;
                 // Only show superweapon button if in same region and not self
                 if (!SparkleHelper.getIdFromName(nationName).equals(curUserId) && isSameRegion) {
-                    zcc.initExplore(exploreActivity, zombieData, ZombieChartCard.MODE_NATION_SUPERWEAPON, nationName);
+                    zcc.initExplore(exploreActivity, zombieData,
+                            ZombieChartCard.MODE_NATION_SUPERWEAPON, nationName);
                 } else {
                     zcc.init(context, zombieData, ZombieChartCard.MODE_NATION_DEFAULT, nationName);
                 }
@@ -210,36 +212,39 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         return cards.size();
     }
 
+    // Card viewholders
+
     @Override
     public int getItemViewType(int position) {
         if (cards.get(position) instanceof NationOverviewCardData) {
             return CARD_OVERVIEW;
-        }
-        else if (cards.get(position) instanceof NationFreedomCardData) {
+        } else if (cards.get(position) instanceof NationFreedomCardData) {
             return CARD_FREEDOMS;
-        }
-        else if (cards.get(position) instanceof NationGenericCardData) {
+        } else if (cards.get(position) instanceof NationGenericCardData) {
             return CARD_GENERIC;
-        }
-        else if (cards.get(position) instanceof NationChartCardData) {
+        } else if (cards.get(position) instanceof NationChartCardData) {
             return CARD_CHART;
-        }
-        else if (cards.get(position) instanceof Zombie) {
+        } else if (cards.get(position) instanceof Zombie) {
             return CARD_ZOMBIE;
-        }
-        else if (cards.get(position) instanceof WaBadge) {
+        } else if (cards.get(position) instanceof WaBadge) {
             return CARD_WA_BADGE;
-        }
-        else if (cards.get(position) instanceof Policy) {
+        } else if (cards.get(position) instanceof Policy) {
             return CARD_POLICY;
-        }
-        else if (cards.get(position) instanceof Event) {
+        } else if (cards.get(position) instanceof Event) {
             return CARD_EMPTY;
         }
         return -1;
     }
 
-    // Card viewholders
+    private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title,
+                              String content) {
+        View entryView = inflater.inflate(R.layout.view_cardentry, null);
+        TextView titleView = entryView.findViewById(R.id.cardentry_label);
+        TextView contentView = entryView.findViewById(R.id.cardentry_content);
+        titleView.setText(SparkleHelper.getHtmlFormatting(title));
+        contentView.setText(SparkleHelper.getHtmlFormatting(content));
+        targetLayout.addView(entryView);
+    }
 
     public class NationOverviewCard extends RecyclerView.ViewHolder {
 
@@ -286,15 +291,22 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         public void init(NationOverviewCardData data) {
             govType.setHtml(data.category);
             region.setText(data.region);
-            region.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, SparkleHelper.getIdFromName(data.region), ExploreActivity.EXPLORE_REGION));
-            influence.setText(String.format(Locale.US, POWER_TEMPLATE, data.inflDesc, SparkleHelper.getPrettifiedNumber(data.inflScore)));
+            region.setOnClickListener(SparkleHelper.getExploreOnClickListener(context,
+                    SparkleHelper.getIdFromName(data.region), ExploreActivity.EXPLORE_REGION));
+            influence.setText(String.format(Locale.US, POWER_TEMPLATE, data.inflDesc,
+                    SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
             String lastLogin = SparkleHelper.getReadableDateFromUTC(context, data.lastSeen);
             if (data.established == 0) {
-                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), context.getString(R.string.nation_time_immemorial), lastLogin));
+                time.setText(String.format(Locale.US,
+                        context.getString(R.string.nation_time_founded),
+                        context.getString(R.string.nation_time_immemorial), lastLogin));
             } else {
-                time.setText(String.format(Locale.US, context.getString(R.string.nation_time_founded), SparkleHelper.getReadableDateFromUTC(context, data.established), lastLogin));
+                time.setText(String.format(Locale.US,
+                        context.getString(R.string.nation_time_founded),
+                        SparkleHelper.getReadableDateFromUTC(context, data.established),
+                        lastLogin));
             }
 
             if (SparkleHelper.isWaMember(data.waState)) {
@@ -336,13 +348,15 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 // Show vote state in General Assembly if exists
                 if (data.gaVote != null) {
                     gaVoteHolder.setVisibility(View.VISIBLE);
-                    setAssemblyVoteState(gaVoteHolder, gaVote, data.gaVote, Assembly.GENERAL_ASSEMBLY);
+                    setAssemblyVoteState(gaVoteHolder, gaVote, data.gaVote,
+                            Assembly.GENERAL_ASSEMBLY);
                 }
 
                 // Show vote state in Security council if exists
                 if (data.scVote != null) {
                     scVoteHolder.setVisibility(View.VISIBLE);
-                    setAssemblyVoteState(scVoteHolder, scVote, data.scVote, Assembly.SECURITY_COUNCIL);
+                    setAssemblyVoteState(scVoteHolder, scVote, data.scVote,
+                            Assembly.SECURITY_COUNCIL);
                 }
             }
         }
@@ -354,7 +368,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
          * @param vote
          * @param councilId
          */
-        private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote, final int councilId) {
+        private void setAssemblyVoteState(RelativeLayout holder, TextView content, String vote,
+                                          final int councilId) {
             // Colour of the indicator as well as the assembly name
             int stateColour;
             String assemblyName;
@@ -376,17 +391,22 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             // If voting FOR the resolution
             if (WaVoteStatus.VOTE_FOR.equals(vote)) {
                 stateColour = R.color.colorChart0;
-                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
+                content.setText(String.format(Locale.US,
+                        context.getString(R.string.card_overview_wa_vote), assemblyName,
+                        vote.toLowerCase(Locale.ENGLISH)));
             }
             // If voting AGAINST the resolution
             else if (WaVoteStatus.VOTE_AGAINST.equals(vote)) {
                 stateColour = R.color.colorChart1;
-                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_vote), assemblyName, vote.toLowerCase(Locale.ENGLISH)));
+                content.setText(String.format(Locale.US,
+                        context.getString(R.string.card_overview_wa_vote), assemblyName,
+                        vote.toLowerCase(Locale.ENGLISH)));
             }
             // If no vote yet
             else {
                 stateColour = R.color.colorChart12;
-                content.setText(String.format(Locale.US, context.getString(R.string.card_overview_wa_novote), assemblyName));
+                content.setText(String.format(Locale.US,
+                        context.getString(R.string.card_overview_wa_novote), assemblyName));
             }
 
             holder.setBackgroundColor(ContextCompat.getColor(context, stateColour));
@@ -430,33 +450,35 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             civilRightsDesc.setText(data.civDesc);
             int civilRightsScore = data.civScore;
             civilRightsPts.setText(String.valueOf(civilRightsScore));
-            int civColInd = Math.min(Math.max(civilRightsScore / 7, 0), RaraHelper.freedomColours.length - 1);
-            civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[civColInd]));
-            civilRightsCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_CIVIL_RIGHTS));
+            int civColInd = Math.min(Math.max(civilRightsScore / 7, 0),
+                    RaraHelper.freedomColours.length - 1);
+            civilRightsCard.setCardBackgroundColor(ContextCompat.getColor(context,
+                    RaraHelper.freedomColours[civColInd]));
+            civilRightsCard.setOnClickListener(new TrendsOnClickListener(context,
+                    SparkleHelper.getIdFromName(data.nationTarget),
+                    TrendsActivity.CENSUS_CIVIL_RIGHTS));
 
             economyDesc.setText(data.econDesc);
             int economyScore = data.econScore;
             economyPts.setText(String.valueOf(economyScore));
-            int econColInd = Math.min(Math.max(economyScore / 7, 0), RaraHelper.freedomColours.length - 1);
-            economyCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[econColInd]));
-            economyCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_ECONOMY));
+            int econColInd = Math.min(Math.max(economyScore / 7, 0),
+                    RaraHelper.freedomColours.length - 1);
+            economyCard.setCardBackgroundColor(ContextCompat.getColor(context,
+                    RaraHelper.freedomColours[econColInd]));
+            economyCard.setOnClickListener(new TrendsOnClickListener(context,
+                    SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_ECONOMY));
 
             politicalDesc.setText(data.poliDesc);
             int politicalFreedomScore = data.poliScore;
             politicalPts.setText(String.valueOf(politicalFreedomScore));
-            int polColInd = Math.min(Math.max(politicalFreedomScore / 7, 0), RaraHelper.freedomColours.length - 1);
-            politicalCard.setCardBackgroundColor(ContextCompat.getColor(context, RaraHelper.freedomColours[polColInd]));
-            politicalCard.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationTarget), TrendsActivity.CENSUS_POLITICAL_FREEDOM));
+            int polColInd = Math.min(Math.max(politicalFreedomScore / 7, 0),
+                    RaraHelper.freedomColours.length - 1);
+            politicalCard.setCardBackgroundColor(ContextCompat.getColor(context,
+                    RaraHelper.freedomColours[polColInd]));
+            politicalCard.setOnClickListener(new TrendsOnClickListener(context,
+                    SparkleHelper.getIdFromName(data.nationTarget),
+                    TrendsActivity.CENSUS_POLITICAL_FREEDOM));
         }
-    }
-
-    private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content) {
-        View entryView = inflater.inflate(R.layout.view_cardentry, null);
-        TextView titleView = entryView.findViewById(R.id.cardentry_label);
-        TextView contentView = entryView.findViewById(R.id.cardentry_content);
-        titleView.setText(SparkleHelper.getHtmlFormatting(title));
-        contentView.setText(SparkleHelper.getHtmlFormatting(content));
-        targetLayout.addView(entryView);
     }
 
     public class NationGenericCard extends RecyclerView.ViewHolder {
@@ -500,19 +522,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if (data.nationCensusTarget != null) {
                 trendButton.setVisibility(View.VISIBLE);
-                trendButton.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(data.nationCensusTarget), data.idCensusTarget));
+                trendButton.setOnClickListener(new TrendsOnClickListener(context,
+                        SparkleHelper.getIdFromName(data.nationCensusTarget), data.idCensusTarget));
 
                 // if census ID is out of bounds, set it as unknown
-                CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales, data.idCensusTarget);
-                trendContent.setText(String.format(Locale.US, context.getString(R.string.card_overview_census_button), worldCensusItem.name));
+                CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales,
+                        data.idCensusTarget);
+                trendContent.setText(String.format(Locale.US,
+                        context.getString(R.string.card_overview_census_button),
+                        worldCensusItem.name));
             } else {
                 trendButton.setVisibility(View.GONE);
                 trendButton.setOnClickListener(null);
             }
         }
     }
-
-    public static final String ANIMAL_ATTACK = "Animal Attack";
 
     public class NationChartCard extends RecyclerView.ViewHolder {
 
@@ -551,19 +575,21 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     // setup data
                     List<MortalityCause> causes = data.mortalityList;
 
-                    for (int i=0; i < causes.size(); i++) {
+                    for (int i = 0; i < causes.size(); i++) {
                         // NationStates API stores this as Animal Attack instead of
                         // using the actual national animal, so replace that
                         String causeLabel = causes.get(i).type;
                         if (ANIMAL_ATTACK.equals(causes.get(i).type)) {
-                            causeLabel = String.format(Locale.US, context.getString(R.string.animal_attack_madlibs), data.animal);
+                            causeLabel = String.format(Locale.US,
+                                    context.getString(R.string.animal_attack_madlibs), data.animal);
                         }
                         PieEntry n = new PieEntry(causes.get(i).value, causeLabel);
                         chartEntries.add(n);
                     }
 
-                    for (int i=0; i<RaraHelper.chartColours.length; i++) {
-                        chartColours.add(ContextCompat.getColor(context, RaraHelper.chartColours[i]));
+                    for (int i = 0; i < RaraHelper.chartColours.length; i++) {
+                        chartColours.add(ContextCompat.getColor(context,
+                                RaraHelper.chartColours[i]));
                     }
                     break;
                 case NationChartCardData.MODE_GOV:
@@ -574,51 +600,63 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     // Have to add it one by one, how horrifying
                     if (budget.admin > 0f) {
-                        chartEntries.add(new PieEntry(budget.admin, context.getString(R.string.administration)));
+                        chartEntries.add(new PieEntry(budget.admin,
+                                context.getString(R.string.administration)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart0));
                     }
                     if (budget.defense > 0f) {
-                        chartEntries.add(new PieEntry(budget.defense, context.getString(R.string.defense)));
+                        chartEntries.add(new PieEntry(budget.defense,
+                                context.getString(R.string.defense)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
                     }
                     if (budget.education > 0f) {
-                        chartEntries.add(new PieEntry(budget.education, context.getString(R.string.education)));
+                        chartEntries.add(new PieEntry(budget.education,
+                                context.getString(R.string.education)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart2));
                     }
                     if (budget.environment > 0f) {
-                        chartEntries.add(new PieEntry(budget.environment, context.getString(R.string.environment)));
+                        chartEntries.add(new PieEntry(budget.environment,
+                                context.getString(R.string.environment)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart3));
                     }
                     if (budget.healthcare > 0f) {
-                        chartEntries.add(new PieEntry(budget.healthcare, context.getString(R.string.healthcare)));
+                        chartEntries.add(new PieEntry(budget.healthcare,
+                                context.getString(R.string.healthcare)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart4));
                     }
                     if (budget.industry > 0f) {
-                        chartEntries.add(new PieEntry(budget.industry, context.getString(R.string.industry)));
+                        chartEntries.add(new PieEntry(budget.industry,
+                                context.getString(R.string.industry)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart5));
                     }
                     if (budget.internationalAid > 0f) {
-                        chartEntries.add(new PieEntry(budget.internationalAid, context.getString(R.string.international_aid)));
+                        chartEntries.add(new PieEntry(budget.internationalAid,
+                                context.getString(R.string.international_aid)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart6));
                     }
                     if (budget.lawAndOrder > 0f) {
-                        chartEntries.add(new PieEntry(budget.lawAndOrder, context.getString(R.string.law_and_order)));
+                        chartEntries.add(new PieEntry(budget.lawAndOrder,
+                                context.getString(R.string.law_and_order)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart7));
                     }
                     if (budget.publicTransport > 0f) {
-                        chartEntries.add(new PieEntry(budget.publicTransport, context.getString(R.string.public_transport)));
+                        chartEntries.add(new PieEntry(budget.publicTransport,
+                                context.getString(R.string.public_transport)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart8));
                     }
                     if (budget.socialPolicy > 0f) {
-                        chartEntries.add(new PieEntry(budget.socialPolicy, context.getString(R.string.social_policy)));
+                        chartEntries.add(new PieEntry(budget.socialPolicy,
+                                context.getString(R.string.social_policy)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart9));
                     }
                     if (budget.spirituality > 0f) {
-                        chartEntries.add(new PieEntry(budget.spirituality, context.getString(R.string.spirituality)));
+                        chartEntries.add(new PieEntry(budget.spirituality,
+                                context.getString(R.string.spirituality)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart10));
                     }
                     if (budget.welfare > 0f) {
-                        chartEntries.add(new PieEntry(budget.welfare, context.getString(R.string.welfare)));
+                        chartEntries.add(new PieEntry(budget.welfare,
+                                context.getString(R.string.welfare)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorChart11));
                     }
                     break;
@@ -629,19 +667,23 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     Sectors sectors = data.sectors;
 
                     if (sectors.government > 0f) {
-                        chartEntries.add(new PieEntry(sectors.government, context.getString(R.string.government)));
+                        chartEntries.add(new PieEntry(sectors.government,
+                                context.getString(R.string.government)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorSector0));
                     }
                     if (sectors.stateOwned > 0f) {
-                        chartEntries.add(new PieEntry(sectors.stateOwned, context.getString(R.string.state_owned)));
+                        chartEntries.add(new PieEntry(sectors.stateOwned,
+                                context.getString(R.string.state_owned)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorSector1));
                     }
                     if (sectors.privateSector > 0f) {
-                        chartEntries.add(new PieEntry(sectors.privateSector, context.getString(R.string.private_sector)));
+                        chartEntries.add(new PieEntry(sectors.privateSector,
+                                context.getString(R.string.private_sector)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorSector2));
                     }
                     if (sectors.blackMarket > 0f) {
-                        chartEntries.add(new PieEntry(sectors.blackMarket, context.getString(R.string.black_market)));
+                        chartEntries.add(new PieEntry(sectors.blackMarket,
+                                context.getString(R.string.black_market)));
                         chartColours.add(ContextCompat.getColor(context, R.color.colorSector3));
                     }
                     break;

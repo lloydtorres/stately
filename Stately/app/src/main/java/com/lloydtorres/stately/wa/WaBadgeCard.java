@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.wa;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Assembly;
@@ -75,13 +76,15 @@ public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClick
         }
 
         container.setCardBackgroundColor(containerColour);
-        badgeDescription.setText(String.format(Locale.US, context.getString(descriptionText), badgeData.scResolution));
+        badgeDescription.setText(String.format(Locale.US, context.getString(descriptionText),
+                badgeData.scResolution));
     }
 
     @Override
     public void onClick(View v) {
         if (badgeData != null) {
-            SparkleHelper.startResolution(context, Assembly.SECURITY_COUNCIL, badgeData.scResolution);
+            SparkleHelper.startResolution(context, Assembly.SECURITY_COUNCIL,
+                    badgeData.scResolution);
         }
     }
 }

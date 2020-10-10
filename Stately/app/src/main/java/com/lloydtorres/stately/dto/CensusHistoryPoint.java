@@ -26,15 +26,30 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-04-10.
  * This is a single point in a census scale's history.
  */
-@Root(name="POINT", strict=false)
+@Root(name = "POINT", strict = false)
 public class CensusHistoryPoint implements Parcelable {
 
-    @Element(name="TIMESTAMP", required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusHistoryPoint> CREATOR =
+            new Parcelable.Creator<CensusHistoryPoint>() {
+        @Override
+        public CensusHistoryPoint createFromParcel(Parcel in) {
+            return new CensusHistoryPoint(in);
+        }
+
+        @Override
+        public CensusHistoryPoint[] newArray(int size) {
+            return new CensusHistoryPoint[size];
+        }
+    };
+    @Element(name = "TIMESTAMP", required = false)
     public long timestamp;
-    @Element(name="SCORE", required=false)
+    @Element(name = "SCORE", required = false)
     public float score;
 
-    public CensusHistoryPoint() { super(); }
+    public CensusHistoryPoint() {
+        super();
+    }
 
     protected CensusHistoryPoint(Parcel in) {
         timestamp = in.readLong();
@@ -51,17 +66,4 @@ public class CensusHistoryPoint implements Parcelable {
         dest.writeLong(timestamp);
         dest.writeFloat(score);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusHistoryPoint> CREATOR = new Parcelable.Creator<CensusHistoryPoint>() {
-        @Override
-        public CensusHistoryPoint createFromParcel(Parcel in) {
-            return new CensusHistoryPoint(in);
-        }
-
-        @Override
-        public CensusHistoryPoint[] newArray(int size) {
-            return new CensusHistoryPoint[size];
-        }
-    };
 }

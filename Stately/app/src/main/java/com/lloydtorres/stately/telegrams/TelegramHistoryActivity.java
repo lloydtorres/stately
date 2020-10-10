@@ -100,8 +100,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -125,9 +124,12 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
         }
 
         if (telegramsAntiquityContainer != null) {
-            telegrams = MuffinsHelper.processRawTelegramsFromAntiquity(TelegramHistoryActivity.this, telegramsContainer, null);
+            telegrams =
+                    MuffinsHelper.processRawTelegramsFromAntiquity(TelegramHistoryActivity.this,
+                            telegramsContainer, null);
         } else if (telegramsContainer != null) {
-            telegrams = MuffinsHelper.processRawTelegrams(TelegramHistoryActivity.this, telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
+            telegrams = MuffinsHelper.processRawTelegrams(TelegramHistoryActivity.this,
+                    telegramsContainer, PinkaHelper.getActiveUser(this).nationId);
         }
 
         initTelegramsRecyclerAdapter();
@@ -139,7 +141,8 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
             Collections.reverse(telegrams);
 
             if (mRecyclerAdapter == null) {
-                mRecyclerAdapter = new TelegramsAdapter(this, telegrams, getSupportFragmentManager());
+                mRecyclerAdapter = new TelegramsAdapter(this, telegrams,
+                        getSupportFragmentManager());
                 mRecyclerView.setAdapter(mRecyclerAdapter);
             } else {
                 ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
@@ -149,8 +152,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
             if (scrollIndex != -1) {
                 mLayoutManager.scrollToPosition(scrollIndex);
             }
-        }
-        else {
+        } else {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_empty_convo));
         }
         mSwipeRefreshLayout.setRefreshing(false);

@@ -26,21 +26,34 @@ import org.simpleframework.xml.Root;
  * Created by lloyd on 2017-11-10.
  * Model containing data on a nation's policy.
  */
-@Root(name="POLICY", strict=false)
+@Root(name = "POLICY", strict = false)
 public class Policy implements Parcelable {
     public static final int VIEW_NONE = 0;
     public static final int VIEW_ENACTED = 1;
     public static final int VIEW_ABOLISHED = 2;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Policy> CREATOR = new Parcelable.Creator<Policy>() {
+        @Override
+        public Policy createFromParcel(Parcel in) {
+            return new Policy(in);
+        }
 
-    @Element(name="NAME", required=false)
+        @Override
+        public Policy[] newArray(int size) {
+            return new Policy[size];
+        }
+    };
+    @Element(name = "NAME", required = false)
     public String name;
-    @Element(name="DESC", required=false)
+    @Element(name = "DESC", required = false)
     public String description;
-    @Element(name="PIC", required=false)
+    @Element(name = "PIC", required = false)
     public String imageId;
     public int renderType = VIEW_NONE;
 
-    public Policy() { super(); }
+    public Policy() {
+        super();
+    }
 
     protected Policy(Parcel in) {
         name = in.readString();
@@ -61,17 +74,4 @@ public class Policy implements Parcelable {
         dest.writeString(imageId);
         dest.writeInt(renderType);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Policy> CREATOR = new Parcelable.Creator<Policy>() {
-        @Override
-        public Policy createFromParcel(Parcel in) {
-            return new Policy(in);
-        }
-
-        @Override
-        public Policy[] newArray(int size) {
-            return new Policy[size];
-        }
-    };
 }

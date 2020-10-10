@@ -28,18 +28,33 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-10-16.
  * Holder for a region's zombie data.
  */
-@Root(name="REGION", strict=false)
+@Root(name = "REGION", strict = false)
 public class ZombieRegion implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
-                                        + "name+zombie"
-                                        + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?region=%s&q="
+            + "name+zombie"
+            + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ZombieRegion> CREATOR =
+            new Parcelable.Creator<ZombieRegion>() {
+        @Override
+        public ZombieRegion createFromParcel(Parcel in) {
+            return new ZombieRegion(in);
+        }
 
-    @Element(name="NAME")
+        @Override
+        public ZombieRegion[] newArray(int size) {
+            return new ZombieRegion[size];
+        }
+    };
+    @Element(name = "NAME")
     public String name;
-    @Element(name="ZOMBIE")
+    @Element(name = "ZOMBIE")
     public Zombie zombieData;
 
-    public ZombieRegion() { super(); }
+    public ZombieRegion() {
+        super();
+    }
 
     protected ZombieRegion(Parcel in) {
         name = in.readString();
@@ -56,17 +71,4 @@ public class ZombieRegion implements Parcelable {
         dest.writeString(name);
         dest.writeValue(zombieData);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ZombieRegion> CREATOR = new Parcelable.Creator<ZombieRegion>() {
-        @Override
-        public ZombieRegion createFromParcel(Parcel in) {
-            return new ZombieRegion(in);
-        }
-
-        @Override
-        public ZombieRegion[] newArray(int size) {
-            return new ZombieRegion[size];
-        }
-    };
 }

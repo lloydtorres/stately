@@ -70,7 +70,8 @@ public final class PinkaHelper {
     public static final String USERSESSION_WA_MEMBER = "var_wa_member";
 
     // Private constructor
-    private PinkaHelper() {}
+    private PinkaHelper() {
+    }
 
     /**
      * Sets the currently logged-in user in shared prefs and saves them into the database.
@@ -210,7 +211,8 @@ public final class PinkaHelper {
         // Delete current user login from database
         UserLogin activeUser = getActiveUser(c);
         if (activeUser != null) {
-            List<UserLogin> dbActiveUserList = UserLogin.find(UserLogin.class, "nation_id = ?", activeUser.nationId);
+            List<UserLogin> dbActiveUserList = UserLogin.find(UserLogin.class, "nation_id = ?",
+                    activeUser.nationId);
             if (dbActiveUserList != null && dbActiveUserList.size() > 0) {
                 UserLogin dbActiveUser = dbActiveUserList.get(0);
                 dbActiveUser.delete();

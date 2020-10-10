@@ -17,10 +17,11 @@
 package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
@@ -54,7 +55,8 @@ public abstract class WebViewActivity extends SlidrActivity {
         mWebView = findViewById(R.id.register_webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setSupportZoom(false);
-        mWebView.getSettings().setUserAgentString(String.format(Locale.US, NSStringRequest.STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));
+        mWebView.getSettings().setUserAgentString(String.format(Locale.US,
+                NSStringRequest.STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));
     }
 
     private void setToolbar(Toolbar t) {

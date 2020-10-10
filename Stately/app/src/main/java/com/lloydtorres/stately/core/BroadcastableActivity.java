@@ -18,15 +18,17 @@ package com.lloydtorres.stately.core;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lloyd on 2017-02-21.
- * Superclass containing logic allowing for handling of broadcast registrations and mass unregistrations.
+ * Superclass containing logic allowing for handling of broadcast registrations and mass
+ * unregistrations.
  */
 public abstract class BroadcastableActivity extends AppCompatActivity {
 

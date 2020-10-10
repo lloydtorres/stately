@@ -30,7 +30,19 @@ public class NationChartCardData implements Parcelable {
     public static final int MODE_PEOPLE = 0;
     public static final int MODE_GOV = 1;
     public static final int MODE_ECON = 2;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationChartCardData> CREATOR =
+            new Parcelable.Creator<NationChartCardData>() {
+        @Override
+        public NationChartCardData createFromParcel(Parcel in) {
+            return new NationChartCardData(in);
+        }
 
+        @Override
+        public NationChartCardData[] newArray(int size) {
+            return new NationChartCardData[size];
+        }
+    };
     public int mode;
     public List<DataPair> details = new ArrayList<DataPair>();
     public List<MortalityCause> mortalityList = new ArrayList<MortalityCause>();
@@ -38,7 +50,9 @@ public class NationChartCardData implements Parcelable {
     public GovBudget govBudget;
     public Sectors sectors;
 
-    public NationChartCardData() { super(); }
+    public NationChartCardData() {
+        super();
+    }
 
     protected NationChartCardData(Parcel in) {
         mode = in.readInt();
@@ -83,17 +97,4 @@ public class NationChartCardData implements Parcelable {
         dest.writeValue(govBudget);
         dest.writeValue(sectors);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<NationChartCardData> CREATOR = new Parcelable.Creator<NationChartCardData>() {
-        @Override
-        public NationChartCardData createFromParcel(Parcel in) {
-            return new NationChartCardData(in);
-        }
-
-        @Override
-        public NationChartCardData[] newArray(int size) {
-            return new NationChartCardData[size];
-        }
-    };
 }

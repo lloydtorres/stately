@@ -27,15 +27,29 @@ import org.simpleframework.xml.Text;
  * Created by Lloyd on 2016-01-21.
  * Embassy information for a region.
  */
-@Root(name="OFFICER", strict=false)
+@Root(name = "OFFICER", strict = false)
 public class Embassy implements Parcelable {
 
-    @Attribute(required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Embassy> CREATOR = new Parcelable.Creator<Embassy>() {
+        @Override
+        public Embassy createFromParcel(Parcel in) {
+            return new Embassy(in);
+        }
+
+        @Override
+        public Embassy[] newArray(int size) {
+            return new Embassy[size];
+        }
+    };
+    @Attribute(required = false)
     public String type;
-    @Text(required=false)
+    @Text(required = false)
     public String name;
 
-    public Embassy() { super(); }
+    public Embassy() {
+        super();
+    }
 
     protected Embassy(Parcel in) {
         type = in.readString();
@@ -52,17 +66,4 @@ public class Embassy implements Parcelable {
         dest.writeString(type);
         dest.writeString(name);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Embassy> CREATOR = new Parcelable.Creator<Embassy>() {
-        @Override
-        public Embassy createFromParcel(Parcel in) {
-            return new Embassy(in);
-        }
-
-        @Override
-        public Embassy[] newArray(int size) {
-            return new Embassy[size];
-        }
-    };
 }

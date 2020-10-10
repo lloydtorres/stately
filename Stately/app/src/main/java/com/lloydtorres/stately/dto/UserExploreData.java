@@ -29,16 +29,31 @@ import org.simpleframework.xml.Root;
  * This model holds useful information about a specific user, to be looked up while exploring
  * other nations and regions.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class UserExploreData extends Dossier {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q="
             + "dossier+rdossier+zombie"
             + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UserExploreData> CREATOR =
+            new Parcelable.Creator<UserExploreData>() {
+        @Override
+        public UserExploreData createFromParcel(Parcel in) {
+            return new UserExploreData(in);
+        }
 
-    @Element(name="ZOMBIE")
+        @Override
+        public UserExploreData[] newArray(int size) {
+            return new UserExploreData[size];
+        }
+    };
+    @Element(name = "ZOMBIE")
     public Zombie zombieData;
 
-    public UserExploreData() { super(); }
+    public UserExploreData() {
+        super();
+    }
 
     protected UserExploreData(Parcel in) {
         super(in);
@@ -55,17 +70,4 @@ public class UserExploreData extends Dossier {
         super.writeToParcel(dest, flags);
         dest.writeValue(zombieData);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UserExploreData> CREATOR = new Parcelable.Creator<UserExploreData>() {
-        @Override
-        public UserExploreData createFromParcel(Parcel in) {
-            return new UserExploreData(in);
-        }
-
-        @Override
-        public UserExploreData[] newArray(int size) {
-            return new UserExploreData[size];
-        }
-    };
 }

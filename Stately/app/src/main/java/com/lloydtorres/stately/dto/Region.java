@@ -35,50 +35,59 @@ import java.util.List;
  * The DTO used to store information about a region, as returned by the NationStates API.
  * Excludes messages, which is stored in a separate DTO.
  */
-@Root(name="REGION", strict=false)
+@Root(name = "REGION", strict = false)
 public class Region extends BaseRegion implements Parcelable {
 
     public static final String QUERY = BaseRegion.BASE_QUERY
-                                        + "+power+wabadges"
-                                        + "+poll+gavote+scvote"
-                                        + "+officers+embassies"
-                                        + "+happenings+history"
-                                        + "+zombie+census"
-                                        + ";scale=all;mode=score+rank+prank"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template-overall=none";
-    public static final String CHANGE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=change_region/template-overall=none";
+            + "+power+wabadges"
+            + "+poll+gavote+scvote"
+            + "+officers+embassies"
+            + "+happenings+history"
+            + "+zombie+census"
+            + ";scale=all;mode=score+rank+prank"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template" +
+            "-overall=none";
+    public static final String CHANGE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=change_region/template-overall=none";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Region> CREATOR = new Parcelable.Creator<Region>() {
+        @Override
+        public Region createFromParcel(Parcel in) {
+            return new Region(in);
+        }
 
-    @Element(name="POWER")
+        @Override
+        public Region[] newArray(int size) {
+            return new Region[size];
+        }
+    };
+    @Element(name = "POWER")
     public String power;
-
-    @ElementList(name="WABADGES", required=false)
+    @ElementList(name = "WABADGES", required = false)
     public List<WaBadge> waBadges;
-
-    @Element(name="POLL", required=false)
+    @Element(name = "POLL", required = false)
     public Poll poll;
-    @Element(name="GAVOTE", required=false)
+    @Element(name = "GAVOTE", required = false)
     public WaVote gaVote;
-    @Element(name="SCVOTE", required=false)
+    @Element(name = "SCVOTE", required = false)
     public WaVote scVote;
-
-    @ElementList(name="OFFICERS", required=false)
+    @ElementList(name = "OFFICERS", required = false)
     public List<Officer> officers;
-    @ElementList(name="EMBASSIES", required=false)
+    @ElementList(name = "EMBASSIES", required = false)
     public List<Embassy> embassies;
-
-    @ElementList(name="CENSUS")
+    @ElementList(name = "CENSUS")
     public List<CensusDetailedRank> census;
-
-    @ElementList(name="HAPPENINGS")
+    @ElementList(name = "HAPPENINGS")
     public List<Event> happenings;
-    @ElementList(name="HISTORY")
+    @ElementList(name = "HISTORY")
     public List<Event> history;
-
-    @Element(name="ZOMBIE")
+    @Element(name = "ZOMBIE")
     public Zombie zombieData;
 
-    public Region() { super(); }
+    public Region() {
+        super();
+    }
 
     protected Region(Parcel in) {
         super(in);
@@ -123,6 +132,17 @@ public class Region extends BaseRegion implements Parcelable {
             history = null;
         }
         zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
+    }
+
+    public static Region parseRegionXML(Context c, Persister serializer, String response) throws Exception {
+        Region regionResponse = serializer.read(Region.class, response);
+        regionResponse = ((Region) processRawFields(c, regionResponse));
+        // Convert poll text BBcode to HTML if it exists
+        if (regionResponse.poll != null) {
+            regionResponse.poll.text = SparkleHelper.transformBBCodeToHtml(c,
+                    regionResponse.poll.text);
+        }
+        return regionResponse;
     }
 
     @Override
@@ -174,28 +194,5 @@ public class Region extends BaseRegion implements Parcelable {
             dest.writeList(history);
         }
         dest.writeValue(zombieData);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Region> CREATOR = new Parcelable.Creator<Region>() {
-        @Override
-        public Region createFromParcel(Parcel in) {
-            return new Region(in);
-        }
-
-        @Override
-        public Region[] newArray(int size) {
-            return new Region[size];
-        }
-    };
-
-    public static Region parseRegionXML(Context c, Persister serializer, String response) throws Exception {
-        Region regionResponse = serializer.read(Region.class, response);
-        regionResponse = ((Region) processRawFields(c, regionResponse));
-        // Convert poll text BBcode to HTML if it exists
-        if (regionResponse.poll != null) {
-            regionResponse.poll.text = SparkleHelper.transformBBCodeToHtml(c, regionResponse.poll.text);
-        }
-        return regionResponse;
     }
 }

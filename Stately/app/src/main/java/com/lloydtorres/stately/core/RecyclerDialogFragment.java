@@ -19,14 +19,15 @@ package com.lloydtorres.stately.core;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -45,17 +46,19 @@ public abstract class RecyclerDialogFragment extends DetachDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AppCompatDialog dialog = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeLollipopDialog(getContext()));
-        }
-        else {
-            dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
+            dialog = new AppCompatDialog(getActivity(),
+                    RaraHelper.getThemeLollipopDialog(getContext()));
+        } else {
+            dialog = new AppCompatDialog(getActivity(),
+                    RaraHelper.getThemeMaterialDialog(getContext()));
         }
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_dialog_recycler, container, false);
 
         initRecycler(mView);
@@ -84,7 +87,9 @@ public abstract class RecyclerDialogFragment extends DetachDialogFragment {
             int screenHeight = displaymetrics.heightPixels;
             int recyclerHeight = mRecyclerView.getLayoutParams().height;
             if (recyclerHeight > screenHeight * 0.75) {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (screenHeight * 0.5));
+                LinearLayout.LayoutParams lp =
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                (int) (screenHeight * 0.5));
                 mRecyclerView.setLayoutParams(lp);
             }
         }

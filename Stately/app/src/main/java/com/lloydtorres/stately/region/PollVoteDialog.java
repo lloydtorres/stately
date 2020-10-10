@@ -36,7 +36,8 @@ public class PollVoteDialog extends RecyclerDialogFragment {
     private Poll pollData;
     private CommunityRecyclerAdapter.PollCard pollCard;
 
-    public void setData(RegionCommunitySubFragment frag, Poll p, CommunityRecyclerAdapter.PollCard pc) {
+    public void setData(RegionCommunitySubFragment frag, Poll p,
+                        CommunityRecyclerAdapter.PollCard pc) {
         fragment = frag;
         pollData = p;
         pollCard = pc;
@@ -55,7 +56,8 @@ public class PollVoteDialog extends RecyclerDialogFragment {
     protected void initRecycler(View view) {
         super.initRecycler(view);
         setDialogTitle(getString(R.string.card_region_poll));
-        mRecyclerAdapter = new PollVoteRecyclerAdapter(fragment, this, pollData, getString(R.string.poll_vote_withdraw), pollCard);
+        mRecyclerAdapter = new PollVoteRecyclerAdapter(fragment, this, pollData,
+                getString(R.string.poll_vote_withdraw), pollCard);
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }
 

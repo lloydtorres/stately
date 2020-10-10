@@ -49,6 +49,7 @@ public class NSStringRequest extends StringRequest {
     private String password;
     private int method;
     private Map<String, String> params = new HashMap<String, String>();
+    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
 
     public NSStringRequest(Context c, int m, String target,
                            Response.Listener<String> listener,
@@ -58,9 +59,18 @@ public class NSStringRequest extends StringRequest {
         method = m;
     }
 
-    public void setUserData(UserLogin u) { userDataOverride = u; }
+    public void setUserData(UserLogin u) {
+        userDataOverride = u;
+    }
 
-    public void setPassword(String p) { password = p; }
+    public void setPassword(String p) {
+        password = p;
+    }
+
+    @Override
+    protected Map<String, String> getParams() {
+        return params;
+    }
 
     public void setParams(Map<String, String> p) {
         Map<String, String> escapedHashMap = new HashMap<String, String>();
@@ -71,35 +81,34 @@ public class NSStringRequest extends StringRequest {
     }
 
     @Override
-    protected Map<String,String> getParams(){
-        return params;
-    }
-
-    @Override
     public Map<String, String> getHeaders() {
-        Map<String,String> headers = new HashMap<String, String>();
-        UserLogin u = userDataOverride == null ? PinkaHelper.getActiveUser(context) : userDataOverride;
+        Map<String, String> headers = new HashMap<String, String>();
+        UserLogin u = userDataOverride == null ? PinkaHelper.getActiveUser(context) :
+                userDataOverride;
 
         // UserLogin will not be null when user is logged in
         if (u != null && u.nationId != null) {
-            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_USER, BuildConfig.VERSION_NAME, u.nationId));
+            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_USER,
+                    BuildConfig.VERSION_NAME, u.nationId));
 
             // Case 1: If only autologin cookie is available/pin cookie is invalid
             if ((u.pin == null || PIN_INVALID.equals(u.pin)) && u.autologin != null) {
-                headers.put("Cookie", String.format(Locale.US, "autologin=%s", buildCookieAutologinToken(u.nationId, u.autologin)));
+                headers.put("Cookie", String.format(Locale.US, "autologin=%s",
+                        buildCookieAutologinToken(u.nationId, u.autologin)));
                 headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
             }
             // Case 2: If both autologin and pin cookies are available and pin cookie is good
             else if (u.autologin != null && u.pin != null && !PIN_INVALID.equals(u.pin)) {
-                headers.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s", buildCookieAutologinToken(u.nationId, u.autologin), u.pin));
+                headers.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s",
+                        buildCookieAutologinToken(u.nationId, u.autologin), u.pin));
                 headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
                 headers.put("X-Pin", u.pin);
             }
             // Case 3: Both are missing, don't do anything
             // ...
-        }
-        else {
-            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_NOUSER, BuildConfig.VERSION_NAME));
+        } else {
+            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_NOUSER,
+                    BuildConfig.VERSION_NAME));
         }
 
         // If the password is provided, add that to the header
@@ -114,14 +123,13 @@ public class NSStringRequest extends StringRequest {
         return headers;
     }
 
-    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
-
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         Map<String, String> responseHeaders = response.headers;
 
         // Update PIN if new one available
-        if (responseHeaders.containsKey("X-Pin") && !PIN_INVALID.equals(responseHeaders.get("X-Pin"))) {
+        if (responseHeaders.containsKey("X-Pin") && !PIN_INVALID.equals(responseHeaders.get("X" +
+                "-Pin"))) {
             PinkaHelper.setActivePin(context, responseHeaders.get("X-Pin"));
         }
 
@@ -141,11 +149,11 @@ public class NSStringRequest extends StringRequest {
         // Sync number of requests seen by server with internal count
         if (responseHeaders.containsKey("X-Ratelimit-Requests-Seen")) {
             try {
-                int serverCount = Integer.parseInt(responseHeaders.get("X-Ratelimit-Requests-Seen"));
+                int serverCount = Integer.parseInt(responseHeaders.get("X-Ratelimit-Requests-Seen"
+                ));
                 DashHelper dashie = DashHelper.getInstance(context);
                 dashie.setNumCalls(serverCount);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 SparkleHelper.logError(e.toString());
             }
         }
@@ -212,8 +220,7 @@ public class NSStringRequest extends StringRequest {
             input = URLDecoder.decode(input, "UTF-8");
             input = input.replace(" ", "+");
             return input;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             SparkleHelper.logError(e.toString());
             return input;
         }

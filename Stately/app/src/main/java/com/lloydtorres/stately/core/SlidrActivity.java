@@ -37,7 +37,7 @@ public abstract class SlidrActivity extends BroadcastableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        switch(SettingsActivity.getTheme(this)) {
+        switch (SettingsActivity.getTheme(this)) {
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme_SlidrActivity);
                 break;

@@ -35,142 +35,144 @@ import java.util.List;
  * Created by Lloyd on 2016-01-10.
  * The main DTO used to store information about a nation, as returned by the NationStates API.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class Nation implements Parcelable {
 
-    public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q="
-                                                + "banner+flag+name+type+wa+wabadges"
-                                                + "+category+region+influence+population+foundedtime+lastlogin+motto"
-                                                + "+freedom"
-                                                + "+customleader+customcapital+govtpriority+tax"
-                                                + "+currency+gdp+income+majorindustry"
-                                                + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
-                                                + "+policies"
-                                                + "+census+wcensus"
-                                                + "+gavote+scvote+endorsements"
-                                                + "+notable+sensibilities+crime+deaths"
-                                                + "+govtdesc+govt"
-                                                + "+industrydesc+poorest+richest+sectors"
-                                                + "+happenings+zombie";
+    public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q="
+            + "banner+flag+name+type+wa+wabadges"
+            + "+category+region+influence+population+foundedtime+lastlogin+motto"
+            + "+freedom"
+            + "+customleader+customcapital+govtpriority+tax"
+            + "+currency+gdp+income+majorindustry"
+            + "+demonym+demonym2+demonym2plural+customreligion+animal+animaltrait"
+            + "+policies"
+            + "+census+wcensus"
+            + "+gavote+scvote+endorsements"
+            + "+notable+sensibilities+crime+deaths"
+            + "+govtdesc+govt"
+            + "+industrydesc+poorest+richest+sectors"
+            + "+happenings+zombie";
 
     public static final String CENSUS_MODIFIER = ";scale=all;mode=score+rank+rrank+prank+prrank";
 
-    public static final String QUERY = BASE_QUERY + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY =
+            BASE_QUERY + CENSUS_MODIFIER + "&v=" + SparkleHelper.API_VERSION;
 
-    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/nation=%s/template-overall=none";
+    public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/nation=%s/template" +
+            "-overall=none";
 
     // WA membership types
     public static final String WA_MEMBER = "WA Member";
     public static final String WA_DELEGATE = "WA Delegate";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Nation> CREATOR = new Parcelable.Creator<Nation>() {
+        @Override
+        public Nation createFromParcel(Parcel in) {
+            return new Nation(in);
+        }
 
-    @Element(name="BANNER")
+        @Override
+        public Nation[] newArray(int size) {
+            return new Nation[size];
+        }
+    };
+    @Element(name = "BANNER")
     public String bannerKey;
-    @Element(name="FLAG")
+    @Element(name = "FLAG")
     public String flagURL;
-    @Element(name="NAME")
+    @Element(name = "NAME")
     public String name;
-    @Element(name="TYPE")
+    @Element(name = "TYPE")
     public String prename;
-    @Element(name="UNSTATUS")
+    @Element(name = "UNSTATUS")
     public String waState;
-
-    @Element(name="CATEGORY")
+    @Element(name = "CATEGORY")
     public String govType;
-    @Element(name="REGION")
+    @Element(name = "REGION")
     public String region;
-    @Element(name="INFLUENCE")
+    @Element(name = "INFLUENCE")
     public String influence;
-    @Element(name="POPULATION")
+    @Element(name = "POPULATION")
     public int popBase;
-    @Element(name="FOUNDEDTIME")
+    @Element(name = "FOUNDEDTIME")
     public long foundedAgo;
-    @Element(name="LASTLOGIN")
+    @Element(name = "LASTLOGIN")
     public long lastActivityAgo;
-    @Element(name="MOTTO")
+    @Element(name = "MOTTO")
     public String motto;
-
-    @ElementList(name="WABADGES", required=false)
+    @ElementList(name = "WABADGES", required = false)
     public List<WaBadge> waBadges;
-
-    @Element(name="FREEDOM")
+    @Element(name = "FREEDOM")
     public Freedom freedomDesc;
-
-    @Element(name="LEADER", required=false)
+    @Element(name = "LEADER", required = false)
     public String leader;
-    @Element(name="CAPITAL", required=false)
+    @Element(name = "CAPITAL", required = false)
     public String capital;
-    @Element(name="GOVTPRIORITY", required=false)
+    @Element(name = "GOVTPRIORITY", required = false)
     public String govtPriority;
-    @Element(name="TAX")
+    @Element(name = "TAX")
     public float tax;
-
-    @Element(name="CURRENCY")
+    @Element(name = "CURRENCY")
     public String currency;
-    @Element(name="GDP")
+    @Element(name = "GDP")
     public long gdp;
-    @Element(name="INCOME")
+    @Element(name = "INCOME")
     public long income;
-    @Element(name="MAJORINDUSTRY")
+    @Element(name = "MAJORINDUSTRY")
     public String industry;
-
-    @Element(name="DEMONYM")
+    @Element(name = "DEMONYM")
     public String demAdjective;
-    @Element(name="DEMONYM2")
+    @Element(name = "DEMONYM2")
     public String demNoun;
-    @Element(name="DEMONYM2PLURAL")
+    @Element(name = "DEMONYM2PLURAL")
     public String demPlural;
-    @Element(name="RELIGION", required=false)
+    @Element(name = "RELIGION", required = false)
     public String religion;
-    @Element(name="ANIMAL")
+    @Element(name = "ANIMAL")
     public String animal;
-    @Element(name="ANIMALTRAIT", required=false)
+    @Element(name = "ANIMALTRAIT", required = false)
     public String animalTrait;
-
-    @ElementList(name="POLICIES", required=false)
+    @ElementList(name = "POLICIES", required = false)
     public List<Policy> policies;
-
-    @ElementList(name="CENSUS")
+    @ElementList(name = "CENSUS")
     public List<CensusDetailedRank> census;
-    @Element(name="WCENSUS", required=false)
+    @Element(name = "WCENSUS", required = false)
     public CensusBasicRank wCensus;
-
-    @Element(name="GAVOTE", required=false)
+    @Element(name = "GAVOTE", required = false)
     public String gaVote;
-    @Element(name="SCVOTE", required=false)
+    @Element(name = "SCVOTE", required = false)
     public String scVote;
-    @Element(name="ENDORSEMENTS", required=false)
+    @Element(name = "ENDORSEMENTS", required = false)
     public String endorsements;
-
-    @Element(name="NOTABLE")
+    @Element(name = "NOTABLE")
     public String notable;
-    @Element(name="SENSIBILITIES")
+    @Element(name = "SENSIBILITIES")
     public String sensible;
-    @Element(name="CRIME")
+    @Element(name = "CRIME")
     public String crime;
-    @ElementList(name="DEATHS")
+    @ElementList(name = "DEATHS")
     public List<MortalityCause> causes;
-
-    @Element(name="GOVTDESC")
+    @Element(name = "GOVTDESC")
     public String govtDesc;
-    @Element(name="GOVT")
+    @Element(name = "GOVT")
     public GovBudget govBudget;
-
-    @Element(name="INDUSTRYDESC")
+    @Element(name = "INDUSTRYDESC")
     public String industryDesc;
-    @Element(name="POOREST")
+    @Element(name = "POOREST")
     public long poorest;
-    @Element(name="RICHEST")
+    @Element(name = "RICHEST")
     public long richest;
-    @Element(name="SECTORS")
+    @Element(name = "SECTORS")
     public Sectors sectors;
-
-    @ElementList(name="HAPPENINGS")
+    @ElementList(name = "HAPPENINGS")
     public List<Event> events;
-
-    @Element(name="ZOMBIE")
+    @Element(name = "ZOMBIE")
     public Zombie zombieData;
 
-    public Nation() { super(); }
+    public Nation() {
+        super();
+    }
 
     protected Nation(Parcel in) {
         bannerKey = in.readString();
@@ -244,6 +246,41 @@ public class Nation implements Parcelable {
             events = null;
         }
         zombieData = (Zombie) in.readValue(Zombie.class.getClassLoader());
+    }
+
+    /**
+     * Factory for deserializing a Nation XML.
+     * @param c App context
+     * @param serializer SimpleXML deserializer
+     * @param response XML response
+     * @return Nation object
+     * @throws Exception
+     */
+    public static Nation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
+        Nation nationResponse = serializer.read(Nation.class, response);
+        return fieldReplacer(c, nationResponse);
+    }
+
+    protected static Nation fieldReplacer(Context c, Nation nationResponse) {
+        // Switch flag URL to https
+        nationResponse.flagURL = nationResponse.flagURL.replace("http://", "https://");
+
+        // Map out government priorities
+        if (nationResponse.govtPriority != null) {
+            switch (nationResponse.govtPriority) {
+                case "Defence":
+                    nationResponse.govtPriority = c.getString(R.string.defense);
+                    break;
+                case "Commerce":
+                    nationResponse.govtPriority = c.getString(R.string.industry);
+                    break;
+                case "Social Equality":
+                    nationResponse.govtPriority = c.getString(R.string.social_policy);
+                    break;
+            }
+        }
+
+        return nationResponse;
     }
 
     @Override
@@ -324,53 +361,5 @@ public class Nation implements Parcelable {
             dest.writeList(events);
         }
         dest.writeValue(zombieData);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Nation> CREATOR = new Parcelable.Creator<Nation>() {
-        @Override
-        public Nation createFromParcel(Parcel in) {
-            return new Nation(in);
-        }
-
-        @Override
-        public Nation[] newArray(int size) {
-            return new Nation[size];
-        }
-    };
-
-    /**
-     * Factory for deserializing a Nation XML.
-     * @param c App context
-     * @param serializer SimpleXML deserializer
-     * @param response XML response
-     * @return Nation object
-     * @throws Exception
-     */
-    public static Nation parseNationFromXML(Context c, Persister serializer, String response) throws Exception {
-        Nation nationResponse = serializer.read(Nation.class, response);
-        return fieldReplacer(c, nationResponse);
-    }
-
-    protected static Nation fieldReplacer(Context c, Nation nationResponse) {
-        // Switch flag URL to https
-        nationResponse.flagURL = nationResponse.flagURL.replace("http://","https://");
-
-        // Map out government priorities
-        if (nationResponse.govtPriority != null) {
-            switch (nationResponse.govtPriority) {
-                case "Defence":
-                    nationResponse.govtPriority = c.getString(R.string.defense);
-                    break;
-                case "Commerce":
-                    nationResponse.govtPriority = c.getString(R.string.industry);
-                    break;
-                case "Social Equality":
-                    nationResponse.govtPriority = c.getString(R.string.social_policy);
-                    break;
-            }
-        }
-
-        return nationResponse;
     }
 }

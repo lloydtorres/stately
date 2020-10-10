@@ -20,12 +20,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -49,7 +50,8 @@ public class ExploreDialog extends DetachDialogFragment {
     private String searchContentOverride;
     private int searchTypeOverride = NO_SEARCH_TYPE_OVERRIDE;
 
-    public ExploreDialog() { }
+    public ExploreDialog() {
+    }
 
     public void setActivityCloseOnFinish(Activity closeOnFinish) {
         activityCloseOnFinish = closeOnFinish;
@@ -61,7 +63,7 @@ public class ExploreDialog extends DetachDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)  {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_explore_dialog, null);
 
@@ -89,7 +91,8 @@ public class ExploreDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.menu_explore)
                 .setView(dialogView)
                 .setPositiveButton(R.string.explore_positive, dialogListener)
@@ -103,12 +106,10 @@ public class ExploreDialog extends DetachDialogFragment {
         return d;
     }
 
-    private void startExploreActivity()
-    {
+    private void startExploreActivity() {
         int mode;
 
-        switch (exploreToggleState.getCheckedRadioButtonId())
-        {
+        switch (exploreToggleState.getCheckedRadioButtonId()) {
             case R.id.explore_radio_nation:
                 mode = ExploreActivity.EXPLORE_NATION;
                 break;

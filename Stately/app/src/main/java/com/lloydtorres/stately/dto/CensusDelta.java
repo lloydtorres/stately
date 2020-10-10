@@ -18,6 +18,7 @@ package com.lloydtorres.stately.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import org.simpleframework.xml.Attribute;
@@ -28,15 +29,30 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-03-02.
  * This is a model containing data on the change for one census stat after an issue result.
  */
-@Root(name="RANK", strict=false)
+@Root(name = "RANK", strict = false)
 public class CensusDelta implements Parcelable, Comparable<CensusDelta> {
 
-    @Attribute(name="id", required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusDelta> CREATOR =
+            new Parcelable.Creator<CensusDelta>() {
+        @Override
+        public CensusDelta createFromParcel(Parcel in) {
+            return new CensusDelta(in);
+        }
+
+        @Override
+        public CensusDelta[] newArray(int size) {
+            return new CensusDelta[size];
+        }
+    };
+    @Attribute(name = "id", required = false)
     public int censusId;
-    @Element(name="PCHANGE", required=false)
+    @Element(name = "PCHANGE", required = false)
     public double percentDelta;
 
-    public CensusDelta() { super(); }
+    public CensusDelta() {
+        super();
+    }
 
     protected CensusDelta(Parcel in) {
         censusId = in.readInt();
@@ -53,19 +69,6 @@ public class CensusDelta implements Parcelable, Comparable<CensusDelta> {
         dest.writeInt(censusId);
         dest.writeDouble(percentDelta);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusDelta> CREATOR = new Parcelable.Creator<CensusDelta>() {
-        @Override
-        public CensusDelta createFromParcel(Parcel in) {
-            return new CensusDelta(in);
-        }
-
-        @Override
-        public CensusDelta[] newArray(int size) {
-            return new CensusDelta[size];
-        }
-    };
 
     @Override
     public int compareTo(@NonNull CensusDelta o) {

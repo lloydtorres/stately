@@ -20,13 +20,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Parcelable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
@@ -73,7 +74,8 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 viewHolder = new IssueCard(issueCard);
                 break;
             case ZOMBIE_CARD:
-                View zombieCard = inflater.inflate(R.layout.card_issue_zombie_control, parent, false);
+                View zombieCard = inflater.inflate(R.layout.card_issue_zombie_control, parent,
+                        false);
                 viewHolder = new ZombieIssueCard(zombieCard);
                 break;
             default:
@@ -111,11 +113,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         if (issuesCards.get(position) instanceof Issue) {
             return ISSUE_CARD;
-        }
-        else if (issuesCards.get(position) instanceof Zombie) {
+        } else if (issuesCards.get(position) instanceof Zombie) {
             return ZOMBIE_CARD;
-        }
-        else if (issuesCards.get(position) instanceof Long) {
+        } else if (issuesCards.get(position) instanceof Long) {
             return NEXT_CARD;
         }
         return -1;
@@ -128,7 +128,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void setIssueCards(List<Parcelable> cards, long nextIssueTime) {
         issuesCards = new ArrayList<Object>(cards);
         final int maxIssues = !NightmareHelper.getIsZDayActive(context)
-            ? IssueFullHolder.MAX_ISSUE_COUNT_REGULAR : IssueFullHolder.MAX_ISSUE_COUNT_ZOMBIE;
+                ? IssueFullHolder.MAX_ISSUE_COUNT_REGULAR : IssueFullHolder.MAX_ISSUE_COUNT_ZOMBIE;
         if (cards.size() < maxIssues || nextIssueTime != IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME) {
             issuesCards.add(nextIssueTime);
         }
@@ -155,9 +155,12 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             title.setText(issue.title);
 
             if (issue.chain != null) {
-                id.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
+                id.setText(String.format(Locale.US,
+                        context.getString(R.string.issue_chain_and_number),
+                        SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
             } else {
-                id.setText(String.format(Locale.US, context.getString(R.string.issue_number), SparkleHelper.getPrettifiedNumber(issue.id)));
+                id.setText(String.format(Locale.US, context.getString(R.string.issue_number),
+                        SparkleHelper.getPrettifiedNumber(issue.id)));
             }
 
             if (issue.image != null) {
@@ -220,10 +223,12 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public void init(Zombie zombieData) {
             DashHelper dashie = DashHelper.getInstance(context);
-            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), background, false);
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action),
+                    background, false);
             float total = zombieData.survivors + zombieData.dead + zombieData.zombies;
             float survivalRatePercent = (zombieData.survivors / total) * 100f;
-            survivalRate.setText(String.format(Locale.US, context.getString(R.string.zombie_control_survival),
+            survivalRate.setText(String.format(Locale.US,
+                    context.getString(R.string.zombie_control_survival),
                     SparkleHelper.getPrettifiedNumber(survivalRatePercent)));
         }
 

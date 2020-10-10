@@ -31,34 +31,45 @@ import java.util.List;
  * Created by Lloyd on 2016-01-21.
  * A regional poll retrieved from the NationStates API.
  */
-@Root(name="POLL", strict=false)
+@Root(name = "POLL", strict = false)
 public class Poll implements Parcelable {
 
     public static final String RESPONSE_VOTE = "Your vote has been lodged";
     public static final String RESPONSE_WITHDRAW = "Your vote has been withdrawn";
 
     public static final int NO_VOTE = -1;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Poll> CREATOR = new Parcelable.Creator<Poll>() {
+        @Override
+        public Poll createFromParcel(Parcel in) {
+            return new Poll(in);
+        }
 
+        @Override
+        public Poll[] newArray(int size) {
+            return new Poll[size];
+        }
+    };
     @Attribute
     public int id;
-
-    @Element(name="TITLE")
+    @Element(name = "TITLE")
     public String title;
-    @Element(name="TEXT", required=false)
+    @Element(name = "TEXT", required = false)
     public String text;
-    @Element(name="START")
+    @Element(name = "START")
     public long startTime;
-    @Element(name="STOP")
+    @Element(name = "STOP")
     public long stopTime;
-    @Element(name="AUTHOR")
+    @Element(name = "AUTHOR")
     public String author;
-
-    @ElementList(name="OPTIONS")
+    @ElementList(name = "OPTIONS")
     public List<PollOption> options;
     public boolean isVotingEnabled;
     public int votedOption;
 
-    public Poll() { super(); }
+    public Poll() {
+        super();
+    }
 
     protected Poll(Parcel in) {
         id = in.readInt();
@@ -99,17 +110,4 @@ public class Poll implements Parcelable {
         dest.writeByte((byte) (isVotingEnabled ? 0x01 : 0x00));
         dest.writeInt(votedOption);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Poll> CREATOR = new Parcelable.Creator<Poll>() {
-        @Override
-        public Poll createFromParcel(Parcel in) {
-            return new Poll(in);
-        }
-
-        @Override
-        public Poll[] newArray(int size) {
-            return new Poll[size];
-        }
-    };
 }

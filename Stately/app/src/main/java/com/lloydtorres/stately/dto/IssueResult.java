@@ -30,36 +30,47 @@ import java.util.List;
  * Created by lloyd on 2017-02-11.
  * Contains data from the results of an issue decision.
  */
-@Root(name="ISSUE", strict=false)
+@Root(name = "ISSUE", strict = false)
 public class IssueResult implements Parcelable {
 
-    @Element(name="ERROR", required=false)
-    public String errorMessage;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssueResult> CREATOR =
+            new Parcelable.Creator<IssueResult>() {
+        @Override
+        public IssueResult createFromParcel(Parcel in) {
+            return new IssueResult(in);
+        }
 
+        @Override
+        public IssueResult[] newArray(int size) {
+            return new IssueResult[size];
+        }
+    };
+    @Element(name = "ERROR", required = false)
+    public String errorMessage;
     public String image;
     public String issueContent;
     public String issuePosition;
-
-    @Element(name="DESC", required=false)
+    @Element(name = "DESC", required = false)
     public String mainResult;
-
-    @ElementList(name="RECLASSIFICATIONS", required=false)
+    @ElementList(name = "RECLASSIFICATIONS", required = false)
     public List<Reclassification> reclassifications;
-    @ElementList(name="NEW_POLICIES", required=false)
+    @ElementList(name = "NEW_POLICIES", required = false)
     public List<Policy> enactedPolicies;
-    @ElementList(name="REMOVED_POLICIES", required=false)
+    @ElementList(name = "REMOVED_POLICIES", required = false)
     public List<Policy> abolishedPolicies;
-    @ElementList(name="RANKINGS", required=false)
+    @ElementList(name = "RANKINGS", required = false)
     public List<CensusDelta> rankings;
-    @ElementList(name="HEADLINES", required=false)
+    @ElementList(name = "HEADLINES", required = false)
     public List<String> headlines;
-    @ElementList(name="UNLOCKS", required=false)
+    @ElementList(name = "UNLOCKS", required = false)
     public List<String> postcards;
-
     public IssueResultHeadlinesContainer niceHeadlines;
     public List<IssuePostcard> nicePostcards;
 
-    public IssueResult() { super(); }
+    public IssueResult() {
+        super();
+    }
 
     protected IssueResult(Parcel in) {
         errorMessage = in.readString();
@@ -103,7 +114,8 @@ public class IssueResult implements Parcelable {
         } else {
             postcards = null;
         }
-        niceHeadlines = (IssueResultHeadlinesContainer) in.readValue(IssueResultHeadlinesContainer.class.getClassLoader());
+        niceHeadlines =
+                (IssueResultHeadlinesContainer) in.readValue(IssueResultHeadlinesContainer.class.getClassLoader());
         if (in.readByte() == 0x01) {
             nicePostcards = new ArrayList<IssuePostcard>();
             in.readList(nicePostcards, IssuePostcard.class.getClassLoader());
@@ -168,17 +180,4 @@ public class IssueResult implements Parcelable {
             dest.writeList(nicePostcards);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueResult> CREATOR = new Parcelable.Creator<IssueResult>() {
-        @Override
-        public IssueResult createFromParcel(Parcel in) {
-            return new IssueResult(in);
-        }
-
-        @Override
-        public IssueResult[] newArray(int size) {
-            return new IssueResult[size];
-        }
-    };
 }

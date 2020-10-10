@@ -28,27 +28,42 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-04-10.
  * Model for a given census scale's history;
  */
-@Root(strict=false)
+@Root(strict = false)
 public class CensusHistory implements Parcelable {
 
     public static final String QUERY_BASE = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?%sq="
-                                        + "name+census+censusranks"
-                                        + ";scale=%d;mode=history"
-                                        + ";from=%d&to=%d";
+            + "name+census+censusranks"
+            + ";scale=%d;mode=history"
+            + ";from=%d&to=%d";
     public static final String QUERY_NATION = QUERY_BASE + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_RANKED = QUERY_BASE + "&start=%d" + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_RANKED =
+            QUERY_BASE + "&start=%d" + "&v=" + SparkleHelper.API_VERSION;
     public static final long CENSUS_TRENDS_RANGE_IN_SECONDS = 2 * 365 * 24 * 60 * 60;
     public static final String NATION_HISTORY = "nation=%s&";
     public static final String REGION_HISTORY = "region=%s&";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusHistory> CREATOR =
+            new Parcelable.Creator<CensusHistory>() {
+        @Override
+        public CensusHistory createFromParcel(Parcel in) {
+            return new CensusHistory(in);
+        }
 
-    @Element(name="NAME", required=false)
+        @Override
+        public CensusHistory[] newArray(int size) {
+            return new CensusHistory[size];
+        }
+    };
+    @Element(name = "NAME", required = false)
     public String name;
-    @Element(name="CENSUS", required=false)
+    @Element(name = "CENSUS", required = false)
     public CensusHistoryScale scale;
-    @Element(name="CENSUSRANKS", required=false)
+    @Element(name = "CENSUSRANKS", required = false)
     public CensusNationRankList ranks;
 
-    public CensusHistory() { super(); }
+    public CensusHistory() {
+        super();
+    }
 
     protected CensusHistory(Parcel in) {
         name = in.readString();
@@ -67,17 +82,4 @@ public class CensusHistory implements Parcelable {
         dest.writeValue(scale);
         dest.writeValue(ranks);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusHistory> CREATOR = new Parcelable.Creator<CensusHistory>() {
-        @Override
-        public CensusHistory createFromParcel(Parcel in) {
-            return new CensusHistory(in);
-        }
-
-        @Override
-        public CensusHistory[] newArray(int size) {
-            return new CensusHistory[size];
-        }
-    };
 }

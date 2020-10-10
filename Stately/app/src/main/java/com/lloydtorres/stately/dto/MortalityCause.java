@@ -28,15 +28,30 @@ import org.simpleframework.xml.Text;
  * A DTO that stores information on one cause of mortality in a nation in percent, as returned
  * by the NationStates API.
  */
-@Root(name="CAUSE", strict=false)
+@Root(name = "CAUSE", strict = false)
 public class MortalityCause implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<MortalityCause> CREATOR =
+            new Parcelable.Creator<MortalityCause>() {
+        @Override
+        public MortalityCause createFromParcel(Parcel in) {
+            return new MortalityCause(in);
+        }
+
+        @Override
+        public MortalityCause[] newArray(int size) {
+            return new MortalityCause[size];
+        }
+    };
     @Attribute
     public String type;
     @Text
     public float value;
 
-    public MortalityCause() { super(); }
+    public MortalityCause() {
+        super();
+    }
 
     protected MortalityCause(Parcel in) {
         type = in.readString();
@@ -53,17 +68,4 @@ public class MortalityCause implements Parcelable {
         dest.writeString(type);
         dest.writeFloat(value);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<MortalityCause> CREATOR = new Parcelable.Creator<MortalityCause>() {
-        @Override
-        public MortalityCause createFromParcel(Parcel in) {
-            return new MortalityCause(in);
-        }
-
-        @Override
-        public MortalityCause[] newArray(int size) {
-            return new MortalityCause[size];
-        }
-    };
 }

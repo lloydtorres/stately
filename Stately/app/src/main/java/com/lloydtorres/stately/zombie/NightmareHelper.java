@@ -71,12 +71,16 @@ import java.util.List;
  * Helper for Z-Day operations.
  */
 public final class NightmareHelper {
-    // Empty constructor
-    private NightmareHelper() {}
-
     public static final String ZDAY_REFERENCE = "https://embed.nationstates.net/page=world";
     public static final String ZDAY_REFERENCE_DIV = "div#zchart-container";
     public static final String USERSESSION_IS_ZDAY = "var_is_zday";
+    public static final String HEADER_MILITARY = "m8";
+    public static final String HEADER_CURE = "n3";
+    public static final String HEADER_ZOMBIE = "x5";
+
+    // Empty constructor
+    private NightmareHelper() {
+    }
 
     /**
      * Sets if Z-Day mode should be active during the user's current session.
@@ -104,12 +108,9 @@ public final class NightmareHelper {
         return storage.getBoolean(USERSESSION_IS_ZDAY, false);
     }
 
-    public static final String HEADER_MILITARY = "m8";
-    public static final String HEADER_CURE = "n3";
-    public static final String HEADER_ZOMBIE = "x5";
-
     /**
-     * Given a nation's current zombie action, returns the appropriate banner image to use for Z-Day.
+     * Given a nation's current zombie action, returns the appropriate banner image to use for
+     * Z-Day.
      * @param action Current zombie action
      * @return URL to banner
      */

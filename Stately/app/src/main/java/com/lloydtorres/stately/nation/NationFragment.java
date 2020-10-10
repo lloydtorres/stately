@@ -18,20 +18,21 @@ package com.lloydtorres.stately.nation;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
@@ -104,7 +105,8 @@ public class NationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nation, container, false);
 
         // Restore state
@@ -133,7 +135,8 @@ public class NationFragment extends Fragment {
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
-        final CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_container);
+        final CollapsingToolbarLayout collapsingToolbarLayout =
+                view.findViewById(R.id.collapsing_container);
         collapsingToolbarLayout.setTitle("");
 
         AppBarLayout appBarLayout = view.findViewById(R.id.nation_appbar);
@@ -151,8 +154,7 @@ public class NationFragment extends Fragment {
                         collapsingToolbarLayout.setTitle(mNation.name);
                     }
                     isShow = true;
-                }
-                else if (isShow) {
+                } else if (isShow) {
                     collapsingToolbarLayout.setTitle("");
                     isShow = false;
                 }
@@ -160,8 +162,7 @@ public class NationFragment extends Fragment {
         });
     }
 
-    public Toolbar getToolbar()
-    {
+    public Toolbar getToolbar() {
         return toolbar;
     }
 
@@ -192,7 +193,8 @@ public class NationFragment extends Fragment {
         // Dynamically change nation banner height
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         int maxScreenWidth = RaraHelper.dpToPx(getContext(), 200);
-        nationBanner.getLayoutParams().height = Math.min(Math.round(screenWidth / 3f) + 50, maxScreenWidth);
+        nationBanner.getLayoutParams().height = Math.min(Math.round(screenWidth / 3f) + 50,
+                maxScreenWidth);
 
         initNationData(view);
     }
@@ -208,7 +210,8 @@ public class NationFragment extends Fragment {
         DashHelper dashie = DashHelper.getInstance(getContext());
 
         if (NightmareHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
-            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action), nationBanner, false);
+            dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action),
+                    nationBanner, false);
         } else {
             dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
         }
@@ -274,7 +277,7 @@ public class NationFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case OVERVIEW_TAB:
                     return overviewSubFragment;
                 case POLICY_TAB:

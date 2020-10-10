@@ -26,14 +26,29 @@ import org.simpleframework.xml.Root;
  * Created by lloyd on 2017-02-28.
  * Stores a WA delegate and their vote count.
  */
-@Root(name="DELEGATE", strict=false)
+@Root(name = "DELEGATE", strict = false)
 public class DelegateVote implements Parcelable, Comparable<DelegateVote> {
-    @Element(name="NATION", required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<DelegateVote> CREATOR =
+            new Parcelable.Creator<DelegateVote>() {
+        @Override
+        public DelegateVote createFromParcel(Parcel in) {
+            return new DelegateVote(in);
+        }
+
+        @Override
+        public DelegateVote[] newArray(int size) {
+            return new DelegateVote[size];
+        }
+    };
+    @Element(name = "NATION", required = false)
     public String delegate;
-    @Element(name="VOTES", required=false)
+    @Element(name = "VOTES", required = false)
     public int votes;
 
-    public DelegateVote() { super(); }
+    public DelegateVote() {
+        super();
+    }
 
     protected DelegateVote(Parcel in) {
         delegate = in.readString();
@@ -50,19 +65,6 @@ public class DelegateVote implements Parcelable, Comparable<DelegateVote> {
         dest.writeString(delegate);
         dest.writeInt(votes);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<DelegateVote> CREATOR = new Parcelable.Creator<DelegateVote>() {
-        @Override
-        public DelegateVote createFromParcel(Parcel in) {
-            return new DelegateVote(in);
-        }
-
-        @Override
-        public DelegateVote[] newArray(int size) {
-            return new DelegateVote[size];
-        }
-    };
 
     @Override
     public int compareTo(DelegateVote o) {

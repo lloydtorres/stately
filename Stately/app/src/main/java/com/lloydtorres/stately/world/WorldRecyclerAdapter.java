@@ -17,8 +17,6 @@
 package com.lloydtorres.stately.world;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
@@ -116,15 +117,18 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolder = new StatsCard(statsCard);
                 break;
             case WORLD_FEATURED_REGION:
-                View featuredRegionCard = inflater.inflate(R.layout.card_world_featured_region, parent, false);
+                View featuredRegionCard = inflater.inflate(R.layout.card_world_featured_region,
+                        parent, false);
                 viewHolder = new FeaturedRegionCard(featuredRegionCard);
                 break;
             case WORLD_BREAKING_NEWS:
-                View breakingNewsCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                View breakingNewsCard = inflater.inflate(R.layout.card_world_breaking_news,
+                        parent, false);
                 viewHolder = new BreakingNewsCard(breakingNewsCard);
                 break;
             case WORLD_FEATURED_CENSUS:
-                View featuredCensusCard = inflater.inflate(R.layout.card_world_featured_census, parent, false);
+                View featuredCensusCard = inflater.inflate(R.layout.card_world_featured_census,
+                        parent, false);
                 viewHolder = new FeaturedCensusCard(featuredCensusCard);
                 break;
         }
@@ -147,7 +151,8 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case WORLD_BREAKING_NEWS:
                 BreakingNewsCard breakingNewsCard = (BreakingNewsCard) holder;
-                breakingNewsCard.init(context, context.getString(R.string.issue_breaking), ((EventsHolder) cards.get(position)).events);
+                breakingNewsCard.init(context, context.getString(R.string.issue_breaking),
+                        ((EventsHolder) cards.get(position)).events);
                 break;
             case WORLD_FEATURED_CENSUS:
                 FeaturedCensusCard featuredCensusCard = (FeaturedCensusCard) holder;
@@ -165,14 +170,11 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int getItemViewType(int position) {
         if (cards.get(position) instanceof DataIntPair) {
             return WORLD_COUNT;
-        }
-        else if (cards.get(position) instanceof BaseRegion) {
+        } else if (cards.get(position) instanceof BaseRegion) {
             return WORLD_FEATURED_REGION;
-        }
-        else if (cards.get(position) instanceof EventsHolder) {
+        } else if (cards.get(position) instanceof EventsHolder) {
             return WORLD_BREAKING_NEWS;
-        }
-        else if (cards.get(position) instanceof CensusDetailedRank) {
+        } else if (cards.get(position) instanceof CensusDetailedRank) {
             return WORLD_FEATURED_CENSUS;
         }
         return -1;
@@ -237,7 +239,8 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             nationCount.setText(String.format(Locale.US,
                     SparkleHelper.CURRENCY_NOSUFFIX_TEMPLATE,
                     SparkleHelper.getPrettifiedNumber(regionData.numNations),
-                    context.getResources().getQuantityString(R.plurals.nation_prop, regionData.numNations)));
+                    context.getResources().getQuantityString(R.plurals.nation_prop,
+                            regionData.numNations)));
             if (regionData.flagURL != null) {
                 flag.setVisibility(View.VISIBLE);
                 DashHelper.getInstance(context).loadImage(regionData.flagURL, flag, false);
@@ -245,14 +248,16 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 flag.setVisibility(View.GONE);
             }
 
-            RegionOverviewRecyclerAdapter.initWaDelegate(context, waDelegate, regionData.delegate, regionData.delegateVotes, regionData.lastUpdate);
-            RegionOverviewRecyclerAdapter.initFounder(context, founder, regionData.founder, regionData.founded);
+            RegionOverviewRecyclerAdapter.initWaDelegate(context, waDelegate, regionData.delegate
+                    , regionData.delegateVotes, regionData.lastUpdate);
+            RegionOverviewRecyclerAdapter.initFounder(context, founder, regionData.founder,
+                    regionData.founded);
 
             if (regionData.factbook != null) {
-                SparkleHelper.setStyledTextView(context, factbook, regionData.factbook, fragmentManager);
+                SparkleHelper.setStyledTextView(context, factbook, regionData.factbook,
+                        fragmentManager);
                 factbookHolder.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 factbookHolder.setVisibility(View.GONE);
             }
 
@@ -260,7 +265,8 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             tags.setText(tagCombine);
 
             visitButton.setOnClickListener(regionOnClick);
-            visitText.setText(String.format(Locale.US, context.getString(R.string.telegrams_region_explore), regionData.name));
+            visitText.setText(String.format(Locale.US,
+                    context.getString(R.string.telegrams_region_explore), regionData.name));
         }
     }
 

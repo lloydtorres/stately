@@ -27,26 +27,51 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  * Used for Z-Day.
  */
 public class ZSuperweaponProgress implements Parcelable {
-    public static final String ZOMBIE_CONTROL_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=zombie_control/template-overall=none";
+    public static final String ZOMBIE_CONTROL_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=zombie_control/template-overall=none";
 
     public static final String ONE_HUNDRED_PERCENT = "100.0%";
     public static final String TYPE_TZES = "Tactical Zombie Elimination Squads";
     public static final String TYPE_CURE = "Cure Missiles";
     public static final String TYPE_HORDE = "Hordes";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ZSuperweaponProgress> CREATOR =
+            new Parcelable.Creator<ZSuperweaponProgress>() {
+        @Override
+        public ZSuperweaponProgress createFromParcel(Parcel in) {
+            return new ZSuperweaponProgress(in);
+        }
 
+        @Override
+        public ZSuperweaponProgress[] newArray(int size) {
+            return new ZSuperweaponProgress[size];
+        }
+    };
     public String tzesCurrentLevel;
     public String tzesNextLevel;
     public String tzesNextProgress;
-
     public String cureCurrentLevel;
     public String cureNextLevel;
     public String cureNextProgress;
-
     public String hordeCurrentLevel;
     public String hordeNextLevel;
     public String hordeNextProgress;
 
-    public ZSuperweaponProgress() { super(); }
+    public ZSuperweaponProgress() {
+        super();
+    }
+
+    protected ZSuperweaponProgress(Parcel in) {
+        tzesCurrentLevel = in.readString();
+        tzesNextLevel = in.readString();
+        tzesNextProgress = in.readString();
+        cureCurrentLevel = in.readString();
+        cureNextLevel = in.readString();
+        cureNextProgress = in.readString();
+        hordeCurrentLevel = in.readString();
+        hordeNextLevel = in.readString();
+        hordeNextProgress = in.readString();
+    }
 
     public boolean isTzesReady() {
         return tzesCurrentLevel != null;
@@ -92,18 +117,6 @@ public class ZSuperweaponProgress implements Parcelable {
         return isTzesVisible() || isCureVisible() || isHordeVisible();
     }
 
-    protected ZSuperweaponProgress(Parcel in) {
-        tzesCurrentLevel = in.readString();
-        tzesNextLevel = in.readString();
-        tzesNextProgress = in.readString();
-        cureCurrentLevel = in.readString();
-        cureNextLevel = in.readString();
-        cureNextProgress = in.readString();
-        hordeCurrentLevel = in.readString();
-        hordeNextLevel = in.readString();
-        hordeNextProgress = in.readString();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -121,17 +134,4 @@ public class ZSuperweaponProgress implements Parcelable {
         dest.writeString(hordeNextLevel);
         dest.writeString(hordeNextProgress);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ZSuperweaponProgress> CREATOR = new Parcelable.Creator<ZSuperweaponProgress>() {
-        @Override
-        public ZSuperweaponProgress createFromParcel(Parcel in) {
-            return new ZSuperweaponProgress(in);
-        }
-
-        @Override
-        public ZSuperweaponProgress[] newArray(int size) {
-            return new ZSuperweaponProgress[size];
-        }
-    };
 }

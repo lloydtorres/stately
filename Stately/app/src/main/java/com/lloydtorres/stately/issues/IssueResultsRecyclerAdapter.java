@@ -17,15 +17,16 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
@@ -58,18 +59,18 @@ import java.util.Locale;
  * An adapter for showing the results of an issue resolution.
  */
 public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LinkedHashMap<Integer, CensusScale> censusScales;
-    private HashMap<String, String> postcardData;
-    private List<String> unifiedFreedomScale;
-
     private static final int ISSUE_RESULT_CARD = 0;
     private static final int HEADLINE_CARD = 1;
     private static final int POSTCARD_CARD = 2;
     private static final int CENSUSDELTA_CARD = 3;
     private static final int POLICY_CARD = 4;
-
     private static final String PERCENT_TEMPLATE = "%s%%";
-
+    private static final String NS_DEFAULT_CAPITAL = "%s City";
+    private static final String NS_DEFAULT_LEADER = "Leader";
+    private static final String NS_DEFAULT_RELIGION = "a major religion";
+    private LinkedHashMap<Integer, CensusScale> censusScales;
+    private HashMap<String, String> postcardData;
+    private List<String> unifiedFreedomScale;
     private Context context;
     private List<Object> content;
     private Nation mNation;
@@ -86,9 +87,68 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             postcardData.put(postcard[1], postcard[0]);
         }
 
-        unifiedFreedomScale = Arrays.asList(context.getResources().getStringArray(R.array.freedom_scale));
+        unifiedFreedomScale =
+                Arrays.asList(context.getResources().getStringArray(R.array.freedom_scale));
 
         setContent(con, n);
+    }
+
+    /**
+     * Replaces NationStates template artifacts with their proper values.
+     * @param t Target textview
+     * @param nationData User nation's data
+     * @param target String to replace data
+     */
+    private static void setIssueResultsFormatting(TextView t, Nation nationData, String target) {
+        if (nationData != null && target != null) {
+            target = target.replace("@@NAME@@", nationData.name);
+            target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
+            target = target.replace("@@uc($nation->query(\"name\"))@@",
+                    nationData.name.toUpperCase(Locale.US));
+            target = target.replace("@@REGION@@", nationData.region);
+            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
+            target = target.replace("@@POPULATION@@",
+                    SparkleHelper.getPrettifiedNumber(nationData.popBase));
+            target = target.replace("@@TYPE@@", nationData.prename);
+            target = target.replace("@@ANIMAL@@", nationData.animal);
+            target = target.replace("@@ucfirst(ANIMAL)@@",
+                    SparkleHelper.toNormalCase(nationData.animal));
+            target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
+            target = target.replace("@@ucfirst(PL(ANIMAL))@@",
+                    SparkleHelper.toNormalCase(English.plural(nationData.animal)));
+            target = target.replace("@@CURRENCY@@", nationData.currency);
+            target = target.replace("@@PL(CURRENCY)@@",
+                    SparkleHelper.getCurrencyPlural(nationData.currency));
+            target = target.replace("@@ucfirst(PL(CURRENCY))@@",
+                    SparkleHelper.toNormalCase(SparkleHelper.getCurrencyPlural(nationData.currency)));
+            target = target.replace("@@SLOGAN@@", nationData.motto);
+            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
+            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
+            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
+
+            String valCapital = String.format(Locale.US, NS_DEFAULT_CAPITAL, nationData.name);
+            if (nationData.capital != null) {
+                valCapital = nationData.capital;
+            }
+            target = target.replace("@@CAPITAL@@", valCapital);
+            target = target.replace("@@$nation->query_capital()@@", valCapital);
+
+            String valLeader = NS_DEFAULT_LEADER;
+            if (nationData.leader != null) {
+                valLeader = nationData.leader;
+            }
+            target = target.replace("@@LEADER@@", valLeader);
+            target = target.replace("@@$nation->query_leader()@@", valLeader);
+
+            String valReligion = NS_DEFAULT_RELIGION;
+            if (nationData.religion != null) {
+                valReligion = nationData.religion;
+            }
+            target = target.replace("@@FAITH@@", valReligion);
+            target = target.replace("@@$nation->query_faith()@@", valReligion);
+        }
+
+        t.setText(SparkleHelper.getHtmlFormatting(target, false));
     }
 
     public void setContent(IssueResultContainer con, Nation n) {
@@ -136,7 +196,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 viewHolder = new PolicyCard(context, policyCard);
                 break;
             default:
-                View headlineCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                View headlineCard = inflater.inflate(R.layout.card_world_breaking_news, parent,
+                        false);
                 viewHolder = new HeadlinesCard(headlineCard);
                 break;
         }
@@ -178,75 +239,16 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemViewType(int position) {
         if (content.get(position) instanceof IssueResult) {
             return ISSUE_RESULT_CARD;
-        }
-        else if (content.get(position) instanceof IssueResultHeadlinesContainer) {
+        } else if (content.get(position) instanceof IssueResultHeadlinesContainer) {
             return HEADLINE_CARD;
-        }
-        else if (content.get(position) instanceof IssuePostcard) {
+        } else if (content.get(position) instanceof IssuePostcard) {
             return POSTCARD_CARD;
-        }
-        else if (content.get(position) instanceof CensusDelta) {
+        } else if (content.get(position) instanceof CensusDelta) {
             return CENSUSDELTA_CARD;
-        } else if (content.get(position) instanceof  Policy) {
+        } else if (content.get(position) instanceof Policy) {
             return POLICY_CARD;
         }
         return -1;
-    }
-
-    private static final String NS_DEFAULT_CAPITAL = "%s City";
-    private static final String NS_DEFAULT_LEADER = "Leader";
-    private static final String NS_DEFAULT_RELIGION = "a major religion";
-
-    /**
-     * Replaces NationStates template artifacts with their proper values.
-     * @param t Target textview
-     * @param nationData User nation's data
-     * @param target String to replace data
-     */
-    private static void setIssueResultsFormatting(TextView t, Nation nationData, String target) {
-        if (nationData != null && target != null) {
-            target = target.replace("@@NAME@@", nationData.name);
-            target = target.replace("@@$nation->query(\"name\")@@", nationData.name);
-            target = target.replace("@@uc($nation->query(\"name\"))@@", nationData.name.toUpperCase(Locale.US));
-            target = target.replace("@@REGION@@", nationData.region);
-            target = target.replace("@@MAJORINDUSTRY@@", nationData.industry);
-            target = target.replace("@@POPULATION@@", SparkleHelper.getPrettifiedNumber(nationData.popBase));
-            target = target.replace("@@TYPE@@", nationData.prename);
-            target = target.replace("@@ANIMAL@@", nationData.animal);
-            target = target.replace("@@ucfirst(ANIMAL)@@", SparkleHelper.toNormalCase(nationData.animal));
-            target = target.replace("@@PL(ANIMAL)@@", English.plural(nationData.animal));
-            target = target.replace("@@ucfirst(PL(ANIMAL))@@", SparkleHelper.toNormalCase(English.plural(nationData.animal)));
-            target = target.replace("@@CURRENCY@@", nationData.currency);
-            target = target.replace("@@PL(CURRENCY)@@", SparkleHelper.getCurrencyPlural(nationData.currency));
-            target = target.replace("@@ucfirst(PL(CURRENCY))@@", SparkleHelper.toNormalCase(SparkleHelper.getCurrencyPlural(nationData.currency)));
-            target = target.replace("@@SLOGAN@@", nationData.motto);
-            target = target.replace("@@DEMONYM@@", nationData.demAdjective);
-            target = target.replace("@@DEMONYM2@@", nationData.demNoun);
-            target = target.replace("@@PL(DEMONYM2)@@", nationData.demPlural);
-
-            String valCapital = String.format(Locale.US, NS_DEFAULT_CAPITAL, nationData.name);
-            if (nationData.capital != null) {
-                valCapital = nationData.capital;
-            }
-            target = target.replace("@@CAPITAL@@", valCapital);
-            target = target.replace("@@$nation->query_capital()@@", valCapital);
-
-            String valLeader = NS_DEFAULT_LEADER;
-            if (nationData.leader != null) {
-                valLeader = nationData.leader;
-            }
-            target = target.replace("@@LEADER@@", valLeader);
-            target = target.replace("@@$nation->query_leader()@@", valLeader);
-
-            String valReligion = NS_DEFAULT_RELIGION;
-            if (nationData.religion != null) {
-                valReligion = nationData.religion;
-            }
-            target = target.replace("@@FAITH@@", valReligion);
-            target = target.replace("@@$nation->query_faith()@@", valReligion);
-        }
-
-        t.setText(SparkleHelper.getHtmlFormatting(target, false));
     }
 
     public class IssueResultCard extends RecyclerView.ViewHolder {
@@ -280,7 +282,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 StringBuilder sb = new StringBuilder();
                 for (Reclassification rec : result.reclassifications) {
                     if (Reclassification.TYPE_GOVERNMENT.equals(rec.type)) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.issue_template_reclass_govt), mNation.name, rec.from, rec.to));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.issue_template_reclass_govt),
+                                mNation.name, rec.from, rec.to));
                     } else {
                         int templateId = R.string.issue_template_reclass_civil_rights;
                         switch (rec.type) {
@@ -304,7 +308,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                             } else {
                                 deltaDesc = R.string.issue_reclass_went_down;
                             }
-                            sb.append(String.format(Locale.US, context.getString(templateId), mNation.name, context.getString(deltaDesc), rec.from, rec.to));
+                            sb.append(String.format(Locale.US, context.getString(templateId),
+                                    mNation.name, context.getString(deltaDesc), rec.from, rec.to));
                         }
                     }
                     sb.append("\n");
@@ -324,7 +329,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             expander.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    issueContent.setVisibility(issueContent.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                    issueContent.setVisibility(issueContent.getVisibility() == View.VISIBLE ?
+                            View.GONE : View.VISIBLE);
                     expander.setText(context.getString(issueContent.getVisibility() == View.VISIBLE ? R.string.issue_show_less : R.string.issue_read_more));
                 }
             });
@@ -347,8 +353,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             headlinesHolder.removeAllViews();
             int index = 0;
             for (String h : headlines.headlines) {
-                View headlineTextHolder = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
-                HtmlTextView newsContent = headlineTextHolder.findViewById(R.id.card_world_breaking_news_content);
+                View headlineTextHolder =
+                        inflater.inflate(R.layout.view_world_breaking_news_entry, null);
+                HtmlTextView newsContent =
+                        headlineTextHolder.findViewById(R.id.card_world_breaking_news_content);
                 h = h.trim();
                 setIssueResultsFormatting(newsContent, mNation, h);
 
@@ -407,25 +415,27 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(CensusDelta d) {
             delta = d;
-            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, delta.percentDelta >= 0 ? R.color.colorFreedom14 : R.color.colorFreedom0));
+            cardHolder.setCardBackgroundColor(ContextCompat.getColor(context,
+                    delta.percentDelta >= 0 ? R.color.colorFreedom14 : R.color.colorFreedom0));
 
             CensusScale censusType = SparkleHelper.getCensusScale(censusScales, delta.censusId);
             title.setText(censusType.name);
             unit.setText(censusType.unit);
-            trend.setImageResource(delta.percentDelta >= 0 ? R.drawable.ic_trend_up : R.drawable.ic_trend_down);
+            trend.setImageResource(delta.percentDelta >= 0 ? R.drawable.ic_trend_up :
+                    R.drawable.ic_trend_down);
             int maxDecimals = 1;
             double absValue = Math.abs(delta.percentDelta);
             if (absValue > 1) {
                 maxDecimals = 0;
-            }
-            else if (absValue < 0.001) {
+            } else if (absValue < 0.001) {
                 maxDecimals = 4;
             } else if (absValue < 0.01) {
                 maxDecimals = 3;
             } else if (absValue < 0.1) {
                 maxDecimals = 2;
             }
-            String deltaText = SparkleHelper.getPrettifiedNumber(delta.percentDelta >= 0 ? delta.percentDelta : delta.percentDelta * -1, maxDecimals);
+            String deltaText = SparkleHelper.getPrettifiedNumber(delta.percentDelta >= 0 ?
+                    delta.percentDelta : delta.percentDelta * -1, maxDecimals);
             value.setText(String.format(Locale.US, PERCENT_TEMPLATE, deltaText));
         }
 

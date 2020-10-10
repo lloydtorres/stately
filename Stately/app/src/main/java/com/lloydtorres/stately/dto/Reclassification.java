@@ -27,21 +27,35 @@ import org.simpleframework.xml.Root;
  * Created by lloyd on 2017-06-01.
  * Contains data on reclassifications after an issue decision.
  */
-@Root(name="RECLASSIFY", strict=false)
+@Root(name = "RECLASSIFY", strict = false)
 public class Reclassification implements Parcelable {
     public static final String TYPE_GOVERNMENT = "govt";
     public static final String TYPE_CIVILRIGHTS = "0";
     public static final String TYPE_ECONOMY = "1";
     public static final String TYPE_POLITICALFREEDOM = "2";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Reclassification> CREATOR =
+            new Parcelable.Creator<Reclassification>() {
+        @Override
+        public Reclassification createFromParcel(Parcel in) {
+            return new Reclassification(in);
+        }
 
-    @Attribute(name="type", required=false)
+        @Override
+        public Reclassification[] newArray(int size) {
+            return new Reclassification[size];
+        }
+    };
+    @Attribute(name = "type", required = false)
     public String type;
-    @Element(name="FROM", required=false)
+    @Element(name = "FROM", required = false)
     public String from;
-    @Element(name="TO", required=false)
+    @Element(name = "TO", required = false)
     public String to;
 
-    public Reclassification() { super(); }
+    public Reclassification() {
+        super();
+    }
 
     protected Reclassification(Parcel in) {
         type = in.readString();
@@ -60,17 +74,4 @@ public class Reclassification implements Parcelable {
         dest.writeString(from);
         dest.writeString(to);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Reclassification> CREATOR = new Parcelable.Creator<Reclassification>() {
-        @Override
-        public Reclassification createFromParcel(Parcel in) {
-            return new Reclassification(in);
-        }
-
-        @Override
-        public Reclassification[] newArray(int size) {
-            return new Reclassification[size];
-        }
-    };
 }

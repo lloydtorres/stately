@@ -26,19 +26,34 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-08-06.
  * This model contains a user's unread counts.
  */
-@Root(name="UNREAD", strict=false)
+@Root(name = "UNREAD", strict = false)
 public class UnreadData implements Parcelable {
 
-    @Element(name="ISSUES", required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UnreadData> CREATOR =
+            new Parcelable.Creator<UnreadData>() {
+        @Override
+        public UnreadData createFromParcel(Parcel in) {
+            return new UnreadData(in);
+        }
+
+        @Override
+        public UnreadData[] newArray(int size) {
+            return new UnreadData[size];
+        }
+    };
+    @Element(name = "ISSUES", required = false)
     public int issues;
-    @Element(name="TELEGRAMS", required=false)
+    @Element(name = "TELEGRAMS", required = false)
     public int telegrams;
-    @Element(name="RMB", required=false)
+    @Element(name = "RMB", required = false)
     public int rmb;
-    @Element(name="WA", required=false)
+    @Element(name = "WA", required = false)
     public int wa;
 
-    public UnreadData() { super(); }
+    public UnreadData() {
+        super();
+    }
 
     protected UnreadData(Parcel in) {
         issues = in.readInt();
@@ -59,17 +74,4 @@ public class UnreadData implements Parcelable {
         dest.writeInt(rmb);
         dest.writeInt(wa);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UnreadData> CREATOR = new Parcelable.Creator<UnreadData>() {
-        @Override
-        public UnreadData createFromParcel(Parcel in) {
-            return new UnreadData(in);
-        }
-
-        @Override
-        public UnreadData[] newArray(int size) {
-            return new UnreadData[size];
-        }
-    };
 }

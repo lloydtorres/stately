@@ -19,8 +19,9 @@ package com.lloydtorres.stately.issues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -71,7 +72,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     private static final String CDATA_HEADLINE_TEMPLATE = "<HEADLINE><![CDATA[%s]]></HEADLINE>";
 
     private static final Pattern RAW_DESC_REGEX = Pattern.compile("(?i)(?s)<DESC>(.*?)<\\/DESC>");
-    private static final Pattern RAW_HEADLINE_REGEX = Pattern.compile("(?i)(?s)<HEADLINE>(.*?)<\\/HEADLINE>");
+    private static final Pattern RAW_HEADLINE_REGEX = Pattern.compile("(?i)(?s)<HEADLINE>(.*?)" +
+            "<\\/HEADLINE>");
 
     private Issue issue;
     private Nation mNation;
@@ -95,7 +97,9 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             mNation = savedInstanceState.getParcelable(NATION_DATA);
         }
 
-        getSupportActionBar().setTitle(String.format(Locale.US, getString(R.string.issue_activity_title), mNation.name, SparkleHelper.getPrettifiedNumber(issue.id)));
+        getSupportActionBar().setTitle(String.format(Locale.US,
+                getString(R.string.issue_activity_title), mNation.name,
+                SparkleHelper.getPrettifiedNumber(issue.id)));
         mSwipeRefreshLayout.setEnabled(false);
 
         startConfirmIssueAvailable();
@@ -121,12 +125,14 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     private void confirmIssueAvailable() {
         String targetURL = String.format(Locale.US, IssueFullHolder.CONFIRM_QUERY, issue.id);
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if (response.contains(NOT_AVAILABLE)) {
-                            SparkleHelper.makeSnackbar(mView, String.format(Locale.US, getString(R.string.issue_unavailable), mNation.name));
+                            SparkleHelper.makeSnackbar(mView, String.format(Locale.US,
+                                    getString(R.string.issue_unavailable), mNation.name));
                         } else {
                             setRecyclerAdapter(issue);
                         }
@@ -176,8 +182,10 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                RaraHelper.getThemeMaterialDialog(this));
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -192,19 +200,21 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             switch (option.id) {
                 case IssueOption.DISMISS_ISSUE_ID:
                     dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
-                            .setPositiveButton(getString(R.string.issue_option_dismiss), dialogClickListener);
+                            .setPositiveButton(getString(R.string.issue_option_dismiss),
+                                    dialogClickListener);
                     break;
                 default:
-                    dialogBuilder.setTitle(String.format(Locale.US, getString(R.string.issue_option_confirm_adopt), option.index))
-                            .setPositiveButton(getString(R.string.issue_option_adopt), dialogClickListener);
+                    dialogBuilder.setTitle(String.format(Locale.US,
+                            getString(R.string.issue_option_confirm_adopt), option.index))
+                            .setPositiveButton(getString(R.string.issue_option_adopt),
+                                    dialogClickListener);
                     break;
             }
 
             if (!isFinishing()) {
                 dialogBuilder.show();
             }
-        }
-        else {
+        } else {
             startPostAdoptPosition(option);
         }
     }
@@ -225,7 +235,8 @@ public class IssueDecisionActivity extends RefreshviewActivity {
      */
     public void postAdoptPosition(final IssueOption option) {
         isInProgress = true;
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, IssueOption.POST_QUERY,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.POST, IssueOption.POST_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -234,13 +245,16 @@ public class IssueDecisionActivity extends RefreshviewActivity {
 
                         // Wrap response tags around CDATA
                         if (!response.contains(CDATA_FRAGMENT)) {
-                            response = SparkleHelper.regexReplace(response, RAW_DESC_REGEX, CDATA_DESC_TEMPLATE);
-                            response = SparkleHelper.regexReplace(response, RAW_HEADLINE_REGEX, CDATA_HEADLINE_TEMPLATE);
+                            response = SparkleHelper.regexReplace(response, RAW_DESC_REGEX,
+                                    CDATA_DESC_TEMPLATE);
+                            response = SparkleHelper.regexReplace(response, RAW_HEADLINE_REGEX,
+                                    CDATA_HEADLINE_TEMPLATE);
                         }
 
                         Persister serializer = new Persister();
                         try {
-                            IssueResultContainer issueResults = serializer.read(IssueResultContainer.class, response);
+                            IssueResultContainer issueResults =
+                                    serializer.read(IssueResultContainer.class, response);
 
                             if (issueResults.results.errorMessage == null || issueResults.results.errorMessage.isEmpty()) {
                                 // Broadcast which issue has been decided and can be cleared
@@ -250,20 +264,22 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                                 LocalBroadcastManager.getInstance(IssueDecisionActivity.this).sendBroadcast(issueDecisionBroadcast);
 
                                 if (option.id != IssueOption.DISMISS_ISSUE_ID) {
-                                    Intent issueResultsActivity = processAndPackResultsData(issueResults, option);
+                                    Intent issueResultsActivity =
+                                            processAndPackResultsData(issueResults, option);
                                     startActivity(issueResultsActivity);
                                     finish();
-                                }
-                                else {
+                                } else {
                                     finish();
                                 }
                             } else {
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.login_error_generic));
                                 SparkleHelper.logError(issueResults.results.errorMessage);
                             }
                         } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -274,14 +290,13 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("nation", SparkleHelper.getIdFromName(mNation.name));
         params.put("c", "issue");
         params.put("issue", String.valueOf(issue.id));
@@ -296,13 +311,15 @@ public class IssueDecisionActivity extends RefreshviewActivity {
     }
 
     /**
-     * Builds an intent to IssueResults Activity and packages bits and pieces of the issue decision results HTML into it.
+     * Builds an intent to IssueResults Activity and packages bits and pieces of the issue
+     * decision results HTML into it.
      * @param issueResult
      * @param option
      * @return
      */
     private Intent processAndPackResultsData(IssueResultContainer issueResult, IssueOption option) {
-        Intent issueResultsActivity = new Intent(IssueDecisionActivity.this, IssueResultsActivity.class);
+        Intent issueResultsActivity = new Intent(IssueDecisionActivity.this,
+                IssueResultsActivity.class);
         issueResultsActivity.putExtra(IssueResultsActivity.NATION_DATA, mNation);
 
         // Prettify the main description
@@ -311,7 +328,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             StringBuilder sb = new StringBuilder();
             sb.append(mainResult.substring(0, 1).toUpperCase(Locale.US));
             if (mainResult.length() >= 1) {
-                sb.append(mainResult.substring(1, mainResult.length()));
+                sb.append(mainResult.substring(1));
             }
             sb.append(".");
             mainResult = sb.toString();

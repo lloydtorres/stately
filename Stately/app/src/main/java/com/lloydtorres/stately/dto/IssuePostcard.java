@@ -26,10 +26,25 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * A postcard from the issues result activity.
  */
 public class IssuePostcard implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssuePostcard> CREATOR =
+            new Parcelable.Creator<IssuePostcard>() {
+        @Override
+        public IssuePostcard createFromParcel(Parcel in) {
+            return new IssuePostcard(in);
+        }
+
+        @Override
+        public IssuePostcard[] newArray(int size) {
+            return new IssuePostcard[size];
+        }
+    };
     public String imgUrl;
     public String rawId;
 
-    public IssuePostcard() { super(); }
+    public IssuePostcard() {
+        super();
+    }
 
     public IssuePostcard(String id) {
         rawId = id;
@@ -51,17 +66,4 @@ public class IssuePostcard implements Parcelable {
         dest.writeString(imgUrl);
         dest.writeString(rawId);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssuePostcard> CREATOR = new Parcelable.Creator<IssuePostcard>() {
-        @Override
-        public IssuePostcard createFromParcel(Parcel in) {
-            return new IssuePostcard(in);
-        }
-
-        @Override
-        public IssuePostcard[] newArray(int size) {
-            return new IssuePostcard[size];
-        }
-    };
 }

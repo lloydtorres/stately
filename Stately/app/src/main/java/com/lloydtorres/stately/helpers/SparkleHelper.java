@@ -53,8 +53,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.FragmentManager;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -65,6 +63,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
 import com.lloydtorres.stately.dto.Assembly;
@@ -133,18 +134,174 @@ public final class SparkleHelper {
 
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd MMM yyyy", Locale.US);
-    public static final SimpleDateFormat SDF_MONTH_YEAR = new SimpleDateFormat("MMM yyyy", Locale.US);
+    public static final SimpleDateFormat SDF_MONTH_YEAR = new SimpleDateFormat("MMM yyyy",
+            Locale.US);
 
     // Reference time zone for update-related calculations
     public static final TimeZone TIMEZONE_TORONTO = TimeZone.getTimeZone("America/Toronto");
-
-    // Private constructor
-    private SparkleHelper() {}
+    public static final String VALID_ID_BASE = "[A-Za-z0-9-_]";
 
     /**
      * VALIDATION
      * These are functions used to validate inputs.
      */
+    public static final String VALID_NAME_BASE = "[A-Za-z0-9-_ ]";
+    public static final Pattern VALID_NAME_PATTERN = Pattern.compile("^" + VALID_NAME_BASE + "+$");
+    public static final String[] ARTICLES_THE = {"the", "le", "la", "les", "el", "lo", "los",
+            "las", "al", "der", "die", "das", "des", "dem", "il", "het"};
+    public static final String[] ARTICLES_OF = {"of", "du", "de", "del", "dello", "della", "dei",
+            "degli", "delle", "von", "no"};
+    public static final String[] ARTICLES_AN = {"an", "a", "un", "une", "ein", "eine", "einer",
+            "eines", "einem", "einen", "uno", "una", "unos", "unas"};
+
+    /**
+     * FORMATTING
+     * These are functions used to change an input's format to something nicer.
+     */
+    public static final String[] ARTICLES_TO = {"to", "au", "ad", "in", "zu", "zum"};
+    public static final String[] ARTICLES_AND = {"and", "et", "e", "ac", "atque", "und", "y"};
+    public static final List<String> ARTICLES_EXCEPTIONS = new ArrayList<String>() {
+        {
+            addAll(Arrays.asList(ARTICLES_THE));
+            addAll(Arrays.asList(ARTICLES_OF));
+            addAll(Arrays.asList(ARTICLES_AN));
+            addAll(Arrays.asList(ARTICLES_TO));
+            addAll(Arrays.asList(ARTICLES_AND));
+        }
+    };
+    // Pattern for matching Roman numerals, taken from: http://stackoverflow.com/a/267405
+    public static final Pattern ROMAN_NUMERALS = Pattern.compile("(?i)(?s)^M{0,4}(CM|CD|D?C{0,3})" +
+            "(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
+    public static final String SHORT_SUFFIXED_NUMBER_TEMPLATE = "%s%s";
+    public static final Pattern CURRENCY_PLURALIZE = Pattern.compile("^(.+?)( +of .+)?$");
+    public static final String CURRENCY_NOSUFFIX_TEMPLATE = "%s %s";
+    public static final String CURRENCY_SUFFIX_TEMPLATE = "%s %s %s";
+    // The number of hours a resolution is on the WA chamber floor
+    public static final int WA_RESOLUTION_DURATION = 96;
+    public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(" + VALID_NAME_BASE +
+            "+?)@@");
+    public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(" + VALID_NAME_BASE +
+            "+?)%%");
+    public static final Pattern NS_RMB_POST_LINK =
+            Pattern.compile("<a href=\"\\/region=(" + VALID_ID_BASE + "+?)\\/page" +
+                    "=display_region_rmb\\?postid=(\\d+?)#p\\d+?\" rel=\"nofollow\">");
+    public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+?)\" " +
+            "rel=\"nofollow\">");
+    /**
+     * Regex patterns
+     */
+    public static final String NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\" +
+            ".net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\" +
+            ".net\\/|\\/|nationstates\\.net\\/|)";
+    public static final Pattern NS_RAW_NATION_LINK =
+            Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)" +
+                    "(?:\\/|)(?:$|\\s)");
+    public static final Pattern NS_RAW_REGION_LINK =
+            Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)" +
+                    "(?:\\/|)(?:$|\\s)");
+    public static final Pattern NS_RAW_REGION_LINK_TG =
+            Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)" +
+                    "\\?tgid=[0-9]+?");
+    public static final Pattern NS_BBCODE_NATION =
+            Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_2 =
+            Pattern.compile("(?i)\\[nation=.+?\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
+    public static final Pattern NS_BBCODE_NATION_3 =
+            Pattern.compile("(?i)\\[nation=(" + VALID_NAME_BASE + "+?)\\]");
+    public static final Pattern NS_BBCODE_REGION =
+            Pattern.compile("(?i)\\[region\\](" + VALID_NAME_BASE + "+?)\\[\\/region\\]");
+    public static final Pattern NS_BBCODE_REGION_2 =
+            Pattern.compile("(?i)\\[region=(" + VALID_NAME_BASE + "+?)\\]");
+    public static final Pattern NS_BBCODE_URL_NATION =
+            Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE +
+                    "+?)(?:\\/|)\\]");
+    public static final Pattern NS_BBCODE_URL_REGION =
+            Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE +
+                    "+?)(?:\\/|)\\]");
+    public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
+    public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
+
+    /**
+     * UTILITY
+     * These are convenient tools to call from any class.
+     */
+    public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
+    public static final Pattern BBCODE_SUP = Pattern.compile("(?i)(?s)\\[sup\\](.*?)\\[\\/sup\\]");
+    public static final Pattern BBCODE_SUB = Pattern.compile("(?i)(?s)\\[sub\\](.*?)\\[\\/sub\\]");
+    public static final Pattern BBCODE_STRIKE = Pattern.compile("(?i)(?s)\\[strike\\](.*?)" +
+            "\\[\\/strike\\]");
+    public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](" +
+            ".*?)\\[\\/proposal\\]");
+    public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)" +
+            "\\[\\/colou?r\\]");
+    public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=(" +
+            "(?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
+    public static final int BBCODE_PERMISSIONS_GENERAL = 0;
+    public static final int BBCODE_PERMISSIONS_RMB = 1;
+    public static final int BBCODE_PERMISSIONS_REGION = 2;
+    public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
+    public static final Pattern HTML_CODE_TAG = Pattern.compile("(?i)(?s)<code>(.*?)<\\/code>");
+    public static final String HTML_LEFT_SQUARE_BRACKET = "&#91;";
+    public static final String HTML_RIGHT_SQUARE_BRACKET = "&#93;";
+    public static final String HTML_COLON = "&#58;";
+    public static final String HTML_FORWARD_SLASH = "&#47;";
+
+    /**
+     * LINK AND HTML PROCESSING
+     * These are functions used to transform raw NationStates BBCode and formatting into clickable
+     * links and formatted text. Separate from the other formatting functions due to their unique
+     * nature.
+     */
+    public static final String HTML_EQUALS_SIGN = "&#61;";
+    public static final String HTML_QUESTION_MARK = "&#63;";
+    public static final String PRE_HTML_TEMPLATE = "<code>%s</code>";
+    public static final Pattern BBCODE_LIST_ORDERED = Pattern.compile("(?i)(?s)\\[list=(1|a|i)\\]");
+    public static final String BBCODE_END_LIST_RAW = "[/list]";
+    public static final String BBCODE_END_LIST_REGEX = "\\[\\/list\\]";
+    public static final String HTML_UL_FRAGMENT = "<ul";
+    public static final String HTML_OL_FRAGMENT = "<ol";
+    public static final String HTML_UL_CLOSE = "</ul>";
+    public static final String HTML_OL_CLOSE = "</ol>";
+    public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=" +
+            "(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)" +
+            "\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
+    public static final Pattern BBCODE_URL_GA =
+            Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=ga(?:\\/|)\\](.*?)" +
+                    "\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_SC =
+            Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=sc(?:\\/|)\\](.*?)" +
+                    "\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION =
+            Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions" +
+                    "\\/council=(1|2)\\/start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION_2 =
+            Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions" +
+                    "\\/council=(1|2)\\?start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_RESOLUTION_3 =
+            Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution" +
+                    "(?:s|)\\/id=([0-9]+?)\\/council=(1|2)(?:\\/|)\\](.*?)\\[\\/url\\]");
+    public static final String BBCODE_RESOLUTION_GA = "GA";
+    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)" +
+            "\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](" +
+            ".*?)\\[\\/spoiler\\]");
+    public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)" +
+            "\\[\\/url\\]");
+    public static final Pattern BBCODE_URL_NOCLOSE = Pattern.compile("(?i)(?s)\\[url=(.*?)\\]");
+    public static final Pattern RAW_HTTP_LINK = Pattern.compile("(?i)(?<=^|\\s|<br " +
+            "\\/>|<br>|<b>|<i>|<u>)((?:http|https):\\/\\/[^\\s\\[\\<]+)");
+    public static final Pattern RAW_WWW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br " +
+            "\\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)");
+    public static final Pattern BBCODE_QUOTE = Pattern.compile("(?i)(?s)\\[quote\\](.*?)" +
+            "\\[\\/quote\\]");
+    public static final Pattern BBCODE_QUOTE_1 = Pattern.compile("(?i)(?s)\\[quote=(.*?);" +
+            "[0-9]+?\\](.*?)\\[\\/quote\\]");
+    public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)" +
+            "\\[\\/quote\\]");
+    // Private constructor
+    private SparkleHelper() {
+    }
 
     /**
      * Normalizes a given String to ASCII characters.
@@ -161,10 +318,6 @@ public final class SparkleHelper {
         return sb.toString();
     }
 
-    public static final String VALID_ID_BASE = "[A-Za-z0-9-_]";
-    public static final String VALID_NAME_BASE = "[A-Za-z0-9-_ ]";
-    public static final Pattern VALID_NAME_PATTERN = Pattern.compile("^" + VALID_NAME_BASE + "+$");
-
     /**
      * Checks if the passed in name is a valid NationStates name (i.e. A-Z, a-z, 0-9, -, (space)).
      * @param name The name to be checked.
@@ -180,11 +333,6 @@ public final class SparkleHelper {
     }
 
     /**
-     * FORMATTING
-     * These are functions used to change an input's format to something nicer.
-     */
-
-    /**
      * Turns a proper name into a NationStates ID.
      * @param n the name
      * @return the NS ID
@@ -197,24 +345,6 @@ public final class SparkleHelper {
         return null;
     }
 
-    public static final String[] ARTICLES_THE = { "the", "le", "la", "les", "el", "lo", "los", "las", "al", "der", "die", "das", "des", "dem", "il", "het" };
-    public static final String[] ARTICLES_OF = { "of", "du", "de", "del", "dello", "della", "dei", "degli", "delle", "von", "no" };
-    public static final String[] ARTICLES_AN = { "an", "a", "un", "une", "ein", "eine", "einer", "eines", "einem", "einen", "uno", "una", "unos", "unas" };
-    public static final String[] ARTICLES_TO = { "to", "au", "ad", "in", "zu", "zum" };
-    public static final String[] ARTICLES_AND = { "and", "et", "e", "ac", "atque", "und", "y" };
-    public static final List<String> ARTICLES_EXCEPTIONS = new ArrayList<String>() {
-        {
-            addAll(Arrays.asList(ARTICLES_THE));
-            addAll(Arrays.asList(ARTICLES_OF));
-            addAll(Arrays.asList(ARTICLES_AN));
-            addAll(Arrays.asList(ARTICLES_TO));
-            addAll(Arrays.asList(ARTICLES_AND));
-        }
-    };
-
-    // Pattern for matching Roman numerals, taken from: http://stackoverflow.com/a/267405
-    public static final Pattern ROMAN_NUMERALS = Pattern.compile("(?i)(?s)^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
-
     /**
      * This turns a NationStates ID like greater_tern to a nicely formatted string.
      * In the example's case, greater_tern -> Greater Tern
@@ -226,7 +356,8 @@ public final class SparkleHelper {
             // Make sure it's in ~ID form~ first
             id = getIdFromName(id);
 
-            // Split main ID by "_" -- IDs in NationStates have no whitespace, these are replaced by _
+            // Split main ID by "_" -- IDs in NationStates have no whitespace, these are replaced
+            // by _
             String[] words = id.split("_");
             List<String> properWords = new ArrayList<String>();
 
@@ -289,32 +420,34 @@ public final class SparkleHelper {
         long timeDiffAbs = Math.abs(timeDiff);
 
         // If the time diff is zero or positive, it's in the future; past otherwise
-        String pastIndicator = (timeDiff >= 0) ? c.getString(R.string.time_from_now) : c.getString(R.string.time_ago);
+        String pastIndicator = (timeDiff >= 0) ? c.getString(R.string.time_from_now) :
+                c.getString(R.string.time_ago);
         String template = c.getString(R.string.time_generic_template);
 
         if (timeDiffAbs < 60000L) {
             // less than a minute
-            template = String.format(Locale.US, c.getString(R.string.time_moments_template), c.getString(R.string.time_moments), pastIndicator);
-        }
-        else if (timeDiffAbs < 3600000L) {
+            template = String.format(Locale.US, c.getString(R.string.time_moments_template),
+                    c.getString(R.string.time_moments), pastIndicator);
+        } else if (timeDiffAbs < 3600000L) {
             // less than an hour
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
             int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, minutes, c.getResources().getQuantityString(R.plurals.time_minute, minutes), pastIndicator);
-        }
-        else if (timeDiffAbs < 86400000L) {
+            template = String.format(Locale.US, template, minutes,
+                    c.getResources().getQuantityString(R.plurals.time_minute, minutes),
+                    pastIndicator);
+        } else if (timeDiffAbs < 86400000L) {
             // less than a day
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
             int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, hours, c.getResources().getQuantityString(R.plurals.time_hour, hours), pastIndicator);
-        }
-        else if (timeDiffAbs < 604800000L) {
+            template = String.format(Locale.US, template, hours,
+                    c.getResources().getQuantityString(R.plurals.time_hour, hours), pastIndicator);
+        } else if (timeDiffAbs < 604800000L) {
             // less than a week
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
             int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-            template = String.format(Locale.US, template, days, c.getResources().getQuantityString(R.plurals.time_day, days), pastIndicator);
-        }
-        else {
+            template = String.format(Locale.US, template, days,
+                    c.getResources().getQuantityString(R.plurals.time_day, days), pastIndicator);
+        } else {
             template = SDF.format(new Date(inputTime));
         }
 
@@ -380,7 +513,8 @@ public final class SparkleHelper {
             popHolder /= 1000D;
         }
 
-        return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(popHolder), suffix);
+        return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE,
+                getPrettifiedNumber(popHolder), suffix);
     }
 
     /**
@@ -396,29 +530,25 @@ public final class SparkleHelper {
         if (d < 1000000D) {
             // If the money is less than 1 million, we don't need a suffix.
             return getPrettifiedNumber(d);
-        }
-        else {
+        } else {
             // NS drops the least significant digits depending on the suffix needed.
             // e.g. A value like 10,000,000 is simply 10 million.
             String suffix = "";
             if (d >= 1000000D && d < 1000000000D) {
                 suffix = c.getString(R.string.million);
                 d /= 1000000D;
-            }
-            else if (d >= 1000000000D && d < 1000000000000D) {
+            } else if (d >= 1000000000D && d < 1000000000000D) {
                 suffix = c.getString(R.string.billion);
                 d /= 1000000000D;
-            }
-            else if (d >= 1000000000000D) {
+            } else if (d >= 1000000000000D) {
                 suffix = c.getString(R.string.trillion);
                 d /= 1000000000000D;
             }
 
-            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(d), suffix);
+            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(d),
+                    suffix);
         }
     }
-
-    public static final String SHORT_SUFFIXED_NUMBER_TEMPLATE = "%s%s";
 
     /**
      * Same as above, but starts at 1000 and uses short suffixes.
@@ -436,21 +566,19 @@ public final class SparkleHelper {
             if (absoluteValue >= 1000D && absoluteValue < 1000000D) {
                 suffix = c.getString(R.string.thousand_short);
                 d /= 1000D;
-            }
-            else if (absoluteValue >= 1000000D && absoluteValue < 1000000000D) {
+            } else if (absoluteValue >= 1000000D && absoluteValue < 1000000000D) {
                 suffix = c.getString(R.string.million_short);
                 d /= 1000000D;
-            }
-            else if (absoluteValue >= 1000000000D && absoluteValue < 1000000000000D) {
+            } else if (absoluteValue >= 1000000000D && absoluteValue < 1000000000000D) {
                 suffix = c.getString(R.string.billion_short);
                 d /= 1000000000D;
-            }
-            else if (absoluteValue >= 1000000000000D) {
+            } else if (absoluteValue >= 1000000000000D) {
                 suffix = c.getString(R.string.trillion_short);
                 d /= 1000000000000D;
             }
 
-            return String.format(Locale.US, SHORT_SUFFIXED_NUMBER_TEMPLATE, getPrettifiedNumber(d), suffix);
+            return String.format(Locale.US, SHORT_SUFFIXED_NUMBER_TEMPLATE,
+                    getPrettifiedNumber(d), suffix);
         }
     }
 
@@ -463,18 +591,14 @@ public final class SparkleHelper {
         String prop = "";
         if (w.length() == 0) {
             prop = w;
-        }
-        else if (w.length() == 1) {
+        } else if (w.length() == 1) {
             prop = w.substring(0, 1).toUpperCase(Locale.US);
-        }
-        else {
+        } else {
             prop = w.substring(0, 1).toUpperCase(Locale.US) + w.substring(1);
         }
         return prop;
     }
-    
-    public static final Pattern CURRENCY_PLURALIZE = Pattern.compile("^(.+?)( +of .+)?$");
-    
+
     /**
      * Takes in a currency name from the NationStates API and formats it to the
      * plural form using NS format.
@@ -497,9 +621,6 @@ public final class SparkleHelper {
         return English.plural(currency);
     }
 
-    public static final String CURRENCY_NOSUFFIX_TEMPLATE = "%s %s";
-    public static final String CURRENCY_SUFFIX_TEMPLATE = "%s %s %s";
-
     /**
      * Takes in a money value and currency name from the NationStates API and formats it to the
      * NS format.
@@ -513,33 +634,27 @@ public final class SparkleHelper {
     public static String getMoneyFormatted(Context c, long money, String currency) {
         if (money < 1000000L) {
             // If the money is less than 1 million, we don't need a suffix.
-            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE, getPrettifiedNumber(money), getCurrencyPlural(currency));
-        }
-        else {
+            return String.format(Locale.US, CURRENCY_NOSUFFIX_TEMPLATE,
+                    getPrettifiedNumber(money), getCurrencyPlural(currency));
+        } else {
             // NS drops the least significant digits depending on the suffix needed.
             // e.g. A value like 10,000,000 is simply 10 million.
             String suffix = "";
             if (money >= 1000000L && money < 1000000000L) {
                 suffix = c.getString(R.string.million);
                 money /= 1000000L;
-            }
-            else if (money >= 1000000000L && money < 1000000000000L) {
+            } else if (money >= 1000000000L && money < 1000000000000L) {
                 suffix = c.getString(R.string.billion);
                 money /= 1000000000L;
-            }
-            else if (money >= 1000000000000L) {
+            } else if (money >= 1000000000000L) {
                 suffix = c.getString(R.string.trillion);
                 money /= 1000000000000L;
             }
 
-            return String.format(Locale.US, CURRENCY_SUFFIX_TEMPLATE, getPrettifiedNumber(money), suffix, getCurrencyPlural(currency));
+            return String.format(Locale.US, CURRENCY_SUFFIX_TEMPLATE, getPrettifiedNumber(money),
+                    suffix, getCurrencyPlural(currency));
         }
     }
-
-    /**
-     * UTILITY
-     * These are convenient tools to call from any class.
-     */
 
     /**
      * Takes in a list of strings and a delimiter and returns a string that combines
@@ -549,7 +664,9 @@ public final class SparkleHelper {
      * @return Merged string.
      */
     public static String joinStringList(Collection<String> list, String delimiter) {
-        if (list == null || list.size() < 0) { return ""; }
+        if (list == null || list.size() < 0) {
+            return "";
+        }
 
         StringBuilder mergedString = new StringBuilder();
         int i = 0;
@@ -572,7 +689,8 @@ public final class SparkleHelper {
      * @param id Census ID to use
      * @return Formatted census data
      */
-    public static CensusScale getCensusScale(LinkedHashMap<Integer, CensusScale> censusData, int id) {
+    public static CensusScale getCensusScale(LinkedHashMap<Integer, CensusScale> censusData,
+                                             int id) {
         if (censusData.containsKey(id)) {
             return censusData.get(id);
         }
@@ -610,9 +728,6 @@ public final class SparkleHelper {
         cal.setTimeZone(TIMEZONE_TORONTO);
         return cal;
     }
-
-    // The number of hours a resolution is on the WA chamber floor
-    public static final int WA_RESOLUTION_DURATION = 96;
 
     /**
      * Calculates the remaining time for a WA resolution in human-readable form.
@@ -671,13 +786,15 @@ public final class SparkleHelper {
     }
 
     /**
-     * Returns an OnClickListener that starts the ExploreActivity targeting the specified nation/region.
+     * Returns an OnClickListener that starts the ExploreActivity targeting the specified
+     * nation/region.
      * @param c Invoking context
      * @param n Nation/region ID
      * @param mode Mode if nation or region
      * @return OnClickListener invoking ExploreActivity
      */
-    public static View.OnClickListener getExploreOnClickListener(final Context c, final String n, final int mode) {
+    public static View.OnClickListener getExploreOnClickListener(final Context c, final String n,
+                                                                 final int mode) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -724,11 +841,13 @@ public final class SparkleHelper {
         startTelegramCompose(c, recipients, replyId, false);
     }
 
-    public static void startTelegramCompose(Context c, String recipients, int replyId, boolean isDeveloperTg) {
+    public static void startTelegramCompose(Context c, String recipients, int replyId,
+                                            boolean isDeveloperTg) {
         Intent telegramComposeActivityLaunch = new Intent(c, TelegramComposeActivity.class);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.RECIPIENTS_DATA, recipients);
         telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.REPLY_ID_DATA, replyId);
-        telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.DEVELOPER_TG_DATA, isDeveloperTg);
+        telegramComposeActivityLaunch.putExtra(TelegramComposeActivity.DEVELOPER_TG_DATA,
+                isDeveloperTg);
         c.startActivity(telegramComposeActivityLaunch);
     }
 
@@ -767,17 +886,11 @@ public final class SparkleHelper {
         Intent resolutionActivityIntent = new Intent(c, ResolutionActivity.class);
         resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_COUNCIL_ID, councilId);
         if (resolutionId != null) {
-            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID, resolutionId);
+            resolutionActivityIntent.putExtra(ResolutionActivity.TARGET_OVERRIDE_RES_ID,
+                    resolutionId);
         }
         c.startActivity(resolutionActivityIntent);
     }
-
-    /**
-     * LINK AND HTML PROCESSING
-     * These are functions used to transform raw NationStates BBCode and formatting into clickable
-     * links and formatted text. Separate from the other formatting functions due to their unique
-     * nature.
-     */
 
     /**
      * Embeds a link to ExploreActivity for a given nation/region target in an arbitrary text.
@@ -787,7 +900,8 @@ public final class SparkleHelper {
      * @param mode If target is a nation or a region.
      * @return Returns the linkified text.
      */
-    public static String addExploreActivityLink(String template, String oldContent, String exploreTarget, int mode) {
+    public static String addExploreActivityLink(String template, String oldContent,
+                                                String exploreTarget, int mode) {
         final String urlFormat = "<a href=\"%s/%d\">%s</a>";
         String tempHolder = template;
         // Name needs to be formatted back to its NationStates ID first for the URL.
@@ -824,8 +938,7 @@ public final class SparkleHelper {
     public static Spanned fromHtml(String src) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(src, Html.FROM_HTML_MODE_COMPACT);
-        }
-        else {
+        } else {
             return Html.fromHtml(src);
         }
     }
@@ -879,12 +992,6 @@ public final class SparkleHelper {
         return fromHtml(holder);
     }
 
-
-    public static final Pattern NS_HAPPENINGS_NATION = Pattern.compile("@@(" + VALID_NAME_BASE + "+?)@@");
-    public static final Pattern NS_HAPPENINGS_REGION = Pattern.compile("%%(" + VALID_NAME_BASE + "+?)%%");
-    public static final Pattern NS_RMB_POST_LINK = Pattern.compile("<a href=\"\\/region=(" + VALID_ID_BASE + "+?)\\/page=display_region_rmb\\?postid=(\\d+?)#p\\d+?\" rel=\"nofollow\">");
-    public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+?)\" rel=\"nofollow\">");
-
     /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
      * @param c App context
@@ -893,67 +1000,42 @@ public final class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content) {
         String holder = "<base href=\"" + BASE_URI_NOSLASH + "\">" + content;
-        holder = Jsoup.clean(holder, Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
+        holder = Jsoup.clean(holder,
+                Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
         holder = replaceMalformedHtmlCharacters(holder);
 
         // Replace RMB links with targets to the RMB activity
-        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK, "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
+        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK,
+                "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
 
         // Replace internal links with valid links
         holder = regexReplace(holder, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
 
         // Linkify nations (@@NATION@@)
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_REGION, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION,
+                ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_REGION,
+                ExploreActivity.EXPLORE_REGION);
 
         if (holder.contains("EO:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
-            holder = addExploreActivityLink(template, "EO:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
+            holder = addExploreActivityLink(template, "EO:" + newTarget + ".",
+                    getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         if (holder.contains("EC:")) {
             String[] newTargets = holder.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
             String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
-            holder = addExploreActivityLink(template, "EC:"+newTarget+".", getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
+            holder = addExploreActivityLink(template, "EC:" + newTarget + ".",
+                    getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         // In case there are no nations or regions to linkify, set and style TextView here too
         setStyledTextView(c, t, holder);
     }
-
-    /**
-     * Regex patterns
-     */
-    public static final String NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\.net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\.net\\/|\\/|nationstates\\.net\\/|)";
-
-    public static final Pattern NS_RAW_NATION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|)(?:$|\\s)");
-    public static final Pattern NS_RAW_REGION_LINK = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|)(?:$|\\s)");
-    public static final Pattern NS_RAW_REGION_LINK_TG = Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)\\?tgid=[0-9]+?");
-
-    public static final Pattern NS_BBCODE_NATION = Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
-    public static final Pattern NS_BBCODE_NATION_2 = Pattern.compile("(?i)\\[nation=.+?\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
-    public static final Pattern NS_BBCODE_NATION_3 = Pattern.compile("(?i)\\[nation=(" + VALID_NAME_BASE + "+?)\\]");
-    public static final Pattern NS_BBCODE_REGION = Pattern.compile("(?i)\\[region\\](" + VALID_NAME_BASE + "+?)\\[\\/region\\]");
-    public static final Pattern NS_BBCODE_REGION_2 = Pattern.compile("(?i)\\[region=(" + VALID_NAME_BASE + "+?)\\]");
-    public static final Pattern NS_BBCODE_URL_NATION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "nation=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
-    public static final Pattern NS_BBCODE_URL_REGION = Pattern.compile("(?i)\\[url=" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)(?:\\/|)\\]");
-
-    public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
-    public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
-    public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
-    public static final Pattern BBCODE_SUP = Pattern.compile("(?i)(?s)\\[sup\\](.*?)\\[\\/sup\\]");
-    public static final Pattern BBCODE_SUB = Pattern.compile("(?i)(?s)\\[sub\\](.*?)\\[\\/sub\\]");
-    public static final Pattern BBCODE_STRIKE = Pattern.compile("(?i)(?s)\\[strike\\](.*?)\\[\\/strike\\]");
-    public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](.*?)\\[\\/proposal\\]");
-    public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)\\[\\/colou?r\\]");
-    public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=((?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
-
-    public static final int BBCODE_PERMISSIONS_GENERAL = 0;
-    public static final int BBCODE_PERMISSIONS_RMB = 1;
-    public static final int BBCODE_PERMISSIONS_REGION = 2;
 
     /**
      * Transform NationStates' BBCode-formatted content into HTML
@@ -993,22 +1075,31 @@ public final class SparkleHelper {
         holder = regexPreFormat(holder);
 
         // Handle the [hr] tag; there's no Android equivalent so we'll cheat here
-        holder = holder.replaceAll("(?s)(?i)(?:<br>|\\s)*\\[hr\\](?:<br>|\\s)*", "<br><br><center>—————</center><br>");
+        holder = holder.replaceAll("(?s)(?i)(?:<br>|\\s)*\\[hr\\](?:<br>|\\s)*", "<br><br><center" +
+                ">—————</center><br>");
 
         // Linkify nations and regions
         holder = addExploreActivityLinks(holder, NS_BBCODE_NATION, ExploreActivity.EXPLORE_NATION);
-        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_2, ExploreActivity.EXPLORE_NATION);
-        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_3, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_2,
+                ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_NATION_3,
+                ExploreActivity.EXPLORE_NATION);
         holder = addExploreActivityLinks(holder, NS_BBCODE_REGION, ExploreActivity.EXPLORE_REGION);
-        holder = addExploreActivityLinks(holder, NS_BBCODE_REGION_2, ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_BBCODE_REGION_2,
+                ExploreActivity.EXPLORE_REGION);
 
         // Replace raw NS nation and region links with Stately versions
         // It's in this order since the last three lines grab raw URLs and formats them
-        holder = regexReplace(holder, NS_BBCODE_URL_NATION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
-        holder = regexReplace(holder, NS_BBCODE_URL_REGION, "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
-        holder = addExploreActivityLinks(holder, NS_RAW_NATION_LINK, ExploreActivity.EXPLORE_NATION);
-        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK, ExploreActivity.EXPLORE_REGION);
-        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK_TG, ExploreActivity.EXPLORE_REGION);
+        holder = regexReplace(holder, NS_BBCODE_URL_NATION,
+                "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_NATION + "]");
+        holder = regexReplace(holder, NS_BBCODE_URL_REGION,
+                "[url=" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "]");
+        holder = addExploreActivityLinks(holder, NS_RAW_NATION_LINK,
+                ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK,
+                ExploreActivity.EXPLORE_REGION);
+        holder = addExploreActivityLinks(holder, NS_RAW_REGION_LINK_TG,
+                ExploreActivity.EXPLORE_REGION);
 
         // Other BBCode transforms
         holder = regexReplace(holder, BBCODE_B, "<b>%s</b>");
@@ -1017,7 +1108,8 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_SUP, "<sup>%s</sup>");
         holder = regexReplace(holder, BBCODE_SUB, "<sub>%s</sub>");
         holder = regexReplace(holder, BBCODE_STRIKE, "<strike>%s</strike>");
-        holder = regexDoubleReplace(holder, BBCODE_PROPOSAL, "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
+        holder = regexDoubleReplace(holder, BBCODE_PROPOSAL,
+                "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
         holder = regexResolutionFormat(holder);
         holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);
 
@@ -1025,7 +1117,8 @@ public final class SparkleHelper {
             holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
         }
 
-        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL, "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
+        holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL,
+                "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
 
         if (permissions == BBCODE_PERMISSIONS_RMB) {
@@ -1044,16 +1137,14 @@ public final class SparkleHelper {
     public static void setStyledTextView(Context c, TextView t, String holder) {
         if (t instanceof HtmlTextView) {
             try {
-                ((HtmlTextView)t).setHtml(holder);
-            }
-            catch(Exception e) {
+                ((HtmlTextView) t).setHtml(holder);
+            } catch (Exception e) {
                 logError(e.toString());
                 logError(holder);
                 t.setText(c.getString(R.string.bbcode_parse_error));
                 t.setTypeface(t.getTypeface(), Typeface.ITALIC);
             }
-        }
-        else {
+        } else {
             t.setText(fromHtml(holder));
         }
         styleLinkifiedTextView(c, t);
@@ -1065,7 +1156,7 @@ public final class SparkleHelper {
     public static void setStyledTextView(Context c, TextView t, String holder, FragmentManager fm) {
         // Extract and replace spoilers beforehand
         List<Spoiler> spoilers = getSpoilerReplacePairs(c, holder);
-        for (int i=0; i < spoilers.size(); i++) {
+        for (int i = 0; i < spoilers.size(); i++) {
             Spoiler s = spoilers.get(i);
             holder = holder.replace(s.raw, s.replacer);
         }
@@ -1079,7 +1170,7 @@ public final class SparkleHelper {
             String rawSpan = span.toString();
             int startFromIndex = 0;
 
-            for (int i=0; i < spoilers.size(); i++) {
+            for (int i = 0; i < spoilers.size(); i++) {
                 Spoiler s = spoilers.get(i);
                 int start = rawSpan.indexOf(s.replacer, startFromIndex);
                 if (start != -1) {
@@ -1102,7 +1193,7 @@ public final class SparkleHelper {
         // Get individual spans and replace them with clickable ones.
         Spannable s = new SpannableString(t.getText());
         URLSpan[] spans = s.getSpans(0, s.length(), URLSpan.class);
-        for (URLSpan span: spans) {
+        for (URLSpan span : spans) {
             int start = s.getSpanStart(span);
             int end = s.getSpanEnd(span);
             s.removeSpan(span);
@@ -1125,7 +1216,8 @@ public final class SparkleHelper {
      * @param content Target content
      * @return
      */
-    public static List<DataPair> getReplacePairsFromRegex(Pattern regex, String content, boolean isName) {
+    public static List<DataPair> getReplacePairsFromRegex(Pattern regex, String content,
+                                                          boolean isName) {
         String holder = content;
         // (old, new) replacement pairs
         List<DataPair> replacePairs = new ArrayList<DataPair>();
@@ -1136,8 +1228,7 @@ public final class SparkleHelper {
             if (isName) {
                 // Nameify the ID found and put the (old, new) pair into the map
                 properFormat = getNameFromId(m.group(1));
-            }
-            else {
+            } else {
                 properFormat = m.group(1);
             }
             replacePairs.add(new DataPair(m.group(), properFormat));
@@ -1145,7 +1236,8 @@ public final class SparkleHelper {
         return replacePairs;
     }
 
-    public static List<DataPair> getDoubleReplacePairsFromRegex(Pattern regex, String afterFormat, String content) {
+    public static List<DataPair> getDoubleReplacePairsFromRegex(Pattern regex, String afterFormat
+            , String content) {
         String holder = content;
         // (old, new) replacement pairs
         List<DataPair> replacePairs = new ArrayList<DataPair>();
@@ -1200,7 +1292,8 @@ public final class SparkleHelper {
      * @param afterFormat String template
      * @return
      */
-    public static String regexDoubleReplace(String target, Pattern regexBefore, String afterFormat) {
+    public static String regexDoubleReplace(String target, Pattern regexBefore,
+                                            String afterFormat) {
         String holder = target;
         List<DataPair> set = getDoubleReplacePairsFromRegex(regexBefore, afterFormat, holder);
         holder = replaceFromReplacePairs(holder, set);
@@ -1236,16 +1329,6 @@ public final class SparkleHelper {
         return holder;
     }
 
-    public static final Pattern BBCODE_PRE = Pattern.compile("(?i)(?s)\\[pre\\](.*?)\\[\\/pre\\]");
-    public static final Pattern HTML_CODE_TAG = Pattern.compile("(?i)(?s)<code>(.*?)<\\/code>");
-    public static final String HTML_LEFT_SQUARE_BRACKET = "&#91;";
-    public static final String HTML_RIGHT_SQUARE_BRACKET = "&#93;";
-    public static final String HTML_COLON = "&#58;";
-    public static final String HTML_FORWARD_SLASH = "&#47;";
-    public static final String HTML_EQUALS_SIGN = "&#61;";
-    public static final String HTML_QUESTION_MARK = "&#63;";
-    public static final String PRE_HTML_TEMPLATE = "<code>%s</code>";
-
     /**
      * Processes [pre] tags -- must be wrapped using <code> tag and contents must not be formatted.
      * @param target
@@ -1259,7 +1342,8 @@ public final class SparkleHelper {
     }
 
     /**
-     * Helper function for regexPreFormat -- actually does the processing based on the passed in pattern.
+     * Helper function for regexPreFormat -- actually does the processing based on the passed in
+     * pattern.
      * @param pattern
      * @param target
      * @return
@@ -1275,18 +1359,11 @@ public final class SparkleHelper {
             rawContent = rawContent.replace("/", HTML_FORWARD_SLASH);
             rawContent = rawContent.replace("=", HTML_EQUALS_SIGN);
             rawContent = rawContent.replace("?", HTML_QUESTION_MARK);
-            holder = holder.replace(m.group(), String.format(Locale.US, PRE_HTML_TEMPLATE, rawContent));
+            holder = holder.replace(m.group(), String.format(Locale.US, PRE_HTML_TEMPLATE,
+                    rawContent));
         }
         return holder;
     }
-
-    public static final Pattern BBCODE_LIST_ORDERED = Pattern.compile("(?i)(?s)\\[list=(1|a|i)\\]");
-    public static final String BBCODE_END_LIST_RAW = "[/list]";
-    public static final String BBCODE_END_LIST_REGEX = "\\[\\/list\\]";
-    public static final String HTML_UL_FRAGMENT = "<ul";
-    public static final String HTML_OL_FRAGMENT = "<ol";
-    public static final String HTML_UL_CLOSE = "</ul>";
-    public static final String HTML_OL_CLOSE = "</ol>";
 
     /**
      * Processes [list] tags and their children.
@@ -1298,7 +1375,7 @@ public final class SparkleHelper {
         holder = holder.replace("[list]", "<ul>");
         holder = regexReplace(holder, BBCODE_LIST_ORDERED, "<ol type='%s'>");
 
-         // Properly close <ul> and <ol> tags using an honest-to-Holo parser
+        // Properly close <ul> and <ol> tags using an honest-to-Holo parser
         if (holder.contains(BBCODE_END_LIST_RAW)) {
             LinkedList<String> htmlStack = new LinkedList<String>();
             int scanIndex = 0;
@@ -1346,15 +1423,6 @@ public final class SparkleHelper {
         return holder;
     }
 
-    public static final Pattern BBCODE_RESOLUTION_GA_SC = Pattern.compile("(?i)(?s)\\[resolution=(GA|SC)#([0-9]+?)\\](.*?)\\[\\/resolution\\]");
-    public static final Pattern BBCODE_RESOLUTION_GENERIC = Pattern.compile("(?i)(?s)\\[resolution=.+?\\](.*?)\\[\\/resolution\\]");
-    public static final Pattern BBCODE_URL_GA = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=ga(?:\\/|)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL_SC = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=sc(?:\\/|)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL_RESOLUTION = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\/start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL_RESOLUTION_2 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolutions\\/council=(1|2)\\?start=([0-9]+?)(?:\\/|)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL_RESOLUTION_3 = Pattern.compile("(?i)(?s)\\[url=" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution(?:s|)\\/id=([0-9]+?)\\/council=(1|2)(?:\\/|)\\](.*?)\\[\\/url\\]");
-    public static final String BBCODE_RESOLUTION_GA = "GA";
-
     /**
      * Processes the resolution tag by linkifying it to ResolutionActivity.
      * @param content
@@ -1365,14 +1433,17 @@ public final class SparkleHelper {
 
         Matcher m = BBCODE_RESOLUTION_GA_SC.matcher(holder);
         while (m.find()) {
-            int councilId = BBCODE_RESOLUTION_GA.equals(m.group(1)) ? Assembly.GENERAL_ASSEMBLY : Assembly.SECURITY_COUNCIL;
+            int councilId = BBCODE_RESOLUTION_GA.equals(m.group(1)) ? Assembly.GENERAL_ASSEMBLY :
+                    Assembly.SECURITY_COUNCIL;
             int resolutionId = Integer.valueOf(m.group(2)) - 1;
             String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
             holder = holder.replace(m.group(), properFormat);
         }
 
-        holder = regexReplace(holder, BBCODE_URL_GA, regexResolutionFormatHelper(Assembly.GENERAL_ASSEMBLY, -2, "%s"));
-        holder = regexReplace(holder, BBCODE_URL_SC, regexResolutionFormatHelper(Assembly.SECURITY_COUNCIL, -2, "%s"));
+        holder = regexReplace(holder, BBCODE_URL_GA,
+                regexResolutionFormatHelper(Assembly.GENERAL_ASSEMBLY, -2, "%s"));
+        holder = regexReplace(holder, BBCODE_URL_SC,
+                regexResolutionFormatHelper(Assembly.SECURITY_COUNCIL, -2, "%s"));
 
         holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION, false, false);
         holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_2, false, false);
@@ -1381,7 +1452,9 @@ public final class SparkleHelper {
         return holder;
     }
 
-    public static String regexResolutionReplacer(String target, Pattern pattern, boolean shouldOffsetByOne, boolean shouldSwitchCouncilId) {
+    public static String regexResolutionReplacer(String target, Pattern pattern,
+                                                 boolean shouldOffsetByOne,
+                                                 boolean shouldSwitchCouncilId) {
         String holder = target;
         Matcher m = pattern.matcher(target);
         while (m.find()) {
@@ -1403,12 +1476,11 @@ public final class SparkleHelper {
      * @param content
      * @return
      */
-    public static String regexResolutionFormatHelper(int councilId, int resolutionId, String content) {
-        return String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s</a>", councilId, resolutionId, content);
+    public static String regexResolutionFormatHelper(int councilId, int resolutionId,
+                                                     String content) {
+        return String.format(Locale.US, "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d" +
+                "/%d\">%s</a>", councilId, resolutionId, content);
     }
-
-    public static final Pattern BBCODE_SPOILER = Pattern.compile("(?i)(?s)\\[spoiler\\](.*?)\\[\\/spoiler\\]");
-    public static final Pattern BBCODE_SPOILER_2 = Pattern.compile("(?i)(?s)\\[spoiler=(.*?)\\](.*?)\\[\\/spoiler\\]");
 
     /**
      * Helper function that extracts spoilers from BBCode for later use.
@@ -1438,17 +1510,13 @@ public final class SparkleHelper {
             s.title = Jsoup.parse(m2.group(1)).text();
             s.content = m2.group(2);
             s.raw = m2.group();
-            s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link), s.title);
+            s.replacer = String.format(Locale.US, c.getString(R.string.spoiler_warn_title_link),
+                    s.title);
             spoilers.add(s);
         }
 
         return spoilers;
     }
-
-    public static final Pattern BBCODE_URL = Pattern.compile("(?i)(?s)\\[url=(.*?)\\](.*?)\\[\\/url\\]");
-    public static final Pattern BBCODE_URL_NOCLOSE = Pattern.compile("(?i)(?s)\\[url=(.*?)\\]");
-    public static final Pattern RAW_HTTP_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)((?:http|https):\\/\\/[^\\s\\[\\<]+)");
-    public static final Pattern RAW_WWW_LINK = Pattern.compile("(?i)(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)(www\\.[^\\s\\[\\<]+)");
 
     /**
      * Finds all raw URL links and URL tags and linkifies them properly in a nice format.
@@ -1477,19 +1545,22 @@ public final class SparkleHelper {
         Matcher m1 = RAW_HTTP_LINK.matcher(holder);
         while (m1.find()) {
             Uri link = Uri.parse(m1.group(1)).normalizeScheme();
-            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
+                    link.toString(), link.getHost());
             replaceRaw.add(new DataPair(m1.group(), replaceText));
         }
 
         Matcher m2 = RAW_WWW_LINK.matcher(holder);
         while (m2.find()) {
             Uri link = Uri.parse("http://" + m2.group(1)).normalizeScheme();
-            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
+            String replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
+                    link.toString(), link.getHost());
             replaceRaw.add(new DataPair(m2.group(), replaceText));
         }
 
         for (DataPair e : replaceRaw) {
-            holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.key + "\\E(?=$|[\\s\\[\\<])", e.value);
+            holder = holder.replaceAll("(?<=^|\\s|<br \\/>|<br>|<b>|<i>|<u>)\\Q" + e.key + "\\E" +
+                    "(?=$|[\\s\\[\\<])", e.value);
         }
 
         // Do this last so it doesn't interfere with complete tags
@@ -1501,11 +1572,14 @@ public final class SparkleHelper {
             if (link.getScheme() == null) {
                 String finalLink = "http://" + link.toString();
                 Uri finalLinkUri = Uri.parse(finalLink).normalizeScheme();
-                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), finalLink, finalLinkUri.getHost());
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
+                        finalLink, finalLinkUri.getHost());
             } else if (link.getScheme().equals(ExploreActivity.EXPLORE_PROTOCOL)) {
-                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal), link.toString(), getNameFromId(link.getHost()));
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal)
+                        , link.toString(), getNameFromId(link.getHost()));
             } else {
-                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http), link.toString(), link.getHost());
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
+                        link.toString(), link.getHost());
             }
             replaceNoClose.add(new DataPair(m3.group(), replaceText));
         }
@@ -1513,10 +1587,6 @@ public final class SparkleHelper {
 
         return holder;
     }
-
-    public static final Pattern BBCODE_QUOTE = Pattern.compile("(?i)(?s)\\[quote\\](.*?)\\[\\/quote\\]");
-    public static final Pattern BBCODE_QUOTE_1 = Pattern.compile("(?i)(?s)\\[quote=(.*?);[0-9]+?\\](.*?)\\[\\/quote\\]");
-    public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)\\[\\/quote\\]");
 
     /**
      * Used for formatting blockquotes
@@ -1549,14 +1619,17 @@ public final class SparkleHelper {
         List<DataPair> replacePairs = new ArrayList<DataPair>();
         Matcher m = regex.matcher(holder);
         while (m.find()) {
-            String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br />%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
+            String properFormat = String.format(Locale.US, "<blockquote><i>@@%s@@:<br " +
+                    "/>%s</i></blockquote>", getNameFromId(m.group(1)), m.group(2));
             if (Post.POST_NS_MODERATORS.equals(m.group(1))) {
-                properFormat = String.format(Locale.US, "<blockquote><i>%s:<br />%s</i></blockquote>", Post.POST_NS_MODERATORS, m.group(2));
+                properFormat = String.format(Locale.US, "<blockquote><i>%s:<br " +
+                        "/>%s</i></blockquote>", Post.POST_NS_MODERATORS, m.group(2));
             }
             replacePairs.add(new DataPair(m.group(), properFormat));
         }
         holder = replaceFromReplacePairs(holder, replacePairs);
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION, ExploreActivity.EXPLORE_NATION);
+        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION,
+                ExploreActivity.EXPLORE_NATION);
         return holder;
     }
 

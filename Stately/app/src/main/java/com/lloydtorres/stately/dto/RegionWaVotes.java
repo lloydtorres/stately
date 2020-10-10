@@ -28,21 +28,35 @@ import org.simpleframework.xml.Root;
  * Created by lloyd on 2017-09-08.
  * Model holding data on regional WA resolution votes.
  */
-@Root(name="REGION", strict=false)
+@Root(name = "REGION", strict = false)
 public class RegionWaVotes implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q="
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?region=%s&q="
             + "gavote+scvote"
             + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RegionWaVotes> CREATOR =
+            new Parcelable.Creator<RegionWaVotes>() {
+        @Override
+        public RegionWaVotes createFromParcel(Parcel in) {
+            return new RegionWaVotes(in);
+        }
 
+        @Override
+        public RegionWaVotes[] newArray(int size) {
+            return new RegionWaVotes[size];
+        }
+    };
     public int councilId;
     public String regionName;
-
-    @Element(name="GAVOTE", required=false)
+    @Element(name = "GAVOTE", required = false)
     public WaVote gaVote;
-    @Element(name="SCVOTE", required=false)
+    @Element(name = "SCVOTE", required = false)
     public WaVote scVote;
 
-    public RegionWaVotes() { super(); }
+    public RegionWaVotes() {
+        super();
+    }
 
     protected RegionWaVotes(Parcel in) {
         councilId = in.readInt();
@@ -63,17 +77,4 @@ public class RegionWaVotes implements Parcelable {
         dest.writeValue(gaVote);
         dest.writeValue(scVote);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RegionWaVotes> CREATOR = new Parcelable.Creator<RegionWaVotes>() {
-        @Override
-        public RegionWaVotes createFromParcel(Parcel in) {
-            return new RegionWaVotes(in);
-        }
-
-        @Override
-        public RegionWaVotes[] newArray(int size) {
-            return new RegionWaVotes[size];
-        }
-    };
 }

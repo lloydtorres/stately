@@ -28,26 +28,40 @@ import org.simpleframework.xml.Root;
  * This is the model used for storing data on one census scale, such as its world/region rank
  * (both in percent and absolute rank) as well as the actual score for that scale.
  */
-@Root(name="SCALE", strict=false)
+@Root(name = "SCALE", strict = false)
 public class CensusDetailedRank implements Parcelable {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusDetailedRank> CREATOR =
+            new Parcelable.Creator<CensusDetailedRank>() {
+        @Override
+        public CensusDetailedRank createFromParcel(Parcel in) {
+            return new CensusDetailedRank(in);
+        }
+
+        @Override
+        public CensusDetailedRank[] newArray(int size) {
+            return new CensusDetailedRank[size];
+        }
+    };
     @Attribute
     public int id;
-    @Element(name="SCORE", required=false)
+    @Element(name = "SCORE", required = false)
     public float score;
-    @Element(name="RANK", required=false)
+    @Element(name = "RANK", required = false)
     public int worldRank;
-    @Element(name="PRANK", required=false)
+    @Element(name = "PRANK", required = false)
     public float worldRankPercent;
-    @Element(name="RRANK", required=false)
+    @Element(name = "RRANK", required = false)
     public int regionRank;
-    @Element(name="PRRANK", required=false)
+    @Element(name = "PRRANK", required = false)
     public float regionRankPercent;
-
     public String name;
     public boolean isFeatured;
 
-    public CensusDetailedRank() { super(); }
+    public CensusDetailedRank() {
+        super();
+    }
 
     protected CensusDetailedRank(Parcel in) {
         id = in.readInt();
@@ -76,17 +90,4 @@ public class CensusDetailedRank implements Parcelable {
         dest.writeString(name);
         dest.writeByte((byte) (isFeatured ? 0x01 : 0x00));
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusDetailedRank> CREATOR = new Parcelable.Creator<CensusDetailedRank>() {
-        @Override
-        public CensusDetailedRank createFromParcel(Parcel in) {
-            return new CensusDetailedRank(in);
-        }
-
-        @Override
-        public CensusDetailedRank[] newArray(int size) {
-            return new CensusDetailedRank[size];
-        }
-    };
 }

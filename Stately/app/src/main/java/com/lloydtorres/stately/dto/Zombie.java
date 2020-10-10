@@ -31,24 +31,37 @@ import java.util.Locale;
  * Created by Lloyd on 2016-10-15.
  * Contains data about a nation/region's zombie infestation. Used during Z-Day.
  */
-@Root(name="ZOMBIE", strict=false)
+@Root(name = "ZOMBIE", strict = false)
 public class Zombie implements Parcelable {
 
     public static final String ZACTION_PARAM_BASE = "zact_%s";
     public static final String ZACTION_MILITARY = "exterminate";
     public static final String ZACTION_CURE = "research";
     public static final String ZACTION_ZOMBIE = "export";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Zombie> CREATOR = new Parcelable.Creator<Zombie>() {
+        @Override
+        public Zombie createFromParcel(Parcel in) {
+            return new Zombie(in);
+        }
 
-    @Element(name="ZACTION", required=false)
+        @Override
+        public Zombie[] newArray(int size) {
+            return new Zombie[size];
+        }
+    };
+    @Element(name = "ZACTION", required = false)
     public String action;
-    @Element(name="SURVIVORS", required=false)
+    @Element(name = "SURVIVORS", required = false)
     public int survivors;
-    @Element(name="ZOMBIES", required=false)
+    @Element(name = "ZOMBIES", required = false)
     public int zombies;
-    @Element(name="DEAD", required=false)
+    @Element(name = "DEAD", required = false)
     public int dead;
 
-    public Zombie() { super(); }
+    public Zombie() {
+        super();
+    }
 
     protected Zombie(Parcel in) {
         action = in.readString();
@@ -69,19 +82,6 @@ public class Zombie implements Parcelable {
         dest.writeInt(zombies);
         dest.writeInt(dead);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Zombie> CREATOR = new Parcelable.Creator<Zombie>() {
-        @Override
-        public Zombie createFromParcel(Parcel in) {
-            return new Zombie(in);
-        }
-
-        @Override
-        public Zombie[] newArray(int size) {
-            return new Zombie[size];
-        }
-    };
 
     /**
      * Returns some descriptive text about the current action
@@ -105,7 +105,7 @@ public class Zombie implements Parcelable {
         }
 
         // If everyone's dead
-        if (survivors <=0 && zombies <= 0) {
+        if (survivors <= 0 && zombies <= 0) {
             actionTextId = R.string.zombie_quiet;
         }
 

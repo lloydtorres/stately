@@ -29,13 +29,28 @@ import java.util.List;
  * Created by Lloyd on 2016-04-10.
  * Holder for a given census scale's history.
  */
-@Root(name="CENSUS", strict=false)
+@Root(name = "CENSUS", strict = false)
 public class CensusHistoryScale implements Parcelable {
 
-    @ElementList(name="SCALE", required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusHistoryScale> CREATOR =
+            new Parcelable.Creator<CensusHistoryScale>() {
+        @Override
+        public CensusHistoryScale createFromParcel(Parcel in) {
+            return new CensusHistoryScale(in);
+        }
+
+        @Override
+        public CensusHistoryScale[] newArray(int size) {
+            return new CensusHistoryScale[size];
+        }
+    };
+    @ElementList(name = "SCALE", required = false)
     public List<CensusHistoryPoint> points;
 
-    public CensusHistoryScale() { super(); }
+    public CensusHistoryScale() {
+        super();
+    }
 
     protected CensusHistoryScale(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -60,17 +75,4 @@ public class CensusHistoryScale implements Parcelable {
             dest.writeList(points);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusHistoryScale> CREATOR = new Parcelable.Creator<CensusHistoryScale>() {
-        @Override
-        public CensusHistoryScale createFromParcel(Parcel in) {
-            return new CensusHistoryScale(in);
-        }
-
-        @Override
-        public CensusHistoryScale[] newArray(int size) {
-            return new CensusHistoryScale[size];
-        }
-    };
 }

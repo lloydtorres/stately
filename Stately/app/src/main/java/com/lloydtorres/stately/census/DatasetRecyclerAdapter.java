@@ -17,12 +17,13 @@
 package com.lloydtorres.stately.census;
 
 import android.graphics.Typeface;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Dataset;
@@ -42,7 +43,8 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private DatasetDialog selfDialog;
     private ArrayList<Dataset> datasets;
 
-    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, LinkedHashMap<Integer, Dataset> ds) {
+    public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, LinkedHashMap<Integer,
+            Dataset> ds) {
         activity = a;
         selfDialog = d;
         datasets = new ArrayList<Dataset>(ds.values());
@@ -70,7 +72,7 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public int getSelectedPosition() {
-        for (int i=0; i<datasets.size(); i++) {
+        for (int i = 0; i < datasets.size(); i++) {
             if (datasets.get(i).selected) {
                 return i;
             }
@@ -83,35 +85,30 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         private TextView datasetName;
         private Dataset dataset;
 
-        public DatasetEntry(View v)
-        {
+        public DatasetEntry(View v) {
             super(v);
             datasetName = v.findViewById(R.id.basic_nation_name);
             v.setOnClickListener(this);
         }
 
-        public void init(Dataset d)
-        {
+        public void init(Dataset d) {
             dataset = d;
             datasetName.setText(dataset.name);
         }
 
         @Override
         public void onClick(View v) {
-            if (activity instanceof TrendsActivity)
-            {
+            if (activity instanceof TrendsActivity) {
                 ((TrendsActivity) activity).queryNewDataset(dataset.id);
             }
             selfDialog.dismiss();
         }
 
-        public void select()
-        {
+        public void select() {
             datasetName.setTypeface(datasetName.getTypeface(), Typeface.BOLD);
         }
 
-        public void unselect()
-        {
+        public void unselect() {
             datasetName.setTypeface(datasetName.getTypeface(), Typeface.NORMAL);
         }
     }

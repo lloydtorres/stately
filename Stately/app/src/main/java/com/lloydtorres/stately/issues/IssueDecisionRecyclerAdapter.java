@@ -17,13 +17,14 @@
 package com.lloydtorres.stately.issues;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Issue;
@@ -112,8 +113,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (cards.get(position) instanceof Issue) {
             return INFO_CARD;
-        }
-        else if (cards.get(position) instanceof IssueOption) {
+        } else if (cards.get(position) instanceof IssueOption) {
             IssueOption option = (IssueOption) cards.get(position);
             if (option.id == IssueOption.DISMISS_ISSUE_ID) {
                 return DISMISS_CARD;
@@ -147,10 +147,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             title.setText(SparkleHelper.getHtmlFormatting(issue.title).toString());
 
             if (issue.chain != null) {
-                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_chain_and_number), SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
-            }
-            else {
-                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number), SparkleHelper.getPrettifiedNumber(issue.id)));
+                issueNo.setText(String.format(Locale.US,
+                        context.getString(R.string.issue_chain_and_number),
+                        SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
+            } else {
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number)
+                        , SparkleHelper.getPrettifiedNumber(issue.id)));
             }
 
             if (issue.image != null) {
@@ -210,13 +212,15 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (mode != DISMISS_CARD) {
                 content.setText(SparkleHelper.getHtmlFormatting(option.content, false));
-                selectContent.setText(context.getString(pirateMode ? R.string.issue_select_option_pirate : R.string.issue_select_option));
+                selectContent.setText(context.getString(pirateMode ?
+                        R.string.issue_select_option_pirate : R.string.issue_select_option));
             } else {
                 // Forces card to span across columns
                 RaraHelper.setViewHolderFullSpan(itemView);
 
                 contentHolder.setVisibility(View.GONE);
-                selectContent.setText(context.getString(pirateMode ? R.string.issue_dismiss_issue_pirate : R.string.issue_dismiss_issue));
+                selectContent.setText(context.getString(pirateMode ?
+                        R.string.issue_dismiss_issue_pirate : R.string.issue_dismiss_issue));
                 selectIcon.setImageResource(R.drawable.ic_dismiss);
                 divider.setVisibility(View.GONE);
             }

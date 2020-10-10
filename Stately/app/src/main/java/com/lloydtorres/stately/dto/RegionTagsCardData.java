@@ -27,9 +27,24 @@ import java.util.List;
  * Convenient model to hold parcelable region tags for Region > Overview.
  */
 public class RegionTagsCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RegionTagsCardData> CREATOR =
+            new Parcelable.Creator<RegionTagsCardData>() {
+        @Override
+        public RegionTagsCardData createFromParcel(Parcel in) {
+            return new RegionTagsCardData(in);
+        }
+
+        @Override
+        public RegionTagsCardData[] newArray(int size) {
+            return new RegionTagsCardData[size];
+        }
+    };
     public List<String> tags;
 
-    public RegionTagsCardData() { super(); }
+    public RegionTagsCardData() {
+        super();
+    }
 
     protected RegionTagsCardData(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -54,17 +69,4 @@ public class RegionTagsCardData implements Parcelable {
             dest.writeList(tags);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RegionTagsCardData> CREATOR = new Parcelable.Creator<RegionTagsCardData>() {
-        @Override
-        public RegionTagsCardData createFromParcel(Parcel in) {
-            return new RegionTagsCardData(in);
-        }
-
-        @Override
-        public RegionTagsCardData[] newArray(int size) {
-            return new RegionTagsCardData[size];
-        }
-    };
 }

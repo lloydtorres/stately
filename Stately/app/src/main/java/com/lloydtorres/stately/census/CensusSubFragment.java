@@ -45,16 +45,21 @@ public class CensusSubFragment extends RecyclerSubFragment {
     private ArrayList<CensusDetailedRank> censusData;
     private int censusMode;
 
-    public void setTarget(String t) { target = t; }
+    public void setTarget(String t) {
+        target = t;
+    }
 
     public void setCensusData(ArrayList<CensusDetailedRank> c) {
         censusData = c;
     }
 
-    public void setMode(int mode) { censusMode = mode; }
+    public void setMode(int mode) {
+        censusMode = mode;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore save state
@@ -67,12 +72,14 @@ public class CensusSubFragment extends RecyclerSubFragment {
         if (censusData != null) {
             // Get rid of Z-Day data if needed
             if (!(NightmareHelper.getIsZDayActive(getContext()) && censusMode == CensusSortDialog.CENSUS_MODE_REGION)) {
-                censusData = new ArrayList<CensusDetailedRank>(NightmareHelper.trimZDayCensusData(censusData));
+                censusData =
+                        new ArrayList<CensusDetailedRank>(NightmareHelper.trimZDayCensusData(censusData));
             }
 
             // Attach names to census data
             String[] WORLD_CENSUS_ITEMS = getResources().getStringArray(R.array.census);
-            LinkedHashMap<Integer, CensusScale> censusScales = SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
+            LinkedHashMap<Integer, CensusScale> censusScales =
+                    SparkleHelper.getCensusScales(WORLD_CENSUS_ITEMS);
 
             for (CensusDetailedRank rank : censusData) {
                 if (censusScales.containsKey(rank.id)) {

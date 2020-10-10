@@ -80,14 +80,6 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     private View mainFragmentView;
 
     private boolean isInProgress = false;
-
-    public void setRegion(Region r)
-    {
-        mRegion = r;
-    }
-    public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
-    public void setMainFragmentView(View v) { mainFragmentView = v; }
-
     // Receiver for WA vote broadcasts
     private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
@@ -98,13 +90,16 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
             // Only update if in user's region
             String openRegionName = SparkleHelper.getIdFromName(mRegion.name);
-            String userRegionName = SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(context));
+            String userRegionName =
+                    SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(context));
             if (!openRegionName.equals(userRegionName)) {
                 return;
             }
 
-            WaVoteStatus currentVoteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
-            WaVoteStatus oldVoteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_OLD_VOTE_STATUS);
+            WaVoteStatus currentVoteStatus =
+                    intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+            WaVoteStatus oldVoteStatus =
+                    intent.getParcelableExtra(ResolutionActivity.TARGET_OLD_VOTE_STATUS);
 
             if (oldVoteStatus != null) {
                 // Remove old tallies
@@ -122,6 +117,18 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
         }
     };
 
+    public void setRegion(Region r) {
+        mRegion = r;
+    }
+
+    public void setRMBUnreadCountText(String countText) {
+        rmbUnreadCountText = countText;
+    }
+
+    public void setMainFragmentView(View v) {
+        mainFragmentView = v;
+    }
+
     /**
      * Helper function for updating WA vote counts.
      * @param waVote WaVote object to update.
@@ -137,7 +144,8 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         isInProgress = false;
 
@@ -154,7 +162,8 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
         resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
-        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver,
+                resolutionVoteFilter);
 
         // Check if regional poll can be voted on
         if (mRegion != null && mRegion.poll != null) {
@@ -195,10 +204,12 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         List<Officer> officers = new ArrayList<Officer>(mRegion.officers);
         if (!"0".equals(mRegion.delegate)) {
-            officers.add(new Officer(mRegion.delegate, getString(R.string.card_region_wa_delegate), Officer.DELEGATE_ORDER));
+            officers.add(new Officer(mRegion.delegate,
+                    getString(R.string.card_region_wa_delegate), Officer.DELEGATE_ORDER));
         }
         if (!"0".equals(mRegion.founder)) {
-            officers.add(new Officer(mRegion.founder, getString(R.string.card_region_founder), Officer.FOUNDER_ORDER));
+            officers.add(new Officer(mRegion.founder, getString(R.string.card_region_founder),
+                    Officer.FOUNDER_ORDER));
         }
         Collections.sort(officers);
         cards.add(new OfficerHolder(officers));
@@ -239,8 +250,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
         final Poll poll = mRegion.poll;
         poll.votedOption = Poll.NO_VOTE;
 
-        String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(mRegion.name));
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        String targetURL = String.format(Locale.US, Region.QUERY_HTML,
+                SparkleHelper.getIdFromName(mRegion.name));
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -295,9 +308,11 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
      * @param pollData
      * @param pollCard The card viewholder for the poll
      */
-    public void startSubmitPollVote(final Poll pollData, final CommunityRecyclerAdapter.PollCard pollCard) {
+    public void startSubmitPollVote(final Poll pollData,
+                                    final CommunityRecyclerAdapter.PollCard pollCard) {
         if (isInProgress) {
-            SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.multiple_request_error));
+            SparkleHelper.makeSnackbar(mainFragmentView,
+                    getString(R.string.multiple_request_error));
             return;
         }
 
@@ -307,8 +322,10 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
             pollCard.setIsLoading(true);
         }
 
-        String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        String targetURL = String.format(Locale.US, Region.QUERY_HTML,
+                SparkleHelper.getIdFromName(regionName));
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -320,7 +337,8 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                         Element input = d.select("input[name=chk]").first();
 
                         if (input == null) {
-                            SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mainFragmentView,
+                                    getString(R.string.login_error_parsing));
                             return;
                         }
 
@@ -339,10 +357,11 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                     pollCard.setIsLoading(false);
                 }
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
-                }
-                else {
-                    SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mainFragmentView,
+                            getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(mainFragmentView,
+                            getString(R.string.login_error_generic));
                 }
             }
         });
@@ -362,9 +381,12 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
      * @param pollData Poll data to submit
      * @param pollCard The card viewholder for the poll
      */
-    private void postPollVote(final String chk, final Poll pollData, final CommunityRecyclerAdapter.PollCard pollCard) {
-        String targetURL = String.format(Locale.US, Region.QUERY_HTML, SparkleHelper.getIdFromName(regionName));
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.POST, targetURL,
+    private void postPollVote(final String chk, final Poll pollData,
+                              final CommunityRecyclerAdapter.PollCard pollCard) {
+        String targetURL = String.format(Locale.US, Region.QUERY_HTML,
+                SparkleHelper.getIdFromName(regionName));
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.POST,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -379,19 +401,19 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                         if (response.contains(Poll.RESPONSE_VOTE) || response.contains(Poll.RESPONSE_WITHDRAW)) {
                             // Add user to voted list then update poll data
                             String userId = PinkaHelper.getActiveUser(getContext()).nationId;
-                            for (int i=0; i<pollData.options.size(); i++) {
+                            for (int i = 0; i < pollData.options.size(); i++) {
                                 PollOption option = pollData.options.get(i);
                                 List<String> voters = new ArrayList<String>();
 
                                 if (option.voters != null && option.voters.length() > 0) {
-                                    voters = new ArrayList<String>(Arrays.asList(option.voters.split(":")));
+                                    voters =
+                                            new ArrayList<String>(Arrays.asList(option.voters.split(":")));
                                 }
 
                                 if (voters.contains(userId)) {
                                     voters.remove(userId);
                                     option.votes = Math.max(0, option.votes - 1);
-                                }
-                                else if (option.id == pollData.votedOption) {
+                                } else if (option.id == pollData.votedOption) {
                                     voters.add(userId);
                                     option.votes += 1;
                                 }
@@ -402,7 +424,8 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                             }
                             ((CommunityRecyclerAdapter) mRecyclerAdapter).updatePoll(pollData);
                         } else {
-                            SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_generic));
+                            SparkleHelper.makeSnackbar(mainFragmentView,
+                                    getString(R.string.login_error_generic));
                         }
 
                         isInProgress = false;
@@ -420,15 +443,16 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
                     pollCard.setIsLoading(false);
                 }
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                    SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_no_internet));
-                }
-                else {
-                    SparkleHelper.makeSnackbar(mainFragmentView, getString(R.string.login_error_generic));
+                    SparkleHelper.makeSnackbar(mainFragmentView,
+                            getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(mainFragmentView,
+                            getString(R.string.login_error_generic));
                 }
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("pollid", String.valueOf(pollData.id));
         params.put("chk", chk);
         if (pollData.votedOption != Poll.NO_VOTE) {

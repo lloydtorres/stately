@@ -31,29 +31,11 @@ import org.simpleframework.xml.core.Persister;
  * This is similar to the Assembly DTO, but only contains information on the resolution
  * as well as voting history to minimize the amount of data to be downloaded.
  */
-@Root(name="WA", strict=false)
+@Root(name = "WA", strict = false)
 public class BaseAssembly implements Parcelable {
-    @Element(name="RESOLUTION")
-    public Resolution resolution;
-
-    public BaseAssembly() { super(); }
-
-    protected BaseAssembly(Parcel in) {
-        resolution = (Resolution) in.readValue(Resolution.class.getClassLoader());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(resolution);
-    }
-
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<BaseAssembly> CREATOR = new Parcelable.Creator<BaseAssembly>() {
+    public static final Parcelable.Creator<BaseAssembly> CREATOR =
+            new Parcelable.Creator<BaseAssembly>() {
         @Override
         public BaseAssembly createFromParcel(Parcel in) {
             return new BaseAssembly(in);
@@ -64,6 +46,16 @@ public class BaseAssembly implements Parcelable {
             return new BaseAssembly[size];
         }
     };
+    @Element(name = "RESOLUTION")
+    public Resolution resolution;
+
+    public BaseAssembly() {
+        super();
+    }
+
+    protected BaseAssembly(Parcel in) {
+        resolution = (Resolution) in.readValue(Resolution.class.getClassLoader());
+    }
 
     public static BaseAssembly parseAssemblyXML(Context c, Persister serializer, String response) throws Exception {
         BaseAssembly baseAssembly = serializer.read(BaseAssembly.class, response);
@@ -73,8 +65,19 @@ public class BaseAssembly implements Parcelable {
 
     protected static BaseAssembly processRawFields(Context c, BaseAssembly response) {
         if (response.resolution != null) {
-            response.resolution.content = SparkleHelper.transformBBCodeToHtml(c, response.resolution.content);
+            response.resolution.content = SparkleHelper.transformBBCodeToHtml(c,
+                    response.resolution.content);
         }
         return response;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(resolution);
     }
 }

@@ -42,7 +42,8 @@ public class LicensesActivity extends RefreshviewActivity {
         String[] licenseTitles = getResources().getStringArray(R.array.libraries);
         String[] licenseContents = getResources().getStringArray(R.array.libraries_licenses);
 
-        DataPair header = new DataPair(getString(R.string.licenses_desc_title), getString(R.string.licenses_desc));
+        DataPair header = new DataPair(getString(R.string.licenses_desc_title),
+                getString(R.string.licenses_desc));
         licenses.add(header);
         for (int i = 0; i < licenseTitles.length; i++) {
             DataPair licenseData = new DataPair(licenseTitles[i], licenseContents[i]);

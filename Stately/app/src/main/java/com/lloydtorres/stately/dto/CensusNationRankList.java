@@ -29,9 +29,22 @@ import java.util.List;
  * Created by Lloyd on 2016-09-10.
  * A model holding a list of nation census rankings.
  */
-@Root(name="CENSUSRANKS", strict=false)
+@Root(name = "CENSUSRANKS", strict = false)
 public class CensusNationRankList implements Parcelable {
-    @ElementList(name="NATIONS")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusNationRankList> CREATOR =
+            new Parcelable.Creator<CensusNationRankList>() {
+        @Override
+        public CensusNationRankList createFromParcel(Parcel in) {
+            return new CensusNationRankList(in);
+        }
+
+        @Override
+        public CensusNationRankList[] newArray(int size) {
+            return new CensusNationRankList[size];
+        }
+    };
+    @ElementList(name = "NATIONS")
     public List<CensusNationRank> ranks;
 
     public CensusNationRankList() {
@@ -61,17 +74,4 @@ public class CensusNationRankList implements Parcelable {
             dest.writeList(ranks);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusNationRankList> CREATOR = new Parcelable.Creator<CensusNationRankList>() {
-        @Override
-        public CensusNationRankList createFromParcel(Parcel in) {
-            return new CensusNationRankList(in);
-        }
-
-        @Override
-        public CensusNationRankList[] newArray(int size) {
-            return new CensusNationRankList[size];
-        }
-    };
 }

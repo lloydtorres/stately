@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.telegrams;
 
 import android.graphics.Typeface;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.TelegramFolder;
@@ -40,7 +41,8 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private ArrayList<TelegramFolder> folders;
     private int selected;
 
-    public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d, ArrayList<TelegramFolder> f, int s) {
+    public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d,
+                                  ArrayList<TelegramFolder> f, int s) {
         fragmentInstance = fr;
         isMove = false;
         selfDialog = d;
@@ -48,7 +50,8 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         selected = s;
     }
 
-    public FoldersRecyclerAdapter(TelegramsFragment fr, int targetId, FoldersDialog d, ArrayList<TelegramFolder> f, int s) {
+    public FoldersRecyclerAdapter(TelegramsFragment fr, int targetId, FoldersDialog d,
+                                  ArrayList<TelegramFolder> f, int s) {
         fragmentInstance = fr;
         isMove = true;
         targetMoveId = targetId;

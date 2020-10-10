@@ -26,21 +26,35 @@ import java.util.Locale;
  * Represents one trend dataset.
  */
 public class Dataset implements Comparable<Dataset>, Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Dataset> CREATOR = new Parcelable.Creator<Dataset>() {
+        @Override
+        public Dataset createFromParcel(Parcel in) {
+            return new Dataset(in);
+        }
+
+        @Override
+        public Dataset[] newArray(int size) {
+            return new Dataset[size];
+        }
+    };
     public String name;
     public int id;
     public boolean selected;
 
-    public Dataset() { super(); }
-
-    @Override
-    public int compareTo(Dataset another) {
-        return name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
+    public Dataset() {
+        super();
     }
 
     protected Dataset(Parcel in) {
         name = in.readString();
         id = in.readInt();
         selected = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int compareTo(Dataset another) {
+        return name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
     }
 
     @Override
@@ -54,17 +68,4 @@ public class Dataset implements Comparable<Dataset>, Parcelable {
         dest.writeInt(id);
         dest.writeByte((byte) (selected ? 0x01 : 0x00));
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Dataset> CREATOR = new Parcelable.Creator<Dataset>() {
-        @Override
-        public Dataset createFromParcel(Parcel in) {
-            return new Dataset(in);
-        }
-
-        @Override
-        public Dataset[] newArray(int size) {
-            return new Dataset[size];
-        }
-    };
 }

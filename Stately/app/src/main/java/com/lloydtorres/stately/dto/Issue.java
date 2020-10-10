@@ -31,24 +31,38 @@ import java.util.List;
  * Created by Lloyd on 2016-01-28.
  * An object containing all information about one issue encountered in NationStates.
  */
-@Root(name="ISSUE", strict=false)
+@Root(name = "ISSUE", strict = false)
 public class Issue implements Parcelable {
-    @Attribute(required=false)
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Issue> CREATOR = new Parcelable.Creator<Issue>() {
+        @Override
+        public Issue createFromParcel(Parcel in) {
+            return new Issue(in);
+        }
+
+        @Override
+        public Issue[] newArray(int size) {
+            return new Issue[size];
+        }
+    };
+    @Attribute(required = false)
     public int id;
-    @Element(name="TITLE", required=false)
+    @Element(name = "TITLE", required = false)
     public String title;
-    @Element(name="CHAIN", required=false)
+    @Element(name = "CHAIN", required = false)
     public String chain;
-    @Element(name="RECAP", required=false)
+    @Element(name = "RECAP", required = false)
     public String recap;
-    @Element(name="TEXT", required=false)
+    @Element(name = "TEXT", required = false)
     public String content;
-    @Element(name="PIC1", required=false)
+    @Element(name = "PIC1", required = false)
     public String image;
-    @ElementList(name="OPTION", required=false, inline=true)
+    @ElementList(name = "OPTION", required = false, inline = true)
     public List<IssueOption> options;
 
-    public Issue() { super(); }
+    public Issue() {
+        super();
+    }
 
     protected Issue(Parcel in) {
         id = in.readInt();
@@ -85,17 +99,4 @@ public class Issue implements Parcelable {
             dest.writeList(options);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Issue> CREATOR = new Parcelable.Creator<Issue>() {
-        @Override
-        public Issue createFromParcel(Parcel in) {
-            return new Issue(in);
-        }
-
-        @Override
-        public Issue[] newArray(int size) {
-            return new Issue[size];
-        }
-    };
 }

@@ -18,11 +18,6 @@ package com.lloydtorres.stately.report;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +25,12 @@ import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -61,17 +62,14 @@ public class ReportActivity extends SlidrActivity {
     public static final String REPORT_ID = "reportId";
     public static final String REPORT_TYPE = "reportType";
     public static final String REPORT_USER = "reportUser";
-    private static final String REPORT_CATEGORY = "reportCategory";
-    private static final String REPORT_CONTENT = "reportContent";
-
     // Types of reports
     public static final int REPORT_TYPE_TASK = 0;
     public static final int REPORT_TYPE_RMB = 1;
     public static final int REPORT_TYPE_TELEGRAM = 2;
-
     // Target URL for reports
     public static final String REPORT_URL = SparkleHelper.BASE_URI_NOSLASH + "/page=help";
-
+    private static final String REPORT_CATEGORY = "reportCategory";
+    private static final String REPORT_CONTENT = "reportContent";
     // Headers to send when submitting report
     private static final int HEADER_GHR_INAPPROPRIATE = 1;
     private static final int HEADER_GHR_SPAMMER = 3;
@@ -80,7 +78,7 @@ public class ReportActivity extends SlidrActivity {
 
     // If no category selected
     private static final int CATEGORY_NONE = -1;
-
+    private static final String REPORT_POST_TEMPLATE = "%s ID:#%d\n\n%s:\n%s\n\n(sent via Stately)";
     private View view;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RelativeLayout targetHolder;
@@ -88,13 +86,11 @@ public class ReportActivity extends SlidrActivity {
     private CardView reportCategoryHolder;
     private RadioGroup reportCategorySelect;
     private AppCompatEditText reportContent;
-
     private int targetId;
     private String targetName;
     private int type;
     private int categoryHolder = CATEGORY_NONE;
     private String contentHolder;
-
     private boolean isInProgress = false;
     private DialogInterface.OnClickListener dialogListener;
 
@@ -104,20 +100,17 @@ public class ReportActivity extends SlidrActivity {
         setContentView(R.layout.activity_report);
 
         // Either get data from intent or restore state
-        if (getIntent() != null)
-        {
+        if (getIntent() != null) {
             if (getIntent().getData() != null) {
                 targetId = Integer.valueOf(getIntent().getData().getHost());
                 type = REPORT_TYPE_TASK;
-            }
-            else {
+            } else {
                 targetId = getIntent().getIntExtra(REPORT_ID, 0);
                 targetName = SparkleHelper.getNameFromId(getIntent().getStringExtra(REPORT_USER));
                 type = getIntent().getIntExtra(REPORT_TYPE, REPORT_TYPE_TASK);
             }
         }
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             targetId = savedInstanceState.getInt(REPORT_ID);
             targetName = savedInstanceState.getString(REPORT_USER);
             type = savedInstanceState.getInt(REPORT_TYPE);
@@ -157,7 +150,8 @@ public class ReportActivity extends SlidrActivity {
 
         // If replying to mod mail, use this message instead
         if (type == REPORT_TYPE_TASK) {
-            reportTarget.setText(String.format(Locale.US, getString(R.string.report_mod_reply), targetId));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_mod_reply),
+                    targetId));
             reportCategoryHolder.setVisibility(View.GONE);
         } else {
             String reportType = "";
@@ -172,7 +166,8 @@ public class ReportActivity extends SlidrActivity {
                     targetHolder.setVisibility(View.GONE);
                     break;
             }
-            reportTarget.setText(String.format(Locale.US, getString(R.string.report_target), reportType, targetId, targetName));
+            reportTarget.setText(String.format(Locale.US, getString(R.string.report_target),
+                    reportType, targetId, targetName));
         }
 
         if (categoryHolder != CATEGORY_NONE) {
@@ -208,18 +203,16 @@ public class ReportActivity extends SlidrActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.report_confirm)
                 .setPositiveButton(R.string.report_send_confirm, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
                 .show();
     }
 
-    private static final String REPORT_POST_TEMPLATE = "%s ID:#%d\n\n%s:\n%s\n\n(sent via Stately)";
-
     private void sendReport() {
-        if (isInProgress)
-        {
+        if (isInProgress) {
             SparkleHelper.makeSnackbar(view, getString(R.string.multiple_request_error));
             return;
         }
@@ -251,8 +244,7 @@ public class ReportActivity extends SlidrActivity {
         final int problemHeader;
         if (type == REPORT_TYPE_TASK) {
             problemHeader = HEADER_GHR_MODREPLY;
-        }
-        else {
+        } else {
             switch (reportCategorySelect.getCheckedRadioButtonId()) {
                 case R.id.report_inappropriate:
                     problemHeader = HEADER_GHR_INAPPROPRIATE;
@@ -266,7 +258,8 @@ public class ReportActivity extends SlidrActivity {
             }
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, REPORT_URL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.POST, REPORT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -282,22 +275,19 @@ public class ReportActivity extends SlidrActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("problem", Integer.toString(problemHeader));
         params.put("comment", commentHeader);
         params.put("submit", "1");
         stringRequest.setParams(params);
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             mSwipeRefreshLayout.setRefreshing(false);
             isInProgress = false;
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
@@ -326,31 +316,26 @@ public class ReportActivity extends SlidrActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(REPORT_ID, targetId);
         savedInstanceState.putInt(REPORT_TYPE, type);
         savedInstanceState.putInt(REPORT_CATEGORY, reportCategorySelect.getCheckedRadioButtonId());
 
-        if (targetName != null)
-        {
+        if (targetName != null) {
             savedInstanceState.putString(REPORT_USER, targetName);
         }
-        if (reportContent != null)
-        {
+        if (reportContent != null) {
             savedInstanceState.putString(REPORT_CONTENT, reportContent.getText().toString());
         }
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             targetId = savedInstanceState.getInt(REPORT_ID);
             categoryHolder = savedInstanceState.getInt(REPORT_CATEGORY, CATEGORY_NONE);
             type = savedInstanceState.getInt(REPORT_TYPE);

@@ -31,19 +31,36 @@ import java.util.List;
  * Created by Lloyd on 2016-02-09.
  * This DTO is a generic for holding happenings from any root.
  */
-@Root(strict=false)
+@Root(strict = false)
 public class HappeningFeed implements Parcelable {
-    public static final String QUERY_NATION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q=happenings;view=nation.%s"
-                                                + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_REGION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?q=happenings;view=region.%s"
-                                                + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_WA = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?wa=1&q=happenings"
-                                            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_NATION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?q=happenings;view=nation.%s"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_REGION = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?q=happenings;view=region.%s"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_WA = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?wa=1&q=happenings"
+            + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<HappeningFeed> CREATOR =
+            new Parcelable.Creator<HappeningFeed>() {
+        @Override
+        public HappeningFeed createFromParcel(Parcel in) {
+            return new HappeningFeed(in);
+        }
 
-    @ElementList(name="HAPPENINGS")
+        @Override
+        public HappeningFeed[] newArray(int size) {
+            return new HappeningFeed[size];
+        }
+    };
+    @ElementList(name = "HAPPENINGS")
     public List<Event> happenings;
 
-    public HappeningFeed() { super(); }
+    public HappeningFeed() {
+        super();
+    }
 
     protected HappeningFeed(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -68,17 +85,4 @@ public class HappeningFeed implements Parcelable {
             dest.writeList(happenings);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<HappeningFeed> CREATOR = new Parcelable.Creator<HappeningFeed>() {
-        @Override
-        public HappeningFeed createFromParcel(Parcel in) {
-            return new HappeningFeed(in);
-        }
-
-        @Override
-        public HappeningFeed[] newArray(int size) {
-            return new HappeningFeed[size];
-        }
-    };
 }

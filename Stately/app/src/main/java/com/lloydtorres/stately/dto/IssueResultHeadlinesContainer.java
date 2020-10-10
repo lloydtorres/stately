@@ -27,9 +27,24 @@ import java.util.List;
  * Helper class for containing issue result headlines.
  */
 public class IssueResultHeadlinesContainer implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssueResultHeadlinesContainer> CREATOR =
+            new Parcelable.Creator<IssueResultHeadlinesContainer>() {
+        @Override
+        public IssueResultHeadlinesContainer createFromParcel(Parcel in) {
+            return new IssueResultHeadlinesContainer(in);
+        }
+
+        @Override
+        public IssueResultHeadlinesContainer[] newArray(int size) {
+            return new IssueResultHeadlinesContainer[size];
+        }
+    };
     public List<String> headlines;
 
-    public IssueResultHeadlinesContainer() { super(); }
+    public IssueResultHeadlinesContainer() {
+        super();
+    }
 
     protected IssueResultHeadlinesContainer(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -54,17 +69,4 @@ public class IssueResultHeadlinesContainer implements Parcelable {
             dest.writeList(headlines);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueResultHeadlinesContainer> CREATOR = new Parcelable.Creator<IssueResultHeadlinesContainer>() {
-        @Override
-        public IssueResultHeadlinesContainer createFromParcel(Parcel in) {
-            return new IssueResultHeadlinesContainer(in);
-        }
-
-        @Override
-        public IssueResultHeadlinesContainer[] newArray(int size) {
-            return new IssueResultHeadlinesContainer[size];
-        }
-    };
 }

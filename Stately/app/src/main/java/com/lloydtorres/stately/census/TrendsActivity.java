@@ -17,14 +17,15 @@
 package com.lloydtorres.stately.census;
 
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -118,7 +119,7 @@ public class TrendsActivity extends SlidrActivity {
         // Only show Z-Day related datasets if it's actually Z-Day
         // and we're showing regional or world rankings
         if (!(NightmareHelper.getIsZDayActive(this) &&
-           (mode == TREND_REGION || mode == TREND_WORLD))) {
+                (mode == TREND_REGION || mode == TREND_WORLD))) {
             censusScales = NightmareHelper.trimZDayCensusDatasets(censusScales);
         }
 
@@ -146,8 +147,7 @@ public class TrendsActivity extends SlidrActivity {
 
         if (dataset == null) {
             startQueryDataset();
-        }
-        else {
+        } else {
             processDataset(dataset);
         }
     }
@@ -208,20 +208,27 @@ public class TrendsActivity extends SlidrActivity {
 
         switch (mode) {
             case TREND_NATION:
-                queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY, SparkleHelper.getIdFromName(target));
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id, twoYearsAgo, curTime);
+                queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY,
+                        SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id,
+                        twoYearsAgo, curTime);
                 break;
             case TREND_REGION:
-                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, twoYearsAgo, curTime, start);
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY,
+                        SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id,
+                        twoYearsAgo, curTime, start);
                 break;
             case TREND_WORLD:
-                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id, twoYearsAgo, curTime, start);
+                targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id,
+                        twoYearsAgo, curTime, start);
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     CensusHistory censusResponse = null;
+
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
@@ -232,23 +239,22 @@ public class TrendsActivity extends SlidrActivity {
                             String newTitle;
                             if (mode != TREND_WORLD && censusResponse.name != null) {
                                 newTitle = censusResponse.name;
-                            }
-                            else {
+                            } else {
                                 newTitle = getString(R.string.trends_title_world);
                             }
-                            setToolbarTitle(String.format(Locale.US, getString(R.string.trends_title), newTitle));
+                            setToolbarTitle(String.format(Locale.US,
+                                    getString(R.string.trends_title), newTitle));
 
                             if (censusResponse.scale.points != null) {
                                 processDataset(censusResponse);
-                            }
-                            else {
+                            } else {
                                 SparkleHelper.makeSnackbar(view, getString(R.string.trends_empty));
                                 stopRefreshing();
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.login_error_parsing));
                             stopRefreshing();
                         }
                     }
@@ -259,16 +265,13 @@ public class TrendsActivity extends SlidrActivity {
                 stopRefreshing();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             stopRefreshing();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -294,7 +297,8 @@ public class TrendsActivity extends SlidrActivity {
 
         CensusScale censusType = SparkleHelper.getCensusScale(censusScales, id);
 
-        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, id, censusType.name, censusType.unit, dataset);
+        mRecyclerAdapter = new TrendsRecyclerAdapter(this, mode, id, censusType.name,
+                censusType.unit, dataset);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         stopRefreshing();
     }
@@ -318,38 +322,43 @@ public class TrendsActivity extends SlidrActivity {
 
         switch (mode) {
             case TREND_REGION:
-                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY, SparkleHelper.getIdFromName(target));
-                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY,
+                        SparkleHelper.getIdFromName(target));
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id,
+                        start);
                 break;
             case TREND_WORLD:
-                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id, start);
+                targetURL = String.format(Locale.US, CensusNationRankData.QUERY, queryTarget, id,
+                        start);
                 break;
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     CensusNationRankData rankDataResponse = null;
+
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            rankDataResponse = serializer.read(CensusNationRankData.class, response);
+                            rankDataResponse = serializer.read(CensusNationRankData.class,
+                                    response);
                             if (rankDataResponse.ranks != null && rankDataResponse.ranks.ranks.size() > 0) {
                                 dataset.ranks.ranks.addAll(rankDataResponse.ranks.ranks);
                                 Collections.sort(dataset.ranks.ranks);
 
-                                int oldItemCount = mRecyclerAdapter.getItemCount()-1;
+                                int oldItemCount = mRecyclerAdapter.getItemCount() - 1;
                                 ((TrendsRecyclerAdapter) mRecyclerAdapter).addNewCensusNationRanks(rankDataResponse.ranks);
                                 ((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(oldItemCount, 40);
                                 updateStartCounter(rankDataResponse.ranks);
-                            }
-                            else {
+                            } else {
                                 SparkleHelper.makeSnackbar(view, getString(R.string.rmb_caught_up));
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.login_error_parsing));
                         }
                         stopRefreshing();
                     }
@@ -360,16 +369,13 @@ public class TrendsActivity extends SlidrActivity {
                 stopRefreshing();
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else
-                {
+                } else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        if (!DashHelper.getInstance(this).addRequest(stringRequest))
-        {
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
             stopRefreshing();
             SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
         }
@@ -419,12 +425,10 @@ public class TrendsActivity extends SlidrActivity {
         savedInstanceState.putInt(TREND_DATA_ID, id);
         savedInstanceState.putInt(TREND_DATA_MODE, mode);
         savedInstanceState.putInt(TREND_DATA_START, start);
-        if (target != null)
-        {
+        if (target != null) {
             savedInstanceState.putString(TREND_DATA_TARGET, target);
         }
-        if (dataset != null)
-        {
+        if (dataset != null) {
             savedInstanceState.putParcelable(TREND_DATA_DATASET, dataset);
         }
     }
@@ -437,12 +441,10 @@ public class TrendsActivity extends SlidrActivity {
             id = savedInstanceState.getInt(TREND_DATA_ID);
             mode = savedInstanceState.getInt(TREND_DATA_MODE);
             start = savedInstanceState.getInt(TREND_DATA_START);
-            if (target == null)
-            {
+            if (target == null) {
                 target = savedInstanceState.getString(TREND_DATA_TARGET);
             }
-            if (dataset == null)
-            {
+            if (dataset == null) {
                 dataset = savedInstanceState.getParcelable(TREND_DATA_DATASET);
             }
         }

@@ -29,13 +29,28 @@ import java.util.Locale;
  * Defines the information needed to login a user.
  */
 public class UserLogin extends SugarRecord implements Parcelable, Comparable<UserLogin> {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UserLogin> CREATOR =
+            new Parcelable.Creator<UserLogin>() {
+        @Override
+        public UserLogin createFromParcel(Parcel in) {
+            return new UserLogin(in);
+        }
+
+        @Override
+        public UserLogin[] newArray(int size) {
+            return new UserLogin[size];
+        }
+    };
     @Unique
     public String nationId;
     public String name;
     public String autologin;
     public String pin;
 
-    public UserLogin() { super(); }
+    public UserLogin() {
+        super();
+    }
 
     public UserLogin(String i, String n, String a, String p) {
         nationId = i;
@@ -63,19 +78,6 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
         dest.writeString(autologin);
         dest.writeString(pin);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UserLogin> CREATOR = new Parcelable.Creator<UserLogin>() {
-        @Override
-        public UserLogin createFromParcel(Parcel in) {
-            return new UserLogin(in);
-        }
-
-        @Override
-        public UserLogin[] newArray(int size) {
-            return new UserLogin[size];
-        }
-    };
 
     @Override
     public int compareTo(UserLogin another) {

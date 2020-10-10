@@ -19,10 +19,11 @@ package com.lloydtorres.stately.zombie;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -39,12 +40,15 @@ public class ZombieDecisionDialog extends DetachDialogFragment {
     private Zombie zombieData;
     private RadioGroup actionState;
 
-    public ZombieDecisionDialog() { }
+    public ZombieDecisionDialog() {
+    }
 
-    public void setZombieData(Zombie z) { zombieData = z; }
+    public void setZombieData(Zombie z) {
+        zombieData = z;
+    }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)  {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_zombie_decision_dialog, null);
 
@@ -62,7 +66,7 @@ public class ZombieDecisionDialog extends DetachDialogFragment {
         }
 
         if (zombieData != null && zombieData.action != null) {
-            switch(zombieData.action) {
+            switch (zombieData.action) {
                 case Zombie.ZACTION_MILITARY:
                     actionState.check(R.id.zombie_action_military);
                     break;
@@ -82,7 +86,8 @@ public class ZombieDecisionDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.zombie_control)
                 .setView(dialogView)
                 .setPositiveButton(R.string.zombie_action_do_button, dialogListener)

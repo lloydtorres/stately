@@ -21,10 +21,11 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -53,22 +54,21 @@ public class SubscriptionsDialog extends DetachDialogFragment {
     private CheckBox dossierRegions;
     private CheckBox assembly;
 
-    public SubscriptionsDialog() { }
+    public SubscriptionsDialog() {
+    }
 
-    public void setCallback(ActivityFeedFragment c)
-    {
+    public void setCallback(ActivityFeedFragment c) {
         callback = c;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)  {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_subscriptions_dialog, null);
 
@@ -96,14 +96,14 @@ public class SubscriptionsDialog extends DetachDialogFragment {
                 editor.putBoolean(DOSSIER_REGIONS, dossierRegions.isChecked());
                 editor.putBoolean(WORLD_ASSEMBLY, assembly.isChecked());
                 editor.apply();
-                if (callback != null)
-                {
+                if (callback != null) {
                     callback.startQueryHappenings();
                 }
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.activityfeed_subscriptions)
                 .setView(dialogView)
                 .setPositiveButton(R.string.update, dialogListener)

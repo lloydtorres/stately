@@ -20,12 +20,13 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -96,7 +97,7 @@ public class LoginActivity extends BroadcastableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch(SettingsActivity.getTheme(this)) {
+        switch (SettingsActivity.getTheme(this)) {
             case SettingsActivity.THEME_VERT:
                 setTheme(R.style.AppTheme);
                 break;
@@ -123,7 +124,8 @@ public class LoginActivity extends BroadcastableActivity {
         login = findViewById(R.id.login_button);
         createNation = findViewById(R.id.register_button);
 
-        int statelyLogo = RaraHelper.getSpecialDayStatus(this) != RaraHelper.DAY_Z_DAY ? R.drawable.stately : R.drawable.stately_zday;
+        int statelyLogo = RaraHelper.getSpecialDayStatus(this) != RaraHelper.DAY_Z_DAY ?
+                R.drawable.stately : R.drawable.stately_zday;
         DashHelper.getInstance(this).loadImageWithoutPlaceHolder(statelyLogo, headerImage);
 
         if (RaraHelper.getSpecialDayStatus(this) == RaraHelper.DAY_NORMAL) {
@@ -144,7 +146,9 @@ public class LoginActivity extends BroadcastableActivity {
                     subtitle.setText(getString(R.string.login_subtitle_zday));
                     break;
                 case RaraHelper.DAY_NEW_YEAR:
-                    subtitle.setText(String.format(Locale.US, getString(R.string.login_subtitle_new_year), SparkleHelper.getUtc5Calendar().get(Calendar.YEAR)));
+                    subtitle.setText(String.format(Locale.US,
+                            getString(R.string.login_subtitle_new_year),
+                            SparkleHelper.getUtc5Calendar().get(Calendar.YEAR)));
                     break;
                 case RaraHelper.DAY_STATELY_BIRTHDAY:
                     subtitle.setText(getString(R.string.login_subtitle_stately_bday));
@@ -159,7 +163,9 @@ public class LoginActivity extends BroadcastableActivity {
                     subtitle.setText(getString(R.string.login_subtitle_halloween));
                     break;
                 case RaraHelper.DAY_NS_BIRTHDAY:
-                    subtitle.setText(String.format(Locale.US, getString(R.string.login_subtitle_ns_bday), (SparkleHelper.getUtc5Calendar().get(Calendar.YEAR) - RaraHelper.NS_FOUNDATION_YEAR)));
+                    subtitle.setText(String.format(Locale.US,
+                            getString(R.string.login_subtitle_ns_bday),
+                            (SparkleHelper.getUtc5Calendar().get(Calendar.YEAR) - RaraHelper.NS_FOUNDATION_YEAR)));
                     break;
             }
         }
@@ -220,11 +226,13 @@ public class LoginActivity extends BroadcastableActivity {
      * @return No frills NSStringRequest
      */
     private NSStringRequest buildUserAuthRequest(final String nationId, final UserLogin u) {
-        final String targetURL = String.format(Locale.US, UserNation.QUERY, SparkleHelper.getIdFromName(nationId));
+        final String targetURL = String.format(Locale.US, UserNation.QUERY,
+                SparkleHelper.getIdFromName(nationId));
         final String oldActivePin = PinkaHelper.getActivePin(this);
         NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     UserNation nationResponse = null;
+
                     @Override
                     public void onResponse(String response) {
                         // Don't bother if user already closed app
@@ -234,7 +242,8 @@ public class LoginActivity extends BroadcastableActivity {
 
                         Persister serializer = new Persister();
                         try {
-                            nationResponse = UserNation.parseNationFromXML(LoginActivity.this, serializer, response);
+                            nationResponse = UserNation.parseNationFromXML(LoginActivity.this,
+                                    serializer, response);
 
                             if (u != null) {
                                 PinkaHelper.setActiveAutologin(LoginActivity.this, u.autologin);
@@ -246,10 +255,14 @@ public class LoginActivity extends BroadcastableActivity {
                                 }
                             }
                             PinkaHelper.setActiveUser(LoginActivity.this, nationResponse.name);
-                            PinkaHelper.setSessionData(LoginActivity.this, SparkleHelper.getIdFromName(nationResponse.region), nationResponse.waState);
+                            PinkaHelper.setSessionData(LoginActivity.this,
+                                    SparkleHelper.getIdFromName(nationResponse.region),
+                                    nationResponse.waState);
 
-                            Intent nationActivityLaunch = new Intent(LoginActivity.this, StatelyActivity.class);
-                            nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA, nationResponse);
+                            Intent nationActivityLaunch = new Intent(LoginActivity.this,
+                                    StatelyActivity.class);
+                            nationActivityLaunch.putExtra(StatelyActivity.NATION_DATA,
+                                    nationResponse);
 
                             if (routeBundle == null) {
                                 nationActivityLaunch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -259,25 +272,31 @@ public class LoginActivity extends BroadcastableActivity {
                                 int routePath = routeBundle.getInt(ROUTE_PATH_KEY, ROUTE_ISSUES);
                                 switch (routePath) {
                                     case ROUTE_ISSUES:
-                                        nextActivity = new Intent(LoginActivity.this, StatelyActivity.class);
+                                        nextActivity = new Intent(LoginActivity.this,
+                                                StatelyActivity.class);
                                         nextActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         break;
                                     case ROUTE_TG:
-                                        nextActivity = new Intent(LoginActivity.this, TelegramHistoryActivity.class);
+                                        nextActivity = new Intent(LoginActivity.this,
+                                                TelegramHistoryActivity.class);
                                         break;
                                     case ROUTE_RMB:
-                                        nextActivity = new Intent(LoginActivity.this, MessageBoardActivity.class);
+                                        nextActivity = new Intent(LoginActivity.this,
+                                                MessageBoardActivity.class);
                                         break;
                                     case ROUTE_EXPLORE:
-                                        nextActivity = new Intent(LoginActivity.this, ExploreActivity.class);
+                                        nextActivity = new Intent(LoginActivity.this,
+                                                ExploreActivity.class);
                                         break;
                                 }
                                 for (String bundleKey : routeBundle.keySet()) {
                                     Object value = routeBundle.get(bundleKey);
                                     if (value instanceof String) {
-                                        nextActivity.putExtra(bundleKey, (String) routeBundle.get(bundleKey));
+                                        nextActivity.putExtra(bundleKey,
+                                                (String) routeBundle.get(bundleKey));
                                     } else if (value instanceof Integer) {
-                                        nextActivity.putExtra(bundleKey, (Integer) routeBundle.get(bundleKey));
+                                        nextActivity.putExtra(bundleKey,
+                                                (Integer) routeBundle.get(bundleKey));
                                     }
                                 }
 
@@ -288,10 +307,10 @@ public class LoginActivity extends BroadcastableActivity {
 
                                 startActivity(nextActivity);
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.login_error_parsing));
                             setLockedState(false);
                         }
                     }
@@ -307,13 +326,11 @@ public class LoginActivity extends BroadcastableActivity {
                 setLockedState(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else if (error instanceof ServerError || error instanceof AuthFailureError) {
+                } else if (error instanceof ServerError || error instanceof AuthFailureError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_404));
                     invalidAttempts++;
                     showInvalidLoginGuidance();
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
@@ -329,7 +346,8 @@ public class LoginActivity extends BroadcastableActivity {
      * @param pass Password
      */
     private void verifyAccount(String user, String pass) {
-        NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user), null);
+        NSStringRequest stringRequest = buildUserAuthRequest(SparkleHelper.getIdFromName(user),
+                null);
         stringRequest.setPassword(pass);
         // Set dummy UserLogin data
         stringRequest.setUserData(new UserLogin());
@@ -377,12 +395,14 @@ public class LoginActivity extends BroadcastableActivity {
         DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent createNationIntent = new Intent(LoginActivity.this, WebRegisterActivity.class);
+                Intent createNationIntent = new Intent(LoginActivity.this,
+                        WebRegisterActivity.class);
                 startActivityForResult(createNationIntent, WebRegisterActivity.REGISTER_RESULT);
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.create_nation)
                 .setMessage(R.string.create_nation_redirect)
                 .setPositiveButton(R.string.create_continue, dialogListener)
@@ -408,12 +428,14 @@ public class LoginActivity extends BroadcastableActivity {
         }
 
         setLockedState(true, getString(R.string.calibration_load));
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, NightmareHelper.ZDAY_REFERENCE,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, NightmareHelper.ZDAY_REFERENCE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        boolean isZDayActive = d.select(NightmareHelper.ZDAY_REFERENCE_DIV).first() != null;
+                        boolean isZDayActive =
+                                d.select(NightmareHelper.ZDAY_REFERENCE_DIV).first() != null;
                         NightmareHelper.setIsZDayActive(LoginActivity.this, isZDayActive);
                         continueToVerifyAccount(userLogin);
                     }
@@ -444,12 +466,14 @@ public class LoginActivity extends BroadcastableActivity {
     }
 
     /**
-     * Shows a dialog providing a suggestion to copy-paste nation name into field (has helped some users)
+     * Shows a dialog providing a suggestion to copy-paste nation name into field (has helped
+     * some users)
      * when too many login errors occur.
      */
     private void showInvalidLoginGuidance() {
         if (invalidAttempts == INVALID_NATION_ERROR_GUIDANCE_LIMIT && !isFinishing()) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                    RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.guidance_invalid_login_title)
                     .setMessage(R.string.guidance_invalid_login_content)
                     .setPositiveButton(R.string.got_it, null)
@@ -464,7 +488,8 @@ public class LoginActivity extends BroadcastableActivity {
         }
 
         if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
+                    RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)
                     .setMessage(R.string.create_finish)
                     .setPositiveButton(R.string.got_it, null)

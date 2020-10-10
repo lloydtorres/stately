@@ -27,7 +27,7 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-24.
  * This objects holds a single post in the regional message board.
  */
-@Root(name="POST", strict=false)
+@Root(name = "POST", strict = false)
 public class Post implements Parcelable, Comparable<Post> {
 
     public static final int POST_EMPTY = -1;
@@ -37,30 +37,42 @@ public class Post implements Parcelable, Comparable<Post> {
     public static final int POST_BANHAMMERED = 9;
 
     public static final String POST_NS_MODERATORS = "NationStates Moderators";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
 
-    @Attribute(required=false)
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
+    @Attribute(required = false)
     public int id;
-
-    @Element(name="TIMESTAMP", required=false)
+    @Element(name = "TIMESTAMP", required = false)
     public long timestamp;
-    @Element(name="EDITED", required=false)
+    @Element(name = "EDITED", required = false)
     public long editedTimestamp;
-    @Element(name="NATION", required=false)
+    @Element(name = "NATION", required = false)
     public String name;
-    @Element(name="MESSAGE", required=false)
+    @Element(name = "MESSAGE", required = false)
     public String message;
     public String messageRaw;
-    @Element(name="STATUS", required=false)
+    @Element(name = "STATUS", required = false)
     public int status;
-    @Element(name="SUPPRESSOR", required=false)
+    @Element(name = "SUPPRESSOR", required = false)
     public String suppressor;
-    @Element(name="LIKES", required=false)
+    @Element(name = "LIKES", required = false)
     public int likes;
-    @Element(name="LIKERS", required=false)
+    @Element(name = "LIKERS", required = false)
     public String likedBy;
     public boolean isExpanded = false;
 
-    public Post() { super(); }
+    public Post() {
+        super();
+    }
 
     protected Post(Parcel in) {
         id = in.readInt();
@@ -95,19 +107,6 @@ public class Post implements Parcelable, Comparable<Post> {
         dest.writeString(likedBy);
         dest.writeByte((byte) (isExpanded ? 0x01 : 0x00));
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
-        @Override
-        public Post createFromParcel(Parcel in) {
-            return new Post(in);
-        }
-
-        @Override
-        public Post[] newArray(int size) {
-            return new Post[size];
-        }
-    };
 
     @Override
     public int compareTo(Post another) {

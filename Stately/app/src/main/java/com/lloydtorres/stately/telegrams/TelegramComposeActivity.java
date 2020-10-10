@@ -18,10 +18,6 @@ package com.lloydtorres.stately.telegrams;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +25,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -50,7 +51,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +162,8 @@ public class TelegramComposeActivity extends SlidrActivity {
         // Clear focus then hide keyboard
         recipientsField.clearFocus();
         content.clearFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
 
         // Sanity checks
@@ -181,18 +182,18 @@ public class TelegramComposeActivity extends SlidrActivity {
         // Check if recipients are valid names
         List<String> recipientIds = new ArrayList<String>();
         if (recipientsRaw.contains(",")) {
-            List<String> recipientItems = Arrays.asList(recipientsRaw.split(","));
+            String[] recipientItems = recipientsRaw.split(",");
             for (String r : recipientItems) {
                 String rawRecipient = r.trim();
                 if (verifyRecipientEntry(rawRecipient)) {
                     recipientIds.add(SparkleHelper.getIdFromName(rawRecipient));
                 } else {
-                    SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_invalid_recipient));
+                    SparkleHelper.makeSnackbar(mView,
+                            getString(R.string.telegrams_invalid_recipient));
                     return;
                 }
             }
-        }
-        else {
+        } else {
             String recipientCheck = recipientsRaw.trim();
             if (verifyRecipientEntry(recipientCheck)) {
                 recipientIds.add(SparkleHelper.getIdFromName(recipientCheck));
@@ -234,7 +235,8 @@ public class TelegramComposeActivity extends SlidrActivity {
         }
         isInProgress = true;
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, Telegram.SEND_TELEGRAM,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -243,7 +245,8 @@ public class TelegramComposeActivity extends SlidrActivity {
 
                         if (input == null) {
                             mSwipeRefreshLayout.setRefreshing(false);
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             return;
                         }
 
@@ -272,7 +275,8 @@ public class TelegramComposeActivity extends SlidrActivity {
     }
 
     private void sendTelegram(final List<String> recipients, final String chk) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, Telegram.SEND_TELEGRAM,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.POST, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -299,12 +303,13 @@ public class TelegramComposeActivity extends SlidrActivity {
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("chk", chk);
         params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
         if (replyId == NO_REPLY_ID) {
             params.put("recruitregion", "region");
-            params.put("recruitregionrealname", PinkaHelper.getRegionSessionData(getApplicationContext()));
+            params.put("recruitregionrealname",
+                    PinkaHelper.getRegionSessionData(getApplicationContext()));
             params.put("send", "1");
         } else {
             params.put("in_reply_to", String.valueOf(replyId));

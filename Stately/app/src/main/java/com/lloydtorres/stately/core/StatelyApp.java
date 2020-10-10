@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.core;
 
 import com.lloydtorres.stately.push.TrixHelper;
-import com.lloydtorres.stately.settings.SettingsActivity;
 import com.orm.SugarApp;
 
 

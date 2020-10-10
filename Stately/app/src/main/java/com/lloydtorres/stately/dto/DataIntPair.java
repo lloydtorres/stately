@@ -24,8 +24,7 @@ public class DataIntPair {
     public int members;
     public int delegates;
 
-    public DataIntPair(int m, int d)
-    {
+    public DataIntPair(int m, int d) {
         this.members = m;
         this.delegates = d;
     }

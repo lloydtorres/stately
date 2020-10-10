@@ -27,12 +27,27 @@ import org.simpleframework.xml.Text;
  * Stores information on a given census score from a nation.
  */
 public class CensusBasicRank implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusBasicRank> CREATOR =
+            new Parcelable.Creator<CensusBasicRank>() {
+        @Override
+        public CensusBasicRank createFromParcel(Parcel in) {
+            return new CensusBasicRank(in);
+        }
+
+        @Override
+        public CensusBasicRank[] newArray(int size) {
+            return new CensusBasicRank[size];
+        }
+    };
     @Attribute
     public int id;
     @Text
     public int value;
 
-    public CensusBasicRank() { super(); }
+    public CensusBasicRank() {
+        super();
+    }
 
     protected CensusBasicRank(Parcel in) {
         id = in.readInt();
@@ -49,17 +64,4 @@ public class CensusBasicRank implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(value);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusBasicRank> CREATOR = new Parcelable.Creator<CensusBasicRank>() {
-        @Override
-        public CensusBasicRank createFromParcel(Parcel in) {
-            return new CensusBasicRank(in);
-        }
-
-        @Override
-        public CensusBasicRank[] newArray(int size) {
-            return new CensusBasicRank[size];
-        }
-    };
 }

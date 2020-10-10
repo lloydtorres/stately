@@ -46,10 +46,17 @@ public class EconomySubFragment extends NationSubFragment {
         cards.add(ngcSummary);
 
         NationChartCardData nccExpenditures = new NationChartCardData();
-        nccExpenditures.details.add(new DataPair(getString(R.string.card_economy_analysis_gdp), SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency)));
-        StringBuilder perCapitaText = new StringBuilder(String.format(Locale.US, getString(R.string.avg_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
-        perCapitaText.append("<br>").append(String.format(Locale.US, getString(R.string.poor_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
-        perCapitaText.append("<br>").append(String.format(Locale.US, getString(R.string.rich_val_currency), SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
+        nccExpenditures.details.add(new DataPair(getString(R.string.card_economy_analysis_gdp),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency)));
+        StringBuilder perCapitaText = new StringBuilder(String.format(Locale.US,
+                getString(R.string.avg_val_currency),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
+        perCapitaText.append("<br>").append(String.format(Locale.US,
+                getString(R.string.poor_val_currency),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.poorest, mNation.currency)));
+        perCapitaText.append("<br>").append(String.format(Locale.US,
+                getString(R.string.rich_val_currency),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.richest, mNation.currency)));
         nccExpenditures.details.add(new DataPair(getString(R.string.card_economy_analysis_per_capita), perCapitaText.toString()));
         nccExpenditures.mode = NationChartCardData.MODE_ECON;
         nccExpenditures.sectors = mNation.sectors;

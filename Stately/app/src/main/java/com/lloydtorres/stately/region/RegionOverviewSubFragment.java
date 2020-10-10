@@ -44,13 +44,13 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     private String regionName;
     private ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
-    public void setRegion(Region r)
-    {
+    public void setRegion(Region r) {
         mRegion = r;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore save state
@@ -96,7 +96,7 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
             factbook.factbook = mRegion.factbook;
             cards.add(factbook);
         }
-        
+
         RegionTagsCardData tags = new RegionTagsCardData();
         tags.tags = mRegion.tags;
         cards.add(tags);
@@ -104,7 +104,8 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
 
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), regionName, getFragmentManager(), cards);
+            mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), regionName,
+                    getFragmentManager(), cards);
         } else {
             ((RegionOverviewRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }

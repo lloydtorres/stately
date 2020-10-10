@@ -24,6 +24,19 @@ import android.os.Parcelable;
  * Convenience class used within the CommunityRecyclerAdapter for holding the RMB button.
  */
 public class RMBButtonHolder implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RMBButtonHolder> CREATOR =
+            new Parcelable.Creator<RMBButtonHolder>() {
+        @Override
+        public RMBButtonHolder createFromParcel(Parcel in) {
+            return new RMBButtonHolder(in);
+        }
+
+        @Override
+        public RMBButtonHolder[] newArray(int size) {
+            return new RMBButtonHolder[size];
+        }
+    };
     public String regionName;
     public String unreadCount;
 
@@ -47,18 +60,5 @@ public class RMBButtonHolder implements Parcelable {
         dest.writeString(regionName);
         dest.writeString(unreadCount);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RMBButtonHolder> CREATOR = new Parcelable.Creator<RMBButtonHolder>() {
-        @Override
-        public RMBButtonHolder createFromParcel(Parcel in) {
-            return new RMBButtonHolder(in);
-        }
-
-        @Override
-        public RMBButtonHolder[] newArray(int size) {
-            return new RMBButtonHolder[size];
-        }
-    };
 
 }

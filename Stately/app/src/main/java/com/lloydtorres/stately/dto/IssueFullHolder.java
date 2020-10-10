@@ -32,24 +32,40 @@ import java.util.List;
  * Created by Lloyd on 2016-10-17.
  * This model contains data from the API issues query.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class IssueFullHolder implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=issues+nextissuetime+zombie"
-                                        + "&v=" + SparkleHelper.API_VERSION;
-    public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=show_dilemma/dilemma=%d/template-overall=none";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q=issues+nextissuetime+zombie"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=show_dilemma/dilemma=%d/template-overall=none";
 
     public static final long UNKNOWN_NEXT_ISSUE_TIME = -1;
     public static final int MAX_ISSUE_COUNT_REGULAR = 5;
     public static final int MAX_ISSUE_COUNT_ZOMBIE = MAX_ISSUE_COUNT_REGULAR + 1;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssueFullHolder> CREATOR =
+            new Parcelable.Creator<IssueFullHolder>() {
+        @Override
+        public IssueFullHolder createFromParcel(Parcel in) {
+            return new IssueFullHolder(in);
+        }
 
-    @ElementList(name="ISSUES", required=false)
+        @Override
+        public IssueFullHolder[] newArray(int size) {
+            return new IssueFullHolder[size];
+        }
+    };
+    @ElementList(name = "ISSUES", required = false)
     public List<Issue> issues;
-    @Element(name="NEXTISSUETIME", required=false)
+    @Element(name = "NEXTISSUETIME", required = false)
     public long nextIssueTime;
-    @Element(name="ZOMBIE", required=false)
+    @Element(name = "ZOMBIE", required = false)
     public Zombie zombieData;
 
-    public IssueFullHolder() { super(); }
+    public IssueFullHolder() {
+        super();
+    }
 
     protected IssueFullHolder(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -78,17 +94,4 @@ public class IssueFullHolder implements Parcelable {
         dest.writeLong(nextIssueTime);
         dest.writeValue(zombieData);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueFullHolder> CREATOR = new Parcelable.Creator<IssueFullHolder>() {
-        @Override
-        public IssueFullHolder createFromParcel(Parcel in) {
-            return new IssueFullHolder(in);
-        }
-
-        @Override
-        public IssueFullHolder[] newArray(int size) {
-            return new IssueFullHolder[size];
-        }
-    };
 }

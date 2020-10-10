@@ -18,19 +18,19 @@ package com.lloydtorres.stately.telegrams;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -99,7 +99,8 @@ public class TelegramsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.content_message_board, container, false);
         telegrams = new ArrayList<Telegram>();
         folders = new ArrayList<TelegramFolder>();
@@ -134,8 +135,7 @@ public class TelegramsFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if (direction.equals(SwipyRefreshLayoutDirection.TOP)) {
                     queryTelegrams(0, SCAN_FORWARD, false);
-                }
-                else {
+                } else {
                     queryTelegrams(pastOffset, SCAN_BACKWARD, false);
                 }
             }
@@ -174,15 +174,16 @@ public class TelegramsFragment extends Fragment {
 
         if (selectedFolder < folders.size()) {
             activeFolder = folders.get(selectedFolder);
-        }
-        else {
+        } else {
             SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
             return;
         }
 
-        String targetURL = String.format(Locale.US, Telegram.GET_TELEGRAM, activeFolder.value, offset);
+        String targetURL = String.format(Locale.US, Telegram.GET_TELEGRAM, activeFolder.value,
+                offset);
 
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -206,8 +207,7 @@ public class TelegramsFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -254,14 +254,16 @@ public class TelegramsFragment extends Fragment {
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
         if (telegramsContainer != null) {
-            scannedTelegrams = MuffinsHelper.processRawTelegrams(getContext(), telegramsContainer, PinkaHelper.getActiveUser(getContext()).nationId);
+            scannedTelegrams = MuffinsHelper.processRawTelegrams(getContext(), telegramsContainer
+                    , PinkaHelper.getActiveUser(getContext()).nationId);
         } else if (telegramsAntiquityContainer != null) {
             String selfName = null;
             // If currently in sent folder, pass in current user's name
             if (selectedFolder < folders.size() && TelegramFolder.TELEGRAM_FOLDER_SENT.equals(folders.get(selectedFolder).name)) {
                 selfName = PinkaHelper.getActiveUser(getContext()).name;
             }
-            scannedTelegrams = MuffinsHelper.processRawTelegramsFromAntiquity(getContext(), telegramsAntiquityContainer, selfName);
+            scannedTelegrams = MuffinsHelper.processRawTelegramsFromAntiquity(getContext(),
+                    telegramsAntiquityContainer, selfName);
         }
 
         switch (direction) {
@@ -298,7 +300,8 @@ public class TelegramsFragment extends Fragment {
             SparkleHelper.makeSnackbar(mView, getString(R.string.rmb_caught_up));
         }
 
-        // We've reached the point where we already have the messages, so put everything back together
+        // We've reached the point where we already have the messages, so put everything back
+        // together
         refreshRecycler(SCAN_FORWARD);
     }
 
@@ -317,7 +320,7 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(scannedTelegrams);
 
         // Count the number of obtained telegrams that are earlier than the current earliest
-        long earliestCurrentDate = telegrams.get(telegrams.size()-1).timestamp;
+        long earliestCurrentDate = telegrams.get(telegrams.size() - 1).timestamp;
         int timeCounter = 0;
         for (Telegram t : scannedTelegrams) {
             if (t.timestamp < earliestCurrentDate && !uniqueEnforcer.contains(t.id)) {
@@ -332,8 +335,7 @@ public class TelegramsFragment extends Fragment {
         if (timeCounter < 1) {
             SparkleHelper.makeSnackbar(mView, getString(R.string.telegrams_backtrack_error));
             mSwipeRefreshLayout.setRefreshing(false);
-        }
-        else {
+        } else {
             refreshRecycler(SCAN_BACKWARD);
         }
     }
@@ -345,10 +347,10 @@ public class TelegramsFragment extends Fragment {
         int oldSize = 0;
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new TelegramsAdapter(telegrams, this, folders.get(selectedFolder).name, getFragmentManager());
+            mRecyclerAdapter = new TelegramsAdapter(telegrams, this,
+                    folders.get(selectedFolder).name, getFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
-        }
-        else {
+        } else {
             oldSize = mRecyclerAdapter.getItemCount();
             ((TelegramsAdapter) mRecyclerAdapter).setTelegrams(telegrams);
             ((TelegramsAdapter) mRecyclerAdapter).setFolder(folders.get(selectedFolder).name);
@@ -361,7 +363,7 @@ public class TelegramsFragment extends Fragment {
                 mLayoutManager.scrollToPosition(0);
                 break;
             case SCAN_BACKWARD:
-                mLayoutManager.scrollToPosition(oldSize+1);
+                mLayoutManager.scrollToPosition(oldSize + 1);
                 break;
         }
     }
@@ -402,7 +404,8 @@ public class TelegramsFragment extends Fragment {
         }
 
         String targetURL = String.format(Locale.US, Telegram.MARK_READ, id, chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -428,7 +431,7 @@ public class TelegramsFragment extends Fragment {
      */
     private void invalidateTelegram(int id) {
         ((TelegramsAdapter) mRecyclerAdapter).invalidateTelegram(id);
-        pastOffset = Math.max(0, pastOffset-1);
+        pastOffset = Math.max(0, pastOffset - 1);
     }
 
     /**
@@ -439,15 +442,18 @@ public class TelegramsFragment extends Fragment {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
                 .setTitle(getString(R.string.telegrams_archive_confirm))
-                .setPositiveButton(getString(R.string.telegrams_archive), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.telegrams_archive),
+                        new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         archiveTelegram(id);
-                    }})
+                    }
+                })
                 .setNegativeButton(getString(R.string.explore_negative), null)
                 .show();
     }
@@ -475,7 +481,7 @@ public class TelegramsFragment extends Fragment {
         }
 
         ArrayList<TelegramFolder> moveableFolders = new ArrayList<TelegramFolder>();
-        for (int i=0; i<folders.size(); i++) {
+        for (int i = 0; i < folders.size(); i++) {
             String name = folders.get(i).name;
             Matcher m = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name);
             if (i == selectedFolder ||
@@ -488,14 +494,14 @@ public class TelegramsFragment extends Fragment {
         }
 
         if (moveableFolders.size() <= 0) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                    RaraHelper.getThemeMaterialDialog(getContext()));
             dialogBuilder
                     .setTitle(getString(R.string.telegrams_move))
                     .setMessage(getString(R.string.telegrams_move_none))
                     .setPositiveButton(getString(R.string.got_it), null)
                     .show();
-        }
-        else {
+        } else {
             FoldersDialog foldersDialog = new FoldersDialog();
             foldersDialog.setFolders(moveableFolders);
             foldersDialog.setFragment(this);
@@ -539,8 +545,10 @@ public class TelegramsFragment extends Fragment {
         if (TelegramFolder.TELEGRAM_FOLDER_INBOX_VAL.equals(targetFolder)) {
             finalTarget = "";
         }
-        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, id, finalTarget, chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, id, finalTarget,
+                chkValue);
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -562,8 +570,7 @@ public class TelegramsFragment extends Fragment {
 
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -580,18 +587,20 @@ public class TelegramsFragment extends Fragment {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder
-            .setTitle(getString(R.string.telegrams_delete_confirm))
-            .setPositiveButton(getString(R.string.telegrams_delete), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    startDeleteTelegram(id);
-                }
-            })
-            .setNegativeButton(getString(R.string.explore_negative), null)
-            .show();
+                .setTitle(getString(R.string.telegrams_delete_confirm))
+                .setPositiveButton(getString(R.string.telegrams_delete),
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startDeleteTelegram(id);
+                    }
+                })
+                .setNegativeButton(getString(R.string.explore_negative), null)
+                .show();
     }
 
     /**
@@ -625,7 +634,8 @@ public class TelegramsFragment extends Fragment {
             templateURL = Telegram.PERMDELETE_TELEGRAM;
         }
         String targetURL = String.format(Locale.US, templateURL, id, chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -642,13 +652,12 @@ public class TelegramsFragment extends Fragment {
                 if (getActivity() == null || !isAdded()) {
                     return;
                 }
-                
+
                 SparkleHelper.logError(error.toString());
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -699,7 +708,8 @@ public class TelegramsFragment extends Fragment {
                 showFoldersDialog(fm);
                 return true;
             case R.id.nav_compose:
-                SparkleHelper.startTelegramCompose(getContext(), null, TelegramComposeActivity.NO_REPLY_ID);
+                SparkleHelper.startTelegramCompose(getContext(), null,
+                        TelegramComposeActivity.NO_REPLY_ID);
                 return true;
         }
         return super.onOptionsItemSelected(item);

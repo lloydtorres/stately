@@ -17,10 +17,11 @@
 package com.lloydtorres.stately.helpers.links;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.lloydtorres.stately.helpers.RaraHelper;
 import com.lloydtorres.stately.helpers.dialogs.NameListDialog;

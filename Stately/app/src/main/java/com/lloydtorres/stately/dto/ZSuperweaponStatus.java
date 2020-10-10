@@ -27,12 +27,26 @@ public class ZSuperweaponStatus implements Parcelable {
     public static final String ZSUPER_TZES = "zsw_tzes";
     public static final String ZSUPER_CURE = "zsw_cure";
     public static final String ZSUPER_HORDE = "zsw_horde";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ZSuperweaponStatus> CREATOR =
+            new Parcelable.Creator<ZSuperweaponStatus>() {
+        @Override
+        public ZSuperweaponStatus createFromParcel(Parcel in) {
+            return new ZSuperweaponStatus(in);
+        }
 
+        @Override
+        public ZSuperweaponStatus[] newArray(int size) {
+            return new ZSuperweaponStatus[size];
+        }
+    };
     public boolean isTZES;
     public boolean isCure;
     public boolean isHorde;
 
-    public ZSuperweaponStatus() { super(); }
+    public ZSuperweaponStatus() {
+        super();
+    }
 
     protected ZSuperweaponStatus(Parcel in) {
         isTZES = in.readByte() != 0x00;
@@ -51,17 +65,4 @@ public class ZSuperweaponStatus implements Parcelable {
         dest.writeByte((byte) (isCure ? 0x01 : 0x00));
         dest.writeByte((byte) (isHorde ? 0x01 : 0x00));
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ZSuperweaponStatus> CREATOR = new Parcelable.Creator<ZSuperweaponStatus>() {
-        @Override
-        public ZSuperweaponStatus createFromParcel(Parcel in) {
-            return new ZSuperweaponStatus(in);
-        }
-
-        @Override
-        public ZSuperweaponStatus[] newArray(int size) {
-            return new ZSuperweaponStatus[size];
-        }
-    };
 }

@@ -24,6 +24,19 @@ import android.os.Parcelable;
  * Model holding data for the 'Quick Facts' card in Region > Overview.
  */
 public class RegionQuickFactsCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RegionQuickFactsCardData> CREATOR =
+            new Parcelable.Creator<RegionQuickFactsCardData>() {
+        @Override
+        public RegionQuickFactsCardData createFromParcel(Parcel in) {
+            return new RegionQuickFactsCardData(in);
+        }
+
+        @Override
+        public RegionQuickFactsCardData[] newArray(int size) {
+            return new RegionQuickFactsCardData[size];
+        }
+    };
     public String waDelegate;
     public int delegateVotes;
     public long lastUpdate;
@@ -31,7 +44,9 @@ public class RegionQuickFactsCardData implements Parcelable {
     public long founded;
     public String power;
 
-    public RegionQuickFactsCardData() { super(); }
+    public RegionQuickFactsCardData() {
+        super();
+    }
 
     protected RegionQuickFactsCardData(Parcel in) {
         waDelegate = in.readString();
@@ -56,17 +71,4 @@ public class RegionQuickFactsCardData implements Parcelable {
         dest.writeLong(founded);
         dest.writeString(power);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RegionQuickFactsCardData> CREATOR = new Parcelable.Creator<RegionQuickFactsCardData>() {
-        @Override
-        public RegionQuickFactsCardData createFromParcel(Parcel in) {
-            return new RegionQuickFactsCardData(in);
-        }
-
-        @Override
-        public RegionQuickFactsCardData[] newArray(int size) {
-            return new RegionQuickFactsCardData[size];
-        }
-    };
 }

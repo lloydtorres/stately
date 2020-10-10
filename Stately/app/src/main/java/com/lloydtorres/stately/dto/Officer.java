@@ -26,22 +26,35 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-21.
  * An officer in a region.
  */
-@Root(name="OFFICER", strict=false)
+@Root(name = "OFFICER", strict = false)
 public class Officer implements Parcelable, Comparable<Officer> {
 
     // Officers are ordered from smallest to greatest; this numbering puts
     // the delegate and the founder first and second, respectively.
     public static final int DELEGATE_ORDER = -2;
     public static final int FOUNDER_ORDER = -1;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Officer> CREATOR = new Parcelable.Creator<Officer>() {
+        @Override
+        public Officer createFromParcel(Parcel in) {
+            return new Officer(in);
+        }
 
-    @Element(name="NATION", required=false)
+        @Override
+        public Officer[] newArray(int size) {
+            return new Officer[size];
+        }
+    };
+    @Element(name = "NATION", required = false)
     public String name;
-    @Element(name="OFFICE", required=false)
+    @Element(name = "OFFICE", required = false)
     public String office;
-    @Element(name="ORDER", required=false)
+    @Element(name = "ORDER", required = false)
     public int order;
 
-    public Officer() { super(); }
+    public Officer() {
+        super();
+    }
 
     public Officer(String n, String off, int ord) {
         super();
@@ -67,19 +80,6 @@ public class Officer implements Parcelable, Comparable<Officer> {
         dest.writeString(office);
         dest.writeInt(order);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Officer> CREATOR = new Parcelable.Creator<Officer>() {
-        @Override
-        public Officer createFromParcel(Parcel in) {
-            return new Officer(in);
-        }
-
-        @Override
-        public Officer[] newArray(int size) {
-            return new Officer[size];
-        }
-    };
 
     @Override
     public int compareTo(Officer another) {

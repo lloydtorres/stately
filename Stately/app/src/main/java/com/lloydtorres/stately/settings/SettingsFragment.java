@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.settings;
 
 import android.os.Bundle;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.lloydtorres.stately.BuildConfig;
 import com.lloydtorres.stately.R;
@@ -44,14 +45,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.settings);
 
         Preference appVersionSetting = findPreference(SettingsActivity.SETTING_APP_VERSION);
-        appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version), BuildConfig.VERSION_NAME));
+        appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version),
+                BuildConfig.VERSION_NAME));
 
         // Set on click listener to send telegram
         Preference sendTelegramSetting = findPreference(SettingsActivity.SETTING_SEND_TELEGRAM);
         sendTelegramSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SparkleHelper.startTelegramCompose(getContext(), DEVELOPER_TARGET, TelegramComposeActivity.NO_REPLY_ID, true);
+                SparkleHelper.startTelegramCompose(getContext(), DEVELOPER_TARGET,
+                        TelegramComposeActivity.NO_REPLY_ID, true);
                 return true;
             }
         });
@@ -72,7 +75,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }

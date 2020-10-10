@@ -18,12 +18,13 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
@@ -58,11 +59,44 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     private Context context;
     private FragmentManager fragmentManager;
 
-    public RegionOverviewRecyclerAdapter(Context c, String r, FragmentManager fm, List<Parcelable> crds) {
+    public RegionOverviewRecyclerAdapter(Context c, String r, FragmentManager fm,
+                                         List<Parcelable> crds) {
         regionName = r;
         context = c;
         fragmentManager = fm;
         setCards(crds);
+    }
+
+    public static void initWaDelegate(Context c, TextView tv, String delegateId,
+                                      int delegateVotes, long lastUpdate) {
+        if (!"0".equals(delegateId)) {
+            String delegateProper = SparkleHelper.getNameFromId(delegateId);
+            String delegateTemplate = String.format(Locale.US,
+                    c.getString(R.string.region_delegate_votes),
+                    delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
+                    c.getResources().getQuantityString(R.plurals.vote, delegateVotes),
+                    SparkleHelper.getReadableDateFromUTC(c, lastUpdate));
+            delegateTemplate = SparkleHelper.addExploreActivityLink(delegateTemplate, delegateId,
+                    delegateProper, ExploreActivity.EXPLORE_NATION);
+            SparkleHelper.setStyledTextView(c, tv, delegateTemplate);
+        } else {
+            tv.setText(c.getString(R.string.region_filler_none));
+        }
+    }
+
+    public static void initFounder(Context c, TextView tv, String founder, long founded) {
+        if (!"0".equals(founder)) {
+            String founderTemplate = SparkleHelper.addExploreActivityLink(founder, founder,
+                    SparkleHelper.getNameFromId(founder), ExploreActivity.EXPLORE_NATION);
+            SparkleHelper.setStyledTextView(c, tv, founderTemplate);
+        } else {
+            tv.setText(c.getString(R.string.region_filler_none));
+        }
+
+        if (founded != 0) {
+            tv.append(" " + String.format(Locale.US, c.getString(R.string.region_founded_append),
+                    SparkleHelper.getReadableDateFromUTC(c, founded)));
+        }
     }
 
     public void setCards(List<Parcelable> crds) {
@@ -77,7 +111,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
 
         switch (viewType) {
             case REGION_QUICK_FACTS:
-                View quickFactsCard = inflater.inflate(R.layout.card_region_quick_facts, parent, false);
+                View quickFactsCard = inflater.inflate(R.layout.card_region_quick_facts, parent,
+                        false);
                 viewHolder = new RegionQuickFactsCard(quickFactsCard);
                 break;
             case REGION_FACTBOOK:
@@ -118,7 +153,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 break;
             case REGION_ZOMBIE:
                 ZombieChartCard zombieChartCard = (ZombieChartCard) holder;
-                zombieChartCard.init(context, (Zombie) cards.get(position), ZombieChartCard.MODE_REGION_DEFAULT, regionName);
+                zombieChartCard.init(context, (Zombie) cards.get(position),
+                        ZombieChartCard.MODE_REGION_DEFAULT, regionName);
                 break;
             case REGION_WA_BADGE:
                 WaBadgeCard bc = (WaBadgeCard) holder;
@@ -136,49 +172,16 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     public int getItemViewType(int position) {
         if (cards.get(position) instanceof RegionQuickFactsCardData) {
             return REGION_QUICK_FACTS;
-        }
-        else if (cards.get(position) instanceof RegionFactbookCardData) {
+        } else if (cards.get(position) instanceof RegionFactbookCardData) {
             return REGION_FACTBOOK;
-        }
-        else if (cards.get(position) instanceof RegionTagsCardData) {
+        } else if (cards.get(position) instanceof RegionTagsCardData) {
             return REGION_TAGS;
-        }
-        else if (cards.get(position) instanceof Zombie) {
+        } else if (cards.get(position) instanceof Zombie) {
             return REGION_ZOMBIE;
-        }
-        else if (cards.get(position) instanceof WaBadge) {
+        } else if (cards.get(position) instanceof WaBadge) {
             return REGION_WA_BADGE;
         }
         return -1;
-    }
-
-    public static void initWaDelegate(Context c, TextView tv, String delegateId, int delegateVotes, long lastUpdate) {
-        if (!"0".equals(delegateId)) {
-            String delegateProper = SparkleHelper.getNameFromId(delegateId);
-            String delegateTemplate = String.format(Locale.US, c.getString(R.string.region_delegate_votes),
-                    delegateId, SparkleHelper.getPrettifiedNumber(delegateVotes),
-                    c.getResources().getQuantityString(R.plurals.vote, delegateVotes),
-                    SparkleHelper.getReadableDateFromUTC(c, lastUpdate));
-            delegateTemplate = SparkleHelper.addExploreActivityLink(delegateTemplate, delegateId, delegateProper, ExploreActivity.EXPLORE_NATION);
-            SparkleHelper.setStyledTextView(c, tv, delegateTemplate);
-        }
-        else {
-            tv.setText(c.getString(R.string.region_filler_none));
-        }
-    }
-
-    public static void initFounder(Context c, TextView tv, String founder, long founded) {
-        if (!"0".equals(founder)) {
-            String founderTemplate = SparkleHelper.addExploreActivityLink(founder, founder, SparkleHelper.getNameFromId(founder), ExploreActivity.EXPLORE_NATION);
-            SparkleHelper.setStyledTextView(c, tv, founderTemplate);
-        }
-        else {
-            tv.setText(c.getString(R.string.region_filler_none));
-        }
-
-        if (founded != 0) {
-            tv.append(" " + String.format(Locale.US, c.getString(R.string.region_founded_append), SparkleHelper.getReadableDateFromUTC(c, founded)));
-        }
     }
 
     // Card viewholders

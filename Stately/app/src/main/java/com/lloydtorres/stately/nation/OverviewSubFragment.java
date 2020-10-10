@@ -48,15 +48,14 @@ import java.util.Locale;
  * Takes in a Nation object.
  */
 public class OverviewSubFragment extends NationSubFragment {
-    private final static String CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE = "<font color=\"#727272\"><strike>%s</strike></font><br>%s";
+    public static final String TAX_TEMPLATE = "%s%%";
+    private final static String CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE = "<font color=\"#727272" +
+            "\"><strike>%s</strike></font><br>%s";
     private static final String ANIMAL_TEMPLATE = "%s — %s.";
     private static final String CENSUS_TEMPLATE = "%s — %s";
-    public static final String TAX_TEMPLATE = "%s%%";
-
-    private LinkedHashMap<Integer, CensusScale> censusScales;
     private final HashMap<String, String> waCategoryConservative = new HashMap<String, String>();
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
-
+    private LinkedHashMap<Integer, CensusScale> censusScales;
     // Receiver for WA vote broadcasts
     private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
@@ -67,12 +66,14 @@ public class OverviewSubFragment extends NationSubFragment {
 
             // Only update if user's nation
             String openNationName = SparkleHelper.getIdFromName(mNation.name);
-            String userNationName = SparkleHelper.getIdFromName(PinkaHelper.getActiveUser(context).name);
+            String userNationName =
+                    SparkleHelper.getIdFromName(PinkaHelper.getActiveUser(context).name);
             if (!userNationName.equals(openNationName)) {
                 return;
             }
 
-            WaVoteStatus voteStatus = intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
+            WaVoteStatus voteStatus =
+                    intent.getParcelableExtra(ResolutionActivity.TARGET_VOTE_STATUS);
             mNation.waState = voteStatus.waState;
             mNation.gaVote = voteStatus.gaVote;
             mNation.scVote = voteStatus.scVote;
@@ -89,7 +90,8 @@ public class OverviewSubFragment extends NationSubFragment {
         // Register resolution vote receiver
         IntentFilter resolutionVoteFilter = new IntentFilter();
         resolutionVoteFilter.addAction(ResolutionActivity.RESOLUTION_BROADCAST);
-        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver, resolutionVoteFilter);
+        ((BroadcastableActivity) getActivity()).registerBroadcastReceiver(resolutionVoteReceiver,
+                resolutionVoteFilter);
 
         String[] govTypes = getResources().getStringArray(R.array.gov_types);
         String[] govConservative = getResources().getStringArray(R.array.gov_conservative);
@@ -117,15 +119,15 @@ public class OverviewSubFragment extends NationSubFragment {
         NationOverviewCardData nocData = new NationOverviewCardData();
 
         // Set up custom government category depending on user preferences
-        String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-", "_");
+        String waCategory = mNation.govType.toLowerCase(Locale.US).replace(" ", "_").replace("-",
+                "_");
         String customCategory = null;
         int governmentSetting = SettingsActivity.getGovernmentSetting(getContext());
         if (governmentSetting == SettingsActivity.GOV_CONSERVATIVE
                 && waCategoryConservative.containsKey(waCategory)) {
             customCategory = waCategoryConservative.get(waCategory);
 
-        }
-        else if (governmentSetting == SettingsActivity.GOV_LIBERAL
+        } else if (governmentSetting == SettingsActivity.GOV_LIBERAL
                 && waCategoryLiberal.containsKey(waCategory)) {
             customCategory = waCategoryLiberal.get(waCategory);
         }
@@ -133,8 +135,7 @@ public class OverviewSubFragment extends NationSubFragment {
         if (customCategory != null) {
             nocData.category = String.format(Locale.US, CUSTOM_GOVERNMENT_CATEGORY_TEMPLATE,
                     mNation.govType, customCategory);
-        }
-        else {
+        } else {
             nocData.category = mNation.govType;
         }
 
@@ -164,25 +165,34 @@ public class OverviewSubFragment extends NationSubFragment {
         NationGenericCardData ngcGov = new NationGenericCardData();
         ngcGov.title = getString(R.string.card_overview_gov_title);
         if (mNation.leader != null) {
-            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_leader), mNation.leader));
+            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_leader),
+                    mNation.leader));
         }
         if (mNation.capital != null) {
-            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_capital), mNation.capital));
+            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_capital),
+                    mNation.capital));
         }
         if (mNation.govtPriority != null) {
-            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_priority), mNation.govtPriority));
+            ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_priority),
+                    mNation.govtPriority));
         }
-        ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_tax), String.format(Locale.US, TAX_TEMPLATE, SparkleHelper.getPrettifiedNumber(mNation.tax))));
+        ngcGov.items.add(new DataPair(getString(R.string.card_overview_gov_tax),
+                String.format(Locale.US, TAX_TEMPLATE,
+                        SparkleHelper.getPrettifiedNumber(mNation.tax))));
         ngcGov.nationCensusTarget = mNation.name;
         ngcGov.idCensusTarget = TrendsActivity.CENSUS_TAXATION;
         cards.add(ngcGov);
 
         NationGenericCardData ngcEconomy = new NationGenericCardData();
         ngcEconomy.title = getString(R.string.card_overview_econ_title);
-        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_currency), mNation.currency));
-        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_gdp), SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency)));
-        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_income), SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
-        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_industry), mNation.industry));
+        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_currency),
+                mNation.currency));
+        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_gdp),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.gdp, mNation.currency)));
+        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_income),
+                SparkleHelper.getMoneyFormatted(getContext(), mNation.income, mNation.currency)));
+        ngcEconomy.items.add(new DataPair(getString(R.string.card_overview_econ_industry),
+                mNation.industry));
         ngcEconomy.nationCensusTarget = mNation.name;
         ngcEconomy.idCensusTarget = TrendsActivity.CENSUS_ECONOMIC_OUTPUT;
         cards.add(ngcEconomy);
@@ -192,33 +202,49 @@ public class OverviewSubFragment extends NationSubFragment {
         // Determine if the adjective is different from the noun (different flavour text)
         String demonymText;
         if (mNation.demAdjective.equals(mNation.demNoun)) {
-            demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun, mNation.demPlural);
+            demonymText = String.format(Locale.US,
+                    getString(R.string.card_overview_other_demonym_txt2), mNation.demNoun,
+                    mNation.demPlural);
+        } else {
+            demonymText = String.format(Locale.US,
+                    getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun,
+                    mNation.demPlural, mNation.demAdjective);
         }
-        else {
-            demonymText = String.format(Locale.US, getString(R.string.card_overview_other_demonym_txt1), mNation.demNoun, mNation.demPlural, mNation.demAdjective);
-        }
-        ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_demonym), demonymText));
+        ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_demonym),
+                demonymText));
         if (mNation.religion != null) {
-            ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_religion), mNation.religion));
+            ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_religion),
+                    mNation.religion));
         }
         String animalText;
         if (mNation.animalTrait != null) {
-            animalText = String.format(Locale.US, ANIMAL_TEMPLATE, mNation.animal, mNation.animalTrait);
-        }
-        else {
+            animalText = String.format(Locale.US, ANIMAL_TEMPLATE, mNation.animal,
+                    mNation.animalTrait);
+        } else {
             animalText = mNation.animal;
         }
-        ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal), animalText));
+        ngcOther.items.add(new DataPair(getString(R.string.card_overview_other_animal),
+                animalText));
         int censusRawId = mNation.wCensus.id;
-        CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales, mNation.wCensus.id);
-        String todayCensusTitle = String.format(Locale.US, getString(R.string.card_overview_other_census_title), worldCensusItem.name);
+        CensusScale worldCensusItem = SparkleHelper.getCensusScale(censusScales,
+                mNation.wCensus.id);
+        String todayCensusTitle = String.format(Locale.US,
+                getString(R.string.card_overview_other_census_title), worldCensusItem.name);
         CensusDetailedRank detailedRank = mNation.census.get(censusRawId);
-        StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US, CENSUS_TEMPLATE, SparkleHelper.getPrettifiedSuffixedNumber(getContext(), detailedRank.score), worldCensusItem.unit));
+        StringBuilder todayCensusContent = new StringBuilder(String.format(Locale.US,
+                CENSUS_TEMPLATE, SparkleHelper.getPrettifiedSuffixedNumber(getContext(),
+                        detailedRank.score), worldCensusItem.unit));
         if (detailedRank.regionRank > 0) {
-            todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_region), SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region, SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
+            todayCensusContent.append("<br>").append(String.format(Locale.US,
+                    getString(R.string.card_overview_other_census_region),
+                    SparkleHelper.getPrettifiedNumber(detailedRank.regionRank), mNation.region,
+                    SparkleHelper.getPrettifiedNumber(detailedRank.regionRankPercent)));
         }
         if (detailedRank.worldRank > 0) {
-            todayCensusContent.append("<br>").append(String.format(Locale.US, getString(R.string.card_overview_other_census_world), SparkleHelper.getPrettifiedNumber(detailedRank.worldRank), SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
+            todayCensusContent.append("<br>").append(String.format(Locale.US,
+                    getString(R.string.card_overview_other_census_world),
+                    SparkleHelper.getPrettifiedNumber(detailedRank.worldRank),
+                    SparkleHelper.getPrettifiedNumber(detailedRank.worldRankPercent)));
         }
         ngcOther.items.add(new DataPair(todayCensusTitle, todayCensusContent.toString()));
         ngcOther.nationCensusTarget = mNation.name;

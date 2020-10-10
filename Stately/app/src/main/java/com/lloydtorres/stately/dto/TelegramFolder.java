@@ -30,12 +30,27 @@ public class TelegramFolder implements Parcelable {
     public static final String TELEGRAM_FOLDER_INBOX_VAL = "inbox";
     public static final String TELEGRAM_FOLDER_SENT = "Sent Items";
     public static final String TELEGRAM_FOLDER_DELETED = "Deleted Items";
-    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\([0-9]*?\\)$");
+    public static final Pattern TELEGRAM_FOLDER_ARCHIVE = Pattern.compile("^Archive \\([0-9]*?\\)" +
+            "$");
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<TelegramFolder> CREATOR =
+            new Parcelable.Creator<TelegramFolder>() {
+        @Override
+        public TelegramFolder createFromParcel(Parcel in) {
+            return new TelegramFolder(in);
+        }
 
+        @Override
+        public TelegramFolder[] newArray(int size) {
+            return new TelegramFolder[size];
+        }
+    };
     public String name;
     public String value;
 
-    public TelegramFolder() { super(); }
+    public TelegramFolder() {
+        super();
+    }
 
     protected TelegramFolder(Parcel in) {
         name = in.readString();
@@ -52,17 +67,4 @@ public class TelegramFolder implements Parcelable {
         dest.writeString(name);
         dest.writeString(value);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<TelegramFolder> CREATOR = new Parcelable.Creator<TelegramFolder>() {
-        @Override
-        public TelegramFolder createFromParcel(Parcel in) {
-            return new TelegramFolder(in);
-        }
-
-        @Override
-        public TelegramFolder[] newArray(int size) {
-            return new TelegramFolder[size];
-        }
-    };
 }

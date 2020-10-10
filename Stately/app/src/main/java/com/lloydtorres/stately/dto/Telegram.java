@@ -29,13 +29,20 @@ import java.util.List;
  * This contains data about a telegram.
  */
 public class Telegram implements Parcelable, Comparable<Telegram> {
-    public static final String GET_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams/template-overall=none/folder=%s?start=%d";
-    public static final String SEND_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams/template-overall=none";
-    public static final String MARK_READ = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=markread/tgid=%d/chk=%s";
-    public static final String MOVE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgmove/tgid=%d/dest=%s/chk=%s";
-    public static final String DELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgdelete/tgid=%d/chk=%s";
-    public static final String PERMDELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
-    public static final String TELEGRAM_CONVERSATION = SparkleHelper.BASE_URI_NOSLASH + "/page=tg/template-overall=none/tgid=%d/conversation=1";
+    public static final String GET_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams" +
+            "/template-overall=none/folder=%s?start=%d";
+    public static final String SEND_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams" +
+            "/template-overall=none";
+    public static final String MARK_READ = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a" +
+            "=markread/tgid=%d/chk=%s";
+    public static final String MOVE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a" +
+            "=tgmove/tgid=%d/dest=%s/chk=%s";
+    public static final String DELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a" +
+            "=tgdelete/tgid=%d/chk=%s";
+    public static final String PERMDELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
+    public static final String TELEGRAM_CONVERSATION = SparkleHelper.BASE_URI_NOSLASH + "/page=tg" +
+            "/template-overall=none/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
     public static final int TELEGRAM_RECRUITMENT = 1;
@@ -46,7 +53,18 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public static final int TELEGRAM_WA = 6;
     public static final int TELEGRAM_CAMPAIGN = 7;
     public static final int TELEGRAM_API = 8;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Telegram> CREATOR = new Parcelable.Creator<Telegram>() {
+        @Override
+        public Telegram createFromParcel(Parcel in) {
+            return new Telegram(in);
+        }
 
+        @Override
+        public Telegram[] newArray(int size) {
+            return new Telegram[size];
+        }
+    };
     public int id;
     public int type;
     public long timestamp;
@@ -59,7 +77,9 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
     public String regionTarget;
     public boolean isExpanded;
 
-    public Telegram() { super(); }
+    public Telegram() {
+        super();
+    }
 
     protected Telegram(Parcel in) {
         id = in.readInt();
@@ -105,31 +125,13 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
         dest.writeByte((byte) (isExpanded ? 0x01 : 0x00));
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Telegram> CREATOR = new Parcelable.Creator<Telegram>() {
-        @Override
-        public Telegram createFromParcel(Parcel in) {
-            return new Telegram(in);
-        }
-
-        @Override
-        public Telegram[] newArray(int size) {
-            return new Telegram[size];
-        }
-    };
-
     @Override
     public int compareTo(Telegram another) {
-        if (this.timestamp > another.timestamp)
-        {
+        if (this.timestamp > another.timestamp) {
             return -1;
-        }
-        else if (this.timestamp == another.timestamp)
-        {
+        } else if (this.timestamp == another.timestamp) {
             return 0;
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }

@@ -34,8 +34,7 @@ public class JellyBeanTransform implements Transformation {
     private Context context;
     private ImageView imageView;
 
-    public JellyBeanTransform(Context c, ImageView img)
-    {
+    public JellyBeanTransform(Context c, ImageView img) {
         super();
         context = c.getApplicationContext();
         imageView = img;

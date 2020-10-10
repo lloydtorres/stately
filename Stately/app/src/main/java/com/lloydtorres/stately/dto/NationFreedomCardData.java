@@ -24,6 +24,19 @@ import android.os.Parcelable;
  * A holder for freedom score data in the nation overview tab.
  */
 public class NationFreedomCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationFreedomCardData> CREATOR =
+            new Parcelable.Creator<NationFreedomCardData>() {
+        @Override
+        public NationFreedomCardData createFromParcel(Parcel in) {
+            return new NationFreedomCardData(in);
+        }
+
+        @Override
+        public NationFreedomCardData[] newArray(int size) {
+            return new NationFreedomCardData[size];
+        }
+    };
     public String nationTarget;
     public String civDesc;
     public int civScore;
@@ -32,7 +45,9 @@ public class NationFreedomCardData implements Parcelable {
     public String poliDesc;
     public int poliScore;
 
-    public NationFreedomCardData() { super(); }
+    public NationFreedomCardData() {
+        super();
+    }
 
     protected NationFreedomCardData(Parcel in) {
         nationTarget = in.readString();
@@ -59,18 +74,5 @@ public class NationFreedomCardData implements Parcelable {
         dest.writeString(poliDesc);
         dest.writeInt(poliScore);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<NationFreedomCardData> CREATOR = new Parcelable.Creator<NationFreedomCardData>() {
-        @Override
-        public NationFreedomCardData createFromParcel(Parcel in) {
-            return new NationFreedomCardData(in);
-        }
-
-        @Override
-        public NationFreedomCardData[] newArray(int size) {
-            return new NationFreedomCardData[size];
-        }
-    };
 
 }

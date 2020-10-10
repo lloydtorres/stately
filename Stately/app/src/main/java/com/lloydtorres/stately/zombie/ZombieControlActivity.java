@@ -17,6 +17,7 @@
 package com.lloydtorres.stately.zombie;
 
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkError;
@@ -105,8 +106,10 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Queries the user's zombie data.
      */
     private void queryUserZombieData() {
-        String targetURL = String.format(Locale.US, ZombieControlData.QUERY, PinkaHelper.getActiveUser(this).nationId);
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        String targetURL = String.format(Locale.US, ZombieControlData.QUERY,
+                PinkaHelper.getActiveUser(this).nationId);
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -114,10 +117,10 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         try {
                             userData = serializer.read(ZombieControlData.class, response);
                             queryRegionZombieData();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                         isInProgress = false;
@@ -147,8 +150,10 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Queries the user's region's zombie data.
      */
     private void queryRegionZombieData() {
-        String targetURL = String.format(Locale.US, ZombieRegion.QUERY, SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(this)));
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        String targetURL = String.format(Locale.US, ZombieRegion.QUERY,
+                SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(this)));
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -156,10 +161,10 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         try {
                             regionData = serializer.read(ZombieRegion.class, response);
                             queryZSuperweaponProgress();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -186,7 +191,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Queries the user's superweapon progress.
      */
     private void queryZSuperweaponProgress() {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -268,10 +274,12 @@ public class ZombieControlActivity extends RefreshviewActivity {
      */
     private void initRecycler() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager(), userData, regionData, superweaponProgress);
+            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager()
+                    , userData, regionData, superweaponProgress);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
-            ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData, superweaponProgress);
+            ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData,
+                    superweaponProgress);
         }
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -314,7 +322,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * @param action
      */
     private void getLocalId(final String action) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -322,7 +331,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
                         Element input = d.select("input[name=localid]").first();
 
                         if (input == null) {
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                             isInProgress = false;
                             return;
@@ -339,8 +349,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -359,19 +368,23 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * @param action User action
      */
     private void postZombieDecision(final String localid, final String action) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         switch (action) {
                             case Zombie.ZACTION_MILITARY:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_military_done));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.zombie_action_military_done));
                                 break;
                             case Zombie.ZACTION_CURE:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_cure_done));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.zombie_action_cure_done));
                                 break;
                             case Zombie.ZACTION_ZOMBIE:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.zombie_action_join_done));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.zombie_action_join_done));
                                 break;
                         }
                         queryUserZombieData();
@@ -384,14 +397,13 @@ public class ZombieControlActivity extends RefreshviewActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("localid", localid);
         params.put(String.format(Locale.US, Zombie.ZACTION_PARAM_BASE, action), "1");
         stringRequest.setParams(params);

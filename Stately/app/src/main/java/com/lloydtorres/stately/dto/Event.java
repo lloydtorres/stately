@@ -27,18 +27,31 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-01-12.
  * A DTO used to hold a single happening event as returned by the NationStates API.
  */
-@Root(name="EVENT", strict=false)
+@Root(name = "EVENT", strict = false)
 public class Event implements Parcelable, Comparable<Event> {
 
-    @Attribute(required=false)
-    public long id;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
 
-    @Element(name="TIMESTAMP")
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+    @Attribute(required = false)
+    public long id;
+    @Element(name = "TIMESTAMP")
     public long timestamp;
-    @Element(name="TEXT")
+    @Element(name = "TEXT")
     public String content;
 
-    public Event() { super(); }
+    public Event() {
+        super();
+    }
 
     protected Event(Parcel in) {
         id = in.readLong();
@@ -58,28 +71,13 @@ public class Event implements Parcelable, Comparable<Event> {
         dest.writeString(content);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
     @Override
     public int compareTo(Event another) {
         if (this.timestamp > another.timestamp) {
             return -1;
-        }
-        else if (this.timestamp < another.timestamp) {
+        } else if (this.timestamp < another.timestamp) {
             return 1;
-        }
-        else {
+        } else {
             return 0;
         }
     }

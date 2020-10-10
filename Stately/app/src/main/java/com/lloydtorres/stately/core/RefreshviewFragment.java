@@ -17,14 +17,14 @@
 package com.lloydtorres.stately.core;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.helpers.RaraHelper;
@@ -44,15 +44,14 @@ public abstract class RefreshviewFragment extends Fragment {
     protected RecyclerView.Adapter mRecyclerAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_refreshview, container, false);
 
         toolbar = mView.findViewById(R.id.refreshview_toolbar);
         toolbar.setTitle(getString(R.string.menu_issues));
 
-        if (getActivity() != null && getActivity() instanceof IToolbarActivity)
-        {
+        if (getActivity() != null && getActivity() instanceof IToolbarActivity) {
             ((IToolbarActivity) getActivity()).setToolbar(toolbar);
         }
 

@@ -48,9 +48,10 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.view.View;
+
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -76,16 +77,8 @@ public final class RaraHelper {
 
     // Empty chart description
     public static final Description EMPTY_CHART_DESCRIPTION = new Description();
-
-    static {
-        EMPTY_CHART_DESCRIPTION.setText("");
-    }
-
-    // Private constructor
-    private RaraHelper() {}
-
     // An array of chart colours
-    public static final int[] chartColours = {  R.color.colorChart0,
+    public static final int[] chartColours = {R.color.colorChart0,
             R.color.colorChart1,
             R.color.colorChart2,
             R.color.colorChart3,
@@ -109,9 +102,8 @@ public final class RaraHelper {
             R.color.colorChart21,
             R.color.colorChart22
     };
-
     // An array of colours used for the freedom scale
-    public static final int[] freedomColours = {  R.color.colorFreedom0,
+    public static final int[] freedomColours = {R.color.colorFreedom0,
             R.color.colorFreedom1,
             R.color.colorFreedom2,
             R.color.colorFreedom3,
@@ -127,11 +119,52 @@ public final class RaraHelper {
             R.color.colorFreedom13,
             R.color.colorFreedom14
     };
+    public static final int[] refreshColoursVert = {R.color.colorPrimary,
+            R.color.colorPrimaryDark, R.color.colorAccent};
+    public static final int[] refreshColoursNoir = {R.color.colorPrimaryNoir,
+            R.color.colorPrimaryDarkNoir, R.color.colorAccentNoir};
 
     /**
      * THEMES
      * These are functions used for getting theme-specific colours.
      */
+    public static final int[] refreshColoursBleu = {R.color.colorPrimaryBleu,
+            R.color.colorPrimaryDarkBleu, R.color.colorAccentBleu};
+    public static final int[] refreshColoursRouge = {R.color.colorPrimaryRouge,
+            R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge};
+    public static final int[] refreshColoursViolet = {R.color.colorPrimaryViolet,
+            R.color.colorPrimaryDarkViolet, R.color.colorAccentViolet};
+    // String template used to get nation banners from NationStates
+    // @param: banner_id
+    public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images" +
+            "/banners/%s.jpg";
+    public static final int DAY_NORMAL = -1;
+    public static final int DAY_Z_DAY = -2;
+    public static final int DAY_NEW_YEAR = 11;
+    public static final int DAY_STATELY_BIRTHDAY = 130;
+    public static final int DAY_APRIL_FOOLS = 41;
+    public static final int DAY_CANADA_DAY = 701;
+    public static final int DAY_HALLOWEEN = 1031;
+    public static final int DAY_NS_BIRTHDAY = 1113;
+
+    /**
+     * CHARTS
+     * These are functions used to style various charts
+     */
+    public static final int NS_FOUNDATION_YEAR = 2002;
+
+    static {
+        EMPTY_CHART_DESCRIPTION.setText("");
+    }
+
+    /**
+     * UTILITIES
+     * These are helper functions for dealing with different styling issues.
+     */
+
+    // Private constructor
+    private RaraHelper() {
+    }
 
     /**
      * Gets the primary colour for the current theme.
@@ -227,12 +260,6 @@ public final class RaraHelper {
         return ContextCompat.getColor(c, linkColor);
     }
 
-    public static final int[] refreshColoursVert = { R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent };
-    public static final int[] refreshColoursNoir = { R.color.colorPrimaryNoir, R.color.colorPrimaryDarkNoir, R.color.colorAccentNoir };
-    public static final int[] refreshColoursBleu = { R.color.colorPrimaryBleu, R.color.colorPrimaryDarkBleu, R.color.colorAccentBleu };
-    public static final int[] refreshColoursRouge = { R.color.colorPrimaryRouge, R.color.colorPrimaryDarkRouge, R.color.colorAccentRouge };
-    public static final int[] refreshColoursViolet = { R.color.colorPrimaryViolet, R.color.colorPrimaryDarkViolet, R.color.colorAccentViolet };
-
     /**
      * Gets swipe refresh colours for the current theme.
      * @param c Context
@@ -298,11 +325,6 @@ public final class RaraHelper {
                 return R.style.AlertDialogCustom;
         }
     }
-
-    /**
-     * CHARTS
-     * These are functions used to style various charts
-     */
 
     /**
      * Formats a pie chart in a standardized way
@@ -402,24 +424,22 @@ public final class RaraHelper {
     }
 
     /**
-     * UTILITIES
-     * These are helper functions for dealing with different styling issues.
-     */
-
-    /**
-     * Returns a StaggeredGridLayoutManager that has 1 column on portrait and 2 columns on landscape.
+     * Returns a StaggeredGridLayoutManager that has 1 column on portrait and 2 columns on
+     * landscape.
      * @param c Context
      * @return See above
      */
     public static StaggeredGridLayoutManager getStaggeredLayoutManager(Context c) {
         // One column on portrait, two columns on landscape
-        int noColumns = c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        int noColumns =
+                c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
                 ? 1 : 2;
         return new StaggeredGridLayoutManager(noColumns, StaggeredGridLayoutManager.VERTICAL);
     }
 
     /**
-     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across multiple columns).
+     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across
+     * multiple columns).
      * @param itemView ViewHolder itemView
      */
     public static void setViewHolderFullSpan(View itemView) {
@@ -427,19 +447,17 @@ public final class RaraHelper {
     }
 
     /**
-     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across multiple columns).
+     * Given a ViewHolder's itemView, set it so that it takes up the full span (i.e. across
+     * multiple columns).
      * @param itemView ViewHolder itemView
      * @param isFullSpan Full span or not
      */
     public static void setViewHolderFullSpan(View itemView, boolean isFullSpan) {
-        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+        StaggeredGridLayoutManager.LayoutParams layoutParams =
+                (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
         layoutParams.setFullSpan(isFullSpan);
         itemView.setLayoutParams(layoutParams);
     }
-
-    // String template used to get nation banners from NationStates
-    // @param: banner_id
-    public static final String BANNER_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/images/banners/%s.jpg";
 
     /**
      * Return the URL of a nation banner.
@@ -449,17 +467,6 @@ public final class RaraHelper {
     public static String getBannerURL(String id) {
         return String.format(Locale.US, BANNER_TEMPLATE, id);
     }
-
-    public static final int DAY_NORMAL = -1;
-    public static final int DAY_Z_DAY = -2;
-    public static final int DAY_NEW_YEAR = 11;
-    public static final int DAY_STATELY_BIRTHDAY = 130;
-    public static final int DAY_APRIL_FOOLS = 41;
-    public static final int DAY_CANADA_DAY = 701;
-    public static final int DAY_HALLOWEEN = 1031;
-    public static final int DAY_NS_BIRTHDAY = 1113;
-
-    public static final int NS_FOUNDATION_YEAR = 2002;
 
     /**
      * Determines if the current day in the EST/EDT timezone is a special day.
@@ -478,28 +485,22 @@ public final class RaraHelper {
         if (month == Calendar.JANUARY
                 && day == 1) {
             return DAY_NEW_YEAR;
-        }
-        else if (month == Calendar.JANUARY
+        } else if (month == Calendar.JANUARY
                 && day == 30) {
             return DAY_STATELY_BIRTHDAY;
-        }
-        else if (month == Calendar.APRIL
+        } else if (month == Calendar.APRIL
                 && day == 1) {
             return DAY_APRIL_FOOLS;
-        }
-        else if (month == Calendar.JULY
+        } else if (month == Calendar.JULY
                 && day == 1) {
             return DAY_CANADA_DAY;
-        }
-        else if (month == Calendar.OCTOBER
+        } else if (month == Calendar.OCTOBER
                 && day == 31) {
             return DAY_HALLOWEEN;
-        }
-        else if (month == Calendar.NOVEMBER
+        } else if (month == Calendar.NOVEMBER
                 && day == 13) {
             return DAY_NS_BIRTHDAY;
-        }
-        else {
+        } else {
             return DAY_NORMAL;
         }
     }
@@ -512,6 +513,6 @@ public final class RaraHelper {
      */
     public static int dpToPx(Context context, int dp) {
         float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
+        return Math.round((float) dp * density);
     }
 }

@@ -17,15 +17,16 @@
 package com.lloydtorres.stately.zombie;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.TrendsActivity;
@@ -63,7 +64,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private ZSuperweaponProgress progress;
 
     public ZombieControlRecyclerAdapter(ZombieControlActivity act, FragmentManager f,
-                                        ZombieControlData zcd, ZombieRegion zr, ZSuperweaponProgress p) {
+                                        ZombieControlData zcd, ZombieRegion zr,
+                                        ZSuperweaponProgress p) {
         activity = act;
         context = activity;
         fm = f;
@@ -82,7 +84,7 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch(viewType) {
+        switch (viewType) {
             case CARD_ACTION:
                 View actionCard = inflater.inflate(R.layout.card_zombie_action, parent, false);
                 viewHolder = new ZombieActionCard(actionCard);
@@ -93,7 +95,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 viewHolder = new ZombieChartCard(chartCard);
                 break;
             case CARD_HAPPENINGS:
-                View happenCard = inflater.inflate(R.layout.card_world_breaking_news, parent, false);
+                View happenCard = inflater.inflate(R.layout.card_world_breaking_news, parent,
+                        false);
                 viewHolder = new BreakingNewsCard(happenCard);
                 break;
         }
@@ -111,14 +114,17 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             case CARD_CHART_NATION:
             case CARD_CHART_REGION:
                 ZombieChartCard chartCard = (ZombieChartCard) holder;
-                Zombie zombieData = position == CARD_CHART_NATION ? userData.zombieData : regionData.zombieData;
-                int mode = position == CARD_CHART_NATION ? ZombieChartCard.MODE_NATION_ZCONTROL : ZombieChartCard.MODE_REGION_ZCONTROL;
+                Zombie zombieData = position == CARD_CHART_NATION ? userData.zombieData :
+                        regionData.zombieData;
+                int mode = position == CARD_CHART_NATION ? ZombieChartCard.MODE_NATION_ZCONTROL :
+                        ZombieChartCard.MODE_REGION_ZCONTROL;
                 String target = position == CARD_CHART_NATION ? userData.name : regionData.name;
                 chartCard.init(context, zombieData, mode, target);
                 break;
             case CARD_HAPPENINGS:
                 BreakingNewsCard breakingNewsCard = (BreakingNewsCard) holder;
-                breakingNewsCard.init(context, context.getString(R.string.zombie_reports), userData.events);
+                breakingNewsCard.init(context, context.getString(R.string.zombie_reports),
+                        userData.events);
                 break;
         }
     }
@@ -171,7 +177,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             LayoutInflater inflater = LayoutInflater.from(context);
 
             DashHelper dashie = DashHelper.getInstance(context);
-            dashie.loadImage(NightmareHelper.getZombieBanner(data.zombieData.action), headerBackground, false);
+            dashie.loadImage(NightmareHelper.getZombieBanner(data.zombieData.action),
+                    headerBackground, false);
             dashie.loadImage(data.flagURL, flag, true);
 
             if (data.zombieData.action == null || (data.zombieData.survivors <= 0 && data.zombieData.zombies > 0
@@ -203,46 +210,66 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (progress != null) {
                 if (progress.isAnySuperweaponVisible()) {
-                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon), context.getString(R.string.zombie_superweapon_desc));
+                    inflateEntry(inflater, superweaponContent,
+                            context.getString(R.string.zombie_superweapon),
+                            context.getString(R.string.zombie_superweapon_desc));
                 }
 
                 // Check for TZES availability
                 if (progress.isTzesVisible()) {
                     StringBuilder sb = new StringBuilder();
                     if (progress.isTzesReady()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_current), progress.tzesCurrentLevel));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_current),
+                                progress.tzesCurrentLevel));
                     }
                     if (progress.isTzesNextVisible()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.tzesNextLevel, progress.tzesNextProgress));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_next),
+                                progress.tzesNextLevel, progress.tzesNextProgress));
                     }
                     sb.append(context.getString(R.string.zombie_superweapon_tze_content));
-                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_tze_title), sb.toString());
+                    inflateEntry(inflater, superweaponContent,
+                            context.getString(R.string.zombie_superweapon_tze_title),
+                            sb.toString());
                 }
 
                 // Check for cure availability
                 if (progress.isCureVisible()) {
                     StringBuilder sb = new StringBuilder();
                     if (progress.isCureReady()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_current), progress.cureCurrentLevel));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_current),
+                                progress.cureCurrentLevel));
                     }
                     if (progress.isCureNextVisible()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.cureNextLevel, progress.cureNextProgress));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_next),
+                                progress.cureNextLevel, progress.cureNextProgress));
                     }
                     sb.append(context.getString(R.string.zombie_superweapon_cure_content));
-                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_cure_title), sb.toString());
+                    inflateEntry(inflater, superweaponContent,
+                            context.getString(R.string.zombie_superweapon_cure_title),
+                            sb.toString());
                 }
 
                 // Check for horde availability
                 if (progress.isHordeVisible()) {
                     StringBuilder sb = new StringBuilder();
                     if (progress.isHordeReady()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_horde_current), progress.hordeCurrentLevel));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_horde_current),
+                                progress.hordeCurrentLevel));
                     }
                     if (progress.isHordeNextVisible()) {
-                        sb.append(String.format(Locale.US, context.getString(R.string.zombie_superweapon_next), progress.hordeNextLevel, progress.hordeNextProgress));
+                        sb.append(String.format(Locale.US,
+                                context.getString(R.string.zombie_superweapon_next),
+                                progress.hordeNextLevel, progress.hordeNextProgress));
                     }
                     sb.append(context.getString(R.string.zombie_superweapon_horde_content));
-                    inflateEntry(inflater, superweaponContent, context.getString(R.string.zombie_superweapon_horde_title), sb.toString());
+                    inflateEntry(inflater, superweaponContent,
+                            context.getString(R.string.zombie_superweapon_horde_title),
+                            sb.toString());
                 }
             }
 
@@ -283,14 +310,17 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                         trendsText.setText(context.getString(R.string.zombie_button_survivor_list));
                         break;
                 }
-                trendsButton.setOnClickListener(new TrendsOnClickListener(context, SparkleHelper.getIdFromName(regionData.name), censusTarget, TrendsActivity.TREND_REGION));
+                trendsButton.setOnClickListener(new TrendsOnClickListener(context,
+                        SparkleHelper.getIdFromName(regionData.name), censusTarget,
+                        TrendsActivity.TREND_REGION));
                 trendsButton.setVisibility(View.VISIBLE);
             } else {
                 trendsButton.setOnClickListener(null);
                 trendsButton.setVisibility(View.GONE);
             }
 
-            divider.setVisibility((isActionButtonVisible || isExploreButtonVisible) ? View.VISIBLE : View.GONE);
+            divider.setVisibility((isActionButtonVisible || isExploreButtonVisible) ?
+                    View.VISIBLE : View.GONE);
         }
 
         /**
@@ -300,7 +330,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
          * @param title
          * @param content
          */
-        private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout, String title, String content) {
+        private void inflateEntry(LayoutInflater inflater, LinearLayout targetLayout,
+                                  String title, String content) {
             View entryView = inflater.inflate(R.layout.view_cardentry, null);
             TextView titleView = entryView.findViewById(R.id.cardentry_label);
             TextView contentView = entryView.findViewById(R.id.cardentry_content);

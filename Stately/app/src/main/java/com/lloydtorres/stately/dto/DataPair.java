@@ -24,10 +24,24 @@ import android.os.Parcelable;
  * For when you'd rather use a LinkedHashMap but the model needs to be parcelable.
  */
 public class DataPair implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<DataPair> CREATOR = new Parcelable.Creator<DataPair>() {
+        @Override
+        public DataPair createFromParcel(Parcel in) {
+            return new DataPair(in);
+        }
+
+        @Override
+        public DataPair[] newArray(int size) {
+            return new DataPair[size];
+        }
+    };
     public String key;
     public String value;
 
-    public DataPair() { super(); }
+    public DataPair() {
+        super();
+    }
 
     public DataPair(String k, String v) {
         key = k;
@@ -49,18 +63,5 @@ public class DataPair implements Parcelable {
         dest.writeString(key);
         dest.writeString(value);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<DataPair> CREATOR = new Parcelable.Creator<DataPair>() {
-        @Override
-        public DataPair createFromParcel(Parcel in) {
-            return new DataPair(in);
-        }
-
-        @Override
-        public DataPair[] newArray(int size) {
-            return new DataPair[size];
-        }
-    };
 
 }

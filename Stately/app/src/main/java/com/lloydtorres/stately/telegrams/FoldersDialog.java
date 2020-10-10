@@ -42,13 +42,11 @@ public class FoldersDialog extends RecyclerDialogFragment {
     private boolean isMove;
     private int moveTelegramId;
 
-    public void setFolders(ArrayList<TelegramFolder> f)
-    {
+    public void setFolders(ArrayList<TelegramFolder> f) {
         folders = f;
     }
 
-    public void setSelected(int s)
-    {
+    public void setSelected(int s) {
         selected = s;
     }
 
@@ -80,10 +78,11 @@ public class FoldersDialog extends RecyclerDialogFragment {
         setDialogTitle(getString(!isMove ? R.string.telegrams_folders : R.string.telegrams_move));
 
         if (!isMove) {
-            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders, selected);
-        }
-        else {
-            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, moveTelegramId, this, folders, selected);
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders,
+                    selected);
+        } else {
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, moveTelegramId, this
+                    , folders, selected);
         }
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }

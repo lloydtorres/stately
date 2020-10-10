@@ -33,26 +33,50 @@ import java.util.List;
  * Created by Lloyd on 2016-01-24.
  * This object holds a list of posts from the regional message board.
  */
-@Root(name="REGION", strict=false)
+@Root(name = "REGION", strict = false)
 public class RegionMessages implements Parcelable {
 
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q=messages;offset=%d;limit=%d"
-                                            + "&v=" + SparkleHelper.API_VERSION;
-    public static final String QUERY_ID = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?region=%s&q=messages;fromid=%d;limit=%d;"
-                                            + "&v=" + SparkleHelper.API_VERSION;
-    public static final String LIKE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=%s/postid=%d";
-    public static final String RAW_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=display_region_rmb/region=%s/template-overall=none";
-    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=lodgermbpost/region=%s/template-overall=none";
-    public static final String EDIT_QUERY_CHK = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost/postid=%s/template-overall=none";
-    public static final String EDIT_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost/edit=%s/template-overall=none";
-    public static final String DELETE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbdelete/region=%s/postid=%d";
-    public static final String SUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbsuppress/region=%s/postid=%d";
-    public static final String UNSUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a=rmbunsuppress/region=%s/postid=%d";
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?region=%s&q=messages;offset=%d;limit=%d"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY_ID = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?region=%s&q=messages;fromid=%d;limit=%d;"
+            + "&v=" + SparkleHelper.API_VERSION;
+    public static final String LIKE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a=%s" +
+            "/postid=%d";
+    public static final String RAW_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=display_region_rmb/region=%s/template-overall=none";
+    public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=lodgermbpost" +
+            "/region=%s/template-overall=none";
+    public static final String EDIT_QUERY_CHK = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost" +
+            "/postid=%s/template-overall=none";
+    public static final String EDIT_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=editpost/edit" +
+            "=%s/template-overall=none";
+    public static final String DELETE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a" +
+            "=rmbdelete/region=%s/postid=%d";
+    public static final String SUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a" +
+            "=rmbsuppress/region=%s/postid=%d";
+    public static final String UNSUPPRESS_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax/a" +
+            "=rmbunsuppress/region=%s/postid=%d";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RegionMessages> CREATOR =
+            new Parcelable.Creator<RegionMessages>() {
+        @Override
+        public RegionMessages createFromParcel(Parcel in) {
+            return new RegionMessages(in);
+        }
 
-    @ElementList(name="MESSAGES", required=false)
+        @Override
+        public RegionMessages[] newArray(int size) {
+            return new RegionMessages[size];
+        }
+    };
+    @ElementList(name = "MESSAGES", required = false)
     public List<Post> posts;
 
-    public RegionMessages() { super(); }
+    public RegionMessages() {
+        super();
+    }
 
     protected RegionMessages(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -61,6 +85,19 @@ public class RegionMessages implements Parcelable {
         } else {
             posts = null;
         }
+    }
+
+    public static RegionMessages parseRegionMessagesXML(Context c, Persister serializer,
+                                                        String response) throws Exception {
+        RegionMessages messageResponse = serializer.read(RegionMessages.class, response);
+        if (messageResponse.posts != null && messageResponse.posts.size() > 0) {
+            for (int i = 0; i < messageResponse.posts.size(); i++) {
+                messageResponse.posts.get(i).messageRaw = messageResponse.posts.get(i).message;
+                messageResponse.posts.get(i).message = SparkleHelper.transformBBCodeToHtml(c,
+                        messageResponse.posts.get(i).message, SparkleHelper.BBCODE_PERMISSIONS_RMB);
+            }
+        }
+        return messageResponse;
     }
 
     @Override
@@ -76,29 +113,5 @@ public class RegionMessages implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(posts);
         }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RegionMessages> CREATOR = new Parcelable.Creator<RegionMessages>() {
-        @Override
-        public RegionMessages createFromParcel(Parcel in) {
-            return new RegionMessages(in);
-        }
-
-        @Override
-        public RegionMessages[] newArray(int size) {
-            return new RegionMessages[size];
-        }
-    };
-
-    public static RegionMessages parseRegionMessagesXML(Context c, Persister serializer, String response) throws Exception {
-        RegionMessages messageResponse = serializer.read(RegionMessages.class, response);
-        if (messageResponse.posts != null && messageResponse.posts.size() > 0) {
-            for (int i=0; i < messageResponse.posts.size(); i++) {
-                messageResponse.posts.get(i).messageRaw = messageResponse.posts.get(i).message;
-                messageResponse.posts.get(i).message = SparkleHelper.transformBBCodeToHtml(c, messageResponse.posts.get(i).message, SparkleHelper.BBCODE_PERMISSIONS_RMB);
-            }
-        }
-        return messageResponse;
     }
 }

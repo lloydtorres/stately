@@ -70,8 +70,8 @@ public class DashHelper {
     private static final int RATE_LIMIT_RESET_IN_MS = 30000;
     private static final int RATE_LIMIT = 45;
     private static final DefaultRetryPolicy RETRY_POLICY = new DefaultRetryPolicy(TIMEOUT_IN_MS,
-                                                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
     private static DashHelper mDashie;
     private static Context mContext;

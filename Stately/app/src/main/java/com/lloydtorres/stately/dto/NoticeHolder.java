@@ -31,15 +31,30 @@ import java.util.List;
  * Created by Lloyd on 2016-09-18.
  * A list of notices from a nation from the Notices private API.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class NoticeHolder implements Parcelable {
-    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi?nation=%s&q=notices"
-                                        + "&v=" + SparkleHelper.API_VERSION;
+    public static final String QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
+            ".cgi?nation=%s&q=notices"
+            + "&v=" + SparkleHelper.API_VERSION;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NoticeHolder> CREATOR =
+            new Parcelable.Creator<NoticeHolder>() {
+        @Override
+        public NoticeHolder createFromParcel(Parcel in) {
+            return new NoticeHolder(in);
+        }
 
-    @ElementList(name="NOTICES")
+        @Override
+        public NoticeHolder[] newArray(int size) {
+            return new NoticeHolder[size];
+        }
+    };
+    @ElementList(name = "NOTICES")
     public List<Notice> notices;
 
-    public NoticeHolder() { super(); }
+    public NoticeHolder() {
+        super();
+    }
 
     protected NoticeHolder(Parcel in) {
         if (in.readByte() == 0x01) {
@@ -64,17 +79,4 @@ public class NoticeHolder implements Parcelable {
             dest.writeList(notices);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<NoticeHolder> CREATOR = new Parcelable.Creator<NoticeHolder>() {
-        @Override
-        public NoticeHolder createFromParcel(Parcel in) {
-            return new NoticeHolder(in);
-        }
-
-        @Override
-        public NoticeHolder[] newArray(int size) {
-            return new NoticeHolder[size];
-        }
-    };
 }

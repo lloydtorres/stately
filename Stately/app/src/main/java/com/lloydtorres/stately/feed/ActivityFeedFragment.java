@@ -19,15 +19,16 @@ package com.lloydtorres.stately.feed;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.FragmentManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -77,12 +78,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = PreferenceManager.getDefaultSharedPreferences(getContext());
-        dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
 
         toolbar.setTitle(getString(R.string.menu_activityfeed));
@@ -128,9 +131,11 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      */
     private void queryDossier() {
         String userId = PinkaHelper.getActiveUser(getContext()).nationId;
-        String targetURL = String.format(Locale.US, Dossier.QUERY, SparkleHelper.getIdFromName(userId));
+        String targetURL = String.format(Locale.US, Dossier.QUERY,
+                SparkleHelper.getIdFromName(userId));
 
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -152,8 +157,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                                     dossierRegions.add(SparkleHelper.getNameFromId(r));
                                 }
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             // Keep going even if there's an error
                             SparkleHelper.logError(e.toString());
                         }
@@ -210,11 +214,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
         }
 
         if (nationQuery.size() > 0) {
-            String target = String.format(Locale.US, HappeningFeed.QUERY_NATION, SparkleHelper.joinStringList(nationQuery,","));
+            String target = String.format(Locale.US, HappeningFeed.QUERY_NATION,
+                    SparkleHelper.joinStringList(nationQuery, ","));
 
-            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                    target,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
+
                         @Override
                         public void onResponse(String response) {
                             if (getActivity() == null || !isAdded()) {
@@ -227,10 +234,10 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                                 for (Event e : happeningResponse.happenings) {
                                     events.put(e.id, e);
                                 }
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.login_error_parsing));
                             }
                             queryRegionalHappenings();
                         }
@@ -242,15 +249,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                     }
                     SparkleHelper.logError(error.toString());
                     if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                        SparkleHelper.makeSnackbar(mView,
+                                getString(R.string.login_error_no_internet));
                         // No connection, just show results now
                         finishHappeningQuery();
-                    }
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         // if some data seems missing, continue anyway
                         queryRegionalHappenings();
-                    }
-                    else {
+                    } else {
                         SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                         queryRegionalHappenings();
                     }
@@ -262,8 +268,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                 finishHappeningQuery();
                 SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
             }
-        }
-        else {
+        } else {
             queryRegionalHappenings();
         }
     }
@@ -289,11 +294,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
         }
 
         if (regionQuery.size() > 0) {
-            String target = String.format(Locale.US, HappeningFeed.QUERY_REGION, SparkleHelper.joinStringList(regionQuery,","));
+            String target = String.format(Locale.US, HappeningFeed.QUERY_REGION,
+                    SparkleHelper.joinStringList(regionQuery, ","));
 
-            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, target,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                    target,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
+
                         @Override
                         public void onResponse(String response) {
                             if (getActivity() == null || !isAdded()) {
@@ -306,10 +314,10 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                                 for (Event e : happeningResponse.happenings) {
                                     events.put(e.id, e);
                                 }
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.login_error_parsing));
                             }
                             queryAssemblyHappenings();
                         }
@@ -321,15 +329,14 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                     }
                     SparkleHelper.logError(error.toString());
                     if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
+                        SparkleHelper.makeSnackbar(mView,
+                                getString(R.string.login_error_no_internet));
                         // No connection, just show results now
                         finishHappeningQuery();
-                    }
-                    else if (error instanceof ServerError) {
+                    } else if (error instanceof ServerError) {
                         // if some data seems missing, continue anyway
                         queryAssemblyHappenings();
-                    }
-                    else {
+                    } else {
                         SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                         queryAssemblyHappenings();
                     }
@@ -341,8 +348,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                 finishHappeningQuery();
                 SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
             }
-        }
-        else {
+        } else {
             queryAssemblyHappenings();
         }
     }
@@ -352,9 +358,11 @@ public class ActivityFeedFragment extends RefreshviewFragment {
      */
     private void queryAssemblyHappenings() {
         if (storage.getBoolean(SubscriptionsDialog.WORLD_ASSEMBLY, true)) {
-            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, HappeningFeed.QUERY_WA,
+            NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                    HappeningFeed.QUERY_WA,
                     new Response.Listener<String>() {
                         HappeningFeed happeningResponse = null;
+
                         @Override
                         public void onResponse(String response) {
                             if (getActivity() == null || !isAdded()) {
@@ -367,10 +375,10 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                                 for (Event e : happeningResponse.happenings) {
                                     events.put(e.id, e);
                                 }
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                                 SparkleHelper.logError(e.toString());
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.login_error_parsing));
                             }
                             finishHappeningQuery();
                         }
@@ -382,9 +390,9 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                     }
                     SparkleHelper.logError(error.toString());
                     if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                        SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                    }
-                    else {
+                        SparkleHelper.makeSnackbar(mView,
+                                getString(R.string.login_error_no_internet));
+                    } else {
                         SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                     }
                     finishHappeningQuery();
@@ -395,8 +403,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
                 finishHappeningQuery();
                 SparkleHelper.makeSnackbar(mView, getString(R.string.rate_limit_error));
             }
-        }
-        else {
+        } else {
             finishHappeningQuery();
         }
     }
@@ -410,8 +417,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new EventRecyclerAdapter(getContext(), eventList);
             mRecyclerView.setAdapter(mRecyclerAdapter);
-        }
-        else {
+        } else {
             ((EventRecyclerAdapter) mRecyclerAdapter).setEvents(eventList);
         }
 
@@ -461,8 +467,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
             nameListDialog.setNames(dossierNations);
             nameListDialog.setTarget(ExploreActivity.EXPLORE_NATION);
             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
-        }
-        else {
+        } else {
             dialogBuilder.setTitle(R.string.activityfeed_dossier_n)
                     .setMessage(R.string.dossier_n_none)
                     .setPositiveButton(R.string.got_it, null)
@@ -486,8 +491,7 @@ public class ActivityFeedFragment extends RefreshviewFragment {
             nameListDialog.setNames(dossierRegions);
             nameListDialog.setTarget(ExploreActivity.EXPLORE_REGION);
             nameListDialog.show(fm, NameListDialog.DIALOG_TAG);
-        }
-        else {
+        } else {
             dialogBuilder.setTitle(R.string.activityfeed_dossier_r)
                     .setMessage(R.string.dossier_r_none)
                     .setPositiveButton(R.string.got_it, null)

@@ -18,6 +18,7 @@ package com.lloydtorres.stately.wa;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -111,7 +112,7 @@ public class ResolutionActivity extends RefreshviewActivity {
             voteStatus = savedInstanceState.getParcelable(TARGET_VOTE_STATUS);
         }
 
-        isActive =  overrideResId == NO_RESOLUTION;
+        isActive = overrideResId == NO_RESOLUTION;
 
         setToolbar();
 
@@ -148,7 +149,7 @@ public class ResolutionActivity extends RefreshviewActivity {
     private void setRecyclerAdapter() {
         String voteStats = null;
         if (voteStatus != null) {
-            switch(councilId) {
+            switch (councilId) {
                 case Assembly.GENERAL_ASSEMBLY:
                     voteStats = voteStatus.gaVote;
                     break;
@@ -159,10 +160,12 @@ public class ResolutionActivity extends RefreshviewActivity {
         }
 
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats, regionVotes, councilId);
+            mRecyclerAdapter = new ResolutionRecyclerAdapter(this, mResolution, voteStats,
+                    regionVotes, councilId);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
-            ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution, voteStats, regionVotes);
+            ((ResolutionRecyclerAdapter) mRecyclerAdapter).setUpdatedResolutionData(mResolution,
+                    voteStats, regionVotes);
         }
 
         mSwipeRefreshLayout.setRefreshing(false);
@@ -197,16 +200,20 @@ public class ResolutionActivity extends RefreshviewActivity {
     private void queryResolution(int chamberId) {
         String targetURL = String.format(Locale.US, Resolution.QUERY, chamberId);
         if (overrideResId != NO_RESOLUTION) {
-            targetURL = String.format(Locale.US, Resolution.QUERY_INACTIVE, chamberId, overrideResId);
+            targetURL = String.format(Locale.US, Resolution.QUERY_INACTIVE, chamberId,
+                    overrideResId);
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Persister serializer = new Persister();
                         try {
-                            BaseAssembly waResponse = BaseAssembly.parseAssemblyXML(ResolutionActivity.this, serializer, response);
+                            BaseAssembly waResponse =
+                                    BaseAssembly.parseAssemblyXML(ResolutionActivity.this,
+                                            serializer, response);
                             mResolution = waResponse.resolution;
 
                             // Resolution doesn't exist, stop now
@@ -218,13 +225,13 @@ public class ResolutionActivity extends RefreshviewActivity {
 
                             if (isActive) {
                                 queryVoteStatus();
-                            }  else {
+                            } else {
                                 setRecyclerAdapter();
                             }
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -235,8 +242,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -255,7 +261,8 @@ public class ResolutionActivity extends RefreshviewActivity {
         UserLogin u = PinkaHelper.getActiveUser(this);
         String targetURL = String.format(Locale.US, WaVoteStatus.QUERY, u.nationId);
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -263,7 +270,8 @@ public class ResolutionActivity extends RefreshviewActivity {
                         try {
                             WaVoteStatus oldVoteStatus = voteStatus;
                             voteStatus = serializer.read(WaVoteStatus.class, response);
-                            PinkaHelper.setWaSessionData(ResolutionActivity.this, voteStatus.waState);
+                            PinkaHelper.setWaSessionData(ResolutionActivity.this,
+                                    voteStatus.waState);
 
                             // Send broadcast containing data about the user's WA votes
                             Intent resolutionVoteBroadcast = new Intent();
@@ -271,15 +279,17 @@ public class ResolutionActivity extends RefreshviewActivity {
                             resolutionVoteBroadcast.putExtra(TARGET_VOTE_STATUS, voteStatus);
                             resolutionVoteBroadcast.putExtra(TARGET_OLD_VOTE_STATUS, oldVoteStatus);
                             resolutionVoteBroadcast.putExtra(TARGET_COUNCIL_ID, councilId);
-                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_FOR, mResolution.votesFor);
-                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_AGAINST, mResolution.votesAgainst);
+                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_FOR,
+                                    mResolution.votesFor);
+                            resolutionVoteBroadcast.putExtra(TARGET_VOTES_AGAINST,
+                                    mResolution.votesAgainst);
                             LocalBroadcastManager.getInstance(ResolutionActivity.this).sendBroadcast(resolutionVoteBroadcast);
 
                             queryRegionVotes();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -290,8 +300,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -310,7 +319,8 @@ public class ResolutionActivity extends RefreshviewActivity {
         final String regionId = SparkleHelper.getIdFromName(PinkaHelper.getRegionSessionData(this));
         String targetURL = String.format(Locale.US, RegionWaVotes.QUERY, regionId);
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -320,10 +330,10 @@ public class ResolutionActivity extends RefreshviewActivity {
                             regionVotes.councilId = councilId;
                             regionVotes.regionName = SparkleHelper.getNameFromId(regionId);
                             setRecyclerAdapter();
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -334,8 +344,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -368,7 +377,7 @@ public class ResolutionActivity extends RefreshviewActivity {
      */
     public void submitVote(int choice) {
         String url;
-        switch(councilId) {
+        switch (councilId) {
             case Assembly.GENERAL_ASSEMBLY:
                 url = Assembly.TARGET_GA;
                 break;
@@ -391,7 +400,8 @@ public class ResolutionActivity extends RefreshviewActivity {
         }
         isInProgress = true;
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.GET, url,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -400,7 +410,8 @@ public class ResolutionActivity extends RefreshviewActivity {
 
                         if (input == null) {
                             mSwipeRefreshLayout.setRefreshing(false);
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             return;
                         }
 
@@ -415,8 +426,7 @@ public class ResolutionActivity extends RefreshviewActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
@@ -449,19 +459,23 @@ public class ResolutionActivity extends RefreshviewActivity {
                 break;
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(), Request.Method.POST, url,
+        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        switch(p) {
+                        switch (p) {
                             case VoteDialog.VOTE_FOR:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.wa_resolution_vote_for));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.wa_resolution_vote_for));
                                 break;
                             case VoteDialog.VOTE_AGAINST:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.wa_resolution_vote_against));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.wa_resolution_vote_against));
                                 break;
                             default:
-                                SparkleHelper.makeSnackbar(mView, getString(R.string.wa_resolution_vote_undecided));
+                                SparkleHelper.makeSnackbar(mView,
+                                        getString(R.string.wa_resolution_vote_undecided));
                                 break;
                         }
                         isInProgress = false;
@@ -475,14 +489,13 @@ public class ResolutionActivity extends RefreshviewActivity {
                 isInProgress = false;
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
                 }
             }
         });
 
-        Map<String,String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("localid", localid);
         params.put("vote", votePost);
         stringRequest.setParams(params);
@@ -495,8 +508,7 @@ public class ResolutionActivity extends RefreshviewActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save state
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(TARGET_COUNCIL_ID, councilId);
@@ -511,8 +523,7 @@ public class ResolutionActivity extends RefreshviewActivity {
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore state
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {

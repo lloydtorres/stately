@@ -18,10 +18,6 @@ package com.lloydtorres.stately.region;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +25,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Post;
@@ -65,7 +66,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean isSuppressable = false;
     private int messageMode = MessageBoardActivity.MODE_NORMAL;
 
-    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean isP, boolean isS, FragmentManager f) {
+    public MessageBoardRecyclerAdapter(Context c, List<Post> p, boolean isP, boolean isS,
+                                       FragmentManager f) {
         context = c;
         fm = f;
         isPostable = isP;
@@ -152,7 +154,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             Post p = messages.get(i);
             if (p.id == id) {
                 p.messageRaw = message;
-                p.message = SparkleHelper.transformBBCodeToHtml(context, message, SparkleHelper.BBCODE_PERMISSIONS_RMB);
+                p.message = SparkleHelper.transformBBCodeToHtml(context, message,
+                        SparkleHelper.BBCODE_PERMISSIONS_RMB);
                 p.editedTimestamp = System.currentTimeMillis() / 1000L;
                 notifyItemChanged(i);
                 break;
@@ -258,7 +261,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemViewType(int position) {
         Post targetPost = messages.get(position);
         if (targetPost.status == Post.POST_REGULAR ||
-                        (targetPost.status == Post.POST_SUPPRESSED && targetPost.isExpanded)) {
+                (targetPost.status == Post.POST_SUPPRESSED && targetPost.isExpanded)) {
             return POST_EXPANDED;
         } else {
             return POST_COLLAPSED;
@@ -291,8 +294,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     String userId = PinkaHelper.getActiveUser(context).nationId;
                     // Users can't like their own posts
                     if (!SparkleHelper.getIdFromName(post.name).equals(userId)) {
-                        boolean curLikeStatus = post.likedBy != null && post.likedBy.contains(userId);
-                        ((MessageBoardActivity) context).setLikeStatus(pos, post.id, !curLikeStatus);
+                        boolean curLikeStatus =
+                                post.likedBy != null && post.likedBy.contains(userId);
+                        ((MessageBoardActivity) context).setLikeStatus(pos, post.id,
+                                !curLikeStatus);
                     } else {
                         ((MessageBoardActivity) context).selfLikeStatus();
                     }
@@ -306,9 +311,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION && post.message != null) {
                     if (modifierIndex == pos && messageMode == MessageBoardActivity.MODE_REPLY) {
-                        ((MessageBoardActivity) context).setModifierMessage(null, MessageBoardActivity.MODE_NORMAL);
+                        ((MessageBoardActivity) context).setModifierMessage(null,
+                                MessageBoardActivity.MODE_NORMAL);
                     } else {
-                        ((MessageBoardActivity) context).setModifierMessage(post, MessageBoardActivity.MODE_REPLY, pos);
+                        ((MessageBoardActivity) context).setModifierMessage(post,
+                                MessageBoardActivity.MODE_REPLY, pos);
                         setModifierIndex(pos, MessageBoardActivity.MODE_REPLY);
                     }
                 }
@@ -321,9 +328,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION && post.message != null) {
                     if (modifierIndex == pos && messageMode == MessageBoardActivity.MODE_EDIT) {
-                        ((MessageBoardActivity) context).setModifierMessage(null, MessageBoardActivity.MODE_NORMAL);
+                        ((MessageBoardActivity) context).setModifierMessage(null,
+                                MessageBoardActivity.MODE_NORMAL);
                     } else {
-                        ((MessageBoardActivity) context).setModifierMessage(post, MessageBoardActivity.MODE_EDIT, pos);
+                        ((MessageBoardActivity) context).setModifierMessage(post,
+                                MessageBoardActivity.MODE_EDIT, pos);
                         setModifierIndex(pos, MessageBoardActivity.MODE_EDIT);
                     }
                 }
@@ -345,7 +354,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             public void onClick(View v) {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
-                    SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_RMB, post.id, post.name);
+                    SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_RMB, post.id,
+                            post.name);
                 }
             }
         };
@@ -385,7 +395,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
             if (!Post.POST_NS_MODERATORS.equals(post.name)) {
                 cardAuthor.setText(SparkleHelper.getNameFromId(post.name));
-                cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context, post.name, ExploreActivity.EXPLORE_NATION));
+                cardAuthor.setOnClickListener(SparkleHelper.getExploreOnClickListener(context,
+                        post.name, ExploreActivity.EXPLORE_NATION));
             } else {
                 cardAuthor.setText(post.name);
                 cardAuthor.setOnClickListener(null);
@@ -401,14 +412,18 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (post.status == Post.POST_SUPPRESSED && post.suppressor != null) {
                 cardSuppressedHolder.setVisibility(View.VISIBLE);
                 cardSuppressedIcon.setImageResource(R.drawable.ic_unsuppress_post);
-                String suppressedText = String.format(Locale.US, context.getString(R.string.rmb_suppressed_main), post.suppressor);
-                SparkleHelper.setHappeningsFormatting(context, cardSuppressedContent, suppressedText);
-                cardSuppressedContent.setTextColor(ContextCompat.getColor(context, R.color.colorChart1));
+                String suppressedText = String.format(Locale.US,
+                        context.getString(R.string.rmb_suppressed_main), post.suppressor);
+                SparkleHelper.setHappeningsFormatting(context, cardSuppressedContent,
+                        suppressedText);
+                cardSuppressedContent.setTextColor(ContextCompat.getColor(context,
+                        R.color.colorChart1));
             } else if (Post.POST_NS_MODERATORS.equals(post.name)) {
                 cardSuppressedHolder.setVisibility(View.VISIBLE);
                 cardSuppressedIcon.setImageResource(R.drawable.ic_alert_moderator);
                 cardSuppressedContent.setText(context.getString(R.string.rmb_moderation));
-                cardSuppressedContent.setTextColor(ContextCompat.getColor(context, R.color.colorChart0));
+                cardSuppressedContent.setTextColor(ContextCompat.getColor(context,
+                        R.color.colorChart0));
             } else {
                 cardSuppressedHolder.setVisibility(View.GONE);
             }
@@ -445,7 +460,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 reportButton.setOnClickListener(reportClickListener);
             }
 
-            // Only show reply button if postable; setup alignment of other buttons depending on case
+            // Only show reply button if postable; setup alignment of other buttons depending on
+            // case
             if (isPostable) {
                 // All posts can be replied to
                 replyButton.setVisibility(View.VISIBLE);
@@ -455,11 +471,13 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 setAlignParentRight(isSelfPost() ? deleteButton : reportButton, true);
             }
 
-            // Setup suppression button -- only visible if user has suppression rights and for non-self posts
+            // Setup suppression button -- only visible if user has suppression rights and for
+            // non-self posts
             if (isSuppressable && !isSelfPost()) {
                 suppressButton.setVisibility(View.VISIBLE);
                 suppressButton.setOnClickListener(suppressClickListener);
-                suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ? R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
+                suppressButton.setImageResource(post.status == Post.POST_SUPPRESSED ?
+                        R.drawable.ic_unsuppress_post : R.drawable.ic_suppress_post);
             }
 
             // like button and count are visible to all
@@ -476,7 +494,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 likeCount.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentManager fm = ((MessageBoardActivity) context).getSupportFragmentManager();
+                        FragmentManager fm =
+                                ((MessageBoardActivity) context).getSupportFragmentManager();
                         NameListDialog nameListDialog = new NameListDialog();
                         nameListDialog.setTitle(context.getString(R.string.rmb_likes));
                         nameListDialog.setNames(fLikes);
@@ -503,7 +522,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
          * @param shouldAlignRight
          */
         private void setAlignParentRight(ImageView target, boolean shouldAlignRight) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) target.getLayoutParams();
+            RelativeLayout.LayoutParams params =
+                    (RelativeLayout.LayoutParams) target.getLayoutParams();
             if (shouldAlignRight) {
 
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -515,9 +535,11 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void select() {
             if (SettingsActivity.getTheme(context) != SettingsActivity.THEME_NOIR) {
-                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.highlightColor));
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context,
+                        R.color.highlightColor));
             } else {
-                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAccentNoir));
+                cardContainer.setCardBackgroundColor(ContextCompat.getColor(context,
+                        R.color.colorAccentNoir));
             }
 
             editButton.setImageResource(R.drawable.ic_edit_post);
@@ -582,14 +604,17 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             view.setOnClickListener(null);
             switch (post.status) {
                 case Post.POST_SUPPRESSED:
-                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_suppressed), post.name, post.suppressor);
+                    messageContent = String.format(Locale.US,
+                            context.getString(R.string.rmb_suppressed), post.name, post.suppressor);
                     view.setOnClickListener(this);
                     break;
                 case Post.POST_DELETED:
-                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_deleted), post.name);
+                    messageContent = String.format(Locale.US,
+                            context.getString(R.string.rmb_deleted), post.name);
                     break;
                 case Post.POST_BANHAMMERED:
-                    messageContent = String.format(Locale.US, context.getString(R.string.rmb_banhammered), post.name);
+                    messageContent = String.format(Locale.US,
+                            context.getString(R.string.rmb_banhammered), post.name);
                     break;
                 case Post.POST_EMPTY:
                     messageContent = context.getString(R.string.rmb_no_content);

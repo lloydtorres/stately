@@ -19,10 +19,11 @@ package com.lloydtorres.stately.wa;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -41,22 +42,21 @@ public class VoteDialog extends DetachDialogFragment {
     private RadioGroup voteToggleState;
     private int choice;
 
-    public VoteDialog() { }
+    public VoteDialog() {
+    }
 
-    public void setChoice(int c)
-    {
+    public void setChoice(int c) {
         choice = c;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)  {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.fragment_vote_dialog, null);
 
         voteToggleState = dialogView.findViewById(R.id.vote_radio_group);
 
-        switch(choice)
-        {
+        switch (choice) {
             case VOTE_FOR:
                 voteToggleState.check(R.id.vote_radio_for);
                 break;
@@ -75,7 +75,8 @@ public class VoteDialog extends DetachDialogFragment {
             }
         };
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialogBuilder.setTitle(R.string.wa_vote_dialog_title)
                 .setView(dialogView)
                 .setPositiveButton(R.string.wa_vote_dialog_submit, dialogListener)
@@ -87,11 +88,9 @@ public class VoteDialog extends DetachDialogFragment {
     /**
      * Calls ResolutionActivity's own submitVote logic.
      */
-    private void submitVote()
-    {
+    private void submitVote() {
         int mode;
-        switch (voteToggleState.getCheckedRadioButtonId())
-        {
+        switch (voteToggleState.getCheckedRadioButtonId()) {
             case R.id.vote_radio_for:
                 mode = VOTE_FOR;
                 break;
@@ -103,8 +102,7 @@ public class VoteDialog extends DetachDialogFragment {
                 break;
         }
 
-        if (mode != choice)
-        {
+        if (mode != choice) {
             ((ResolutionActivity) getActivity()).submitVote(mode);
         }
     }

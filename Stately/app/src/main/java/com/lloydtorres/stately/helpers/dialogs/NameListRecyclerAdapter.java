@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.helpers.dialogs;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.DelegateVote;
@@ -69,7 +70,8 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         NameEntry nameEntry = (NameEntry) holder;
         if (delegateVotes != null) {
             DelegateVote dv = delegateVotes.get(position);
-            String displayFormat = String.format(Locale.US, context.getString(R.string.wa_delegate_votes_dialog_format),
+            String displayFormat = String.format(Locale.US,
+                    context.getString(R.string.wa_delegate_votes_dialog_format),
                     SparkleHelper.getNameFromId(dv.delegate),
                     SparkleHelper.getPrettifiedNumber(dv.votes),
                     context.getResources().getQuantityString(R.plurals.vote, dv.votes));

@@ -24,9 +24,24 @@ import android.os.Parcelable;
  * Convenient model to hold parcelable region factbook string for Region > Overview.
  */
 public class RegionFactbookCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RegionFactbookCardData> CREATOR =
+            new Parcelable.Creator<RegionFactbookCardData>() {
+        @Override
+        public RegionFactbookCardData createFromParcel(Parcel in) {
+            return new RegionFactbookCardData(in);
+        }
+
+        @Override
+        public RegionFactbookCardData[] newArray(int size) {
+            return new RegionFactbookCardData[size];
+        }
+    };
     public String factbook;
 
-    public RegionFactbookCardData() { super(); }
+    public RegionFactbookCardData() {
+        super();
+    }
 
     protected RegionFactbookCardData(Parcel in) {
         factbook = in.readString();
@@ -41,17 +56,4 @@ public class RegionFactbookCardData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(factbook);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<RegionFactbookCardData> CREATOR = new Parcelable.Creator<RegionFactbookCardData>() {
-        @Override
-        public RegionFactbookCardData createFromParcel(Parcel in) {
-            return new RegionFactbookCardData(in);
-        }
-
-        @Override
-        public RegionFactbookCardData[] newArray(int size) {
-            return new RegionFactbookCardData[size];
-        }
-    };
 }

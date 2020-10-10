@@ -29,18 +29,32 @@ import org.simpleframework.xml.Text;
  * Created by Lloyd on 2016-01-28.
  * An object containing text for one of the options in an issue.
  */
-@Root(name="OPTION", strict=false)
+@Root(name = "OPTION", strict = false)
 public class IssueOption implements Parcelable {
     public static final String POST_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api.cgi";
     public static final int DISMISS_ISSUE_ID = -1;
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<IssueOption> CREATOR =
+            new Parcelable.Creator<IssueOption>() {
+        @Override
+        public IssueOption createFromParcel(Parcel in) {
+            return new IssueOption(in);
+        }
 
-    @Attribute(required=false)
+        @Override
+        public IssueOption[] newArray(int size) {
+            return new IssueOption[size];
+        }
+    };
+    @Attribute(required = false)
     public int id;
     public int index;
-    @Text(required=false)
+    @Text(required = false)
     public String content;
 
-    public IssueOption() { super(); }
+    public IssueOption() {
+        super();
+    }
 
     protected IssueOption(Parcel in) {
         id = in.readInt();
@@ -59,17 +73,4 @@ public class IssueOption implements Parcelable {
         dest.writeInt(index);
         dest.writeString(content);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<IssueOption> CREATOR = new Parcelable.Creator<IssueOption>() {
-        @Override
-        public IssueOption createFromParcel(Parcel in) {
-            return new IssueOption(in);
-        }
-
-        @Override
-        public IssueOption[] newArray(int size) {
-            return new IssueOption[size];
-        }
-    };
 }

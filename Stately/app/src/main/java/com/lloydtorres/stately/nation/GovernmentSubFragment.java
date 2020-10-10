@@ -46,8 +46,11 @@ public class GovernmentSubFragment extends NationSubFragment {
         cards.add(ngcSummary);
 
         NationChartCardData nccExpenditures = new NationChartCardData();
-        long budgetHolder = (long) (mNation.gdp * (mNation.sectors.government/100d));
-        String budgetText = String.format(Locale.US, getString(R.string.card_government_expenditures_budget_flavour), SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency), mNation.sectors.government);
+        long budgetHolder = (long) (mNation.gdp * (mNation.sectors.government / 100d));
+        String budgetText = String.format(Locale.US,
+                getString(R.string.card_government_expenditures_budget_flavour),
+                SparkleHelper.getMoneyFormatted(getContext(), budgetHolder, mNation.currency),
+                mNation.sectors.government);
         nccExpenditures.details.add(new DataPair(getString(R.string.card_government_expenditures_budget), budgetText));
         nccExpenditures.mode = NationChartCardData.MODE_GOV;
         nccExpenditures.govBudget = mNation.govBudget;

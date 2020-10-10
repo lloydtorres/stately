@@ -17,10 +17,11 @@
 package com.lloydtorres.stately.helpers.links;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Spoiler;
@@ -39,8 +40,7 @@ public class SpoilerSpan extends ClickableSpan {
     private FragmentManager fm;
     private Spoiler spoiler;
 
-    public SpoilerSpan(Context c, Spoiler s, FragmentManager f)
-    {
+    public SpoilerSpan(Context c, Spoiler s, FragmentManager f) {
         context = c;
         spoiler = s;
         fm = f;
@@ -49,7 +49,9 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void onClick(View widget) {
         HtmlDialog htmlDialog = new HtmlDialog();
-        htmlDialog.setTitle(spoiler.title != null ? String.format(Locale.US, context.getString(R.string.spoiler_warn_title), spoiler.title) : context.getString(R.string.spoiler_warn));
+        htmlDialog.setTitle(spoiler.title != null ? String.format(Locale.US,
+                context.getString(R.string.spoiler_warn_title), spoiler.title) :
+                context.getString(R.string.spoiler_warn));
         htmlDialog.setRawContent(spoiler.content);
         htmlDialog.setFragmentManager(fm);
         htmlDialog.show(fm, HtmlDialog.DIALOG_TAG);

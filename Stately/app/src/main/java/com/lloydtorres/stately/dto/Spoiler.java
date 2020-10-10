@@ -26,5 +26,7 @@ public class Spoiler {
     public String replacer;
     public String raw;
 
-    public Spoiler() { super(); }
+    public Spoiler() {
+        super();
+    }
 }

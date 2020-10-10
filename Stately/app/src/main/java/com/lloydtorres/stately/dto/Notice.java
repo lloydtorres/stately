@@ -26,7 +26,7 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-09-18.
  * Model for a single notice from the Notices private API.
  */
-@Root(name="NOTICE", strict=false)
+@Root(name = "NOTICE", strict = false)
 public class Notice implements Parcelable {
     public static final int NOTICE_UNREAD = 1;
     public static final String ISSUE = "I";
@@ -35,23 +35,36 @@ public class Notice implements Parcelable {
     public static final String RMB_QUOTE = "RMBQ";
     public static final String RMB_LIKE = "RMBL";
     public static final String ENDORSE = "END";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Notice> CREATOR = new Parcelable.Creator<Notice>() {
+        @Override
+        public Notice createFromParcel(Parcel in) {
+            return new Notice(in);
+        }
 
-    @Element(name="NEW", required=false)
+        @Override
+        public Notice[] newArray(int size) {
+            return new Notice[size];
+        }
+    };
+    @Element(name = "NEW", required = false)
     public int unread;
-    @Element(name="TIMESTAMP", required=false)
+    @Element(name = "TIMESTAMP", required = false)
     public long timestamp;
-    @Element(name="TYPE", required=false)
+    @Element(name = "TYPE", required = false)
     public String type;
-    @Element(name="TITLE", required=false)
+    @Element(name = "TITLE", required = false)
     public String title;
-    @Element(name="TEXT", required=false)
+    @Element(name = "TEXT", required = false)
     public String content;
-    @Element(name="WHO", required=false)
+    @Element(name = "WHO", required = false)
     public String subject;
-    @Element(name="URL", required=false)
+    @Element(name = "URL", required = false)
     public String link;
 
-    public Notice() { super(); }
+    public Notice() {
+        super();
+    }
 
     protected Notice(Parcel in) {
         unread = in.readInt();
@@ -78,17 +91,4 @@ public class Notice implements Parcelable {
         dest.writeString(subject);
         dest.writeString(link);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Notice> CREATOR = new Parcelable.Creator<Notice>() {
-        @Override
-        public Notice createFromParcel(Parcel in) {
-            return new Notice(in);
-        }
-
-        @Override
-        public Notice[] newArray(int size) {
-            return new Notice[size];
-        }
-    };
 }

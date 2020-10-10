@@ -19,10 +19,6 @@ package com.lloydtorres.stately.telegrams;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +27,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
@@ -71,7 +72,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private boolean isHistory;
     private FragmentManager fm;
 
-    public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName, FragmentManager fragMan) {
+    public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName,
+                            FragmentManager fragMan) {
         setTelegrams(t);
         context = tf.getContext();
         fragment = tf;
@@ -109,7 +111,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (TelegramFolder.TELEGRAM_FOLDER_SENT.equals(name)) {
             displayMode = POPUP_SENT;
         } else {
-            displayMode = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name).matches() ? POPUP_ARCHIVE : POPUP_NORMAL;
+            displayMode = TelegramFolder.TELEGRAM_FOLDER_ARCHIVE.matcher(name).matches() ?
+                    POPUP_ARCHIVE : POPUP_NORMAL;
         }
         notifyDataSetChanged();
     }
@@ -160,14 +163,14 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemViewType(int position) {
         if (telegrams.get(position).id == EMPTY_INDICATOR) {
             return EMPTY_CARD;
-        }
-        else {
-            return isHistory ? FULL_CARD : (telegrams.get(position).isExpanded ? FULL_CARD : PREVIEW_CARD);
+        } else {
+            return isHistory ? FULL_CARD : (telegrams.get(position).isExpanded ? FULL_CARD :
+                    PREVIEW_CARD);
         }
     }
 
     public int getIndexOfId(int id) {
-        for (int i=0; i<telegrams.size(); i++) {
+        for (int i = 0; i < telegrams.size(); i++) {
             if (telegrams.get(i).id == id) {
                 return i;
             }
@@ -180,7 +183,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * @param id
      */
     public void invalidateTelegram(int id) {
-        for (int i=0; i<telegrams.size(); i++) {
+        for (int i = 0; i < telegrams.size(); i++) {
             if (telegrams.get(i).id == id) {
                 telegrams.remove(i);
                 notifyItemRemoved(i);
@@ -203,11 +206,13 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * @param icon
      * @param text
      */
-    public void setAlertState(int type, boolean isPreview, RelativeLayout holder, ImageView icon, TextView text) {
+    public void setAlertState(int type, boolean isPreview, RelativeLayout holder, ImageView icon,
+                              TextView text) {
         if (type != Telegram.TELEGRAM_GENERIC) {
             holder.setVisibility(View.VISIBLE);
 
-            int iconRes = isPreview ? R.drawable.ic_alert_recruitment : R.drawable.ic_alert_recruitment_white;
+            int iconRes = isPreview ? R.drawable.ic_alert_recruitment :
+                    R.drawable.ic_alert_recruitment_white;
             int alertColor = R.color.colorChart1;
             int alertContent = R.string.telegrams_alert_recruitment;
 
@@ -226,7 +231,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     alertContent = R.string.telegrams_alert_welcome;
                     break;
                 case Telegram.TELEGRAM_MODERATOR:
-                    iconRes = isPreview ? R.drawable.ic_alert_moderator : R.drawable.ic_alert_moderator_white;
+                    iconRes = isPreview ? R.drawable.ic_alert_moderator :
+                            R.drawable.ic_alert_moderator_white;
                     alertColor = R.color.colorChart0;
                     alertContent = R.string.telegrams_alert_mod;
                     break;
@@ -251,12 +257,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             text.setText(context.getString(alertContent));
             if (isPreview) {
                 text.setTextColor(ContextCompat.getColor(context, alertColor));
-            }
-            else {
+            } else {
                 holder.setBackgroundColor(ContextCompat.getColor(context, alertColor));
             }
-        }
-        else {
+        } else {
             holder.setVisibility(View.GONE);
         }
     }
@@ -283,7 +287,7 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private LinearLayout regionVisitButton;
         private TextView regionVisitButtonContent;
 
-        public TelegramCard( View v) {
+        public TelegramCard(View v) {
             super(v);
             sender = v.findViewById(R.id.card_telegram_from);
             recipients = v.findViewById(R.id.card_telegram_to);
@@ -315,7 +319,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         fragment.showDeleteTelegramDialog(telegram.id);
                         return true;
                     case R.id.telegrams_report:
-                        SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_TELEGRAM, telegram.id, telegram.sender.replace("@@", ""));
+                        SparkleHelper.startReport(context, ReportActivity.REPORT_TYPE_TELEGRAM,
+                                telegram.id, telegram.sender.replace("@@", ""));
                         return true;
                     case R.id.telegrams_close:
                         telegram.isExpanded = false;
@@ -346,7 +351,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onClick(View view) {
                             PopupMenu popup = new PopupMenu(context, popupMenuButton);
-                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_sent, popup.getMenu());
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_sent,
+                                    popup.getMenu());
                             popup.setOnMenuItemClickListener(TelegramCard.this);
                             popup.show();
                         }
@@ -358,7 +364,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onClick(View view) {
                             PopupMenu popup = new PopupMenu(context, popupMenuButton);
-                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_archive, popup.getMenu());
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_archive,
+                                    popup.getMenu());
                             popup.setOnMenuItemClickListener(TelegramCard.this);
                             popup.show();
                         }
@@ -370,7 +377,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onClick(View view) {
                             PopupMenu popup = new PopupMenu(context, popupMenuButton);
-                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_normal, popup.getMenu());
+                            popup.getMenuInflater().inflate(R.menu.popup_telegram_read_normal,
+                                    popup.getMenu());
                             popup.setOnMenuItemClickListener(TelegramCard.this);
                             popup.show();
                         }
@@ -379,11 +387,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
 
             if (telegram.recipients != null && telegram.recipients.size() > 0) {
-                String recipientsContent = String.format(Locale.US, context.getString(R.string.telegrams_recipients), SparkleHelper.joinStringList(telegram.recipients, ", "));
+                String recipientsContent = String.format(Locale.US,
+                        context.getString(R.string.telegrams_recipients),
+                        SparkleHelper.joinStringList(telegram.recipients, ", "));
                 SparkleHelper.setHappeningsFormatting(context, recipients, recipientsContent);
                 recipients.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 recipients.setVisibility(View.GONE);
             }
 
@@ -399,8 +408,10 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 telegramHistoryButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent telegramHistoryIntent = new Intent(context, TelegramHistoryActivity.class);
-                        telegramHistoryIntent.putExtra(TelegramHistoryActivity.ID_DATA, telegram.id);
+                        Intent telegramHistoryIntent = new Intent(context,
+                                TelegramHistoryActivity.class);
+                        telegramHistoryIntent.putExtra(TelegramHistoryActivity.ID_DATA,
+                                telegram.id);
                         context.startActivity(telegramHistoryIntent);
                     }
                 });
@@ -419,7 +430,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     String recipient = MuffinsHelper.getNationIdFromFormat(telegram.sender);
-                    SparkleHelper.startTelegramCompose(context, SparkleHelper.getNameFromId(recipient), telegram.id);
+                    SparkleHelper.startTelegramCompose(context,
+                            SparkleHelper.getNameFromId(recipient), telegram.id);
                 }
             });
 
@@ -431,8 +443,9 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     recipientsRaw.add(MuffinsHelper.getNationIdFromFormat(telegram.sender));
                     // Go through recipients if they exist
                     if (telegram.recipients != null) {
-                        for (int i=0; i<telegram.recipients.size(); i++) {
-                            String idChk = MuffinsHelper.getNationIdFromFormat(telegram.recipients.get(i));
+                        for (int i = 0; i < telegram.recipients.size(); i++) {
+                            String idChk =
+                                    MuffinsHelper.getNationIdFromFormat(telegram.recipients.get(i));
                             if (idChk != null && !idChk.equals(curNation)) {
                                 recipientsRaw.add(idChk);
                             }
@@ -452,11 +465,15 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     && telegram.regionTarget != null
                     && telegram.regionTarget.length() > 0) {
                 regionVisitButton.setVisibility(View.VISIBLE);
-                regionVisitButtonContent.setText(String.format(Locale.US, context.getString(R.string.telegrams_region_explore), telegram.regionTarget));
+                regionVisitButtonContent.setText(String.format(Locale.US,
+                        context.getString(R.string.telegrams_region_explore),
+                        telegram.regionTarget));
                 regionVisitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        SparkleHelper.startExploring(context, SparkleHelper.getIdFromName(telegram.regionTarget), ExploreActivity.EXPLORE_REGION);
+                        SparkleHelper.startExploring(context,
+                                SparkleHelper.getIdFromName(telegram.regionTarget),
+                                ExploreActivity.EXPLORE_REGION);
                     }
                 });
             } else {
@@ -493,7 +510,8 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (t.recipients != null) {
                 headerContents.addAll(t.recipients);
             }
-            SparkleHelper.setHappeningsFormatting(context, header, SparkleHelper.joinStringList(headerContents, ", "));
+            SparkleHelper.setHappeningsFormatting(context, header,
+                    SparkleHelper.joinStringList(headerContents, ", "));
             timestamp.setText(SparkleHelper.getReadableDateFromUTC(context, telegram.timestamp));
             setAlertState(telegram.type, true, alertHolder, alertIcon, alertText);
             preview.setText(SparkleHelper.getHtmlFormatting(telegram.preview).toString());

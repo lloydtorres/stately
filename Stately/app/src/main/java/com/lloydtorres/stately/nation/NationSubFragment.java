@@ -44,8 +44,7 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     protected boolean isSameRegion;
     protected ArrayList<Parcelable> cards = new ArrayList<Parcelable>();
 
-    public void setNation(Nation n)
-    {
+    public void setNation(Nation n) {
         mNation = n;
     }
 
@@ -55,7 +54,8 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Restore state
@@ -72,7 +72,8 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
         if ((cards == null || cards.size() <= 0) && mNation != null) {
             nationName = mNation.name;
             String curRegionName = PinkaHelper.getRegionSessionData(getContext());
-            isSameRegion = (SparkleHelper.getIdFromName(mNation.region).equals(SparkleHelper.getIdFromName(curRegionName)));
+            isSameRegion =
+                    (SparkleHelper.getIdFromName(mNation.region).equals(SparkleHelper.getIdFromName(curRegionName)));
             initData();
         }
 
@@ -100,9 +101,12 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
             if (getParentFragment() != null && getParentFragment().getActivity() instanceof ExploreActivity) {
-                mRecyclerAdapter = new NationCardsRecyclerAdapter(cards, getFragmentManager(), nationName, isSameRegion, (ExploreActivity) getParentFragment().getActivity());
+                mRecyclerAdapter = new NationCardsRecyclerAdapter(cards, getFragmentManager(),
+                        nationName, isSameRegion,
+                        (ExploreActivity) getParentFragment().getActivity());
             } else {
-                mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards, getFragmentManager(), nationName, isSameRegion);
+                mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards,
+                        getFragmentManager(), nationName, isSameRegion);
             }
             if (isOnlySetAdapterOnNull) {
                 mRecyclerView.setAdapter(mRecyclerAdapter);

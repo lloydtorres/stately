@@ -17,19 +17,18 @@
 package com.lloydtorres.stately.region;
 
 import android.os.Bundle;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -39,6 +38,8 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.census.CensusSortDialog;
 import com.lloydtorres.stately.census.CensusSubFragment;
@@ -96,12 +97,21 @@ public class RegionFragment extends Fragment {
     private Toolbar toolbar;
     private ProgressBar progressBar;
 
-    public void setRegionName(String n) { mRegionName = n; }
-    public void setRegion(Region r) { mRegion = r; }
-    public void setRMBUnreadCountText(String countText) { rmbUnreadCountText = countText; }
+    public void setRegionName(String n) {
+        mRegionName = n;
+    }
+
+    public void setRegion(Region r) {
+        mRegion = r;
+    }
+
+    public void setRMBUnreadCountText(String countText) {
+        rmbUnreadCountText = countText;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_region, container, false);
 
         progressBar = view.findViewById(R.id.region_progress_bar);
@@ -118,8 +128,7 @@ public class RegionFragment extends Fragment {
         if (mRegion != null) {
             mRegionName = mRegion.name;
             getAllRegionViews(view);
-        }
-        else {
+        } else {
             updateRegion(view);
         }
 
@@ -139,7 +148,8 @@ public class RegionFragment extends Fragment {
         }
 
         // Hide the title when the collapsing toolbar is expanded, only show when fully collapsed
-        final CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.collapsing_container_region);
+        final CollapsingToolbarLayout collapsingToolbarLayout =
+                view.findViewById(R.id.collapsing_container_region);
         collapsingToolbarLayout.setTitle("");
 
         AppBarLayout appBarLayout = view.findViewById(R.id.region_appbar);
@@ -165,7 +175,9 @@ public class RegionFragment extends Fragment {
         });
     }
 
-    public Toolbar getToolbar() { return toolbar; }
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 
     /**
      * Initialize the tabs layout and view pager
@@ -204,7 +216,9 @@ public class RegionFragment extends Fragment {
         }
 
         regionName.setText(mRegion.name);
-        regionPop.setText(String.format(Locale.US, SparkleHelper.CURRENCY_NOSUFFIX_TEMPLATE, SparkleHelper.getPrettifiedNumber(mRegion.numNations), getResources().getQuantityString(R.plurals.nation_prop, mRegion.numNations)));
+        regionPop.setText(String.format(Locale.US, SparkleHelper.CURRENCY_NOSUFFIX_TEMPLATE,
+                SparkleHelper.getPrettifiedNumber(mRegion.numNations),
+                getResources().getQuantityString(R.plurals.nation_prop, mRegion.numNations)));
 
         regionOverviewSubFragment = new RegionOverviewSubFragment();
         regionOverviewSubFragment.setRegion(mRegion);
@@ -241,11 +255,14 @@ public class RegionFragment extends Fragment {
     private void updateRegion(final View view) {
         progressBar.setVisibility(View.VISIBLE);
 
-        String targetURL = String.format(Locale.US, Region.QUERY, SparkleHelper.getIdFromName(mRegionName));
+        String targetURL = String.format(Locale.US, Region.QUERY,
+                SparkleHelper.getIdFromName(mRegionName));
 
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     Region regionResponse = null;
+
                     @Override
                     public void onResponse(String response) {
                         if (getActivity() == null || !isAdded()) {
@@ -254,14 +271,15 @@ public class RegionFragment extends Fragment {
 
                         Persister serializer = new Persister();
                         try {
-                            regionResponse = Region.parseRegionXML(getContext(), serializer, response);
+                            regionResponse = Region.parseRegionXML(getContext(), serializer,
+                                    response);
 
                             mRegion = regionResponse;
                             getAllRegionViews(view);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.login_error_parsing));
                         }
 
                         progressBar.setVisibility(View.GONE);
@@ -276,11 +294,9 @@ public class RegionFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
-                }
-                else if (error instanceof ServerError) {
+                } else if (error instanceof ServerError) {
                     SparkleHelper.makeSnackbar(view, getString(R.string.region_404));
-                }
-                else {
+                } else {
                     SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
                 }
             }
@@ -313,7 +329,7 @@ public class RegionFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case OVERVIEW_TAB:
                     return regionOverviewSubFragment;
                 case COMMUNITY_TAB:

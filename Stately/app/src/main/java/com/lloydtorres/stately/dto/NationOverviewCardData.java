@@ -24,6 +24,19 @@ import android.os.Parcelable;
  * A holder for data in the main nation overview card.
  */
 public class NationOverviewCardData implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<NationOverviewCardData> CREATOR =
+            new Parcelable.Creator<NationOverviewCardData>() {
+        @Override
+        public NationOverviewCardData createFromParcel(Parcel in) {
+            return new NationOverviewCardData(in);
+        }
+
+        @Override
+        public NationOverviewCardData[] newArray(int size) {
+            return new NationOverviewCardData[size];
+        }
+    };
     public String category;
     public String region;
     public String inflDesc;
@@ -32,13 +45,14 @@ public class NationOverviewCardData implements Parcelable {
     public String motto;
     public long established;
     public long lastSeen;
-
     public String waState;
     public String endorsements;
     public String gaVote;
     public String scVote;
 
-    public NationOverviewCardData() { super(); }
+    public NationOverviewCardData() {
+        super();
+    }
 
     protected NationOverviewCardData(Parcel in) {
         category = in.readString();
@@ -75,17 +89,4 @@ public class NationOverviewCardData implements Parcelable {
         dest.writeString(gaVote);
         dest.writeString(scVote);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<NationOverviewCardData> CREATOR = new Parcelable.Creator<NationOverviewCardData>() {
-        @Override
-        public NationOverviewCardData createFromParcel(Parcel in) {
-            return new NationOverviewCardData(in);
-        }
-
-        @Override
-        public NationOverviewCardData[] newArray(int size) {
-            return new NationOverviewCardData[size];
-        }
-    };
 }

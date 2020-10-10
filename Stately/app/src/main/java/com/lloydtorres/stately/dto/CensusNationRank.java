@@ -26,13 +26,26 @@ import org.simpleframework.xml.Root;
  * Created by Lloyd on 2016-09-10.
  * Model for the census rankings for a particular nation.
  */
-@Root(name="NATION", strict=false)
+@Root(name = "NATION", strict = false)
 public class CensusNationRank implements Parcelable, Comparable<CensusNationRank> {
-    @Element(name="NAME")
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<CensusNationRank> CREATOR =
+            new Parcelable.Creator<CensusNationRank>() {
+        @Override
+        public CensusNationRank createFromParcel(Parcel in) {
+            return new CensusNationRank(in);
+        }
+
+        @Override
+        public CensusNationRank[] newArray(int size) {
+            return new CensusNationRank[size];
+        }
+    };
+    @Element(name = "NAME")
     public String name;
-    @Element(name="RANK")
+    @Element(name = "RANK")
     public int rank;
-    @Element(name="SCORE")
+    @Element(name = "SCORE")
     public float score;
 
     public CensusNationRank() {
@@ -57,31 +70,13 @@ public class CensusNationRank implements Parcelable, Comparable<CensusNationRank
         dest.writeFloat(score);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<CensusNationRank> CREATOR = new Parcelable.Creator<CensusNationRank>() {
-        @Override
-        public CensusNationRank createFromParcel(Parcel in) {
-            return new CensusNationRank(in);
-        }
-
-        @Override
-        public CensusNationRank[] newArray(int size) {
-            return new CensusNationRank[size];
-        }
-    };
-
     @Override
     public int compareTo(CensusNationRank another) {
-        if (this.rank > another.rank)
-        {
+        if (this.rank > another.rank) {
             return 1;
-        }
-        else if (this.rank == another.rank)
-        {
+        } else if (this.rank == another.rank) {
             return 0;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }

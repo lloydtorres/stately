@@ -27,18 +27,31 @@ import org.simpleframework.xml.Text;
  * Created by lloyd on 2017-03-06.
  * Contains data about a nation/region's WA commendation/condemnation/liberation.
  */
-@Root(name="WABADGE", strict=false)
+@Root(name = "WABADGE", strict = false)
 public class WaBadge implements Parcelable {
     public static final String TYPE_COMMEND = "commend";
     public static final String TYPE_CONDEMN = "condemn";
     public static final String TYPE_LIBERATE = "liberate";
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<WaBadge> CREATOR = new Parcelable.Creator<WaBadge>() {
+        @Override
+        public WaBadge createFromParcel(Parcel in) {
+            return new WaBadge(in);
+        }
 
-    @Attribute(required=false)
+        @Override
+        public WaBadge[] newArray(int size) {
+            return new WaBadge[size];
+        }
+    };
+    @Attribute(required = false)
     public String type;
-    @Text(required=false)
+    @Text(required = false)
     public int scResolution;
 
-    public WaBadge() { super(); }
+    public WaBadge() {
+        super();
+    }
 
     protected WaBadge(Parcel in) {
         type = in.readString();
@@ -55,17 +68,4 @@ public class WaBadge implements Parcelable {
         dest.writeString(type);
         dest.writeInt(scResolution);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<WaBadge> CREATOR = new Parcelable.Creator<WaBadge>() {
-        @Override
-        public WaBadge createFromParcel(Parcel in) {
-            return new WaBadge(in);
-        }
-
-        @Override
-        public WaBadge[] newArray(int size) {
-            return new WaBadge[size];
-        }
-    };
 }

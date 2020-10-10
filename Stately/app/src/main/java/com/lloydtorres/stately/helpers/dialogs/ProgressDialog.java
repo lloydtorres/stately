@@ -18,12 +18,13 @@ package com.lloydtorres.stately.helpers.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatDialog;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.core.DetachDialogFragment;
@@ -42,18 +43,22 @@ public class ProgressDialog extends DetachDialogFragment {
 
     public String content;
 
-    public void setContent(String con) { content = con; }
+    public void setContent(String con) {
+        content = con;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AppCompatDialog dialog = new AppCompatDialog(getActivity(), RaraHelper.getThemeMaterialDialog(getContext()));
+        AppCompatDialog dialog = new AppCompatDialog(getActivity(),
+                RaraHelper.getThemeMaterialDialog(getContext()));
         dialog.setCanceledOnTouchOutside(false);
         dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialog_progress, container, false);
 
         // Restore saved state

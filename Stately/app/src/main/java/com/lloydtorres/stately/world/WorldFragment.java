@@ -56,7 +56,8 @@ public class WorldFragment extends RefreshviewFragment {
     private BaseRegion featuredRegion;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
 
@@ -75,8 +76,7 @@ public class WorldFragment extends RefreshviewFragment {
 
         if (worldData != null && featuredRegion != null) {
             initRecyclerAdapter();
-        }
-        else {
+        } else {
             startWorldQuery();
         }
 
@@ -84,7 +84,8 @@ public class WorldFragment extends RefreshviewFragment {
     }
 
     /**
-     * Helper function that starts the onSwipeRefresh animation and calls on the real query function.
+     * Helper function that starts the onSwipeRefresh animation and calls on the real query
+     * function.
      */
     private void startWorldQuery() {
         mSwipeRefreshLayout.post(new Runnable() {
@@ -97,10 +98,12 @@ public class WorldFragment extends RefreshviewFragment {
     }
 
     /**
-     * Queries the NS API for world data, then calls on the query for featured region data if successful.
+     * Queries the NS API for world data, then calls on the query for featured region data if
+     * successful.
      */
     private void queryWorldData() {
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, World.QUERY,
+        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
+                World.QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -113,14 +116,15 @@ public class WorldFragment extends RefreshviewFragment {
 
                             // Get rid of Z-Day data if needed
                             if (!NightmareHelper.getIsZDayActive(getContext())) {
-                                worldData.census = NightmareHelper.trimZDayCensusData(worldData.census);
+                                worldData.census =
+                                        NightmareHelper.trimZDayCensusData(worldData.census);
                             }
 
                             queryFeaturedRegionData(worldData.featuredRegion);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
                     }
@@ -135,10 +139,11 @@ public class WorldFragment extends RefreshviewFragment {
 
                         mSwipeRefreshLayout.setRefreshing(false);
                         if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                        }
-                        else {
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_no_internet));
+                        } else {
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_generic));
                         }
                     }
                 });
@@ -149,11 +154,13 @@ public class WorldFragment extends RefreshviewFragment {
     }
 
     /**
-     * Queries the NS API for featured region data. If this fails, just show the existing world data.
+     * Queries the NS API for featured region data. If this fails, just show the existing world
+     * data.
      * @param regionName
      */
     private void queryFeaturedRegionData(String regionName) {
-        final String query = String.format(Locale.US, BaseRegion.QUERY, SparkleHelper.getIdFromName(regionName));
+        final String query = String.format(Locale.US, BaseRegion.QUERY,
+                SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET, query,
                 new Response.Listener<String>() {
                     @Override
@@ -163,11 +170,12 @@ public class WorldFragment extends RefreshviewFragment {
                         }
                         Persister serializer = new Persister();
                         try {
-                            featuredRegion = BaseRegion.parseRegionXML(getContext(), serializer, response);
-                        }
-                        catch (Exception e) {
+                            featuredRegion = BaseRegion.parseRegionXML(getContext(), serializer,
+                                    response);
+                        } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_parsing));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_parsing));
                         }
                         // If this fails, just process the data we already have.
                         initRecyclerAdapter();
@@ -182,10 +190,11 @@ public class WorldFragment extends RefreshviewFragment {
                         }
 
                         if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_no_internet));
-                        }
-                        else {
-                            SparkleHelper.makeSnackbar(mView, getString(R.string.login_error_generic));
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_no_internet));
+                        } else {
+                            SparkleHelper.makeSnackbar(mView,
+                                    getString(R.string.login_error_generic));
                         }
                         // If this fails, just process the data we already have.
                         initRecyclerAdapter();
@@ -203,12 +212,13 @@ public class WorldFragment extends RefreshviewFragment {
      */
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getFragmentManager(), worldData, featuredRegion);
+            mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getFragmentManager(),
+                    worldData, featuredRegion);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((WorldRecyclerAdapter) mRecyclerAdapter).setContent(worldData, featuredRegion);
         }
-        
+
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

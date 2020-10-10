@@ -18,13 +18,14 @@ package com.lloydtorres.stately.zombie;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -93,7 +94,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         missileProgressBar = itemView.findViewById(R.id.card_zombie_chart_missile_progressbar);
     }
 
-    public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode, final String target) {
+    public void initExplore(ExploreActivity act, final Zombie zombieData, final int mode,
+                            final String target) {
         exploreActivity = act;
         init(act, zombieData, mode, target);
 
@@ -120,7 +122,8 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
         missileProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
     }
 
-    public void init(final Context c, final Zombie zombieData, final int mode, final String target) {
+    public void init(final Context c, final Zombie zombieData, final int mode,
+                     final String target) {
         context = c;
 
         // Set title
@@ -190,19 +193,20 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
 
             // Set data
             if (zombieData.survivors > 0) {
-                float popSurvivors = (zombieData.survivors * 100f)/popTotal;
-                chartEntries.add(new PieEntry(popSurvivors, c.getString(R.string.zombie_survivors)));
+                float popSurvivors = (zombieData.survivors * 100f) / popTotal;
+                chartEntries.add(new PieEntry(popSurvivors,
+                        c.getString(R.string.zombie_survivors)));
                 chartColours.add(ContextCompat.getColor(context, R.color.colorChart3));
             }
 
             if (zombieData.zombies > 0) {
-                float popZombies = (zombieData.zombies * 100f)/popTotal;
+                float popZombies = (zombieData.zombies * 100f) / popTotal;
                 chartEntries.add(new PieEntry(popZombies, c.getString(R.string.zombie_infected)));
                 chartColours.add(ContextCompat.getColor(context, R.color.colorChart1));
             }
 
             if (zombieData.dead > 0) {
-                float popDead = (zombieData.dead * 100f)/popTotal;
+                float popDead = (zombieData.dead * 100f) / popTotal;
                 chartEntries.add(new PieEntry(popDead, c.getString(R.string.zombie_dead)));
                 chartColours.add(ContextCompat.getColor(context, R.color.colorChart20));
             }

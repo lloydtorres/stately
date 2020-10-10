@@ -17,11 +17,12 @@
 package com.lloydtorres.stately.feed;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Event;
@@ -53,7 +54,8 @@ public class BreakingNewsCard extends RecyclerView.ViewHolder {
         int index = 0;
         for (Event e : newsItems) {
             View newsItemView = inflater.inflate(R.layout.view_world_breaking_news_entry, null);
-            HtmlTextView newsContent = newsItemView.findViewById(R.id.card_world_breaking_news_content);
+            HtmlTextView newsContent =
+                    newsItemView.findViewById(R.id.card_world_breaking_news_content);
             SparkleHelper.setHappeningsFormatting(context, newsContent, e.content);
 
             if (++index >= newsItems.size()) {
