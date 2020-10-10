@@ -105,7 +105,7 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new RegionOverviewRecyclerAdapter(getContext(), regionName,
-                    getFragmentManager(), cards);
+                    getParentFragmentManager(), cards);
         } else {
             ((RegionOverviewRecyclerAdapter) mRecyclerAdapter).setCards(cards);
         }

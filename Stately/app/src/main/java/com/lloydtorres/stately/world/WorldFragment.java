@@ -212,7 +212,7 @@ public class WorldFragment extends RefreshviewFragment {
      */
     private void initRecyclerAdapter() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getFragmentManager(),
+            mRecyclerAdapter = new WorldRecyclerAdapter(getContext(), getParentFragmentManager(),
                     worldData, featuredRegion);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
@@ -234,7 +234,7 @@ public class WorldFragment extends RefreshviewFragment {
             case R.id.nav_explore:
                 if (getActivity() != null && isAdded()) {
                     ExploreDialog exploreDialog = new ExploreDialog();
-                    exploreDialog.show(getFragmentManager(), ExploreDialog.DIALOG_TAG);
+                    exploreDialog.show(getParentFragmentManager(), ExploreDialog.DIALOG_TAG);
                 }
                 return true;
         }

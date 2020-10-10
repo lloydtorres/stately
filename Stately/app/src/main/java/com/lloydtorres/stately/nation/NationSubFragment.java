@@ -101,12 +101,12 @@ public abstract class NationSubFragment extends RecyclerSubFragment {
     private void initRecyclerAdapter(boolean isOnlySetAdapterOnNull) {
         if (mRecyclerAdapter == null) {
             if (getParentFragment() != null && getParentFragment().getActivity() instanceof ExploreActivity) {
-                mRecyclerAdapter = new NationCardsRecyclerAdapter(cards, getFragmentManager(),
+                mRecyclerAdapter = new NationCardsRecyclerAdapter(cards, getParentFragmentManager(),
                         nationName, isSameRegion,
                         (ExploreActivity) getParentFragment().getActivity());
             } else {
                 mRecyclerAdapter = new NationCardsRecyclerAdapter(getContext(), cards,
-                        getFragmentManager(), nationName, isSameRegion);
+                        getParentFragmentManager(), nationName, isSameRegion);
             }
             if (isOnlySetAdapterOnNull) {
                 mRecyclerView.setAdapter(mRecyclerAdapter);

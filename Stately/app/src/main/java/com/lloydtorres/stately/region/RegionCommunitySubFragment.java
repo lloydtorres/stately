@@ -299,7 +299,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
         PollVoteDialog voteDialog = new PollVoteDialog();
         voteDialog.setData(this, pollData, pollCard);
-        voteDialog.show(getFragmentManager(), PollVoteDialog.DIALOG_TAG);
+        voteDialog.show(getParentFragmentManager(), PollVoteDialog.DIALOG_TAG);
     }
 
     /**

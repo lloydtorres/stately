@@ -348,7 +348,7 @@ public class TelegramsFragment extends Fragment {
         Collections.sort(telegrams);
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = new TelegramsAdapter(telegrams, this,
-                    folders.get(selectedFolder).name, getFragmentManager());
+                    folders.get(selectedFolder).name, getParentFragmentManager());
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             oldSize = mRecyclerAdapter.getItemCount();
@@ -508,7 +508,7 @@ public class TelegramsFragment extends Fragment {
             foldersDialog.setMoveMode(true);
             foldersDialog.setMoveTelegramId(id);
             foldersDialog.setSelected(FoldersDialog.NO_SELECTION);
-            foldersDialog.show(getFragmentManager(), FoldersDialog.DIALOG_TAG);
+            foldersDialog.show(getParentFragmentManager(), FoldersDialog.DIALOG_TAG);
         }
     }
 
