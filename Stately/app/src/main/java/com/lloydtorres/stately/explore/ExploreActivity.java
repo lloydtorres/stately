@@ -626,13 +626,13 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                getLocalId(String.format(Locale.US, Nation.QUERY_HTML,
-                        SparkleHelper.getIdFromName(id)), null);
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        getLocalId(String.format(Locale.US, Nation.QUERY_HTML,
+                                SparkleHelper.getIdFromName(id)), null);
+                    }
+                };
 
         dialogBuilder
                 .setTitle(String.format(Locale.US, isEndorsed ?
@@ -727,12 +727,12 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                postDossier();
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        postDossier();
+                    }
+                };
 
         dialogBuilder
                 .setTitle(String.format(Locale.US, isInDossier ?
@@ -755,7 +755,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         }
 
         String progressMessage = String.format(Locale.US, getString(isInDossier ?
-                R.string.explore_dossier_rem_progress : R.string.explore_dossier_add_progress),
+                        R.string.explore_dossier_rem_progress :
+                        R.string.explore_dossier_add_progress),
                 name);
         final ProgressDialog dossierProgress = new ProgressDialog();
         dossierProgress.setContent(progressMessage);
@@ -857,17 +858,17 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         final AppCompatEditText passView = dialogView.findViewById(R.id.move_password);
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String password = null;
-                if (passView.getText().length() >= 0) {
-                    password = passView.getText().toString();
-                }
-                dialog.dismiss();
-                getLocalId(String.format(Locale.US, Region.QUERY_HTML,
-                        SparkleHelper.getIdFromName(id)), password);
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String password = null;
+                        if (passView.getText().length() >= 0) {
+                            password = passView.getText().toString();
+                        }
+                        dialog.dismiss();
+                        getLocalId(String.format(Locale.US, Region.QUERY_HTML,
+                                SparkleHelper.getIdFromName(id)), password);
+                    }
+                };
 
         if (isPassword) {
             dialogBuilder

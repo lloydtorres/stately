@@ -39,16 +39,16 @@ public class NoticeHolder implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<NoticeHolder> CREATOR =
             new Parcelable.Creator<NoticeHolder>() {
-        @Override
-        public NoticeHolder createFromParcel(Parcel in) {
-            return new NoticeHolder(in);
-        }
+                @Override
+                public NoticeHolder createFromParcel(Parcel in) {
+                    return new NoticeHolder(in);
+                }
 
-        @Override
-        public NoticeHolder[] newArray(int size) {
-            return new NoticeHolder[size];
-        }
-    };
+                @Override
+                public NoticeHolder[] newArray(int size) {
+                    return new NoticeHolder[size];
+                }
+            };
     @ElementList(name = "NOTICES")
     public List<Notice> notices;
 

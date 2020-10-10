@@ -34,16 +34,16 @@ public class CensusNationRankList implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusNationRankList> CREATOR =
             new Parcelable.Creator<CensusNationRankList>() {
-        @Override
-        public CensusNationRankList createFromParcel(Parcel in) {
-            return new CensusNationRankList(in);
-        }
+                @Override
+                public CensusNationRankList createFromParcel(Parcel in) {
+                    return new CensusNationRankList(in);
+                }
 
-        @Override
-        public CensusNationRankList[] newArray(int size) {
-            return new CensusNationRankList[size];
-        }
-    };
+                @Override
+                public CensusNationRankList[] newArray(int size) {
+                    return new CensusNationRankList[size];
+                }
+            };
     @ElementList(name = "NATIONS")
     public List<CensusNationRank> ranks;
 

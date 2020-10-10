@@ -36,16 +36,16 @@ public class Reclassification implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Reclassification> CREATOR =
             new Parcelable.Creator<Reclassification>() {
-        @Override
-        public Reclassification createFromParcel(Parcel in) {
-            return new Reclassification(in);
-        }
+                @Override
+                public Reclassification createFromParcel(Parcel in) {
+                    return new Reclassification(in);
+                }
 
-        @Override
-        public Reclassification[] newArray(int size) {
-            return new Reclassification[size];
-        }
-    };
+                @Override
+                public Reclassification[] newArray(int size) {
+                    return new Reclassification[size];
+                }
+            };
     @Attribute(name = "type", required = false)
     public String type;
     @Element(name = "FROM", required = false)

@@ -48,10 +48,9 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.view.View;
-
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -147,20 +146,11 @@ public final class RaraHelper {
     public static final int DAY_HALLOWEEN = 1031;
     public static final int DAY_NS_BIRTHDAY = 1113;
 
-    /**
-     * CHARTS
-     * These are functions used to style various charts
-     */
     public static final int NS_FOUNDATION_YEAR = 2002;
 
     static {
         EMPTY_CHART_DESCRIPTION.setText("");
     }
-
-    /**
-     * UTILITIES
-     * These are helper functions for dealing with different styling issues.
-     */
 
     // Private constructor
     private RaraHelper() {
@@ -433,7 +423,7 @@ public final class RaraHelper {
         // One column on portrait, two columns on landscape
         int noColumns =
                 c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                ? 1 : 2;
+                        ? 1 : 2;
         return new StaggeredGridLayoutManager(noColumns, StaggeredGridLayoutManager.VERTICAL);
     }
 

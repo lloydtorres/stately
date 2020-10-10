@@ -37,16 +37,16 @@ public class RegionWaVotes implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<RegionWaVotes> CREATOR =
             new Parcelable.Creator<RegionWaVotes>() {
-        @Override
-        public RegionWaVotes createFromParcel(Parcel in) {
-            return new RegionWaVotes(in);
-        }
+                @Override
+                public RegionWaVotes createFromParcel(Parcel in) {
+                    return new RegionWaVotes(in);
+                }
 
-        @Override
-        public RegionWaVotes[] newArray(int size) {
-            return new RegionWaVotes[size];
-        }
-    };
+                @Override
+                public RegionWaVotes[] newArray(int size) {
+                    return new RegionWaVotes[size];
+                }
+            };
     public int councilId;
     public String regionName;
     @Element(name = "GAVOTE", required = false)

@@ -274,8 +274,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      */
     private void initRecycler() {
         if (mRecyclerAdapter == null) {
-            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager()
-                    , userData, regionData, superweaponProgress);
+            mRecyclerAdapter = new ZombieControlRecyclerAdapter(this, getSupportFragmentManager(),
+                    userData, regionData, superweaponProgress);
             mRecyclerView.setAdapter(mRecyclerAdapter);
         } else {
             ((ZombieControlRecyclerAdapter) mRecyclerAdapter).setContent(userData, regionData,

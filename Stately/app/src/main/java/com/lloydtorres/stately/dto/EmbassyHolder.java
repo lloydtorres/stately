@@ -30,16 +30,16 @@ public class EmbassyHolder implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<EmbassyHolder> CREATOR =
             new Parcelable.Creator<EmbassyHolder>() {
-        @Override
-        public EmbassyHolder createFromParcel(Parcel in) {
-            return new EmbassyHolder(in);
-        }
+                @Override
+                public EmbassyHolder createFromParcel(Parcel in) {
+                    return new EmbassyHolder(in);
+                }
 
-        @Override
-        public EmbassyHolder[] newArray(int size) {
-            return new EmbassyHolder[size];
-        }
-    };
+                @Override
+                public EmbassyHolder[] newArray(int size) {
+                    return new EmbassyHolder[size];
+                }
+            };
     public ArrayList<String> embassies;
 
     public EmbassyHolder(ArrayList<String> emb) {

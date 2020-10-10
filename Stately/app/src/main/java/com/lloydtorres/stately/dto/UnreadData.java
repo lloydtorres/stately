@@ -32,16 +32,16 @@ public class UnreadData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<UnreadData> CREATOR =
             new Parcelable.Creator<UnreadData>() {
-        @Override
-        public UnreadData createFromParcel(Parcel in) {
-            return new UnreadData(in);
-        }
+                @Override
+                public UnreadData createFromParcel(Parcel in) {
+                    return new UnreadData(in);
+                }
 
-        @Override
-        public UnreadData[] newArray(int size) {
-            return new UnreadData[size];
-        }
-    };
+                @Override
+                public UnreadData[] newArray(int size) {
+                    return new UnreadData[size];
+                }
+            };
     @Element(name = "ISSUES", required = false)
     public int issues;
     @Element(name = "TELEGRAMS", required = false)

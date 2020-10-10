@@ -29,16 +29,16 @@ public class IssuePostcard implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<IssuePostcard> CREATOR =
             new Parcelable.Creator<IssuePostcard>() {
-        @Override
-        public IssuePostcard createFromParcel(Parcel in) {
-            return new IssuePostcard(in);
-        }
+                @Override
+                public IssuePostcard createFromParcel(Parcel in) {
+                    return new IssuePostcard(in);
+                }
 
-        @Override
-        public IssuePostcard[] newArray(int size) {
-            return new IssuePostcard[size];
-        }
-    };
+                @Override
+                public IssuePostcard[] newArray(int size) {
+                    return new IssuePostcard[size];
+                }
+            };
     public String imgUrl;
     public String rawId;
 

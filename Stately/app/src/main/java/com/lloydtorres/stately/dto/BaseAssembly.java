@@ -36,16 +36,16 @@ public class BaseAssembly implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<BaseAssembly> CREATOR =
             new Parcelable.Creator<BaseAssembly>() {
-        @Override
-        public BaseAssembly createFromParcel(Parcel in) {
-            return new BaseAssembly(in);
-        }
+                @Override
+                public BaseAssembly createFromParcel(Parcel in) {
+                    return new BaseAssembly(in);
+                }
 
-        @Override
-        public BaseAssembly[] newArray(int size) {
-            return new BaseAssembly[size];
-        }
-    };
+                @Override
+                public BaseAssembly[] newArray(int size) {
+                    return new BaseAssembly[size];
+                }
+            };
     @Element(name = "RESOLUTION")
     public Resolution resolution;
 

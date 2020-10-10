@@ -43,16 +43,16 @@ public class ZombieControlData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ZombieControlData> CREATOR =
             new Parcelable.Creator<ZombieControlData>() {
-        @Override
-        public ZombieControlData createFromParcel(Parcel in) {
-            return new ZombieControlData(in);
-        }
+                @Override
+                public ZombieControlData createFromParcel(Parcel in) {
+                    return new ZombieControlData(in);
+                }
 
-        @Override
-        public ZombieControlData[] newArray(int size) {
-            return new ZombieControlData[size];
-        }
-    };
+                @Override
+                public ZombieControlData[] newArray(int size) {
+                    return new ZombieControlData[size];
+                }
+            };
     @Element(name = "NAME")
     public String name;
     @Element(name = "FLAG")

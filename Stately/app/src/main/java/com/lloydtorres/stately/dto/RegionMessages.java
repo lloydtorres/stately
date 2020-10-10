@@ -61,16 +61,16 @@ public class RegionMessages implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<RegionMessages> CREATOR =
             new Parcelable.Creator<RegionMessages>() {
-        @Override
-        public RegionMessages createFromParcel(Parcel in) {
-            return new RegionMessages(in);
-        }
+                @Override
+                public RegionMessages createFromParcel(Parcel in) {
+                    return new RegionMessages(in);
+                }
 
-        @Override
-        public RegionMessages[] newArray(int size) {
-            return new RegionMessages[size];
-        }
-    };
+                @Override
+                public RegionMessages[] newArray(int size) {
+                    return new RegionMessages[size];
+                }
+            };
     @ElementList(name = "MESSAGES", required = false)
     public List<Post> posts;
 

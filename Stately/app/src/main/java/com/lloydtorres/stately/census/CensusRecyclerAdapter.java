@@ -57,64 +57,64 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int CARD_CENSUS = 1;
     private static final Comparator<CensusDetailedRank> SORT_SCORE =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            if (lhs.score < rhs.score) {
-                return -1;
-            } else if (lhs.score > rhs.score) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    if (lhs.score < rhs.score) {
+                        return -1;
+                    } else if (lhs.score > rhs.score) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
     private static final Comparator<CensusDetailedRank> SORT_WORLD_RANK =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            return lhs.worldRank - rhs.worldRank;
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    return lhs.worldRank - rhs.worldRank;
+                }
+            };
     private static final Comparator<CensusDetailedRank> SORT_WORLD_PERCENT =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            if (lhs.worldRankPercent < rhs.worldRankPercent) {
-                return -1;
-            } else if (lhs.worldRankPercent > rhs.worldRankPercent) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    if (lhs.worldRankPercent < rhs.worldRankPercent) {
+                        return -1;
+                    } else if (lhs.worldRankPercent > rhs.worldRankPercent) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
     private static final Comparator<CensusDetailedRank> SORT_REGION_RANK =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            return lhs.regionRank - rhs.regionRank;
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    return lhs.regionRank - rhs.regionRank;
+                }
+            };
     private static final Comparator<CensusDetailedRank> SORT_REGION_PERCENT =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            if (lhs.regionRankPercent < rhs.regionRankPercent) {
-                return -1;
-            } else if (lhs.regionRankPercent > rhs.regionRankPercent) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    if (lhs.regionRankPercent < rhs.regionRankPercent) {
+                        return -1;
+                    } else if (lhs.regionRankPercent > rhs.regionRankPercent) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            };
     private static final Comparator<CensusDetailedRank> SORT_ALPHABETICAL =
             new Comparator<CensusDetailedRank>() {
-        @Override
-        public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
-            return lhs.name.compareTo(rhs.name);
-        }
-    };
+                @Override
+                public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
+                    return lhs.name.compareTo(rhs.name);
+                }
+            };
     private LinkedHashMap<Integer, CensusScale> censusScales;
     private Context context;
     private CensusSubFragment fragment;
@@ -126,8 +126,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private int mode;
     private int TWO_DP_IN_PIXELS;
 
-    public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen, String t
-            , int m) {
+    public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen,
+                                 String t, int m) {
         context = c.getContext();
         fragment = c;
         String[] WORLD_CENSUS_ITEMS = context.getResources().getStringArray(R.array.census);
@@ -136,7 +136,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         target = t;
         mode = m;
 
-        if (!(NightmareHelper.getIsZDayActive(context) && mode == CensusSortDialog.CENSUS_MODE_REGION)) {
+        if (!(NightmareHelper.getIsZDayActive(context)
+                && mode == CensusSortDialog.CENSUS_MODE_REGION)) {
             censusScales = NightmareHelper.trimZDayCensusDatasets(censusScales);
         }
 
@@ -269,7 +270,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      * Comparators for CensusDetailedRank.
      */
 
-    private Comparator<CensusDetailedRank> sortDescending(final Comparator<CensusDetailedRank> other) {
+    private Comparator<CensusDetailedRank> sortDescending(
+            final Comparator<CensusDetailedRank> other) {
         return new Comparator<CensusDetailedRank>() {
             public int compare(CensusDetailedRank lhs, CensusDetailedRank rhs) {
                 return -1 * other.compare(lhs, rhs);
@@ -334,7 +336,8 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             censusData = data;
 
             int censusColorIndex;
-            if (sortOrder == SORT_MODE_SCORE || sortOrder == SORT_MODE_WORLD_RANK || sortOrder == SORT_MODE_WORLD_PERCENT) {
+            if (sortOrder == SORT_MODE_SCORE ||
+                    sortOrder == SORT_MODE_WORLD_RANK || sortOrder == SORT_MODE_WORLD_PERCENT) {
                 censusColorIndex = (int) (data.worldRankPercent / 7);
             } else {
                 censusColorIndex = (int) (data.regionRankPercent / 7);

@@ -186,12 +186,12 @@ public class IssueDecisionActivity extends RefreshviewActivity {
                 RaraHelper.getThemeMaterialDialog(this));
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                startPostAdoptPosition(option);
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        startPostAdoptPosition(option);
+                    }
+                };
 
         if (SettingsActivity.getConfirmIssueDecisionSetting(this)) {
             dialogBuilder

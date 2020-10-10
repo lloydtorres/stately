@@ -45,16 +45,16 @@ public class HappeningFeed implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HappeningFeed> CREATOR =
             new Parcelable.Creator<HappeningFeed>() {
-        @Override
-        public HappeningFeed createFromParcel(Parcel in) {
-            return new HappeningFeed(in);
-        }
+                @Override
+                public HappeningFeed createFromParcel(Parcel in) {
+                    return new HappeningFeed(in);
+                }
 
-        @Override
-        public HappeningFeed[] newArray(int size) {
-            return new HappeningFeed[size];
-        }
-    };
+                @Override
+                public HappeningFeed[] newArray(int size) {
+                    return new HappeningFeed[size];
+                }
+            };
     @ElementList(name = "HAPPENINGS")
     public List<Event> happenings;
 

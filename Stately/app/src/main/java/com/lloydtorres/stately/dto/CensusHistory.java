@@ -44,16 +44,16 @@ public class CensusHistory implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusHistory> CREATOR =
             new Parcelable.Creator<CensusHistory>() {
-        @Override
-        public CensusHistory createFromParcel(Parcel in) {
-            return new CensusHistory(in);
-        }
+                @Override
+                public CensusHistory createFromParcel(Parcel in) {
+                    return new CensusHistory(in);
+                }
 
-        @Override
-        public CensusHistory[] newArray(int size) {
-            return new CensusHistory[size];
-        }
-    };
+                @Override
+                public CensusHistory[] newArray(int size) {
+                    return new CensusHistory[size];
+                }
+            };
     @Element(name = "NAME", required = false)
     public String name;
     @Element(name = "CENSUS", required = false)

@@ -31,16 +31,16 @@ public class DelegateVote implements Parcelable, Comparable<DelegateVote> {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<DelegateVote> CREATOR =
             new Parcelable.Creator<DelegateVote>() {
-        @Override
-        public DelegateVote createFromParcel(Parcel in) {
-            return new DelegateVote(in);
-        }
+                @Override
+                public DelegateVote createFromParcel(Parcel in) {
+                    return new DelegateVote(in);
+                }
 
-        @Override
-        public DelegateVote[] newArray(int size) {
-            return new DelegateVote[size];
-        }
-    };
+                @Override
+                public DelegateVote[] newArray(int size) {
+                    return new DelegateVote[size];
+                }
+            };
     @Element(name = "NATION", required = false)
     public String delegate;
     @Element(name = "VOTES", required = false)

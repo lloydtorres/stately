@@ -47,16 +47,16 @@ public class Resolution implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Resolution> CREATOR =
             new Parcelable.Creator<Resolution>() {
-        @Override
-        public Resolution createFromParcel(Parcel in) {
-            return new Resolution(in);
-        }
+                @Override
+                public Resolution createFromParcel(Parcel in) {
+                    return new Resolution(in);
+                }
 
-        @Override
-        public Resolution[] newArray(int size) {
-            return new Resolution[size];
-        }
-    };
+                @Override
+                public Resolution[] newArray(int size) {
+                    return new Resolution[size];
+                }
+            };
     @Element(name = "NAME", required = false)
     public String name;
     @Element(name = "CREATED", required = false)

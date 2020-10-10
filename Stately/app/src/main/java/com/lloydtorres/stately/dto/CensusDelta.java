@@ -35,16 +35,16 @@ public class CensusDelta implements Parcelable, Comparable<CensusDelta> {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusDelta> CREATOR =
             new Parcelable.Creator<CensusDelta>() {
-        @Override
-        public CensusDelta createFromParcel(Parcel in) {
-            return new CensusDelta(in);
-        }
+                @Override
+                public CensusDelta createFromParcel(Parcel in) {
+                    return new CensusDelta(in);
+                }
 
-        @Override
-        public CensusDelta[] newArray(int size) {
-            return new CensusDelta[size];
-        }
-    };
+                @Override
+                public CensusDelta[] newArray(int size) {
+                    return new CensusDelta[size];
+                }
+            };
     @Attribute(name = "id", required = false)
     public int censusId;
     @Element(name = "PCHANGE", required = false)

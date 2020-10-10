@@ -32,16 +32,16 @@ public class CensusHistoryPoint implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusHistoryPoint> CREATOR =
             new Parcelable.Creator<CensusHistoryPoint>() {
-        @Override
-        public CensusHistoryPoint createFromParcel(Parcel in) {
-            return new CensusHistoryPoint(in);
-        }
+                @Override
+                public CensusHistoryPoint createFromParcel(Parcel in) {
+                    return new CensusHistoryPoint(in);
+                }
 
-        @Override
-        public CensusHistoryPoint[] newArray(int size) {
-            return new CensusHistoryPoint[size];
-        }
-    };
+                @Override
+                public CensusHistoryPoint[] newArray(int size) {
+                    return new CensusHistoryPoint[size];
+                }
+            };
     @Element(name = "TIMESTAMP", required = false)
     public long timestamp;
     @Element(name = "SCORE", required = false)

@@ -47,16 +47,16 @@ public class BaseRegion implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<BaseRegion> CREATOR =
             new Parcelable.Creator<BaseRegion>() {
-        @Override
-        public BaseRegion createFromParcel(Parcel in) {
-            return new BaseRegion(in);
-        }
+                @Override
+                public BaseRegion createFromParcel(Parcel in) {
+                    return new BaseRegion(in);
+                }
 
-        @Override
-        public BaseRegion[] newArray(int size) {
-            return new BaseRegion[size];
-        }
-    };
+                @Override
+                public BaseRegion[] newArray(int size) {
+                    return new BaseRegion[size];
+                }
+            };
     @Element(name = "NAME")
     public String name;
     @Element(name = "FLAG", required = false)

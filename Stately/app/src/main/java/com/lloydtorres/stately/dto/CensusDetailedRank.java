@@ -34,16 +34,16 @@ public class CensusDetailedRank implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusDetailedRank> CREATOR =
             new Parcelable.Creator<CensusDetailedRank>() {
-        @Override
-        public CensusDetailedRank createFromParcel(Parcel in) {
-            return new CensusDetailedRank(in);
-        }
+                @Override
+                public CensusDetailedRank createFromParcel(Parcel in) {
+                    return new CensusDetailedRank(in);
+                }
 
-        @Override
-        public CensusDetailedRank[] newArray(int size) {
-            return new CensusDetailedRank[size];
-        }
-    };
+                @Override
+                public CensusDetailedRank[] newArray(int size) {
+                    return new CensusDetailedRank[size];
+                }
+            };
     @Attribute
     public int id;
     @Element(name = "SCORE", required = false)

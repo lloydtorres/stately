@@ -254,8 +254,8 @@ public class TelegramsFragment extends Fragment {
         // Build telegram objects from raw telegrams
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
         if (telegramsContainer != null) {
-            scannedTelegrams = MuffinsHelper.processRawTelegrams(getContext(), telegramsContainer
-                    , PinkaHelper.getActiveUser(getContext()).nationId);
+            scannedTelegrams = MuffinsHelper.processRawTelegrams(getContext(), telegramsContainer,
+                    PinkaHelper.getActiveUser(getContext()).nationId);
         } else if (telegramsAntiquityContainer != null) {
             String selfName = null;
             // If currently in sent folder, pass in current user's name
@@ -448,12 +448,12 @@ public class TelegramsFragment extends Fragment {
                 .setTitle(getString(R.string.telegrams_archive_confirm))
                 .setPositiveButton(getString(R.string.telegrams_archive),
                         new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        archiveTelegram(id);
-                    }
-                })
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                archiveTelegram(id);
+                            }
+                        })
                 .setNegativeButton(getString(R.string.explore_negative), null)
                 .show();
     }
@@ -593,12 +593,12 @@ public class TelegramsFragment extends Fragment {
                 .setTitle(getString(R.string.telegrams_delete_confirm))
                 .setPositiveButton(getString(R.string.telegrams_delete),
                         new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        startDeleteTelegram(id);
-                    }
-                })
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                startDeleteTelegram(id);
+                            }
+                        })
                 .setNegativeButton(getString(R.string.explore_negative), null)
                 .show();
     }

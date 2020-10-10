@@ -27,16 +27,16 @@ public class CensusScale implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusScale> CREATOR =
             new Parcelable.Creator<CensusScale>() {
-        @Override
-        public CensusScale createFromParcel(Parcel in) {
-            return new CensusScale(in);
-        }
+                @Override
+                public CensusScale createFromParcel(Parcel in) {
+                    return new CensusScale(in);
+                }
 
-        @Override
-        public CensusScale[] newArray(int size) {
-            return new CensusScale[size];
-        }
-    };
+                @Override
+                public CensusScale[] newArray(int size) {
+                    return new CensusScale[size];
+                }
+            };
     public int id;
     public String name;
     public String unit;

@@ -27,16 +27,16 @@ public class RegionQuickFactsCardData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<RegionQuickFactsCardData> CREATOR =
             new Parcelable.Creator<RegionQuickFactsCardData>() {
-        @Override
-        public RegionQuickFactsCardData createFromParcel(Parcel in) {
-            return new RegionQuickFactsCardData(in);
-        }
+                @Override
+                public RegionQuickFactsCardData createFromParcel(Parcel in) {
+                    return new RegionQuickFactsCardData(in);
+                }
 
-        @Override
-        public RegionQuickFactsCardData[] newArray(int size) {
-            return new RegionQuickFactsCardData[size];
-        }
-    };
+                @Override
+                public RegionQuickFactsCardData[] newArray(int size) {
+                    return new RegionQuickFactsCardData[size];
+                }
+            };
     public String waDelegate;
     public int delegateVotes;
     public long lastUpdate;

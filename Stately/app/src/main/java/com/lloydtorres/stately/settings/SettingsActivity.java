@@ -214,8 +214,8 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         setToolbar(toolbar);
 
         if (getIntent() != null) {
-            isChangeThemeTriggered = getIntent().getBooleanExtra(INTENT_IS_CHANGE_THEME_TRIGGERED
-                    , false);
+            isChangeThemeTriggered = getIntent().getBooleanExtra(INTENT_IS_CHANGE_THEME_TRIGGERED,
+                    false);
         }
 
         if (isChangeThemeTriggered) {

@@ -27,16 +27,16 @@ public class RegionFactbookCardData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<RegionFactbookCardData> CREATOR =
             new Parcelable.Creator<RegionFactbookCardData>() {
-        @Override
-        public RegionFactbookCardData createFromParcel(Parcel in) {
-            return new RegionFactbookCardData(in);
-        }
+                @Override
+                public RegionFactbookCardData createFromParcel(Parcel in) {
+                    return new RegionFactbookCardData(in);
+                }
 
-        @Override
-        public RegionFactbookCardData[] newArray(int size) {
-            return new RegionFactbookCardData[size];
-        }
-    };
+                @Override
+                public RegionFactbookCardData[] newArray(int size) {
+                    return new RegionFactbookCardData[size];
+                }
+            };
     public String factbook;
 
     public RegionFactbookCardData() {

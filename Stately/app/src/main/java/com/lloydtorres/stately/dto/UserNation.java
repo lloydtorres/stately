@@ -39,16 +39,16 @@ public class UserNation extends Nation {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<UserNation> CREATOR =
             new Parcelable.Creator<UserNation>() {
-        @Override
-        public UserNation createFromParcel(Parcel in) {
-            return new UserNation(in);
-        }
+                @Override
+                public UserNation createFromParcel(Parcel in) {
+                    return new UserNation(in);
+                }
 
-        @Override
-        public UserNation[] newArray(int size) {
-            return new UserNation[size];
-        }
-    };
+                @Override
+                public UserNation[] newArray(int size) {
+                    return new UserNation[size];
+                }
+            };
     @Element(name = "UNREAD", required = false)
     public UnreadData unread;
 

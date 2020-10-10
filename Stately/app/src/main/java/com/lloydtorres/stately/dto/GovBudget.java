@@ -33,16 +33,16 @@ public class GovBudget implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<GovBudget> CREATOR =
             new Parcelable.Creator<GovBudget>() {
-        @Override
-        public GovBudget createFromParcel(Parcel in) {
-            return new GovBudget(in);
-        }
+                @Override
+                public GovBudget createFromParcel(Parcel in) {
+                    return new GovBudget(in);
+                }
 
-        @Override
-        public GovBudget[] newArray(int size) {
-            return new GovBudget[size];
-        }
-    };
+                @Override
+                public GovBudget[] newArray(int size) {
+                    return new GovBudget[size];
+                }
+            };
     @Element(name = "ADMINISTRATION")
     public float admin;
     @Element(name = "DEFENCE")

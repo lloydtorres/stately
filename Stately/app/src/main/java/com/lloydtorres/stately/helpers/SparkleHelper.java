@@ -117,7 +117,6 @@ import java.util.regex.Pattern;
 public final class SparkleHelper {
     // Tag used to mark system log print calls
     public static final String APP_TAG = "Stately";
-
     // Whitelisted protocols
     public static final String[] PROTOCOLS = {"http", "https",
             ExploreActivity.EXPLORE_PROTOCOL,
@@ -131,20 +130,13 @@ public final class SparkleHelper {
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
     public static final String BASE_URI_NOSLASH = "https://www." + DOMAIN_URI;
     public static final String BASE_URI_REGEX = "https:\\/\\/www\\.nationstates\\.net\\/";
-
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd MMM yyyy", Locale.US);
     public static final SimpleDateFormat SDF_MONTH_YEAR = new SimpleDateFormat("MMM yyyy",
             Locale.US);
-
     // Reference time zone for update-related calculations
     public static final TimeZone TIMEZONE_TORONTO = TimeZone.getTimeZone("America/Toronto");
     public static final String VALID_ID_BASE = "[A-Za-z0-9-_]";
-
-    /**
-     * VALIDATION
-     * These are functions used to validate inputs.
-     */
     public static final String VALID_NAME_BASE = "[A-Za-z0-9-_ ]";
     public static final Pattern VALID_NAME_PATTERN = Pattern.compile("^" + VALID_NAME_BASE + "+$");
     public static final String[] ARTICLES_THE = {"the", "le", "la", "les", "el", "lo", "los",
@@ -154,10 +146,6 @@ public final class SparkleHelper {
     public static final String[] ARTICLES_AN = {"an", "a", "un", "une", "ein", "eine", "einer",
             "eines", "einem", "einen", "uno", "una", "unos", "unas"};
 
-    /**
-     * FORMATTING
-     * These are functions used to change an input's format to something nicer.
-     */
     public static final String[] ARTICLES_TO = {"to", "au", "ad", "in", "zu", "zum"};
     public static final String[] ARTICLES_AND = {"and", "et", "e", "ac", "atque", "und", "y"};
     public static final List<String> ARTICLES_EXCEPTIONS = new ArrayList<String>() {
@@ -187,9 +175,6 @@ public final class SparkleHelper {
                     "=display_region_rmb\\?postid=(\\d+?)#p\\d+?\" rel=\"nofollow\">");
     public static final Pattern NS_INTERNAL_LINK = Pattern.compile("<a href=\"(page=.+?)\" " +
             "rel=\"nofollow\">");
-    /**
-     * Regex patterns
-     */
     public static final String NS_REGEX_URI_SCHEME = "(?:(?:http|https):\\/\\/nationstates\\" +
             ".net\\/|www\\.nationstates\\.net\\/|(?:http|https):\\/\\/www\\.nationstates\\" +
             ".net\\/|\\/|nationstates\\.net\\/|)";
@@ -220,11 +205,6 @@ public final class SparkleHelper {
                     "+?)(?:\\/|)\\]");
     public static final Pattern BBCODE_B = Pattern.compile("(?i)(?s)\\[b\\](.*?)\\[\\/b\\]");
     public static final Pattern BBCODE_I = Pattern.compile("(?i)(?s)\\[i\\](.*?)\\[\\/i\\]");
-
-    /**
-     * UTILITY
-     * These are convenient tools to call from any class.
-     */
     public static final Pattern BBCODE_U = Pattern.compile("(?i)(?s)\\[u\\](.*?)\\[\\/u\\]");
     public static final Pattern BBCODE_SUP = Pattern.compile("(?i)(?s)\\[sup\\](.*?)\\[\\/sup\\]");
     public static final Pattern BBCODE_SUB = Pattern.compile("(?i)(?s)\\[sub\\](.*?)\\[\\/sub\\]");
@@ -245,13 +225,6 @@ public final class SparkleHelper {
     public static final String HTML_RIGHT_SQUARE_BRACKET = "&#93;";
     public static final String HTML_COLON = "&#58;";
     public static final String HTML_FORWARD_SLASH = "&#47;";
-
-    /**
-     * LINK AND HTML PROCESSING
-     * These are functions used to transform raw NationStates BBCode and formatting into clickable
-     * links and formatted text. Separate from the other formatting functions due to their unique
-     * nature.
-     */
     public static final String HTML_EQUALS_SIGN = "&#61;";
     public static final String HTML_QUESTION_MARK = "&#63;";
     public static final String PRE_HTML_TEMPLATE = "<code>%s</code>";
@@ -299,6 +272,7 @@ public final class SparkleHelper {
             "[0-9]+?\\](.*?)\\[\\/quote\\]");
     public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)" +
             "\\[\\/quote\\]");
+
     // Private constructor
     private SparkleHelper() {
     }
@@ -1236,8 +1210,9 @@ public final class SparkleHelper {
         return replacePairs;
     }
 
-    public static List<DataPair> getDoubleReplacePairsFromRegex(Pattern regex, String afterFormat
-            , String content) {
+    public static List<DataPair> getDoubleReplacePairsFromRegex(Pattern regex,
+                                                                String afterFormat,
+                                                                String content) {
         String holder = content;
         // (old, new) replacement pairs
         List<DataPair> replacePairs = new ArrayList<DataPair>();
@@ -1575,8 +1550,8 @@ public final class SparkleHelper {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
                         finalLink, finalLinkUri.getHost());
             } else if (link.getScheme().equals(ExploreActivity.EXPLORE_PROTOCOL)) {
-                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal)
-                        , link.toString(), getNameFromId(link.getHost()));
+                replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal),
+                        link.toString(), getNameFromId(link.getHost()));
             } else {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
                         link.toString(), link.getHost());

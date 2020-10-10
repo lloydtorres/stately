@@ -154,8 +154,8 @@ public class IssuesFragment extends RefreshviewFragment {
                         }
                         Persister serializer = new Persister();
                         try {
-                            IssueFullHolder issueResponse = serializer.read(IssueFullHolder.class
-                                    , response);
+                            IssueFullHolder issueResponse = serializer.read(IssueFullHolder.class,
+                                    response);
                             processIssues(issueResponse);
                         } catch (Exception e) {
                             SparkleHelper.logError(e.toString());

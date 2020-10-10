@@ -33,16 +33,16 @@ public class NationChartCardData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<NationChartCardData> CREATOR =
             new Parcelable.Creator<NationChartCardData>() {
-        @Override
-        public NationChartCardData createFromParcel(Parcel in) {
-            return new NationChartCardData(in);
-        }
+                @Override
+                public NationChartCardData createFromParcel(Parcel in) {
+                    return new NationChartCardData(in);
+                }
 
-        @Override
-        public NationChartCardData[] newArray(int size) {
-            return new NationChartCardData[size];
-        }
-    };
+                @Override
+                public NationChartCardData[] newArray(int size) {
+                    return new NationChartCardData[size];
+                }
+            };
     public int mode;
     public List<DataPair> details = new ArrayList<DataPair>();
     public List<MortalityCause> mortalityList = new ArrayList<MortalityCause>();

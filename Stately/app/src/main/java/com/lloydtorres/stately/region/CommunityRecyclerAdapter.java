@@ -337,8 +337,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             voteButtonProgress.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         }
 
-        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes
-                , String voters, boolean votedOption) {
+        private void inflateOption(LinearLayout optionLayout, int index, String option, int votes,
+                                   String voters, boolean votedOption) {
             LayoutInflater inflater = LayoutInflater.from(context);
             View optionView = inflater.inflate(R.layout.view_cardentry, null);
             TextView label = optionView.findViewById(R.id.cardentry_label);

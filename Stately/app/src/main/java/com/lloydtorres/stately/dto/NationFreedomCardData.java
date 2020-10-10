@@ -27,16 +27,16 @@ public class NationFreedomCardData implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<NationFreedomCardData> CREATOR =
             new Parcelable.Creator<NationFreedomCardData>() {
-        @Override
-        public NationFreedomCardData createFromParcel(Parcel in) {
-            return new NationFreedomCardData(in);
-        }
+                @Override
+                public NationFreedomCardData createFromParcel(Parcel in) {
+                    return new NationFreedomCardData(in);
+                }
 
-        @Override
-        public NationFreedomCardData[] newArray(int size) {
-            return new NationFreedomCardData[size];
-        }
-    };
+                @Override
+                public NationFreedomCardData[] newArray(int size) {
+                    return new NationFreedomCardData[size];
+                }
+            };
     public String nationTarget;
     public String civDesc;
     public int civScore;

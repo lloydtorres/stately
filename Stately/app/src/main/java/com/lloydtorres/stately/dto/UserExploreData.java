@@ -38,16 +38,16 @@ public class UserExploreData extends Dossier {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<UserExploreData> CREATOR =
             new Parcelable.Creator<UserExploreData>() {
-        @Override
-        public UserExploreData createFromParcel(Parcel in) {
-            return new UserExploreData(in);
-        }
+                @Override
+                public UserExploreData createFromParcel(Parcel in) {
+                    return new UserExploreData(in);
+                }
 
-        @Override
-        public UserExploreData[] newArray(int size) {
-            return new UserExploreData[size];
-        }
-    };
+                @Override
+                public UserExploreData[] newArray(int size) {
+                    return new UserExploreData[size];
+                }
+            };
     @Element(name = "ZOMBIE")
     public Zombie zombieData;
 

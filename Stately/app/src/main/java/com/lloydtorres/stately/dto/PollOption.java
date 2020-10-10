@@ -33,16 +33,16 @@ public class PollOption implements Parcelable, Comparable<PollOption> {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<PollOption> CREATOR =
             new Parcelable.Creator<PollOption>() {
-        @Override
-        public PollOption createFromParcel(Parcel in) {
-            return new PollOption(in);
-        }
+                @Override
+                public PollOption createFromParcel(Parcel in) {
+                    return new PollOption(in);
+                }
 
-        @Override
-        public PollOption[] newArray(int size) {
-            return new PollOption[size];
-        }
-    };
+                @Override
+                public PollOption[] newArray(int size) {
+                    return new PollOption[size];
+                }
+            };
     @Attribute(required = false)
     public int id;
     @Element(name = "OPTIONTEXT", required = false)

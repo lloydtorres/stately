@@ -105,11 +105,16 @@ public final class MuffinsHelper {
     public static final String API_TELEGRAM_IMG = "tgcat-4.png";
     public static final String WELCOME_TELEGRAM = "tag: welcome";
     public static final Pattern NS_TG_RAW_NATION_LINK =
-            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)nation=(" +
+                    SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK_TG =
-            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" +
+                    SparkleHelper.VALID_ID_BASE +
+                    "+?)\\?tgid=[0-9]+?\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_REGION_LINK =
-            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)region=(" + SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX +
+                    "|)region=(" +
+                    SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK =
             Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help" +
                     "\\?taskid=(\\d+?)\" rel=\"nofollow\">");
@@ -222,8 +227,8 @@ public final class MuffinsHelper {
      * @param selfName Name of current user. Should only be added if in "sent" folder.
      * @return
      */
-    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(Context c,
-                                                                       Element rawTelegramsContainer, String selfName) {
+    public static ArrayList<Telegram> processRawTelegramsFromAntiquity(
+            Context c, Element rawTelegramsContainer, String selfName) {
         Elements rawTelegrams = rawTelegramsContainer.select("tr.tg");
         ArrayList<Telegram> scannedTelegrams = new ArrayList<Telegram>();
 
@@ -337,7 +342,8 @@ public final class MuffinsHelper {
         Element nationSenderRaw = targetDoc.select("a.nlink").first();
         if (nationSenderRaw != null) {
             targetTelegram.isNation = true;
-            targetTelegram.sender = "@@" + SparkleHelper.getIdFromName(nationSenderRaw.attr("href"
+            targetTelegram.sender = "@@" +
+                    SparkleHelper.getIdFromName(nationSenderRaw.attr("href"
             ).replace(NATION_LINK_PREFIX, "")) + "@@";
         } else {
             targetTelegram.isNation = false;

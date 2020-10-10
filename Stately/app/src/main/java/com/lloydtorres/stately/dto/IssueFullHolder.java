@@ -46,16 +46,16 @@ public class IssueFullHolder implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<IssueFullHolder> CREATOR =
             new Parcelable.Creator<IssueFullHolder>() {
-        @Override
-        public IssueFullHolder createFromParcel(Parcel in) {
-            return new IssueFullHolder(in);
-        }
+                @Override
+                public IssueFullHolder createFromParcel(Parcel in) {
+                    return new IssueFullHolder(in);
+                }
 
-        @Override
-        public IssueFullHolder[] newArray(int size) {
-            return new IssueFullHolder[size];
-        }
-    };
+                @Override
+                public IssueFullHolder[] newArray(int size) {
+                    return new IssueFullHolder[size];
+                }
+            };
     @ElementList(name = "ISSUES", required = false)
     public List<Issue> issues;
     @Element(name = "NEXTISSUETIME", required = false)

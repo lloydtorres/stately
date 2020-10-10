@@ -35,16 +35,16 @@ public class CensusHistoryScale implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<CensusHistoryScale> CREATOR =
             new Parcelable.Creator<CensusHistoryScale>() {
-        @Override
-        public CensusHistoryScale createFromParcel(Parcel in) {
-            return new CensusHistoryScale(in);
-        }
+                @Override
+                public CensusHistoryScale createFromParcel(Parcel in) {
+                    return new CensusHistoryScale(in);
+                }
 
-        @Override
-        public CensusHistoryScale[] newArray(int size) {
-            return new CensusHistoryScale[size];
-        }
-    };
+                @Override
+                public CensusHistoryScale[] newArray(int size) {
+                    return new CensusHistoryScale[size];
+                }
+            };
     @ElementList(name = "SCALE", required = false)
     public List<CensusHistoryPoint> points;
 

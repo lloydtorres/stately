@@ -32,16 +32,16 @@ public class UserLogin extends SugarRecord implements Parcelable, Comparable<Use
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<UserLogin> CREATOR =
             new Parcelable.Creator<UserLogin>() {
-        @Override
-        public UserLogin createFromParcel(Parcel in) {
-            return new UserLogin(in);
-        }
+                @Override
+                public UserLogin createFromParcel(Parcel in) {
+                    return new UserLogin(in);
+                }
 
-        @Override
-        public UserLogin[] newArray(int size) {
-            return new UserLogin[size];
-        }
-    };
+                @Override
+                public UserLogin[] newArray(int size) {
+                    return new UserLogin[size];
+                }
+            };
     @Unique
     public String nationId;
     public String name;

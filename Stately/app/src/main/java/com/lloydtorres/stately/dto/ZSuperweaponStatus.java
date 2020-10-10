@@ -30,16 +30,16 @@ public class ZSuperweaponStatus implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ZSuperweaponStatus> CREATOR =
             new Parcelable.Creator<ZSuperweaponStatus>() {
-        @Override
-        public ZSuperweaponStatus createFromParcel(Parcel in) {
-            return new ZSuperweaponStatus(in);
-        }
+                @Override
+                public ZSuperweaponStatus createFromParcel(Parcel in) {
+                    return new ZSuperweaponStatus(in);
+                }
 
-        @Override
-        public ZSuperweaponStatus[] newArray(int size) {
-            return new ZSuperweaponStatus[size];
-        }
-    };
+                @Override
+                public ZSuperweaponStatus[] newArray(int size) {
+                    return new ZSuperweaponStatus[size];
+                }
+            };
     public boolean isTZES;
     public boolean isCure;
     public boolean isHorde;

@@ -37,16 +37,16 @@ public class ZSuperweaponProgress implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ZSuperweaponProgress> CREATOR =
             new Parcelable.Creator<ZSuperweaponProgress>() {
-        @Override
-        public ZSuperweaponProgress createFromParcel(Parcel in) {
-            return new ZSuperweaponProgress(in);
-        }
+                @Override
+                public ZSuperweaponProgress createFromParcel(Parcel in) {
+                    return new ZSuperweaponProgress(in);
+                }
 
-        @Override
-        public ZSuperweaponProgress[] newArray(int size) {
-            return new ZSuperweaponProgress[size];
-        }
-    };
+                @Override
+                public ZSuperweaponProgress[] newArray(int size) {
+                    return new ZSuperweaponProgress[size];
+                }
+            };
     public String tzesCurrentLevel;
     public String tzesNextLevel;
     public String tzesNextProgress;

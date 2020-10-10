@@ -502,8 +502,8 @@ public class MessageBoardActivity extends SlidrActivity {
                 case MODE_REPLY:
                     messageModifierIcon.setImageResource(R.drawable.ic_reply);
                     messagePostButton.setImageResource(R.drawable.ic_post);
-                    messageModifierAlert = String.format(Locale.US, getString(R.string.rmb_reply)
-                            , SparkleHelper.getNameFromId(p.name));
+                    messageModifierAlert = String.format(Locale.US, getString(R.string.rmb_reply),
+                            SparkleHelper.getNameFromId(p.name));
                     break;
                 case MODE_EDIT:
                     messageModifierIcon.setImageResource(R.drawable.ic_edit_post);
@@ -770,13 +770,13 @@ public class MessageBoardActivity extends SlidrActivity {
 
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startSwipeRefresh();
-                dialog.dismiss();
-                postMessageDelete(pos, id);
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startSwipeRefresh();
+                        dialog.dismiss();
+                        postMessageDelete(pos, id);
+                    }
+                };
 
         dialogBuilder.setTitle(R.string.rmb_delete_confirm)
                 .setPositiveButton(R.string.rmb_delete, dialogClickListener)
@@ -842,13 +842,13 @@ public class MessageBoardActivity extends SlidrActivity {
 
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startSwipeRefresh();
-                dialog.dismiss();
-                postMessageSuppress(pos, id, postStatus);
-            }
-        };
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startSwipeRefresh();
+                        dialog.dismiss();
+                        postMessageSuppress(pos, id, postStatus);
+                    }
+                };
 
         int dialogTitle = postStatus != Post.POST_SUPPRESSED ? R.string.rmb_suppress_confirm :
                 R.string.rmb_unsuppress_confirm;

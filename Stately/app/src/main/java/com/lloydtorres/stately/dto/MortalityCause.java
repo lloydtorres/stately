@@ -34,16 +34,16 @@ public class MortalityCause implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<MortalityCause> CREATOR =
             new Parcelable.Creator<MortalityCause>() {
-        @Override
-        public MortalityCause createFromParcel(Parcel in) {
-            return new MortalityCause(in);
-        }
+                @Override
+                public MortalityCause createFromParcel(Parcel in) {
+                    return new MortalityCause(in);
+                }
 
-        @Override
-        public MortalityCause[] newArray(int size) {
-            return new MortalityCause[size];
-        }
-    };
+                @Override
+                public MortalityCause[] newArray(int size) {
+                    return new MortalityCause[size];
+                }
+            };
     @Attribute
     public String type;
     @Text

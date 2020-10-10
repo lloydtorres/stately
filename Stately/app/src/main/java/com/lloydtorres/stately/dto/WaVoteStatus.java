@@ -42,16 +42,16 @@ public class WaVoteStatus implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<WaVoteStatus> CREATOR =
             new Parcelable.Creator<WaVoteStatus>() {
-        @Override
-        public WaVoteStatus createFromParcel(Parcel in) {
-            return new WaVoteStatus(in);
-        }
+                @Override
+                public WaVoteStatus createFromParcel(Parcel in) {
+                    return new WaVoteStatus(in);
+                }
 
-        @Override
-        public WaVoteStatus[] newArray(int size) {
-            return new WaVoteStatus[size];
-        }
-    };
+                @Override
+                public WaVoteStatus[] newArray(int size) {
+                    return new WaVoteStatus[size];
+                }
+            };
     @Element(name = "UNSTATUS")
     public String waState;
     @Element(name = "GAVOTE", required = false)

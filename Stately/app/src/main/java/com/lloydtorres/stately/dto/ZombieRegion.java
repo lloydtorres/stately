@@ -37,16 +37,16 @@ public class ZombieRegion implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<ZombieRegion> CREATOR =
             new Parcelable.Creator<ZombieRegion>() {
-        @Override
-        public ZombieRegion createFromParcel(Parcel in) {
-            return new ZombieRegion(in);
-        }
+                @Override
+                public ZombieRegion createFromParcel(Parcel in) {
+                    return new ZombieRegion(in);
+                }
 
-        @Override
-        public ZombieRegion[] newArray(int size) {
-            return new ZombieRegion[size];
-        }
-    };
+                @Override
+                public ZombieRegion[] newArray(int size) {
+                    return new ZombieRegion[size];
+                }
+            };
     @Element(name = "NAME")
     public String name;
     @Element(name = "ZOMBIE")

@@ -36,16 +36,16 @@ public class IssueOption implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<IssueOption> CREATOR =
             new Parcelable.Creator<IssueOption>() {
-        @Override
-        public IssueOption createFromParcel(Parcel in) {
-            return new IssueOption(in);
-        }
+                @Override
+                public IssueOption createFromParcel(Parcel in) {
+                    return new IssueOption(in);
+                }
 
-        @Override
-        public IssueOption[] newArray(int size) {
-            return new IssueOption[size];
-        }
-    };
+                @Override
+                public IssueOption[] newArray(int size) {
+                    return new IssueOption[size];
+                }
+            };
     @Attribute(required = false)
     public int id;
     public int index;

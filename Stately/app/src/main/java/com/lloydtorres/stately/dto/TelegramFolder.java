@@ -35,16 +35,16 @@ public class TelegramFolder implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<TelegramFolder> CREATOR =
             new Parcelable.Creator<TelegramFolder>() {
-        @Override
-        public TelegramFolder createFromParcel(Parcel in) {
-            return new TelegramFolder(in);
-        }
+                @Override
+                public TelegramFolder createFromParcel(Parcel in) {
+                    return new TelegramFolder(in);
+                }
 
-        @Override
-        public TelegramFolder[] newArray(int size) {
-            return new TelegramFolder[size];
-        }
-    };
+                @Override
+                public TelegramFolder[] newArray(int size) {
+                    return new TelegramFolder[size];
+                }
+            };
     public String name;
     public String value;
 

@@ -81,8 +81,8 @@ public class FoldersDialog extends RecyclerDialogFragment {
             mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, this, folders,
                     selected);
         } else {
-            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment, moveTelegramId, this
-                    , folders, selected);
+            mRecyclerAdapter = new FoldersRecyclerAdapter(telegramsFragment,
+                    moveTelegramId, this, folders, selected);
         }
         mRecyclerView.setAdapter(mRecyclerAdapter);
     }

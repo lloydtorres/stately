@@ -151,8 +151,8 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                         context.getString(R.string.issue_chain_and_number),
                         SparkleHelper.getPrettifiedNumber(issue.id), issue.chain));
             } else {
-                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number)
-                        , SparkleHelper.getPrettifiedNumber(issue.id)));
+                issueNo.setText(String.format(Locale.US, context.getString(R.string.issue_number),
+                        SparkleHelper.getPrettifiedNumber(issue.id)));
             }
 
             if (issue.image != null) {

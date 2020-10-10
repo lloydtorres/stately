@@ -32,16 +32,16 @@ public class IssueResultContainer implements Parcelable {
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<IssueResultContainer> CREATOR =
             new Parcelable.Creator<IssueResultContainer>() {
-        @Override
-        public IssueResultContainer createFromParcel(Parcel in) {
-            return new IssueResultContainer(in);
-        }
+                @Override
+                public IssueResultContainer createFromParcel(Parcel in) {
+                    return new IssueResultContainer(in);
+                }
 
-        @Override
-        public IssueResultContainer[] newArray(int size) {
-            return new IssueResultContainer[size];
-        }
-    };
+                @Override
+                public IssueResultContainer[] newArray(int size) {
+                    return new IssueResultContainer[size];
+                }
+            };
     @Element(name = "ISSUE")
     public IssueResult results;
 
