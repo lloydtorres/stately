@@ -975,42 +975,41 @@ public final class SparkleHelper {
      * @param content Target content
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content) {
-        String holder = "<base href=\"" + BASE_URI_NOSLASH + "\">" + content;
-        holder = Jsoup.clean(holder,
-                Whitelist.basic().preserveRelativeLinks(true).addTags("br").addTags("a"));
-        holder = replaceMalformedHtmlCharacters(holder);
+        content = Jsoup.clean(content, BASE_URI_NOSLASH,
+                Whitelist.basic().preserveRelativeLinks(true));
+        content = replaceMalformedHtmlCharacters(content);
 
         // Replace RMB links with targets to the RMB activity
-        holder = regexDoubleReplace(holder, NS_RMB_POST_LINK,
+        content = regexDoubleReplace(content, NS_RMB_POST_LINK,
                 "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
 
         // Replace internal links with valid links
-        holder = regexReplace(holder, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
+        content = regexReplace(content, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");
 
         // Linkify nations (@@NATION@@)
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_NATION,
+        content = addExploreActivityLinks(content, NS_HAPPENINGS_NATION,
                 ExploreActivity.EXPLORE_NATION);
-        holder = addExploreActivityLinks(holder, NS_HAPPENINGS_REGION,
+        content = addExploreActivityLinks(content, NS_HAPPENINGS_REGION,
                 ExploreActivity.EXPLORE_REGION);
 
-        if (holder.contains("EO:")) {
-            String[] newTargets = holder.split(":");
+        if (content.contains("EO:")) {
+            String[] newTargets = content.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
-            String template = String.format(Locale.US, c.getString(R.string.region_eo), holder);
-            holder = addExploreActivityLink(template, "EO:" + newTarget + ".",
+            String template = String.format(Locale.US, c.getString(R.string.region_eo), content);
+            content = addExploreActivityLink(template, "EO:" + newTarget + ".",
                     getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
-        if (holder.contains("EC:")) {
-            String[] newTargets = holder.split(":");
+        if (content.contains("EC:")) {
+            String[] newTargets = content.split(":");
             String newTarget = newTargets[1].substring(0, newTargets[1].length() - 1);
-            String template = String.format(Locale.US, c.getString(R.string.region_ec), holder);
-            holder = addExploreActivityLink(template, "EC:" + newTarget + ".",
+            String template = String.format(Locale.US, c.getString(R.string.region_ec), content);
+            content = addExploreActivityLink(template, "EC:" + newTarget + ".",
                     getNameFromId(newTarget), ExploreActivity.EXPLORE_REGION);
         }
 
         // In case there are no nations or regions to linkify, set and style TextView here too
-        setStyledTextView(c, t, holder);
+        setStyledTextView(c, t, content);
     }
 
     /**
