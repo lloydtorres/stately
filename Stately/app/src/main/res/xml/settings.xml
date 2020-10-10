@@ -4,6 +4,7 @@
 
     <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_behavior"
+        android:icon="@drawable/ic_menu_settings"
         android:key="setting_behavior">
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_autologin"
@@ -24,6 +25,7 @@
 
     <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_notifs"
+        android:icon="@drawable/ic_notifications"
         android:key="setting_notifs_cat">
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs"
@@ -45,25 +47,25 @@
             android:title="@string/setting_notifs_issues"
             android:dependency="setting_notifs"
             android:defaultValue="true"
-            android:icon="@null" />
+            android:icon="@drawable/ic_settings_issues" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_tgs"
             android:title="@string/setting_notifs_tgs"
             android:dependency="setting_notifs"
             android:defaultValue="true"
-            android:icon="@null" />
+            android:icon="@drawable/ic_settings_telegrams" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_endorse"
             android:title="@string/setting_notifs_endorse"
             android:dependency="setting_notifs"
             android:defaultValue="true"
-            android:icon="@null" />
+            android:icon="@drawable/ic_settings_endorsements" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_rmb_mention"
             android:title="@string/setting_notifs_rmb_mention"
             android:dependency="setting_notifs"
             android:defaultValue="true"
-            android:icon="@null" />
+            android:icon="@drawable/ic_region_button" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="setting_notifs_rmb_quote"
             android:title="@string/setting_notifs_rmb_quote"
@@ -80,6 +82,7 @@
 
     <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_style"
+        android:icon="@drawable/ic_styling"
         android:key="setting_style">
         <androidx.preference.ListPreference
             android:title="@string/setting_theme"
@@ -101,6 +104,7 @@
 
     <androidx.preference.PreferenceCategory
         android:title="@string/setting_title_about"
+        android:icon="@drawable/ic_about"
         android:key="setting_about">
         <androidx.preference.Preference
             android:key="setting_app_version"
