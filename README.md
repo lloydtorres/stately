@@ -85,7 +85,7 @@ Commit to your fork and submit a pull request once your translation is ready. I'
 
 Note that translations only affect in-app strings. Strings from the NationStates gameside (such as issues) will remain in English.
 
-### Libraries
+### Attributions
 
 Stately uses the following open-source libraries:
 
@@ -102,8 +102,6 @@ Stately uses the following open-source libraries:
 * [Sugar ORM](https://github.com/satyan/sugar)
 * [SwipyRefreshLayout](https://github.com/omadahealth/SwipyRefreshLayout)
 * [Volley](https://github.com/google/volley)
-
-### Creative Commons
 
 Stately uses Creative Commons-licensed content from the following sources:
 
