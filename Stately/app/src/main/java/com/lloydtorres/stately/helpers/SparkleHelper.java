@@ -212,8 +212,10 @@ public final class SparkleHelper {
             "\\[\\/strike\\]");
     public static final Pattern BBCODE_PROPOSAL = Pattern.compile("(?i)(?s)\\[proposal=(.*?)\\](" +
             ".*?)\\[\\/proposal\\]");
-    public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[colou?r=(.*?)\\](.*?)" +
-            "\\[\\/colou?r\\]");
+    public static final Pattern BBCODE_COLOR = Pattern.compile("(?i)(?s)\\[color=(.*?)\\](.*?)" +
+            "\\[\\/color\\]");
+    public static final Pattern BBCODE_COLOUR = Pattern.compile("(?i)(?s)\\[colour=(.*?)\\](.*?)" +
+            "\\[\\/colour\\]");
     public static final Pattern BBCODE_INTERNAL_URL = Pattern.compile("(?i)(?s)\\[url=(" +
             "(?:pages\\/|page=).*?)\\](.*?)\\[\\/url\\]");
     public static final int BBCODE_PERMISSIONS_GENERAL = 0;
@@ -1089,6 +1091,7 @@ public final class SparkleHelper {
 
         if (permissions == BBCODE_PERMISSIONS_REGION) {
             holder = regexDoubleReplace(holder, BBCODE_COLOR, "<font color=\"%s\">%s</font>");
+            holder = regexDoubleReplace(holder, BBCODE_COLOUR, "<font color=\"%s\">%s</font>");
         }
 
         holder = regexDoubleReplace(holder, BBCODE_INTERNAL_URL,
