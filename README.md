@@ -76,7 +76,7 @@ Stately is an open-source project — contributions are always welcome! Please k
 
 1. **Improve the NationStates experience, don't detract from it.** NationStates players should be able to jump right into Stately and figure out how things work intuitively. Features shouldn't stray too far from convention and confuse players.
 2. **The Material Design aesthetic comes first.** Stately prides itself on its clean, sleek and modern interface based on Material Design. Features should match or improve upon the app's existing aesthetic.
-3. **Security and privacy are paramount.** Stately should only interact with NationStates when handling user data. Other than receiving crash reports, Stately's developers should not be aware of any actions in the app.
+3. **Security and privacy are paramount.** Stately should only interact with NationStates when handling user data. Stately's developers should not be aware of any actions in the app.
 4. **Compatibility should be maintained whenever possible.** Stately runs on a variety of Android devices. Future updates should work on both modern flagship phones and on older devices we've previously supported.
 5. **Off-the-shelf solutions work better in the long run.** To keep Stately robust, changes should be built on stock Android libraries and existing dependencies. Data consumed from the NationStates API should be from documented shards.
 
