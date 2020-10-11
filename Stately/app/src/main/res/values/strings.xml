@@ -23,6 +23,7 @@
     <string name="create_nation_redirect">To create a new nation, you\'ll be redirected to the NationStates website.</string>
     <string name="create_continue">Continue</string>
     <string name="create_finish">Type in your nation name and password to get started.</string>
+    <string name="create_error">Something went wrong with the nation creation process. Please try again on the NationStates website (nationstates.net).</string>
     <string name="log_in_load">Logging In…</string>
     <string name="calibration_load">Calibrating…</string>
     <string name="guidance_invalid_login_title">Problem logging in?</string>

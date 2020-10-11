@@ -47,9 +47,14 @@ public class WebRegisterActivity extends WebViewActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (url != null && url.contains(FINISHED_URL_HOME)) {
-                    setResult(RESULT_OK);
-                    finish();
+                if (url != null) {
+                    if (url.contains(FINISHED_URL_HOME)) {
+                        setResult(RESULT_OK);
+                        finish();
+                    } else if (!url.contains(REGISTER_URL)) {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                    }
                 }
             }
         });

@@ -489,11 +489,16 @@ public class LoginActivity extends BroadcastableActivity {
             return;
         }
 
-        if (requestCode == WebRegisterActivity.REGISTER_RESULT && resultCode == Activity.RESULT_OK) {
+        if (requestCode == WebRegisterActivity.REGISTER_RESULT) {
+            int createNationStringId = R.string.create_error;
+            if (resultCode == RESULT_OK) {
+                createNationStringId = R.string.create_finish;
+            }
+
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
                     RaraHelper.getThemeMaterialDialog(this));
             dialogBuilder.setTitle(R.string.create_nation)
-                    .setMessage(R.string.create_finish)
+                    .setMessage(createNationStringId)
                     .setPositiveButton(R.string.got_it, null)
                     .show();
         }
