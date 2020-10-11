@@ -1,0 +1,3 @@
+• Add support for International Artwork census scale.
+• Fix scaling issue for Average Income of Rich census scale.
+• Other bug fixes and improvements.
