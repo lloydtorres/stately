@@ -69,21 +69,21 @@ Detailed release notes and APKs can be found in the [releases page](https://gith
 * **1.0.1** - Fix bug with malformed vectors.
 * **1.0.0** - Initial release.
 
-### Translations
+### Contributions
 
-English strings in the Stately app can be found in three files:
+Stately is an open-source project — contributions are always welcome! Please keep in mind the following project tenets before working with Stately code:
 
-* [`res/values/strings.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/strings.xml)
-* [`res/values/plurals.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/plurals.xml)
-* [`res/values/arrays.xml`](https://github.com/lloydtorres/stately/blob/master/Stately/app/src/main/res/values/arrays.xml) (lines 4-51 only; rest are from NationStates or licensing)
+1. **Improve the NationStates experience, don't detract from it.** NationStates players should be able to jump right into Stately and figure out how things work intuitively. Features shouldn't stray too far from convention and confuse players.
+2. **The Material Design aesthetic comes first.** Stately prides itself on its clean, sleek and modern interface based on Material Design. Features should match or improve upon the app's existing aesthetic.
+3. **Security and privacy are paramount.** Stately should only interact with NationStates when handling user data. Other than receiving crash reports, Stately's developers should not be aware of any actions in the app.
+4. **Compatibility should be maintained whenever possible.** Stately runs on a variety of Android devices. Future updates should work on both modern flagship phones and on older devices we've previously supported.
+5. **Off-the-shelf solutions work better in the long run.** To keep Stately robust, changes should be built on stock Android libraries and existing dependencies. Data consumed from the NationStates API should be from documented shards.
 
-To translate Stately into another language, fork this repository and create a copy of these files in a new directory called `res/values-[xx]/`, where `[xx]` represents the target language's [ISO 639-1 code](https://www.loc.gov/standards/iso639-2/php/code_list.php) (e.g. `fr` for French and `ja` for Japanese).
+All proposed changes to the app should be submitted as [pull requests](https://github.com/lloydtorres/stately/pulls) to the main GitHub repository. Additionally, major changes (e.g. new features or UI changes) should have a [tracking issue](https://github.com/lloydtorres/stately/issues) for it. The project owner will work with the contributor on getting their code released in an app update through these channels.
 
-For languages with special pluralization rules, refer to the [official Android guide on pluralization](https://developer.android.com/guide/topics/resources/string-resource.html#Plurals) for information on how to format `res/values/plurals.xml`.
+#### Translations
 
-Commit to your fork and submit a pull request once your translation is ready. I'll reach out and work with you to properly integrate your translation into Stately.
-
-Note that translations only affect in-app strings. Strings from the NationStates gameside (such as issues) will remain in English.
+Stately is entirely dependent on NationStates and its API, which provides in-game content (such as issues and nation descriptions) solely in English; a significant portion of Stately will therefore still be in English even if every in-app string is translated into another language. As a result, in-app string translations will **not** be accepted at this time.
 
 ### Attributions
 
