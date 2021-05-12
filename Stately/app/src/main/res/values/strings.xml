@@ -20,7 +20,8 @@
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
     <string name="create_nation">Create New Nation</string>
-    <string name="create_nation_redirect">To create a new nation, you\'ll be redirected to the NationStates website.</string>
+    <string name="create_nation_redirect">To create a new nation, a native WebView of the NationStates website will be opened. This website contains tracking scripts.\nIf you want to avoid this, consider creating a nation in a browser with tracking protection (for example through the \'uBlock Origin\' extension). Alternatively consider using a DNS server with tracking protection and/or ad-blocking.</string>
+    <string name="open_in_browser">Open in browser</string>
     <string name="create_continue">Continue</string>
     <string name="create_finish">Type in your nation name and password to get started.</string>
     <string name="create_error">Something went wrong with the create a new nation process. Please try again on the NationStates website (nationstates.net).</string>
