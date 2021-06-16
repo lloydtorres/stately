@@ -15,8 +15,8 @@ android {
         applicationId "com.lloydtorres.stately"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 46
-        versionName "1.10.4"
+        versionCode 47
+        versionName "1.10.5"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
