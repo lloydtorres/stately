@@ -671,9 +671,9 @@ public final class SparkleHelper {
             return censusData.get(id);
         }
 
-        // Get last entry
-        CensusScale[] scales = (CensusScale[]) censusData.values().toArray();
-        return scales[scales.length - 1];
+        // Get last entry (Unknown)
+        List<CensusScale> censusScalesList = new ArrayList<CensusScale>(censusData.values());
+        return censusScalesList.get(censusScalesList.size() - 1);
     }
 
     /**
