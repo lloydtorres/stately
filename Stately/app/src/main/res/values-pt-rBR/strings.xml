@@ -1,0 +1,460 @@
+<resources>
+    <string name="app_name">Stately</string>
+    <string name="app_version">Stately 1.7.1</string>
+    <string name="app_header">Stately/1.7.1 (User %1$s; Droid)</string>
+    <string name="app_header_nouser">Stately/1.7.1 (No User; Droid)</string>
+    <string name="stately_alphys_r">Stately Notification Polling Receiver</string>
+    <string name="stately_alphys">Stately Notification Polling Service</string>
+    <string name="stately_notifs_sub_template">%1$s — Stately para NationStates</string>
+
+    <!-- Login -->
+    <string name="login_subtitle_conservative">NationStates: Ordem e Progresso</string>
+    <string name="login_subtitle_liberal">Um NationStates de Todos</string>
+    <string name="login_subtitle_neutral">para NationStates</string>
+    <string name="login_subtitle_stately_bday">Edição Especial de Aniversário</string>
+    <string name="login_subtitle_canada_day">Feito no Canadá</string>
+    <string name="login_subtitle_halloween">BRAAAAINS</string>
+    <string name="login_subtitle_ns_bday">Feliz Aniversário, NationStates</string>
+    <string name="username_hint">Nome da Nação</string>
+    <string name="password">Senha</string>
+    <string name="log_in">Conectar</string>
+    <string name="create_nation">Criar Nova Nação</string>
+    <string name="create_nation_redirect">Para criar uma nova nação, você será redirecionado para a página do NationStates.</string>
+    <string name="create_continue">Continuar</string>
+    <string name="create_finish">Digite o nome da sua nação e a senha para começar.</string>
+    <string name="log_in_load">Conectando…</string>
+
+    <string name="login_error_404">Nome de nação ou senha inválidos.</string>
+    <string name="login_error_parsing">Não foi possível processar os dados recebidos do NationStates.</string>
+    <string name="login_error_no_internet">Não foi possível conectar ao NationStates.</string>
+    <string name="login_error_generic">Ocorreu um errro. Por favor, tente novamente.</string>
+
+    <string name="rate_limit_error">Rápido demais! Tente novamente daqui a pouco.</string>
+    <string name="multiple_request_error">Já há uma ação sendo realizada.</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Abrir menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar menu de navegação</string>
+
+    <string name="menu_nation">Nação</string>
+    <string name="menu_issues">Questões</string><!-- ! -->
+    <string name="menu_telegrams">Telegramas</string>
+    <string name="menu_region">Região</string>
+    <string name="menu_wa">Assembleia Mundial</string>
+    <string name="menu_world">O Mundo</string>
+    <string name="menu_activityfeed">Feed de Atividades</string><!-- ! -->
+    <string name="menu_explore">Explorar</string>
+    <string name="menu_switch">Trocar</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_logout">Desconectar</string>
+
+    <string name="menu_unread_count_over100">100+</string>
+
+    <!-- Time -->
+    <string name="time_moments_template">%1$s %2$s</string>
+    <string name="time_generic_template">%1$d %2$s %3$s</string>
+    <string name="time_moments">momentos</string>
+    <string name="time_minute">minuto</string>
+    <string name="time_hour">hora</string>
+    <string name="time_day">dia</string>
+    <string name="time_ago">atrás</string>
+    <string name="time_from_now">daqui a</string>
+
+    <!-- Explorer -->
+    <string name="explore_search_text">Ir para&#8230;</string>
+    <string name="explore_nation">Nação</string>
+    <string name="explore_region">Região</string>
+    <string name="explore_positive">Vamos</string>
+    <string name="explore_negative">Cancelar</string>
+    <string name="explore_default">Explorando&#8230;</string>
+    <string name="explore_error_404_nation">Nação não encontrada.</string>
+
+    <!-- ! -->
+    <string name="explore_endorse">Endossar</string>
+    <string name="explore_withdraw_endorse">Retirar endosso</string>
+    <string name="explore_endorse_confirm">Endossar %1$s?</string>
+    <string name="explore_withdraw_endorse_confirm">Retirar endosso a %1$s?</string>
+    <string name="explore_endorsed_response">Endossou %1$s.</string>
+    <string name="explore_withdraw_endorse_response">Retirou endosso a %1$s.</string>
+    <string name="explore_endorse_button">Endossar</string>
+    <string name="explore_withdraw_endorse_button">Retirar</string>
+
+    <string name="explore_menu_dossier_add">Adicionar ao Dossiê</string>
+    <string name="explore_menu_dossier_rem">Remover do Dossiê</string>
+    <string name="explore_dossier_added">%1$s adicionado ao Dossiê.</string>
+    <string name="explore_dossier_removed">%1$s removido do Dossiê.</string>
+    <string name="explore_dossier_add_confirm">Adicionar %1$s ao Dossiê?</string>
+    <string name="explore_dossier_rem_confirm">Remover %1$s do Dossiê?</string>
+    <string name="explore_dossier_add_button">Adicionar</string>
+    <string name="explore_dossier_rem_button">Remover</string>
+
+    <string name="explore_region_move">Mudar-se para %1$s?</string>
+    <string name="explore_region_password">Senha necessária para se mudar</string>
+    <string name="explore_move_confirm">Mudar</string>
+    <string name="explore_move_wrong_password">Senha incorreta.</string>
+
+    <!-- Switch nation -->
+    <string name="switch_single_warn">Nenhuma outra nação salva no Stately. Você gostaria de conectar em uma nação diferente?</string>
+    <string name="add_nation">Adicionar Nação</string>
+
+    <!-- Logout confirm -->
+    <string name="logout_confirm">Desconectar?</string>
+
+    <!-- Exit confirm -->
+    <string name="setting_exitconfirm">Confirmar saída</string>
+    <string name="exit_confirm">Sair do Stately?</string>
+    <string name="exit">Sair</string>
+
+    <!-- Nation main card -->
+    <string name="nation_government_custom">&lt;font color=&quot;#727272&quot;&gt;&lt;strike&gt;%1$s&lt;/strike&gt;&lt;/font&gt;&lt;br&gt;%2$s</string>
+    <string name="nation_wa_member">Membro da AM</string><!-- ! -->
+    <string name="nation_wa_delegate">Delegado da AM</string><!-- ! -->
+    <string name="nation_time_founded">Estabelecida em %1$s\nVista pela última vez em %2$s</string>
+    <string name="nation_time_immemorial">desde tempos imemoriais</string>
+    <string name="nation_power_template">%1$s (%2$s)</string>
+
+    <!-- Nation freedom card -->
+    <string name="overview_label_civrights">Direitos Civis</string>
+    <string name="overview_label_economy">Economia</string>
+    <string name="overview_label_polifree">Liberdade Política</string>
+
+    <!-- Nation government card -->
+    <string name="card_overview_gov_title">Governo</string>
+    <string name="card_overview_gov_leader">Líder</string>
+    <string name="card_overview_gov_capital">Capital</string>
+    <string name="card_overview_gov_priority">Prioridade</string>
+    <string name="card_overview_gov_tax">Imposto de Renda</string>
+
+    <!-- Nation economy card -->
+    <string name="card_overview_econ_title">Economia</string>
+    <string name="card_overview_econ_currency">Moeda</string>
+    <string name="card_overview_econ_gdp">Produto Interno Bruto (PIB)</string>
+    <string name="card_overview_econ_industry">Principal Indústria</string>
+    <string name="card_overview_econ_income">Renda Média</string>
+
+    <!-- Nation WA card -->
+    <string name="card_overview_wa_endorsements">Endossos</string><!-- ! -->
+    <string name="card_overview_wa_novote">%1$s: Nenhum voto na resolução.</string><!-- ! -->
+    <string name="card_overview_wa_vote">%1$s: Votou %2$s na resolução.</string><!-- ! -->
+
+    <!-- Nation other card -->
+    <string name="card_overview_other_title">Outras Informações</string>
+    <string name="card_overview_other_demonym">Gentílico</string>
+    <string name="card_overview_other_demonym_txt1">%1$s (substantivo, plural %2$s), %3$s (adjetivo)</string>
+    <string name="card_overview_other_demonym_txt2">%1$s (substantivo/adjetivo, plural %2$s)</string>
+    <string name="card_overview_other_religion">Religião</string>
+    <string name="card_overview_other_animal">Animal Nacional</string>
+    <string name="card_overview_other_animal_template">%1$s — %2$s.</string>
+    <string name="card_overview_other_census_title">Censo do DIa: %1$s</string>
+    <string name="card_overview_other_census_content">%1$s — %2$s</string>
+    <string name="card_overview_other_census_region">#%1$s em %2$s (%3$s%% melhores)</string>
+    <string name="card_overview_other_census_world">#%1$s no Mundo (%2$s%% melhores)</string>
+    <string name="card_overview_census_button">Tendências para %1$s</string>
+
+    <!-- Nation subfragment cards -->
+    <string name="card_main_title_summary">Resumo</string>
+    <string name="chart_inner_text">%1$s\n%2$.1f%%</string>
+
+    <!-- Nation people subfragment -->
+    <string name="card_people_summarydesc_flavour">The %1$s of %2$s is notable for its %3$s, as well as its %4$s population of %5$s %6$s.</string><!-- ! -->
+    <string name="card_people_mortality_title">Mortalidade</string>
+    <string name="animal_attack_original">Ataque de Animais</string>
+    <string name="animal_attack_madlibs">Ataque de %1$s</string>
+
+    <!-- Nation government subfragment -->
+    <string name="card_government_expenditures_title">Gastos</string>
+    <string name="card_government_expenditures_budget">Total</string>
+    <string name="card_government_expenditures_budget_flavour">%1$s (%2$.1f%% do PIB)</string>
+
+    <string name="administration">Administração</string>
+    <string name="defense">Defesa</string>
+    <string name="education">Educação</string>
+    <string name="environment">Meio Ambiente</string>
+    <string name="healthcare">Saúde</string>
+    <string name="industry">Indústria</string>
+    <string name="international_aid">Ajuda Internacional</string>
+    <string name="law_and_order">Lei e Ordem</string>
+    <string name="public_transport">Transporte Público</string>
+    <string name="social_policy">Políticas Sociais</string>
+    <string name="spirituality">Espiritualidade</string>
+    <string name="welfare">Bem-estar Social</string>
+
+    <!-- Nation economy subfragment -->
+    <string name="card_economy_analysis_title">Análise</string>
+    <string name="card_economy_analysis_gdp">Produto Interno Bruto (PIB)</string>
+    <string name="card_economy_analysis_per_capita">PIB Per Capita</string>
+    <string name="avg_val_currency">Média: %1$s</string>
+    <string name="poor_val_currency">10%% Mais Pobres: %1$s</string>
+    <string name="rich_val_currency">10%% Mais Ricos: %1$s</string>
+
+    <string name="government">Governo</string>
+    <string name="state_owned">Estatais</string>
+    <string name="private_sector">Privadas</string>
+    <string name="black_market">Mercado Negro</string>
+
+    <!-- Large number suffixes -->
+    <string name="thousand_short">mil</string>
+    <string name="million">milhão</string>
+    <string name="million_short">mi</string>
+    <string name="billion">bilhão</string>
+    <string name="billion_short">bi</string>
+    <string name="trillion">trilhão</string>
+    <string name="trillion_short">tri</string>
+    <string name="val_currency">%1$s %2$s</string>
+    <string name="val_short">%1$s%2$s</string>
+    <string name="percent">%1$.1f%%</string>
+    <string name="val_suffix_currency">%1$s %2$s %3$s</string>
+
+    <!-- Activity Feed -->
+    <string name="activityfeed_subscriptions">Inscrições</string><!-- ! -->
+    <string name="subscriptions_curnation">Nação atual</string>
+    <string name="subscriptions_switch">Switch nation list</string><!-- ? -->
+    <string name="subscriptions_dossier_n">Dossiê: Nações</string>
+    <string name="subscriptions_region">Região atual</string>
+    <string name="subscriptions_dossier_r">Dossiê: Regiões</string>
+    <string name="subscriptions_wa">Assembleia Mundial</string>
+    <string name="update">Atualizar</string>
+    <string name="activityfeed_dossier_n">Dossiê: Nações</string>
+    <string name="activityfeed_dossier_r">Dossiê: Regiões</string>
+    <string name="dossier_n_none">Não há nações no Dossiê.</string>
+    <string name="dossier_r_none">Não há regiões no Dossiê.</string>
+
+    <!-- Region -->
+    <string name="region_404">Região não encontrada.</string>
+    <string name="region_pop">Nação</string>
+
+    <!-- Region overview subfragment -->
+    <string name="card_region_quick_facts_title">Fatos Rápidos</string><!-- ! -->
+    <string name="card_region_wa_delegate">Delegado na AM</string><!-- ! -->
+    <string name="region_delegate_votes">%1$s (%2$s %3$s)</string>
+    <string name="region_filler_vote">voto</string>
+    <string name="region_filler_none">Nenhum</string>
+    <string name="card_region_founder">Fundador</string>
+    <string name="region_founded_append">(%1$s)</string>
+    <string name="card_region_power">Poder Regional</string>
+    <string name="card_region_factbook_title">Factbook</string><!-- ? -->
+    <string name="card_region_tags_title">Tags</string>
+
+    <!-- Region community subfragment -->
+    <string name="card_region_rmb">Mural Regional</string><!-- ! -->
+    <string name="card_region_poll">Enquete</string>
+    <string name="poll_author">Criada por @@%1$s@@</string>
+    <string name="poll_open">Aberta em %1$s</string>
+    <string name="poll_close">Fecha em %1$s</string>
+    <string name="region_option_index">Opção %1$d</string>
+    <string name="poll_votes_template_start">%1$s (</string>
+    <string name="poll_votes_template_votes">%1$d %2$s</string>
+    <string name="poll_votes_template_end">)</string>
+    <string name="poll_votes_voter_dialog">Votou em %1$s</string>
+    <string name="poll_vote_button_submit">Votar na enquete regional</string>
+    <string name="poll_vote_button_change">Alterar voto</string>
+    <string name="poll_vote_withdraw">Retirar voto</string>
+    <string name="card_region_wa_vote">Resolução - %1$s</string><!-- ! -->
+    <string name="region_wa_filler">Entre as nações desta região, a votação está em %1$d a favor e %2$d contra.</string>
+    <string name="card_region_wa_link">Abrir resolução - %1$s</string><!-- ! -->
+    <string name="votes_null">Nenhum voto registrado ainda!</string>
+
+    <!-- Region message board -->
+    <string name="region_rmb">MR: %1$s</string><!-- ! -->
+    <string name="spoiler_warn">Spoiler</string>
+    <string name="spoiler_warn_link">[spoiler]</string>
+    <string name="spoiler_warn_title">Spoiler: %1$s</string>
+    <string name="spoiler_warn_title_link">[spoiler: %1$s]</string>
+    <string name="rmb_suppressed">[i]Removido por [nation=%1$s].[/i]\n\n[i][spoiler=Toque para ver.]%2$s[/spoiler][/i]</string>
+    <string name="clicky_link_http">&lt;a href=&quot;%1$s&quot;&gt;[link externo: %2$s]&lt;/a&gt;</string>
+    <string name="rmb_no_content">Nada para ver aqui!</string>
+    <string name="rmb_caught_up">Tudo carregado!</string>
+    <string name="rmb_backtrack_error">Não foi possível lidar com o volume de mensagens.</string>
+    <string name="bbcode_parse_error">Ocorreu um erro no interpretador: não foi possível carregar o conteúdo.</string>
+    <string name="rmb_message_hint">Postar uma mensagem…</string>
+    <string name="rmb_reply">Respondendo a %1$s</string>
+    <string name="rmb_delete_confirm">Deletar esta mensagem?</string>
+    <string name="rmb_delete">Deletar</string>
+    <string name="rmb_reply_format">[quote=%1$s;%2$d]%3$s[/quote]\n</string>
+    <string name="rmb_likes">Curtidas</string>
+    <string name="rmb_cant_like">Não é permitido curtir mensagens em uma região estrangeira.</string>
+    <string name="rmb_self_like">Não é permitido curtir suas próprias mensagens!</string>
+
+    <!-- Region governance subfragment -->
+    <string name="card_region_officers">Oficiais</string><!-- ! -->
+    <string name="region_filler_no_officers">%1$s não tem oficiais.</string><!-- ! -->
+    <string name="card_region_embassies">Embaixadas</string>
+    <string name="region_eo">Embaixada aberta: %1$s.</string>
+    <string name="region_ec">Embaixada fechada: %1$s.</string>
+
+    <!-- Census subfragment -->
+    <string name="census_sort_score">Pontuação</string>
+    <string name="census_sort_world_rank">Classificação mundial</string>
+    <string name="census_sort_world_percent">Melhor percentual mundial</string>
+    <string name="census_sort_region_rank">Classificação regional</string>
+    <string name="census_sort_region_percent">Melhor percentual regional</string>
+    <string name="census_hash_symbol">#</string>
+    <string name="census_blank">—</string>
+    <string name="census_top">Melhores</string>
+    <string name="census_percent">%1$s%%</string>
+
+    <string name="census_sort_ascending">Ascendente</string>
+    <string name="census_sort_descending">Descendente</string>
+
+    <string name="census_sort_label">Ordernar por: %1$s (%2$s)</string>
+    <string name="census_sort_dialog_title">Ordenar por</string>
+    <string name="census_sort_confirm">Ordenar</string>
+
+    <!-- Trends -->
+    <string name="trends_title_generic">Tendências</string>
+    <string name="trends_title">Tendência: %1$s</string>
+    <string name="trends_title_world">Mundo</string>
+    <string name="trends_datasets">Dados</string><!-- ! -->
+    <string name="trends_max">Máximo</string>
+    <string name="trends_min">Mínimo</string>
+    <string name="trends_avg">Média</string>
+    <string name="trends_empty">Não foram encontrados dados.</string>
+    <string name="trends_regional">Classificação Regional</string>
+    <string name="trends_world">Classificação Mundial</string>
+    <string name="trends_score_template">Pontuação: %1$s</string>
+
+    <!-- Issues -->
+    <string name="next_issue">Próxima questão esperada em %1$s.</string>
+    <string name="no_issues">Nenhuma questão disponível no momento.</string>
+    <string name="issue_number">Questão #%1$d</string>
+    <string name="issue_chain_and_number">Questão #%1$d — %2$s</string>
+    <string name="issue_activity_title">%1$s: Questão #%2$d</string>
+    <string name="issue_unavailable">Essa questão não está disponível para %1$s.</string>
+    <string name="issue_select_option">Adotar esta posição</string>
+    <string name="issue_select_option_pirate">Yarr!</string>
+    <string name="issue_option_confirm_adopt">Adotar a posição da Opção %1$d?</string>
+    <string name="issue_option_confirm_dismiss">Ignorar esta questão?</string>
+    <string name="issue_option_adopt">Adotar</string>
+    <string name="issue_option_dismiss">Ignorar</string>
+    <string name="issue_dismiss_issue">Ignorar esta issue</string>
+    <string name="issue_dismiss_issue_pirate">Arr, t\'Davey Jones\' Locker with ye all!</string>
+    <string name="issue_legislation_passed">Legislação Passada</string>
+    <string name="issue_breaking">Últimas Notícias</string>
+    <string name="issue_position">Posição Adotada</string>
+    <string name="issue_capital_none">Cidade de %1$s</string>
+    <string name="issue_leader_none">Líder</string>
+    <string name="issue_religion_none">uma importante religão</string>
+
+    <!-- Telegrams -->
+    <string name="telegrams_folders">Pastas</string>
+    <string name="telegrams_compose">Escrever Telegrama</string>
+    <string name="telegrams_alert_recruitment">Telegrama de Recrutament</string>
+    <string name="telegrams_alert_region">Telegrama Regional</string>
+    <string name="telegram_alert_welcome">Telegrama Regional de Boas Vindas</string>
+    <string name="telegrams_alert_mod">Telegrama de Moderação</string>
+    <string name="telegrams_recipients">para %1$s</string>
+    <string name="telegrams_region_explore">Visitar %1$s</string>
+    <string name="telegrams_backtrack_error">Não foi possível lidar com o volume de telegramas.</string>
+    <string name="telegrams_empty_convo">Nenhum telegrama encontrado.</string>
+    <string name="telegrams_reply">Responder ao Telegrama</string>
+    <string name="telegrams_archive">Arquivar</string>
+    <string name="telegrams_move">Mover</string>
+    <string name="telegrams_delete">Deletar</string>
+    <string name="telegrams_report">Reportar</string>
+    <string name="telegrams_close">Fechar</string>
+    <string name="telegrams_archive_confirm">Arquivar telegrama?</string>
+    <string name="telegrams_delete_confirm">Deletar telegrama?</string>
+    <string name="telegrams_move_none">Nenhuma outra pasta está disponível.</string>
+    <string name="telegrams_action_error">Ocorreu um erro. Tente reabrir este telegrama.</string>
+    <string name="telegrams_to">Para</string>
+    <string name="telegrams_to_hint">Nações (separadas por vírgula)</string>
+    <string name="telegrams_from">De</string>
+    <string name="telegrams_compose_hint">Escrever telegrama…</string>
+    <string name="telegrams_send">Enviar Telegrama</string>
+    <string name="telegrams_empty_recipients">Nenhum destinatário encontrado para este telegrama.</string>
+    <string name="telegrams_empty_content">O telegrama parece estar vazio.</string>
+    <string name="telegrams_invalid_recipient">Algo parece errado com os destinatários.</string>
+    <string name="telegrams_fail">Não foi possível enviar o telegrama. Tente novamente daqui a pouco.</string>
+    <string name="telegram_history_title">Histórico do TelegramA</string>
+
+    <!-- World Assembly -->
+    <string name="wa_general_assembly">Assembleia Geral</string>
+    <string name="wa_security_council">Conselho de Segurança</string>
+    <string name="wa_voting_time">Votação se encerra em %1$s</string>
+    <string name="wa_implemented">%1$s #%2$d — %3$s</string>
+    <string name="wa_ga_prefix">AG</string>
+    <string name="wa_sc_prefix">CS</string>
+    <string name="wa_for">A Favor</string>
+    <string name="wa_against">Contra</string>
+    <string name="wa_members">membros</string>
+    <string name="wa_delegates">delegados</string>
+    <string name="wa_proposed">Proposta por %1$s</string>
+    <string name="wa_nominee_template">%1$s — %2$s</string>
+    <string name="wa_repeal_target">Revogar — %1$s</string>
+    <string name="wa_repealed">Revogada por %1$s #%2$d</string>
+    <string name="wa_resolution">Resolução</string>
+    <string name="wa_resolution_vote_default">Votar nesta resolução</string>
+    <string name="wa_resolution_vote_for">Votou a favor desta resolução.</string>
+    <string name="wa_resolution_vote_against">Votou contra esta resolução.</string>
+    <string name="wa_resolution_vote_undecided">No vote for this resolution.</string>
+    <string name="wa_vote_dialog_title">Voto na Resolução</string>
+    <string name="wa_vote_dialog_for">A Favor</string>
+    <string name="wa_vote_dialog_against">Contra</string>
+    <string name="wa_vote_dialog_undecided">Não votou</string>
+    <string name="wa_vote_dialog_submit">Enviar Voto</string>
+    <string name="wa_vote_breakdown">Votação</string><!-- ! -->
+    <string name="wa_vote_history">Histórico de Votação</string>
+    <string name="wa_x_axis_h">%1$d h</string>
+    <string name="wa_x_axis_d">Dia %1$d</string>
+    <string name="wa_post_for">Votar A Favor</string>
+    <string name="wa_post_against">Votar Contra</string>
+    <string name="wa_post_undecided">Retirar Voto</string>
+    <string name="wa_error">Resolução não encontrada.</string>
+    <string name="wa_last_resolution">Ler esta resolução</string>
+
+    <!-- The World -->
+    <string name="world_nations">nações</string>
+    <string name="world_regions">regiões</string>
+    <string name="world_featured">Região em Destaque</string>
+    <string name="world_census">Censo em Destaque</string>
+    <string name="world_census_score">Portuação Mundial: %1$s</string>
+
+    <!-- Report -->
+    <string name="report_title">Denúnia</string>
+    <string name="report_send">Enviar Denúncia</string>
+    <string name="report_target">Denunciando %1$s #%2$d de %3$s ao time de moderação do NationStates.</string>
+    <string name="report_mod_reply">Respondendo ao telegrama de moderador (tarefa #%1$d).</string>
+    <string name="report_telegram">telegrama</string>
+    <string name="report_rmb_post">Mensagem no MR</string><!-- ! -->
+    <string name="report_checklist">Seja específico.\nDiga-nos quem está envolvido.\nSeja gentil com os moderadores!</string>
+    <string name="report_want">Eu desejo denunciar…</string>
+    <string name="report_inappropriate">…conteúdo impróprio.</string>
+    <string name="report_spam">…um spammer.</string>
+    <string name="report_other">…alguma outra coisa.</string>
+    <string name="report_describe_hint">Por favor descreva o problema…</string>
+    <string name="report_blank">A denúncia parece estar vazia.</string>
+    <string name="report_confirm">Enviar denúncia aos moderadores do NationStates?</string>
+    <string name="report_send_confirm">Enviar</string>
+    <string name="report_header_comment_template">%1$s ID:#%2$d\n\n%3$s:\n%4$s\n\n(enviado via Stately)</string>
+    <string name="report_header_telegram">Telegrama</string>
+    <string name="report_header_rmb_post">Mensagem no MR</string><!-- ! -->
+    <string name="report_header_task">Tarefa</string>
+    <string name="report_header_reason">Razão da denúncia</string>
+    <string name="report_header_response">Resposta</string>
+
+    <!-- Settings -->
+    <string name="setting_title_behavior">Geral</string>
+    <string name="setting_autologin">Conectar automaticamente</string>
+    <string name="setting_issueconfirm">Confirmar decisões de questões</string>
+    <string name="setting_crashreport">Enviar relatório de erros</string>
+    <string name="warn_crashreport">O Stately deve ser reiniciado para que a alteração tenha efeito.</string>
+    <string name="got_it">Entendi</string>
+    <string name="setting_title_notifs">Notificaçções</string>
+    <string name="setting_notifs">Obter notificações</string>
+    <string name="setting_notifs_desc">Apenas para a nação conectada atualmente. Os Avisos devem ser habilitados no NationStates.</string>
+    <string name="setting_notifs_check">Verificar se há novas notificações</string>
+    <string name="setting_notifs_issues">Questões</string>
+    <string name="setting_notifs_tgs">Telegramas</string>
+    <string name="setting_notifs_rmb_mention">Menções no MR</string>
+    <string name="setting_notifs_rmb_quote">Citações no MR</string>
+    <string name="setting_notifs_rmb_like">Curtidas no MR</string>
+    <string name="setting_notifs_endorse">Endossos</string>
+    <string name="setting_title_style">Estilo</string>
+    <string name="setting_theme">Tema</string>
+    <string name="setting_category">Categoria de Governo</string>
+    <string name="setting_title_about">Sobre</string>
+    <string name="setting_developer_info">Criado com ♥ no Canadá por Lloyd Torres\nContribuidores: Jannes Höke</string>
+
+    <!-- Notifications -->
+    <string name="notifs_new_issue">Uma nova questão foi encontrada</string>
+</resources>
