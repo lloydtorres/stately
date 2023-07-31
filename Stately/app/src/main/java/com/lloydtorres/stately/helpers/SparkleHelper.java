@@ -124,7 +124,7 @@ public final class SparkleHelper {
             ResolutionActivity.RESOLUTION_PROTOCOL,
             ReportActivity.REPORT_PROTOCOL};
     // Current NationStates API version
-    public static final String API_VERSION = "11";
+    public static final String API_VERSION = "12";
     // NationStates API
     public static final String DOMAIN_URI = "nationstates.net";
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
