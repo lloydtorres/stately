@@ -148,24 +148,29 @@
         <item>Unknown##Mystery Units##x12</item>
     </string-array>
     <string-array name="postcards">
+        <item>A Golden Age##y167</item>
         <item>A Many Splendoured Land##t22</item>
         <item>A Moment\'s Peace##m3</item>
         <item>A New Day##l19</item>
         <item>A Voice at the Table##wa1</item>
         <item>Abandoned##l13</item>
         <item>Above it All##t25</item>
+        <item>Agrarian Spirit##ty54</item>
         <item>Air and Glass##b1</item>
         <item>All Available Space##t1</item>
         <item>All That Glitters##e5</item>
         <item>An Apple a Day##i18</item>
+        <item>Another Day Older and Deeper in Debt##y243</item>
         <item>Artist\'s Impression##c13</item>
         <item>Aspire##c9</item>
         <item>At Rest##l26</item>
         <item>Atomic Age##x4</item>
+        <item>Author of Your Own Destiny##y178</item>
         <item>Autumnal##f3</item>
         <item>Avast!##x6</item>
         <item>Beached##o10</item>
         <item>Beating Heart##c19</item>
+        <item>Better Red Than Dead##k8</item>
         <item>Better When Bottled##i9</item>
         <item>Between God and Rock##b19</item>
         <item>Bike Lane##k1</item>
@@ -177,15 +182,20 @@
         <item>Bridge to Nowhere##d2</item>
         <item>Bright Lights, Big City##c1</item>
         <item>Budding Freedoms##n5</item>
+        <item>Bushels of Baskets##i32</item>
         <item>Business First##b11</item>
+        <item>Camera-Carrying Cruisers##y117</item>
+        <item>Carry That Weight##y331</item>
         <item>Cavern##l16</item>
         <item>Celestial Color##v1</item>
         <item>Cheeky##p18</item>
         <item>Chewing the Cud##a1</item>
+        <item>Circle of Friends##y37</item>
         <item>City of Sand##c8</item>
         <item>City of Sticks##t24</item>
         <item>Clean and Green##i3</item>
         <item>Cold Hard Reality##b12</item>
+        <item>Condemned by the Space Pope##w6</item>
         <item>Conference##e3</item>
         <item>Contemplation##b18</item>
         <item>Conveyance##i15</item>
@@ -195,55 +205,68 @@
         <item>Crisp Village##t21</item>
         <item>Cruise##m4</item>
         <item>Cultivated##l45</item>
+        <item>Dangerous Combination##y210</item>
         <item>Defiance##z2</item>
         <item>Delicious##i24</item>
         <item>Department of Oversight##b8</item>
         <item>Detrimental Externality##r9</item>
         <item>Dissent is Treason##b15</item>
         <item>Domed##b6</item>
+        <item>Don\'t Forget to Carry the One##i58</item>
         <item>Dumped##r10</item>
         <item>Dune##h2</item>
         <item>Early to Rise##a4</item>
+        <item>Eco-Warriors##y102</item>
         <item>Eggcellent Detective Work##eg2</item>
+        <item>Eggceptional Exploring##y261</item>
+        <item>Enduring Guidance##y255</item>
         <item>Energy Source##i2</item>
         <item>Engine of Growth##i5</item>
         <item>Every Road is a Story##l3</item>
         <item>Everyone Wants a Piece##tv1</item>
         <item>Exodus##d3</item>
         <item>Export Sales##i7</item>
-        <item>We the People##p2</item>
-        <item>We the People##p9</item>
-        <item>We the People##p8</item>
-        <item>We the People##p7</item>
-        <item>We the People##p6</item>
-        <item>We the People##p5</item>
-        <item>We the People##p10</item>
-        <item>We the People##p11</item>
-        <item>We the People##p12</item>
-        <item>We the People##p13</item>
-        <item>We the People##p14</item>
-        <item>We the People##p15</item>
-        <item>We the People##p16</item>
-        <item>We the People##p21</item>
+        <item>Faces of the Nation##p2</item>
+        <item>Faces of the Nation##p9</item>
+        <item>Faces of the Nation##p8</item>
+        <item>Faces of the Nation##p7</item>
+        <item>Faces of the Nation##p6</item>
+        <item>Faces of the Nation##p5</item>
+        <item>Faces of the Nation##p10</item>
+        <item>Faces of the Nation##p11</item>
+        <item>Faces of the Nation##p12</item>
+        <item>Faces of the Nation##p13</item>
+        <item>Faces of the Nation##p14</item>
+        <item>Faces of the Nation##p15</item>
+        <item>Faces of the Nation##p16</item>
+        <item>Faces of the Nation##p21</item>
         <item>Fast Lane##c5</item>
         <item>Father Knows Best##t19</item>
+        <item>Fervent Followers##y279</item>
         <item>Fields of Gold##l20</item>
         <item>Form and Function##g1</item>
         <item>Foundry##i12</item>
+        <item>Freedom From##z3</item>
         <item>From Above##m6</item>
         <item>From the Earth##a5</item>
         <item>Gatekeepers##b22</item>
         <item>Genetic Warfare##n2</item>
+        <item>Girl Power##m9</item>
         <item>Giving Back##p22</item>
+        <item>Glorious Purpose##l65</item>
         <item>Glory to the Government##g2</item>
         <item>Go It Alone##l34</item>
         <item>Gone Fission##i11</item>
+        <item>Good Habits##y359</item>
         <item>Gray Power##l22</item>
         <item>Great Works##z1</item>
         <item>Green is the Morrow##t26</item>
+        <item>Grudges are Forever##y53</item>
         <item>Hallowed Halls##b20</item>
         <item>Handheld##p3</item>
+        <item>Hands Off##y163</item>
         <item>Happy Trails##f4</item>
+        <item>Helping Hand##y194</item>
         <item>High-Density Culture##t5</item>
         <item>Hiking##l12</item>
         <item>Hilly Terrain##l2</item>
@@ -260,24 +283,36 @@
         <item>Inconsistent Service Delivery##d7</item>
         <item>Incremental Improvement##c4</item>
         <item>Infected##x5</item>
+        <item>Insular Inhabitants##y202</item>
         <item>Interior Tech##b4</item>
+        <item>International Outsider##p37</item>
+        <item>Invisible Hand##e11</item>
         <item>Island of Many Hills##c14</item>
+        <item>It\'s Not the Scandal, It\'s the Cover-Up##y244</item>
         <item>Jacked In##i16</item>
+        <item>Just Called to Say I Love You##y38</item>
         <item>Keeper of the Flame##p26</item>
         <item>Keeping the Peace##s1</item>
         <item>Kickball##p24</item>
+        <item>Kids Wanna Rock##y82</item>
+        <item>Lab Rats##y182</item>
         <item>Leadership##b7</item>
+        <item>Life Finds a Way##x7</item>
         <item>Life is a Mystery##l41</item>
         <item>Light the Lamps##t6</item>
         <item>Listening In##b24</item>
+        <item>Live Fast, Die Young##l41</item>
         <item>Live Wire##i8</item>
         <item>Making No Cents##e4</item>
+        <item>Marathon Not a Sprint##y347</item>
         <item>Material Disadvantage##m8</item>
         <item>Medical Innovation##n1</item>
         <item>Medieval##b16</item>
         <item>Mega-Metropolis##c15</item>
         <item>Mesa##l40</item>
         <item>Metropolis##c3</item>
+        <item>Migrant Labor##a7</item>
+        <item>Millenial Persistence##l57</item>
         <item>Minimalist Curves##b3</item>
         <item>Misty Morning##f1</item>
         <item>Model of Efficiency##i1</item>
@@ -286,40 +321,49 @@
         <item>Morning Calm##t16</item>
         <item>Mother and Child##p1</item>
         <item>Haute Couture##p4</item>
+        <item>Nation of States##y154</item>
         <item>National Pride##s3</item>
         <item>Needs of the Many##b14</item>
         <item>New Around Here##o9</item>
-        <item>Nice Part of Town##t27</item>
         <item>Nice for Some##b17</item>
+        <item>Nice Part of Town##t27</item>
+        <item>No Escape From Reality##y266</item>
         <item>No Limits##c20</item>
         <item>No Moisture Required##w1</item>
         <item>No Rest for the Young##u1</item>
         <item>Not Sure What\'s Happening Here##d4</item>
         <item>Nothing to See Here##r11</item>
+        <item>Nuclear Family Testing##y122</item>
         <item>Oasis##l24</item>
         <item>Oblong Secrets##eg1</item>
         <item>Ocean Frolics##p20</item>
         <item>Ocean Nova##o3</item>
         <item>Old Ways are Best##l31</item>
+        <item>On Everyone\'s Bucket List##t31</item>
         <item>On Rails##i26</item>
         <item>On the Menu##a6</item>
         <item>On the Water##t9</item>
         <item>Open for Business##e2</item>
+        <item>Our Thing##x14</item>
         <item>Out There##x1</item>
         <item>Outdoor Pursuits##l11</item>
+        <item>Overcomer##y49</item>
         <item>Oversight##t11</item>
         <item>Palatial##b23</item>
         <item>Patrol##m5</item>
         <item>Pause for Sightseeing##l29</item>
         <item>Peacekeepers##m7</item>
         <item>Perched##l18</item>
+        <item>Permanently Grounded##y30</item>
         <item>Perspective##b25</item>
+        <item>Pilgrim\'s Progress##y132</item>
         <item>Pillar of Society##g3</item>
         <item>Piped Profits##i4</item>
         <item>Platform for Expansion##i13</item>
         <item>Popular Uprising##p23</item>
-        <item>Power Grid##c16</item>
         <item>Power from the People##p17</item>
+        <item>Power Grid##c16</item>
+        <item>Praise the Lord and Pass the Doobie##b27</item>
         <item>Productive Soil##a3</item>
         <item>Progress is Movement##c7</item>
         <item>Progress is Thirsty Work##c10</item>
@@ -327,16 +371,22 @@
         <item>Puffing Billy##i20</item>
         <item>Queen of the Hill##t14</item>
         <item>Railworks##i19</item>
+        <item>Rebels With a Cause##y73</item>
         <item>Red Dawn##l1</item>
+        <item>Red in Tooth and Claw##y335</item>
+        <item>Red Tape##b34</item>
         <item>Remembered##l25</item>
         <item>Removed##b9</item>
         <item>Renovator\'s Delight##c11</item>
         <item>Respected##o5</item>
+        <item>Retirement##l30</item>
         <item>Revolving##l10</item>
         <item>Ride the Wave##e1</item>
         <item>River City##c2</item>
         <item>Rock of Ages##l21</item>
         <item>Rocky Endeavor##l37</item>
+        <item>Runaway Bride##7360</item>
+        <item>Rural Idyll##y353</item>
         <item>Rush Hour##a2</item>
         <item>Sand and Rock##l7</item>
         <item>Scenic Slag Heap##l39</item>
@@ -348,9 +398,12 @@
         <item>Server Room##b5</item>
         <item>Shacked Up##o8</item>
         <item>Simple Life##t23</item>
+        <item>Sin City##y96</item>
         <item>Skyward##c17</item>
+        <item>Slavery, Serfdom, and Subjugation##y204</item>
         <item>Slice of Life##i25</item>
         <item>Slight Crime Problem##d1</item>
+        <item>Slipped Through the Net##y179</item>
         <item>Slumming##r3</item>
         <item>Small Business##r4</item>
         <item>Snowed In##l42</item>
@@ -361,25 +414,35 @@
         <item>Stand Alone##l43</item>
         <item>Starting Out##p19</item>
         <item>Steel and Glass##c18</item>
+        <item>Storied##t59</item>
         <item>Stories to Tell##r7</item>
+        <item>Stupid Is as Stupid Does##y228</item>
+        <item>Suffer the Little Children##y220</item>
         <item>Summer Residence##t18</item>
         <item>Sunset Escort##m2</item>
+        <item>Sword and Shield##y320</item>
         <item>Tall Timber##f5</item>
         <item>Tanks for Everything##m1</item>
         <item>Temperature Dropping##l32</item>
+        <item>That\'s Not Red Ink Dripping From the Budget##r16</item>
         <item>The Fish Are Worth It##i23</item>
         <item>The Future is Near##w2</item>
+        <item>The Gig is Up##y101</item>
+        <item>The Good the Bad and the Ugly##y256</item>
         <item>The Hand That Feeds##i14</item>
         <item>The Hills are Alive##l44</item>
+        <item>The Lost World##y206</item>
         <item>The Other Way##t4</item>
+        <item>The Pen is Mightier##y85</item>
         <item>The Sea Remembers##r8</item>
         <item>The Sun Always Rises##t15</item>
         <item>The Worlds Above Us##w3</item>
         <item>There Are Always More Questions##n4</item>
-        <item>There Will Be Blood##x3</item>
         <item>There\'s a Whole World Out Here##l33</item>
+        <item>There Will Be Blood##x3</item>
         <item>They Grow Up So Fast##c21</item>
         <item>Thickening Blue Line##s2</item>
+        <item>This Never Happened##s4</item>
         <item>Together##p25</item>
         <item>Tourist Destination##l9</item>
         <item>Trade Hub##i6</item>
@@ -389,16 +452,22 @@
         <item>Trickle Down##r1</item>
         <item>Unbeaten Path##l6</item>
         <item>Under and Over##t12</item>
+        <item>Under Your Eye##z4</item>
         <item>Underbelly##u2</item>
+        <item>Undergrounded##t38</item>
         <item>Urban Sprawl##c12</item>
         <item>Vats Entertainment##x2</item>
         <item>Vaults of Knowledge##i10</item>
         <item>Very Fishy##o1</item>
+        <item>Virtual Gold##y22</item>
         <item>Vista##t2</item>
         <item>Waking in Paradise##o6</item>
+        <item>Well, That Escalated Quickly##y100</item>
+        <item>Wildly Artificial##y224</item>
         <item>White Whale##d6</item>
         <item>Window Shopping##t20</item>
         <item>Windswept##l38</item>
+        <item>Won\'t Be Fooled Again##d6</item>
         <item>You Didn\'t Build That##b10</item>
     </string-array>
     <string-array name="freedom_scale">
