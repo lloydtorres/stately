@@ -61,7 +61,7 @@ import com.lloydtorres.stately.wa.ResolutionActivity;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -208,7 +208,7 @@ public final class MuffinsHelper {
             }
 
             Element previewRaw = rt.select("div.tgsample").first();
-            tel.preview = Jsoup.clean(previewRaw.text(), Whitelist.none().addTags("br"));
+            tel.preview = Jsoup.clean(previewRaw.text(), Safelist.none().addTags("br"));
             String contentRawHtml = rt.select("div.tgmsg").first().html();
             processTelegramContent(c, contentRawHtml, tel);
 
@@ -304,7 +304,7 @@ public final class MuffinsHelper {
             String contentRawHtml = rt.select("div.tgcontent").first().html();
             processTelegramContent(c, contentRawHtml, tel);
             tel.content = "<br>" + tel.content;
-            tel.preview = Jsoup.clean(tel.content, Whitelist.none());
+            tel.preview = Jsoup.clean(tel.content, Safelist.none());
 
             getTelegramRecruitmentStatus(rt, tel);
 
@@ -476,7 +476,7 @@ public final class MuffinsHelper {
         outputSettings.prettyPrint(false);
 
         String holder = Jsoup.clean(content.html(), SparkleHelper.BASE_URI,
-                Whitelist.basic().preserveRelativeLinks(true).addTags("br", "strike"),
+                Safelist.basic().preserveRelativeLinks(true).addTags("br", "strike"),
                 outputSettings);
         holder = holder.replace("\n", "<br>");
         holder = SparkleHelper.replaceMalformedHtmlCharacters(holder);

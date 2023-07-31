@@ -86,7 +86,7 @@ import com.lloydtorres.stately.wa.ResolutionActivity;
 
 import org.atteo.evo.inflector.English;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
@@ -117,7 +117,7 @@ import java.util.regex.Pattern;
 public final class SparkleHelper {
     // Tag used to mark system log print calls
     public static final String APP_TAG = "Stately";
-    // Whitelisted protocols
+    // Allowlisted protocols
     public static final String[] PROTOCOLS = {"http", "https",
             ExploreActivity.EXPLORE_PROTOCOL,
             MessageBoardActivity.RMB_PROTOCOL,
@@ -962,7 +962,7 @@ public final class SparkleHelper {
         }
         String holder = content;
         if (shouldClean) {
-            holder = Jsoup.clean(holder, Whitelist.none().addTags("br"));
+            holder = Jsoup.clean(holder, Safelist.none().addTags("br"));
         }
         holder = replaceMalformedHtmlCharacters(holder);
         return fromHtml(holder);
@@ -976,7 +976,7 @@ public final class SparkleHelper {
      */
     public static void setHappeningsFormatting(Context c, TextView t, String content) {
         content = Jsoup.clean(content, BASE_URI_NOSLASH,
-                Whitelist.basic().preserveRelativeLinks(true));
+                Safelist.basic().preserveRelativeLinks(true));
         content = replaceMalformedHtmlCharacters(content);
 
         // Replace RMB links with targets to the RMB activity
@@ -1039,7 +1039,7 @@ public final class SparkleHelper {
         String holder = content.trim();
         holder = holder.replace("\n", "<br>");
         holder = replaceMalformedHtmlCharacters(holder);
-        holder = Jsoup.clean(holder, Whitelist.simpleText().addTags("br"));
+        holder = Jsoup.clean(holder, Safelist.simpleText().addTags("br"));
 
         // First handle the [pre] tag -- anything inside must not be formatted
         holder = regexPreFormat(holder);
@@ -1396,7 +1396,7 @@ public final class SparkleHelper {
         holder = holder.replace("[*]", "<li>");
         holder = holder.replace("<li><br><br>", "<li>");
         holder = holder.replace("<li><br>", "<li>");
-        holder = Jsoup.clean(holder, Whitelist.relaxed());
+        holder = Jsoup.clean(holder, Safelist.relaxed());
         return holder;
     }
 

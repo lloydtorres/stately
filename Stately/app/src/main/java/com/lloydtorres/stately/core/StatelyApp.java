@@ -16,9 +16,12 @@
 
 package com.lloydtorres.stately.core;
 
+import android.content.Context;
+
+import androidx.multidex.MultiDex;
+
 import com.lloydtorres.stately.push.TrixHelper;
 import com.orm.SugarApp;
-
 
 /**
  * Created by Lloyd on 2016-01-29.
@@ -32,5 +35,11 @@ public class StatelyApp extends SugarApp {
 
         // notification channels
         TrixHelper.initNotificationChannels(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }
