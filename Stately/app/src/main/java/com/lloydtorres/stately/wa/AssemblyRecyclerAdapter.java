@@ -61,7 +61,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final int SECURITY_COUNCIL_INDEX = 1;
 
     private static final String WA_BANNER_URL = SparkleHelper.BASE_URI + "images/banners/wa1.jpg";
-    private static final int WA_FOUNDATION_ID = 2;
+    private static final int WA_FOUNDATION_ID = 654;
     private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)" +
             "\\/page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)");
     private List<Object> cards;
