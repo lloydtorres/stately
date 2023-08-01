@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -85,6 +86,8 @@ public class RegionFragment extends Fragment {
     private HappeningsSubFragment regionHappeningsSubFragment;
 
     // variables used for mRegion views
+    private ImageView regionBanner;
+    private Space regionNoFlagSpacer;
     private TextView regionName;
     private TextView regionPop;
     private ImageView regionFlag;
@@ -198,6 +201,8 @@ public class RegionFragment extends Fragment {
      * @param view
      */
     private void getAllRegionViews(View view) {
+        regionBanner = view.findViewById(R.id.region_banner);
+        regionNoFlagSpacer = view.findViewById(R.id.region_noflag_spacer);
         regionName = view.findViewById(R.id.region_name);
         regionPop = view.findViewById(R.id.region_pop);
         regionFlag = view.findViewById(R.id.region_flag);
@@ -210,9 +215,16 @@ public class RegionFragment extends Fragment {
      * @param view
      */
     private void initRegionData(View view) {
+        final DashHelper dashie = DashHelper.getInstance(getContext());
+
+        dashie.loadImage(SparkleHelper.BASE_URI_NOSLASH + mRegion.bannerUrl, regionBanner);
+
         if (mRegion.flagURL != null) {
             regionFlag.setVisibility(View.VISIBLE);
-            DashHelper.getInstance(getContext()).loadImage(mRegion.flagURL, regionFlag);
+            dashie.loadImage(mRegion.flagURL, regionFlag);
+            regionNoFlagSpacer.setVisibility(View.GONE);
+        } else {
+            regionNoFlagSpacer.setVisibility(View.VISIBLE);
         }
 
         regionName.setText(mRegion.name);
