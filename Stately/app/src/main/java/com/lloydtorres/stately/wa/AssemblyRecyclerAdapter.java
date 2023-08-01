@@ -300,7 +300,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             banner = v.findViewById(R.id.card_wa_header);
             foundationButton = v.findViewById(R.id.card_wa_header_foundation_button);
 
-            DashHelper.getInstance(context).loadImage(WA_BANNER_URL, banner, false);
+            DashHelper.getInstance(context).loadImage(WA_BANNER_URL, banner);
         }
 
         public void init(DataIntPair s) {

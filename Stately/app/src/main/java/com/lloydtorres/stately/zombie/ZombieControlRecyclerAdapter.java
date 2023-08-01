@@ -178,8 +178,8 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             DashHelper dashie = DashHelper.getInstance(context);
             dashie.loadImage(NightmareHelper.getZombieBanner(data.zombieData.action),
-                    headerBackground, false);
-            dashie.loadImage(data.flagURL, flag, true);
+                    headerBackground);
+            dashie.loadImage(data.flagURL, flag);
 
             if (data.zombieData.action == null || (data.zombieData.survivors <= 0 && data.zombieData.zombies > 0
                     && !Zombie.ZACTION_ZOMBIE.equals(data.zombieData.action))) {

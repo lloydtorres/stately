@@ -211,12 +211,12 @@ public class NationFragment extends Fragment {
 
         if (NightmareHelper.getIsZDayActive(getContext()) && mNation.zombieData != null) {
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action),
-                    nationBanner, false);
+                    nationBanner);
         } else {
-            dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner, false);
+            dashie.loadImage(RaraHelper.getBannerURL(mNation.bannerKey), nationBanner);
         }
 
-        dashie.loadImage(mNation.flagURL, nationFlag, true);
+        dashie.loadImage(mNation.flagURL, nationFlag);
 
         overviewSubFragment = new OverviewSubFragment();
         overviewSubFragment.setNation(mNation);

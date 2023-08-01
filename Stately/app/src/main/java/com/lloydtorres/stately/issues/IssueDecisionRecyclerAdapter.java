@@ -158,7 +158,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             if (issue.image != null) {
                 image.setVisibility(View.VISIBLE);
                 DashHelper dashie = DashHelper.getInstance(context);
-                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image, false);
+                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image);
             } else {
                 image.setVisibility(View.GONE);
             }

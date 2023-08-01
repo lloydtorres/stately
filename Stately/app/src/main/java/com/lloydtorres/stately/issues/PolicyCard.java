@@ -68,8 +68,7 @@ public class PolicyCard extends RecyclerView.ViewHolder {
             image.setVisibility(View.VISIBLE);
             DashHelper.getInstance(context).loadImage(
                     RaraHelper.getBannerURL(policy.imageId),
-                    image,
-                    true
+                    image
             );
         } else {
             image.setVisibility(View.GONE);

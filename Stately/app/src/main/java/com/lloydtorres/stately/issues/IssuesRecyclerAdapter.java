@@ -166,7 +166,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (issue.image != null) {
                 image.setVisibility(View.VISIBLE);
                 DashHelper dashie = DashHelper.getInstance(context);
-                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image, false);
+                dashie.loadImage(RaraHelper.getBannerURL(issue.image), image);
             } else {
                 image.setVisibility(View.GONE);
             }
@@ -224,7 +224,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void init(Zombie zombieData) {
             DashHelper dashie = DashHelper.getInstance(context);
             dashie.loadImage(NightmareHelper.getZombieBanner(mNation.zombieData.action),
-                    background, false);
+                    background);
             float total = zombieData.survivors + zombieData.dead + zombieData.zombies;
             float survivalRatePercent = (zombieData.survivors / total) * 100f;
             survivalRate.setText(String.format(Locale.US,

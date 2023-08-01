@@ -149,13 +149,8 @@ public class DashHelper {
         }
     }
 
-    public void loadImage(String url, ImageView target, boolean adjustBounds) {
-        // Only adjust if set and version is <=4.2
-        if (adjustBounds && Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Picasso.get().load(url).placeholder(R.drawable.gray).transform(new JellyBeanTransform(mContext, target)).into(target);
-        } else {
-            Picasso.get().load(url).placeholder(R.drawable.gray).into(target);
-        }
+    public void loadImage(String url, ImageView target) {
+        Picasso.get().load(url).placeholder(R.drawable.gray).into(target);
     }
 
     public void loadImageWithoutPlaceHolder(int drawable, ImageView target) {

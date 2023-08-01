@@ -243,7 +243,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                             regionData.numNations)));
             if (regionData.flagURL != null) {
                 flag.setVisibility(View.VISIBLE);
-                DashHelper.getInstance(context).loadImage(regionData.flagURL, flag, false);
+                DashHelper.getInstance(context).loadImage(regionData.flagURL, flag);
             } else {
                 flag.setVisibility(View.GONE);
             }
@@ -301,7 +301,7 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     SparkleHelper.getPrettifiedShortSuffixedNumber(context, featuredCensus.score)));
 
             String bgUrl = RaraHelper.getBannerURL(censusType.banner);
-            DashHelper.getInstance(context).loadImage(bgUrl, censusBg, false);
+            DashHelper.getInstance(context).loadImage(bgUrl, censusBg);
         }
 
         @Override

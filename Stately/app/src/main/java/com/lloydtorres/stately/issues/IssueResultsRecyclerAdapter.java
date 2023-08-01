@@ -271,7 +271,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             if (result.image != null) {
                 image.setVisibility(View.VISIBLE);
                 DashHelper dashie = DashHelper.getInstance(context);
-                dashie.loadImage(RaraHelper.getBannerURL(result.image), image, false);
+                dashie.loadImage(RaraHelper.getBannerURL(result.image), image);
             } else {
                 image.setVisibility(View.GONE);
             }
@@ -383,7 +383,7 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public void init(IssuePostcard card) {
             nationName.setText(mNation.name);
-            DashHelper.getInstance(context).loadImage(card.imgUrl, img, false);
+            DashHelper.getInstance(context).loadImage(card.imgUrl, img);
             if (postcardData.containsKey(card.rawId)) {
                 description.setVisibility(View.VISIBLE);
                 description.setText(postcardData.get(card.rawId));

@@ -212,7 +212,7 @@ public class RegionFragment extends Fragment {
     private void initRegionData(View view) {
         if (mRegion.flagURL != null) {
             regionFlag.setVisibility(View.VISIBLE);
-            DashHelper.getInstance(getContext()).loadImage(mRegion.flagURL, regionFlag, true);
+            DashHelper.getInstance(getContext()).loadImage(mRegion.flagURL, regionFlag);
         }
 
         regionName.setText(mRegion.name);
