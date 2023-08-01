@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Lloyd Torres
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,12 +87,12 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int CARD_POLICY = 6;
     private static final int CARD_EMPTY = 7;
     private final LinkedHashMap<Integer, CensusScale> censusScales;
-    private List<Parcelable> cards;
     private final String nationName;
     private final boolean isSameRegion;
-    private ExploreActivity exploreActivity;
     private final Context context;
     private final FragmentManager fm;
+    private List<Parcelable> cards;
+    private ExploreActivity exploreActivity;
 
     public NationCardsRecyclerAdapter(List<Parcelable> cds, FragmentManager f, String n,
                                       boolean sameRegion, ExploreActivity act) {
@@ -253,6 +253,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private final TextView influence;
         private final TextView population;
         private final TextView motto;
+        private final TextView issuesAnswered;
         private final TextView time;
 
         // WA section
@@ -274,6 +275,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             influence = view.findViewById(R.id.nation_influence);
             population = view.findViewById(R.id.nation_population);
             motto = view.findViewById(R.id.nation_motto);
+            issuesAnswered = view.findViewById(R.id.nation_issues_answered);
             time = view.findViewById(R.id.nation_time);
 
             waMember = view.findViewById(R.id.nation_wa_member);
@@ -297,6 +299,9 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     SparkleHelper.getPrettifiedNumber(data.inflScore)));
             population.setText(SparkleHelper.getPopulationFormatted(context, data.population));
             motto.setText(SparkleHelper.getHtmlFormatting(data.motto).toString());
+            issuesAnswered.setText(String.format(Locale.US, context.getString(R.string.nation_issues_answered),
+                    SparkleHelper.getPrettifiedNumber(data.issuesAnswered),
+                    context.getResources().getQuantityString(R.plurals.issue, data.issuesAnswered)));
             String lastLogin = SparkleHelper.getReadableDateFromUTC(context, data.lastSeen);
             if (data.established == 0) {
                 time.setText(String.format(Locale.US,
@@ -363,6 +368,7 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         /**
          * Sets up colours, etc. for the WA voting indicators, which are identical in all but name.
+         *
          * @param holder
          * @param content
          * @param vote

@@ -43,6 +43,7 @@ public class NationOverviewCardData implements Parcelable {
     public float inflScore;
     public int population;
     public String motto;
+    public int issuesAnswered;
     public long established;
     public long lastSeen;
     public String waState;
@@ -61,6 +62,7 @@ public class NationOverviewCardData implements Parcelable {
         inflScore = in.readFloat();
         population = in.readInt();
         motto = in.readString();
+        issuesAnswered = in.readInt();
         established = in.readLong();
         lastSeen = in.readLong();
         waState = in.readString();
@@ -82,6 +84,7 @@ public class NationOverviewCardData implements Parcelable {
         dest.writeFloat(inflScore);
         dest.writeInt(population);
         dest.writeString(motto);
+        dest.writeInt(issuesAnswered);
         dest.writeLong(established);
         dest.writeLong(lastSeen);
         dest.writeString(waState);

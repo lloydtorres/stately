@@ -41,7 +41,7 @@ public class Nation implements Parcelable {
     public static final String BASE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/cgi-bin/api" +
             ".cgi?nation=%s&q="
             + "banner+flag+name+type+wa+wabadges"
-            + "+category+region+influence+population+foundedtime+lastlogin+motto"
+            + "+category+region+influence+population+foundedtime+lastlogin+answered+motto"
             + "+freedom"
             + "+customleader+customcapital+govtpriority+tax"
             + "+currency+gdp+income+majorindustry"
@@ -95,6 +95,8 @@ public class Nation implements Parcelable {
     public String influence;
     @Element(name = "POPULATION")
     public int popBase;
+    @Element(name = "ISSUES_ANSWERED")
+    public int issuesAnswered;
     @Element(name = "FOUNDEDTIME")
     public long foundedAgo;
     @Element(name = "LASTLOGIN")
@@ -184,6 +186,7 @@ public class Nation implements Parcelable {
         region = in.readString();
         influence = in.readString();
         popBase = in.readInt();
+        issuesAnswered = in.readInt();
         foundedAgo = in.readLong();
         lastActivityAgo = in.readLong();
         motto = in.readString();
@@ -299,6 +302,7 @@ public class Nation implements Parcelable {
         dest.writeString(region);
         dest.writeString(influence);
         dest.writeInt(popBase);
+        dest.writeInt(issuesAnswered);
         dest.writeLong(foundedAgo);
         dest.writeLong(lastActivityAgo);
         dest.writeString(motto);

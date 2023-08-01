@@ -144,6 +144,7 @@ public class OverviewSubFragment extends NationSubFragment {
         nocData.inflScore = mNation.census.get(TrendsActivity.CENSUS_INFLUENCE).score;
         nocData.population = mNation.popBase;
         nocData.motto = mNation.motto;
+        nocData.issuesAnswered = mNation.issuesAnswered;
         nocData.established = mNation.foundedAgo;
         nocData.lastSeen = mNation.lastActivityAgo;
         nocData.waState = mNation.waState;

@@ -20,4 +20,8 @@
         <item quantity="one">Nation</item>
         <item quantity="other">Nations</item>
     </plurals>
+    <plurals name="issue">
+        <item quantity="one">issue</item>
+        <item quantity="other">issues</item>
+    </plurals>
 </resources>

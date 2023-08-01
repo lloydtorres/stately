@@ -112,6 +112,7 @@
     <string name="exit">Exit</string>
 
     <!-- Nation main card -->
+    <string name="nation_issues_answered">%1$s %2$s answered</string>
     <string name="nation_time_founded">Established %1$s\nLast seen %2$s</string>
     <string name="nation_time_immemorial">since time immemorial</string>
 
