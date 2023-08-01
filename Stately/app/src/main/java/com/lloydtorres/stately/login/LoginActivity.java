@@ -250,7 +250,7 @@ public class LoginActivity extends BroadcastableActivity {
 
                                 // Only override pin if it hasn't been changed by the server
                                 String newActivePin = PinkaHelper.getActivePin(LoginActivity.this);
-                                if (newActivePin != null && oldActivePin != null && newActivePin.equals(oldActivePin)) {
+                                if (newActivePin != null && newActivePin.equals(oldActivePin)) {
                                     PinkaHelper.setActivePin(LoginActivity.this, u.pin);
                                 }
                             }

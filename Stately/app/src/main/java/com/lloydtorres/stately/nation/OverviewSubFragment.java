@@ -57,7 +57,7 @@ public class OverviewSubFragment extends NationSubFragment {
     private final HashMap<String, String> waCategoryLiberal = new HashMap<String, String>();
     private LinkedHashMap<Integer, CensusScale> censusScales;
     // Receiver for WA vote broadcasts
-    private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (getActivity() == null || !isAdded() || mNation == null) {

@@ -55,9 +55,9 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     private static final int REGION_WA_BADGE = 4;
 
     private List<Parcelable> cards;
-    private String regionName;
-    private Context context;
-    private FragmentManager fragmentManager;
+    private final String regionName;
+    private final Context context;
+    private final FragmentManager fragmentManager;
 
     public RegionOverviewRecyclerAdapter(Context c, String r, FragmentManager fm,
                                          List<Parcelable> crds) {
@@ -188,9 +188,9 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     public class RegionQuickFactsCard extends RecyclerView.ViewHolder {
         private RegionQuickFactsCardData data;
 
-        private TextView delegate;
-        private TextView founder;
-        private TextView power;
+        private final TextView delegate;
+        private final TextView founder;
+        private final TextView power;
 
         public RegionQuickFactsCard(View itemView) {
             super(itemView);

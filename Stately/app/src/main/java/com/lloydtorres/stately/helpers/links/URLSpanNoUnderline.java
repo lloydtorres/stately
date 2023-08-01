@@ -28,7 +28,7 @@ import com.lloydtorres.stately.helpers.RaraHelper;
  * In this case, it removes the underline and colours the link with the primary colour.
  */
 public class URLSpanNoUnderline extends URLSpan {
-    private Context context;
+    private final Context context;
 
     public URLSpanNoUnderline(Context c, String url) {
         super(url);

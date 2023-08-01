@@ -116,15 +116,15 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             };
     private LinkedHashMap<Integer, CensusScale> censusScales;
-    private Context context;
-    private CensusSubFragment fragment;
+    private final Context context;
+    private final CensusSubFragment fragment;
     private ArrayList<CensusDetailedRank> censusData;
     private int sortOrder = SORT_MODE_WORLD_PERCENT;
     private boolean isAlphabetical = false;
     private boolean isAscending = true;
-    private String target;
-    private int mode;
-    private int TWO_DP_IN_PIXELS;
+    private final String target;
+    private final int mode;
+    private final int TWO_DP_IN_PIXELS;
 
     public CensusRecyclerAdapter(CensusSubFragment c, ArrayList<CensusDetailedRank> cen,
                                  String t, int m) {
@@ -228,15 +228,12 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType) {
-            case CARD_BUTTON:
-                View buttonCard = inflater.inflate(R.layout.card_button, parent, false);
-                viewHolder = new SortButtonCard(buttonCard);
-                break;
-            default:
-                View censusCard = inflater.inflate(R.layout.card_census_delta, parent, false);
-                viewHolder = new CensusCard(censusCard);
-                break;
+        if (viewType == CARD_BUTTON) {
+            View buttonCard = inflater.inflate(R.layout.card_button, parent, false);
+            viewHolder = new SortButtonCard(buttonCard);
+        } else {
+            View censusCard = inflater.inflate(R.layout.card_census_delta, parent, false);
+            viewHolder = new CensusCard(censusCard);
         }
 
         return viewHolder;
@@ -244,15 +241,12 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-            case CARD_BUTTON:
-                SortButtonCard sortButtonCard = (SortButtonCard) holder;
-                sortButtonCard.init();
-                break;
-            default:
-                CensusCard censusCard = (CensusCard) holder;
-                censusCard.init(censusData.get(position - 1));
-                break;
+        if (holder.getItemViewType() == CARD_BUTTON) {
+            SortButtonCard sortButtonCard = (SortButtonCard) holder;
+            sortButtonCard.init();
+        } else {
+            CensusCard censusCard = (CensusCard) holder;
+            censusCard.init(censusData.get(position - 1));
         }
     }
 
@@ -285,7 +279,7 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class SortButtonCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView buttonText;
+        private final TextView buttonText;
 
         public SortButtonCard(View v) {
             super(v);
@@ -316,11 +310,11 @@ public class CensusRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public class CensusCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CensusDetailedRank censusData;
 
-        private CardView cardHolder;
-        private TextView title;
-        private TextView unit;
-        private TextView superScript;
-        private TextView value;
+        private final CardView cardHolder;
+        private final TextView title;
+        private final TextView unit;
+        private final TextView superScript;
+        private final TextView value;
 
         public CensusCard(View v) {
             super(v);

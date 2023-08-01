@@ -37,11 +37,11 @@ import java.util.Locale;
  * An adapter used for the endorsement dialog's recycler.
  */
 public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private NameListDialog selfDialog;
+    private final Context context;
+    private final NameListDialog selfDialog;
     private List<String> names;
     private List<DelegateVote> delegateVotes;
-    private int target;
+    private final int target;
 
     public NameListRecyclerAdapter(Context c, NameListDialog d, List<String> n, int t) {
         context = c;
@@ -91,7 +91,7 @@ public class NameListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class NameEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView nationName;
+        private final TextView nationName;
 
         public NameEntry(View v) {
             super(v);

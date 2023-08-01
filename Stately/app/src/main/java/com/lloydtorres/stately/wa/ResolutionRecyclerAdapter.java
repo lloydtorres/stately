@@ -76,16 +76,16 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private static final String IMPLEMENTED_TEMPLATE = "%s #%d — %s";
     private static final int COUNT_ACTIVE = 5;
     private static final int COUNT_INACTIVE = 2;
-    private ResolutionActivity resolutionActivity;
-    private Context context;
-    private FragmentManager fragmentManager;
-    private AlertDialog.Builder dialogBuilder;
+    private final ResolutionActivity resolutionActivity;
+    private final Context context;
+    private final FragmentManager fragmentManager;
+    private final AlertDialog.Builder dialogBuilder;
     private Resolution resolution;
     private String voteStatus;
     private RegionWaVotes regionVotes;
-    private int councilId;
-    private int prefixId;
-    private boolean isActive;
+    private final int councilId;
+    private final int prefixId;
+    private final boolean isActive;
 
     public ResolutionRecyclerAdapter(ResolutionActivity activity, Resolution res, String vs,
                                      RegionWaVotes rv, int cId) {
@@ -175,15 +175,15 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private static final String RESOLUTION_LINK_TEMPLATE =
                 "<a href=\"" + ResolutionActivity.RESOLUTION_TARGET + "%d/%d\">%s #%d</a>";
         private static final String NOMINEE_TEMPLATE = "%s — %s";
-        private TextView title;
-        private TextView target;
-        private TextView proposedBy;
-        private TextView voteStart;
-        private TextView repealed;
-        private TextView votesFor;
-        private TextView votesAgainst;
-        private ImageView iconVoteFor;
-        private ImageView iconVoteAgainst;
+        private final TextView title;
+        private final TextView target;
+        private final TextView proposedBy;
+        private final TextView voteStart;
+        private final TextView repealed;
+        private final TextView votesFor;
+        private final TextView votesAgainst;
+        private final ImageView iconVoteFor;
+        private final ImageView iconVoteAgainst;
 
         public ResolutionHeaderCard(View itemView) {
             super(itemView);
@@ -301,11 +301,11 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class ResolutionContentCard extends ResolutionCard {
-        private HtmlTextView content;
-        private ImageView voteButtonIcon;
-        private View voteButtonDivider;
-        private LinearLayout voteButton;
-        private TextView voteButtonContent;
+        private final HtmlTextView content;
+        private final ImageView voteButtonIcon;
+        private final View voteButtonDivider;
+        private final LinearLayout voteButton;
+        private final TextView voteButtonContent;
 
         public ResolutionContentCard(View itemView) {
             super(itemView);
@@ -377,17 +377,17 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         // Views
         private PieChart votingBreakdown;
-        private TextView nullVote;
-        private RelativeLayout nationVotesForHolder;
-        private TextView nationVotesFor;
-        private ImageView nationVotesForIcon;
-        private RelativeLayout nationVotesAgainstHolder;
-        private TextView nationVotesAgainst;
-        private ImageView nationVotesAgainstIcon;
-        private RelativeLayout delegateVotesForButton;
-        private TextView delegateVotesFor;
-        private RelativeLayout delegateVotesAgainstButton;
-        private TextView delegateVotesAgainst;
+        private final TextView nullVote;
+        private final RelativeLayout nationVotesForHolder;
+        private final TextView nationVotesFor;
+        private final ImageView nationVotesForIcon;
+        private final RelativeLayout nationVotesAgainstHolder;
+        private final TextView nationVotesAgainst;
+        private final ImageView nationVotesAgainstIcon;
+        private final RelativeLayout delegateVotesForButton;
+        private final TextView delegateVotesFor;
+        private final RelativeLayout delegateVotesAgainstButton;
+        private final TextView delegateVotesAgainst;
 
         public ResolutionBreakdownCard(View itemView) {
             super(itemView);
@@ -545,10 +545,10 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private List<Integer> votesAgainst;
 
         private LineChart votingHistory;
-        private TextView voteHistoryFor;
-        private TextView voteHistoryAgainst;
-        private ImageView histIconVoteFor;
-        private ImageView histIconVoteAgainst;
+        private final TextView voteHistoryFor;
+        private final TextView voteHistoryAgainst;
+        private final ImageView histIconVoteFor;
+        private final ImageView histIconVoteAgainst;
 
         public ResolutionHistoryCard(View itemView) {
             super(itemView);
@@ -655,12 +655,12 @@ public class ResolutionRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public class RegionVotesCard extends ResolutionCard {
-        private TextView title;
-        private TextView votesFor;
-        private TextView votesAgainst;
-        private LinearLayout rmbLink;
-        private ImageView linkIcon;
-        private TextView linkContent;
+        private final TextView title;
+        private final TextView votesFor;
+        private final TextView votesAgainst;
+        private final LinearLayout rmbLink;
+        private final ImageView linkIcon;
+        private final TextView linkContent;
 
         public RegionVotesCard(View v) {
             super(v);

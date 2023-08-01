@@ -27,9 +27,9 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  */
 public class TrendsOnClickListener implements View.OnClickListener {
 
-    private Context context;
-    private String nationId;
-    private int id;
+    private final Context context;
+    private final String nationId;
+    private final int id;
     private int mode;
 
     public TrendsOnClickListener(Context c, String n, int i) {

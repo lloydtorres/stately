@@ -30,10 +30,10 @@ import com.lloydtorres.stately.dto.DataIntPair;
  */
 public class StatsCard extends RecyclerView.ViewHolder {
 
-    private TextView cardLeftValue;
-    private TextView cardLeftSub;
-    private TextView cardRightValue;
-    private TextView cardRightSub;
+    private final TextView cardLeftValue;
+    private final TextView cardLeftSub;
+    private final TextView cardRightValue;
+    private final TextView cardRightSub;
 
     public StatsCard(View v) {
         super(v);

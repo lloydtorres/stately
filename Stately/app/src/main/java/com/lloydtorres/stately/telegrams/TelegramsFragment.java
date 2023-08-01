@@ -266,13 +266,10 @@ public class TelegramsFragment extends Fragment {
                     telegramsAntiquityContainer, selfName);
         }
 
-        switch (direction) {
-            case SCAN_FORWARD:
-                processTelegramsForward(scannedTelegrams, firstRun);
-                break;
-            default:
-                processTelegramsBackward(scannedTelegrams);
-                break;
+        if (direction == SCAN_FORWARD) {
+            processTelegramsForward(scannedTelegrams, firstRun);
+        } else {
+            processTelegramsBackward(scannedTelegrams);
         }
 
         mSwipeRefreshLayout.setRefreshing(false);

@@ -32,7 +32,7 @@ import java.util.List;
  */
 public abstract class BroadcastableActivity extends AppCompatActivity {
 
-    private List<BroadcastReceiver> broadcastReceivers = new ArrayList<BroadcastReceiver>();
+    private final List<BroadcastReceiver> broadcastReceivers = new ArrayList<BroadcastReceiver>();
 
     public void registerBroadcastReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);

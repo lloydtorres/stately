@@ -81,7 +81,7 @@ public class RegionCommunitySubFragment extends RecyclerSubFragment {
 
     private boolean isInProgress = false;
     // Receiver for WA vote broadcasts
-    private BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver resolutionVoteReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (getActivity() == null || !isAdded() || mRegion == null) {

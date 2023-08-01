@@ -75,11 +75,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int OFFICER_CARD = 3;
     public static final int EMBASSY_CARD = 4;
 
-    private RegionCommunitySubFragment fragment;
-    private Context context;
-    private FragmentManager fm;
+    private final RegionCommunitySubFragment fragment;
+    private final Context context;
+    private final FragmentManager fm;
     private List<Parcelable> cards;
-    private String regionName;
+    private final String regionName;
 
     public CommunityRecyclerAdapter(RegionCommunitySubFragment frag, List<Parcelable> crds,
                                     String n) {
@@ -192,7 +192,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     // Card for the RMB button
     public class MessageBoardCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView unreadCounter;
+        private final TextView unreadCounter;
         private RMBButtonHolder buttonData;
 
         public MessageBoardCard(View v) {
@@ -226,19 +226,19 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         private static final String POLL_OPTION_FRAGMENT_START = "%s (";
         private static final String POLL_OPTION_FRAGMENT_VOTES = "%s %s";
         private static final String POLL_OPTION_FRAGMENT_END = ")";
-        private TextView question;
-        private HtmlTextView content;
-        private TextView author;
-        private TextView open;
-        private TextView close;
-        private LinearLayout options;
+        private final TextView question;
+        private final HtmlTextView content;
+        private final TextView author;
+        private final TextView open;
+        private final TextView close;
+        private final LinearLayout options;
         private PieChart breakdown;
-        private TextView nullVote;
-        private View divider;
-        private LinearLayout voteButton;
-        private ImageView voteButtonIcon;
-        private ProgressBar voteButtonProgress;
-        private TextView voteButtonContent;
+        private final TextView nullVote;
+        private final View divider;
+        private final LinearLayout voteButton;
+        private final ImageView voteButtonIcon;
+        private final ProgressBar voteButtonProgress;
+        private final TextView voteButtonContent;
 
         public PollCard(View v) {
             super(v);
@@ -378,11 +378,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     // Card for the WA poll
     public class RegionWaCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView votesFor;
-        private TextView votesAgainst;
-        private LinearLayout resolutionLink;
-        private TextView linkContent;
+        private final TextView title;
+        private final TextView votesFor;
+        private final TextView votesAgainst;
+        private final LinearLayout resolutionLink;
+        private final TextView linkContent;
 
         public RegionWaCard(View v) {
             super(v);
@@ -403,13 +403,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             });
 
             String chamberName = "";
-            switch (w.chamber) {
-                case Assembly.GENERAL_ASSEMBLY:
-                    chamberName = context.getString(R.string.wa_general_assembly);
-                    break;
-                default:
-                    chamberName = context.getString(R.string.wa_security_council);
-                    break;
+            if (w.chamber == Assembly.GENERAL_ASSEMBLY) {
+                chamberName = context.getString(R.string.wa_general_assembly);
+            } else {
+                chamberName = context.getString(R.string.wa_security_council);
             }
 
             title.setText(String.format(Locale.US,
@@ -424,9 +421,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class OfficerCard extends RecyclerView.ViewHolder {
 
-        private LayoutInflater inflater;
-        private LinearLayout officersLayout;
-        private TextView noOfficers;
+        private final LayoutInflater inflater;
+        private final LinearLayout officersLayout;
+        private final TextView noOfficers;
 
         public OfficerCard(View itemView) {
             super(itemView);
@@ -482,8 +479,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public class EmbassyCard extends RecyclerView.ViewHolder {
 
-        private CardView embassyCard;
-        private TextView embassyNum;
+        private final CardView embassyCard;
+        private final TextView embassyNum;
 
         public EmbassyCard(View itemView) {
             super(itemView);

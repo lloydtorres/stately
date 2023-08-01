@@ -56,9 +56,9 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     private static final int NUMBER_OF_CARDS = 4;
 
-    private ZombieControlActivity activity;
-    private Context context;
-    private FragmentManager fm;
+    private final ZombieControlActivity activity;
+    private final Context context;
+    private final FragmentManager fm;
     private ZombieControlData userData;
     private ZombieRegion regionData;
     private ZSuperweaponProgress progress;
@@ -144,18 +144,18 @@ public class ZombieControlRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         public static final int PULSE_DURATION_ACTION = 4000;
         public static final int PULSE_DURATION_NOACTION = PULSE_DURATION_ACTION * 3;
 
-        private ImageView headerBackground;
-        private ImageView flag;
-        private PulsatorLayout pulsator;
+        private final ImageView headerBackground;
+        private final ImageView flag;
+        private final PulsatorLayout pulsator;
 
-        private TextView action;
-        private LinearLayout superweaponContent;
+        private final TextView action;
+        private final LinearLayout superweaponContent;
 
-        private View divider;
-        private LinearLayout button;
-        private TextView buttonText;
-        private LinearLayout trendsButton;
-        private TextView trendsText;
+        private final View divider;
+        private final LinearLayout button;
+        private final TextView buttonText;
+        private final LinearLayout trendsButton;
+        private final TextView trendsText;
 
         public ZombieActionCard(View itemView) {
             super(itemView);

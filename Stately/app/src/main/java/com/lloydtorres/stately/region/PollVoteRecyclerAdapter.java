@@ -36,10 +36,10 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  */
 public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final PollOption withdrawOption;
-    private RegionCommunitySubFragment fragment;
-    private PollVoteDialog dialog;
-    private Poll pollData;
-    private CommunityRecyclerAdapter.PollCard pollCard;
+    private final RegionCommunitySubFragment fragment;
+    private final PollVoteDialog dialog;
+    private final Poll pollData;
+    private final CommunityRecyclerAdapter.PollCard pollCard;
 
     public PollVoteRecyclerAdapter(RegionCommunitySubFragment frag, PollVoteDialog diag, Poll p,
                                    String withdrawText, CommunityRecyclerAdapter.PollCard pc) {
@@ -82,7 +82,7 @@ public class PollVoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public class PollOptionEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
         private PollOption pollOption;
-        private TextView pollOptionContent;
+        private final TextView pollOptionContent;
 
         public PollOptionEntry(View v) {
             super(v);

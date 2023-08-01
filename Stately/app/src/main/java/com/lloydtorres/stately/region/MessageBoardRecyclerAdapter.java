@@ -58,8 +58,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int POST_EXPANDED = 0;
     private static final int POST_COLLAPSED = 1;
 
-    private Context context;
-    private FragmentManager fm;
+    private final Context context;
+    private final FragmentManager fm;
     private List<Post> messages;
     private int modifierIndex = NO_SELECTION;
     private boolean isPostable = false;
@@ -207,13 +207,10 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         View postCard = inflater.inflate(R.layout.card_post, parent, false);
         RecyclerView.ViewHolder viewHolder = null;
 
-        switch (viewType) {
-            case POST_COLLAPSED:
-                viewHolder = new CollapsedPostCard(postCard);
-                break;
-            default:
-                viewHolder = new PostCard(postCard);
-                break;
+        if (viewType == POST_COLLAPSED) {
+            viewHolder = new CollapsedPostCard(postCard);
+        } else {
+            viewHolder = new PostCard(postCard);
         }
 
         return viewHolder;
@@ -270,23 +267,23 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class PostCard extends RecyclerView.ViewHolder {
         private Post post;
-        private CardView cardContainer;
-        private TextView cardAuthor;
-        private TextView cardTime;
-        private RelativeLayout cardSuppressedHolder;
-        private ImageView cardSuppressedIcon;
-        private TextView cardSuppressedContent;
-        private HtmlTextView cardContent;
-        private RelativeLayout actionsHolder;
-        private ImageView likeButton;
-        private TextView likeCount;
-        private ImageView suppressButton;
-        private ImageView editButton;
-        private ImageView deleteButton;
-        private ImageView reportButton;
-        private ImageView replyButton;
+        private final CardView cardContainer;
+        private final TextView cardAuthor;
+        private final TextView cardTime;
+        private final RelativeLayout cardSuppressedHolder;
+        private final ImageView cardSuppressedIcon;
+        private final TextView cardSuppressedContent;
+        private final HtmlTextView cardContent;
+        private final RelativeLayout actionsHolder;
+        private final ImageView likeButton;
+        private final TextView likeCount;
+        private final ImageView suppressButton;
+        private final ImageView editButton;
+        private final ImageView deleteButton;
+        private final ImageView reportButton;
+        private final ImageView replyButton;
 
-        private View.OnClickListener likeClickListener = new View.OnClickListener() {
+        private final View.OnClickListener likeClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
@@ -305,7 +302,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        private View.OnClickListener replyClickListener = new View.OnClickListener() {
+        private final View.OnClickListener replyClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
@@ -322,7 +319,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        private View.OnClickListener editClickListener = new View.OnClickListener() {
+        private final View.OnClickListener editClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = getAdapterPosition();
@@ -339,7 +336,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        private View.OnClickListener deleteClickListener = new View.OnClickListener() {
+        private final View.OnClickListener deleteClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
@@ -349,7 +346,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        private View.OnClickListener reportClickListener = new View.OnClickListener() {
+        private final View.OnClickListener reportClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = getAdapterPosition();
@@ -360,7 +357,7 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         };
 
-        private View.OnClickListener suppressClickListener = new View.OnClickListener() {
+        private final View.OnClickListener suppressClickListener = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -573,8 +570,8 @@ public class MessageBoardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class CollapsedPostCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Post post;
-        private View view;
-        private HtmlTextView cardContent;
+        private final View view;
+        private final HtmlTextView cardContent;
 
         public CollapsedPostCard(View v) {
             super(v);

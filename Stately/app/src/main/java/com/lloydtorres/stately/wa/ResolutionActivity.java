@@ -377,13 +377,10 @@ public class ResolutionActivity extends RefreshviewActivity {
      */
     public void submitVote(int choice) {
         String url;
-        switch (councilId) {
-            case Assembly.GENERAL_ASSEMBLY:
-                url = Assembly.TARGET_GA;
-                break;
-            default:
-                url = Assembly.TARGET_SC;
-                break;
+        if (councilId == Assembly.GENERAL_ASSEMBLY) {
+            url = Assembly.TARGET_GA;
+        } else {
+            url = Assembly.TARGET_SC;
         }
         getLocalId(url, choice);
     }

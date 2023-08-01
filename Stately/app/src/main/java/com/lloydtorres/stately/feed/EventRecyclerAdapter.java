@@ -35,7 +35,7 @@ import java.util.List;
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int EMPTY_INDICATOR = -1;
 
-    private Context context;
+    private final Context context;
     private List<Event> events;
 
     public EventRecyclerAdapter(Context c, List<Event> ev) {

@@ -34,12 +34,12 @@ import java.util.ArrayList;
  * A recycler adapter for the folders dialog.
  */
 public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private TelegramsFragment fragmentInstance;
-    private boolean isMove;
+    private final TelegramsFragment fragmentInstance;
+    private final boolean isMove;
     private int targetMoveId;
-    private FoldersDialog selfDialog;
-    private ArrayList<TelegramFolder> folders;
-    private int selected;
+    private final FoldersDialog selfDialog;
+    private final ArrayList<TelegramFolder> folders;
+    private final int selected;
 
     public FoldersRecyclerAdapter(TelegramsFragment fr, FoldersDialog d,
                                   ArrayList<TelegramFolder> f, int s) {
@@ -80,7 +80,7 @@ public class FoldersRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class FolderEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView folderName;
+        private final TextView folderName;
         private TelegramFolder folder;
 
         public FolderEntry(View v) {

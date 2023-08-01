@@ -35,12 +35,12 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
  * View holder used for rendering policies in nations and issue results.
  */
 public class PolicyCard extends RecyclerView.ViewHolder {
-    private Context context;
-    private LinearLayout toggleHolder;
-    private TextView toggleText;
-    private ImageView image;
-    private TextView title;
-    private TextView description;
+    private final Context context;
+    private final LinearLayout toggleHolder;
+    private final TextView toggleText;
+    private final ImageView image;
+    private final TextView title;
+    private final TextView description;
 
     public PolicyCard(Context c, View itemView) {
         super(itemView);

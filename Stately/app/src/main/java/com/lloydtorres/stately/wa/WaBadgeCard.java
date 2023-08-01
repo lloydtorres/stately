@@ -39,9 +39,9 @@ import java.util.Locale;
  */
 public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private Context context;
-    private CardView container;
-    private TextView badgeDescription;
+    private final Context context;
+    private final CardView container;
+    private final TextView badgeDescription;
     private WaBadge badgeData;
 
     public WaBadgeCard(Context c, View v) {

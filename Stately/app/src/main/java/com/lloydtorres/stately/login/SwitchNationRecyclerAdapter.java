@@ -35,9 +35,9 @@ import java.util.List;
  * This is the recycler adapter used for SwitchNationDialog.
  */
 public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private SwitchNationDialog selfDialog;
-    private List<UserLogin> logins;
+    private final Context context;
+    private final SwitchNationDialog selfDialog;
+    private final List<UserLogin> logins;
 
     public SwitchNationRecyclerAdapter(Context c, SwitchNationDialog d, List<UserLogin> u) {
         context = c;
@@ -66,7 +66,7 @@ public class SwitchNationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public class SwitchNationEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
         private UserLogin login;
-        private TextView nationName;
+        private final TextView nationName;
 
         public SwitchNationEntry(View v) {
             super(v);

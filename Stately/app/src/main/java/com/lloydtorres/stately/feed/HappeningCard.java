@@ -34,9 +34,9 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  */
 public class HappeningCard extends RecyclerView.ViewHolder {
 
-    private Context context;
-    private TextView cardTime;
-    private TextView cardContent;
+    private final Context context;
+    private final TextView cardTime;
+    private final TextView cardContent;
 
     public HappeningCard(Context c, View v) {
         super(v);

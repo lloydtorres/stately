@@ -36,9 +36,9 @@ import java.util.Locale;
  */
 public class SpoilerSpan extends ClickableSpan {
 
-    private Context context;
-    private FragmentManager fm;
-    private Spoiler spoiler;
+    private final Context context;
+    private final FragmentManager fm;
+    private final Spoiler spoiler;
 
     public SpoilerSpan(Context c, Spoiler s, FragmentManager f) {
         context = c;

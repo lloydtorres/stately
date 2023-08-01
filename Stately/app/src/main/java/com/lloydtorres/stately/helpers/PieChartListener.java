@@ -33,7 +33,7 @@ import java.util.Locale;
 public class PieChartListener implements OnChartValueSelectedListener {
     private static final String INNER_TEXT_TEMPLATE = "%1s\n%s%%";
 
-    private PieChart pieChart;
+    private final PieChart pieChart;
 
     public PieChartListener(PieChart p) {
         pieChart = p;

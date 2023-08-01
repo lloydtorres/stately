@@ -356,13 +356,10 @@ public class MessageBoardActivity extends SlidrActivity {
                         try {
                             messageResponse =
                                     RegionMessages.parseRegionMessagesXML(MessageBoardActivity.this, serializer, response);
-                            switch (direction) {
-                                case SCAN_BACKWARD:
-                                    processMessageResponseBackward(messageResponse);
-                                    break;
-                                default:
-                                    processMessageResponseForward(messageResponse, initialRun);
-                                    break;
+                            if (direction == SCAN_BACKWARD) {
+                                processMessageResponseBackward(messageResponse);
+                            } else {
+                                processMessageResponseForward(messageResponse, initialRun);
                             }
                         } catch (Exception e) {
                             SparkleHelper.logError(e.toString());
@@ -956,11 +953,10 @@ public class MessageBoardActivity extends SlidrActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
+        // Respond to the action bar's Up/Home button
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -58,21 +58,21 @@ public class ZombieChartCard extends RecyclerView.ViewHolder {
     private Context context;
     private ExploreActivity exploreActivity;
 
-    private TextView title;
-    private TextView action;
+    private final TextView title;
+    private final TextView action;
 
-    private TextView nullData;
+    private final TextView nullData;
     private PieChart chart;
 
-    private View divider;
+    private final View divider;
 
-    private LinearLayout genericButton;
-    private ImageView genericButtonIcon;
-    private TextView genericButtonText;
+    private final LinearLayout genericButton;
+    private final ImageView genericButtonIcon;
+    private final TextView genericButtonText;
 
-    private LinearLayout missileButton;
-    private ImageView missileIcon;
-    private ProgressBar missileProgressBar;
+    private final LinearLayout missileButton;
+    private final ImageView missileIcon;
+    private final ProgressBar missileProgressBar;
 
     public ZombieChartCard(View itemView) {
         super(itemView);

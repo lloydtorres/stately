@@ -86,13 +86,13 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int CARD_WA_BADGE = 5;
     private static final int CARD_POLICY = 6;
     private static final int CARD_EMPTY = 7;
-    private LinkedHashMap<Integer, CensusScale> censusScales;
+    private final LinkedHashMap<Integer, CensusScale> censusScales;
     private List<Parcelable> cards;
-    private String nationName;
-    private boolean isSameRegion;
+    private final String nationName;
+    private final boolean isSameRegion;
     private ExploreActivity exploreActivity;
-    private Context context;
-    private FragmentManager fm;
+    private final Context context;
+    private final FragmentManager fm;
 
     public NationCardsRecyclerAdapter(List<Parcelable> cds, FragmentManager f, String n,
                                       boolean sameRegion, ExploreActivity act) {
@@ -248,24 +248,24 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationOverviewCard extends RecyclerView.ViewHolder {
 
-        private HtmlTextView govType;
-        private TextView region;
-        private TextView influence;
-        private TextView population;
-        private TextView motto;
-        private TextView time;
+        private final HtmlTextView govType;
+        private final TextView region;
+        private final TextView influence;
+        private final TextView population;
+        private final TextView motto;
+        private final TextView time;
 
         // WA section
-        private RelativeLayout waMember;
-        private LinearLayout waSection;
-        private TextView isWaMember;
-        private View divider;
-        private RelativeLayout endorsementsHolder;
-        private TextView endorsementsCount;
-        private RelativeLayout gaVoteHolder;
-        private TextView gaVote;
-        private RelativeLayout scVoteHolder;
-        private TextView scVote;
+        private final RelativeLayout waMember;
+        private final LinearLayout waSection;
+        private final TextView isWaMember;
+        private final View divider;
+        private final RelativeLayout endorsementsHolder;
+        private final TextView endorsementsCount;
+        private final RelativeLayout gaVoteHolder;
+        private final TextView gaVote;
+        private final RelativeLayout scVoteHolder;
+        private final TextView scVote;
 
         public NationOverviewCard(View view) {
             super(view);
@@ -421,17 +421,17 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationFreedomCard extends RecyclerView.ViewHolder {
 
-        private CardView civilRightsCard;
-        private TextView civilRightsDesc;
-        private TextView civilRightsPts;
+        private final CardView civilRightsCard;
+        private final TextView civilRightsDesc;
+        private final TextView civilRightsPts;
 
-        private CardView economyCard;
-        private TextView economyDesc;
-        private TextView economyPts;
+        private final CardView economyCard;
+        private final TextView economyDesc;
+        private final TextView economyPts;
 
-        private CardView politicalCard;
-        private TextView politicalDesc;
-        private TextView politicalPts;
+        private final CardView politicalCard;
+        private final TextView politicalDesc;
+        private final TextView politicalPts;
 
         public NationFreedomCard(View view) {
             super(view);
@@ -483,11 +483,11 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationGenericCard extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private TextView content;
-        private LinearLayout detailsHolder;
-        private LinearLayout trendButton;
-        private TextView trendContent;
+        private final TextView title;
+        private final TextView content;
+        private final LinearLayout detailsHolder;
+        private final LinearLayout trendButton;
+        private final TextView trendContent;
         private LayoutInflater inflater;
 
         public NationGenericCard(View itemView) {
@@ -540,8 +540,8 @@ public class NationCardsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public class NationChartCard extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private LinearLayout details;
+        private final TextView title;
+        private final LinearLayout details;
         private PieChart chart;
         private LayoutInflater inflater;
 

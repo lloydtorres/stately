@@ -68,10 +68,10 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final String NS_DEFAULT_CAPITAL = "%s City";
     private static final String NS_DEFAULT_LEADER = "Leader";
     private static final String NS_DEFAULT_RELIGION = "a major religion";
-    private LinkedHashMap<Integer, CensusScale> censusScales;
-    private HashMap<String, String> postcardData;
-    private List<String> unifiedFreedomScale;
-    private Context context;
+    private final LinkedHashMap<Integer, CensusScale> censusScales;
+    private final HashMap<String, String> postcardData;
+    private final List<String> unifiedFreedomScale;
+    private final Context context;
     private List<Object> content;
     private Nation mNation;
 
@@ -252,11 +252,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class IssueResultCard extends RecyclerView.ViewHolder {
-        private ImageView image;
-        private HtmlTextView mainResult;
-        private TextView reclassResult;
-        private HtmlTextView issueContent;
-        private TextView expander;
+        private final ImageView image;
+        private final HtmlTextView mainResult;
+        private final TextView reclassResult;
+        private final HtmlTextView issueContent;
+        private final TextView expander;
 
         public IssueResultCard(View v) {
             super(v);
@@ -320,10 +320,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 reclassResult.setVisibility(View.GONE);
             }
 
-            StringBuilder sb = new StringBuilder(result.issueContent);
-            sb.append("<br><br>");
-            sb.append(result.issuePosition);
-            issueContent.setText(SparkleHelper.getHtmlFormatting(sb.toString(), false));
+            String sb = result.issueContent + "<br><br>" +
+                    result.issuePosition;
+            issueContent.setText(SparkleHelper.getHtmlFormatting(sb, false));
 
             expander.setText(context.getString(R.string.issue_read_more));
             expander.setOnClickListener(new View.OnClickListener() {
@@ -338,8 +337,8 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class HeadlinesCard extends RecyclerView.ViewHolder {
-        private TextView headlinesTitle;
-        private LinearLayout headlinesHolder;
+        private final TextView headlinesTitle;
+        private final LinearLayout headlinesHolder;
 
         public HeadlinesCard(View v) {
             super(v);
@@ -370,9 +369,9 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class PostcardCard extends RecyclerView.ViewHolder {
-        private TextView nationName;
-        private ImageView img;
-        private TextView description;
+        private final TextView nationName;
+        private final ImageView img;
+        private final TextView description;
 
         public PostcardCard(View v) {
             super(v);
@@ -396,11 +395,11 @@ public class IssueResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public class CensusDeltaCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CensusDelta delta;
 
-        private CardView cardHolder;
-        private TextView title;
-        private TextView unit;
-        private ImageView trend;
-        private TextView value;
+        private final CardView cardHolder;
+        private final TextView title;
+        private final TextView unit;
+        private final ImageView trend;
+        private final TextView value;
 
         public CensusDeltaCard(View v) {
             super(v);

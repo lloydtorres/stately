@@ -90,6 +90,7 @@ import org.jsoup.safety.Safelist;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -407,20 +408,20 @@ public final class SparkleHelper {
         } else if (timeDiffAbs < 3600000L) {
             // less than an hour
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 60000D);
-            int minutes = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            int minutes = calc.setScale(0, RoundingMode.HALF_UP).intValue();
             template = String.format(Locale.US, template, minutes,
                     c.getResources().getQuantityString(R.plurals.time_minute, minutes),
                     pastIndicator);
         } else if (timeDiffAbs < 86400000L) {
             // less than a day
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 3600000D);
-            int hours = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            int hours = calc.setScale(0, RoundingMode.HALF_UP).intValue();
             template = String.format(Locale.US, template, hours,
                     c.getResources().getQuantityString(R.plurals.time_hour, hours), pastIndicator);
         } else if (timeDiffAbs < 604800000L) {
             // less than a week
             BigDecimal calc = BigDecimal.valueOf(timeDiffAbs / 86400000D);
-            int days = calc.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            int days = calc.setScale(0, RoundingMode.HALF_UP).intValue();
             template = String.format(Locale.US, template, days,
                     c.getResources().getQuantityString(R.plurals.time_day, days), pastIndicator);
         } else {
@@ -1512,7 +1513,7 @@ public final class SparkleHelper {
             if (link.getScheme() == null) {
                 template = "<a href=\"http://%s\">%s</a>";
             }
-            String replaceText = String.format(Locale.US, template, link.toString(), m0.group(2));
+            String replaceText = String.format(Locale.US, template, link, m0.group(2));
             replaceBasic.add(new DataPair(m0.group(), replaceText));
         }
         holder = replaceFromReplacePairs(holder, replaceBasic);
@@ -1547,16 +1548,16 @@ public final class SparkleHelper {
             String replaceText = "";
             Uri link = Uri.parse(m3.group(1)).normalizeScheme();
             if (link.getScheme() == null) {
-                String finalLink = "http://" + link.toString();
+                String finalLink = "http://" + link;
                 Uri finalLinkUri = Uri.parse(finalLink).normalizeScheme();
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
                         finalLink, finalLinkUri.getHost());
             } else if (link.getScheme().equals(ExploreActivity.EXPLORE_PROTOCOL)) {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_internal),
-                        link.toString(), getNameFromId(link.getHost()));
+                        link, getNameFromId(link.getHost()));
             } else {
                 replaceText = String.format(Locale.US, c.getString(R.string.clicky_link_http),
-                        link.toString(), link.getHost());
+                        link, link.getHost());
             }
             replaceNoClose.add(new DataPair(m3.group(), replaceText));
         }

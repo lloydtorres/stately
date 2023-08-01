@@ -65,12 +65,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int FULL_CARD = 1;
     private static final int EMPTY_CARD = 2;
 
-    private Context context;
+    private final Context context;
     private List<Telegram> telegrams;
     private TelegramsFragment fragment;
     private int displayMode;
     private boolean isHistory;
-    private FragmentManager fm;
+    private final FragmentManager fm;
 
     public TelegramsAdapter(List<Telegram> t, TelegramsFragment tf, String folderName,
                             FragmentManager fragMan) {
@@ -268,24 +268,24 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class TelegramCard extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
         private Telegram telegram;
 
-        private TextView sender;
-        private TextView recipients;
-        private TextView timestamp;
+        private final TextView sender;
+        private final TextView recipients;
+        private final TextView timestamp;
 
-        private ImageView popupMenuButton;
+        private final ImageView popupMenuButton;
 
-        private RelativeLayout alertHolder;
-        private ImageView alertIcon;
-        private TextView alertText;
+        private final RelativeLayout alertHolder;
+        private final ImageView alertIcon;
+        private final TextView alertText;
 
-        private HtmlTextView content;
-        private ImageView telegramHistoryButton;
-        private LinearLayout replyHolder;
-        private ImageView reply;
-        private ImageView replyAll;
+        private final HtmlTextView content;
+        private final ImageView telegramHistoryButton;
+        private final LinearLayout replyHolder;
+        private final ImageView reply;
+        private final ImageView replyAll;
 
-        private LinearLayout regionVisitButton;
-        private TextView regionVisitButtonContent;
+        private final LinearLayout regionVisitButton;
+        private final TextView regionVisitButtonContent;
 
         public TelegramCard(View v) {
             super(v);
@@ -485,12 +485,12 @@ public class TelegramsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class TelegramPreviewCard extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Telegram telegram;
-        private TextView header;
-        private TextView timestamp;
-        private RelativeLayout alertHolder;
-        private ImageView alertIcon;
-        private TextView alertText;
-        private HtmlTextView preview;
+        private final TextView header;
+        private final TextView timestamp;
+        private final RelativeLayout alertHolder;
+        private final ImageView alertIcon;
+        private final TextView alertText;
+        private final HtmlTextView preview;
 
         public TelegramPreviewCard(View v) {
             super(v);

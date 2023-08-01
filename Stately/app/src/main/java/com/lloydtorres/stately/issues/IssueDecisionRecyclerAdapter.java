@@ -52,7 +52,7 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private static final int ISSUE_PIRATE_NO = 201;
 
     private List<Object> cards;
-    private Context context;
+    private final Context context;
     private boolean pirateMode;
 
     public IssueDecisionRecyclerAdapter(Context c, Issue issue) {
@@ -77,30 +77,24 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType) {
-            case INFO_CARD:
-                View infoCard = inflater.inflate(R.layout.card_issue_info, parent, false);
-                viewHolder = new IssueInfoCard(infoCard);
-                break;
-            default:
-                View optionCard = inflater.inflate(R.layout.card_issue_option, parent, false);
-                viewHolder = new IssueOptionCard(optionCard);
-                break;
+        if (viewType == INFO_CARD) {
+            View infoCard = inflater.inflate(R.layout.card_issue_info, parent, false);
+            viewHolder = new IssueInfoCard(infoCard);
+        } else {
+            View optionCard = inflater.inflate(R.layout.card_issue_option, parent, false);
+            viewHolder = new IssueOptionCard(optionCard);
         }
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-            case INFO_CARD:
-                IssueInfoCard infoCard = (IssueInfoCard) holder;
-                infoCard.init((Issue) cards.get(position));
-                break;
-            default:
-                IssueOptionCard optionCard = (IssueOptionCard) holder;
-                optionCard.init((IssueOption) cards.get(position), holder.getItemViewType());
-                break;
+        if (holder.getItemViewType() == INFO_CARD) {
+            IssueInfoCard infoCard = (IssueInfoCard) holder;
+            infoCard.init((Issue) cards.get(position));
+        } else {
+            IssueOptionCard optionCard = (IssueOptionCard) holder;
+            optionCard.init((IssueOption) cards.get(position), holder.getItemViewType());
         }
     }
 
@@ -127,10 +121,10 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     // Card for info on issue
     public class IssueInfoCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView issueNo;
-        private ImageView image;
-        private HtmlTextView content;
+        private final TextView title;
+        private final TextView issueNo;
+        private final ImageView image;
+        private final HtmlTextView content;
 
         public IssueInfoCard(View v) {
             super(v);
@@ -178,12 +172,12 @@ public class IssueDecisionRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     // Card for options
     public class IssueOptionCard extends RecyclerView.ViewHolder {
         private IssueOption option;
-        private HtmlTextView content;
-        private LinearLayout contentHolder;
-        private LinearLayout selectButton;
-        private ImageView selectIcon;
-        private TextView selectContent;
-        private View divider;
+        private final HtmlTextView content;
+        private final LinearLayout contentHolder;
+        private final LinearLayout selectButton;
+        private final ImageView selectIcon;
+        private final TextView selectContent;
+        private final View divider;
 
         public IssueOptionCard(View v) {
             super(v);

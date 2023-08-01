@@ -37,8 +37,8 @@ import java.util.List;
  * Recycler view card for combining a bunch of happenings together.
  */
 public class BreakingNewsCard extends RecyclerView.ViewHolder {
-    private LinearLayout newsHolder;
-    private TextView title;
+    private final LinearLayout newsHolder;
+    private final TextView title;
     private LayoutInflater inflater;
 
     public BreakingNewsCard(View itemView) {

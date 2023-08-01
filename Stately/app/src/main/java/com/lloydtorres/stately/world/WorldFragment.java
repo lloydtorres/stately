@@ -230,13 +230,12 @@ public class WorldFragment extends RefreshviewFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_explore:
-                if (getActivity() != null && isAdded()) {
-                    ExploreDialog exploreDialog = new ExploreDialog();
-                    exploreDialog.show(getParentFragmentManager(), ExploreDialog.DIALOG_TAG);
-                }
-                return true;
+        if (item.getItemId() == R.id.nav_explore) {
+            if (getActivity() != null && isAdded()) {
+                ExploreDialog exploreDialog = new ExploreDialog();
+                exploreDialog.show(getParentFragmentManager(), ExploreDialog.DIALOG_TAG);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

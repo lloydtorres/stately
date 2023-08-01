@@ -58,8 +58,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int DIVIDER_VIEW = 2;
     private static final int RANKING_VIEW = 3;
 
-    private List<Object> trendItems;
-    private Context context;
+    private final List<Object> trendItems;
+    private final Context context;
 
     public TrendsRecyclerAdapter(Context c, int mode, int censusId, String title, String unit,
                                  CensusHistory censusData) {
@@ -180,8 +180,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     // Title card
     private class TitleCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView unit;
+        private final TextView title;
+        private final TextView unit;
 
         public TitleCard(View itemView) {
             super(itemView);
@@ -198,11 +198,11 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // Graph card
     private class GraphCard extends RecyclerView.ViewHolder implements OnChartValueSelectedListener {
         private CensusHistoryScale dataset;
-        private TextView date;
-        private TextView value;
-        private TextView max;
-        private TextView min;
-        private TextView avg;
+        private final TextView date;
+        private final TextView value;
+        private final TextView max;
+        private final TextView min;
+        private final TextView avg;
         private LineChart chart;
 
         public GraphCard(View itemView) {
@@ -314,8 +314,8 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // Title at the beginning of rank list
     private class RankTitleViewHolder extends RecyclerView.ViewHolder {
         private TrendsRankTitle titleData;
-        private TextView type;
-        private TextView census;
+        private final TextView type;
+        private final TextView census;
 
         public RankTitleViewHolder(View itemView) {
             super(itemView);
@@ -342,9 +342,9 @@ public class TrendsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // Rank entry
     private class NationRankViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CensusNationRank rankData;
-        private TextView nation;
-        private TextView score;
-        private TextView rank;
+        private final TextView nation;
+        private final TextView score;
+        private final TextView rank;
 
         public NationRankViewHolder(View itemView) {
             super(itemView);

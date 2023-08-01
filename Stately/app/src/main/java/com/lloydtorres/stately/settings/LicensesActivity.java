@@ -30,7 +30,7 @@ import java.util.List;
  * Activity that shows licenses for Stately and its open source dependencies.
  */
 public class LicensesActivity extends RefreshviewActivity {
-    private List<DataPair> licenses = new ArrayList<DataPair>();
+    private final List<DataPair> licenses = new ArrayList<DataPair>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

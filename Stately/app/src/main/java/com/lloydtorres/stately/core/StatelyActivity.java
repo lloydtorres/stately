@@ -117,7 +117,7 @@ public class StatelyActivity extends BroadcastableActivity implements Navigation
 
     // Used for listening to broadcasts that 1) an issue decision is made, or
     // 2) a WA vote is submitted. Sets a flag that nation data should be requeried.
-    private BroadcastReceiver requeryReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver requeryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (isFinishing() || mNation == null) {

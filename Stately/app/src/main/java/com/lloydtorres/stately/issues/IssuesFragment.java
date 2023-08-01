@@ -69,7 +69,7 @@ public class IssuesFragment extends RefreshviewFragment {
     private ArrayList<Parcelable> issues;
     private Nation mNation;
     private long nextIssueTime = IssueFullHolder.UNKNOWN_NEXT_ISSUE_TIME;
-    private BroadcastReceiver issueDecisionReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver issueDecisionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (getActivity() == null || !isAdded() || issues == null) {

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class XAxisLabelFormatter extends ValueFormatter {
 
-    private List<String> labels;
+    private final List<String> labels;
 
     public XAxisLabelFormatter(List<String> l) {
         labels = l;

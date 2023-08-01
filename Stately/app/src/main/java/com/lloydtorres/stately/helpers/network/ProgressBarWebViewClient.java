@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
  * WebViewClient that shows and hides a progress bar as appropriate.
  */
 public class ProgressBarWebViewClient extends WebViewClient {
-    private ProgressBar mProgressBar;
+    private final ProgressBar mProgressBar;
 
     public ProgressBarWebViewClient(ProgressBar pb) {
         mProgressBar = pb;

@@ -64,8 +64,8 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int WORLD_FEATURED_CENSUS = 3;
 
     private List<Object> cards;
-    private Context context;
-    private FragmentManager fragmentManager;
+    private final Context context;
+    private final FragmentManager fragmentManager;
     private LinkedHashMap<Integer, CensusScale> censusScale;
 
     public WorldRecyclerAdapter(Context c, FragmentManager fm, World w, BaseRegion fr) {
@@ -186,23 +186,23 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         private BaseRegion regionData;
 
-        private RelativeLayout header;
-        private TextView regionName;
-        private TextView nationCount;
-        private ImageView flag;
+        private final RelativeLayout header;
+        private final TextView regionName;
+        private final TextView nationCount;
+        private final ImageView flag;
 
-        private TextView waDelegate;
-        private TextView founder;
+        private final TextView waDelegate;
+        private final TextView founder;
 
-        private LinearLayout factbookHolder;
-        private HtmlTextView factbook;
+        private final LinearLayout factbookHolder;
+        private final HtmlTextView factbook;
 
-        private TextView tags;
+        private final TextView tags;
 
-        private LinearLayout visitButton;
-        private TextView visitText;
+        private final LinearLayout visitButton;
+        private final TextView visitText;
 
-        private View.OnClickListener regionOnClick = new View.OnClickListener() {
+        private final View.OnClickListener regionOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (regionData != null) {
@@ -275,10 +275,10 @@ public class WorldRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         private CensusDetailedRank featuredCensus;
 
-        private TextView censusTitle;
-        private TextView censusUnit;
-        private TextView censusScore;
-        private ImageView censusBg;
+        private final TextView censusTitle;
+        private final TextView censusUnit;
+        private final TextView censusScore;
+        private final ImageView censusBg;
 
         public FeaturedCensusCard(View itemView) {
             super(itemView);

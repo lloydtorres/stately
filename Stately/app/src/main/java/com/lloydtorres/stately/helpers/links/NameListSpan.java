@@ -34,9 +34,9 @@ import java.util.ArrayList;
  */
 public class NameListSpan extends ClickableSpan {
 
-    private Context context;
-    private FragmentManager fragmentManager;
-    private NameListDialog nameListDialog;
+    private final Context context;
+    private final FragmentManager fragmentManager;
+    private final NameListDialog nameListDialog;
 
     public NameListSpan(Context c, FragmentManager fm, String t, ArrayList<String> n, int m) {
         context = c;

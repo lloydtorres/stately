@@ -65,7 +65,7 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final Pattern LASTRESOLUTION_LINK = Pattern.compile("(?i)(?s)" +
             "\\/page=WA_past_resolution\\/id=([0-9]+?)\\/council=(1|2)");
     private List<Object> cards;
-    private Context context;
+    private final Context context;
     private WaVoteStatus voteStatus;
 
     public AssemblyRecyclerAdapter(Context c, Assembly ga, Assembly sc, WaVoteStatus vs) {
@@ -166,13 +166,13 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card for active resolutions
     public class ActiveCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView cardTitle;
-        private TextView cardHeader;
-        private TextView cardActiveTime;
-        private TextView cardFor;
-        private TextView cardAgainst;
-        private ImageView iconVoteFor;
-        private ImageView iconVoteAgainst;
+        private final TextView cardTitle;
+        private final TextView cardHeader;
+        private final TextView cardActiveTime;
+        private final TextView cardFor;
+        private final TextView cardAgainst;
+        private final ImageView iconVoteFor;
+        private final ImageView iconVoteAgainst;
 
         public ActiveCard(View v) {
             super(v);
@@ -249,10 +249,10 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     // Card for inactive resolutions
     public class InactiveCard extends RecyclerView.ViewHolder {
 
-        private TextView cardTitle;
-        private TextView cardContent;
-        private View buttonDivider;
-        private LinearLayout buttonHolder;
+        private final TextView cardTitle;
+        private final TextView cardContent;
+        private final View buttonDivider;
+        private final LinearLayout buttonHolder;
 
         public InactiveCard(View v) {
             super(v);
@@ -292,8 +292,8 @@ public class AssemblyRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public class WaHeaderCard extends StatsCard {
-        private ImageView banner;
-        private LinearLayout foundationButton;
+        private final ImageView banner;
+        private final LinearLayout foundationButton;
 
         public WaHeaderCard(View v) {
             super(v);

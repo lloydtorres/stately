@@ -197,18 +197,15 @@ public class IssueDecisionActivity extends RefreshviewActivity {
             dialogBuilder
                     .setNegativeButton(getString(R.string.explore_negative), null);
 
-            switch (option.id) {
-                case IssueOption.DISMISS_ISSUE_ID:
-                    dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
-                            .setPositiveButton(getString(R.string.issue_option_dismiss),
-                                    dialogClickListener);
-                    break;
-                default:
-                    dialogBuilder.setTitle(String.format(Locale.US,
-                            getString(R.string.issue_option_confirm_adopt), option.index))
-                            .setPositiveButton(getString(R.string.issue_option_adopt),
-                                    dialogClickListener);
-                    break;
+            if (option.id == IssueOption.DISMISS_ISSUE_ID) {
+                dialogBuilder.setTitle(getString(R.string.issue_option_confirm_dismiss))
+                        .setPositiveButton(getString(R.string.issue_option_dismiss),
+                                dialogClickListener);
+            } else {
+                dialogBuilder.setTitle(String.format(Locale.US,
+                                getString(R.string.issue_option_confirm_adopt), option.index))
+                        .setPositiveButton(getString(R.string.issue_option_adopt),
+                                dialogClickListener);
             }
 
             if (!isFinishing()) {

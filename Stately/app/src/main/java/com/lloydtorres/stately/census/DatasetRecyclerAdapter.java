@@ -39,9 +39,9 @@ import java.util.LinkedHashMap;
 public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int INVALID_POSITION = -1;
 
-    private FragmentActivity activity;
-    private DatasetDialog selfDialog;
-    private ArrayList<Dataset> datasets;
+    private final FragmentActivity activity;
+    private final DatasetDialog selfDialog;
+    private final ArrayList<Dataset> datasets;
 
     public DatasetRecyclerAdapter(FragmentActivity a, DatasetDialog d, LinkedHashMap<Integer,
             Dataset> ds) {
@@ -82,7 +82,7 @@ public class DatasetRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public class DatasetEntry extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView datasetName;
+        private final TextView datasetName;
         private Dataset dataset;
 
         public DatasetEntry(View v) {

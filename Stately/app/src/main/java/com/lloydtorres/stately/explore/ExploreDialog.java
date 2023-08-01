@@ -109,13 +109,10 @@ public class ExploreDialog extends DetachDialogFragment {
     private void startExploreActivity() {
         int mode;
 
-        switch (exploreToggleState.getCheckedRadioButtonId()) {
-            case R.id.explore_radio_nation:
-                mode = ExploreActivity.EXPLORE_NATION;
-                break;
-            default:
-                mode = ExploreActivity.EXPLORE_REGION;
-                break;
+        if (exploreToggleState.getCheckedRadioButtonId() == R.id.explore_radio_nation) {
+            mode = ExploreActivity.EXPLORE_NATION;
+        } else {
+            mode = ExploreActivity.EXPLORE_REGION;
         }
 
         String name = exploreSearch.getText().toString();

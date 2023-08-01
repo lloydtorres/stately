@@ -53,9 +53,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int NEXT_CARD = 1;
     private static final int ZOMBIE_CARD = 2;
 
-    private Context context;
+    private final Context context;
     private List<Object> issuesCards;
-    private Nation mNation;
+    private final Nation mNation;
 
     public IssuesRecyclerAdapter(Context c, List<Parcelable> i, long nextIssueTime, Nation n) {
         context = c;
@@ -137,9 +137,9 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     // Card viewholders
     public class IssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView title;
-        private TextView id;
-        private ImageView image;
+        private final TextView title;
+        private final TextView id;
+        private final ImageView image;
         private Issue issue;
 
         public IssueCard(View v) {
@@ -185,7 +185,7 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class NextCard extends RecyclerView.ViewHolder {
 
-        private TextView nextUpdate;
+        private final TextView nextUpdate;
 
         public NextCard(View v) {
             super(v);
@@ -211,8 +211,8 @@ public class IssuesRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class ZombieIssueCard extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView background;
-        private TextView survivalRate;
+        private final ImageView background;
+        private final TextView survivalRate;
 
         public ZombieIssueCard(View v) {
             super(v);

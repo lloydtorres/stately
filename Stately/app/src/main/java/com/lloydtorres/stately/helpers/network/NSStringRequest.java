@@ -44,12 +44,12 @@ public class NSStringRequest extends StringRequest {
     public static final String STATELY_USER_AGENT_USER = "Stately/%s (User %s; Droid)";
     public static final String STATELY_USER_AGENT_NOUSER = "Stately/%s (No User; Droid)";
 
-    private Context context;
+    private final Context context;
     private UserLogin userDataOverride = null;
     private String password;
-    private int method;
+    private final int method;
     private Map<String, String> params = new HashMap<String, String>();
-    private Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
+    private final Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
 
     public NSStringRequest(Context c, int m, String target,
                            Response.Listener<String> listener,

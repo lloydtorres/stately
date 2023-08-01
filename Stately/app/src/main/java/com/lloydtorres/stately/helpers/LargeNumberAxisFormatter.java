@@ -27,7 +27,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
  */
 public class LargeNumberAxisFormatter extends ValueFormatter {
 
-    private Context context;
+    private final Context context;
 
     public LargeNumberAxisFormatter(Context c) {
         context = c;

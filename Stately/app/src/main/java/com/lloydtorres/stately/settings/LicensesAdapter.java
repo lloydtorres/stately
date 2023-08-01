@@ -78,8 +78,8 @@ public class LicensesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     // View holder
     private class LicenseCard extends RecyclerView.ViewHolder {
-        private TextView title;
-        private HtmlTextView content;
+        private final TextView title;
+        private final HtmlTextView content;
 
         private boolean isLicense = true;
 
