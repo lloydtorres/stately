@@ -276,6 +276,8 @@ public final class SparkleHelper {
     public static final Pattern BBCODE_QUOTE_2 = Pattern.compile("(?i)(?s)\\[quote=(.*?)\\](.*?)" +
             "\\[\\/quote\\]");
 
+    public static final String RMB_POST_LINK_TEMPLATE = "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">";
+
     // Private constructor
     private SparkleHelper() {
     }
@@ -990,8 +992,7 @@ public final class SparkleHelper {
         content = replaceMalformedHtmlCharacters(content);
 
         // Replace RMB links with targets to the RMB activity
-        content = regexDoubleReplace(content, NS_RMB_POST_LINK,
-                "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/%s\">");
+        content = regexDoubleReplace(content, NS_RMB_POST_LINK, RMB_POST_LINK_TEMPLATE);
 
         // Replace internal links with valid links
         content = regexReplace(content, NS_INTERNAL_LINK, "<a href=\"" + BASE_URI + "%s\">");

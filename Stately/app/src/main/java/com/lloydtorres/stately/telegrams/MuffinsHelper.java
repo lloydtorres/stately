@@ -55,6 +55,7 @@ import com.lloydtorres.stately.R;
 import com.lloydtorres.stately.dto.Telegram;
 import com.lloydtorres.stately.explore.ExploreActivity;
 import com.lloydtorres.stately.helpers.SparkleHelper;
+import com.lloydtorres.stately.region.MessageBoardActivity;
 import com.lloydtorres.stately.report.ReportActivity;
 import com.lloydtorres.stately.wa.ResolutionActivity;
 
@@ -114,6 +115,10 @@ public final class MuffinsHelper {
     public static final Pattern NS_TG_RAW_REGION_LINK =
             Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX +
                     "|)region=(" +
+                    SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
+    public static final Pattern NS_TG_RAW_RMB_LINK =
+            Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX +
+                    "|)page=display_region_rmb\\/region=(" +
                     SparkleHelper.VALID_ID_BASE + "+?)\" rel=\"nofollow\">(.+?)<\\/a>");
     public static final Pattern NS_TG_RAW_GHR_LINK =
             Pattern.compile("(?i)<a href=\"(?:" + SparkleHelper.BASE_URI_REGEX + "|)page=help" +
@@ -501,6 +506,9 @@ public final class MuffinsHelper {
                 "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
         holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_REGION_LINK,
                 "<a href=\"" + ExploreActivity.EXPLORE_TARGET + "%s/" + ExploreActivity.EXPLORE_REGION + "\">%s</a>");
+        holder = SparkleHelper.regexDoubleReplace(holder, SparkleHelper.NS_RMB_POST_LINK, SparkleHelper.RMB_POST_LINK_TEMPLATE);
+        holder = SparkleHelper.regexDoubleReplace(holder, NS_TG_RAW_RMB_LINK,
+                "<a href=\"" + MessageBoardActivity.RMB_TARGET + "%s/" + MessageBoardActivity.NO_LATEST + "\">%s</a>");
 
         holder = SparkleHelper.regexReplace(holder, NS_TG_RAW_GHR_LINK,
                 "<a href=\"" + ReportActivity.REPORT_TARGET + "%s\">");
