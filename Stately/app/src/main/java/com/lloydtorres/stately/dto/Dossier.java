@@ -38,6 +38,8 @@ public class Dossier implements Parcelable {
             + "&v=" + SparkleHelper.API_VERSION;
     public static final String POST_QUERY_GENERIC = SparkleHelper.BASE_URI_NOSLASH + "/page" +
             "=dossier";
+    public static final String POST_QUERY_NO_TEMPLATE = SparkleHelper.BASE_URI_NOSLASH + "/page" +
+            "=dossier" + SparkleHelper.TEMPLATE_NONE;
     public static final String POST_QUERY_ADD_REGION = POST_QUERY_GENERIC + "/action=add/region=%s";
 
     public static final String PARAM_REMOVE_TEMPLATE = "remove_%s_%s";

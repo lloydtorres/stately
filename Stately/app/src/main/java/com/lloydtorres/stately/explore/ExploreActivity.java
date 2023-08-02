@@ -615,7 +615,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      */
     private void getChkValueForDossier() {
         final String urlTemplate = mode == EXPLORE_NATION ? Nation.QUERY_HTML : Region.QUERY_HTML;
-        final String url = String.format(Locale.US, urlTemplate, SparkleHelper.getIdFromName(id));
+        final String url = !isInDossier ?
+                String.format(Locale.US, urlTemplate, SparkleHelper.getIdFromName(id)) :
+                Dossier.POST_QUERY_NO_TEMPLATE;
         final NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
                 Request.Method.GET, url,
                 new Response.Listener<String>() {
