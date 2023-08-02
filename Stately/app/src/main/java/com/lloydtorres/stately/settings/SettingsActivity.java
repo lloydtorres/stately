@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.lloydtorres.stately.R;
@@ -77,8 +76,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
     public static final int GOV_NEUTRAL = 2;
 
     public static final long NOTIFS_6_HOURS_IN_SEC = 21600L;
-
-    private static AlertDialog.Builder dialogBuilder;
 
     private SharedPreferences storage;
     private boolean isChangeThemeTriggered = false;
@@ -224,8 +221,6 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
 
         storage = PreferenceManager.getDefaultSharedPreferences(this);
         storage.registerOnSharedPreferenceChangeListener(this);
-
-        dialogBuilder = new AlertDialog.Builder(this, RaraHelper.getThemeMaterialDialog(this));
     }
 
     private void setToolbar(Toolbar toolbar) {

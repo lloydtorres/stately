@@ -16,10 +16,8 @@
 
 package com.lloydtorres.stately.push;
 
-import android.annotation.TargetApi;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.os.Build;
 
 import com.lloydtorres.stately.helpers.network.DashHelper;
 
@@ -28,7 +26,6 @@ import com.lloydtorres.stately.helpers.network.DashHelper;
  * Same as AlphysService, but invoked for Lollipop and above.
  * Used to meet requirements for Android O.
  */
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class AlphysLollipopService extends JobService {
 
     @Override

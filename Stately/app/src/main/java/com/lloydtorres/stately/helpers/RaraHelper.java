@@ -48,9 +48,10 @@ package com.lloydtorres.stately.helpers;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.view.View;
+
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import android.view.View;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;

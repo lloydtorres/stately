@@ -215,7 +215,7 @@ public final class TrixHelper {
         long notificationJitterIntervalInMs =
                 (long) (r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (!shouldFallback) {
             ComponentName alphysLollipopServiceName = new ComponentName(c,
                     AlphysLollipopService.class);
             JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
@@ -225,9 +225,7 @@ public final class TrixHelper {
                     (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             scheduler.cancel(TAG_JOB_ID);
             shouldFallback = scheduler.schedule(alphysJobInfo) == JobScheduler.RESULT_FAILURE;
-        }
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || shouldFallback) {
+        } else {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
@@ -242,8 +240,6 @@ public final class TrixHelper {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm,
                         pendingIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                am.setExact(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
             } else {
                 am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
             }
@@ -255,17 +251,9 @@ public final class TrixHelper {
      * @param c App context.
      */
     public static void stopAlarmForAlphys(Context c) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobScheduler scheduler =
-                    (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            scheduler.cancel(TAG_JOB_ID);
-        } else {
-            Intent alphysIntent = new Intent(c, AlphysReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-            am.cancel(pendingIntent);
-        }
+        JobScheduler scheduler =
+                (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(TAG_JOB_ID);
     }
 
     /**
@@ -392,13 +380,9 @@ public final class TrixHelper {
                 .setStyle(getBigTextStyle(contentText))
                 .setOnlyAlertOnce(true)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c,
-                        account, issueBundle), PendingIntent.FLAG_ONE_SHOT));
+                        account, issueBundle), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setSmallIcon(R.drawable.ic_menu_issues);
-        } else {
-            builder.setSmallIcon(R.drawable.ic_notifs_kitkat_issue);
-        }
+        builder.setSmallIcon(R.drawable.ic_menu_issues);
 
         NotificationManager notificationManager =
                 (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -435,13 +419,11 @@ public final class TrixHelper {
 
         // Handle notification icon and intent
         int smallIcon = 0;
-        int smallIconCompat = 0;
         Bundle bundle = new Bundle();
         String channelId = "";
         switch (notice.type) {
             case Notice.TG:
                 smallIcon = R.drawable.ic_menu_telegrams;
-                smallIconCompat = R.drawable.ic_notifs_kitkat_telegram;
                 Matcher matcherTg = NOTIFS_URL_TG.matcher(notice.link);
                 matcherTg.matches();
                 int telegramId = Integer.valueOf(matcherTg.group(1));
@@ -455,7 +437,6 @@ public final class TrixHelper {
             case Notice.RMB_QUOTE:
             case Notice.RMB_LIKE:
                 smallIcon = R.drawable.ic_region_white;
-                smallIconCompat = R.drawable.ic_notifs_kitkat_region;
                 Matcher rMatcher = NOTIFS_URL_RMB.matcher(notice.link);
                 rMatcher.matches();
                 String rName = SparkleHelper.getNameFromId(rMatcher.group(1));
@@ -467,7 +448,6 @@ public final class TrixHelper {
                 break;
             case Notice.ENDORSE:
                 smallIcon = R.drawable.ic_endorse_yes;
-                smallIconCompat = R.drawable.ic_notifs_kitkat_endorse;
                 Matcher matcherEndorse = NOTIFS_URL_ENDORSE.matcher(notice.link);
                 matcherEndorse.matches();
 
@@ -495,10 +475,9 @@ public final class TrixHelper {
         NotificationCompat.Builder builder = getBaseBuilder(c, account, channelId)
                 .setContentText(title)
                 .setStyle(getBigTextStyle(title))
-                .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? smallIcon :
-                        smallIconCompat)
+                .setSmallIcon(smallIcon)
                 .setContentIntent(PendingIntent.getActivity(c, 0, getLoginActivityIntent(c,
-                        account, bundle), PendingIntent.FLAG_ONE_SHOT));
+                        account, bundle), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
 
         NotificationManager notificationManager =
                 (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);

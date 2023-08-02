@@ -18,7 +18,6 @@ package com.lloydtorres.stately.login;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -62,12 +61,7 @@ public class SwitchNationDialog extends DetachDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeLollipopDialog(getContext()));
-        } else {
-            setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeMaterialDialog(getContext()));
-        }
+        setStyle(DialogFragment.STYLE_NORMAL, RaraHelper.getThemeLollipopDialog(getContext()));
     }
 
     @Override

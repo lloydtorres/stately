@@ -17,7 +17,6 @@
 package com.lloydtorres.stately.core;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -44,14 +43,8 @@ public abstract class RecyclerDialogFragment extends DetachDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AppCompatDialog dialog = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog = new AppCompatDialog(getActivity(),
-                    RaraHelper.getThemeLollipopDialog(getContext()));
-        } else {
-            dialog = new AppCompatDialog(getActivity(),
-                    RaraHelper.getThemeMaterialDialog(getContext()));
-        }
+        final AppCompatDialog dialog = new AppCompatDialog(getActivity(),
+                RaraHelper.getThemeLollipopDialog(getContext()));
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
     }
