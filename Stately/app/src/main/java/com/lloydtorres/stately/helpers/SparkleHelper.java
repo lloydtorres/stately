@@ -1108,9 +1108,7 @@ public final class SparkleHelper {
                 "<a href=\"" + BASE_URI_NOSLASH + "/%s\">%s</a>");
         holder = regexGenericUrlFormat(c, holder);
 
-        if (permissions == BBCODE_PERMISSIONS_RMB) {
-            holder = regexQuoteFormat(holder);
-        }
+        holder = regexQuoteFormat(holder);
 
         return holder;
     }
