@@ -6,13 +6,14 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.lloydtorres.stately"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         multiDexEnabled true
         versionCode 47
@@ -26,6 +27,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
     namespace 'com.lloydtorres.stately'
 }
 
@@ -43,6 +53,7 @@ dependencies {
     }
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
@@ -53,7 +64,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.jpardogo.materialtabstrip:library:1.1.1'
     implementation 'com.r0adkll:slidableactivity:2.1.0'
-    implementation 'com.squareup.picasso:picasso:2.8'
+    implementation 'io.coil-kt:coil:2.4.0'
+    implementation 'io.coil-kt:coil-svg:2.4.0'
     implementation 'org.atteo:evo-inflector:1.3'
     implementation 'org.jsoup:jsoup:1.16.1'
     implementation 'org.sufficientlysecure:html-textview:3.9'

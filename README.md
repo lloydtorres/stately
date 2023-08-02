@@ -91,13 +91,13 @@ Stately is entirely dependent on NationStates and its API, which provides in-gam
 
 Stately uses the following open-source libraries:
 
+* [Coil](https://github.com/coil-kt/coil)
 * [Evo Inflector](https://github.com/atteo/evo-inflector)
 * [HtmlTextView](https://github.com/SufficientlySecure/html-textview)
 * [jsoup](http://jsoup.org/)
 * [Material Components for Android](https://github.com/material-components/material-components-android)
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 * [PagerSlidingTabStrip](https://github.com/jpardogo/PagerSlidingTabStrip)
-* [Picasso](https://github.com/square/picasso)
 * [Pulsator4Droid](https://github.com/booncol/Pulsator4Droid)
 * [Simple XML](http://simple.sourceforge.net/)
 * [Slidr](https://github.com/r0adkll/Slidr)
