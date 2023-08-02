@@ -290,9 +290,9 @@
     <string name="census_sort_category">Category</string>
     <string name="census_sort_score">Score</string>
     <string name="census_sort_world_rank">World rank</string>
-    <string name="census_sort_world_percent">World top percent</string>
+    <string name="census_sort_world_percent">World percentile</string>
     <string name="census_sort_region_rank">Region rank</string>
-    <string name="census_sort_region_percent">Region top percent</string>
+    <string name="census_sort_region_percent">Region percentile</string>
     <string name="census_hash_symbol">#</string>
     <string name="census_top">Top</string>
 
