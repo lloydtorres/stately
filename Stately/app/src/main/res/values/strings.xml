@@ -23,7 +23,7 @@
     <string name="create_nation_redirect">To create a new nation, you\'ll be redirected to the NationStates website.</string>
     <string name="create_continue">Continue</string>
     <string name="create_finish">Type in your nation name and password to get started.</string>
-    <string name="create_error">Something went wrong with the create a new nation process. Please try again on the NationStates website (nationstates.net).</string>
+    <string name="create_error">Something went wrong with the new nation process. Try again on the NationStates website (nationstates.net).</string>
     <string name="log_in_load">Logging In…</string>
     <string name="calibration_load">Calibrating…</string>
     <string name="guidance_invalid_login_title">Problem logging in?</string>
@@ -32,7 +32,7 @@
     <string name="login_error_404">Invalid nation name or password.</string>
     <string name="login_error_parsing">Couldn\'t process data from NationStates.</string>
     <string name="login_error_no_internet">Couldn\'t connect to NationStates.</string>
-    <string name="login_error_generic">An error occurred. Please try again later.</string>
+    <string name="login_error_generic">An error occurred. Try again in a bit.</string>
 
     <string name="rate_limit_error">Too fast! Try again in a bit.</string>
     <string name="multiple_request_error">An action is already in progress.</string>
@@ -98,7 +98,7 @@
     <string name="explore_move_confirm">Move</string>
     <string name="explore_move_progress">Moving to %1$s…</string>
     <string name="explore_move_wrong_password">Incorrect password.</string>
-    <string name="explore_move_blocked">Too many invalid attempts! Please try again later.</string>
+    <string name="explore_move_blocked">Too many invalid attempts! Try again in a bit.</string>
 
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>
@@ -382,7 +382,7 @@
     <string name="telegrams_compose_hint">Compose telegram…</string>
     <string name="telegrams_send">Send Telegram</string>
     <string name="telegrams_developer_header">Sending a telegram to Stately\'s developer — Greater Tern.</string>
-    <string name="telegrams_developer_warning">Please only send telegrams related to the Stately app.\n\nAlthough the developer cannot respond to everyone, please be assured that all telegrams are carefully considered.\n\nQuestions concerning NationStates should be posted on the forums: forum.nationstates.net</string>
+    <string name="telegrams_developer_warning">Only send telegrams related to the Stately app.\n\nAlthough the developer cannot respond to everyone, all telegrams received are carefully considered.\n\nQuestions concerning NationStates should be posted on the forums: forum.nationstates.net</string>
     <string name="telegrams_empty_recipients">No recipients found for this telegram.</string>
     <string name="telegrams_empty_content">Telegram seems empty.</string>
     <string name="telegrams_invalid_recipient">Something seems wrong with the recipients.</string>
@@ -463,7 +463,7 @@
     <string name="report_inappropriate">…inappropriate user content.</string>
     <string name="report_spam">…a spammer.</string>
     <string name="report_other">…something else.</string>
-    <string name="report_describe_hint">Please describe the problem…</string>
+    <string name="report_describe_hint">Describe the problem…</string>
     <string name="report_blank">Report seems empty.</string>
     <string name="report_confirm">Send report to NationStates moderators?</string>
     <string name="report_send_confirm">Send</string>
