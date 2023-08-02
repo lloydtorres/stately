@@ -112,7 +112,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             Pattern.compile("Success! " + SparkleHelper.VALID_NAME_BASE + "+? is now located in ");
     private static final Pattern REGION_MOVE_WRONG_PASS =
             Pattern.compile("Moving to " + SparkleHelper.VALID_NAME_BASE + "+?: You have not " +
-                    "entered the correct password for " + SparkleHelper.VALID_NAME_BASE + "+?\\.");
+                    "entered the correct password");
+    private static final String REGION_MOVE_BLOCKED_PASS = "temporarily blocked from moving into password-protected regions";
     private static final String SUPERWEAPON_BUTTON_TEMPLATE = "button[name=%s]";
     private static final String ZSW_TZES_RESPONSE = "ZOMBIE HUNTERS ARE GO";
     private static final String ZSW_CURE_RESPONSE = "CURE MISSILE FIRED";
@@ -910,9 +911,10 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         if (isFinishing()) {
                             return;
                         }
+                        final String sanitizedResponse = SparkleHelper.getStrippedHtml(response);
 
-                        Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(response);
-                        Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(response);
+                        Matcher moveSuccess = REGION_MOVE_SUCCESS.matcher(sanitizedResponse);
+                        Matcher moveWrongPassword = REGION_MOVE_WRONG_PASS.matcher(sanitizedResponse);
                         isInProgress = false;
                         pd.dismiss();
                         if (moveSuccess.find()) {
@@ -925,6 +927,9 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                         } else if (moveWrongPassword.find()) {
                             SparkleHelper.makeSnackbar(view,
                                     getString(R.string.explore_move_wrong_password));
+                        } else if (sanitizedResponse.contains(REGION_MOVE_BLOCKED_PASS)) {
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.explore_move_blocked));
                         } else {
                             SparkleHelper.makeSnackbar(view,
                                     getString(R.string.login_error_generic));

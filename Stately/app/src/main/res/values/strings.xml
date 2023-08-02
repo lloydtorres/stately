@@ -98,6 +98,7 @@
     <string name="explore_move_confirm">Move</string>
     <string name="explore_move_progress">Moving to %1$s…</string>
     <string name="explore_move_wrong_password">Incorrect password.</string>
+    <string name="explore_move_blocked">Too many invalid attempts! Please try again later.</string>
 
     <!-- Switch nation -->
     <string name="switch_single_warn">No other nations are saved in Stately. Would you like to log in to a different nation?</string>

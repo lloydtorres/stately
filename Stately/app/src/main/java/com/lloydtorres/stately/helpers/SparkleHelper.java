@@ -970,6 +970,15 @@ public final class SparkleHelper {
     }
 
     /**
+     * Given HTML content, returns a string with all HTML tags stripped out.
+     * @param content HTML content
+     * @return String with no tags
+     */
+    public static String getStrippedHtml(final String content) {
+        return Jsoup.clean(content, Safelist.none());
+    }
+
+    /**
      * A formatter used to linkify @@nation@@ and %%region%% text in NationStates' happenings.
      * @param c App context
      * @param t TextView
