@@ -140,7 +140,9 @@ public final class RaraHelper {
     public static final int DAY_NORMAL = -1;
     public static final int DAY_Z_DAY = -2;
     public static final int DAY_NEW_YEAR = 11;
+    public static final int DAY_JENNIFER_GOVERNMENT = 121;
     public static final int DAY_STATELY_BIRTHDAY = 130;
+    public static final int DAY_MAX_BARRY = 318;
     public static final int DAY_APRIL_FOOLS = 41;
     public static final int DAY_CANADA_DAY = 701;
     public static final int DAY_HALLOWEEN = 1031;
@@ -476,8 +478,14 @@ public final class RaraHelper {
                 && day == 1) {
             return DAY_NEW_YEAR;
         } else if (month == Calendar.JANUARY
+                && day == 21) {
+            return DAY_JENNIFER_GOVERNMENT;
+        } else if (month == Calendar.JANUARY
                 && day == 30) {
             return DAY_STATELY_BIRTHDAY;
+        } else if (month == Calendar.MARCH
+                && day == 18) {
+            return DAY_MAX_BARRY;
         } else if (month == Calendar.APRIL
                 && day == 1) {
             return DAY_APRIL_FOOLS;

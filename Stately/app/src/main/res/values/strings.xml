@@ -10,7 +10,9 @@
     <string name="login_subtitle_liberal">Unite for a Better NationStates</string>
     <string name="login_subtitle_neutral">for NationStates</string>
     <string name="login_subtitle_new_year">Happy %1$d!</string>
+    <string name="login_subtitle_jennifer_government">Read Jennifer Government!</string>
     <string name="login_subtitle_stately_bday">Special Anniversary Edition</string>
+    <string name="login_subtitle_max_barry">Happy Birthday Max Barry!</string>
     <string name="login_subtitle_april_fools">big yikes edition</string>
     <string name="login_subtitle_canada_day">Made in Canada / Fabriqué au Canada</string>
     <string name="login_subtitle_zday">Z-Day Land Saga Edition</string>

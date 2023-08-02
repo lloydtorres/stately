@@ -150,8 +150,14 @@ public class LoginActivity extends BroadcastableActivity {
                             getString(R.string.login_subtitle_new_year),
                             SparkleHelper.getUtc5Calendar().get(Calendar.YEAR)));
                     break;
+                case RaraHelper.DAY_JENNIFER_GOVERNMENT:
+                    subtitle.setText(getString(R.string.login_subtitle_jennifer_government));
+                    break;
                 case RaraHelper.DAY_STATELY_BIRTHDAY:
                     subtitle.setText(getString(R.string.login_subtitle_stately_bday));
+                    break;
+                case RaraHelper.DAY_MAX_BARRY:
+                    subtitle.setText(getString(R.string.login_subtitle_max_barry));
                     break;
                 case RaraHelper.DAY_APRIL_FOOLS:
                     subtitle.setText(getString(R.string.login_subtitle_april_fools));
