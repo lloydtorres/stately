@@ -611,6 +611,58 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     }
 
     /**
+     * First part of the dossier process. Gets the chk value from NationStates.
+     */
+    private void getChkValueForDossier() {
+        final String urlTemplate = mode == EXPLORE_NATION ? Nation.QUERY_HTML : Region.QUERY_HTML;
+        final String url = String.format(Locale.US, urlTemplate, SparkleHelper.getIdFromName(id));
+        final NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
+                Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (isFinishing()) {
+                            return;
+                        }
+
+                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        Element input = d.select("input[name=chk]").first();
+
+                        if (input == null) {
+                            SparkleHelper.makeSnackbar(view,
+                                    getString(R.string.login_error_parsing));
+                            isInProgress = false;
+                            return;
+                        }
+
+                        String chkValue = input.attr("value");
+                        postDossier(chkValue);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SparkleHelper.logError(error.toString());
+                isInProgress = false;
+
+                if (isFinishing()) {
+                    return;
+                }
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError || error instanceof NetworkError) {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_no_internet));
+                } else {
+                    SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                }
+            }
+        });
+
+        if (!DashHelper.getInstance(this).addRequest(stringRequest)) {
+            isInProgress = false;
+            SparkleHelper.makeSnackbar(view, getString(R.string.rate_limit_error));
+        }
+    }
+
+    /**
      * Shows a dialog with the appropriate text to confirm an endorsement/withdrawal request.
      */
     private void handleEndorsement() {
@@ -731,7 +783,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        postDossier();
+                        getChkValueForDossier();
                     }
                 };
 
@@ -748,7 +800,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     /**
      * Actually sends a POST to NS to add the nation/region to the current user's dossier.
      */
-    private void postDossier() {
+    private void postDossier(final String chkValue) {
         String postUrl = Dossier.POST_QUERY_GENERIC;
         if (!isInDossier && mode == EXPLORE_REGION) {
             postUrl = String.format(Locale.US, Dossier.POST_QUERY_ADD_REGION,
@@ -829,6 +881,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     break;
             }
         }
+        params.put("chk", chkValue);
 
         stringRequest.setParams(params);
 
