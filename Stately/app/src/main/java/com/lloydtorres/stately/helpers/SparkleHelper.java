@@ -130,6 +130,7 @@ public final class SparkleHelper {
     public static final String DOMAIN_URI = "nationstates.net";
     public static final String BASE_URI = "https://www." + DOMAIN_URI + "/";
     public static final String BASE_URI_NOSLASH = "https://www." + DOMAIN_URI;
+    public static final String TEMPLATE_NONE = "/template-overall=none";
     public static final String BASE_URI_REGEX = "https:\\/\\/www\\.nationstates\\.net\\/";
     // Initialized to provide human-readable date strings for Date objects
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd MMM yyyy", Locale.US);

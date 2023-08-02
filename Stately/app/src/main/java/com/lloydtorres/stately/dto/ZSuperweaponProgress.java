@@ -28,7 +28,7 @@ import com.lloydtorres.stately.helpers.SparkleHelper;
  */
 public class ZSuperweaponProgress implements Parcelable {
     public static final String ZOMBIE_CONTROL_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
-            "=zombie_control/template-overall=none";
+            "=zombie_control" + SparkleHelper.TEMPLATE_NONE;
 
     public static final String ONE_HUNDRED_PERCENT = "100.0%";
     public static final String TYPE_TZES = "Tactical Zombie Elimination Squads";

@@ -29,10 +29,10 @@ import java.util.List;
  * This contains data about a telegram.
  */
 public class Telegram implements Parcelable, Comparable<Telegram> {
-    public static final String GET_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams" +
-            "/template-overall=none/folder=%s?start=%d";
-    public static final String SEND_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams" +
-            "/template-overall=none";
+    public static final String GET_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams"
+            + SparkleHelper.TEMPLATE_NONE + "/folder=%s?start=%d";
+    public static final String SEND_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=telegrams"
+            + SparkleHelper.TEMPLATE_NONE;
     public static final String MARK_READ = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a" +
             "=markread/tgid=%d/chk=%s";
     public static final String MOVE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page=ajax3/a" +
@@ -41,8 +41,8 @@ public class Telegram implements Parcelable, Comparable<Telegram> {
             "=tgdelete/tgid=%d/chk=%s";
     public static final String PERMDELETE_TELEGRAM = SparkleHelper.BASE_URI_NOSLASH + "/page" +
             "=ajax3/a=tgpermadelete/tgid=%d/chk=%s";
-    public static final String TELEGRAM_CONVERSATION = SparkleHelper.BASE_URI_NOSLASH + "/page=tg" +
-            "/template-overall=none/tgid=%d/conversation=1";
+    public static final String TELEGRAM_CONVERSATION = SparkleHelper.BASE_URI_NOSLASH + "/page=tg"
+            + SparkleHelper.TEMPLATE_NONE + "/tgid=%d/conversation=1";
 
     public static final int TELEGRAM_GENERIC = 0;
     public static final int TELEGRAM_RECRUITMENT = 1;

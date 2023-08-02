@@ -49,7 +49,7 @@ public class Region extends BaseRegion implements Parcelable {
     public static final String QUERY_HTML = SparkleHelper.BASE_URI_NOSLASH + "/region=%s/template" +
             "-overall=none";
     public static final String CHANGE_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
-            "=change_region/template-overall=none";
+            "=change_region" + SparkleHelper.TEMPLATE_NONE;
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Region> CREATOR = new Parcelable.Creator<Region>() {
         @Override

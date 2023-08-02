@@ -38,7 +38,7 @@ public class IssueFullHolder implements Parcelable {
             ".cgi?nation=%s&q=issues+nextissuetime+zombie"
             + "&v=" + SparkleHelper.API_VERSION;
     public static final String CONFIRM_QUERY = SparkleHelper.BASE_URI_NOSLASH + "/page" +
-            "=show_dilemma/dilemma=%d/template-overall=none";
+            "=show_dilemma/dilemma=%d" + SparkleHelper.TEMPLATE_NONE;
 
     public static final long UNKNOWN_NEXT_ISSUE_TIME = -1;
     public static final int MAX_ISSUE_COUNT_REGULAR = 5;
