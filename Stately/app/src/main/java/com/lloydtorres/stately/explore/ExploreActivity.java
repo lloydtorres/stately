@@ -114,6 +114,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
             Pattern.compile("Moving to " + SparkleHelper.VALID_NAME_BASE + "+?: You have not " +
                     "entered the correct password");
     private static final String REGION_MOVE_BLOCKED_PASS = "temporarily blocked from moving into password-protected regions";
+    private static final String DOSSIER_ADD_CONFIRM = "has been added to your Dossier.";
+    private static final String DOSSIER_REMOVE_CONFIRM = "Removed 1";
     private static final String SUPERWEAPON_BUTTON_TEMPLATE = "button[name=%s]";
     private static final String ZSW_TZES_RESPONSE = "ZOMBIE HUNTERS ARE GO";
     private static final String ZSW_CURE_RESPONSE = "CURE MISSILE FIRED";
@@ -157,7 +159,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                 // to convert it from a proper name to an ID
                 // But we need it as a name so we convert it back
                 id = getIntent().getData().getHost();
-                id = SparkleHelper.getNameFromId(id);
+                id = SparkleHelper.getIdFromName(id);
                 name = SparkleHelper.getNameFromId(id);
                 mode = Integer.valueOf(getIntent().getData().getLastPathSegment());
             }
@@ -613,7 +615,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     /**
      * First part of the dossier process. Gets the chk value from NationStates.
      */
-    private void getChkValueForDossier() {
+    private void getCheckValueForDossier() {
         final String urlTemplate = mode == EXPLORE_NATION ? Nation.QUERY_HTML : Region.QUERY_HTML;
         final String url = !isInDossier ?
                 String.format(Locale.US, urlTemplate, SparkleHelper.getIdFromName(id)) :
@@ -785,7 +787,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        getChkValueForDossier();
+                        getCheckValueForDossier();
                     }
                 };
 
@@ -802,14 +804,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     /**
      * Actually sends a POST to NS to add the nation/region to the current user's dossier.
      */
-    private void postDossier(final String chkValue) {
-        String postUrl = Dossier.POST_QUERY_GENERIC;
-        if (!isInDossier && mode == EXPLORE_REGION) {
-            postUrl = String.format(Locale.US, Dossier.POST_QUERY_ADD_REGION,
-                    SparkleHelper.getIdFromName(id));
-        }
-
-        String progressMessage = String.format(Locale.US, getString(isInDossier ?
+    private void postDossier(final String checkValue) {
+        final String progressMessage = String.format(Locale.US, getString(isInDossier ?
                         R.string.explore_dossier_rem_progress :
                         R.string.explore_dossier_add_progress),
                 name);
@@ -818,17 +814,27 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         dossierProgress.show(getSupportFragmentManager(), ProgressDialog.DIALOG_TAG);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, postUrl,
+                Request.Method.POST, Dossier.POST_QUERY_NO_TEMPLATE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if (isFinishing()) {
                             return;
                         }
-
                         isInProgress = false;
-                        isInDossier = !isInDossier;
                         dossierProgress.dismiss();
+
+                        final String sanitizedResponse = SparkleHelper.getStrippedHtml(response);
+                        final boolean isAddSuccesful = !isInDossier &&
+                                sanitizedResponse.contains(DOSSIER_ADD_CONFIRM);
+                        final boolean isRemoveSuccessful = isInDossier &&
+                                sanitizedResponse.contains(DOSSIER_REMOVE_CONFIRM);
+                        if (!isAddSuccesful && !isRemoveSuccessful) {
+                            SparkleHelper.makeSnackbar(view, getString(R.string.login_error_generic));
+                            return;
+                        }
+
+                        isInDossier = !isInDossier;
                         if (isInDossier) {
                             SparkleHelper.makeSnackbar(view, String.format(Locale.US,
                                     getString(R.string.explore_dossier_added), name));
@@ -883,7 +889,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                     break;
             }
         }
-        params.put("chk", chkValue);
+        params.put("chk", checkValue);
 
         stringRequest.setParams(params);
 
