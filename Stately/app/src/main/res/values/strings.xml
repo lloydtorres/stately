@@ -235,6 +235,9 @@
     <string name="card_region_factbook_title">Factbook</string>
     <string name="card_region_tags_title">Tags</string>
 
+    <!-- Banned from region badge -->
+    <string name="region_ban_badge_description">%1$s is banned from this region.</string>
+
     <!-- Region community subfragment -->
     <string name="card_region_rmb">Regional Message Board</string>
     <string name="card_region_poll">Poll</string>

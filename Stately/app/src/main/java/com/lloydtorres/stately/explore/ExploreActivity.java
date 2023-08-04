@@ -127,6 +127,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
     private String id;
     private String name;
     private int mode;
+    private String userId;
     private TextView statusMessage;
     private ImageView exploreButton;
     private boolean noRefresh;
@@ -285,7 +286,7 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      * @param name Nation/region to check
      */
     private void queryAndCheckUserExploreData(final String name) {
-        String userId = PinkaHelper.getActiveUser(this).nationId;
+        userId = PinkaHelper.getActiveUser(this).nationId;
         String targetURL = String.format(Locale.US, UserExploreData.QUERY,
                 SparkleHelper.getIdFromName(userId));
 
@@ -376,7 +377,6 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
 
                             // determine endorseable state
                             UserLogin u = PinkaHelper.getActiveUser(getApplicationContext());
-                            String userId = u.nationId;
                             String userRegionId =
                                     PinkaHelper.getRegionSessionData(getApplicationContext());
                             boolean userWaMember =
@@ -464,7 +464,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
                             String curRegion =
                                     PinkaHelper.getRegionSessionData(getApplicationContext());
                             isMoveable =
-                                    !curRegion.equals(SparkleHelper.getIdFromName(regionResponse.name));
+                                    !curRegion.equals(SparkleHelper.getIdFromName(regionResponse.name))
+                                        && !regionResponse.isNationBannedFromRegion(userId);
                             isPassword =
                                     regionResponse.tags != null && regionResponse.tags.contains(PASSWORD_TAG);
                             invalidateOptionsMenu();

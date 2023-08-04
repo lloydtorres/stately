@@ -28,7 +28,10 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Lloyd on 2016-01-21.
@@ -41,7 +44,7 @@ public class Region extends BaseRegion implements Parcelable {
     public static final String QUERY = BaseRegion.BASE_QUERY
             + "+power+wabadges+bannerurl"
             + "+poll+gavote+scvote"
-            + "+officers+embassies"
+            + "+officers+embassies+banlist"
             + "+happenings+history"
             + "+zombie+census"
             + ";scale=all;mode=score+rank+prank"
@@ -68,6 +71,8 @@ public class Region extends BaseRegion implements Parcelable {
     public List<WaBadge> waBadges;
     @Element(name = "BANNERURL")
     public String bannerUrl;
+    @Element(name = "BANNED", required = false)
+    public String rawBanList;
     @Element(name = "POLL", required = false)
     public Poll poll;
     @Element(name = "GAVOTE", required = false)
@@ -87,6 +92,8 @@ public class Region extends BaseRegion implements Parcelable {
     @Element(name = "ZOMBIE")
     public Zombie zombieData;
 
+    private Set<String> banListSet;
+
     public Region() {
         super();
     }
@@ -101,6 +108,7 @@ public class Region extends BaseRegion implements Parcelable {
             waBadges = null;
         }
         bannerUrl = in.readString();
+        rawBanList = in.readString();
         poll = (Poll) in.readValue(Poll.class.getClassLoader());
         gaVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
         scVote = (WaVote) in.readValue(WaVote.class.getClassLoader());
@@ -148,6 +156,18 @@ public class Region extends BaseRegion implements Parcelable {
         return regionResponse;
     }
 
+    public boolean isNationBannedFromRegion(final String nationId) {
+        if (banListSet == null) {
+            banListSet = new HashSet<>();
+        }
+
+        if (rawBanList != null) {
+            banListSet.addAll(Arrays.asList(rawBanList.split(":")));
+        }
+
+        return banListSet.contains(nationId);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -164,6 +184,7 @@ public class Region extends BaseRegion implements Parcelable {
             dest.writeList(waBadges);
         }
         dest.writeString(bannerUrl);
+        dest.writeString(rawBanList);
         dest.writeValue(poll);
         dest.writeValue(gaVote);
         dest.writeValue(scVote);

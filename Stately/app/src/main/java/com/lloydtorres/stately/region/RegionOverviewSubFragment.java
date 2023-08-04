@@ -23,10 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lloydtorres.stately.core.RecyclerSubFragment;
+import com.lloydtorres.stately.dto.EmptyParcelable;
 import com.lloydtorres.stately.dto.Region;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.zombie.NightmareHelper;
 
 import java.util.ArrayList;
@@ -74,6 +76,11 @@ public class RegionOverviewSubFragment extends RecyclerSubFragment {
     }
 
     private void initData() {
+        final String userId = PinkaHelper.getActiveUser(getContext()).nationId;
+        if (mRegion.isNationBannedFromRegion(userId)) {
+            cards.add(new EmptyParcelable());
+        }
+
         if (NightmareHelper.getIsZDayActive(getContext()) && mRegion.zombieData != null) {
             cards.add(mRegion.zombieData);
         }

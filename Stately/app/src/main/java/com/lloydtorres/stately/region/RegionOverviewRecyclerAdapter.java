@@ -27,12 +27,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lloydtorres.stately.R;
+import com.lloydtorres.stately.dto.EmptyParcelable;
 import com.lloydtorres.stately.dto.RegionFactbookCardData;
 import com.lloydtorres.stately.dto.RegionQuickFactsCardData;
 import com.lloydtorres.stately.dto.RegionTagsCardData;
 import com.lloydtorres.stately.dto.WaBadge;
 import com.lloydtorres.stately.dto.Zombie;
 import com.lloydtorres.stately.explore.ExploreActivity;
+import com.lloydtorres.stately.helpers.PinkaHelper;
 import com.lloydtorres.stately.helpers.SparkleHelper;
 import com.lloydtorres.stately.wa.WaBadgeCard;
 import com.lloydtorres.stately.zombie.ZombieChartCard;
@@ -53,6 +55,7 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
     private static final int REGION_TAGS = 2;
     private static final int REGION_ZOMBIE = 3;
     private static final int REGION_WA_BADGE = 4;
+    private static final int REGION_BANNED_BADGE = 5;
 
     private List<Parcelable> cards;
     private final String regionName;
@@ -131,6 +134,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 View waBadgeCard = inflater.inflate(R.layout.card_wa_badge, parent, false);
                 viewHolder = new WaBadgeCard(context, waBadgeCard);
                 break;
+            case REGION_BANNED_BADGE:
+                View regionBannedCard = inflater.inflate(R.layout.card_region_banned, parent, false);
+                viewHolder = new RegionBannedCard(context, regionBannedCard);
+                break;
         }
 
         return viewHolder;
@@ -160,6 +167,10 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
                 WaBadgeCard bc = (WaBadgeCard) holder;
                 bc.init((WaBadge) cards.get(position));
                 break;
+            case REGION_BANNED_BADGE:
+                RegionBannedCard regionBannedCard = (RegionBannedCard) holder;
+                regionBannedCard.init();
+                break;
         }
     }
 
@@ -180,6 +191,8 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             return REGION_ZOMBIE;
         } else if (cards.get(position) instanceof WaBadge) {
             return REGION_WA_BADGE;
+        } else if (cards.get(position) instanceof EmptyParcelable) {
+            return REGION_BANNED_BADGE;
         }
         return -1;
     }
@@ -244,6 +257,23 @@ public class RegionOverviewRecyclerAdapter extends RecyclerView.Adapter<Recycler
             data = d;
             String tagCombine = SparkleHelper.joinStringList(data.tags, ", ");
             cardContent.setText(tagCombine);
+        }
+    }
+
+    public class RegionBannedCard extends RecyclerView.ViewHolder {
+        private Context context;
+        private TextView badgeTextView;
+
+        public RegionBannedCard(final Context c, final View itemView) {
+            super(itemView);
+            context = c;
+            badgeTextView = itemView.findViewById(R.id.region_banned_description);
+        }
+
+        public void init() {
+            final String selfNationName = PinkaHelper.getActiveUser(context).name;
+            badgeTextView.setText(String.format(Locale.US,
+                    context.getString(R.string.region_ban_badge_description), selfNationName));
         }
     }
 }
