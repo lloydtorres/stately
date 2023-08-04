@@ -281,7 +281,7 @@
     <string name="rmb_unsuppress_confirm">Unsuppress this post?</string>
     <string name="rmb_unsuppress">Unsuppress</string>
     <string name="rmb_likes">Likes</string>
-    <string name="rmb_cant_like">Your nation doesn\'t have permission to like posts in this region.</string>
+    <string name="rmb_cant_like">This nation doesn\'t have permission to like posts in this region.</string>
     <string name="rmb_self_like">You can\'t like your own post!</string>
 
     <!-- Region governance subfragment -->
