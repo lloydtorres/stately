@@ -154,7 +154,6 @@ class DashHelper private constructor(private var context: Context) {
         target.load(drawable) {
             crossfade(true)
         }
-        numCalls++
     }
 
     fun getImageLoader(context: Context): ImageLoader {
