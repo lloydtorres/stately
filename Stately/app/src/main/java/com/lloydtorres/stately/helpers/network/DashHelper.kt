@@ -65,6 +65,7 @@ import com.lloydtorres.stately.R
 class DashHelper private constructor(private var context: Context) {
     private var mContext: Context
     private var mRequestQueue: RequestQueue?
+    private var rateLimit: Int
     private var lastReset: Long
     private var numCalls: Int
 
@@ -75,6 +76,7 @@ class DashHelper private constructor(private var context: Context) {
     init {
         mContext = context
         mRequestQueue = requestQueue
+        rateLimit = DEFAULT_RATE_LIMIT
         lastReset = System.currentTimeMillis()
         numCalls = 0
     }
@@ -105,14 +107,20 @@ class DashHelper private constructor(private var context: Context) {
         return false
     }
 
-    /**
-     * Sets the number of calls that have been made to the server.
-     * @param n
-     */
     @Synchronized
-    fun setNumCalls(n: Int) {
-        numCalls = n
-    }// Reset the call counter if more than 30 seconds have passed
+    fun setRateLimit(limit: Int) {
+        rateLimit = maxOf(limit - RATE_LIMIT_BUFFER, 1)
+    }
+
+    @Synchronized
+    fun setRemainingCalls(remaining: Int) {
+        numCalls = rateLimit - remaining
+    }
+
+    @Synchronized
+    fun setNextReset(nextResetInSeconds: Int) {
+        lastReset = System.currentTimeMillis() + nextResetInSeconds * 1000L
+    }
 
     /**
      * Determines if adding a request will violate rate limits.
@@ -126,7 +134,7 @@ class DashHelper private constructor(private var context: Context) {
                 numCalls = 0
                 lastReset = curTime
             }
-            return if (numCalls < RATE_LIMIT) {
+            return if (numCalls < rateLimit) {
                 numCalls++
                 true
             } else {
@@ -139,12 +147,14 @@ class DashHelper private constructor(private var context: Context) {
             crossfade(true)
             error(R.drawable.gray)
         }
+        numCalls++
     }
 
     fun loadImageWithoutPlaceHolder(drawable: Int, target: ImageView) {
         target.load(drawable) {
             crossfade(true)
         }
+        numCalls++
     }
 
     fun getImageLoader(context: Context): ImageLoader {
@@ -156,11 +166,15 @@ class DashHelper private constructor(private var context: Context) {
     companion object {
         private const val TIMEOUT_IN_MS = 60000
         private const val RATE_LIMIT_RESET_IN_MS = 30000
-        private const val RATE_LIMIT = 45
+        private const val RATE_LIMIT_BUFFER = 5
+        private const val DEFAULT_RATE_LIMIT = 50 - RATE_LIMIT_BUFFER
+
         private val RETRY_POLICY = DefaultRetryPolicy(TIMEOUT_IN_MS,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+
         private var mDashie: DashHelper? = null
+
         @JvmStatic
         @Synchronized
         fun getInstance(c: Context): DashHelper? {

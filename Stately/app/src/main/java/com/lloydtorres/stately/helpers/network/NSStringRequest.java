@@ -44,6 +44,17 @@ public class NSStringRequest extends StringRequest {
     public static final String STATELY_USER_AGENT_USER = "Stately/%s (User %s; Droid)";
     public static final String STATELY_USER_AGENT_NOUSER = "Stately/%s (No User; Droid)";
 
+    private static final String HEADER_PIN = "X-Pin";
+    private static final String HEADER_PASSWORD = "X-Password";
+    private static final String HEADER_AUTOLOGIN = "X-Autologin";
+    private static final String HEADER_COOKIE = "Cookie";
+    private static final String HEADER_SET_COOKIE = "Set-Cookie";
+    private static final String HEADER_USER_AGENT = "User-Agent";
+    private static final String HEADER_CONTENT_TYPE = "Content-Type";
+    private static final String HEADER_RATE_LIMIT_LIMIT = "RateLimit-Limit";
+    private static final String HEADER_RATE_LIMIT_REMAINING = "RateLimit-Remaining";
+    private static final String HEADER_RATE_LIMIT_RESET = "RateLimit-Reset";
+
     private final Context context;
     private UserLogin userDataOverride = null;
     private String password;
@@ -88,37 +99,37 @@ public class NSStringRequest extends StringRequest {
 
         // UserLogin will not be null when user is logged in
         if (u != null && u.nationId != null) {
-            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_USER,
+            headers.put(HEADER_USER_AGENT, String.format(Locale.US, STATELY_USER_AGENT_USER,
                     BuildConfig.VERSION_NAME, u.nationId));
 
             // Case 1: If only autologin cookie is available/pin cookie is invalid
             if ((u.pin == null || PIN_INVALID.equals(u.pin)) && u.autologin != null) {
-                headers.put("Cookie", String.format(Locale.US, "autologin=%s",
+                headers.put(HEADER_COOKIE, String.format(Locale.US, "autologin=%s",
                         buildCookieAutologinToken(u.nationId, u.autologin)));
-                headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
+                headers.put(HEADER_AUTOLOGIN, buildHeaderAutologinToken(u.nationId, u.autologin));
             }
             // Case 2: If both autologin and pin cookies are available and pin cookie is good
             else if (u.autologin != null && u.pin != null && !PIN_INVALID.equals(u.pin)) {
-                headers.put("Cookie", String.format(Locale.US, "autologin=%s; pin=%s",
+                headers.put(HEADER_COOKIE, String.format(Locale.US, "autologin=%s; pin=%s",
                         buildCookieAutologinToken(u.nationId, u.autologin), u.pin));
-                headers.put("X-Autologin", buildHeaderAutologinToken(u.nationId, u.autologin));
-                headers.put("X-Pin", u.pin);
+                headers.put(HEADER_AUTOLOGIN, buildHeaderAutologinToken(u.nationId, u.autologin));
+                headers.put(HEADER_PIN, u.pin);
             }
             // Case 3: Both are missing, don't do anything
             // ...
         } else {
-            headers.put("User-Agent", String.format(Locale.US, STATELY_USER_AGENT_NOUSER,
+            headers.put(HEADER_USER_AGENT, String.format(Locale.US, STATELY_USER_AGENT_NOUSER,
                     BuildConfig.VERSION_NAME));
         }
 
         // If the password is provided, add that to the header
         if (password != null) {
-            headers.put("X-Password", SparkleHelper.escapeHtml(password));
+            headers.put(HEADER_PASSWORD, SparkleHelper.escapeHtml(password));
         }
 
         // Only include x-www-form-urlencoded for POSTs
         if (method == Request.Method.POST) {
-            headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            headers.put(HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded; charset=UTF-8");
         }
         return headers;
     }
@@ -128,37 +139,64 @@ public class NSStringRequest extends StringRequest {
         Map<String, String> responseHeaders = response.headers;
 
         // Update PIN if new one available
-        if (responseHeaders.containsKey("X-Pin") && !PIN_INVALID.equals(responseHeaders.get("X" +
-                "-Pin"))) {
-            PinkaHelper.setActivePin(context, responseHeaders.get("X-Pin"));
+        if (responseHeaders.containsKey(HEADER_PIN) && !PIN_INVALID.equals(responseHeaders.get(
+                HEADER_PIN))) {
+            PinkaHelper.setActivePin(context, responseHeaders.get(HEADER_PIN));
         }
 
         // Update PIN from cookie if available AND X-Pin not provided
-        if (responseHeaders.containsKey("Set-Cookie") && !responseHeaders.containsKey("X-Pin")) {
-            Matcher m = COOKIE_PIN.matcher(responseHeaders.get("Set-Cookie"));
+        if (responseHeaders.containsKey(HEADER_SET_COOKIE) &&
+                !responseHeaders.containsKey(HEADER_PIN)) {
+            Matcher m = COOKIE_PIN.matcher(responseHeaders.get(HEADER_SET_COOKIE));
             if (m.matches() && !PIN_INVALID.equals(m.group(1))) {
                 PinkaHelper.setActivePin(context, m.group(1));
             }
         }
 
         // Update autologin if new one available
-        if (responseHeaders.containsKey("X-Autologin")) {
-            PinkaHelper.setActiveAutologin(context, responseHeaders.get("X-Autologin"));
+        if (responseHeaders.containsKey(HEADER_AUTOLOGIN)) {
+            PinkaHelper.setActiveAutologin(context, responseHeaders.get(HEADER_AUTOLOGIN));
         }
 
         // Sync number of requests seen by server with internal count
-        if (responseHeaders.containsKey("X-Ratelimit-Requests-Seen")) {
+        setRateLimitValues(responseHeaders);
+
+        return super.parseNetworkResponse(response);
+    }
+
+    private void setRateLimitValues(final Map<String, String> responseHeaders) {
+        final DashHelper dashie = DashHelper.getInstance(context);
+        if (dashie == null) return;
+
+        if (responseHeaders.containsKey(HEADER_RATE_LIMIT_LIMIT)) {
             try {
-                int serverCount = Integer.parseInt(responseHeaders.get("X-Ratelimit-Requests-Seen"
-                ));
-                DashHelper dashie = DashHelper.getInstance(context);
-                dashie.setNumCalls(serverCount);
+                final int serverRateLimit =
+                        Integer.parseInt(responseHeaders.get(HEADER_RATE_LIMIT_LIMIT));
+                dashie.setRateLimit(serverRateLimit);
             } catch (Exception e) {
                 SparkleHelper.logError(e.toString());
             }
         }
 
-        return super.parseNetworkResponse(response);
+        if (responseHeaders.containsKey(HEADER_RATE_LIMIT_REMAINING)) {
+            try {
+                final int serverRateLimitRemaining =
+                        Integer.parseInt(responseHeaders.get(HEADER_RATE_LIMIT_REMAINING));
+                dashie.setRemainingCalls(serverRateLimitRemaining);
+            } catch (Exception e) {
+                SparkleHelper.logError(e.toString());
+            }
+        }
+
+        if (responseHeaders.containsKey(HEADER_RATE_LIMIT_RESET)) {
+            try {
+                final int serverNextReset =
+                        Integer.parseInt(responseHeaders.get(HEADER_RATE_LIMIT_RESET));
+                dashie.setNextReset(serverNextReset);
+            } catch (Exception e) {
+                SparkleHelper.logError(e.toString());
+            }
+        }
     }
 
     /**
