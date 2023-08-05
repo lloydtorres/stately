@@ -541,6 +541,7 @@
     <string name="setting_title_notifs">Notifications</string>
     <string name="setting_notifs">Get notifications</string>
     <string name="setting_notifs_desc">For the currently logged in nation only. Notices must be enabled in NationStates.</string>
+    <string name="setting_notifs_permission_denied_error">Stately requires device permissions to show notifications.</string>
     <string name="setting_notifs_check">Check for new notifications</string>
     <string name="setting_notifs_issues">Issues</string>
     <string name="setting_notifs_tgs">Telegrams</string>

@@ -16,16 +16,21 @@
 
 package com.lloydtorres.stately.settings;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -44,9 +49,12 @@ import java.util.Locale;
  * The fragment within the Settings activity.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private static final int NOTIFICATIONS_PERMISSION_REQUEST_CODE = 1;
     private static final String DEVELOPER_TARGET = "Greater Tern";
     private static final String NS_RIGHT_TO_ERASURE_POLICY_LINK =
             "https://m.nationstates.net/page=privacy#Erase";
+
+    private Preference mNotificationsSetting;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -55,6 +63,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final Preference appVersionSetting = findPreference(SettingsActivity.SETTING_APP_VERSION);
         appVersionSetting.setTitle(String.format(Locale.US, getString(R.string.app_version),
                 BuildConfig.VERSION_NAME));
+
+        // Set on click listener for notifications
+        mNotificationsSetting = findPreference(SettingsActivity.SETTING_NOTIFS);
+        mNotificationsSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                handleNotificationsPermission();
+                return true;
+            }
+        });
 
         // Set on click listener to send telegram
         final Preference sendTelegramSetting = findPreference(SettingsActivity.SETTING_SEND_TELEGRAM);
@@ -97,6 +115,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         return view;
+    }
+
+    private void handleNotificationsPermission() {
+        final boolean isNotificationsEnabled = SettingsActivity.getNotificationSetting(getContext());
+        if (!isNotificationsEnabled || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+
+        final int notificationPermissionsGrantedState =
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.POST_NOTIFICATIONS);
+        if (notificationPermissionsGrantedState == PackageManager.PERMISSION_GRANTED) return;
+        requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS},
+                NOTIFICATIONS_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        SparkleHelper.makeSnackbar(getView(), getString(R.string.setting_notifs_permission_denied_error));
+        mNotificationsSetting.setEnabled(false);
+        SettingsActivity.setNotificationSetting(getContext(), false);
+
     }
 
     private void showDeleteDataConfirmationDialog() {

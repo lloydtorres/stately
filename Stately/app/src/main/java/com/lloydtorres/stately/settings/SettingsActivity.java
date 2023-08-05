@@ -109,6 +109,11 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
         return storage.getBoolean(SettingsActivity.SETTING_NOTIFS, false);
     }
 
+    public static void setNotificationSetting(Context c, boolean value) {
+        SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
+        storage.edit().putBoolean(SettingsActivity.SETTING_NOTIFS, false).apply();
+    }
+
     public static long getNotificationIntervalSetting(Context c) {
         SharedPreferences storage = PreferenceManager.getDefaultSharedPreferences(c);
         long interval = NOTIFS_6_HOURS_IN_SEC;

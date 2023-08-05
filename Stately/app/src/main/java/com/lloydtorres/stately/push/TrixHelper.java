@@ -214,33 +214,30 @@ public final class TrixHelper {
         Random r = new Random();
         long notificationJitterIntervalInMs =
                 (long) (r.nextDouble() * NOTIFICATION_JITTER_TIME_IN_MS);
+        long notificationTriggerInMs = notificationIntervalInMs + notificationJitterIntervalInMs;
 
-        if (!shouldFallback) {
-            ComponentName alphysLollipopServiceName = new ComponentName(c,
-                    AlphysLollipopService.class);
-            JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
-                    .setMinimumLatency(notificationIntervalInMs + notificationJitterIntervalInMs)
-                    .build();
-            JobScheduler scheduler =
-                    (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            scheduler.cancel(TAG_JOB_ID);
-            shouldFallback = scheduler.schedule(alphysJobInfo) == JobScheduler.RESULT_FAILURE;
-        } else {
+        ComponentName alphysLollipopServiceName = new ComponentName(c,
+                AlphysLollipopService.class);
+        JobInfo alphysJobInfo = new JobInfo.Builder(TAG_JOB_ID, alphysLollipopServiceName)
+                .setMinimumLatency(notificationTriggerInMs)
+                .build();
+        JobScheduler scheduler =
+                (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(TAG_JOB_ID);
+        shouldFallback = scheduler.schedule(alphysJobInfo) == JobScheduler.RESULT_FAILURE;
+
+        if (shouldFallback) {
             Intent alphysIntent = new Intent(c, AlphysReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(c, 0, alphysIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-            long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
-            timeToNextAlarm += notificationJitterIntervalInMs;
 
-            // Source:
-            // https://www.reddit
-            // .com/r/Android/comments/44opi3/reddit_sync_temporarily_blocked_for_bad_api_usage
-            // /czs3ne4
             AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeToNextAlarm,
-                        pendingIntent);
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, notificationTriggerInMs,
+                        notificationTriggerInMs, pendingIntent);
             } else {
+                long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
+                timeToNextAlarm += notificationJitterIntervalInMs;
                 am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
             }
         }
