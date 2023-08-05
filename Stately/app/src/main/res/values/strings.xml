@@ -386,7 +386,7 @@
     <string name="telegrams_from">From</string>
     <string name="telegrams_compose_hint">Compose telegram…</string>
     <string name="telegrams_send">Send Telegram</string>
-    <string name="telegrams_developer_header">Sending a telegram to Stately\'s developer — Greater Tern.</string>
+    <string name="telegrams_developer_header">Sending a telegram to the Stately developer\'s nation — Greater Tern.</string>
     <string name="telegrams_developer_warning">Only send telegrams related to the Stately app.\n\nAlthough the developer cannot respond to everyone, all telegrams received are carefully considered.\n\nQuestions concerning NationStates should be posted on the forums: forum.nationstates.net</string>
     <string name="telegrams_empty_recipients">No recipients found for this telegram.</string>
     <string name="telegrams_empty_content">Telegram seems empty.</string>
@@ -555,8 +555,10 @@
     <string name="setting_category_april">April Fools! Government category will be restored to normal after today.</string>
     <string name="setting_title_about">About</string>
     <string name="setting_developer_info">Built with ♥ in Canada by Lloyd Torres\nContributors: Jannes Höke, Samtinel</string>
-    <string name="setting_send_telegram">Send Telegram</string>
-    <string name="setting_privacy_policy">Privacy Policy</string>
+    <string name="setting_send_telegram">Send Developer Telegram</string>
+    <string name="setting_privacy_policy">Stately Privacy Policy</string>
+    <string name="setting_delete_data">Delete My Data</string>
+    <string name="setting_delete_data_dialog_content">You\'ll be logged out of Stately and redirected to the NationStates Right to Erasure policy, where you\'ll have the option to view and delete your data. Would you like to continue?</string>
 
     <!-- Licenses -->
     <string name="licenses_title">Licenses</string>

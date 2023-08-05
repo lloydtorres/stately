@@ -62,6 +62,7 @@ public class SettingsActivity extends SlidrActivity implements SharedPreferences
 
     public static final String SETTING_APP_VERSION = "setting_app_version";
     public static final String SETTING_SEND_TELEGRAM = "setting_send_telegram";
+    public static final String SETTING_DELETE_DATA = "setting_delete_data";
 
     // Theme keys
     public static final int THEME_VERT = 0;
