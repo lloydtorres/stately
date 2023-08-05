@@ -24,6 +24,7 @@ Get Stately on: [Google Play](https://play.google.com/store/apps/details?id=com.
 
 Detailed release notes and APKs can be found in the [releases page](https://github.com/lloydtorres/stately/releases).
 
+* **1.11.0** - Issues count, region banners and bans, bug fixes and improvements.
 * **1.10.5** - Census scale fixes, bug fixes and improvements.
 * **1.10.4** - Removed Crashlytics, census scale fixes, Android 11 support, bug fixes and improvements.
 * **1.10.3** - Bug fixes and improvements.

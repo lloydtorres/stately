@@ -1,0 +1,5 @@
+• Add count for number of issues answered.
+• Add support for regional banners.
+• Add badge for nations banned from a region.
+• Fix bugs related to: flags, moving regions, dossiers.
+• Other bug fixes and improvements.
