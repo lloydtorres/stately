@@ -79,4 +79,9 @@
 
     <color name="waDelegateFor">#1565C0</color>
     <color name="waDelegateAgainst">#C62828</color>
+
+    <color name="colorWaCommend">#FBC02D</color>
+    <color name="colorWaCondemn">#424242</color>
+    <color name="colorWaLiberated">#E64A19</color>
+    <color name="colorWaInjunction">#6A1B9A</color>
 </resources>

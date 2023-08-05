@@ -58,20 +58,24 @@ public class WaBadgeCard extends RecyclerView.ViewHolder implements View.OnClick
         badgeData = badge;
 
         int containerColour = ContextCompat.getColor(context, R.color.colorChart12);
-        int descriptionText = R.string.wa_badge_commend;
+        int descriptionText = R.string.wa_badge_default;
 
         switch (badgeData.type) {
             case WaBadge.TYPE_COMMEND:
-                containerColour = ContextCompat.getColor(context, R.color.colorChart3);
+                containerColour = ContextCompat.getColor(context, R.color.colorWaCommend);
                 descriptionText = R.string.wa_badge_commend;
                 break;
             case WaBadge.TYPE_CONDEMN:
-                containerColour = ContextCompat.getColor(context, R.color.colorChart1);
+                containerColour = ContextCompat.getColor(context, R.color.colorWaCondemn);
                 descriptionText = R.string.wa_badge_condemn;
                 break;
             case WaBadge.TYPE_LIBERATE:
-                containerColour = ContextCompat.getColor(context, R.color.colorChart0);
+                containerColour = ContextCompat.getColor(context, R.color.colorWaLiberated);
                 descriptionText = R.string.wa_badge_liberated;
+                break;
+            case WaBadge.TYPE_INJUNCT:
+                containerColour = ContextCompat.getColor(context, R.color.colorWaInjunction);
+                descriptionText = R.string.wa_badge_injunction;
                 break;
         }
 

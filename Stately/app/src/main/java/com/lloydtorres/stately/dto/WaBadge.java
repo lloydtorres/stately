@@ -32,6 +32,7 @@ public class WaBadge implements Parcelable {
     public static final String TYPE_COMMEND = "commend";
     public static final String TYPE_CONDEMN = "condemn";
     public static final String TYPE_LIBERATE = "liberate";
+    public static final String TYPE_INJUNCT = "injunct";
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<WaBadge> CREATOR = new Parcelable.Creator<WaBadge>() {
         @Override
