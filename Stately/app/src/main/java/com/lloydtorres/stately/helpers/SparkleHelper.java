@@ -189,6 +189,12 @@ public final class SparkleHelper {
     public static final Pattern NS_RAW_REGION_LINK_TG =
             Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "region=(" + VALID_ID_BASE + "+?)" +
                     "\\?tgid=[0-9]+?");
+    public static final Pattern NS_RAW_RESOLUTION_LINK =
+            Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution" +
+                    "(?:s|)\\/id=([0-9]+?)\\/council=(1|2)");
+    public static final Pattern NS_RAW_RESOLUTION_LINK_2 =
+            Pattern.compile("(?i)\\b" + NS_REGEX_URI_SCHEME + "page=WA_past_resolution" +
+                    "(?:s|)\\/council=(1|2)\\/id=([0-9]+?)");
     public static final Pattern NS_BBCODE_NATION =
             Pattern.compile("(?i)\\[nation\\](" + VALID_NAME_BASE + "+?)\\[\\/nation\\]");
     public static final Pattern NS_BBCODE_NATION_2 =
@@ -1097,7 +1103,7 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_STRIKE, "<strike>%s</strike>");
         holder = regexDoubleReplace(holder, BBCODE_PROPOSAL,
                 "<a href=\"" + Resolution.PATH_PROPOSAL + "\">%s</a>");
-        holder = regexResolutionFormat(holder);
+        holder = regexResolutionFormat(c, holder);
         holder = regexExtract(holder, BBCODE_RESOLUTION_GENERIC);
 
         if (permissions == BBCODE_PERMISSIONS_REGION) {
@@ -1415,7 +1421,7 @@ public final class SparkleHelper {
      * @param content
      * @return
      */
-    public static String regexResolutionFormat(String content) {
+    public static String regexResolutionFormat(final Context context, final String content) {
         String holder = content;
 
         Matcher m = BBCODE_RESOLUTION_GA_SC.matcher(holder);
@@ -1432,16 +1438,20 @@ public final class SparkleHelper {
         holder = regexReplace(holder, BBCODE_URL_SC,
                 regexResolutionFormatHelper(Assembly.SECURITY_COUNCIL, -2, "%s"));
 
-        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION, false, false);
-        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_2, false, false);
-        holder = regexResolutionReplacer(holder, BBCODE_URL_RESOLUTION_3, true, true);
+        holder = regexResolutionReplacer(holder, context, BBCODE_URL_RESOLUTION, false, false, true);
+        holder = regexResolutionReplacer(holder, context, BBCODE_URL_RESOLUTION_2, false, false, true);
+        holder = regexResolutionReplacer(holder, context, BBCODE_URL_RESOLUTION_3, true, true, true);
+
+        holder = regexResolutionReplacer(holder, context, NS_RAW_RESOLUTION_LINK, true, true, false);
+        holder = regexResolutionReplacer(holder, context, NS_RAW_RESOLUTION_LINK_2, true, false, false);
 
         return holder;
     }
 
-    public static String regexResolutionReplacer(String target, Pattern pattern,
+    public static String regexResolutionReplacer(String target, Context context, Pattern pattern,
                                                  boolean shouldOffsetByOne,
-                                                 boolean shouldSwitchCouncilId) {
+                                                 boolean shouldSwitchCouncilId,
+                                                 boolean containsContent) {
         String holder = target;
         Matcher m = pattern.matcher(target);
         while (m.find()) {
@@ -1450,7 +1460,17 @@ public final class SparkleHelper {
             if (shouldOffsetByOne) {
                 resolutionId--;
             }
-            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, m.group(3));
+
+            final String contentToReplace;
+            if (containsContent) {
+                contentToReplace = m.group(3);
+            } else {
+                final boolean isGeneralAssembly = councilId == Assembly.GENERAL_ASSEMBLY;
+                contentToReplace = isGeneralAssembly ?
+                        String.format(Locale.US, context.getString(R.string.clicky_link_wa_general_assembly), resolutionId + 1) :
+                        String.format(Locale.US, context.getString(R.string.clicky_link_wa_security_council), resolutionId + 1);
+            }
+            String properFormat = regexResolutionFormatHelper(councilId, resolutionId, contentToReplace);
             holder = holder.replace(m.group(), properFormat);
         }
         return holder;

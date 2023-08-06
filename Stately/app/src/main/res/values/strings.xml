@@ -266,6 +266,8 @@
     <string name="rmb_banhammered">\@@%1$s@@\'s post was deleted by the moderation team.</string>
     <string name="clicky_link_internal">&lt;a href=&quot;%1$s&quot;&gt;[link: %2$s]&lt;/a&gt;</string>
     <string name="clicky_link_http">&lt;a href=&quot;%1$s&quot;&gt;[external link: %2$s]&lt;/a&gt;</string>
+    <string name="clicky_link_wa_general_assembly">[General Assembly resolution #%1$d]</string>
+    <string name="clicky_link_wa_security_council">[Security Council resolution #%1$d]</string>
     <string name="rmb_edit_indicator">(Edited)</string>
     <string name="rmb_no_content">Nothing to see here!</string>
     <string name="rmb_caught_up">All caught up!</string>
