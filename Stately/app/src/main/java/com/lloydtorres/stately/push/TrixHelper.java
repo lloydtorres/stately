@@ -232,14 +232,9 @@ public final class TrixHelper {
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, notificationTriggerInMs,
-                        notificationTriggerInMs, pendingIntent);
-            } else {
-                long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
-                timeToNextAlarm += notificationJitterIntervalInMs;
-                am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
-            }
+            long timeToNextAlarm = System.currentTimeMillis() + notificationIntervalInMs;
+            timeToNextAlarm += notificationJitterIntervalInMs;
+            am.set(AlarmManager.RTC_WAKEUP, timeToNextAlarm, pendingIntent);
         }
     }
 
