@@ -163,7 +163,7 @@ class DashHelper private constructor(private var context: Context) {
     }
 
     companion object {
-        private const val TIMEOUT_IN_MS = 60000
+        private const val TIMEOUT_IN_MS = 120000
         private const val RATE_LIMIT_RESET_IN_MS = 30000
         private const val RATE_LIMIT_BUFFER = 5
         private const val DEFAULT_RATE_LIMIT = 50 - RATE_LIMIT_BUFFER
