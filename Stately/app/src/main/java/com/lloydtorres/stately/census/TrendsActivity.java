@@ -196,7 +196,6 @@ public class TrendsActivity extends SlidrActivity {
 
     /**
      * Queries NS for the history of a given dataset.
-     * Gets data from 60 days ago up to the present.
      */
     private void queryDataset() {
         start = 1;
@@ -204,24 +203,24 @@ public class TrendsActivity extends SlidrActivity {
         String targetURL = "";
         String queryTarget = "";
         long curTime = System.currentTimeMillis() / 1000L;
-        long twoYearsAgo = curTime - CensusHistory.CENSUS_TRENDS_RANGE_IN_SECONDS;
+        long endpointTime = curTime - CensusHistory.CENSUS_TRENDS_RANGE_IN_SECONDS;
 
         switch (mode) {
             case TREND_NATION:
                 queryTarget = String.format(Locale.US, CensusHistory.NATION_HISTORY,
                         SparkleHelper.getIdFromName(target));
                 targetURL = String.format(Locale.US, CensusHistory.QUERY_NATION, queryTarget, id,
-                        twoYearsAgo, curTime);
+                        endpointTime, curTime);
                 break;
             case TREND_REGION:
                 queryTarget = String.format(Locale.US, CensusHistory.REGION_HISTORY,
                         SparkleHelper.getIdFromName(target));
                 targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id,
-                        twoYearsAgo, curTime, start);
+                        endpointTime, curTime, start);
                 break;
             case TREND_WORLD:
                 targetURL = String.format(Locale.US, CensusHistory.QUERY_RANKED, queryTarget, id,
-                        twoYearsAgo, curTime, start);
+                        endpointTime, curTime, start);
         }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),

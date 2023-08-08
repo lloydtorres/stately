@@ -38,7 +38,7 @@ public class CensusHistory implements Parcelable {
     public static final String QUERY_NATION = QUERY_BASE + "&v=" + SparkleHelper.API_VERSION;
     public static final String QUERY_RANKED =
             QUERY_BASE + "&start=%d" + "&v=" + SparkleHelper.API_VERSION;
-    public static final long CENSUS_TRENDS_RANGE_IN_SECONDS = 2 * 365 * 24 * 60 * 60;
+    public static final long CENSUS_TRENDS_RANGE_IN_SECONDS = 3 * 365 * 24 * 60 * 60;
     public static final String NATION_HISTORY = "nation=%s&";
     public static final String REGION_HISTORY = "region=%s&";
     @SuppressWarnings("unused")
