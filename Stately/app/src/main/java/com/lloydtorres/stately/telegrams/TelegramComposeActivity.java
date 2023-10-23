@@ -240,18 +240,20 @@ public class TelegramComposeActivity extends SlidrActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
-                        Element input = d.select("input[name=chk]").first();
+                        final Document d = Jsoup.parse(response, SparkleHelper.BASE_URI);
+                        final Element inputChk = d.select("input[name=chk]").first();
+                        final Element inputAsFormToken = d.select("input[name=asform_token]").first();
 
-                        if (input == null) {
+                        if (inputChk == null || inputAsFormToken == null) {
                             mSwipeRefreshLayout.setRefreshing(false);
                             SparkleHelper.makeSnackbar(mView,
                                     getString(R.string.login_error_parsing));
                             return;
                         }
 
-                        String chk = input.attr("value");
-                        sendTelegram(recipients, chk);
+                        final String chk = inputChk.attr("value");
+                        final String asFormToken = inputAsFormToken.attr("value");
+                        sendTelegram(recipients, chk, asFormToken);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -274,7 +276,7 @@ public class TelegramComposeActivity extends SlidrActivity {
         }
     }
 
-    private void sendTelegram(final List<String> recipients, final String chk) {
+    private void sendTelegram(final List<String> recipients, final String chk, final String asFormToken) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
                 Request.Method.POST, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
@@ -305,6 +307,7 @@ public class TelegramComposeActivity extends SlidrActivity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("chk", chk);
+        params.put("asform_token", asFormToken);
         params.put("tgto", SparkleHelper.joinStringList(recipients, ", "));
         if (replyId == NO_REPLY_ID) {
             params.put("recruitregion", "region");
