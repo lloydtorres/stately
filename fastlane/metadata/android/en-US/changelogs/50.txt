@@ -1,0 +1,2 @@
+• Fix issues related to telegrams and region dossiers.
+• Other bug fixes and improvements.
