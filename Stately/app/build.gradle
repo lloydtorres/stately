@@ -9,12 +9,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.lloydtorres.stately"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         multiDexEnabled true
         versionCode 49
         versionName "1.11.0"
@@ -52,7 +52,7 @@ dependencies {
     }
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
@@ -60,13 +60,13 @@ dependencies {
     implementation 'com.github.satyan:sugar:1.5'
     implementation 'com.github.omadahealth:swipy:1.2.3@aar'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'com.jpardogo.materialtabstrip:library:1.1.1'
     implementation 'com.r0adkll:slidableactivity:2.1.0'
     implementation 'io.coil-kt:coil:2.4.0'
     implementation 'io.coil-kt:coil-svg:2.4.0'
     implementation 'org.atteo:evo-inflector:1.3'
-    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.jsoup:jsoup:1.16.2'
     implementation 'org.sufficientlysecure:html-textview:3.9'
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
 }
