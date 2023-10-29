@@ -86,7 +86,7 @@ public class TelegramHistoryActivity extends RefreshviewActivity {
 
     private void queryTelegramHistory() {
         String targetURL = String.format(Locale.US, Telegram.TELEGRAM_CONVERSATION, mainTelegramId);
-        NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL,
+        NSStringRequest stringRequest = new NSStringRequest(this, Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

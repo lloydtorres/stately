@@ -398,7 +398,7 @@ public class ResolutionActivity extends RefreshviewActivity {
         isInProgress = true;
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, url,
+                Request.Method.GET, url, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

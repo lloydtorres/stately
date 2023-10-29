@@ -183,7 +183,7 @@ public class TelegramsFragment extends Fragment {
                 offset);
 
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL,
+                targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -402,7 +402,7 @@ public class TelegramsFragment extends Fragment {
 
         String targetURL = String.format(Locale.US, Telegram.MARK_READ, id, chkValue);
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL,
+                targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -545,7 +545,7 @@ public class TelegramsFragment extends Fragment {
         String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, id, finalTarget,
                 chkValue);
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL,
+                targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -632,7 +632,7 @@ public class TelegramsFragment extends Fragment {
         }
         String targetURL = String.format(Locale.US, templateURL, id, chkValue);
         NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL,
+                targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

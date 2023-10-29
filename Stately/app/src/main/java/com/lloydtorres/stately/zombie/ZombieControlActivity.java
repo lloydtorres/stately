@@ -192,7 +192,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
      */
     private void queryZSuperweaponProgress() {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY,
+                Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -323,7 +323,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
      */
     private void getLocalId(final String action) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
+                Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -369,7 +369,7 @@ public class ZombieControlActivity extends RefreshviewActivity {
      */
     private void postZombieDecision(final String localid, final String action) {
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL,
+                Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

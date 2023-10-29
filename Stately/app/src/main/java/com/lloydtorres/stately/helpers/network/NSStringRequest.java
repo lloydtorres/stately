@@ -63,6 +63,15 @@ public class NSStringRequest extends StringRequest {
     private final Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
 
     public NSStringRequest(Context c, int m, String target,
+                           boolean appendUserClickTimestamp,
+                           Response.Listener<String> listener,
+                           Response.ErrorListener errorListener) {
+        this(c, m,
+                target + (appendUserClickTimestamp ? String.format(Locale.US, "?userclick=%d", System.currentTimeMillis()) : ""),
+                listener, errorListener);
+    }
+
+    public NSStringRequest(Context c, int m, String target,
                            Response.Listener<String> listener,
                            Response.ErrorListener errorListener) {
         super(m, target, listener, errorListener);

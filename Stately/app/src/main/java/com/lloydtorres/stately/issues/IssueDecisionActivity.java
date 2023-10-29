@@ -126,7 +126,7 @@ public class IssueDecisionActivity extends RefreshviewActivity {
         String targetURL = String.format(Locale.US, IssueFullHolder.CONFIRM_QUERY, issue.id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL,
+                Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

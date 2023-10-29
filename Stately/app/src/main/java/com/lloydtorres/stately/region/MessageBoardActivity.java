@@ -227,7 +227,7 @@ public class MessageBoardActivity extends SlidrActivity {
         String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY,
                 SparkleHelper.getIdFromName(regionName));
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL,
+                Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -563,7 +563,7 @@ public class MessageBoardActivity extends SlidrActivity {
         }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL,
+                Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -622,7 +622,7 @@ public class MessageBoardActivity extends SlidrActivity {
         }
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, targetURL,
+                Request.Method.POST, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -791,7 +791,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 SparkleHelper.getIdFromName(regionName), id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL,
+                Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -871,7 +871,7 @@ public class MessageBoardActivity extends SlidrActivity {
                 id);
 
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL,
+                Request.Method.GET, targetURL, true,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
