@@ -814,8 +814,13 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         dossierProgress.setContent(progressMessage);
         dossierProgress.show(getSupportFragmentManager(), ProgressDialog.DIALOG_TAG);
 
+        String targetUrl = Dossier.POST_QUERY_NO_TEMPLATE;
+        if (!isInDossier && mode == EXPLORE_REGION) {
+            targetUrl = String.format(Locale.US, Dossier.POST_REGION_QUERY_NO_TEMPLATE, SparkleHelper.getIdFromName(id));
+        }
+
         NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, Dossier.POST_QUERY_NO_TEMPLATE,
+                Request.Method.POST, targetUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
