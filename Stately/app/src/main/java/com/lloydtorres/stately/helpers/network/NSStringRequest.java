@@ -66,8 +66,9 @@ public class NSStringRequest extends StringRequest {
                            boolean appendUserClickTimestamp,
                            Response.Listener<String> listener,
                            Response.ErrorListener errorListener) {
+        // I know, this is terrible...
         this(c, m,
-                target + (appendUserClickTimestamp ? String.format(Locale.US, "?userclick=%d", System.currentTimeMillis()) : ""),
+                target + (appendUserClickTimestamp ? ((target != null && target.contains("?")) ? "&" : "?") + String.format(Locale.US, "userclick=%d", System.currentTimeMillis()) : ""),
                 listener, errorListener);
     }
 
