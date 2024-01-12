@@ -115,7 +115,7 @@ Stately uses Creative Commons-licensed content from the following sources:
 ### License
 
 ```
-Copyright 2016-2023 Lloyd Torres
+Copyright 2016-2024 Lloyd Torres
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
