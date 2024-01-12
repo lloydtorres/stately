@@ -191,8 +191,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * Queries the user's superweapon progress.
      */
     private void queryZSuperweaponProgress() {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, ZSuperweaponProgress.ZOMBIE_CONTROL_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -322,8 +322,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * @param action
      */
     private void getLocalId(final String action) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, ZombieControlData.ZOMBIE_CONTROL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -368,8 +368,8 @@ public class ZombieControlActivity extends RefreshviewActivity {
      * @param action User action
      */
     private void postZombieDecision(final String localid, final String action) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.POST, ZombieControlData.ZOMBIE_CONTROL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

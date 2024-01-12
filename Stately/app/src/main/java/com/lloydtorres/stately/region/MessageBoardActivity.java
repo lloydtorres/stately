@@ -226,8 +226,8 @@ public class MessageBoardActivity extends SlidrActivity {
 
         String targetURL = String.format(Locale.US, RegionMessages.RAW_QUERY,
                 SparkleHelper.getIdFromName(regionName));
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -562,8 +562,8 @@ public class MessageBoardActivity extends SlidrActivity {
             targetURL = String.format(Locale.US, RegionMessages.EDIT_QUERY_CHK, modifierTarget.id);
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -621,8 +621,8 @@ public class MessageBoardActivity extends SlidrActivity {
             targetURL = String.format(Locale.US, RegionMessages.EDIT_QUERY, modifierTarget.id);
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.POST, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -790,8 +790,8 @@ public class MessageBoardActivity extends SlidrActivity {
         String targetURL = String.format(Locale.US, RegionMessages.DELETE_QUERY,
                 SparkleHelper.getIdFromName(regionName), id);
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -870,8 +870,8 @@ public class MessageBoardActivity extends SlidrActivity {
         targetURL = String.format(Locale.US, targetURL, SparkleHelper.getIdFromName(regionName),
                 id);
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

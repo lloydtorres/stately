@@ -63,21 +63,30 @@ public class NSStringRequest extends StringRequest {
     private final Pattern COOKIE_PIN = Pattern.compile("(?:^|\\s+?|;\\s*?)pin=(\\d+?)(?:$|;\\s*?|\\s+?)");
 
     public NSStringRequest(Context c, int m, String target,
-                           boolean appendUserClickTimestamp,
-                           Response.Listener<String> listener,
-                           Response.ErrorListener errorListener) {
-        // I know, this is terrible...
-        this(c, m,
-                target + (appendUserClickTimestamp ? ((target != null && target.contains("?")) ? "&" : "?") + String.format(Locale.US, "userclick=%d", System.currentTimeMillis()) : ""),
-                listener, errorListener);
-    }
-
-    public NSStringRequest(Context c, int m, String target,
                            Response.Listener<String> listener,
                            Response.ErrorListener errorListener) {
         super(m, target, listener, errorListener);
         context = c;
         method = m;
+    }
+
+    public static NSStringRequest getStringRequestWithUserclickParameter(Context c, int m, String target,
+                                                                         Response.Listener<String> listener,
+                                                                         Response.ErrorListener errorListener) {
+        final StringBuilder urlWithUserClickStringBuilder = new StringBuilder();
+        urlWithUserClickStringBuilder.append(target);
+
+        if (target != null && target.contains("?")) {
+            urlWithUserClickStringBuilder.append("&");
+        } else {
+            urlWithUserClickStringBuilder.append("?");
+        }
+
+        final long currentTImeMs = System.currentTimeMillis();
+        final String userclickParameter = String.format(Locale.US, "userclick=%d", currentTImeMs);
+        urlWithUserClickStringBuilder.append(userclickParameter);
+
+        return new NSStringRequest(c, m, urlWithUserClickStringBuilder.toString(), listener, errorListener);
     }
 
     public void setUserData(UserLogin u) {

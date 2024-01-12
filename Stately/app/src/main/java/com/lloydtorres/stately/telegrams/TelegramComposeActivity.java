@@ -235,8 +235,8 @@ public class TelegramComposeActivity extends SlidrActivity {
         }
         isInProgress = true;
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, Telegram.SEND_TELEGRAM, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -277,8 +277,8 @@ public class TelegramComposeActivity extends SlidrActivity {
     }
 
     private void sendTelegram(final List<String> recipients, final String chk, final String asFormToken) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, Telegram.SEND_TELEGRAM, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.POST, Telegram.SEND_TELEGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

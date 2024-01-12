@@ -182,8 +182,8 @@ public class TelegramsFragment extends Fragment {
         String targetURL = String.format(Locale.US, Telegram.GET_TELEGRAM, activeFolder.value,
                 offset);
 
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -401,8 +401,8 @@ public class TelegramsFragment extends Fragment {
         }
 
         String targetURL = String.format(Locale.US, Telegram.MARK_READ, id, chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -544,8 +544,8 @@ public class TelegramsFragment extends Fragment {
         }
         String targetURL = String.format(Locale.US, Telegram.MOVE_TELEGRAM, id, finalTarget,
                 chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -631,8 +631,8 @@ public class TelegramsFragment extends Fragment {
             templateURL = Telegram.PERMDELETE_TELEGRAM;
         }
         String targetURL = String.format(Locale.US, templateURL, id, chkValue);
-        NSStringRequest stringRequest = new NSStringRequest(getContext(), Request.Method.GET,
-                targetURL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getContext(), Request.Method.GET,
+                targetURL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

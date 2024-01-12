@@ -258,8 +258,8 @@ public class ReportActivity extends SlidrActivity {
             }
         }
 
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, REPORT_URL, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.POST, REPORT_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

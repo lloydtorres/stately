@@ -621,8 +621,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
         final String url = !isInDossier ?
                 String.format(Locale.US, urlTemplate, SparkleHelper.getIdFromName(id)) :
                 Dossier.POST_QUERY_NO_TEMPLATE;
-        final NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.GET, url, true,
+        final NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -970,8 +970,8 @@ public class ExploreActivity extends SlidrActivity implements IToolbarActivity {
      */
     private void postRegionMove(final String localid, final String password,
                                 final ProgressDialog pd) {
-        NSStringRequest stringRequest = new NSStringRequest(getApplicationContext(),
-                Request.Method.POST, Region.CHANGE_QUERY, true,
+        NSStringRequest stringRequest = NSStringRequest.getStringRequestWithUserclickParameter(getApplicationContext(),
+                Request.Method.POST, Region.CHANGE_QUERY,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
