@@ -66,7 +66,7 @@ dependencies {
     implementation 'io.coil-kt:coil:2.5.0'
     implementation 'io.coil-kt:coil-svg:2.5.0'
     implementation 'org.atteo:evo-inflector:1.3'
-    implementation 'org.jsoup:jsoup:1.17.1'
+    implementation 'org.jsoup:jsoup:1.17.2'
     implementation 'org.sufficientlysecure:html-textview:3.9'
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
 }
