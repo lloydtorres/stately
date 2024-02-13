@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -407,12 +408,22 @@ public class LoginActivity extends BroadcastableActivity {
             }
         };
 
+        DialogInterface.OnClickListener openExternalDialogListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent openLinkExternalIntent = new Intent(Intent.ACTION_VIEW);
+                openLinkExternalIntent.setData(Uri.parse(WebRegisterActivity.REGISTER_URL));
+                startActivity(openLinkExternalIntent);
+            }
+        };
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this,
                 RaraHelper.getThemeMaterialDialog(this));
         dialogBuilder.setTitle(R.string.create_nation)
                 .setMessage(R.string.create_nation_redirect)
                 .setPositiveButton(R.string.create_continue, dialogListener)
                 .setNegativeButton(R.string.explore_negative, null)
+                .setNeutralButton(R.string.open_in_browser, openExternalDialogListener)
                 .show();
     }
 

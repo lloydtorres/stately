@@ -22,7 +22,8 @@
     <string name="password">Password</string>
     <string name="log_in">Log In</string>
     <string name="create_nation">Create New Nation</string>
-    <string name="create_nation_redirect">To create a new nation, you\'ll be redirected to the NationStates website.</string>
+    <string name="create_nation_redirect">To create a new nation, you\'ll be redirected to the NationStates website.\nThis website uses Google Analytics.</string>
+    <string name="open_in_browser">Open in browser</string>
     <string name="create_continue">Continue</string>
     <string name="create_finish">Type in your nation name and password to get started.</string>
     <string name="create_error">Something went wrong with the new nation process. Try again on the NationStates website (nationstates.net).</string>
